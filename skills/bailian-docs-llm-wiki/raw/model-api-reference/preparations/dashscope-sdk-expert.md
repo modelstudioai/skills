@@ -4,29 +4,39 @@ DashScope Python SDK 内置的 SDK 智能助手——只描述需求即可拿到
 
 DashScope SDK Expert（下称 SDK Expert）是 [dashscope Python SDK](https://dashscope.github.io/dashscope-sdk-python/)（≥1.27.3）内置的 SDK 智能助手 CLI。本页是通用使用指南：教怎么用 SDK Expert 开发与排障。各接口完整参数见侧栏单接口参考页，能力域见下方"覆盖能力一览"。
 
+<a id="快速开始"></a>
+
 ## 快速开始
 
 1.  **准备 API Key 与 base\_url**：在[百炼控制台](https://bailian.console.aliyun.com)“API Key”创建 Key（`sk-` 前缀），各地域 Key 独立。配置环境变量或会话内 `/setup`：
     
-    ```
+    <a id="code-block"></a>
+    
+    ```bash
     export DASHSCOPE_API_KEY=sk-xxxxxxxx
     export DASHSCOPE_HTTP_BASE_URL=https://{workspace-id}.{region}.maas.aliyuncs.com/api/v1
     ```
     
-    各 region 的 base\_url 不同，域名对照见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
+    各 region 的 base\_url 不同，域名对照见 [Base URL 总览](base-url.md)。
     
 2.  **安装/升级 SDK**：SDK Expert 随 dashscope Python SDK 1.27.3 引入，SDK Expert 的 CLI 能力由独立包 dashscope-agenticx 提供。
     
-    ```
+    <a id="code-block-2"></a>
+    
+    ```bash
     # 如果运行失败，可以将 pip 替换成 pip3
     pip install -U "dashscope[acli]"
     ```
     
-    **重要**SDK Expert 还可以通过独立包安装：`pip install -U dashscope-agenticx`。安装后可直接执行 `agenticx` 命令，完整用法与更新见 [AgenticX 官方文档](https://dashscope.github.io/dashscope-agenticx/zh/)。
+    > **重要**
+    >
+    > SDK Expert 还可以通过独立包安装：`pip install -U dashscope-agenticx`。安装后可直接执行 `agenticx` 命令，完整用法与更新见 [AgenticX 官方文档](https://dashscope.github.io/dashscope-agenticx/zh/)。
     
 3.  **启动 CLI**：终端执行 `dashscope`（不带子命令）进入 SDK Expert 交互式会话（首次启动会提示下载 SDK Expert 知识包，含 api-doc/diagnose 等专项 skill）。SDK Expert 的 CLI 能力（原 `python -m dashscope.acli` 入口）已独立为 dashscope-agenticx 包，手动安装知识包请改用 AgenticX 的入口：
     
-    ```
+    <a id="code-block-3"></a>
+    
+    ```bash
     # 下载 Expert 模板
     python -m dashscope_agenticx expert download dashscope-sdk-expert
     # 列出可用模板
@@ -35,20 +45,26 @@ DashScope SDK Expert（下称 SDK Expert）是 [dashscope Python SDK](https://da
     
     如果已安装命令行脚本，也可以直接运行：
     
-    ```
+    <a id="code-block-4"></a>
+    
+    ```bash
     agenticx expert download dashscope-sdk-expert
     agenticx expert
     ```
     
     下载完成后，通过 SDK 提问：
     
-    ```
+    <a id="code-block-5"></a>
+    
+    ```bash
     dashscope expert "你的问题"
     # 简易提问示例：一次性命令，直接返回答案后退出
     dashscope expert "如何用 SDK 开发业务"
     ```
     
-    **说明**通过 `dashscope expert` 提问要求 dashscope 与 dashscope-agenticx 安装在同一 Python 环境——用 `pip install -U "dashscope[acli]"` 可一并安装；若分别安装，请在同一虚拟环境中执行。
+    > **说明**
+    >
+    > 通过 `dashscope expert` 提问要求 dashscope 与 dashscope-agenticx 安装在同一 Python 环境——用 `pip install -U "dashscope[acli]"` 可一并安装；若分别安装，请在同一虚拟环境中执行。
     
 4.  **查看帮助**：会话中输入 `/help` 查看全部 command 与 skill。command 是会话操作（如 `/clear` `/help` `/exit`）；skill 是领域能力开关（`/skill <名称>`）。不确定就直接自然语言提问，SDK Expert 自动匹配 skill。
     
@@ -61,9 +77,15 @@ DashScope SDK Expert（下称 SDK Expert）是 [dashscope Python SDK](https://da
     也支持 Ctrl+T 语音输入、`@文件路径` 贴附文件让 SDK Expert 直接读取、↑ 翻历史命令。
     
 
-**重要**SDK Expert 会校验本机 dashscope 版本，过旧会提醒先 `pip install -U dashscope` 升级。
+> **重要**
+>
+> SDK Expert 会校验本机 dashscope 版本，过旧会提醒先 `pip install -U dashscope` 升级。
 
-**重要**多模态或通义以外模型：`pip install -U 'dashscope[acli-all]'`。
+> **重要**
+>
+> 多模态或通义以外模型：`pip install -U 'dashscope[acli-all]'`。
+
+<a id="覆盖能力一览"></a>
 
 ## 覆盖能力一览
 
@@ -79,7 +101,9 @@ DashScope SDK Expert（下称 SDK Expert）是 [dashscope Python SDK](https://da
 
 会话内通过 `/skill` 切换 skill（不带参数查看全部），常用示例：
 
-```
+<a id="code-block-6"></a>
+
+```bash
 /skill api-doc Generation
 /skill sdk-example TextEmbedding
 /skill error-code InvalidApiKey
@@ -88,13 +112,17 @@ DashScope SDK Expert（下称 SDK Expert）是 [dashscope Python SDK](https://da
 
 SDK Expert 覆盖 DashScope SDK 全部能力域——文本生成、多模态、语音、检索、微调与部署、Agent 等。查某接口文档/示例用 `api-doc`/`sdk-example`，生成代码或排障直接自然语言提问即可。
 
-**说明**SDK Expert 是完整 agentic CLI，还支持多 Agent 协作、MCP（Model Context Protocol，外部工具接入标准）server、定时任务（`/cron`）、审计（`/audit`）、会话压缩与历史（`/compress`、`/history`）等。会话内常用 `/` 命令按类别分组：
+> **说明**
+>
+> SDK Expert 是完整 agentic CLI，还支持多 Agent 协作、MCP（Model Context Protocol，外部工具接入标准）server、定时任务（`/cron`）、审计（`/audit`）、会话压缩与历史（`/compress`、`/history`）等。会话内常用 `/` 命令按类别分组：
+>
+> -   **会话管理**：`/help` `/clear` `/info` `/stats` `/setup` `/exit` `/feedback`
+> -   **能力与工具**：`/skill` `/mcp` `/voice` `/tts` `/copy`
+> -   **历史与审计**：`/history` `/compress` `/cron` `/audit` `/dev` `/example`
+>
+> 完整列表以 `/help` 输出为准。
 
--   **会话管理**：`/help` `/clear` `/info` `/stats` `/setup` `/exit` `/feedback`
--   **能力与工具**：`/skill` `/mcp` `/voice` `/tts` `/copy`
--   **历史与审计**：`/history` `/compress` `/cron` `/audit` `/dev` `/example`
-
-完整列表以 `/help` 输出为准。
+<a id="最佳实践一-只提需求-不读文档-直接产出可运行代码"></a>
 
 ## 最佳实践一：只提需求，不读文档，直接产出可运行代码
 
@@ -108,14 +136,19 @@ SDK Expert 覆盖 DashScope SDK 全部能力域——文本生成、多模态、
 
 **示例对话**：
 
-```
+<a id="code-block-7"></a>
+
+```text
 > 用 qwen-plus 流式输出一段话，并统计 token 消耗
 
 SDK Expert：
 1. 匹配 api-doc/sdk-example skill，核对本机 dashscope 版本
 2. 生成脚本并执行，展示流式输出与 token 统计（见下）
 ```
-```
+
+<a id="code-block-8"></a>
+
+```python
 import os, dashscope
 client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
 stream = client.chat.completions.create(
@@ -128,7 +161,10 @@ for chunk in stream:
         print(chunk.choices[0].delta.content, end="", flush=True)
 # 最后一个 chunk 含 usage（input/output tokens）
 ```
-```
+
+<a id="code-block-9"></a>
+
+```text
 秋风扫落叶...（流式逐字输出）
 usage: input=10 output=52
 ```
@@ -138,6 +174,8 @@ usage: input=10 output=52
 -   指定语言/框架：如"封装成 FastAPI 接口"、"用 async/await 异步调用"
 -   指定版本："我们用 dashscope 1.20.x，这个参数支持吗？"——SDK Expert 核对安装版本后回答
 -   追问细节："参数取值范围？""还有哪些可选模型？"
+
+<a id="最佳实践二-排查问题-让它自动定位并修复-bug"></a>
 
 ## 最佳实践二：排查问题，让它自动定位并修复 Bug
 
@@ -151,7 +189,9 @@ usage: input=10 output=52
 
 **示例对话**：
 
-```
+<a id="code-block-10"></a>
+
+```text
 > 运行 gen.py 报 InvalidParameter: url error，帮我修
 
 SDK Expert：
@@ -159,7 +199,10 @@ SDK Expert：
 2. 生成 diff 供确认（见下）
 3. 确认后应用，重跑脚本，返回 200
 ```
-```
+
+<a id="code-block-11"></a>
+
+```diff
 - image_url="/tmp/photo.jpg"
 + image_url="https://example.com/photo.jpg"
 ```
@@ -169,6 +212,8 @@ SDK Expert：
 -   报错附 `request_id` 便于对应服务端日志（`request_id` 在响应体 `response.request_id` 字段或报错对象属性中）
 -   复杂问题先让 SDK Expert "解释这段代码逻辑"（`/skill explain-code`）确认理解一致再修复
 -   SDK 本身缺陷或未满足需求时，可到 [GitHub](https://github.com/dashscope/dashscope-sdk-python/issues) 提 Issue 反馈
+
+<a id="常见疑问"></a>
 
 ## 常见疑问
 

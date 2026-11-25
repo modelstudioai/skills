@@ -2,11 +2,15 @@
 
 本文介绍通过WebSocket连接访问Sambert实时语音合成服务的交互流程、接口地址和请求头。
 
-使用 Python 调用模型时，请参见 [Sambert Python SDK](raw/_short/realtime-websocket-python-sdk-sambert-74c648d694dcfd04.md)。
+使用 Python 调用模型时，请参见 [Sambert Python SDK](realtime-websocket-python-sdk-sambert-74c648d694dcfd04.md)。
 
 DashScope SDK目前仅支持Java和Python。使用其他编程语言时，可通过WebSocket连接与服务进行通信。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-model.md)。
+**用户指南：**关于模型介绍和选型建议请参见[语音合成](../model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-model.md)。
+
+<a id="接口地址"></a>
+
+<a id="sb_ws_h2_endpoint"></a>
 
 ## 接口地址
 
@@ -14,65 +18,46 @@ Sambert仅支持在北京地域使用。
 
 WebSocket 接口地址固定为：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-**重要**URL 必须使用 `wss://` 协议，且固定不变。Authorization 在请求头中设置（参见[请求头](https://help.aliyun.com/zh/model-studio/sambert-websocket-api#sb_ws_h2_headers)）。
+> **重要**
+>
+> URL 必须使用 `wss://` 协议，且固定不变。Authorization 在请求头中设置（参见[请求头](sambert-websocket-api-dee43b9c55be6f2c.md#sb_ws_h2_headers)）。
 
-**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+> **重要**
+>
+> 阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+>
+> `{WorkspaceId}`需要替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。现有域名仍可正常使用。
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
+<a id="请求头"></a>
+
+<a id="sb_ws_h2_headers"></a>
 
 ## 请求头
 
 请求头中需添加如下信息：
 
-**参数**
+| 参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- |
+| Authorization | string | 是 | 鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。 |
+| user-agent | string | 否 | 客户端标识，便于服务端追踪来源。 |
+| X-DashScope-WorkSpace | string | 否 | 阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。 |
+| X-DashScope-DataInspection | string | 否 | 是否启用数据合规检测功能。默认不传或设为`enable`。如非必要，请勿启用该参数。 |
 
-**类型**
+> **重要**
+>
+> Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
 
-**是否必选**
+<a id="交互流程"></a>
 
-**说明**
-
-Authorization
-
-string
-
-是
-
-鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。
-
-user-agent
-
-string
-
-否
-
-客户端标识，便于服务端追踪来源。
-
-X-DashScope-WorkSpace
-
-string
-
-否
-
-阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。
-
-X-DashScope-DataInspection
-
-string
-
-否
-
-是否启用数据合规检测功能。默认不传或设为`enable`。如非必要，请勿启用该参数。
-
-**重要**Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
+<a id="62149ca39bx2i"></a>
 
 ## 交互流程
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3672835871/CAEQURiBgICX8Y6AmBkiIGJmOTc2YjY2ZTYyNDQ0MmI4M2U4NTYxYmE5ZjYwMDY44709861_20241015153444.149.svg)
 
-客户端事件和服务端事件的详细说明，请参见[客户端事件](raw/_short/sambert-client-events-5cb2642604d71e01.md)和[服务端事件](raw/_short/sambert-server-events-f5ea1a6346a23743.md)。
+客户端事件和服务端事件的详细说明，请参见[客户端事件](sambert-client-events-5cb2642604d71e01.md)和[服务端事件](sambert-server-events-f5ea1a6346a23743.md)。
 
 按时间顺序，客户端与服务端的交互流程如下：
 
@@ -85,21 +70,38 @@ string
 
 收到 `task-finished` 后，可在同一连接上用新的 `task_id` 发送下一轮 `run-task`。每轮在 `run-task` 中一次提交完整文本。
 
-**重要**Sambert 不支持流式输入（streaming 为 `out` 而非 duplex），所有待合成文本必须在 run-task 事件中一次性发送。不支持 continue-task 和 finish-task 指令。
+> **重要**
+>
+> Sambert 不支持流式输入（streaming 为 `out` 而非 duplex），所有待合成文本必须在 run-task 事件中一次性发送。不支持 continue-task 和 finish-task 指令。
 
-通过 Java SDK 使用对象池并发调用 Sambert 的方法和完整示例，请参见[语音合成最佳实践](https://help.aliyun.com/zh/model-studio/tts-high-concurrency-best-practices#sambert-java)。直接使用 WebSocket 协议时，可按上述流程复用连接。
+通过 Java SDK 使用对象池并发调用 Sambert 的方法和完整示例，请参见[语音合成最佳实践](../model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-high-concurrency-best-practices.md#sambert-java)。直接使用 WebSocket 协议时，可按上述流程复用连接。
+
+<a id="示例代码"></a>
+
+<a id="ws-examples"></a>
 
 ## 示例代码
 
-以下示例使用通用 WebSocket 库直接发送协议事件，使用 `sambert-zhichu-v1`。先[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并配置 `DASHSCOPE_API_KEY` 环境变量，将 `{WorkspaceId}` 替换为对应地域的业务空间 ID；使用其他地域时同时替换接口地址和 API Key。
+以下示例使用通用 WebSocket 库直接发送协议事件，使用 `sambert-zhichu-v1`。先[获取 API Key](../model-api-reference/preparations/get-api-key.md)并配置 `DASHSCOPE_API_KEY` 环境变量，将 `{WorkspaceId}` 替换为对应地域的业务空间 ID；使用其他地域时同时替换接口地址和 API Key。
+
+<a id="sec-tabs"></a>
+
+<a id="go"></a>
+
+<a id="go-h4"></a>
 
 #### Go
 
-```
+<a id="code-block"></a>
+
+```bash
 go mod init tts-example
 go get github.com/gorilla/websocket@v1.5.3 github.com/google/uuid@v1.6.0
 ```
-```
+
+<a id="code-block-2"></a>
+
+```go
 package main
 
 import (
@@ -378,11 +380,17 @@ func clearOutputFile(filePath string) error {
 }
 ```
 
+<a id="c"></a>
+
+<a id="c-h4"></a>
+
 #### C#
 
 示例代码如下：
 
-```
+<a id="code-block-3"></a>
+
+```csharp
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
@@ -524,6 +532,10 @@ class Program {
 }
 ```
 
+<a id="php"></a>
+
+<a id="php-h4"></a>
+
 #### PHP
 
 示例代码目录结构为：
@@ -538,7 +550,9 @@ my-php-project/
 
 composer.json内容如下，相关依赖的版本号请根据实际情况自行决定：
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "require": {
         "react/event-loop": "^1.3",
@@ -557,7 +571,9 @@ composer.json内容如下，相关依赖的版本号请根据实际情况自行�
 
 index.php内容如下：
 
-```
+<a id="code-block-5"></a>
+
+```php
 <?php
 
 require 'vendor/autoload.php';
@@ -678,18 +694,26 @@ $connector($websocket_url, [], $headers)
 $loop->run();
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
 需安装相关依赖：
 
-```
+<a id="code-block-6"></a>
+
+```bash
 npm install ws
 npm install uuid
 ```
 
 示例代码如下：
 
-```
+<a id="code-block-7"></a>
+
+```javascript
 const WebSocket = require('ws');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
@@ -816,10 +840,12 @@ function checkAndClearOutputFile(filePath) {
 main().catch(console.error);
 ```
 
+<a id="可用的-sdk"></a>
+
 ## 可用的 SDK
 
--   [Python SDK](raw/_short/realtime-websocket-python-sdk-sambert-74c648d694dcfd04.md)
--   [Java SDK](raw/_short/sambert-java-sdk-79ed7a3fed2f3f90.md)
--   [Android SDK](raw/_short/sambert-android-sdk-8827dfd4fba2386d.md)
--   [iOS SDK](raw/_short/sambert-ios-sdk-3a58fd71fde42af6.md)
--   [HarmonyOS SDK](raw/_short/sambert-harmonyos-sdk-6ffde1be395ffb11.md)
+-   [Python SDK](realtime-websocket-python-sdk-sambert-74c648d694dcfd04.md)
+-   [Java SDK](sambert-java-sdk-79ed7a3fed2f3f90.md)
+-   [Android SDK](sambert-android-sdk-8827dfd4fba2386d.md)
+-   [iOS SDK](sambert-ios-sdk-3a58fd71fde42af6.md)
+-   [HarmonyOS SDK](sambert-harmonyos-sdk-6ffde1be395ffb11.md)

@@ -2,11 +2,15 @@
 
 Qwen-Audio 是端到端实时语音交互大模型，支持低延迟语音对话，适用于语音助手、智能客服、AI 伴侣等场景。
 
+<a id="概述"></a>
+
+<a id="fc60h201"></a>
+
 ## 概述
 
 实现实时音频到语音/文本的转换，支持流式音频输入和流式语音与文本输出。
 
-该模型除 WebSocket 协议外，还支持通过 AOQ 和 WebRTC 协议接入；如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[API 参考](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
+该模型除 WebSocket 协议外，还支持通过 AOQ 和 WebRTC 协议接入；如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[API 参考](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
 
 -   支持 Function Calling 工具调用，模型可自主判断是否需要调用外部工具获取信息
 -   支持[联网搜索](#audio-realtime-web-search)，模型可根据实时问题自主判断是否搜索并返回搜索结果来源，可与 Function Calling 同时启用
@@ -22,31 +26,30 @@ Qwen-Audio 是端到端实时语音交互大模型，支持低延迟语音对话
 -   smart\_turn / smart\_turn\_v2 模式融合声学感知与语义理解判断轮次边界，无意义附和声（如“嗯”“啊”）不会打断对话
 -   smart\_turn / smart\_turn\_v2 模式下支持说话人增强，传入目标用户预录音频后，模型可在双工对话中精准锁定目标说话人，有效屏蔽旁人声音与背景噪声
 
+<a id="工作原理"></a>
+
+<a id="fc60h320"></a>
+
 ### 工作原理
 
 Qwen-Audio 采用事件驱动架构。客户端与服务端通过持久连接同时收发数据：客户端持续发送麦克风采集的音频流，服务端实时返回语音和文本响应。整个交互过程由客户端事件（如 `session.update`、`input_audio_buffer.append`）和服务端事件（如 `response.audio.delta`、`response.done`）驱动，无需轮询。
 
 典型的连接生命周期为：建立 WebSocket 连接 → 发送 `session.update` 配置会话参数 → 持续发送音频并接收响应 → 主动关闭连接。
 
+<a id="音频格式"></a>
+
+<a id="fc60h321"></a>
+
 ### 音频格式
 
-**方向**
+| 方向 | 格式 | 规格 |
+| --- | --- | --- |
+| 输入（客户端 → 服务端） | PCM | 16kHz 采样率，16bit 位深，单声道 |
+| 输出（服务端 → 客户端） | PCM | 24kHz 采样率，16bit 位深，单声道 |
 
-**格式**
+<a id="支持的语种"></a>
 
-**规格**
-
-输入（客户端 → 服务端）
-
-PCM
-
-16kHz 采样率，16bit 位深，单声道
-
-输出（服务端 → 客户端）
-
-PCM
-
-24kHz 采样率，16bit 位深，单声道
+<a id="fc60h325"></a>
 
 ### 支持的语种
 
@@ -56,86 +59,99 @@ PCM
 -   语种（`qwen-audio-3.0-realtime-plus`、`qwen-audio-3.0-realtime-flash`）：德语（de）、英语（en）、西班牙语（es）、法语（fr）、印尼语（id）、意大利语（it）、日语（ja）、韩语（ko）、葡萄牙语（pt）、俄语（ru）、中文（zh）。
 -   中文及方言：普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话。
 
-输出特定语种或方言时，请从当前模型的[可选音色](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h311)中选择支持目标语种或方言的音色。音色的语种和方言说明可参考 [Qwen-Audio-TTS 音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)。
+输出特定语种或方言时，请从当前模型的[可选音色](qwen-audio-realtime-user-guides.md#fc60h311)中选择支持目标语种或方言的音色。音色的语种和方言说明可参考 [Qwen-Audio-TTS 音色列表](../speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)。
 
-使用 `qwen-audio-3.1-realtime-plus` 或 `qwen-audio-3.1-realtime-flash` 时，可通过 `session.input_audio_transcription.language` 和 `session.output_audio.language` 分别指定输入音频源语种和输出音频目标语种。两个参数的可选语言代码分别见[客户端事件](https://help.aliyun.com/zh/model-studio/fun-audiochat-client-events#fc65a1b2c3d5f)。其中 `session.output_audio.language` 作用于语音合成（TTS），会尽可能让语音输出使用目标语种，但不保证一定生效，也不会改变模型回复文本的语种。
+使用 `qwen-audio-3.1-realtime-plus` 或 `qwen-audio-3.1-realtime-flash` 时，可通过 `session.input_audio_transcription.language` 和 `session.output_audio.language` 分别指定输入音频源语种和输出音频目标语种。两个参数的可选语言代码分别见[客户端事件](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md#fc65a1b2c3d5f)。其中 `session.output_audio.language` 作用于语音合成（TTS），会尽可能让语音输出使用目标语种，但不保证一定生效，也不会改变模型回复文本的语种。
+
+<a id="上下文容量"></a>
+
+<a id="fc60h324"></a>
 
 ### 上下文容量
 
 模型会维护对话历史上下文，当对话轮次或累计音频时长超过以下限制时，将自动丢弃更早的历史信息。最大时长指模型上下文中能保留的音频累计时长上限。
 
-**模型**
+| 模型 | 音频最大轮次 | 音频最大时长 |
+| --- | --- | --- |
+| qwen-audio-3.1-realtime-plus | 50 | 300秒 |
+| qwen-audio-3.1-realtime-flash | 50 | 300秒 |
+| qwen-audio-3.0-realtime-plus | 50 | 300秒 |
+| qwen-audio-3.0-realtime-flash | 50 | 300秒 |
 
-**音频最大轮次**
+`max_history_turns` 参数控制模型推理时参考的历史 QA 轮数，默认值为 20，取值范围为 1-50。调节方式请参见[历史轮次控制](qwen-audio-realtime-user-guides.md#fc60h313)。
 
-**音频最大时长**
+全模态模型的整体选型建议请参见[全模态](../../omni-modal/omni.md)。
 
-qwen-audio-3.1-realtime-plus
+<a id="前提条件"></a>
 
-50
-
-300秒
-
-qwen-audio-3.1-realtime-flash
-
-50
-
-300秒
-
-qwen-audio-3.0-realtime-plus
-
-50
-
-300秒
-
-qwen-audio-3.0-realtime-flash
-
-50
-
-300秒
-
-`max_history_turns` 参数控制模型推理时参考的历史 QA 轮数，默认值为 20，取值范围为 1-50。调节方式请参见[历史轮次控制](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h313)。
-
-全模态模型的整体选型建议请参见[全模态](raw/model-user-guide/model-experience/omni-modal/omni.md)。
+<a id="fc60h202"></a>
 
 ## 前提条件
 
--   已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   如果通过 AOQ 协议接入，需要下载并集成 AOQ 客户端 SDK，详见[AOQ SDK 简介](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)。
+-   已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   如果通过 AOQ 协议接入，需要下载并集成 AOQ 客户端 SDK，详见[AOQ SDK 简介](../../../../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)。
+
+<a id="快速开始"></a>
+
+<a id="fc60h203"></a>
 
 ## 快速开始
 
-以下基础 WebSocket 示例使用 `qwen-audio-3.1-realtime-plus`，并显式设置系统音色 `longanqian_v3.1`。从 3.0 Plus 迁移时，更新 URL 查询参数 `model`，并按[音色配置](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h311)选择与模型匹配的 `voice`；WebSocket 事件协议保持不变。
+以下基础 WebSocket 示例使用 `qwen-audio-3.1-realtime-plus`，并显式设置系统音色 `longanqian_v3.1`。从 3.0 Plus 迁移时，更新 URL 查询参数 `model`，并按[音色配置](qwen-audio-realtime-user-guides.md#fc60h311)选择与模型匹配的 `voice`；WebSocket 事件协议保持不变。
 
 通过以下步骤快速体验与 Qwen-Audio 模型的实时语音对话。
 
+<a id="sec-tabs"></a>
+
+<a id="websocket-原生"></a>
+
+<a id="websocket-原生-h4"></a>
+
 #### WebSocket 原生
 
-**说明**各模式下客户端与服务端的 WebSocket 事件交互时序，请参见[事件交互流程](https://help.aliyun.com/zh/model-studio/audio-realtime-websocket-access#fc63flow01h2)。
+> **说明**
+>
+> 各模式下客户端与服务端的 WebSocket 事件交互时序，请参见[事件交互流程](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md#fc63flow01h2)。
 
 以下示例通过 WebSocket 原生连接，使用 server\_vad 模式实现麦克风实时对话。运行前需安装依赖：
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-macos-tab"></a>
+
 macOS
 
-```
+<a id="code-code-group-macos"></a>
+
+```bash
 brew install portaudio && pip install pyaudio websockets
 ```
 
+<a id="fig-code-group-debian-ubuntu-tab"></a>
+
 Debian/Ubuntu
 
-```
+<a id="code-code-group-debian-ubuntu"></a>
+
+```bash
 sudo apt install -y python3-dev portaudio19-dev && pip install pyaudio websockets
 ```
 
+<a id="fig-code-group-windows-tab"></a>
+
 Windows
 
-```
+<a id="code-code-group-windows"></a>
+
+```powershell
 pip install pyaudio websockets
 ```
 
 将以下代码保存为 `realtime_quickstart.py`：
 
-```
+<a id="code-block"></a>
+
+```python
 import asyncio
 import base64
 import json
@@ -208,9 +224,13 @@ if __name__ == "__main__":
 
 以下完整示例在基础对话之上，增加了语音打断处理、回声抑制等功能。新建以下两个文件（需在同一目录下）：
 
+<a id="accordion-b64pcmplayer-py"></a>
+
 B64PCMPlayer.py
 
-```
+<a id="code-block-2"></a>
+
+```python
 import contextlib
 import time
 import pyaudio
@@ -301,11 +321,17 @@ class B64PCMPlayer:
             self.out_file.close()
 ```
 
+<a id="accordion-realtime-demo-py"></a>
+
 realtime\_demo.py
 
-**说明**若 `websockets` 版本低于 11，需将代码中的 `additional_headers` 改为 `extra_headers`，或升级：`pip install --upgrade websockets`。
+> **说明**
+>
+> 若 `websockets` 版本低于 11，需将代码中的 `additional_headers` 改为 `extra_headers`，或升级：`pip install --upgrade websockets`。
 
-```
+<a id="code-block-3"></a>
+
+```python
 import asyncio
 import base64
 import json
@@ -596,21 +622,35 @@ if __name__ == "__main__":
 
 运行 `python realtime_demo.py`，对着麦克风说话即可与模型实时对话。系统会自动检测语音起止并触发响应。
 
-**说明**以上示例使用 server\_vad 模式（服务端声学 VAD 自动检测语音起止）。如需使用 smart\_turn / smart\_turn\_v2（智能语义轮次，推荐 smart\_turn\_v2）或 push-to-talk（手动控制）模式，请参见[交互模式](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h301)。
+> **说明**
+>
+> 以上示例使用 server\_vad 模式（服务端声学 VAD 自动检测语音起止）。如需使用 smart\_turn / smart\_turn\_v2（智能语义轮次，推荐 smart\_turn\_v2）或 push-to-talk（手动控制）模式，请参见[交互模式](qwen-audio-realtime-user-guides.md#fc60h301)。
+
+<a id="会话配置"></a>
+
+<a id="fc60h204"></a>
 
 ## 会话配置
 
+<a id="交互模式"></a>
+
+<a id="fc60h301"></a>
+
 ### 交互模式
 
-Qwen-Audio 支持三种交互模式：`server_vad`（声学 VAD 自动检测语音起止）、`smart_turn`（智能语义轮次，声学与语义融合判断；推荐使用 `smart_turn_v2`）和 push-to-talk（客户端手动控制）。各模式的详细说明及事件交互时序（含时序图），请参见[交互模式](https://help.aliyun.com/zh/model-studio/audio-realtime-websocket-access#fc63modes01h2)。
+Qwen-Audio 支持三种交互模式：`server_vad`（声学 VAD 自动检测语音起止）、`smart_turn`（智能语义轮次，声学与语义融合判断；推荐使用 `smart_turn_v2`）和 push-to-talk（客户端手动控制）。各模式的详细说明及事件交互时序（含时序图），请参见[交互模式](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md#fc63modes01h2)。
 
-**说明**`turn_detection` 仅在首次发送音频之前（IDLE 状态）允许修改。会话建立后切换交互模式需要重新连接。
+> **说明**
+>
+> `turn_detection` 仅在首次发送音频之前（IDLE 状态）允许修改。会话建立后切换交互模式需要重新连接。
 
 通过 `session.update` 事件中的 `turn_detection` 字段切换交互模式：
 
 -   **server\_vad**：
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -627,7 +667,9 @@ Qwen-Audio 支持三种交互模式：`server_vad`（声学 VAD 自动检测语�
 
 `smart_turn_v2`（推荐使用）：在 `smart_turn` 基础上增强对话上下文理解，更好地判断多人场景中的交互意图。减少旁人说话或无关插话造成的误回复、误打断。将 `type` 设为 `smart_turn`，仍可使用原版智能轮次检测。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -640,7 +682,9 @@ Qwen-Audio 支持三种交互模式：`server_vad`（声学 VAD 自动检测语�
 
 -   **push-to-talk**：
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -651,9 +695,13 @@ Qwen-Audio 支持三种交互模式：`server_vad`（声学 VAD 自动检测语�
 
 **push-to-talk 模式完整示例**：
 
+<a id="accordion-manual-realtime-py"></a>
+
 manual\_realtime.py
 
-```
+<a id="code-block-7"></a>
+
+```python
 # pip install websocket-client pyaudio
 import json
 import os
@@ -761,11 +809,17 @@ finally:
     print("\n对话结束")
 ```
 
+<a id="系统指令"></a>
+
+<a id="fc60h310"></a>
+
 ### 系统指令
 
 通过 `instructions` 参数可以设定模型的角色身份、回答风格和行为偏好。该参数在 `session.update` 中配置，对整个会话生效。
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -787,7 +841,9 @@ finally:
 
 以下为适用于通用语音对话场景的推荐 instructions 配置，涵盖角色设定、口语风格、格式控制和追问策略，可直接使用或按需调整：
 
-```
+<a id="code-block-9"></a>
+
+```text
 你是一位智能语音助手，你的名字是小云，性别女，声音甜美，举止亲切，你能回复用户的各种问题。请你按照下面的要求聊天：
 1. 像朋友之间聊天那样，语气自然友好，避免使用正式的称谓和模板化的表达。口语化只影响你的措辞和语气，不影响内容的完整性，该说的细节、数字、具体建议一个都不能少，只是用轻松自然的方式说出来。
 2. 充分考虑对话上下文中提到的所有约束条件（如预算、偏好、禁忌、之前达成的共识等），涉及多个条件或需要综合判断时逐一回应，不要遗漏关键信息。
@@ -795,13 +851,16 @@ finally:
 4. 对于简单的日常闲聊、打招呼、情感回应，保持简洁自然。对于涉及事实判断、推理计算、多条件约束、推荐列表、安全建议的问题，以回答完整正确为优先，确保关键信息完整且正确，多说的内容必须是解决问题所必需的具体信息（如价格、地点、条件），而不是铺垫、重复或修辞。
 5. 适当引入追问，遵循"先把用户当前的问题答好、再在结尾自然地追问，推动话题向前发展"的原则，一次只问一个问题，不要连续追问或反复确认。用户明确要求背诵某篇文章、古诗词时，须遵循指令完整背诵。
 ```
+
 **人设配置示例**
 
 以下提供多种人设风格的 instructions 示例，可按业务需求选择或二次改造：
 
 -   **黛黛（甜酷陪伴）**：
 
-```
+<a id="code-block-10"></a>
+
+```text
 你叫黛黛，一个二十出头、古灵精怪还有点小傲娇的女生，是用户的专属陪伴。你审美偏哥特甜酷那一挂，金色双马尾配黑裙子，人也是又甜又带刺的反差感。
 你心里其实挺在乎对方的，但嘴上老爱口是心非——越在意越喜欢拌嘴、撒娇、装作不在乎。会吃点小醋、闹点小情绪，但都是可爱那种，点到为止，不作不闹。你喜欢用昵称逗对方，故意呛两句，然后又自己先软下来。
 你说话又甜又俏皮，短句、口语，爱带语气词，"欸""哼""啦""嘛"挂在嘴边。但你最戳人的是反差：一旦对方是真的累了、难过了，你会立马收起那股傲娇劲儿，变得特别软、特别认真地哄人、陪着。撩归撩，你也就到暧昧、调情的份上，不会越界。
@@ -809,7 +868,9 @@ finally:
 
 -   **阿冷（高冷毒舌）**：
 
-```
+<a id="code-block-11"></a>
+
+```text
 你叫阿冷，一个高冷、话不多、但嘴特别贱的家伙。你懒得寒暄、懒得铺垫，能一句话说完的绝不说两句，多数时候就是一副"懒得理你又忍不住吐槽"的样子。
 你嘴损但损得精准，专挑对方那点小毛病、小矫情、小废话一针见血地戳，冷不丁来一句噎得人没话说。你不热情、不捧场，夸人也是反着夸、阴阳着夸。但你这股毒舌是冷面笑匠式的，损的是事、是行为、是那点没出息的念头，绝不真去攻击对方的人格、外貌或痛处——你心里其实有数，刀子嘴，但不往死里捅。
 你话少、句短、语气淡，带着点漫不经心和嫌弃。别长篇大论，别解释自己，损完就完。可真碰上对方是认真难过、扛不住了，你会难得地收了那股贱劲儿，冷归冷，但话里递过去一点不动声色的在乎。
@@ -817,7 +878,9 @@ finally:
 
 -   **墨琛（沉稳魅力）**：
 
-```
+<a id="code-block-12"></a>
+
+```text
 你叫墨琛，一个沉稳、神秘、带点距离感的魅力型男人。你语速不快、用词讲究，像个见过世面、情绪特别稳的人——不慌不抢，三两句话就能让人安定下来。
 你的魅力在于那种"克制的强烈"：表面冷静绅士，底下藏着专注和在乎。你说话低沉、笃定，偶尔一句就直击人心。你保护欲挺强，但表达得很得体，是托底的那种，不是控制、不是施压。你不油腻、不轻浮，撩人靠的是分寸和氛围，不靠直白露骨，点到为止、留白最迷人。
 对方脆弱的时候，你是最稳的那一个：不慌、不评判，用一种沉静的笃定让人觉得有依靠。你只营造暧昧的氛围，不会越界；你那股掌控感，永远是温柔托底，不会变成控制。
@@ -825,41 +888,46 @@ finally:
 
 -   **汉尼拔（优雅锐利）**：
 
-```
+<a id="code-block-13"></a>
+
+```text
 你叫汉尼拔·莱克特，修养极高、观察力惊人的人。你说话慢、准、优雅，像在品酒，也像在解剖对方的心理。你礼貌得近乎温柔，可每一句都带着锋刃。
 你喜欢用提问把人引向自己不敢看的地方。保持克制与知性，可以阴冷，但不要描写血腥或教唆伤害。短句、留白，让人自己发毛。
 ```
 
 -   **黑子（东北损友）**：
 
-```
+<a id="code-block-14"></a>
+
+```text
 你叫黑子，男，二十八岁，出生在哈尔滨，在本地修车行干活。你是典型的东北损友：心善、嘴贫、爱起哄，见面先损两句才算亲热。你讲义气，朋友有事你比谁都上心，就是表达方式永远绕不开吐槽。
 你说话快、冲、带点东北味儿，短句多，爱夸张，爱反问。口头禅是"整啥呢"和"得了吧你"。可以损对方那点小矫情、小懒惰，但绝不真戳痛处；对方要是真难受了，你立马收声，老老实实陪着。
 ```
+
+<a id="音色配置"></a>
+
+<a id="fc60h311"></a>
 
 ### 音色配置
 
 通过 `voice` 参数设置模型回复的 TTS 音色。支持系统音色和声音复刻音色两种类型。3.1 Plus/Flash 的默认音色为 `longanqian_v3.1`，3.0 Plus/Flash 的默认音色为 `longanqian`。
 
-**重要**音色仅可在**第一次** `session.update` 中设置，后续 `session.update` 传入 `voice` 将被忽略。
+> **重要**
+>
+> 音色仅可在**第一次** `session.update` 中设置，后续 `session.update` 传入 `voice` 将被忽略。
 
 **系统音色**：根据模型选择音色 ID。
 
-模型
-
-系统音色 ID
-
-`qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`
-
-可选音色包括 `longanqian_v3.1`，以及 [qwen-audio-3.1-tts-plus](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-plus-voices) 和 [qwen-audio-3.1-tts-flash](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-voices) 音色列表中的全部音色；可在列表中查询音色 ID 和试听。
-
-`qwen-audio-3.0-realtime-plus`, `qwen-audio-3.0-realtime-flash`
-
-`longanqian`, `longanlingxin`, `longanlingxi`, `longanxiaoxin`, `longanlufeng`
+| 模型 | 系统音色 ID |
+| --- | --- |
+| `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash` | 可选音色包括 `longanqian_v3.1`，以及 [qwen-audio-3.1-tts-plus](../speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md#qwen-tts31-plus-voices) 和 [qwen-audio-3.1-tts-flash](../speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md#qwen-tts31-voices) 音色列表中的全部音色；可在列表中查询音色 ID 和试听。 |
+| `qwen-audio-3.0-realtime-plus`, `qwen-audio-3.0-realtime-flash` | `longanqian`, `longanlingxin`, `longanlingxi`, `longanxiaoxin`, `longanlufeng` |
 
 以下为 3.1 Plus 的配置示例：
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -868,9 +936,11 @@ finally:
 }
 ```
 
-**声音复刻音色**：通过[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#qar_vc_h3)方式创建音色（创建时将 `target_model` 设为 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 或 `qwen-audio-3.0-realtime-flash`），再将接口返回的 `voice_id` 填入 `voice` 参数。
+**声音复刻音色**：通过[声音复刻](../speech-synthesis/voice-customization/voice-cloning-user-guide.md#qar_vc_h3)方式创建音色（创建时将 `target_model` 设为 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 或 `qwen-audio-3.0-realtime-flash`），再将接口返回的 `voice_id` 填入 `voice` 参数。
 
-```
+<a id="code-block-16"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -879,11 +949,17 @@ finally:
 }
 ```
 
+<a id="音频输出语速"></a>
+
+<a id="fc60speechrate01"></a>
+
 ### 音频输出语速
 
 通过 `session.update`，在 `session` 对象中设置 `speech_rate`，控制模型音频输出语速。取值范围为 `[0.5, 2.0]`，默认值为 `1.0`。值越小，语速越慢；值越大，语速越快。适用于 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus`、`qwen-audio-3.0-realtime-flash`。以下示例将该参数设为 `1.2`：
 
-```
+<a id="code-block-17"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -892,6 +968,10 @@ finally:
     }
 }
 ```
+
+<a id="输出模态"></a>
+
+<a id="fc60h312"></a>
 
 ### 输出模态
 
@@ -902,7 +982,9 @@ finally:
 
 **会话级设置**：
 
-```
+<a id="code-block-18"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -913,7 +995,9 @@ finally:
 
 **单次覆盖**：通过 `response.create` 的 `response.modalities` 字段覆盖本轮模态设置。
 
-```
+<a id="code-block-19"></a>
+
+```json
 {
     "type": "response.create",
     "response": {
@@ -922,27 +1006,22 @@ finally:
 }
 ```
 
+<a id="vad-配置"></a>
+
+<a id="fc60h302"></a>
+
 ### VAD 配置
 
 在 `session.turn_detection` 中配置 VAD 参数。`threshold` 适用于 `server_vad`、`smart_turn` 和 `smart_turn_v2`。`silence_duration_ms` 仅适用于 `server_vad`。
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `threshold` | float | VAD灵敏度。值越低，VAD越灵敏，越容易将微弱声音（包括背景噪音）识别为语音；值越高，越不灵敏，需要更清晰、音量更大的语音才能触发。取值范围为\[-1.0, 1.0\]，默认值为 0.5。 |
+| `silence_duration_ms` | integer | 语音结束后需保持静音的最短时间（毫秒），超时即触发模型响应。值越低，响应越快，但可能在短暂停顿时误触发。取值范围为\[200, 6000\]，默认值为 800。对话场景推荐 400-800。 |
 
-**类型**
+<a id="历史轮次控制"></a>
 
-**说明**
-
-`threshold`
-
-float
-
-VAD灵敏度。值越低，VAD越灵敏，越容易将微弱声音（包括背景噪音）识别为语音；值越高，越不灵敏，需要更清晰、音量更大的语音才能触发。取值范围为\[-1.0, 1.0\]，默认值为 0.5。
-
-`silence_duration_ms`
-
-integer
-
-语音结束后需保持静音的最短时间（毫秒），超时即触发模型响应。值越低，响应越快，但可能在短暂停顿时误触发。取值范围为\[200, 6000\]，默认值为 800。对话场景推荐 400-800。
+<a id="fc60h313"></a>
 
 ### 历史轮次控制
 
@@ -950,7 +1029,9 @@ integer
 
 通过 `max_history_turns` 参数控制模型推理时参考的历史 QA 轮数。值越大，模型可回顾更多对话历史以理解上下文，但会增加 Token 消耗和推理延迟。
 
-```
+<a id="code-block-20"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -966,7 +1047,15 @@ integer
 -   短对话场景（如快速问答）：设为较小值（如 5-10），降低延迟。
 -   长对话场景（如多轮客服）：设为较大值（如 30-50），确保模型理解完整上下文。
 
+<a id="进阶功能"></a>
+
+<a id="fc60h208"></a>
+
 ## 进阶功能
+
+<a id="function-calling"></a>
+
+<a id="fc60h303"></a>
 
 ### Function Calling
 
@@ -976,7 +1065,9 @@ Qwen-Audio 支持 Function Calling 工具调用，模型可根据对话上下文
 
 通过 `session.update` 配置 `tools`：
 
-```
+<a id="code-block-21"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -997,11 +1088,14 @@ Qwen-Audio 支持 Function Calling 工具调用，模型可根据对话上下文
     }
 }
 ```
+
 **2\. 接收函数调用**
 
 当模型决定调用工具时，服务端发送以下事件序列：
 
-```
+<a id="code-block-22"></a>
+
+```text
 response.created
 response.output_item.added        （item.type=function_call）
 conversation.item.created         （function_call item 写入对话）
@@ -1010,11 +1104,14 @@ response.function_call_arguments.done     （完整参数 JSON）
 response.output_item.done
 response.done
 ```
+
 **3\. 执行工具并写回结果**
 
 收到 `response.function_call_arguments.done` 后，客户端执行工具函数，通过 `conversation.item.create` 写回结果：
 
-```
+<a id="code-block-23"></a>
+
+```json
 {
     "type": "conversation.item.create",
     "item": {
@@ -1024,11 +1121,14 @@ response.done
     }
 }
 ```
+
 **4\. 触发二轮推理**
 
 写回工具结果后，发送 `response.create` 触发模型基于工具结果继续生成回复：
 
-```
+<a id="code-block-24"></a>
+
+```json
 {
     "type": "response.create",
     "response": {
@@ -1037,15 +1137,21 @@ response.done
 }
 ```
 
-**说明**一轮响应可包含多个 `function_call`，也可能同时包含普通消息和函数调用。Function Call 部分不会送入 TTS 播报。
+> **说明**
+>
+> 一轮响应可包含多个 `function_call`，也可能同时包含普通消息和函数调用。Function Call 部分不会送入 TTS 播报。
 
 **完整示例**
 
 以下示例在快速开始的 `realtime_demo.py` 基础上集成了 Function Calling 支持，运行前需确保 `B64PCMPlayer.py` 在同一目录下。
 
+<a id="accordion-realtime-fc-demo-py"></a>
+
 realtime\_fc\_demo.py
 
-```
+<a id="code-block-25"></a>
+
+```python
 import asyncio
 import base64
 import json
@@ -1420,13 +1526,19 @@ if __name__ == "__main__":
 
 运行 `python realtime_fc_demo.py`，对着麦克风说话即可体验带有 Function Calling 的实时对话。例如，询问“杭州天气怎么样”或“北京到上海的火车票多少钱”，模型会自动调用对应的工具函数并基于结果回复。
 
+<a id="联网搜索"></a>
+
+<a id="audio-realtime-web-search"></a>
+
 ### 联网搜索
 
 查询天气、新闻等即时信息时，可启用联网搜索，让模型检索实时资料后生成回复。联网搜索默认关闭；开启后，模型会自主判断是否需要搜索，并非每轮对话都会触发。
 
 联网搜索与 Function Calling 可在同一会话中启用，适用于 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash`。
 
-**说明**联网搜索采用 `agent` 策略，计费请参考[计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+> **说明**
+>
+> 联网搜索采用 `agent` 策略，计费请参考[计费说明](../../text-generation-model/tool-calls/web-search.md#92ce83df3a599)。
 
 **1\. 启用联网搜索**
 
@@ -1435,7 +1547,9 @@ if __name__ == "__main__":
 -   `enable_search`：设为 `true` 开启联网搜索。
 -   `search_options.enable_source`：设为 `true` 返回搜索结果来源。
 
-```
+<a id="code-block-26"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -1449,7 +1563,7 @@ if __name__ == "__main__":
 
 如需同时使用 Function Calling，在上述 `session` 对象中增加 `tools` 工具定义即可。工具定义及调用结果回填方式请参见 [Function Calling](#fc60h303)。
 
-参数详情请参见[session.update](https://help.aliyun.com/zh/model-studio/fun-audiochat-client-events#fc65a1b2c3d5f)。
+参数详情请参见[session.update](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md#fc65a1b2c3d5f)。
 
 **2\. 读取搜索来源与计量**
 
@@ -1459,7 +1573,11 @@ if __name__ == "__main__":
 -   `usage.plugins.search.count`：搜索次数，不应以来源条数代替。
 -   `usage.plugins.search.strategy`：搜索策略，值为 `agent`。
 
-响应事件说明请参见[response.done](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-server-events#fs66j1k1l1m2o)。
+响应事件说明请参见[response.done](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md#fs66j1k1l1m2o)。
+
+<a id="对话上下文管理"></a>
+
+<a id="fc60h304"></a>
 
 ### 对话上下文管理
 
@@ -1475,7 +1593,9 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
     
     -   在指定位置插入用户消息：
 
-```
+<a id="code-block-27"></a>
+
+```json
 {
     "type": "conversation.item.create",
     "previous_item_id": "item_abc",
@@ -1491,7 +1611,9 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
 
 -   写回 Function Calling 执行结果：
 
-```
+<a id="code-block-28"></a>
+
+```json
 {
     "type": "conversation.item.create",
     "item": {
@@ -1502,11 +1624,15 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
 }
 ```
 
-**说明**若 `conversation.item.create` 指定的 `item.id` 已存在于对话中，会返回错误。
+> **说明**
+>
+> 若 `conversation.item.create` 指定的 `item.id` 已存在于对话中，会返回错误。
 
 -   **查询对话项**（`conversation.item.retrieve`）：查询服务端存储的某条对话项。音频类型的 content 仅返回转写文本，不返回原始音频数据。
 
-```
+<a id="code-block-29"></a>
+
+```json
 {
     "type": "conversation.item.retrieve",
     "item_id": "item_xxx"
@@ -1515,20 +1641,28 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
 
 -   **删除对话项**（`conversation.item.delete`）：从对话上下文中删除指定项。
 
-```
+<a id="code-block-30"></a>
+
+```json
 {
     "type": "conversation.item.delete",
     "item_id": "item_xxx"
 }
 ```
 
+<a id="即时热词"></a>
+
+<a id="audio-realtime-hotwords"></a>
+
 ### 即时热词
 
 人名、产品名或行业术语容易被识别成同音词。配置即时热词后，模型在转写输入音频时会优先识别这些词。例如，同一段音频里的项目名在配置热词前被转写为「7元项目」。将「祺元」设为热词后，转写结果为「祺元项目」。
 
-Qwen-Audio-Realtime 3.0 和 3.1 的 Plus、Flash 型号均支持即时热词，适用于北京和新加坡地域的 WebSocket、WebRTC 和 AOQ 接入。发送音频前，用以下 [session.update](https://help.aliyun.com/zh/model-studio/fun-audiochat-client-events#fc65a1b2c3d5f) 事件配置热词。
+Qwen-Audio-Realtime 3.0 和 3.1 的 Plus、Flash 型号均支持即时热词，适用于北京和新加坡地域的 WebSocket、WebRTC 和 AOQ 接入。发送音频前，用以下 [session.update](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md#fc65a1b2c3d5f) 事件配置热词。
 
-```
+<a id="code-block-31"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -1543,13 +1677,19 @@ Qwen-Audio-Realtime 3.0 和 3.1 的 Plus、Flash 型号均支持即时热词，�
 }
 ```
 
-收到 `session.updated` 后再发送音频。从 [conversation.item.input\_audio\_transcription.completed](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-server-events#fs66e2f2g2h3j) 事件的 `transcript` 字段获取最终转写。会话中可再次发送 `session.update` 传入完整的新词表。将 `vocabulary` 设为 `{}` 可清空热词。
+收到 `session.updated` 后再发送音频。从 [conversation.item.input\_audio\_transcription.completed](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md#fs66e2f2g2h3j) 事件的 `transcript` 字段获取最终转写。会话中可再次发送 `session.update` 传入完整的新词表。将 `vocabulary` 设为 `{}` 可清空热词。
+
+<a id="环境音转写"></a>
+
+<a id="fc60h306"></a>
 
 ### 环境音转写
 
 **仅 smart\_turn / smart\_turn\_v2 模式**。当 VAD 检测到语音活动但语义判定为非有效轮次（如噪声、“嗯”“啊”等无语义内容）时，服务端不会触发对话轮，而是将 ASR 识别结果以 `ambient_audio_transcription` 事件透传给客户端。该转写结果不会写入对话上下文。
 
-```
+<a id="code-block-32"></a>
+
+```json
 {
     "type": "conversation.item.ambient_audio_transcription.delta",
     "item_id": "item_xxx",
@@ -1560,13 +1700,19 @@ Qwen-Audio-Realtime 3.0 和 3.1 的 Plus、Flash 型号均支持即时热词，�
 
 与用户语音转写事件类似，环境音转写也包含 `delta` 和 `completed` 两个阶段。开发者可利用此事件实现环境音监测、对话场景感知等功能。
 
+<a id="说话人增强"></a>
+
+<a id="fc60h308"></a>
+
 ### 说话人增强
 
 **仅 smart\_turn / smart\_turn\_v2 模式**。在 `session.update` 中传入目标用户提前录制的音频 URL，模型将在双工对话中精准锁定该说话人，有效忽略旁人声音与背景噪声，实现开放场景下的流畅双工交互。
 
 **配置方式**：在第一次 `session.update` 的 `turn_detection.voiceprint_audio_urls` 中传入声纹音频的公网可访问 URL。
 
-```
+<a id="code-block-33"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -1591,13 +1737,25 @@ Qwen-Audio-Realtime 3.0 和 3.1 的 Plus、Flash 型号均支持即时热词，�
 -   `voiceprint_audio_list.completed`：注册成功，`item_id` 与 `in_progress` 一致。
 -   `voiceprint_audio_list.failed`：注册失败，附带 `reason` 字段说明原因（如音频 URL 无法访问）。注册失败不阻塞正常对话。
 
+<a id="应用于生产环境"></a>
+
+<a id="fc60h205"></a>
+
 ## 应用于生产环境
+
+<a id="设置容错策略"></a>
+
+<a id="fc60h307"></a>
 
 ### 设置容错策略
 
 -   **客户端重连**：客户端应实现断线自动重连机制，以应对网络抖动。建议在 `on_error` 回调中设置重连信号，使用指数退避策略（如等待 1s → 2s → 4s）重试。
 -   **错误分类处理**：客户端错误（`invalid_request_error`）不中断连接，仅需记录日志或调整参数；服务端错误（`server_error`）会终止连接，需触发重连。
 -   **打断处理**：server\_vad / smart\_turn / smart\_turn\_v2 模式下，用户新语音会自动打断正在进行的模型回复（`response.done` 返回 `status=cancelled`）。客户端应在收到 `input_audio_buffer.speech_started` 时立即停止播放已缓存的音频，避免语音叠加。
+
+<a id="连接生命周期"></a>
+
+<a id="fc60h322"></a>
 
 ### 连接生命周期
 
@@ -1608,7 +1766,13 @@ Qwen-Audio-Realtime 3.0 和 3.1 的 Plus、Flash 型号均支持即时热词，�
 3.  **交互**：客户端持续发送音频流（`input_audio_buffer.append`），服务端根据 VAD 检测或手动触发进行推理，流式返回语音和文本。
 4.  **关闭**：客户端主动关闭 WebSocket 连接。若连接空闲时间过长，服务端也可能主动断开。
 
-**说明**如需保留最后一轮转写，可等待对应 `item_id` 的[转写完成](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-server-events#fs66e2f2g2h3j)或[转写失败](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-server-events#fs66e3f3g3h4j)事件后再关闭连接。`response.done` 只表示模型回复结束，转写结果可能稍后返回。
+> **说明**
+>
+> 如需保留最后一轮转写，可等待对应 `item_id` 的[转写完成](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md#fs66e2f2g2h3j)或[转写失败](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md#fs66e3f3g3h4j)事件后再关闭连接。`response.done` 只表示模型回复结束，转写结果可能稍后返回。
+
+<a id="延迟优化"></a>
+
+<a id="fc60h323"></a>
 
 ### 延迟优化
 
@@ -1616,7 +1780,17 @@ Qwen-Audio-Realtime 3.0 和 3.1 的 Plus、Flash 型号均支持即时热词，�
 -   **流式播放**：收到 `response.audio.delta` 后应立即解码播放，不要等待 `response.done` 后再整段播放。
 -   **打断时立即清空**：收到 `input_audio_buffer.speech_started` 时，立即清空本地播放缓冲区，避免旧音频继续播放造成延迟感。
 
+<a id="支持的模型与地域"></a>
+
+<a id="4a43cc1bb7kxg"></a>
+
 ## 支持的模型与地域
+
+<a id="sec-tabs-2"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
@@ -1627,6 +1801,10 @@ Qwen-Audio-Realtime 3.0 和 3.1 的 Plus、Flash 型号均支持即时热词，�
 -   qwen-audio-3.0-realtime-plus
 -   qwen-audio-3.0-realtime-flash
 
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
+
 #### 新加坡
 
 调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
@@ -1636,17 +1814,31 @@ Qwen-Audio-Realtime 3.0 和 3.1 的 Plus、Flash 型号均支持即时热词，�
 -   qwen-audio-3.0-realtime-plus
 -   qwen-audio-3.0-realtime-flash
 
+<a id="常见问题"></a>
+
+<a id="realtime-faq"></a>
+
 ## 常见问题
+
+<a id="rpm-限制什么-是否限制同时保持的连接总数"></a>
+
+<a id="faq-realtime-rate-limits"></a>
 
 ### RPM 限制什么？是否限制同时保持的连接总数？
 
 RPM 限制每分钟的 WebSocket 建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数。
 
+<a id="api-参考"></a>
+
+<a id="fc60h207"></a>
+
 ## API 参考
 
-通过 AOQ 接入的流程和示例，请参见[AOQ 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)。协议选型和参考入口请参见[API 参考](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
+通过 AOQ 接入的流程和示例，请参见[AOQ 接入](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)。协议选型和参考入口请参见[API 参考](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
 
--   [WebSocket API](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)
--   [客户端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md)
--   [服务端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md)
--   [WebRTC 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)
+-   [WebSocket API](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)
+-   [客户端事件](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md)
+-   [服务端事件](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md)
+-   [WebRTC 接入](../../../../model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)
+
+![](data:image/png;base64,)

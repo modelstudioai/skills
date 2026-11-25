@@ -2,93 +2,49 @@
 
 运行环境定义工具调用的执行沙箱。在控制台环境页面创建和管理，可被多个会话复用。
 
-**警告**阿里云百炼托管的沙箱容器涉及基础云资源和服务，使用时应特别遵守[《阿里云产品服务协议》](https://terms.aliyun.com/legal-agreement/terms/suit_bu1_ali_cloud/suit_bu1_ali_cloud201802281451_77479.html)第 6 条关于网络和数据安全的约定，不应安装、使用盗版软件等，并对自行安装的软件和进行的操作所引起的结果承担全部责任。
+> **警告**
+>
+> 阿里云百炼托管的沙箱容器涉及基础云资源和服务，使用时应特别遵守[《阿里云产品服务协议》](https://terms.aliyun.com/legal-agreement/terms/suit_bu1_ali_cloud/suit_bu1_ali_cloud201802281451_77479.html)第 6 条关于网络和数据安全的约定，不应安装、使用盗版软件等，并对自行安装的软件和进行的操作所引起的结果承担全部责任。
+
+<a id="类型"></a>
 
 ## 类型
 
-**类型**
+| 类型 | 说明 |
+| --- | --- |
+| 云端 | 由阿里云百炼托管的沙箱容器，开箱即用，可被多个会话复用。配置预装包后可能需要预热，见[环境预热](#h-env-warmup) |
 
-**说明**
+> **说明**
+>
+> 沙箱持久化在会话级配置，不在环境级配置。环境本身不保留会话运行后的磁盘修改；如需跨运行保留工作文件和环境修改，创建会话时开启沙箱持久化，详见[沙箱持久化](../managed-agents-session/managed-agents-session-operations.md#h-sandbox-persistence)。
 
-云端
-
-由阿里云百炼托管的沙箱容器，开箱即用，可被多个会话复用。配置预装包后可能需要预热，见[环境预热](#h-env-warmup)
-
-**说明**沙箱持久化在会话级配置，不在环境级配置。环境本身不保留会话运行后的磁盘修改；如需跨运行保留工作文件和环境修改，创建会话时开启沙箱持久化，详见[沙箱持久化](https://help.aliyun.com/zh/model-studio/managed-agents-session-operations#h-sandbox-persistence)。
+<a id="配置字段"></a>
 
 ## 配置字段
 
 在**环境**页面点击**添加环境**，填写以下字段：
 
-**字段**
+| 字段 | 必填 | 可变更 | 说明 |
+| --- | --- | --- | --- |
+| 名称 | 是 | 是 | 工作空间内唯一标识 |
+| 描述 | 否 | 是 | 环境用途说明 |
+| 托管类型 | 否 | 否 | `cloud`（云端），由阿里云百炼托管。创建后无法变更 |
+| 预装包 | 否 | 是 | 按包管理器声明（`apt` / `pip` / `npm`），环境创建时自动安装 |
+| 网络策略 | 否 | 是 | `unrestricted` 放行全部出站访问（仅 API 设置，控制台不显示） |
+| 作用域 | 否 | 是 | `organization`（默认），工作空间成员均可使用（仅 API 设置，控制台不显示） |
+| 元数据 | 否 | 是 | 自定义键值对（对应 API 的 `metadata`），不影响运行行为 |
 
-**必填**
+通过 API 创建环境时，指定沙箱类型与预装包。完整参数与响应字段详见[创建 Environment API](../../../../application-api-reference/managed-agents-api/environment-api/environment-create.md)。
 
-**可变更**
+<a id="fig-code-group"></a>
 
-**说明**
-
-名称
-
-是
-
-是
-
-工作空间内唯一标识
-
-描述
-
-否
-
-是
-
-环境用途说明
-
-托管类型
-
-否
-
-否
-
-`cloud`（云端），由阿里云百炼托管。创建后无法变更
-
-预装包
-
-否
-
-是
-
-按包管理器声明（`apt` / `pip` / `npm`），环境创建时自动安装
-
-网络策略
-
-否
-
-是
-
-`unrestricted` 放行全部出站访问（仅 API 设置，控制台不显示）
-
-作用域
-
-否
-
-是
-
-`organization`（默认），工作空间成员均可使用（仅 API 设置，控制台不显示）
-
-元数据
-
-否
-
-是
-
-自定义键值对（对应 API 的 `metadata`），不影响运行行为
-
-通过 API 创建环境时，指定沙箱类型与预装包。完整参数与响应字段详见[创建 Environment API](raw/application-api-reference/managed-agents-api/environment-api/environment-create.md)。
+<a id="fig-code-group-bash-tab"></a>
 
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/environments" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -106,9 +62,13 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   }'
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 env = client.environments.create(
     name="data-sandbox",
     config={
@@ -123,14 +83,20 @@ env = client.environments.create(
 )
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 Environment env = client.environments().create(EnvironmentCreateParam.builder()
     .name("data-sandbox")
     .description("数据分析沙箱")
     .build());
 ```
+
+<a id="支持的包管理器"></a>
 
 ## 支持的包管理器
 
@@ -140,9 +106,15 @@ Environment env = client.environments().create(EnvironmentCreateParam.builder()
 -   **pip**：Python 包，例如 pandas、numpy
 -   **npm**：Node.js 包
 
+<a id="环境预热"></a>
+
+<a id="h-env-warmup"></a>
+
 ## 环境预热
 
 配置了预装包的环境，创建后可能需要预热时间安装依赖，耗时与包的数量和大小相关，可能持续数分钟以上。安装完成前环境处于**准备中**状态，不能被会话引用：此时创建会话返回 `invalid_parameter`，报错信息为 `The environment is still being prepared. Please wait until it is ready and try again.`。预热完成后即可正常绑定；未配置预装包的环境创建后立即可用。建议提前创建环境并预留预热时间，再绑定会话。
+
+<a id="归档与删除"></a>
 
 ## 归档与删除
 
@@ -151,50 +123,80 @@ Environment env = client.environments().create(EnvironmentCreateParam.builder()
 -   **归档**：环境保留但默认不出现在列表中，已绑定的会话继续可用。
 -   **删除**：硬删除，环境配置一并清除，不可恢复。如需保留配置请改用归档。
 
-通过 API 归档环境，详见[归档 Environment API](raw/application-api-reference/managed-agents-api/environment-api/environment-archive.md)。
+通过 API 归档环境，详见[归档 Environment API](../../../../application-api-reference/managed-agents-api/environment-api/environment-archive.md)。
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-bash-tab"></a>
 
 bash
 
-```
+<a id="code-code-group-2-bash"></a>
+
+```bash
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/environments/env_xxx/archive" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="fig-code-group-2-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 client.environments.archive("env_xxx")
 ```
 
+<a id="fig-code-group-2-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 client.environments().archive("env_xxx");
 ```
 
-通过 API 删除环境，详见[删除 Environment API](raw/application-api-reference/managed-agents-api/environment-api/environment-delete.md)：
+通过 API 删除环境，详见[删除 Environment API](../../../../application-api-reference/managed-agents-api/environment-api/environment-delete.md)：
+
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-bash-tab"></a>
 
 bash
 
-```
+<a id="code-code-group-3-bash"></a>
+
+```bash
 curl -X DELETE "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/environments/env_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="fig-code-group-3-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 client.environments.delete("env_xxx")
 ```
 
+<a id="fig-code-group-3-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-3-java"></a>
+
+```java
 client.environments().delete("env_xxx");
 ```
 
+<a id="下一步"></a>
+
 ## 下一步
 
--   [发起会话](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-session-event.md)：创建会话时绑定环境。
--   [密钥库认证](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-credential.md)：为 MCP 服务和技能配置鉴权信息。
--   [文件上传与挂载](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-file.md)：上传文件并挂载到会话。
+-   [发起会话](../managed-agents-session/managed-agents-session-event.md)：创建会话时绑定环境。
+-   [密钥库认证](../managed-agents-session/managed-agents-credential.md)：为 MCP 服务和技能配置鉴权信息。
+-   [文件上传与挂载](../managed-agents-context/managed-agents-file.md)：上传文件并挂载到会话。

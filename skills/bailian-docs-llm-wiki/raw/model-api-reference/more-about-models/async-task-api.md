@@ -2,6 +2,10 @@
 
 在异步任务处理中，频繁轮询任务结果接口不仅会造成资源浪费，还可能因请求频率过高触发接口限流。阿里云百炼支持通过事件总线在任务完成处理后主动推送任务完成通知。您可以通过配置 HTTP 回调 URL 或 RocketMQ 消息队列来接收通知，在收到通知后，只需一次查询即可获取任务结果，从而避免频繁轮询。
 
+<a id="背景介绍"></a>
+
+<a id="f9e4c6c88c6ho"></a>
+
 ## 背景介绍
 
 阿里云百炼的异步任务已接入[事件总线EventBridge](https://help.aliyun.com/zh/eventbridge/product-overview/what-is-eventbridge)。事件总线作为事件中转服务，负责将事件路由至配置的事件目标（即事件接收端）。本文中提到的“通知”，在事件总线体系中即为一个具体的“事件”。
@@ -10,52 +14,22 @@
 
 **主动轮询 VS 接收异步任务完成通知**
 
-**对比维度**
-
-**主动轮询**
-
-**接收异步任务完成通知**
-
-是否限流
-
-查询结果接口限流（20QPS）
-
-不限流
-
-接入难度
-
-简单，轮询查询结果接口即可
-
-> 部分任务（如[文生图](https://help.aliyun.com/zh/model-studio/text-to-image-v2-api-reference#db17b3098c2iv)、[文生视频](https://help.aliyun.com/zh/model-studio/text-to-video-api-reference#db17b3098c2iv)）提供了SDK，SDK已实现轮询，可直接使用；若未提供SDK，需自行实现
-
-稍复杂
-
-需要在事件总线中配置HTTP回调URL或RocketMQ，还需解析事件总线推送的通知
-
-服务器资源消耗
-
-轮询会占用您的业务系统资源，尤其是高频查询
-
-不占用您的业务系统资源，由事件总线主动推送
-
-实时性
-
-实时性较低，依赖轮询频率
-
-实时性高，任务完成后立即推送
-
-选型建议
-
-适合低并发、小规模任务，或对实时性要求不高的场景
-
-适合高并发、大规模任务，或对实时性要求较高的场景
+<table><thead><tr><th><strong>对比维度</strong></th><th><strong>主动轮询</strong></th><th><strong>接收异步任务完成通知</strong></th></tr></thead><tbody><tr><td><p>是否限流</p></td><td><p>查询结果接口限流（20QPS）</p></td><td><p>不限流</p></td></tr><tr><td><p>接入难度</p></td><td><p>简单，轮询查询结果接口即可</p><blockquote><p>部分任务（如<a href="../image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md#db17b3098c2iv">文生图</a>、<a href="../video-generation-api/wan-api-reference/text-to-video-api-reference.md#db17b3098c2iv">文生视频</a>）提供了SDK，SDK已实现轮询，可直接使用；若未提供SDK，需自行实现</p></blockquote></td><td><p>稍复杂</p><p>需要在事件总线中配置HTTP回调URL或RocketMQ，还需解析事件总线推送的通知</p></td></tr><tr><td><p>服务器资源消耗</p></td><td><p>轮询会占用您的业务系统资源，尤其是高频查询</p></td><td><p>不占用您的业务系统资源，由事件总线主动推送</p></td></tr><tr><td><p>实时性</p></td><td><p>实时性较低，依赖轮询频率</p></td><td><p>实时性高，任务完成后立即推送</p></td></tr><tr><td><p>选型建议</p></td><td><p>适合低并发、小规模任务，或对实时性要求不高的场景</p></td><td><p>适合高并发、大规模任务，或对实时性要求较高的场景</p></td></tr></tbody></table>
 
 为接收异步任务完成通知，您可以通过事件总线配置事件目标，常见的配置方案包括：
 
--   [配置HTTP回调URL](https://help.aliyun.com/zh/model-studio/async-task-api#d3591b073966f)：需要一个支持公网或[阿里云专有网络VPC](https://help.aliyun.com/zh/vpc/what-is-vpc)访问的 HTTP URL，且支持 POST 请求，适合大多数通用场景。
--   [配置RocketMQ](https://help.aliyun.com/zh/model-studio/async-task-api#e2f044afc2c0w)：通过[云消息队列 RocketMQ](https://help.aliyun.com/zh/apsaramq-for-rocketmq/product-overview/what-is-apsaramq-for-rocketmq) 接收事件并进行消费，适用于对消息可靠性要求较高的场景。
+-   [配置HTTP回调URL](async-task-api.md#d3591b073966f)：需要一个支持公网或[阿里云专有网络VPC](https://help.aliyun.com/zh/vpc/what-is-vpc)访问的 HTTP URL，且支持 POST 请求，适合大多数通用场景。
+-   [配置RocketMQ](async-task-api.md#e2f044afc2c0w)：通过[云消息队列 RocketMQ](https://help.aliyun.com/zh/apsaramq-for-rocketmq/product-overview/what-is-apsaramq-for-rocketmq) 接收事件并进行消费，适用于对消息可靠性要求较高的场景。
+
+<a id="方案一-配置http回调url"></a>
+
+<a id="d3591b073966f"></a>
 
 ## 方案一：配置HTTP回调URL
+
+<a id="方案介绍"></a>
+
+<a id="596c553a1e9dk"></a>
 
 ### 方案介绍
 
@@ -65,22 +39,15 @@
 
 **计费说明**：[事件总线计费](https://help.aliyun.com/zh/eventbridge/product-overview/billing-overview)。
 
-以[文生图](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)为例，基于HTTP回调URL的异步调用流程为：
+<table><tbody><tr><td><p>以<a href="../image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md">文生图</a>为例，基于HTTP回调URL的异步调用流程为：</p><ul><li><p>创建文生图任务，返回task_id，此时任务未完成。</p></li><li><p>阿里云百炼完成任务处理后，将任务完成事件上报至事件总线。</p></li><li><p>事件总线将该事件主动推送给HTTP回调接口。</p></li><li><p>回调接口解析该事件，获取已成功处理的<code>task_id</code>。</p></li><li><p>最后调用查询结果接口获取生成的图像URL。</p></li></ul></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9610776471/p950666.png" alt="image"></p></td></tr></tbody></table>
 
--   创建文生图任务，返回task\_id，此时任务未完成。
-    
--   阿里云百炼完成任务处理后，将任务完成事件上报至事件总线。
-    
--   事件总线将该事件主动推送给HTTP回调接口。
-    
--   回调接口解析该事件，获取已成功处理的`task_id`。
-    
--   最后调用查询结果接口获取生成的图像URL。
-    
+<a id="操作步骤"></a>
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9610776471/p950666.png)
+<a id="198cd2e3f8fzg"></a>
 
 ### 操作步骤
+
+<a id="accordion-步骤1-准备http回调接口"></a>
 
 步骤1：准备HTTP回调接口
 
@@ -90,9 +57,13 @@
 -   请求方式：`POST`。
 -   请求Body：`JSON` 格式，内容为异步任务完成事件数据。具体事件结构可在事件总线控制台查询，示例如下：
 
+<a id="accordion-点击查看异步任务完成事件的数据结构"></a>
+
 点击查看异步任务完成事件的数据结构
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "datacontenttype": "application/json;charset=utf-8",
     "aliyunaccountid": "xxxxx",
@@ -118,6 +89,8 @@
     "type": "dashscope:System:AsyncTaskFinish"
 }
 ```
+
+<a id="accordion-步骤2-在事件总线控制台查询事件"></a>
 
 步骤2：在事件总线控制台查询事件
 
@@ -134,7 +107,9 @@
 3.  点击**详情**，查看阿里云百炼上报的异步任务完成事件的详细信息。
     
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "datacontenttype": "application/json;charset=utf-8",
     "aliyunaccountid": "xxxxx",
@@ -161,230 +136,13 @@
 }
 ```
 
+<a id="accordion-点击查看事件的参数描述"></a>
+
 点击查看事件的参数描述
 
-**参数**
+<table><thead><tr><th><p><strong>参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>描述</strong></p></th><th><p><strong>示例值</strong></p></th></tr></thead><tbody><tr><td><p>datacontenttype</p></td><td><p>String</p></td><td><p>参数data的内容形式。datacontenttype只支持<code>application/json</code>格式。</p></td><td><p><code>application/json;charset=utf-8</code></p></td></tr><tr><td><p>aliyunaccountid</p></td><td><p>String</p></td><td><p>阿里云账号ID。</p></td><td><p>123456789098****</p></td></tr><tr><td><p>aliyunpublishtime</p></td><td><p>String</p></td><td><p>接收事件的时间。</p></td><td><p>2020-11-19T21:04:42.179PRC</p></td></tr><tr><td><p>data</p></td><td><p>Object</p></td><td><p>事件内容。JSON对象，内容由发起事件的服务决定。CloudEvents可能包含事件发生时由事件生产者给定的上下文，data中封装了这些信息。</p></td><td></td></tr><tr><td><p>data[].start_time</p></td><td><p>String</p></td><td><p>异步任务开始时间，</p><p>格式：yyyy-MM-dd HH:mm:ss</p></td><td><p>2023-10-25 09:45:09</p></td></tr><tr><td><p>data[].end_time</p></td><td><p>String</p></td><td><p>异步任务完成时间</p><p>格式：yyyy-MM-dd HH:mm:ss</p></td><td><p>2023-10-25 09:45:16</p></td></tr><tr><td><p>data[].user_api_unique_key</p></td><td><p>String</p></td><td><p>API 的唯一key（提交任务时，模型API的五要素），组成格式为：</p><p><code>apikey:version:group:task:function-call:model</code></p><ul><li><p>version：版本</p></li><li><p>group：分组</p></li><li><p>task：任务名称</p></li><li><p>function-call：方法名称</p></li><li><p>model：模型名称</p></li></ul></td><td><p><code>apikey:v1:audio:asr:transcription:paraformer-8k-v2</code></p></td></tr><tr><td><p>data[].task_status</p></td><td><p>String</p></td><td><p>任务状态</p><ul><li><p>PENDING：任务排队中</p></li><li><p>RUNNING：任务处理中</p></li><li><p>SUCCEEDED：处理成功</p></li><li><p>FAILED：处理失败</p></li><li><p>CANCELED：任务取消</p></li><li><p>UNKNOWN：任务不存在或状态未知</p></li></ul></td><td><p>SUCCEEDED</p></td></tr><tr><td><p>data[].task_id</p></td><td><p>String</p></td><td><p>任务ID</p></td><td><p>a154c328-xxxx-xxxx-xxxx-e52a9a7e9a35</p></td></tr><tr><td><p>data[].region</p></td><td><p>String</p></td><td><p>任务所在地域</p></td><td><p>cn-beijing</p></td></tr><tr><td><p>data[].request_id</p></td><td><p>String</p></td><td><p>请求ID</p></td><td><p>108f38f5-xxxx-xxxx-xxxx-6504db9080b3</p></td></tr><tr><td><p>data[].api_key_id</p></td><td><p>String</p></td><td><p>API Key ID</p></td><td><p>1234</p></td></tr><tr><td><p>data[].contain_result</p></td><td><p>Boolean</p></td><td><p>是否包含结果详情。</p><ul><li><p>true：包含</p></li><li><p>false：不包含</p></li></ul></td><td><p>true</p></td></tr><tr><td><p>data[].output_result</p></td><td><p>JSON</p></td><td><p>结果详情。当<code>contain_result</code>为<code>true</code>时返回。</p></td><td><p><code>{&quot;request_id&quot;: &quot;6abe5b9b-f95c-9a23-8bed-0a04c2158b5c&quot;, &quot;output&quot;: {&quot;task_id&quot;: &quot;84d0e919-5eda-40a1-a6e9-a94033840693&quot;, &quot;task_status&quot;: &quot;SUCCEEDED&quot;, &quot;submit_time&quot;: &quot;2026-05-20 15:38:19.940&quot;, &quot;scheduled_time&quot;: &quot;2026-05-20 15:38:19.995&quot;, &quot;end_time&quot;: &quot;2026-05-20 15:38:25.186&quot;, &quot;text&quot;: &quot;这是一个模拟的文本生成结果。&quot;}, &quot;usage&quot;: {&quot;output_tokens&quot;: 100, &quot;input_tokens&quot;: 21}}</code></p></td></tr><tr><td><p>aliyunoriginalaccountid</p></td><td><p>String</p></td><td><p>阿里云原始账号ID</p></td><td><p>123456789098****</p></td></tr><tr><td><p>specversion</p></td><td><p>String</p></td><td><p>CloudEvents协议版本</p></td><td><p>1.0</p></td></tr><tr><td><p>aliyuneventbusname</p></td><td><p>String</p></td><td><p>接收事件的事件总线名称</p></td><td><p>default</p></td></tr><tr><td><p>id</p></td><td><p>String</p></td><td><p>事件ID，标识事件的唯一值。</p></td><td><p>45ef4dewdwe1-7c35-447a-bd93-fab****</p></td></tr><tr><td><p>source</p></td><td><p>String</p></td><td><p>事件源。</p><p>提供事件的服务，标识事件发生的内容。通常包含事件源的类型，发布事件的机制或生产事件的过程。发送端必须确保每个事件的<code>source+id</code>是唯一的。</p></td><td><p>acs.dashscope</p></td></tr><tr><td><p>time</p></td><td><p>String</p></td><td><p>事件产生的时间。</p><p>如果无法确定事件发生的时间，CloudEvents生产者可以把time设置为其他时间（例如当前时间），但是同一个source的所有生产者设置的值必须是一致的。</p></td><td><p>2020-11-19T21:04:41+08:00</p></td></tr><tr><td><p>aliyunregionid</p></td><td><p>String</p></td><td><p>接收事件的地域。</p></td><td><p>cn-beijing</p></td></tr><tr><td><p>type</p></td><td><p>String</p></td><td><p>事件类型。</p><p>描述事件源相关的事件类型。该参数用于路由、事件查询和策略执行等。格式由生产者定义且包含版本等信息。</p></td><td><p>dashscope:System:AsyncTaskFinish</p></td></tr></tbody></table>
 
-**类型**
-
-**描述**
-
-**示例值**
-
-datacontenttype
-
-String
-
-参数data的内容形式。datacontenttype只支持`application/json`格式。
-
-`application/json;charset=utf-8`
-
-aliyunaccountid
-
-String
-
-阿里云账号ID。
-
-123456789098\*\*\*\*
-
-aliyunpublishtime
-
-String
-
-接收事件的时间。
-
-2020-11-19T21:04:42.179PRC
-
-data
-
-Object
-
-事件内容。JSON对象，内容由发起事件的服务决定。CloudEvents可能包含事件发生时由事件生产者给定的上下文，data中封装了这些信息。
-
-data\[\].start\_time
-
-String
-
-异步任务开始时间，
-
-格式：yyyy-MM-dd HH:mm:ss
-
-2023-10-25 09:45:09
-
-data\[\].end\_time
-
-String
-
-异步任务完成时间
-
-格式：yyyy-MM-dd HH:mm:ss
-
-2023-10-25 09:45:16
-
-data\[\].user\_api\_unique\_key
-
-String
-
-API 的唯一key（提交任务时，模型API的五要素），组成格式为：
-
-`apikey:version:group:task:function-call:model`
-
--   version：版本
-    
--   group：分组
-    
--   task：任务名称
-    
--   function-call：方法名称
-    
--   model：模型名称
-    
-
-`apikey:v1:audio:asr:transcription:paraformer-8k-v2`
-
-data\[\].task\_status
-
-String
-
-任务状态
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：处理成功
-    
--   FAILED：处理失败
-    
--   CANCELED：任务取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-SUCCEEDED
-
-data\[\].task\_id
-
-String
-
-任务ID
-
-a154c328-xxxx-xxxx-xxxx-e52a9a7e9a35
-
-data\[\].region
-
-String
-
-任务所在地域
-
-cn-beijing
-
-data\[\].request\_id
-
-String
-
-请求ID
-
-108f38f5-xxxx-xxxx-xxxx-6504db9080b3
-
-data\[\].api\_key\_id
-
-String
-
-API Key ID
-
-1234
-
-data\[\].contain\_result
-
-Boolean
-
-是否包含结果详情。
-
--   true：包含
-    
--   false：不包含
-    
-
-true
-
-data\[\].output\_result
-
-JSON
-
-结果详情。当`contain_result`为`true`时返回。
-
-`{"request_id": "6abe5b9b-f95c-9a23-8bed-0a04c2158b5c", "output": {"task_id": "84d0e919-5eda-40a1-a6e9-a94033840693", "task_status": "SUCCEEDED", "submit_time": "2026-05-20 15:38:19.940", "scheduled_time": "2026-05-20 15:38:19.995", "end_time": "2026-05-20 15:38:25.186", "text": "这是一个模拟的文本生成结果。"}, "usage": {"output_tokens": 100, "input_tokens": 21}}`
-
-aliyunoriginalaccountid
-
-String
-
-阿里云原始账号ID
-
-123456789098\*\*\*\*
-
-specversion
-
-String
-
-CloudEvents协议版本
-
-1.0
-
-aliyuneventbusname
-
-String
-
-接收事件的事件总线名称
-
-default
-
-id
-
-String
-
-事件ID，标识事件的唯一值。
-
-45ef4dewdwe1-7c35-447a-bd93-fab\*\*\*\*
-
-source
-
-String
-
-事件源。
-
-提供事件的服务，标识事件发生的内容。通常包含事件源的类型，发布事件的机制或生产事件的过程。发送端必须确保每个事件的`source+id`是唯一的。
-
-acs.dashscope
-
-time
-
-String
-
-事件产生的时间。
-
-如果无法确定事件发生的时间，CloudEvents生产者可以把time设置为其他时间（例如当前时间），但是同一个source的所有生产者设置的值必须是一致的。
-
-2020-11-19T21:04:41+08:00
-
-aliyunregionid
-
-String
-
-接收事件的地域。
-
-cn-beijing
-
-type
-
-String
-
-事件类型。
-
-描述事件源相关的事件类型。该参数用于路由、事件查询和策略执行等。格式由生产者定义且包含版本等信息。
-
-dashscope:System:AsyncTaskFinish
+<a id="accordion-步骤3-配置事件转发规则"></a>
 
 步骤3：配置事件转发规则
 
@@ -402,7 +160,9 @@ dashscope:System:AsyncTaskFinish
         
         -   默认情况：在选择事件源和事件类型后，模式内容默认展示如下内容，表示转发所有的`dashscope:System:AsyncTaskFinish`事件。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "source": ["acs.dashscope"],
   "type": ["dashscope:System:AsyncTaskFinish"]
@@ -411,7 +171,9 @@ dashscope:System:AsyncTaskFinish
 
 -   通过指定字段过滤事件：筛选出 `user_api_unique_key`字段后缀为`:paraformer-8k-v2`的事件，即仅转发模型名称为`paraformer-8k-v2`的事件。事件类型为`dashscope:System:AsyncTaskFinish`。
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "source": ["acs.dashscope"],
   "type": ["dashscope:System:AsyncTaskFinish"],
@@ -424,6 +186,8 @@ dashscope:System:AsyncTaskFinish
 ```
 
 4.  **配置事件目标**：支持配置多种类型的[事件目标](https://help.aliyun.com/zh/eventbridge/user-guide/event-target-overview)，包括HTTP回调URL、RocketMQ消息队列等。具体操作见步骤4。
+
+<a id="accordion-步骤4-配置事件目标为http回调接口"></a>
 
 步骤4：配置事件目标为HTTP回调接口
 
@@ -443,7 +207,15 @@ dashscope:System:AsyncTaskFinish
     此时规则的**事件目标**列将显示**HTTP (1)**。
     
 
+<a id="方案二-配置rocketmq"></a>
+
+<a id="e2f044afc2c0w"></a>
+
 ## 方案二：配置RocketMQ
+
+<a id="方案介绍-2"></a>
+
+<a id="2e55ac6eabnac"></a>
 
 ### 方案介绍
 
@@ -453,22 +225,15 @@ dashscope:System:AsyncTaskFinish
 
 **计费说明**：[事件总线计费](https://help.aliyun.com/zh/eventbridge/product-overview/billing-overview)、[RocketMQ计费](https://help.aliyun.com/zh/apsaramq-for-rocketmq/cloud-message-queue-rocketmq-5-x-series/product-overview/overview-2)。
 
-以[文生图](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)为例，基于RocketMQ的异步调用流程为：
+<table><tbody><tr><td><p>以<a href="../image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md">文生图</a>为例，基于RocketMQ的异步调用流程为：</p><ul><li><p>创建文生图任务，返回task_id，此时任务未完成。</p></li><li><p>阿里云百炼完成任务处理后，将任务完成事件上报至事件总线。</p></li><li><p>事件总线将该事件主动转发到指定的RocketMQ队列。</p></li><li><p>业务方监听RocketMQ队列，并消费消息，从中获取已成功处理<code>task_id</code>。</p></li><li><p>最后调用查询结果接口获取生成的图像URL。</p></li></ul></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9610776471/p950716.png" alt="image"></p></td></tr></tbody></table>
 
--   创建文生图任务，返回task\_id，此时任务未完成。
-    
--   阿里云百炼完成任务处理后，将任务完成事件上报至事件总线。
-    
--   事件总线将该事件主动转发到指定的RocketMQ队列。
-    
--   业务方监听RocketMQ队列，并消费消息，从中获取已成功处理`task_id`。
-    
--   最后调用查询结果接口获取生成的图像URL。
-    
+<a id="操作步骤-2"></a>
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9610776471/p950716.png)
+<a id="c16486a497b3q"></a>
 
 ### 操作步骤
+
+<a id="accordion-步骤1-准备rocketmq实例-若已有-rocketmq队列-可跳过此步"></a>
 
 步骤1：准备RocketMQ实例（若已有 RocketMQ队列，可跳过此步 ）
 
@@ -482,6 +247,8 @@ dashscope:System:AsyncTaskFinish
     
 3.  创建对应实例的`Group`，设置自定义的Group名称。
     
+
+<a id="accordion-步骤2-在事件总线控制台查询事件-2"></a>
 
 步骤2：在事件总线控制台查询事件
 
@@ -498,7 +265,9 @@ dashscope:System:AsyncTaskFinish
 3.  点击**详情**，查看阿里云百炼上报的异步任务完成事件的详细信息。
     
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "datacontenttype": "application/json;charset=utf-8",
     "aliyunaccountid": "xxxxx",
@@ -525,230 +294,13 @@ dashscope:System:AsyncTaskFinish
 }
 ```
 
+<a id="accordion-点击查看事件的参数描述-2"></a>
+
 点击查看事件的参数描述
 
-**参数**
+<table><thead><tr><th><p><strong>参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>描述</strong></p></th><th><p><strong>示例值</strong></p></th></tr></thead><tbody><tr><td><p>datacontenttype</p></td><td><p>String</p></td><td><p>参数data的内容形式。datacontenttype只支持<code>application/json</code>格式。</p></td><td><p><code>application/json;charset=utf-8</code></p></td></tr><tr><td><p>aliyunaccountid</p></td><td><p>String</p></td><td><p>阿里云账号ID。</p></td><td><p>123456789098****</p></td></tr><tr><td><p>aliyunpublishtime</p></td><td><p>String</p></td><td><p>接收事件的时间。</p></td><td><p>2020-11-19T21:04:42.179PRC</p></td></tr><tr><td><p>data</p></td><td><p>Object</p></td><td><p>事件内容。JSON对象，内容由发起事件的服务决定。CloudEvents可能包含事件发生时由事件生产者给定的上下文，data中封装了这些信息。</p></td><td></td></tr><tr><td><p>data[].start_time</p></td><td><p>String</p></td><td><p>异步任务开始时间，</p><p>格式：yyyy-MM-dd HH:mm:ss</p></td><td><p>2023-10-25 09:45:09</p></td></tr><tr><td><p>data[].end_time</p></td><td><p>String</p></td><td><p>异步任务完成时间</p><p>格式：yyyy-MM-dd HH:mm:ss</p></td><td><p>2023-10-25 09:45:16</p></td></tr><tr><td><p>data[].user_api_unique_key</p></td><td><p>String</p></td><td><p>API 的唯一key（提交任务时，模型API的五要素），组成格式为：</p><p><code>apikey:version:group:task:function-call:model</code></p><ul><li><p>version：版本</p></li><li><p>group：分组</p></li><li><p>task：任务名称</p></li><li><p>function-call：方法名称</p></li><li><p>model：模型名称</p></li></ul></td><td><p><code>apikey:v1:audio:asr:transcription:paraformer-8k-v2</code></p></td></tr><tr><td><p>data[].task_status</p></td><td><p>String</p></td><td><p>任务状态</p><ul><li><p>PENDING：任务排队中</p></li><li><p>RUNNING：任务处理中</p></li><li><p>SUCCEEDED：处理成功</p></li><li><p>FAILED：处理失败</p></li><li><p>CANCELED：任务取消</p></li><li><p>UNKNOWN：任务不存在或状态未知</p></li></ul></td><td><p>SUCCEEDED</p></td></tr><tr><td><p>data[].task_id</p></td><td><p>String</p></td><td><p>任务ID</p></td><td><p>a154c328-xxxx-xxxx-xxxx-e52a9a7e9a35</p></td></tr><tr><td><p>data[].region</p></td><td><p>String</p></td><td><p>任务所在地域</p></td><td><p>cn-beijing</p></td></tr><tr><td><p>data[].request_id</p></td><td><p>String</p></td><td><p>请求ID</p></td><td><p>108f38f5-xxxx-xxxx-xxxx-6504db9080b3</p></td></tr><tr><td><p>data[].api_key_id</p></td><td><p>String</p></td><td><p>API Key ID</p></td><td><p>1234</p></td></tr><tr><td><p>data[].contain_result</p></td><td><p>Boolean</p></td><td><p>是否包含结果详情。</p><ul><li><p>true：包含</p></li><li><p>false：不包含</p></li></ul></td><td><p>true</p></td></tr><tr><td><p>data[].output_result</p></td><td><p>JSON</p></td><td><p>结果详情。当<code>contain_result</code>为<code>true</code>时返回。</p></td><td><p><code>{&quot;request_id&quot;: &quot;6abe5b9b-f95c-9a23-8bed-0a04c2158b5c&quot;, &quot;output&quot;: {&quot;task_id&quot;: &quot;84d0e919-5eda-40a1-a6e9-a94033840693&quot;, &quot;task_status&quot;: &quot;SUCCEEDED&quot;, &quot;submit_time&quot;: &quot;2026-05-20 15:38:19.940&quot;, &quot;scheduled_time&quot;: &quot;2026-05-20 15:38:19.995&quot;, &quot;end_time&quot;: &quot;2026-05-20 15:38:25.186&quot;, &quot;text&quot;: &quot;这是一个模拟的文本生成结果。&quot;}, &quot;usage&quot;: {&quot;output_tokens&quot;: 100, &quot;input_tokens&quot;: 21}}</code></p></td></tr><tr><td><p>aliyunoriginalaccountid</p></td><td><p>String</p></td><td><p>阿里云原始账号ID</p></td><td><p>123456789098****</p></td></tr><tr><td><p>specversion</p></td><td><p>String</p></td><td><p>CloudEvents协议版本</p></td><td><p>1.0</p></td></tr><tr><td><p>aliyuneventbusname</p></td><td><p>String</p></td><td><p>接收事件的事件总线名称</p></td><td><p>default</p></td></tr><tr><td><p>id</p></td><td><p>String</p></td><td><p>事件ID，标识事件的唯一值。</p></td><td><p>45ef4dewdwe1-7c35-447a-bd93-fab****</p></td></tr><tr><td><p>source</p></td><td><p>String</p></td><td><p>事件源。</p><p>提供事件的服务，标识事件发生的内容。通常包含事件源的类型，发布事件的机制或生产事件的过程。发送端必须确保每个事件的<code>source+id</code>是唯一的。</p></td><td><p>acs.dashscope</p></td></tr><tr><td><p>time</p></td><td><p>String</p></td><td><p>事件产生的时间。</p><p>如果无法确定事件发生的时间，CloudEvents生产者可以把time设置为其他时间（例如当前时间），但是同一个source的所有生产者设置的值必须是一致的。</p></td><td><p>2020-11-19T21:04:41+08:00</p></td></tr><tr><td><p>aliyunregionid</p></td><td><p>String</p></td><td><p>接收事件的地域。</p></td><td><p>cn-beijing</p></td></tr><tr><td><p>type</p></td><td><p>String</p></td><td><p>事件类型。</p><p>描述事件源相关的事件类型。该参数用于路由、事件查询和策略执行等。格式由生产者定义且包含版本等信息。</p></td><td><p>dashscope:System:AsyncTaskFinish</p></td></tr></tbody></table>
 
-**类型**
-
-**描述**
-
-**示例值**
-
-datacontenttype
-
-String
-
-参数data的内容形式。datacontenttype只支持`application/json`格式。
-
-`application/json;charset=utf-8`
-
-aliyunaccountid
-
-String
-
-阿里云账号ID。
-
-123456789098\*\*\*\*
-
-aliyunpublishtime
-
-String
-
-接收事件的时间。
-
-2020-11-19T21:04:42.179PRC
-
-data
-
-Object
-
-事件内容。JSON对象，内容由发起事件的服务决定。CloudEvents可能包含事件发生时由事件生产者给定的上下文，data中封装了这些信息。
-
-data\[\].start\_time
-
-String
-
-异步任务开始时间，
-
-格式：yyyy-MM-dd HH:mm:ss
-
-2023-10-25 09:45:09
-
-data\[\].end\_time
-
-String
-
-异步任务完成时间
-
-格式：yyyy-MM-dd HH:mm:ss
-
-2023-10-25 09:45:16
-
-data\[\].user\_api\_unique\_key
-
-String
-
-API 的唯一key（提交任务时，模型API的五要素），组成格式为：
-
-`apikey:version:group:task:function-call:model`
-
--   version：版本
-    
--   group：分组
-    
--   task：任务名称
-    
--   function-call：方法名称
-    
--   model：模型名称
-    
-
-`apikey:v1:audio:asr:transcription:paraformer-8k-v2`
-
-data\[\].task\_status
-
-String
-
-任务状态
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：处理成功
-    
--   FAILED：处理失败
-    
--   CANCELED：任务取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-SUCCEEDED
-
-data\[\].task\_id
-
-String
-
-任务ID
-
-a154c328-xxxx-xxxx-xxxx-e52a9a7e9a35
-
-data\[\].region
-
-String
-
-任务所在地域
-
-cn-beijing
-
-data\[\].request\_id
-
-String
-
-请求ID
-
-108f38f5-xxxx-xxxx-xxxx-6504db9080b3
-
-data\[\].api\_key\_id
-
-String
-
-API Key ID
-
-1234
-
-data\[\].contain\_result
-
-Boolean
-
-是否包含结果详情。
-
--   true：包含
-    
--   false：不包含
-    
-
-true
-
-data\[\].output\_result
-
-JSON
-
-结果详情。当`contain_result`为`true`时返回。
-
-`{"request_id": "6abe5b9b-f95c-9a23-8bed-0a04c2158b5c", "output": {"task_id": "84d0e919-5eda-40a1-a6e9-a94033840693", "task_status": "SUCCEEDED", "submit_time": "2026-05-20 15:38:19.940", "scheduled_time": "2026-05-20 15:38:19.995", "end_time": "2026-05-20 15:38:25.186", "text": "这是一个模拟的文本生成结果。"}, "usage": {"output_tokens": 100, "input_tokens": 21}}`
-
-aliyunoriginalaccountid
-
-String
-
-阿里云原始账号ID
-
-123456789098\*\*\*\*
-
-specversion
-
-String
-
-CloudEvents协议版本
-
-1.0
-
-aliyuneventbusname
-
-String
-
-接收事件的事件总线名称
-
-default
-
-id
-
-String
-
-事件ID，标识事件的唯一值。
-
-45ef4dewdwe1-7c35-447a-bd93-fab\*\*\*\*
-
-source
-
-String
-
-事件源。
-
-提供事件的服务，标识事件发生的内容。通常包含事件源的类型，发布事件的机制或生产事件的过程。发送端必须确保每个事件的`source+id`是唯一的。
-
-acs.dashscope
-
-time
-
-String
-
-事件产生的时间。
-
-如果无法确定事件发生的时间，CloudEvents生产者可以把time设置为其他时间（例如当前时间），但是同一个source的所有生产者设置的值必须是一致的。
-
-2020-11-19T21:04:41+08:00
-
-aliyunregionid
-
-String
-
-接收事件的地域。
-
-cn-beijing
-
-type
-
-String
-
-事件类型。
-
-描述事件源相关的事件类型。该参数用于路由、事件查询和策略执行等。格式由生产者定义且包含版本等信息。
-
-dashscope:System:AsyncTaskFinish
+<a id="accordion-步骤3-配置事件转发规则-2"></a>
 
 步骤3：配置事件转发规则
 
@@ -766,7 +318,9 @@ dashscope:System:AsyncTaskFinish
         
         -   默认情况：在选择事件源和事件类型后，模式内容默认展示如下内容，表示转发所有的`dashscope:System:AsyncTaskFinish`事件。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
   "source": ["acs.dashscope"],
   "type": ["dashscope:System:AsyncTaskFinish"]
@@ -775,7 +329,9 @@ dashscope:System:AsyncTaskFinish
 
 -   通过指定字段过滤事件：筛选出 `user_api_unique_key`字段后缀为`:paraformer-8k-v2`的事件，即仅转发模型名称为`paraformer-8k-v2`的事件。事件类型为`dashscope:System:AsyncTaskFinish`。
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
   "source": ["acs.dashscope"],
   "type": ["dashscope:System:AsyncTaskFinish"],
@@ -789,14 +345,18 @@ dashscope:System:AsyncTaskFinish
 
 4.  **配置事件目标**：支持配置多种类型的[事件目标](https://help.aliyun.com/zh/eventbridge/user-guide/event-target-overview)，包括HTTP回调URL、RocketMQ消息队列等。具体操作见步骤4。
 
+<a id="accordion-步骤4-配置事件目标为rocketmq"></a>
+
 步骤4：配置事件目标为RocketMQ
 
 RocketMQ创建完成后，打开配置的事件目标界面，选择已配置的RocketMQ实例。
 
 -   服务类型：选择“消息队列RocketMQ版”。
 -   版本：已创建的RocketMQ版本，如RocketMQ 5.x
--   实例ID：已创建的RocketMQ的实例ID。请参见[步骤1](raw/model-api-reference/more-about-models/async-task-api.md)的配置。
--   Topic：已创建的Topic名称。请参见[步骤1](raw/model-api-reference/more-about-models/async-task-api.md)的配置。
+-   实例ID：已创建的RocketMQ的实例ID。请参见[步骤1](async-task-api.md)的配置。
+-   Topic：已创建的Topic名称。请参见[步骤1](async-task-api.md)的配置。
+
+<a id="accordion-步骤5-在rocketmq控制台查看消息"></a>
 
 步骤5：在RocketMQ控制台查看消息
 
@@ -811,6 +371,8 @@ RocketMQ创建完成后，打开配置的事件目标界面，选择已配置的
 
 配置好**Topic 名称**和**Group ID**等参数后，单击**运行**开始接收消息。**运行结果**页签将显示收到的消息列表，包括消息ID和接收时间等信息。
 
+<a id="accordion-步骤6-使用sdk接收并消费消息"></a>
+
 步骤6：使用SDK接收并消费消息
 
 使用RocketMQ的[Java SDK](https://help.aliyun.com/zh/apsaramq-for-rocketmq/cloud-message-queue-rocketmq-5-x-series/developer-reference/overview-8)实现以下逻辑：先订阅相关Topic，实现消息监听逻辑。在接收到消息后，再进行消费处理。
@@ -819,7 +381,9 @@ RocketMQ创建完成后，打开配置的事件目标界面，选择已配置的
 
 -   在Maven项目中，引入以下依赖
 
-```
+<a id="code-block-8"></a>
+
+```xml
 <dependency>
   <groupId>org.apache.rocketmq</groupId>
   <artifactId>rocketmq-client-java</artifactId>
@@ -829,7 +393,9 @@ RocketMQ创建完成后，打开配置的事件目标界面，选择已配置的
 
 -   消费MQ消息的示例代码
 
-```
+<a id="code-block-9"></a>
+
+```java
 import com.alibaba.fastjson2.JSON;
 import org.apache.rocketmq.client.apis.*;
 import org.apache.rocketmq.client.apis.consumer.ConsumeResult;
@@ -904,15 +470,31 @@ public class ConsumerExample {
 }
 ```
 
+<a id="常见问题"></a>
+
+<a id="8847c3ad61g9o"></a>
+
 ## 常见问题
+
+<a id="一个事件规则可以配置多个事件目标吗"></a>
+
+<a id="47e055bd6199b"></a>
 
 ### 一个事件规则可以配置多个事件目标吗？
 
 可以，同一个事件规则可以配置多个事件目标。如果配置多个事件目标，则同一个事件会投递到配置的每个事件目标中。
 
+<a id="配置完事件规则-但是接收不到事件"></a>
+
+<a id="cc6909ea7f28u"></a>
+
 ### 配置完事件规则，但是接收不到事件？
 
 请确认事件转发规则的地域与事件所属地域一致。例如，北京地域配置的规则仅能转发北京地域的事件，无法转发上海等地域的事件。事件总线所在地域可在控制台页面顶部导航栏的地域选择器中查看。
+
+<a id="http-https服务请求超时或者请求错误"></a>
+
+<a id="bf527806a13b5"></a>
 
 ### HTTP/HTTPS服务请求超时或者请求错误？
 

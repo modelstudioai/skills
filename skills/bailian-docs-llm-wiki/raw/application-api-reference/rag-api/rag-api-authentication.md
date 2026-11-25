@@ -4,29 +4,47 @@ RAG API 的 API Key 获取、使用方式与安全建议。
 
 Knowledge API（原RAG API） 采用 **API Key** 鉴权。请求通过 `Authorization` Header 携带 API Key，业务空间由 Endpoint 中的 `{workspace_id}` 标识，格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/`。
 
+<a id="获取-api-key"></a>
+
+<a id="h-ragapi-auth-get"></a>
+
 ## 获取 API Key
 
 1.  打开[百炼控制台](https://bailian.console.aliyun.com/)，使用阿里云账号登录，进入 [**API Key**](https://bailian.console.aliyun.com/?tab=model#/api-key) 页面。
 2.  创建新的 API Key，或复制已有的 API Key。
 
-**警告**API Key 具有账号级权限，请妥善保管，不要在公开渠道分享或提交到代码仓库。
+> **警告**
+>
+> API Key 具有账号级权限，请妥善保管，不要在公开渠道分享或提交到代码仓库。
+
+<a id="使用方式"></a>
+
+<a id="h-ragapi-auth-use"></a>
 
 ## 使用方式
 
 每个请求携带 `Authorization` Header 即可：
 
-```
+<a id="code-block"></a>
+
+```text
 Authorization: Bearer <API-Key>
 ```
 
 完整示例：
 
-```
+<a id="code-block-2"></a>
+
+```bash
 curl "$BASE_URL/api/v1/indices/rag/index/list?page_number=1&page_size=10" \
   -H "Authorization: Bearer $BAILIAN_API_KEY"
 ```
 
 其中 `$BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`，`$BAILIAN_API_KEY` 为您的 API Key。
+
+<a id="权限说明"></a>
+
+<a id="h-ragapi-auth-permission"></a>
 
 ## 权限说明
 
@@ -34,10 +52,16 @@ curl "$BASE_URL/api/v1/indices/rag/index/list?page_number=1&page_size=10" \
 -   **RAM 子账号**：需先获取 `AliyunBailianDataFullAccess` 权限并加入目标业务空间。
 -   API Key 的权限范围由控制台配置。
 
+<a id="安全建议"></a>
+
+<a id="h-ragapi-auth-security"></a>
+
 ## 安全建议
 
 -   **不入代码仓库**：使用环境变量存储 API Key（如 `BAILIAN_API_KEY`）。
 -   **按应用拆分**：每个应用使用独立的 API Key，便于追踪和撤销。
 -   **定期轮转**：定期更换 API Key，降低泄露风险。
 
-**重要**准备好凭证后，试试调用[查询知识库列表](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-list-indices.md)接口。
+> **重要**
+>
+> 准备好凭证后，试试调用[查询知识库列表](rag-api-knowledge-base/rag-api-list-indices.md)接口。

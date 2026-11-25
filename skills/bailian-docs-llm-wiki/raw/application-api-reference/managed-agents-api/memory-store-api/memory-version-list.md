@@ -2,110 +2,76 @@
 
 按创建时间倒序列出记忆库的历史版本。
 
+<a id="前提"></a>
+
+<a id="h-list-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
+已完成 Endpoint 与鉴权配置，详见[API 总览与认证](../managed-agents-api-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-list-endpoint"></a>
 
 ## 接口
 
 **GET** `/memory_stores/{memory_store_id}/memory_versions`
 
+<a id="路径参数"></a>
+
+<a id="h-list-path"></a>
+
 ## 路径参数
 
-**参数**
+| 参数 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `memory_store_id` | 是 | string | 记忆库 ID |
 
-**必填**
+<a id="query-参数"></a>
 
-**类型**
-
-**说明**
-
-`memory_store_id`
-
-是
-
-string
-
-记忆库 ID
+<a id="h-list-query"></a>
 
 ## Query 参数
 
-**参数**
+| 参数 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `memory_id` | 否 | string | 仅返回该记忆的版本；不传则返回整个记忆库的版本 |
+| `operation` | 否 | `created` / `modified` / `deleted` | 按产生版本的操作类型过滤 |
+| `created_at.gte` | 否 | string | 版本产生时间下界（含），ISO 8601 UTC |
+| `created_at.lte` | 否 | string | 版本产生时间上界（含），ISO 8601 UTC |
+| `view` | 否 | `basic` / `full` | basic 不含正文（默认）；full 返回未擦除的正文 |
+| `limit` | 否 | integer | 单页条数。basic 为 1-100 默认 20；full 为 1-20 |
+| `page` | 否 | string | 分页游标。翻页时保持全部查询条件与 limit 不变 |
 
-**必填**
+<a id="请求示例"></a>
 
-**类型**
-
-**说明**
-
-`memory_id`
-
-否
-
-string
-
-仅返回该记忆的版本；不传则返回整个记忆库的版本
-
-`operation`
-
-否
-
-`created` / `modified` / `deleted`
-
-按产生版本的操作类型过滤
-
-`created_at.gte`
-
-否
-
-string
-
-版本产生时间下界（含），ISO 8601 UTC
-
-`created_at.lte`
-
-否
-
-string
-
-版本产生时间上界（含），ISO 8601 UTC
-
-`view`
-
-否
-
-`basic` / `full`
-
-basic 不含正文（默认）；full 返回未擦除的正文
-
-`limit`
-
-否
-
-integer
-
-单页条数。basic 为 1-100 默认 20；full 为 1-20
-
-`page`
-
-否
-
-string
-
-分页游标。翻页时保持全部查询条件与 limit 不变
+<a id="h-list-eg"></a>
 
 ## 请求示例
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl "$AGENTSTUDIO_URL/memory_stores/memstore_xxx/memory_versions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="响应"></a>
+
+<a id="h-list-resp"></a>
+
 ## 响应
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "data": [
     {
@@ -125,120 +91,37 @@ curl "$AGENTSTUDIO_URL/memory_stores/memstore_xxx/memory_versions" \
 }
 ```
 
+<a id="响应字段"></a>
+
+<a id="h-list-dto"></a>
+
 ### 响应字段
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `data` | array<object> | 版本数组；view=full 且未擦除时包含正文 |
+| `id` | string | 版本 ID，格式 memver\_xxx |
+| `type` | string | 固定为 memory\_version |
+| `memory_store_id` | string | 所属记忆库 ID |
+| `memory_id` | string | 对应的记忆 ID |
+| `operation` | `created` / `modified` / `deleted` | 产生该版本的操作类型 |
+| `path` | string | 该版本快照中的路径 |
+| `content` | string | 该版本正文；已擦除时不含此字段 |
+| `content_sha256` | string | 该版本正文的 SHA256 哈希 |
+| `content_size_bytes` | integer | 该版本正文的 UTF-8 字节数 |
+| `redacted_at` | string \| null | 正文被擦除的时间；未擦除时省略或为 null |
+| `created_at` | string | 版本产生时间，ISO 8601 UTC |
+| `next_page` | string \| null | 下一页游标；无更多数据时不含该字段 |
 
-**类型**
+<a id="错误码"></a>
 
-**说明**
-
-`data`
-
-array<object>
-
-版本数组；view=full 且未擦除时包含正文
-
-`id`
-
-string
-
-版本 ID，格式 memver\_xxx
-
-`type`
-
-string
-
-固定为 memory\_version
-
-`memory_store_id`
-
-string
-
-所属记忆库 ID
-
-`memory_id`
-
-string
-
-对应的记忆 ID
-
-`operation`
-
-`created` / `modified` / `deleted`
-
-产生该版本的操作类型
-
-`path`
-
-string
-
-该版本快照中的路径
-
-`content`
-
-string
-
-该版本正文；已擦除时不含此字段
-
-`content_sha256`
-
-string
-
-该版本正文的 SHA256 哈希
-
-`content_size_bytes`
-
-integer
-
-该版本正文的 UTF-8 字节数
-
-`redacted_at`
-
-string | null
-
-正文被擦除的时间；未擦除时省略或为 null
-
-`created_at`
-
-string
-
-版本产生时间，ISO 8601 UTC
-
-`next_page`
-
-string | null
-
-下一页游标；无更多数据时不含该字段
+<a id="h-list-err"></a>
 
 ## 错误码
 
-**状态码**
-
-**错误码**
-
-**说明**
-
-400
-
-`invalid_request_error`
-
-参数、路径、limit 或分页游标非法
-
-401
-
-`InvalidApiKey`
-
-API Key 缺失、错误或失效
-
-403
-
-`permission_error`
-
-身份或资源访问权限不足
-
-404
-
-`not_found_error`
-
-资源不存在或不属于当前工作空间
+| 状态码 | 错误码 | 说明 |
+| --- | --- | --- |
+| 400 | `invalid_request_error` | 参数、路径、limit 或分页游标非法 |
+| 401 | `InvalidApiKey` | API Key 缺失、错误或失效 |
+| 403 | `permission_error` | 身份或资源访问权限不足 |
+| 404 | `not_found_error` | 资源不存在或不属于当前工作空间 |

@@ -2,9 +2,17 @@
 
 获取指定组织的信息
 
+<a id="前提条件"></a>
+
+<a id="tpba43b7a3a5"></a>
+
 ## 前提条件
 
 已获取阿里云账号或 RAM 用户的 AccessKey，并已为其授予调用本接口所需的 RAM 权限。建议将 AccessKey 配置为环境变量 `ALIBABA_CLOUD_ACCESS_KEY_ID` 和 `ALIBABA_CLOUD_ACCESS_KEY_SECRET`，避免明文写入代码。
+
+<a id="请求说明"></a>
+
+<a id="tp221e1cb4f4"></a>
 
 ## 请求说明
 
@@ -12,13 +20,9 @@
     
 -   **请求地址**
     
-    **地域**
-    
-    **Endpoint**
-    
-    华北2（北京）
-    
-    `GET [https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization](https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization)`
+    | 地域 | Endpoint |
+    | --- | --- |
+    | 华北2（北京） | `GET https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization` |
     
 -   **认证方式**
     
@@ -29,115 +33,49 @@
 
 通过 OrgId，获取指定组织的信息
 
+<a id="请求参数"></a>
+
+<a id="tp7ca7dec30f"></a>
+
 ## 请求参数
 
 该接口无请求参数。
 
+<a id="返回参数"></a>
+
+<a id="tpbebc77d941"></a>
+
 ## 返回参数
 
-**参数**
+| 参数 | 类型 | 描述 |
+| --- | --- | --- |
+| Success | boolean | 调用接口是否成功：<br>true：成功<br>false：失败 |
+| Code | string | 响应状态码。 |
+| Message | string | 响应信息。 |
+| Data | object | 业务数据 |
+| OrgId | string | 组织 ID |
+| NamespaceId | string | 产品命名空间 ID |
+| Name | string | 组织名称 |
+| Description | string | 组织描述 |
+| Status | string | 状态（ACTIVE/FROZEN） |
+| OwnerId | string | 组织 Owner 的 UAC 账号 ID |
+| OwnerBizAccountId | string | 组织 Owner 的业务账号标识（ALIYUN 类型为 aliyunUid，SSO 类型为 userIdentifier） |
+| GmtCreate | string | 创建时间 |
+| GmtModified | string | 修改时间 |
+| HttpStatusCode | integer | HTTP 状态码 |
+| RequestId | string | 请求唯一标识 |
 
-**类型**
+<a id="请求示例"></a>
 
-**描述**
-
-Success
-
-boolean
-
-调用接口是否成功：  
-true：成功  
-false：失败
-
-Code
-
-string
-
-响应状态码。
-
-Message
-
-string
-
-响应信息。
-
-Data
-
-object
-
-业务数据
-
-OrgId
-
-string
-
-组织 ID
-
-NamespaceId
-
-string
-
-产品命名空间 ID
-
-Name
-
-string
-
-组织名称
-
-Description
-
-string
-
-组织描述
-
-Status
-
-string
-
-状态（ACTIVE/FROZEN）
-
-OwnerId
-
-string
-
-组织 Owner 的 UAC 账号 ID
-
-OwnerBizAccountId
-
-string
-
-组织 Owner 的业务账号标识（ALIYUN 类型为 aliyunUid，SSO 类型为 userIdentifier）
-
-GmtCreate
-
-string
-
-创建时间
-
-GmtModified
-
-string
-
-修改时间
-
-HttpStatusCode
-
-integer
-
-HTTP 状态码
-
-RequestId
-
-string
-
-请求唯一标识
+<a id="tp4e614553dc"></a>
 
 ## 请求示例
 
 本接口使用阿里云 OpenAPI 签名，下例中 `${SIGNATURE}` 需按 `ACS3-HMAC-SHA256` 算法计算得出，`x-acs-date`、`x-acs-signature-nonce` 需替换为实际值。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization" \
     --header "x-acs-action: GetOrganization" \
     --header "x-acs-version: 2026-02-10" \
@@ -147,9 +85,15 @@ curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization"
     --header "Authorization: ACS3-HMAC-SHA256 Credential=${ALIBABA_CLOUD_ACCESS_KEY_ID},SignedHeaders=host;x-acs-action;x-acs-content-sha256;x-acs-date;x-acs-signature-nonce;x-acs-version,Signature=${SIGNATURE}"
 ```
 
+<a id="返回示例"></a>
+
+<a id="tpa2d91d61a0"></a>
+
 ## 返回示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Success": true,
   "Data": {
@@ -166,6 +110,10 @@ curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization"
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="tp6672b297d6"></a>
+
 ## 错误码
 
-如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](raw/model-api-reference/preparations/error-code.md)。
+如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](../../../model-api-reference/preparations/error-code.md)。

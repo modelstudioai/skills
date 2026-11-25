@@ -11,39 +11,32 @@
 
 如需在自有应用中集成文生图能力，请使用下方的 API 调用方式。
 
+<a id="模型效果"></a>
+
+<a id="1255ee2cf19kw"></a>
+
 ## 模型效果
+
+<a id="千问-qwen-image"></a>
+
+<a id="29c51b3b75zh5"></a>
 
 #### 千问（Qwen-image）
 
-**复杂布局**
+|  |  |  |
+| --- | --- | --- |
+| **复杂布局**<br><br>![c13672c7-6e05-9aeb-8d2c-8c4b66af5861\_qwen\_image3\_serving\_output\_0](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5369106871/p1093777.png) | **长段落**<br><br>![e03efee1-35b1-9109-a988-e3977add0fac\_qwen\_image3\_serving\_output\_0](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0469106871/p1093781.png) | **写实人像**<br><br>![2beecb7f-c3c3-9c10-9458-04325512bb8a\_qwen\_image3\_serving\_output\_0](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5369106871/p1093776.png) |
+| **UI设计**<br><br>![image (92)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5369106871/p1093142.png) | **PPT**<br><br>![image (90)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5369106871/p1093139.png) | **插画设计**<br><br>![e38cc145-78f6-92a7-9bdb-141be17dba04\_qwen\_image3\_serving\_output\_0](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5369106871/p1093779.png) |
 
-![c13672c7-6e05-9aeb-8d2c-8c4b66af5861\_qwen\_image3\_serving\_output\_0](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5369106871/p1093777.png)
-
-**长段落**
-
-![e03efee1-35b1-9109-a988-e3977add0fac\_qwen\_image3\_serving\_output\_0](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0469106871/p1093781.png)
-
-**写实人像**
-
-![2beecb7f-c3c3-9c10-9458-04325512bb8a\_qwen\_image3\_serving\_output\_0](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5369106871/p1093776.png)
-
-**UI设计**
-
-![image (92)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5369106871/p1093142.png)
-
-**PPT**
-
-![image (90)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5369106871/p1093139.png)
-
-**插画设计**
-
-![e38cc145-78f6-92a7-9bdb-141be17dba04\_qwen\_image3\_serving\_output\_0](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5369106871/p1093779.png)
+<a id="accordion-点击查看提示词"></a>
 
 点击查看提示词
 
 **复杂布局**：
 
-```
+<a id="code-block"></a>
+
+```text
 这是一张横向展开的电商店铺招牌信息图，整体采用 16:9 的宽屏比例，完美适配电脑端与平板端的店铺首页顶部展示。画面整体背景采用高饱和度的墨西哥传统色彩体系，以明黄、赤红、孔雀蓝、翠绿为主色调，色彩之间通过柔和的水彩晕染效果自然过渡，背景纸张带有轻微的手绘水彩纹理与细腻的颗粒质感，营造出一种温暖、热情且充满异域风情的视觉氛围。画面最顶部和最底部边缘，装饰着传统的墨西哥剪纸（Papel Picado）镂空图案，这些剪纸图案由连续的菱形、三角形与波浪形组合而成，以明黄、赤红、翠绿、紫色交替排列，呈现出随风飘动的轻盈姿态，镂空部分透出背景的深邃星空蓝，增加了画面的层次感与呼吸感。顶部剪纸下方与底部剪纸上方，各有一条连续的阿兹特克几何图腾边框，由连续的阶梯状折线与菱形图案组成，采用纯白色与暗金色线条勾勒，为整个店招奠定了浓厚的墨西哥文化底蕴与复古手工艺基调。画面四角点缀着立体的彩色陶罐与微型仙人掌盆栽，陶罐表面绘制着经典的蓝白相间塔拉韦拉（Talavera）花纹，釉面带有高光反射，仙人掌则呈现出饱满的翠绿色，带有细微的刺状纹理，这些角落元素起到了平衡画面重心、丰富视觉细节的作用。
 
 画面左侧三分之一区域为品牌主视觉与核心标识区，视觉中心是一个巨大的立体字“TodoTi”。字体设计巧妙融入了墨西哥自然元素，字母“T”的顶部延伸出两片翠绿的仙人掌叶片，叶片表面带有清晰的脉络纹理；字母“o”内部填充着赤红与明黄相间的太阳放射状光芒，光芒由十六条等距的直线构成；字母“d”的圆弧部分带有塔拉韦拉陶瓷的蓝白花纹，绘制着三朵牡丹与缠绕的藤蔓；字母“i”的点被替换为一颗立体的红色小番茄，表面带有白色的高光点。整个“TodoTi”字体采用粗犷的黑色描边，内部填充高饱和度的渐变色，并带有轻微的立体投影效果，使其在背景中跃然而出。在店名正下方，是一行醒目的品牌Slogan，文字内容为“TodoTi
@@ -106,7 +99,9 @@ TodoTi”，字体为白色粗体，带有明黄色的外发光效果，排版�
 
 **超长段落**：
 
-```
+<a id="code-block-2"></a>
+
+```text
 Vertical Western European 19th-century illustrated poetry page, Romantic maritime farewell theme, international English visual tradition, not an East Asian painting. The composition is a vertical art print or vintage book page with aged ivory paper, fine engraved linework, muted blue-gray watercolor washes, and elegant negative space. The main feature is a long English poem rendered clearly in elegant English copperplate-inspired calligraphy, highly legible, English alphabet only, standard left-to-right reading order, top-to-bottom layout, correct punctuation, exact line breaks, natural ink pressure, dark sepia-black lettering, subtle vintage letterpress texture, refined international typography.
 
 Below and around the text, illustrate a cold twilight seashore: gray stones beside the sea, a small boat floating near the shore, distant ships moving toward a haven under low hills, pale evening mist over the water, faint moonlight, soft ripples, a lonely coastal atmosphere, melancholic but restrained. The mood is poetic, timeless, and elegant, like a Victorian English maritime lyric. No Chinese characters, no Chinese painting style, no seals, no stamps, no modern objects, no illegible glyphs, no random letters.
@@ -131,13 +126,17 @@ High resolution, masterful long-form English text rendering, poetic, elegant, mu
 
 **写实人像**：
 
-```
+<a id="code-block-3"></a>
+
+```text
 帮我生成一张生活化美食男生人像写真，呈现实拍电影质感。画面主体是一位24岁左右的年轻男生，五官清爽干净，眉眼温和，皮肤自然清透，保留真实的肤质细节。他穿着质地柔软的米白色粗棒针织毛衣，内搭纯白T恤微微露出领口，展现出温暖、精致且松弛的生活气息。人物坐在温馨的西餐厅餐桌前，身体微微前倾，右手握着银质刀叉正在轻轻切开盘中的惠灵顿牛排，左手自然轻扶着桌面边缘。他微微侧头看向镜头，嘴角带着若有似无的松弛浅笑，眼神温柔且带有生活感。木质桌面上摆满了精致的西餐餐食，旁边有装着琥珀色饮品的复古高脚杯和一小瓶淡雅的复古插花。人物身后是通透的玻璃墙面，上面印有浅金色的法文手写体菜单“Menu du Jour”，文字以丝印工艺自然贴合在玻璃表面，并带有轻微的环境反光。环境采用暖黄色室内顶光，光线柔和地洒在人物面部和桌面食物上，食物表面泛着诱人的高光，背景玻璃透出室外微弱的冷色环境光，形成电影感十足的冷暖光影对比。采用近距离平视取景，机位略带侧前方的呼吸感，避免死板居中，小景深让背景的玻璃墙面和餐厅环境轻微虚化，形成温暖的散景光斑，前景的插花和饮品边缘也带有自然的虚化过渡，整体色调温暖治愈，充满浓郁的生活氛围与美食诱惑。
 ```
 
 **UI设计**：
 
-```
+<a id="code-block-4"></a>
+
+```text
 这张图片是一款沉浸式亚洲雨林声音探索体验网站的宽屏电脑端界面设计，整体氛围暗沉静谧，设计灵感源自老式野外录音设备与模拟科学仪器。整体配色以深邃祖母绿、浓郁黑曜石黑与柔和大地棕为主，营造出安宁沉静的氛围。界面搭载细微水汽与薄雾特效，柔和斑驳的光影折射效果模拟阳光穿透茂密树冠的景象，背景融入纸张细纹、叶脉等自然肌理。整体画面写实度极高，风格对标英国广播公司高端自然纪实纪录片，构图富有电影质感，渲染细节极致精细。
 页面最顶端横贯一整条极简半透明导航栏。最左侧为品牌标识，由精致线条绘制的老式模拟麦克风与龟背竹叶交织而成，搭配柔和米奶油色优雅衬线字体文字“RAINFOREST ARCHIVE”。导航栏右侧是导航菜单，包含四个极简文字链接，字体与颜色和品牌名保持一致：“Expeditions”、“Species”、“Field Notes”、“About”。
 页面上三分之二区域为主视觉横幅板块。背景是一张画质超清、氛围感浓郁的古老亚洲龙脑香科雨林实景图，林间萦绕着轻柔绵延的薄雾；前景虚化的深绿色蕨类枝叶形成自然暗角。横幅板块左侧叠加主标题，采用大号高对比度精致衬线字体，文字为“Voices of the
@@ -159,40 +158,35 @@ Temp: 24°C”
 文字旁配有深棕乌墨手绘精致猪笼草植物速写。
 页面最底端是极简页脚，整页宽度贯通，上方设有一条细深绿色分隔线。页脚左侧文字“Copyright 2024 Rainforest Archive”，右侧文字“Funded by the Wildlife Conservation Society”，两处文字均采用柔和低调的精致小号衬线字体。
 ```
+
 **PPT制作：**
-```
+
+<a id="code-block-5"></a>
+
+```text
 这是一张宽高比为 16:9 的专业教育类 PPT 幻灯片，整体背景采用极淡的蓝灰色柔和渐变，叠加有极低透明度的正弦波暗纹与微弱的网格点阵纹理，营造出严谨的物理学术氛围与科技感。画面顶部居中位置是主标题区域，文字为巨大的深藏青色无衬线粗体“AC Circuit Anaysis: Resistor with Sinusoidal Voltage”，标题下方紧贴一条明亮的橙色细横线作为视觉分割，横线两端带有微小的圆形端点装饰，增强版式的仪式感。画面主体分为左右两列，采用严谨的栅格对齐系统，左右两列宽度比例约为 1:1.2，确保右侧复杂的公式计算拥有充足的展示空间。左侧列顶部是一个圆角矩形橙色标题栏，内部居中显示白色加粗文字“PROBLEM DATA & WAVEFORM”，标题栏底部带有轻微的投影，使其具有浮起的立体质感。橙色标题栏下方是一个浅灰白色的圆角数据卡片，卡片边缘有极细的浅蓝色边框，内部垂直排列四个数据要点，每个要点左侧配有纯灰色的极简线性图标，依次为电阻符号、波浪线、电压箭头和时钟符号。四个要点的文字采用深灰色清晰字体，依次为“Resistor (R) = 10 Ω”、“Waveform = Sinusoidal”、“Peak Voltage (V subscript p) = 311 V”、“Period (T) = 0.02 s”，文字排版整齐，行距舒适，关键数字使用稍深的颜色进行视觉强调。数据卡片下方是图表区域，顶部居中显示深灰色图表标题“Voltage vs. Time”。图表主体是一个带有浅灰色网格线的二维坐标系，垂直 Y 轴左侧标有深灰色文字“Voltage (V)”，刻度线旁分别标有白色背景框包裹的深蓝色文字“+311”、“0”和“-311”。水平 X 轴下方标有深灰色文字“Time (s)”，刻度线旁标有“0.01”和“0.02”。坐标系中央绘制了一条平滑、饱满且带有轻微发光效果的鲜红色正弦波曲线，曲线线条粗细适中，展现出完美的周期性。在正弦波的波峰处，有一条深蓝色的垂直双向箭头指示振幅，箭头旁标有深蓝色文字“V subscript p = 311 V”。在 X 轴的一个完整周期上方，有一条深蓝色的水平尺寸标注线，两端带有垂直引出线，中间标有深蓝色文字“T = 0.02 s”。图表区域整体留白充足，视觉焦点集中在红色波形上。右侧列顶部同样是一个圆角矩形橙色标题栏，与左侧标题栏高度对齐，内部居中显示白色加粗文字“SOLUTION STEPS & CALCULATIONS”。橙色标题栏下方垂直排列四个浅蓝色渐变的圆角卡片，卡片之间保持均匀的垂直间距，内部留有充足的呼吸空间。第一个卡片左上角有一个深蓝色的圆形编号徽章，内部显示白色数字“1”。卡片标题为深蓝色加粗文字“1. Maximum Current (I subscript p)”。下方正文分为三行，采用标准数学公式的视觉样式排版，呈现为分数线、上下标和根号的优雅形态，文字内容为深灰色“Formula: Ohm’s Law, I subscript p = V subscript p over R”，接着是计算过程“I subscript p = 311 V over 10 Ω = 31.1 A”。卡片右下角有一个亮黄色底色的圆角高亮框，内部显示加粗的深蓝色文字“I subscript p = 31.1 A”。第二个卡片左上角编号徽章显示“2”，标题为“2. AC Voltmeter Reading (V subscript rms)”。正文包含说明“Voltmeters read RMS value.”，公式“V subscript rms = V subscript p over square root of 2”，以及计算“V subscript rms = 311 V over 1.414 ≈ 220 V”，右下角高亮框显示“V subscript rms ≈ 220 V”。第三个卡片编号徽章显示“3”，标题为“3. Actual Power Dissipated (P subscript avg)”。正文包含“Using RMS values.”，公式“P subscript avg = (V subscript rms) squared over R”，计算过程“P subscript avg = (220 V) squared over 10 Ω = 48400 over 10 W = 4840 W”，右下角高亮框显示“P subscript avg = 4.84 kW”。第四个卡片编号徽章显示“4”，标题为“4. Joule Heat in Half Cycle (Q subscript half)”。正文包含“Energy = Power × Time”，时间计算“Time = T over 2 = 0.01 s”，主计算“Q subscript half = P subscript avg × (0.01 s) = 4840 W × 0.01 s = 48.4 J”，右下角高亮框显示“Q subscript half = 48.4 J”。四个卡片的高亮框统一位于右下角，形成整齐的视觉对齐与阅读动线。画面最底部是一条极细的浅灰色横向分隔线，分隔线下方居中显示浅灰色小号无衬线字体“Experimental Physics - AC Circuits Analysis Module”。页脚区域保持极简，其余背景保持纯图形与留白。整张幻灯片色彩系统以深藏青、亮橙色、浅蓝灰和纯白为主，红色波形与黄色高亮框作为视觉点缀，打破了单调，提升了画面的活力与专业度。所有文字边缘锐利，对比度极高，确保在投影或屏幕上清晰可读。光影处理克制，仅通过卡片底部的微弱投影和标题栏的轻微高光来增强层次感，整体呈现出高度成熟、结构清晰、信息饱满的专业物理教学课件质感。
 ```
+
 **插画设计：**
-```
+
+<a id="code-block-6"></a>
+
+```text
 这幅画作以柔和的米白色水彩纸为底，呈现一幅手绘水彩插图。纸张表面展现出传统植物艺术的特征，包括清晰可见的颜料颗粒和湿画法带来的柔和色彩晕染。画面上方中央区域绘有一簇簇紫罗兰和三色堇。花瓣由淡紫色、深紫色和淡紫色渐变交织而成，花心呈金黄色。花朵旁点缀着一片翠绿色的小叶，以半透明的水彩晕染和精细的叶脉刻画而成。柔和的定向光线照亮画面，突显了水彩纸的质感和颜料的微妙变化。在花卉图案正下方，纸张下半部分水平居中的位置，是“Виолета”字样。该字样以弧形书法体书写，并使用了金属金色墨水。字母造型采用流畅、连续的笔画，并略带浮雕立体感，在光线照射下呈现出柔和的金属光泽。
 ```
 
+<a id="万相"></a>
+
+<a id="6c339bc578yf1"></a>
+
 #### 万相
 
-**人像写真**
+|  |  |  |
+| --- | --- | --- |
+| **人像写真**<br><br>![p1023408-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0286332671/p1023592.webp) | **写实摄影**<br><br>![p1023409-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0286332671/p1023593.webp) | **绘画流派**<br><br>![p1023411](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0286332671/p1023615.png) |
+| **文字生成**<br><br>![p1023399](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0286332671/p1023596.png) | **海报设计**<br><br>![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2637090871/p1023602.png) | **组图生成**<br><br>![p1023424-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0286332671/p1023598.webp) |
 
-![p1023408-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0286332671/p1023592.webp)
-
-**写实摄影**
-
-![p1023409-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0286332671/p1023593.webp)
-
-**绘画流派**
-
-![p1023411](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0286332671/p1023615.png)
-
-**文字生成**
-
-![p1023399](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0286332671/p1023596.png)
-
-**海报设计**
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2637090871/p1023602.png)
-
-**组图生成**
-
-![p1023424-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0286332671/p1023598.webp)
+<a id="accordion-点击查看提示词-2"></a>
 
 点击查看提示词
 
@@ -208,25 +202,49 @@ Temp: 24°C”
 
 **组图生成**：四宫格日系Q版漫画，赛璐璐风格。第一格：戴黑框眼镜的程序员面对屏幕弹出的红色报错，瞳孔地震，冷汗飞溅，背景变为裂开的像素深渊。第二格：他撸起袖子敲击键盘，自信挑眉，头顶冒出“这不过是五行代码的事！”对话框。第三格：屏幕布满混乱的报错符号，他头发炸立，眼圈发黑，椅子后仰45度，天花板飘满废弃的流程图。第四格：误删一行灰色注释后，绿色对勾闪现，他歪头呆滞，屏幕上浮起问号气泡：“……所以它只是个幻觉？”
 
+<a id="模型选型"></a>
+
+<a id="25f28e763f3kl"></a>
+
 ## 模型选型
 
 -   **qwen-image-3.0-pro**：旗舰效果，支持prompt智能改写，擅长文本渲染，能精准生成贴合物理材质的中英文。
 -   **qwen-image-2.1-pro**：速度、效果、成本最均衡。图生图支持传入最多10张参考图，能根据提示词自动决定输出普通图像或带透明通道的图像。
 -   **qwen-image-2.1-turbo**：极致性价比，Qwen-Image系列中综合性价比最优。图生图支持传入最多10张参考图，能根据提示词自动决定输出普通图像或带透明通道的图像。
 
+<a id="快速开始"></a>
+
+<a id="23ac07f22beyj"></a>
+
 ## 快速开始
+
+<a id="前提条件"></a>
+
+<a id="52fe871aee8n2"></a>
 
 #### 前提条件
 
-在调用前，请[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+在调用前，请[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过DashScope SDK进行调用，还需要[安装SDK](../../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="示例代码"></a>
+
+<a id="313139d6e2grg"></a>
 
 #### 示例代码
 
 以下示例使用**同步调用**方式。千问图像系列还支持异步调用，万相系列模型的调用方式请参见对应的[API参考文档](#189eed0801tx2)。
 
+<a id="sec-tabs"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-7"></a>
+
+```python
 import os
 import base64
 import mimetypes
@@ -259,9 +277,15 @@ for part in (message.content_parts or []):
         print(f"Generated image URL: {part['image']}")
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-8"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
@@ -298,11 +322,19 @@ public class ImageEditExample {
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
+
+<a id="4df3fe32e3vgd"></a>
 
 ##### 请求示例
 
-```
+<a id="code-block-9"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -326,9 +358,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="20d2a7a72bgev"></a>
+
 ##### 响应示例
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -357,22 +393,38 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="dashscope-cli"></a>
+
+<a id="dashscope-cli-h4"></a>
+
 #### dashscope CLI
 
-```
+<a id="code-block-11"></a>
+
+```bash
 export DASHSCOPE_API_KEY="your-api-key"
 # 将 {WorkspaceId} 替换为业务空间ID，cn-beijing 替换为对应地域（新加坡: ap-southeast-1, 美东: us-east-1）
 export DASHSCOPE_HTTP_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 dashscope image-synthesis create -m qwen-image-3.0-pro -p "一只可爱的猫" -n 1
 ```
 
-**重要**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+> **重要**
+>
+> SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+>
+> [DashScope SDK Expert](../../../../model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-[DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
+完整地域表见 [Base URL 总览](../../../../model-api-reference/preparations/base-url.md)。
 
-完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
+<a id="关键能力"></a>
+
+<a id="5bd93b7176yb7"></a>
 
 ## 关键能力
+
+<a id="1-指令遵循-提示词"></a>
+
+<a id="527b35fad3899"></a>
 
 ### 1\. 指令遵循（提示词）
 
@@ -382,9 +434,13 @@ dashscope image-synthesis create -m qwen-image-3.0-pro -p "一只可爱的猫" -
 -   **negative\_prompt（反向提示词）**：描述不希望在画面中出现的内容，如“模糊”、“多余的手指”等。仅用于辅助优化生成质量。
 -   **文本渲染（画面中的文字）**：模型可在画面中生成中英文文字，但对长文本（如完整古诗、长段落或多行文字）难以逐字精准还原，易出现错字、漏字或形近字替代。如对画面内文字的准确性有要求，建议尽量缩短画面内文字、仅保留关键标题或短语，或对成图中的关键文字进行后期编辑。
 
-撰写技巧：一个结构化的 Prompt 通常能带来更好的效果，撰写技巧请参见[文生图Prompt指南](raw/model-user-guide/use-cases/text-to-image-prompt.md)。
+撰写技巧：一个结构化的 Prompt 通常能带来更好的效果，撰写技巧请参见[文生图Prompt指南](../../../use-cases/text-to-image-prompt.md)。
 
 > wan2.7-image-pro、wan2.7-image、qwen-image-2.1系列不支持`negative_prompt`参数，对于不希望出现的元素，请在正向提示词中描述（不要出现xxx）。
+
+<a id="2-开启prompt智能改写"></a>
+
+<a id="5ad5ca93c187i"></a>
 
 ### 2\. 开启prompt智能改写
 
@@ -404,6 +460,10 @@ dashscope image-synthesis create -m qwen-image-3.0-pro -p "一只可爱的猫" -
 -   `direct`：直接提示词增强（DPE），适用于大多数场景。文生图（T2I）和图生图/图像编辑（I2I）均支持。
 -   `agent`：智能体提示词增强（APE），提供更精细的改写效果，仅支持文生图（T2I）。图生图/图像编辑（I2I）场景传入`agent`将返回400错误。
 
+<a id="3-设置输出图像分辨率"></a>
+
+<a id="ebc41fe492cyx"></a>
+
 ### 3\. 设置输出图像分辨率
 
 参数: parameters.size (string)，格式为 `"宽*高"`。
@@ -418,53 +478,17 @@ dashscope image-synthesis create -m qwen-image-3.0-pro -p "一只可爱的猫" -
 
 推荐分辨率：
 
-**宽高比**
+| 宽高比 | 4K (wan2.7-image-pro) | 2K (wan2.7-image, qwen-image-3.0系列, qwen-image-2.1系列, qwen-image-2.0系列) | 1K (Wan t2i) |
+| --- | --- | --- | --- |
+| 1:1 | 4096\*4096 | 2048\*2048 | 1280\*1280 |
+| 16:9 | 4096\*2304 | 2688\*1536 | 1696\*960 |
+| 9:16 | 2304\*4096 | 1536\*2688 | 960\*1696 |
+| 4:3 | 4096\*3072 | 2368\*1728 | 1472\*1104 |
+| 3:4 | 3072\*4096 | 1728\*2368 | 1104\*1472 |
 
-**4K (wan2.7-image-pro)**
+<a id="4-组图生成"></a>
 
-**2K (wan2.7-image, qwen-image-3.0系列, qwen-image-2.1系列, qwen-image-2.0系列)**
-
-**1K (Wan t2i)**
-
-1:1
-
-4096\*4096
-
-2048\*2048
-
-1280\*1280
-
-16:9
-
-4096\*2304
-
-2688\*1536
-
-1696\*960
-
-9:16
-
-2304\*4096
-
-1536\*2688
-
-960\*1696
-
-4:3
-
-4096\*3072
-
-2368\*1728
-
-1472\*1104
-
-3:4
-
-3072\*4096
-
-1728\*2368
-
-1104\*1472
+<a id="fe3018ccc6uxn"></a>
 
 ### 4\. 组图生成
 
@@ -475,6 +499,10 @@ dashscope image-synthesis create -m qwen-image-3.0-pro -p "一只可爱的猫" -
 -   **生成数量**：通过`n`参数控制，开启组图模式时，取值范围1~12（默认12），实际数量由模型决定且不超过n。
 -   **注意**：开启组图模式时，`thinking_mode`和`color_palette`参数不可用。
 
+<a id="5-思考模式"></a>
+
+<a id="e3f4a5b6c7d50"></a>
+
 ### 5\. 思考模式
 
 参数：`parameters.thinking_mode`（bool，**默认为 true**）。仅`wan2.7-image-pro`和`wan2.7-image`支持。
@@ -482,6 +510,10 @@ dashscope image-synthesis create -m qwen-image-3.0-pro -p "一只可爱的猫" -
 开启时，模型将增强推理能力以提升出图质量，但会增加生成耗时。
 
 > 仅在关闭组图模式（`enable_sequential=false`）时可用。
+
+<a id="6-自定义颜色主题"></a>
+
+<a id="f0a1b2c3d4e57"></a>
 
 ### 6\. 自定义颜色主题
 
@@ -491,9 +523,13 @@ dashscope image-synthesis create -m qwen-image-3.0-pro -p "一只可爱的猫" -
 
 > 仅在关闭组图模式（`enable_sequential=false`）时可用。
 
+<a id="accordion-点击查看输入示例"></a>
+
 点击查看输入示例
 
-```
+<a id="code-block-12"></a>
+
+```json
 "color_palette": [
     {
         "hex": "#C2D1E6",
@@ -530,6 +566,10 @@ dashscope image-synthesis create -m qwen-image-3.0-pro -p "一只可爱的猫" -
 ]
 ```
 
+<a id="7-其他通用参数"></a>
+
+<a id="bf1b2c3d4e7h3"></a>
+
 ### 7\. 其他通用参数
 
 参数：`parameters.n`（integer，可选，**默认为 1**）。输出图像的数量。qwen-image-3.0 系列、qwen-image-2.1 系列支持 1~6 张；`wan2.7-image-pro`、`wan2.7-image` 在关闭组图模式时支持 1~4 张；开启组图模式时表示最大生成图像数量（取值范围 1~12，默认为 12），详见上文“组图生成”。
@@ -540,35 +580,55 @@ dashscope image-synthesis create -m qwen-image-3.0-pro -p "一只可爱的猫" -
 
 参数：`parameters.watermark`（bool，可选，**默认为 false**）。是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
 
+<a id="应用于生产环境"></a>
+
+<a id="6abae810fehug"></a>
+
 ## 应用于生产环境
 
 -   **容错策略**
-    -   **处理限流**：当 API 返回 `Throttling` 错误码或 HTTP 429 状态码时，表明已触发限流，限流处理请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+    -   **处理限流**：当 API 返回 `Throttling` 错误码或 HTTP 429 状态码时，表明已触发限流，限流处理请参见[限流](../../../get-started-with-models/rate-limit.md)。
     -   **异步任务轮询**：轮询查询异步任务结果时，建议采用合理的轮询策略（如前30秒每3秒一次，之后拉长间隔），避免因过于频繁的请求而触发限流。为任务设置一个最终超时时间（如 2 分钟），超时后标记为失败。
 -   **风险防范**
     -   **结果持久化**：API 返回的图片 URL 有 24 小时有效期。生产系统必须在获取 URL 后立即下载图片，并转存至您自己的持久化存储服务中（如阿里云对象存储 OSS）。
     -   **内容安全审核**：所有 `prompt` 和 `negative_prompt` 都会经过内容安全审核。若输入内容不合规，请求将被拦截并返回 `DataInspectionFailed` 错误。
     -   **生成内容的版权与合规风险**：请确保您的提示词内容符合相关法律法规。生成包含品牌商标、名人肖像、受版权保护的 IP 形象等内容可能涉及侵权风险，请您自行评估并承担相应责任。
 
+<a id="计费与限流"></a>
+
+<a id="t2i_billing_h"></a>
+
 ## 计费与限流
 
--   计费详情请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
--   限流详情请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+-   计费详情请参见[模型调用计费](../../../test-1/model-pricing.md)。
+-   限流详情请参见[限流](../../../get-started-with-models/rate-limit.md)。
 
 > 调用万相模型时，账户需有可用余额。
 
+<a id="api文档"></a>
+
+<a id="189eed0801tx2"></a>
+
 ## API文档
 
--   [千问-图像生成与编辑](raw/model-api-reference/image-generation/qwen-image-api-reference/qwen-image-generation-and-editing-api-reference.md)
--   [千问 Qwen-Image](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-api.md)
--   [万相-图像生成与编辑2.7](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-and-editing-api-reference.md)
--   [万相-图像生成与编辑2.6](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-api-reference.md)
--   [万相-文生图V2](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)
--   [文生图Z-Image](raw/model-api-reference/image-generation/z-image-generation-api-reference/z-image-api-reference.md)
+-   [千问-图像生成与编辑](../../../../model-api-reference/image-generation/qwen-image-api-reference/qwen-image-generation-and-editing-api-reference.md)
+-   [千问 Qwen-Image](../../../../model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-api.md)
+-   [万相-图像生成与编辑2.7](../../../../model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-and-editing-api-reference.md)
+-   [万相-图像生成与编辑2.6](../../../../model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-api-reference.md)
+-   [万相-文生图V2](../../../../model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)
+-   [文生图Z-Image](../../../../model-api-reference/image-generation/z-image-generation-api-reference/z-image-api-reference.md)
+
+<a id="错误码"></a>
+
+<a id="OajFO"></a>
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../../model-api-reference/preparations/error-code.md)进行解决。
+
+<a id="常见问题"></a>
+
+<a id="c27080cae8905"></a>
 
 ## 常见问题
 

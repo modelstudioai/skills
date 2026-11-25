@@ -2,43 +2,65 @@
 
 通过Python SDK管理定制热词列表，包括client.audio.vocabularies资源的方法说明与示例代码。
 
-**用户指南：**[提升识别准确率](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md)。热词列表数量上限等使用限制详见[热词限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10_limit_h2)。
+**用户指南：**[提升识别准确率](../../../../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md)。热词列表数量上限等使用限制详见[热词限制与计费](../../../../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw10_limit_h2)。
 
-**重要**新加坡地域的子业务空间暂不支持热词功能。
+> **重要**
+>
+> 新加坡地域的子业务空间暂不支持热词功能。
+
+<a id="接口地址"></a>
+
+<a id="10fe1be1c35re"></a>
 
 ## 接口地址
 
 SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，在构造 `dashscope.Client` 时指定 `region` 参数（如新加坡地域为 `ap-southeast-1`）。
 
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
+
 #### 华北2（北京）
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+>
+> `{WorkspaceId}`需要替换为真实的[Workspace ID](../../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。现有域名仍可正常使用。
 
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
-
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
-
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+>
+> `{WorkspaceId}`需要替换为真实的[Workspace ID](../../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。现有域名仍可正常使用。
 
 **切换到新加坡地域**：
 
-```
+<a id="code-block"></a>
+
+```python
 import os
 import dashscope
 
@@ -54,15 +76,25 @@ client = dashscope.Client(
 -   不同地域的 API Key 不同，请确保使用对应地域的 API Key
 -   地域配置为 `dashscope.Client` 实例级设置，仅影响该 client 的 API 调用
 
+<a id="client-audio-vocabularies"></a>
+
+<a id="vocabularyservice"></a>
+
 ## client.audio.vocabularies
 
 **资源入口**：`dashscope.Client` 实例的 `client.audio.vocabularies` 资源
 
 **功能**：管理热词列表的生命周期（创建、查询、更新、删除）
 
+<a id="构造方法"></a>
+
+<a id="6f78ee5f05mi8"></a>
+
 ### 构造方法
 
-```
+<a id="code-block-2"></a>
+
+```python
 import os
 import dashscope
 
@@ -75,11 +107,17 @@ client = dashscope.Client(
 
 未传 `api_key` 时，SDK 自动读取 `DASHSCOPE_API_KEY` 环境变量的值。
 
+<a id="create-创建热词列表"></a>
+
+<a id="13e9d780falfk"></a>
+
 ### create() - 创建热词列表
 
 **方法签名**：
 
-```
+<a id="code-block-3"></a>
+
+```python
 def create(
     self,
     *,
@@ -90,49 +128,21 @@ def create(
 
 **参数**：
 
-**参数**
-
-**类型**
-
-**必填**
-
-**说明**
-
-target\_model
-
-str
-
-是
-
-使用热词列表的语音识别模型，必须与后续调用语音识别接口时使用的模型一致。
-
-prefix
-
-str
-
-是
-
-热词列表自定义前缀，仅允许数字和小写字母，长度不超过10个字符。
-
-vocabulary
-
-List\[dict\]
-
-是
-
-热词列表，每个dict包含 text、weight、lang 等字段。
-
-详情请参见[热词字典结构](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/custom-hot-words/vocabulary-python-sdk.md)。
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| target\_model | str | 是 | 使用热词列表的语音识别模型，必须与后续调用语音识别接口时使用的模型一致。 |
+| prefix | str | 是 | 热词列表自定义前缀，仅允许数字和小写字母，长度不超过10个字符。 |
+| vocabulary | List\[dict\] | 是 | 热词列表，每个dict包含 text、weight、lang 等字段。<br><br>详情请参见[热词字典结构](vocabulary-python-sdk.md)。 |
 
 **返回值**：
 
-**类型**
+| 类型 | 说明 |
+| --- | --- |
+| Vocabulary | 热词列表对象，通过 `vocabulary_id` 字段获取热词列表ID。 |
 
-**说明**
+<a id="list-批量查询热词列表"></a>
 
-Vocabulary
-
-热词列表对象，通过 `vocabulary_id` 字段获取热词列表ID。
+<a id="652e9dddb48ia"></a>
 
 ### list() - 批量查询热词列表
 
@@ -140,7 +150,9 @@ Vocabulary
 
 **方法签名**：
 
-```
+<a id="code-block-4"></a>
+
+```python
 def list(
     self,
     *,
@@ -151,90 +163,27 @@ def list(
 
 **参数**：
 
-**参数**
-
-**类型**
-
-**必填**
-
-**说明**
-
-prefix
-
-str
-
-否
-
-热词列表自定义前缀，如果设定则只返回指定前缀的热词列表。
-
-page\_index
-
-int
-
-否
-
-页码索引，从0开始计数。
-
-默认值：0。
-
-page\_size
-
-int
-
-否
-
-每页包含数据条数。
-
-默认值：10。
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| prefix | str | 否 | 热词列表自定义前缀，如果设定则只返回指定前缀的热词列表。 |
+| page\_index | int | 否 | 页码索引，从0开始计数。<br><br>默认值：0。 |
+| page\_size | int | 否 | 每页包含数据条数。<br><br>默认值：10。 |
 
 **返回值**：
 
-**类型**
-
-**说明**
-
-VocabularyList
-
-热词列表分页对象，`vocabularies` 字段为热词列表信息数组，每个dict包含 vocabulary\_id、gmt\_create、gmt\_modified、status。
+| 类型 | 说明 |
+| --- | --- |
+| VocabularyList | 热词列表分页对象，`vocabularies` 字段为热词列表信息数组，每个dict包含 vocabulary\_id、gmt\_create、gmt\_modified、status。 |
 
 **返回对象字段**：
 
-**字段**
-
-**类型**
-
-**说明**
-
-vocabulary\_id
-
-str
-
-热词列表ID。
-
-gmt\_create
-
-str
-
-创建时间。
-
-gmt\_modified
-
-str
-
-修改时间。
-
-status
-
-str
-
-状态：
-
--   OK：可调用
-    
--   UNDEPLOYED：不可调用。
-    
+<table><thead><tr><th><p><strong>字段</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>vocabulary_id</p></td><td><p>str</p></td><td><div><p>热词列表ID。</p></div></td></tr><tr><td><p>gmt_create</p></td><td><p>str</p></td><td><div><p>创建时间。</p></div></td></tr><tr><td><p>gmt_modified</p></td><td><p>str</p></td><td><div><p>修改时间。</p></div></td></tr><tr><td><p>status</p></td><td><p>str</p></td><td><div><p>状态：</p><ul><li><p>OK：可调用</p></li><li><p>UNDEPLOYED：不可调用。</p></li></ul></div></td></tr></tbody></table>
 
 * * *
+
+<a id="get-查询热词列表"></a>
+
+<a id="3888358ba66rq"></a>
 
 ### get() - 查询热词列表
 
@@ -242,7 +191,9 @@ str
 
 **方法签名**：
 
-```
+<a id="code-block-5"></a>
+
+```python
 def get(
     self,
     vocabulary_id: str) -> Vocabulary
@@ -250,80 +201,31 @@ def get(
 
 **参数**：
 
-**参数**
-
-**类型**
-
-**必填**
-
-**说明**
-
-vocabulary\_id
-
-str
-
-是
-
-需要查询的热词列表ID。
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| vocabulary\_id | str | 是 | 需要查询的热词列表ID。 |
 
 **返回值**：
 
-**类型**
-
-**说明**
-
-Vocabulary
-
-热词列表详细信息对象，包含 vocabulary、target\_model、gmt\_create、gmt\_modified、status。
+| 类型 | 说明 |
+| --- | --- |
+| Vocabulary | 热词列表详细信息对象，包含 vocabulary、target\_model、gmt\_create、gmt\_modified、status。 |
 
 **返回对象字段**：
 
-**字段**
+<table><thead><tr><th><p><strong>字段</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>vocabulary</p></td><td><p>List[dict]</p></td><td><p>热词列表内容。</p></td></tr><tr><td><p>target_model</p></td><td><p>str</p></td><td><div><p>使用热词列表的语音识别模型，必须与后续调用语音识别接口时使用的模型一致。</p></div></td></tr><tr><td><p>gmt_create</p></td><td><p>str</p></td><td><div><p>创建时间。</p></div></td></tr><tr><td><p>gmt_modified</p></td><td><p>str</p></td><td><div><p>修改时间。</p></div></td></tr><tr><td><p>status</p></td><td><p>str</p></td><td><div><p>状态：</p><ul><li><p>OK：可调用</p></li><li><p>UNDEPLOYED：不可调用。</p></li></ul></div></td></tr></tbody></table>
 
-**类型**
+<a id="update-更新热词列表"></a>
 
-**说明**
-
-vocabulary
-
-List\[dict\]
-
-热词列表内容。
-
-target\_model
-
-str
-
-使用热词列表的语音识别模型，必须与后续调用语音识别接口时使用的模型一致。
-
-gmt\_create
-
-str
-
-创建时间。
-
-gmt\_modified
-
-str
-
-修改时间。
-
-status
-
-str
-
-状态：
-
--   OK：可调用
-    
--   UNDEPLOYED：不可调用。
-    
+<a id="bfb9dde2336p2"></a>
 
 ### update() - 更新热词列表
 
 **方法签名**：
 
-```
+<a id="code-block-6"></a>
+
+```python
 def update(
     self,
     vocabulary_id: str,
@@ -333,37 +235,24 @@ def update(
 
 **参数**：
 
-**参数**
-
-**类型**
-
-**必填**
-
-**说明**
-
-vocabulary\_id
-
-str
-
-是
-
-需要更新的热词列表ID。
-
-vocabulary
-
-List\[dict\]
-
-是
-
-新的热词列表，将完全替换原有内容。
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| vocabulary\_id | str | 是 | 需要更新的热词列表ID。 |
+| vocabulary | List\[dict\] | 是 | 新的热词列表，将完全替换原有内容。 |
 
 **返回值**：JobStatus 对象，status 字段为操作状态。
+
+<a id="delete-删除热词列表"></a>
+
+<a id="284b1ecc29e94"></a>
 
 ### delete() - 删除热词列表
 
 **方法签名**：
 
-```
+<a id="code-block-7"></a>
+
+```python
 def delete(
     self,
     vocabulary_id: str) -> JobStatus
@@ -371,104 +260,37 @@ def delete(
 
 **参数**：
 
-**参数**
-
-**类型**
-
-**必填**
-
-**说明**
-
-vocabulary\_id
-
-str
-
-是
-
-需要删除的热词列表ID。
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| vocabulary\_id | str | 是 | 需要删除的热词列表ID。 |
 
 **返回值**：JobStatus 对象，status 字段为操作状态。
+
+<a id="热词字典结构"></a>
+
+<a id="e69652f2feiai"></a>
 
 ## 热词字典结构
 
 **用于**`vocabulary`**参数的字典定义**：
 
-**字段**
+<table><thead><tr><th><p><strong>字段</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>必填</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>text</p></td><td><p>str</p></td><td><p>是</p></td><td><div><p>热词文本。</p><p>热词文本的语言必须在所选模型的支持范围内，不同模型支持的语言各不相同。</p><p>热词用于提升识别的准确率，请使用实际词语而非任意字符组合。</p><p>长度限制：含非 ASCII 字符时不超过 15 个字符；纯 ASCII 时空格分隔片段不超过 7 个。</p></div></td></tr><tr><td><p>weight</p></td><td><p>int</p></td><td><p>是</p></td><td><div><p>热词权重。常用值：4。</p><p>取值范围：[1, 5]。</p><p>如果效果不明显，可以适当增加权重，但权重过大可能产生负面效果，导致其他词语识别不准确。</p></div></td></tr><tr><td><p>lang</p></td><td><p>str</p></td><td><p>否</p></td><td><div><p>待识别音频的语言代码。设置后，系统将对指定语种进行热词识别增强。如果无法提前确定语种，可不设置，模型会自动识别语种。</p><p>取值范围（因模型而异）：</p><ul><li><p>Paraformer：</p><ul><li><p>zh: 中文</p></li><li><p>en: 英文</p></li><li><p>ja: 日语</p></li><li><p>yue: 粤语</p></li><li><p>ko: 韩语</p></li><li><p>de：德语</p></li><li><p>fr：法语</p></li><li><p>ru：俄语</p></li></ul></li><li><p>Fun-ASR：</p><ul><li><p>zh: 中文</p></li><li><p>en: 英文</p></li><li><p>ja: 日语</p></li></ul></li></ul></div></td></tr></tbody></table>
 
-**类型**
+<a id="示例代码"></a>
 
-**必填**
-
-**说明**
-
-text
-
-str
-
-是
-
-热词文本。
-
-热词文本的语言必须在所选模型的支持范围内，不同模型支持的语言各不相同。
-
-热词用于提升识别的准确率，请使用实际词语而非任意字符组合。
-
-长度限制：含非 ASCII 字符时不超过 15 个字符；纯 ASCII 时空格分隔片段不超过 7 个。
-
-weight
-
-int
-
-是
-
-热词权重。常用值：4。
-
-取值范围：\[1, 5\]。
-
-如果效果不明显，可以适当增加权重，但权重过大可能产生负面效果，导致其他词语识别不准确。
-
-lang
-
-str
-
-否
-
-待识别音频的语言代码。设置后，系统将对指定语种进行热词识别增强。如果无法提前确定语种，可不设置，模型会自动识别语种。
-
-取值范围（因模型而异）：
-
--   Paraformer：
-    
-    -   zh: 中文
-        
-    -   en: 英文
-        
-    -   ja: 日语
-        
-    -   yue: 粤语
-        
-    -   ko: 韩语
-        
-    -   de：德语
-        
-    -   fr：法语
-        
-    -   ru：俄语
-        
--   Fun-ASR：
-    
-    -   zh: 中文
-        
-    -   en: 英文
-        
-    -   ja: 日语
-        
+<a id="python-sdk-examples-title"></a>
 
 ## 示例代码
 
+<a id="创建热词列表"></a>
+
+<a id="python-example-create-title"></a>
+
 ### 创建热词列表
 
-```
+<a id="code-block-8"></a>
+
+```python
 import os
 import dashscope
 
@@ -497,9 +319,15 @@ vocabulary = client.audio.vocabularies.create(
 print(f"热词列表ID为：{vocabulary.vocabulary_id}")
 ```
 
+<a id="批量查询热词列表"></a>
+
+<a id="python-example-list-title"></a>
+
 ### 批量查询热词列表
 
-```
+<a id="code-block-9"></a>
+
+```python
 import json
 import os
 import dashscope
@@ -517,9 +345,15 @@ result = client.audio.vocabularies.list()
 print(f"热词列表：{json.dumps(result.vocabularies)}")
 ```
 
+<a id="查询热词列表"></a>
+
+<a id="python-example-query-title"></a>
+
 ### 查询热词列表
 
-```
+<a id="code-block-10"></a>
+
+```python
 import json
 import os
 import dashscope
@@ -538,9 +372,15 @@ vocabulary = client.audio.vocabularies.get("vocab-testpfx-xxx")
 print(f"热词列表：{json.dumps(vocabulary.vocabulary)}")
 ```
 
+<a id="更新热词列表"></a>
+
+<a id="python-example-update-title"></a>
+
 ### 更新热词列表
 
-```
+<a id="code-block-11"></a>
+
+```python
 import os
 import dashscope
 
@@ -561,9 +401,15 @@ result = client.audio.vocabularies.update("vocab-testpfx-xxx", vocabulary=my_voc
 print(f"更新状态：{result.status}")
 ```
 
+<a id="删除热词列表"></a>
+
+<a id="python-example-delete-title"></a>
+
 ### 删除热词列表
 
-```
+<a id="code-block-12"></a>
+
+```python
 import os
 import dashscope
 

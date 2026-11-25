@@ -2,6 +2,10 @@
 
 创建文档库。创建一个新的文档库，文档库用作隔离文档信息、索引信息，如果使用场景中需要经常按类别去做自然语言检索，建议创建多个文档库，来隔离不同类型的数据。支持按照格式自定义向量索引和文本索引。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 **前提条件**
@@ -9,11 +13,19 @@
 -   已开通阿里云百炼服务和通义点金服务。
 -   获取到 workspaceId：获取 [workspace 标识](https://help.aliyun.com/zh/model-studio/developer-reference/get-app-id-and-workspace?spm=openapi-amp.newDocPublishment.0.0.2eb8281foUVd15#2612f896detsz:~:text=%E6%9F%A5%E7%9C%8BAPI%2DKEY%E3%80%82-,%E8%8E%B7%E5%8F%96APP%2DID%E5%92%8CWORKSPACE,-%E8%BF%9B%E5%85%A5%E6%88%91%E7%9A%84%E5%BA%94%E7%94%A8)。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/DianJin/2024-06-28/CreateLibrary)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -32,558 +44,49 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>dianjin:CreateLibrary</td><td>create</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-dianjin:CreateLibrary
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/api/library/create HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>workspaceId</td><td>string</td><td>是</td><td><div><p>业务空间 id</p></div></td><td>llm-ik******RVYCKzt</td></tr><tr><td>body</td><td>object</td><td>否</td><td><div><p>请求体。</p></div></td><td></td></tr><tr><td>description</td><td>string</td><td>是</td><td><div><p>文档库的描述</p></div></td><td>描述文档库的具体作用</td></tr><tr><td>indexSetting</td><td>object</td><td>否</td><td><div><p>文档库的索引设置</p></div></td><td></td></tr><tr><td>chunkStrategy</td><td>object</td><td>否</td><td><div><p>分段策略</p></div></td><td></td></tr><tr><td>docTreeSplit</td><td>boolean</td><td>否</td><td><div><p>版面切分</p></div></td><td>true</td></tr><tr><td>docTreeSplitSize</td><td>integer</td><td>否</td><td><div><p>版面切分大小</p></div></td><td>300</td></tr><tr><td>enhanceGraph</td><td>boolean</td><td>否</td><td><div><p>是否解析文档中的图片内容</p></div></td><td>true</td></tr><tr><td>enhanceTable</td><td>boolean</td><td>否</td><td><div><p>是否解析文档中的表格内容</p></div></td><td>true</td></tr><tr><td>overlap</td><td>integer</td><td>否</td><td><div><p>chunk 重叠长度</p></div></td><td>20</td></tr><tr><td>sentenceSplit</td><td>boolean</td><td>否</td><td><div><p>按句子切分</p></div></td><td>true</td></tr><tr><td>sentenceSplitSize</td><td>integer</td><td>否</td><td><div><p>按句子切分大小</p></div></td><td>300</td></tr><tr><td>size</td><td>integer</td><td>否</td><td><div><p>chunk 大小</p></div></td><td>300</td></tr><tr><td>split</td><td>boolean</td><td>否</td><td><div><p>是否切块</p></div></td><td>true</td></tr><tr><td>modelConfig</td><td>object</td><td>否</td><td><div><p>模型配置</p></div></td><td></td></tr><tr><td>temperature</td><td>double</td><td>否</td><td><div><p>用于控制模型回复的随机性和多样性。具体来说，temperature 值控制了生成文本时对每个候选词的概率分布进行平滑的程度。较高的 temperature 值会降低概率分布的峰值，使得更多的低概率词被选择，生成结果更加多样化；而较低的 temperature 值则会增强概率分布的峰值，使得高概率词更容易被选择，生成结果更加确定。</p><p>取值范围： [0, 2)，不建议取值为 0，无意义。</p></div></td><td>0.8</td></tr><tr><td>topP</td><td>double</td><td>否</td><td><div><p>生成过程中的核采样方法概率阈值，例如，取值为 0.8 时，仅保留概率加起来大于等于 0.8 的最可能 token 的最小集合作为候选集。取值范围为（0,1.0)，取值越大，生成的随机性越高；取值越低，生成的确定性越高。</p></div></td><td>0.8</td></tr><tr><td>promptRoleStyle</td><td>string</td><td>否</td><td><div><p>prompt 风格角色。通过指定角色，描述语气风格，来控制最终回答质量。如：文档分析专家、温柔的客服、专业的金融行业分析师。</p></div></td><td>你是一位信息处理专家，耐心、友好、逻辑清晰。</td></tr><tr><td>queryEnhancer</td><td>object</td><td>否</td><td><div><p>问题增强配置</p></div></td><td></td></tr><tr><td>enableFollowUp</td><td>boolean</td><td>否</td><td><div><p>是否根据历史记录改写问题</p></div></td><td>true</td></tr><tr><td>enableMultiQuery</td><td>boolean</td><td>否</td><td><div><p>是否利用大模型知识拆解问题</p></div></td><td>true</td></tr><tr><td>enableOpenQa</td><td>boolean</td><td>否</td><td><div><p>是否利用大模型知识回答问题</p></div></td><td>true</td></tr><tr><td>enableQueryRewrite</td><td>boolean</td><td>否</td><td><div><p>是否使用问题改写</p></div></td><td>true</td></tr><tr><td>enableSession</td><td>boolean</td><td>否</td><td><div><p>是否开启多轮对话</p></div></td><td>true</td></tr><tr><td>localKnowledgeId</td><td>string</td><td>否</td><td><div><p>知识改写使用的文档库 id</p></div></td><td>xxxx</td></tr><tr><td>withDocumentReference</td><td>boolean</td><td>否</td><td><div><p>是否带文档引用</p></div></td><td>true</td></tr><tr><td>recallStrategy</td><td>object</td><td>否</td><td><div><p>召回策略</p></div></td><td></td></tr><tr><td>documentRankType</td><td>string</td><td>否</td><td><div><p>合并&amp;排序策略</p></div><div><div>枚举值：</div><ul><li>linear：linear。</li><li>model：model。</li></ul></div></td><td>model</td></tr><tr><td>limit</td><td>integer</td><td>否</td><td><div><p>两路合并总结的结果数</p></div></td><td>20</td></tr><tr><td>textIndexSetting</td><td>object</td><td>否</td><td><div><p>文本索引配置</p></div></td><td></td></tr><tr><td>category</td><td>string</td><td>否</td><td><div><p>文本索引类型，目前只支持 ElasticSearch。</p></div></td><td>ElasticSearch</td></tr><tr><td>enable</td><td>boolean</td><td>否</td><td><div><p>是否启用文本索引。</p></div><div><div>枚举值：</div><ul><li>true：true。</li><li>false：false。</li></ul></div></td><td>true</td></tr><tr><td>indexAnalyzer</td><td>string</td><td>否</td><td><div><p>文本索引的索引分析器: (Standard, IkMaxWord, IkSmart)</p></div></td><td>Standard</td></tr><tr><td>rankThreshold</td><td>double</td><td>否</td><td><div><p>文本索引排序阈值</p></div></td><td>0.5</td></tr><tr><td>searchAnalyzer</td><td>string</td><td>否</td><td><div><p>文本索引的搜索分析器: (Standard, IkMaxWord, IkSmart)</p></div></td><td>Standard</td></tr><tr><td>topK</td><td>integer</td><td>否</td><td><div><p>文本索引最后总结结果数</p></div></td><td>50</td></tr><tr><td>vectorIndexSetting</td><td>object</td><td>否</td><td><div><p>向量索引设置</p></div></td><td></td></tr><tr><td>category</td><td>string</td><td>否</td><td><div><p>向量索引来源：目前只支持 ADB</p></div></td><td>ADB</td></tr><tr><td>embeddingType</td><td>string</td><td>否</td><td><div><p>向量索引文本 Embedding 类型</p></div><div><div>枚举值：</div><ul><li>DashScope：DashScope。</li></ul></div></td><td>DashScope</td></tr><tr><td>enable</td><td>boolean</td><td>否</td><td><div><p>是否开启</p></div><div><div>枚举值：</div><ul><li>true：true。</li><li>false：false。</li></ul></div></td><td>true</td></tr><tr><td>rankThreshold</td><td>double</td><td>否</td><td><div><p>向量索引排序阈值</p></div></td><td>0.5</td></tr><tr><td>topK</td><td>integer</td><td>否</td><td><div><p>向量索引最后总结结果数</p></div></td><td>50</td></tr><tr><td>libraryName</td><td>string</td><td>是</td><td><div><p>文档库的名称</p></div></td><td>金融知识文档库</td></tr></tbody></table>
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-业务空间 id
-
-llm-ik\*\*\*\*\*\*RVYCKzt
-
-body
-
-object
-
-否
-
-请求体。
-
-description
-
-string
-
-是
-
-文档库的描述
-
-描述文档库的具体作用
-
-indexSetting
-
-object
-
-否
-
-文档库的索引设置
-
-chunkStrategy
-
-object
-
-否
-
-分段策略
-
-docTreeSplit
-
-boolean
-
-否
-
-版面切分
-
-true
-
-docTreeSplitSize
-
-integer
-
-否
-
-版面切分大小
-
-300
-
-enhanceGraph
-
-boolean
-
-否
-
-是否解析文档中的图片内容
-
-true
-
-enhanceTable
-
-boolean
-
-否
-
-是否解析文档中的表格内容
-
-true
-
-overlap
-
-integer
-
-否
-
-chunk 重叠长度
-
-20
-
-sentenceSplit
-
-boolean
-
-否
-
-按句子切分
-
-true
-
-sentenceSplitSize
-
-integer
-
-否
-
-按句子切分大小
-
-300
-
-size
-
-integer
-
-否
-
-chunk 大小
-
-300
-
-split
-
-boolean
-
-否
-
-是否切块
-
-true
-
-modelConfig
-
-object
-
-否
-
-模型配置
-
-temperature
-
-double
-
-否
-
-用于控制模型回复的随机性和多样性。具体来说，temperature 值控制了生成文本时对每个候选词的概率分布进行平滑的程度。较高的 temperature 值会降低概率分布的峰值，使得更多的低概率词被选择，生成结果更加多样化；而较低的 temperature 值则会增强概率分布的峰值，使得高概率词更容易被选择，生成结果更加确定。
-
-取值范围： \[0, 2)，不建议取值为 0，无意义。
-
-0.8
-
-topP
-
-double
-
-否
-
-生成过程中的核采样方法概率阈值，例如，取值为 0.8 时，仅保留概率加起来大于等于 0.8 的最可能 token 的最小集合作为候选集。取值范围为（0,1.0)，取值越大，生成的随机性越高；取值越低，生成的确定性越高。
-
-0.8
-
-promptRoleStyle
-
-string
-
-否
-
-prompt 风格角色。通过指定角色，描述语气风格，来控制最终回答质量。如：文档分析专家、温柔的客服、专业的金融行业分析师。
-
-你是一位信息处理专家，耐心、友好、逻辑清晰。
-
-queryEnhancer
-
-object
-
-否
-
-问题增强配置
-
-enableFollowUp
-
-boolean
-
-否
-
-是否根据历史记录改写问题
-
-true
-
-enableMultiQuery
-
-boolean
-
-否
-
-是否利用大模型知识拆解问题
-
-true
-
-enableOpenQa
-
-boolean
-
-否
-
-是否利用大模型知识回答问题
-
-true
-
-enableQueryRewrite
-
-boolean
-
-否
-
-是否使用问题改写
-
-true
-
-enableSession
-
-boolean
-
-否
-
-是否开启多轮对话
-
-true
-
-localKnowledgeId
-
-string
-
-否
-
-知识改写使用的文档库 id
-
-xxxx
-
-withDocumentReference
-
-boolean
-
-否
-
-是否带文档引用
-
-true
-
-recallStrategy
-
-object
-
-否
-
-召回策略
-
-documentRankType
-
-string
-
-否
-
-合并&排序策略
-
-枚举值：
-
--   linear：linear。
--   model：model。
-
-model
-
-limit
-
-integer
-
-否
-
-两路合并总结的结果数
-
-20
-
-textIndexSetting
-
-object
-
-否
-
-文本索引配置
-
-category
-
-string
-
-否
-
-文本索引类型，目前只支持 ElasticSearch。
-
-ElasticSearch
-
-enable
-
-boolean
-
-否
-
-是否启用文本索引。
-
-枚举值：
-
--   true：true。
--   false：false。
-
-true
-
-indexAnalyzer
-
-string
-
-否
-
-文本索引的索引分析器: (Standard, IkMaxWord, IkSmart)
-
-Standard
-
-rankThreshold
-
-double
-
-否
-
-文本索引排序阈值
-
-0.5
-
-searchAnalyzer
-
-string
-
-否
-
-文本索引的搜索分析器: (Standard, IkMaxWord, IkSmart)
-
-Standard
-
-topK
-
-integer
-
-否
-
-文本索引最后总结结果数
-
-50
-
-vectorIndexSetting
-
-object
-
-否
-
-向量索引设置
-
-category
-
-string
-
-否
-
-向量索引来源：目前只支持 ADB
-
-ADB
-
-embeddingType
-
-string
-
-否
-
-向量索引文本 Embedding 类型
-
-枚举值：
-
--   DashScope：DashScope。
-
-DashScope
-
-enable
-
-boolean
-
-否
-
-是否开启
-
-枚举值：
-
--   true：true。
--   false：false。
-
-true
-
-rankThreshold
-
-double
-
-否
-
-向量索引排序阈值
-
-0.5
-
-topK
-
-integer
-
-否
-
-向量索引最后总结结果数
-
-50
-
-libraryName
-
-string
-
-是
-
-文档库的名称
-
-金融知识文档库
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | ResultCode |  |
+| cost | long | 耗时 | 300 |
+| data | string | 返回数据 | a1b2c3 |
+| dataType | string | 数据类型 | null |
+| errCode | string | 错误码 | 0 |
+| message | string | 错误信息 | 成功 |
+| requestId | string | 请求 id | xxxx-xxxx-xxxx-xxxx |
+| success | boolean | 是否成功 | true |
+| time | string | 时间戳 | null |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-ResultCode
-
-cost
-
-long
-
-耗时
-
-300
-
-data
-
-string
-
-返回数据
-
-a1b2c3
-
-dataType
-
-string
-
-数据类型
-
-null
-
-errCode
-
-string
-
-错误码
-
-0
-
-message
-
-string
-
-错误信息
-
-成功
-
-requestId
-
-string
-
-请求 id
-
-xxxx-xxxx-xxxx-xxxx
-
-success
-
-boolean
-
-是否成功
-
-true
-
-time
-
-string
-
-时间戳
-
-null
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -591,7 +94,9 @@ null
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "cost": 300,
   "data": "a1b2c3",
@@ -603,6 +108,10 @@ null
   "time": null
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

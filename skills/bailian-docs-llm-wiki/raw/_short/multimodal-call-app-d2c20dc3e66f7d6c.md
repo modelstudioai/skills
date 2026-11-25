@@ -2,17 +2,25 @@
 
 本文介绍如何在多模态交互应用中接入百炼智能体应用，以及在客户端调用。
 
-在多模态交互开发套件中，我们预置了多种官方插件和 Agent。当官方能力不能满足您的特定需求时，您也可以将自己开发的百炼平台应用（如智能体应用、工作流应用等）接入到多模态平台，实现能力更丰富的多模态交互。关于推荐应用模板请参考[百炼应用推荐模板](raw/_short/agent-template-0a908b95e324ab84.md)。
+在多模态交互开发套件中，我们预置了多种官方插件和 Agent。当官方能力不能满足您的特定需求时，您也可以将自己开发的百炼平台应用（如智能体应用、工作流应用等）接入到多模态平台，实现能力更丰富的多模态交互。关于推荐应用模板请参考[百炼应用推荐模板](agent-template-0a908b95e324ab84.md)。
 
 本文档以创建和接入一个【西游记大全】应用为例，介绍如何在多模态应用中接入百炼平台应用。
 
+<a id="创建和配置百炼应用"></a>
+
+<a id="6e3b09002ayh4"></a>
+
 ## 创建和配置百炼应用
 
-1.  创建百炼平台应用，参考[应用类型](raw/application-user-guide/agent-development/llm-application/llm-application-start-using/flow-agent-introduction.md)。
+1.  创建百炼平台应用，参考[应用类型](../application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)。
 2.  配置应用，调整模型、提示词和其他需要的能力。应用名修改为【西游记大全】。
 3.  测试并发布应用。
 
 选择模型为**通义千问-Turbo-Latest 1M**，注意关闭思考模式。在提示词区域编写指令，可通过`${user_name}`等变量实现客户端透传。在技能配置中可按需启用**MCP服务**、**插件**、**智能体**、**工作流**等能力。配置完成后在右侧对话区域测试应用效果。
+
+<a id="在多模交互应用中接入"></a>
+
+<a id="70dee8f826f7h"></a>
 
 ## 在多模交互应用中接入
 
@@ -23,7 +31,15 @@
 
 完成上述步骤后，可在多模交互应用的Agent列表中看到已导入的【西游记大全】应用，确认应用状态为已发布。
 
+<a id="应用测试和参数配置"></a>
+
+<a id="dd14b08bccyc5"></a>
+
 ## 应用测试和参数配置
+
+<a id="应用测试"></a>
+
+<a id="bb1d6187ee91a"></a>
 
 ### 应用测试
 
@@ -33,43 +49,23 @@
 
 系统成功调用**西游记大全**Agent，回复了关于道教三清（元始天尊、灵宝天尊、道德天尊）的儿童化科普内容，验证语音交互测试通过。
 
+<a id="参数配置"></a>
+
+<a id="8f59cd38b2okk"></a>
+
 ### 参数配置
 
 在【西游记大全】应用中，我们配置了一个名为${user\_name}的参数。代表用户昵称，默认值为“小宝”。
 
 通过 SDK 调用多模应用，我们可以在代码中配置`${user_name}`。
 
-一级参数
-
-二级参数
-
-三级参数
-
-四级参数
-
-参数说明
-
-biz\_params
-
-多模请求参数中的biz\_params
-
-user\_defined\_params
-
-透传用户自定义参数
-
-user\_defined\_app\_id
-
-导入的百炼**应用 id**
-
-user\_prompt\_params
-
-类型为 Object
-
-对应百炼应用prompt 的自定义变量名和值。
+<table><thead><tr><th><p>一级参数</p></th><th><p>二级参数</p></th><th><p>三级参数</p></th><th><p>四级参数</p></th><th><p>参数说明</p></th></tr></thead><tbody><tr><td rowspan="4"><p>biz_params</p></td><td></td><td></td><td></td><td><p>多模请求参数中的biz_params</p></td></tr><tr><td rowspan="3"><p>user_defined_params</p></td><td></td><td></td><td><p>透传用户自定义参数</p></td></tr><tr><td rowspan="2"><p>user_defined_app_id</p></td><td></td><td><p>导入的百炼<strong>应用 id</strong></p></td></tr><tr><td><p>user_prompt_params</p></td><td><p>类型为 Object</p><p>对应百炼应用prompt 的自定义变量名和值。</p></td></tr></tbody></table>
 
 -   格式化示例
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "biz_params": {
         "user_defined_params": {
@@ -83,42 +79,28 @@ user\_prompt\_params
 }
 ```
 
+<a id="通过updateinfo更新参数"></a>
+
+<a id="AY2pr"></a>
+
 #### 通过UpdateInfo更新参数
 
 在对话过程中如需携带参数给您的Agent。可通过此方式将参数透传，透传参数会在下一次请求Agent服务时带入。
 
 通过该方式设置的参数每次请求Agent都会携带。您可以通过UpdateInfo更新同名参数。
 
-parameters.bizParams
-
-参数
-
-一级参数
-
-类型
-
-说明
-
-user\_defined\_params
-
-Object
-
-配置给 Agent 的参数
-
-agentId
-
-Object
-
-以 agentId为 key的对象，对象中的参数会传递给 Agent
-
-user\_prompt\_params
-
-Object
-
-当您使用百炼**智能体应用**时，通过此结构传递智能体提示词中定义的参数。
+|  |  |  |  |  |
+| --- | --- | --- | --- | --- |
+| parameters.bizParams | 参数 | 一级参数 | 类型 | 说明 |
+| user\_defined\_params |  |  | Object | 配置给 Agent 的参数 |
+|  | agentId |  | Object | 以 agentId为 key的对象，对象中的参数会传递给 Agent |
+|  |  | user\_prompt\_params | Object | 当您使用百炼**智能体应用**时，通过此结构传递智能体提示词中定义的参数。 |
 
 **parameters.bizParams.user\_defined\_params**
-```
+
+<a id="code-block-2"></a>
+
+```text
 "user_defined_params":{
     "xxxxx":{
         "user_prompt_params":{
@@ -128,8 +110,12 @@ Object
     }
 }
 ```
+
 **以 Android SDK 设置参数为例**
-```
+
+<a id="code-block-3"></a>
+
+```text
 private void updateParams(){
         try {
             JSONObject userAgentPromptParams = new JSONObject();
@@ -153,33 +139,25 @@ private void updateParams(){
     }
 ```
 
+<a id="通过updateinfo透传图片"></a>
+
+<a id="HsDJ1"></a>
+
 #### 通过UpdateInfo透传图片
 
 如果您的 Agent 支持图像模态的交互，您也可以将图片以链接或者 base64 数据的方式透传给 Agent。
 
 关键参数：parameters.images\[\]
 
-images\[\]
+|  |  |  |  |
+| --- | --- | --- | --- |
+| images\[\] | 参数 | 类型 | 说明 |
+|  | type | String | 图片类型，支持"url"/"base64" |
+|  | value | String | 图片连接或者 base64 编码数据。注意以 base64 提交数据原始图片大小不应超过 180KB。 |
 
-参数
+<a id="code-block-4"></a>
 
-类型
-
-说明
-
-type
-
-String
-
-图片类型，支持"url"/"base64"
-
-value
-
-String
-
-图片连接或者 base64 编码数据。注意以 base64 提交数据原始图片大小不应超过 180KB。
-
-```
+```text
 {
   "images": [{
     "type": "base64",
@@ -187,8 +165,12 @@ String
   }]
 }
 ```
+
 **以 Android SDK 设置参数为例**
-```
+
+<a id="code-block-5"></a>
+
+```text
 MultiModalRequestParam updateParams = null;
 try {
     updateParams = MultiModalRequestParam
@@ -201,13 +183,19 @@ try {
 multimodalDialog.updateInfo(updateParams);
 ```
 
+<a id="客户端验证"></a>
+
+<a id="73e0123fc7m10"></a>
+
 ### 客户端验证
 
 以 Android SDK 为例。
 
 -   在建联参数中设置变量值。
 
-```
+<a id="code-block-6"></a>
+
+```java
 HashMap<String, Object> appParams = new HashMap<>();
 appParams.put("user_name","大米");
 HashMap<String, Object> userPromptParams = new HashMap<>();
@@ -221,6 +209,10 @@ MultiModalRequestParam.BizParams bizParams = MultiModalRequestParam.BizParams
 ```
 
 -   运行 Demo 通过语音请求【西游记大全】 Agent。由于端侧设置了用户名为“大米”，可以看到 APP 回复的昵称为“大米”，验证链路测试通过。
+
+<a id="由百炼平台应用主动退出接管模式"></a>
+
+<a id="72d7f002fd8ak"></a>
 
 ## 由百炼平台应用主动退出接管模式
 
@@ -249,6 +241,10 @@ MultiModalRequestParam.BizParams bizParams = MultiModalRequestParam.BizParams
         **使用示例：**应用仅返回 `[#blmm-rejected#]`。多模态平台会接管并根据用户的原始问题寻找其他方式来回复，而不会播报任何来自当前应用的内容。
         
 
+<a id="自定义播报音色"></a>
+
+<a id="2e104d2b4ezk6"></a>
+
 ## 自定义播报音色
 
 您还可以为接入的百炼平台应用单独指定音色，以便与主链路的音色进行区分。
@@ -257,25 +253,15 @@ MultiModalRequestParam.BizParams bizParams = MultiModalRequestParam.BizParams
 
 -   除了在管控台为每个接入的百炼平台应用指定音色，您还可以通过API参数进行更精细的音色控制。设置方式
 
-入参
-
-配置方式
-
-是否必传
-
-说明
-
-speaker\_1\_voice
-
-SDK
-
-否
-
-指定播报的声音，音色取值范围取决于应用中配置的tts模型支持的声音列表
+| 入参 | 配置方式 | 是否必传 | 说明 |
+| --- | --- | --- | --- |
+| speaker\_1\_voice | SDK | 否 | 指定播报的声音，音色取值范围取决于应用中配置的tts模型支持的声音列表 |
 
 -   客户端调用示例，在Start消息的payload.biz\_params节点下，通过如下格式设置要使用的播报音色
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
   "user_defined_params": {
     "请替换为百炼应用ID": {

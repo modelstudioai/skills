@@ -2,6 +2,10 @@
 
 视频通话能力可以赋予AI感知周围环境、用户行为和状态的视觉理解能力，打造更丰富生动的实时多模态互动体验，例如：文物讲解、景点导览、烹饪指导、模拟面试等。本文介绍如何通过多模交互套件接入视频通话能力。
 
+<a id="开通视频通话agent"></a>
+
+<a id="9927d34c67ejz"></a>
+
 ## 开通视频通话Agent
 
 在[多模态开发套件](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app)中创建**多模态应用**（语音应用不支持视频通话）。
@@ -10,9 +14,17 @@
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9367243571/p987567.png)
 
+<a id="使用官方android-ios-sdk-进行视频通话"></a>
+
+<a id="c92c45e6a9uyy"></a>
+
 ## 使用官方Android/iOS SDK 进行视频通话
 
 百炼多模交互 Android 和iOS SDK 内置了 RTC 协议，原生支持音视频录制和传输，通过简单的配置即可方便的实现视频通话功能。
+
+<a id="sdk-调用流程"></a>
+
+<a id="300a2ea71c8jt"></a>
 
 #### SDK 调用流程
 
@@ -27,31 +39,19 @@
 4.  退出视频通话 Agent：发送退出指令或者语音说“退出视频通话”。
     
 
+<a id="ef7772a33871x"></a>
+
 ##### 请求参数说明
 
 通过 requestToRespond 方法请求提交参数如下。
 
-一级参数
+| 一级参数 | 二级参数 | 三级参数 | 是否必选 | 说明 |
+| --- | --- | --- | --- | --- |
+| parameters | biz\_params | videos | 是 | 类型为 List。list 中的元素为视频请求相关的 object。 |
 
-二级参数
+<a id="code-block"></a>
 
-三级参数
-
-是否必选
-
-说明
-
-parameters
-
-biz\_params
-
-videos
-
-是
-
-类型为 List。list 中的元素为视频请求相关的 object。
-
-```
+```json
 {
     "header": {
         "action":"continue-task",
@@ -82,13 +82,19 @@ videos
 }
 ```
 
+<a id="a7b5bb0f18z3o"></a>
+
 ##### 调用时序图
 
 ![截屏2025-06-20 11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9367243571/p987566.png)
 
+<a id="fcc5a9c3bauzo"></a>
+
 ##### 关键代码示例
 
-```
+<a id="code-block-2"></a>
+
+```java
 //1. 设置交互类型为AudioAndVideo
 MultiModalRequestParam.UpStream.builder().mode("duplex").type("AudioAndVideo").build();
 
@@ -139,7 +145,10 @@ private void handleOutputCompleted() {
     }
 }
 ```
-```
+
+<a id="code-block-3"></a>
+
+```swift
 //1. 设置交互类型为AudioAndVideo
 multiBuilder.upStream = MultiModalRequestParam.UpStream(builder: { upstreamBuilder in
                 upstreamBuilder.mode = mode.rawValue
@@ -170,6 +179,10 @@ private func createVideoChatParams() -> [String: Any]{
 //完整代码请参考示例代码。
 ```
 
+<a id="使用图片序列实现视频通话"></a>
+
+<a id="0161430e89y3w"></a>
+
 ## 使用图片序列实现视频通话
 
-接入方法参见[三方RTC接入视频通话](raw/_short/third-party-rtc-invoke-liveai-91801368bca43dc3.md)。
+接入方法参见[三方RTC接入视频通话](third-party-rtc-invoke-liveai-91801368bca43dc3.md)。

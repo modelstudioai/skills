@@ -2,11 +2,19 @@
 
 针对一篇文章、视频或者URL，生成文章的导读内容，包含全文总结、关键要点、章节速览（即分段、每段的总结、段落摘要）。此外支持多种多语言的输入和输出。如果用户仅需要对文章进行全文总结，可使用RunDocSummary接口实现，具体请参见https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocsummary。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/RunDocIntroduction)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,379 +33,82 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:RunDocIntroduction</td><td>get</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:RunDocIntroduction
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /miaodu/stream/runDocIntroduction HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| DocId | string | 是 | 文档 ID | 12345 |
+| SessionId | string | 是 | 对话 ID | a3b5eb35-6b28-4cf9-ac09-1dec25ab4df6 |
+| SummaryPrompt | string | 否 | 总结内容自定义要求 | 用英文输出 |
+| KeyPointPrompt | string | 否 | 关键点自定义要求 | 用英文输出 |
+| IntroductionPrompt | string | 否 | 导读内容自定义要求 | 用英文输出 |
+| CleanCache | boolean | 否 | 清除缓存 | true |
+| referenceContent | string | 否 | 要进行导读的内容，如果不为空，该值优先于 docId | 要进行导读的内容 |
+| ModelName | string | 否 | 用户自定义模型名称 | quanmiao-max、quanmiao-plus |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-xxxx
-
-DocId
-
-string
-
-是
-
-文档 ID
-
-12345
-
-SessionId
-
-string
-
-是
-
-对话 ID
-
-a3b5eb35-6b28-4cf9-ac09-1dec25ab4df6
-
-SummaryPrompt
-
-string
-
-否
-
-总结内容自定义要求
-
-用英文输出
-
-KeyPointPrompt
-
-string
-
-否
-
-关键点自定义要求
-
-用英文输出
-
-IntroductionPrompt
-
-string
-
-否
-
-导读内容自定义要求
-
-用英文输出
-
-CleanCache
-
-boolean
-
-否
-
-清除缓存
-
-true
-
-referenceContent
-
-string
-
-否
-
-要进行导读的内容，如果不为空，该值优先于 docId
-
-要进行导读的内容
-
-ModelName
-
-string
-
-否
-
-用户自定义模型名称
-
-quanmiao-max、quanmiao-plus
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-Header
-
-object
-
-响应头
-
-ErrorCode
-
-string
-
-错误码
-
-success
-
-ErrorMessage
-
-string
-
-错误信息。
-
-success
-
-Event
-
-string
-
-事件类型
-
-task-started
-
-EventInfo
-
-string
-
-事件描述
-
-模型生成事件
-
-SessionId
-
-string
-
-会话 ID
-
-20247a52-23e2-46fb-943d-309cdee2bc6d
-
-TaskId
-
-string
-
-任务 ID
-
-8a9cecb7-6d20-32db-8823-5882c217b647
-
-TraceId
-
-string
-
-全链路 ID
-
-0bd58ea2-dc38-45da-ac02-17f05cb9040b
-
-Payload
-
-object
-
-响应体
-
-Output
-
-object
-
-输出
-
-Introductions
-
-array<object>
-
-分段导读内容数组
-
-introductions
-
-object
-
-Blocks
-
-array<object>
-
-位置信息数组
-
-blocks
-
-object
-
-位置信息
-
-Height
-
-integer
-
-文本块高
-
-600
-
-PageId
-
-integer
-
-文本块所在页号
-
-10
-
-Width
-
-integer
-
-文本块宽
-
-600
-
-X
-
-integer
-
-块左上角 X 坐标
-
-10
-
-Y
-
-integer
-
-块左上角 Y 坐标
-
-10
-
-BeginTime
-
-long
-
-段落开始时间
-
-0
-
-EndTime
-
-long
-
-段落结束时间
-
-1200
-
-StartPageId
-
-integer
-
-多个文本块的起始页号
-
-10
-
-Summary
-
-string
-
-本段摘要
-
-本段摘要内容
-
-Title
-
-string
-
-本段标题
-
-本段标题内容
-
-KeyPoint
-
-string
-
-要点内容
-
-要点1；要点2；
-
-Summary
-
-string
-
-大纲摘要
-
-大纲摘要内容
-
-Usage
-
-object
-
-token 用量
-
-InputTokens
-
-long
-
-输入 Token 数量
-
-100
-
-OutputTokens
-
-long
-
-输出 Token 数量
-
-100
-
-TotalTokens
-
-long
-
-总 Token 数量
-
-200
-
-RequestId
-
-string
-
-请求 Id
-
-C9B5BEA6-E8C4-5861-BE37-D906D516510E
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| Header | object | 响应头 |  |
+| ErrorCode | string | 错误码 | success |
+| ErrorMessage | string | 错误信息。 | success |
+| Event | string | 事件类型 | task-started |
+| EventInfo | string | 事件描述 | 模型生成事件 |
+| SessionId | string | 会话 ID | 20247a52-23e2-46fb-943d-309cdee2bc6d |
+| TaskId | string | 任务 ID | 8a9cecb7-6d20-32db-8823-5882c217b647 |
+| TraceId | string | 全链路 ID | 0bd58ea2-dc38-45da-ac02-17f05cb9040b |
+| Payload | object | 响应体 |  |
+| Output | object | 输出 |  |
+| Introductions | array<object> | 分段导读内容数组 |  |
+| introductions | object |  |  |
+| Blocks | array<object> | 位置信息数组 |  |
+| blocks | object | 位置信息 |  |
+| Height | integer | 文本块高 | 600 |
+| PageId | integer | 文本块所在页号 | 10 |
+| Width | integer | 文本块宽 | 600 |
+| X | integer | 块左上角 X 坐标 | 10 |
+| Y | integer | 块左上角 Y 坐标 | 10 |
+| BeginTime | long | 段落开始时间 | 0 |
+| EndTime | long | 段落结束时间 | 1200 |
+| StartPageId | integer | 多个文本块的起始页号 | 10 |
+| Summary | string | 本段摘要 | 本段摘要内容 |
+| Title | string | 本段标题 | 本段标题内容 |
+| KeyPoint | string | 要点内容 | 要点1；要点2； |
+| Summary | string | 大纲摘要 | 大纲摘要内容 |
+| Usage | object | token 用量 |  |
+| InputTokens | long | 输入 Token 数量 | 100 |
+| OutputTokens | long | 输出 Token 数量 | 100 |
+| TotalTokens | long | 总 Token 数量 | 200 |
+| RequestId | string | 请求 Id | C9B5BEA6-E8C4-5861-BE37-D906D516510E |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -405,7 +116,9 @@ C9B5BEA6-E8C4-5861-BE37-D906D516510E
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "Header": {
     "ErrorCode": "success",
@@ -449,22 +162,14 @@ C9B5BEA6-E8C4-5861-BE37-D906D516510E
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-403
-
-NoPermission
-
-You are not authorized to perform this action.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。

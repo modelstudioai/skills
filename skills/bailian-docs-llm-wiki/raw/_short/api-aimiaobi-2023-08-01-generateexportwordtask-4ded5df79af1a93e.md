@@ -2,13 +2,25 @@
 
 生成内容导出文档任务
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
-全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](raw/_short/iframe-embedding-scheme-6f73b86f9f7bdf41.md)
+全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](iframe-embedding-scheme-6f73b86f9f7bdf41.md)
+
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
 
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -27,133 +39,53 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:GenerateExportWordTask | get | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:GenerateExportWordTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| AgentKey | string | 是 | 业务空间唯一标识：AgentKey | xxxxx\_p\_efm |
+| GeneratedContentId | integer | 是 | 文档唯一标识 | 1 |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-AgentKey
-
-string
-
-是
-
-业务空间唯一标识：AgentKey
-
-xxxxx\_p\_efm
-
-GeneratedContentId
-
-integer
-
-是
-
-文档唯一标识
-
-1
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | 响应结果 |  |
+| Code | string | 状态码 | NoData |
+| Data | object | 返回内容 |  |
+| TaskId | string | 任务 id | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-**示例值**
-
-object
-
-响应结果
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Data
-
-object
-
-返回内容
-
-TaskId
-
-string
-
-任务 id
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -161,7 +93,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Code": "NoData",
   "Data": {
@@ -174,9 +108,17 @@ true
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

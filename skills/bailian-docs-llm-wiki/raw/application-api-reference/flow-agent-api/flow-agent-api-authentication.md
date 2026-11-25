@@ -4,13 +4,23 @@ Flow Agent API 两类接口的鉴权方式。
 
 Flow Agent API 包含两类接口，鉴权方式不同。
 
+<a id="应用调用接口"></a>
+
+<a id="h-flow-api-auth-invocation"></a>
+
 ## 应用调用接口
 
 通过 DashScope 应用网关调用，使用**阿里云百炼 API Key** 鉴权，API Key 在[控制台](https://bailian.console.aliyun.com/?tab=model#/api-key)创建：
 
-```
+<a id="code-block"></a>
+
+```text
 Authorization: Bearer <your-api-key>
 ```
+
+<a id="组件类接口-prompt-模板等"></a>
+
+<a id="h-flow-api-auth-components"></a>
 
 ## 组件类接口（Prompt 模板等）
 

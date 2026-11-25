@@ -2,7 +2,13 @@
 
 本文档介绍如何在阿里云百炼平台调用稀宇科技（简称MiniMax）直供的模型推理服务。
 
-**重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+> **重要**
+>
+> 本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。
+
+<a id="服务开通"></a>
+
+<a id="305311640441x"></a>
 
 ## 服务开通
 
@@ -11,17 +17,37 @@
 
 完成以上步骤即可调用MiniMax提供的 MiniMax 模型服务。
 
+<a id="快速开始"></a>
+
+<a id="9d84551784a6l"></a>
+
 ## 快速开始
 
-API 使用前提：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+API 使用前提：已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="sec-tabs"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
+
+<a id="bd292015a22sc"></a>
 
 ### 示例代码
 
-```
+<a id="code-block"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -60,9 +86,13 @@ for chunk in completion:
             answer_content += delta.content
 ```
 
+<a id="7a142728d5hah"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-2"></a>
+
+```text
 ====================思考过程====================
 
 用户问我是谁。根据系统提示，我应该以"MiniMax-M2.7"的身份回应，并且提到我是由MiniMax公司开发的。
@@ -76,11 +106,19 @@ for chunk in completion:
 我可以帮助你回答问题、提供信息、进行对话等各种任务。有什么我可以帮助你的吗？
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
+
+<a id="9f294ed715hm6"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -134,9 +172,13 @@ async function main() {
 main();
 ```
 
+<a id="d221c3c1d3k93"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```text
 ====================思考过程====================
 
 用户问我是谁。根据系统提示，我应该以"MiniMax-M2.7"的身份回应，并且提到我是由MiniMax公司开发的。
@@ -150,13 +192,27 @@ main();
 我可以帮助你回答问题、提供信息、进行对话等各种任务。有什么我可以帮助你的吗？
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
+
+<a id="d8d5ba8f252i6"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-3"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-5"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -172,9 +228,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="03cd04fa04kxk"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "choices": [
         {
@@ -204,61 +264,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="minimax-m3-1-flash-与-minimax-m3-的差异"></a>
+
+<a id="minimax-m31-differences"></a>
+
 ## MiniMax-M3.1-Flash 与 MiniMax-M3 的差异
 
-能力
+| 能力 | MiniMax/MiniMax-M3.1-Flash | MiniMax/MiniMax-M3 |
+| --- | --- | --- |
+| 思考模式 | 始终开启，不可关闭 | 默认自适应思考，可关闭 |
+| 思考深度 | 支持 `low`、`medium`、`high`、`xhigh`、`max`，默认 `max` | 不支持 `reasoning_effort` |
+| 思考内容 | 始终通过 `reasoning_content` 字段单独返回，不支持将 `reasoning_split` 设为 `false` | `reasoning_split` 为 `true` 时通过 `reasoning_content` 单独返回，为 `false` 时在 `content` 中以 `<think>` 标签返回 |
+| 上下文窗口 | 1M Token | 1M Token |
+| 图片和视频输入 | 支持 | 支持 |
+| Prompt 缓存 | 支持 | 支持 |
+| 默认限流 | 200 RPM、10,000,000 TPM | 500 RPM、20,000,000 TPM |
 
-MiniMax/MiniMax-M3.1-Flash
-
-MiniMax/MiniMax-M3
-
-思考模式
-
-始终开启，不可关闭
-
-默认自适应思考，可关闭
-
-思考深度
-
-支持 `low`、`medium`、`high`、`xhigh`、`max`，默认 `max`
-
-不支持 `reasoning_effort`
-
-思考内容
-
-始终通过 `reasoning_content` 字段单独返回，不支持将 `reasoning_split` 设为 `false`
-
-`reasoning_split` 为 `true` 时通过 `reasoning_content` 单独返回，为 `false` 时在 `content` 中以 `<think>` 标签返回
-
-上下文窗口
-
-1M Token
-
-1M Token
-
-图片和视频输入
-
-支持
-
-支持
-
-Prompt 缓存
-
-支持
-
-支持
-
-默认限流
-
-200 RPM、10,000,000 TPM
-
-500 RPM、20,000,000 TPM
-
-实际服务可能同时按 RPS（RPM/60）与 TPS（TPM/60）执行每秒限流，具体规则请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+实际服务可能同时按 RPS（RPM/60）与 TPS（TPM/60）执行每秒限流，具体规则请参见[限流](../../get-started-with-models/rate-limit.md)。
 
 使用以下示例调用 MiniMax/MiniMax-M3.1-Flash，并通过 `reasoning_effort` 设置思考深度：
 
-```
+<a id="code-block-7"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -277,6 +305,10 @@ print(response.choices[0].message.reasoning_content)
 print(response.choices[0].message.content)
 ```
 
+<a id="从-minimax-m3-迁移"></a>
+
+<a id="migrate-from-minimax-m3"></a>
+
 ### 从 MiniMax-M3 迁移
 
 仅将模型 ID 更换为 `MiniMax/MiniMax-M3.1-Flash` 时，请同步检查以下差异：
@@ -287,26 +319,50 @@ print(response.choices[0].message.content)
 -   为输出预留足够长度。思考内容计入 `max_tokens` 或 `max_completion_tokens`，上限过小可能导致 `finish_reason` 为 `length` 且回答为空。
 -   多轮 Function Calling 时，将包含 `reasoning_content` 和 `tool_calls` 的完整 assistant 消息加入对话历史，以保持思考过程连续。
 
+<a id="多模态调用示例"></a>
+
+<a id="mm3m_multi_h2"></a>
+
 ## 多模态调用示例
 
 MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 均支持文本、图片和视频输入，并输出文本。
 
-**重要**
+> **重要**
+>
+> -   MiniMax/MiniMax-M3.1-Flash 始终开启思考，可通过 `reasoning_effort` 调整思考深度。
+> -   MiniMax/MiniMax-M3 通过 `thinking` 参数控制思考模式，默认值为 `adaptive`；设置为 `disabled` 可关闭思考。
 
--   MiniMax/MiniMax-M3.1-Flash 始终开启思考，可通过 `reasoning_effort` 调整思考深度。
--   MiniMax/MiniMax-M3 通过 `thinking` 参数控制思考模式，默认值为 `adaptive`；设置为 `disabled` 可关闭思考。
+<a id="图像理解"></a>
+
+<a id="mm3m_image_h3"></a>
 
 ### 图像理解
 
 图像理解功能让 MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 能够识别和分析单张或多张图像。以下示例使用 MiniMax/MiniMax-M3；如需使用 MiniMax/MiniMax-M3.1-Flash，请更换模型 ID，并可通过 `reasoning_effort` 调整思考深度。
 
+<a id="sec-tabs-4"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
+
 #### OpenAI兼容
 
-**说明**`thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK中作为顶层参数传入。
+> **说明**
+>
+> `thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK中作为顶层参数传入。
+
+<a id="sec-tabs-5"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-8"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -373,9 +429,15 @@ print(completion.choices[0].message.content)
 # print("\n完整回复：\n" + completion.choices[0].message.content)
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-9"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -444,11 +506,23 @@ console.log(completion.choices[0].message.content);
 // console.log('\n完整回复：\n' + multiCompletion.choices[0].message.content);
 ```
 
+<a id="http-2"></a>
+
+<a id="http-2-h4"></a>
+
 #### HTTP
+
+<a id="sec-tabs-6"></a>
+
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
 
 #### curl
 
-```
+<a id="code-block-10"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -509,13 +583,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 # }'
 ```
 
+<a id="视频理解"></a>
+
+<a id="mm3m_video_h3"></a>
+
 ### 视频理解
+
+<a id="sec-tabs-7"></a>
+
+<a id="openai兼容-3"></a>
+
+<a id="openai兼容-3-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-8"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-11"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -550,9 +642,15 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="node-js-3"></a>
+
+<a id="node-js-3-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-12"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -590,11 +688,23 @@ async function main() {
 main();
 ```
 
+<a id="http-3"></a>
+
+<a id="http-3-h4"></a>
+
 #### HTTP
+
+<a id="sec-tabs-9"></a>
+
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
 
 #### curl
 
-```
+<a id="code-block-13"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -622,7 +732,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   }'
 ```
 
+<a id="文件限制"></a>
+
+<a id="mm3m_file_limits_h3"></a>
+
 ### 文件限制
+
+<a id="sec-tabs-10"></a>
+
+<a id="图像文件"></a>
+
+<a id="图像文件-h4"></a>
 
 #### 图像文件
 
@@ -630,97 +750,32 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -   **支持的图像格式：**PNG、JPEG、WEBP、GIF
 -   **图像大小：**单张图片不超过10MB。
 
+<a id="视频文件"></a>
+
+<a id="视频文件-h4"></a>
+
 #### 视频文件
 
 -   **视频大小与时长：**视频文件不超过50MB，时长不超过30分钟。
 -   **视频格式：**MP4、AVI、MOV、MKV。
 -   **音频理解：**不支持对视频文件的音频进行理解。
 
+<a id="其它功能"></a>
+
+<a id="d062ed0e4d5fe"></a>
+
 ## 其它功能
 
 MiniMax/MiniMax-M3.1-Flash 支持多轮对话、深度思考、Function Calling 和上下文缓存。
 
-模型
+| 模型 | [多轮对话](../../model-experience/text-generation-model/multi-round-conversation.md) | [深度思考](../../model-experience/text-generation-model/deep-thinking.md) | [Function Calling](../../model-experience/text-generation-model/tool-calls/qwen-function-calling.md) | [结构化输出](../../model-experience/text-generation-model/qwen-structured-output.md) | [联网搜索](../../model-experience/text-generation-model/tool-calls/web-search.md) | [前缀续写](../../model-experience/text-generation-model/partial-mode.md) | [上下文缓存](../../model-experience/text-generation-model/context-cache.md) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| MiniMax/MiniMax-M3.1-Flash | 支持 | 支持 | 支持 | 不支持 | 不支持 | 不支持 | 支持 |
+| MiniMax/MiniMax-M3 | 支持 | 支持 | 支持 | 不支持 | 不支持 | 不支持 | 支持 |
+| MiniMax/MiniMax-M2.7 | 支持 | 支持 | 支持 | 不支持 | 不支持 | 不支持 | 支持 |
+| MiniMax/MiniMax-M2.5 | 支持 | 支持 | 支持 | 不支持 | 不支持 | 不支持 | 支持 |
 
-[多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
-
-[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)
-
-[Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)
-
-[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)
-
-[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
-
-[前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)
-
-[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)
-
-MiniMax/MiniMax-M3.1-Flash
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-支持
-
-MiniMax/MiniMax-M3
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-支持
-
-MiniMax/MiniMax-M2.7
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-支持
-
-MiniMax/MiniMax-M2.5
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-支持
-
-上下文缓存类型为隐式缓存，自动开启，与阿里云百炼的[隐式缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)服务有以下不同：
+上下文缓存类型为隐式缓存，自动开启，与阿里云百炼的[隐式缓存](../../model-experience/text-generation-model/context-cache.md)服务有以下不同：
 
 -   MiniMax/MiniMax-M3.1-Flash、MiniMax/MiniMax-M2.5 命中缓存的输入 Token 折扣为 10%，MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 折扣为 20%。MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 和 MiniMax/MiniMax-M2.5 的缓存最少 Token 数为 512（百炼为 1024）。
 -   MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 的 `n` 参数仅支持 `1`，即每次请求只能生成一条回复。
@@ -728,39 +783,24 @@ MiniMax/MiniMax-M2.5
 -   MiniMax/MiniMax-M3.1-Flash 不支持通过 `parallel_tool_calls` 控制工具调用的并行性。设置为 `false` 也不能保证串行调用，模型仍可能在一轮中返回多个 `tool_calls`。
 -   MiniMax/MiniMax-M3.1-Flash 的 `tool_choice` 仅支持 `auto`。其他取值可能报错或不生效，例如指定函数名称不能保证模型调用该函数。MiniMax/MiniMax-M3 的 `tool_choice` 仅支持 `none` 和 `auto`。
 
+<a id="参数默认值"></a>
+
+<a id="20f0ad5093srb"></a>
+
 ## 参数默认值
 
 > 当前不支持修改以下参数
 
-模型
+| 模型 | `temperature` | `top_p` |
+| --- | --- | --- |
+| MiniMax/MiniMax-M3.1-Flash | 1.0 | 0.95 |
+| MiniMax/MiniMax-M3 | 1.0 | 0.95 |
+| MiniMax/MiniMax-M2.7 | 1.0 | 0.9 |
+| MiniMax/MiniMax-M2.5 | 1.0 | 0.9 |
 
-`temperature`
+<a id="模型列表与计费"></a>
 
-`top_p`
-
-MiniMax/MiniMax-M3.1-Flash
-
-1.0
-
-0.95
-
-MiniMax/MiniMax-M3
-
-1.0
-
-0.95
-
-MiniMax/MiniMax-M2.7
-
-1.0
-
-0.9
-
-MiniMax/MiniMax-M2.5
-
-1.0
-
-0.9
+<a id="m7n8o9p0q1r2s5"></a>
 
 ## 模型列表与计费
 
@@ -770,6 +810,10 @@ MiniMax-M3.1-Flash 是最新多模态推理模型，支持 100 万 Token 上下�
 
 按照模型的输入与输出 Token 数量计费。
 
+<a id="错误码"></a>
+
+<a id="e592dd2ca4qfl"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。

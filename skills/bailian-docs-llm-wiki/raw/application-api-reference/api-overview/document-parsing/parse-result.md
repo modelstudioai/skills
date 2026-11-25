@@ -4,191 +4,67 @@
 
 调用本接口查询解析任务的状态、结果或分片。`data.status` 为 `processing` 时继续轮询，为 `success` 或 `failed` 时停止。
 
-**说明**调用前请确保已获取 API Key，详见[鉴权](raw/application-api-reference/api-overview/authentication.md)。
+> **说明**
+>
+> 调用前请确保已获取 API Key，详见[鉴权](../authentication.md)。
+
+<a id="请求参数"></a>
 
 ## 请求参数
 
-参数
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `biz_id` | string | 是 | `/parse/submit` 提交接口返回的业务任务 ID。 |
+| `step_start` | integer | 否 | 分片起始位置，默认 `0`。文档结果对应 `layouts`，音视频结果对应 `segments`。 |
+| `step_size` | integer | 否 | 分片步长，默认 `0` |
+| `oss_config` | object | 否 | OSS 输出配置。 |
+| `oss_config.access_key_id` | string | 否 | 托管 OSS AccessKey ID。 |
+| `oss_config.access_key_secret` | string | 否 | 托管 OSS AccessKey Secret。 |
+| `oss_config.security_token` | string | 否 | 托管 OSS Security Token。 |
 
-类型
-
-必填
-
-说明
-
-`biz_id`
-
-string
-
-是
-
-`/parse/submit` 提交接口返回的业务任务 ID。
-
-`step_start`
-
-integer
-
-否
-
-分片起始位置，默认 `0`。文档结果对应 `layouts`，音视频结果对应 `segments`。
-
-`step_size`
-
-integer
-
-否
-
-分片步长，默认 `0`
-
-`oss_config`
-
-object
-
-否
-
-OSS 输出配置。
-
-`oss_config.access_key_id`
-
-string
-
-否
-
-托管 OSS AccessKey ID。
-
-`oss_config.access_key_secret`
-
-string
-
-否
-
-托管 OSS AccessKey Secret。
-
-`oss_config.security_token`
-
-string
-
-否
-
-托管 OSS Security Token。
+<a id="返回结果"></a>
 
 ## 返回结果
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `request_id` | string | 请求 ID。 |
+| `data.status` | string | 处理状态：`init` 、`processing`、`success` 或 `failed`。 |
+| `data.processing` | number | 处理进度。 |
+| `data.successful_parsing_num` | integer | 已处理的 `layouts` 或 `segments` 数量。 |
+| `data.image_count` | integer | 图片数量。 |
+| `data.table_count` | integer | 表格数量。 |
+| `data.paragraph_count` | integer | 段落数量。 |
+| `data.page_count` | integer | 页数。 |
+| `data.layouts` | array | 查询分片的布局结果。 |
+| `data.output_format_result` | array | 输出格式结果列表。 |
+| `data.output_format_result[].output_file_url` | string | 输出类型对应 URL。 |
+| `data.output_format_result[].output_type` | string | 输出类型。当值为 `markdown` 时，`output_file_url` 为 Markdown 格式解析结果的 URL。 |
+| `data.media_duration` | number | 文件时长（音视频）。 |
+| `data.segments` | array | 解析段落结果（音视频）。 |
+| `data.synopsis_result` | string | 剧情解析结果（音视频）。 |
+| `data.synopsis_segments` | array | 剧情解析分段（音视频）。 |
+| `data.synopsis_summary` | string | 剧情解析摘要（音视频）。 |
 
-类型
+> **说明**
+>
+> 当状态为 `processing` 时继续查询本接口；当状态为 `failed` 时，结合[错误码](../errors.md)判断失败原因。
 
-说明
-
-`request_id`
-
-string
-
-请求 ID。
-
-`data.status`
-
-string
-
-处理状态：`init` 、`processing`、`success` 或 `failed`。
-
-`data.processing`
-
-number
-
-处理进度。
-
-`data.successful_parsing_num`
-
-integer
-
-已处理的 `layouts` 或 `segments` 数量。
-
-`data.image_count`
-
-integer
-
-图片数量。
-
-`data.table_count`
-
-integer
-
-表格数量。
-
-`data.paragraph_count`
-
-integer
-
-段落数量。
-
-`data.page_count`
-
-integer
-
-页数。
-
-`data.layouts`
-
-array
-
-查询分片的布局结果。
-
-`data.output_format_result`
-
-array
-
-输出格式结果列表。
-
-`data.output_format_result[].output_file_url`
-
-string
-
-输出类型对应 URL。
-
-`data.output_format_result[].output_type`
-
-string
-
-输出类型。当值为 `markdown` 时，`output_file_url` 为 Markdown 格式解析结果的 URL。
-
-`data.media_duration`
-
-number
-
-文件时长（音视频）。
-
-`data.segments`
-
-array
-
-解析段落结果（音视频）。
-
-`data.synopsis_result`
-
-string
-
-剧情解析结果（音视频）。
-
-`data.synopsis_segments`
-
-array
-
-剧情解析分段（音视频）。
-
-`data.synopsis_summary`
-
-string
-
-剧情解析摘要（音视频）。
-
-**说明**当状态为 `processing` 时继续查询本接口；当状态为 `failed` 时，结合[错误码](raw/application-api-reference/api-overview/errors.md)判断失败原因。
+<a id="结果查询代码示例"></a>
 
 ## 结果查询代码示例
 
+<a id="sec-tabs"></a>
+
+<a id="文档解析结果查询"></a>
+
+<a id="文档解析结果查询-h4"></a>
+
 #### 文档解析结果查询
 
-```
+<a id="code-block"></a>
+
+```text
 curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x/parse/result' \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H 'Content-Type: application/json' \
@@ -198,7 +74,10 @@ curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/par
     "step_size": 1
   }'
 ```
-```
+
+<a id="code-block-2"></a>
+
+```json
 {
   "request_id": "request_xxx",
   "data": {
@@ -220,9 +99,15 @@ curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/par
 }
 ```
 
+<a id="音视频解析结果查询"></a>
+
+<a id="音视频解析结果查询-h4"></a>
+
 #### 音视频解析结果查询
 
-```
+<a id="code-block-3"></a>
+
+```text
 curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x/parse/result' \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H 'Content-Type: application/json' \
@@ -232,7 +117,10 @@ curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/par
     "step_size": 100
   }'
 ```
-```
+
+<a id="code-block-4"></a>
+
+```json
 {
     "request_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
     "data": {

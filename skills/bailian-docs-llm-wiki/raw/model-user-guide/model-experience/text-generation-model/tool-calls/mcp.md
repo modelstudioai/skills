@@ -2,17 +2,23 @@
 
 模型上下文协议（Model Context Protocol, MCP）可帮助大模型使用外部工具与数据。本文介绍通过 Responses API接入 MCP 的方法。
 
+<a id="使用方式"></a>
+
+<a id="rs2b3c4d5e6f7"></a>
+
 ## 使用方式
 
 使用 Responses API，在 `tools` 参数中配置MCP Server信息。
 
-> 查找与开通 MCP 服务，请参见[开通云部署 MCP 服务](https://help.aliyun.com/zh/model-studio/official-and-third-party-mcp#47ed5b5cff6hs)。
+> 查找与开通 MCP 服务，请参见[开通云部署 MCP 服务](../../../../application-user-guide/agent-store/model-context-protocol/official-and-third-party-mcp.md#47ed5b5cff6hs)。
 
 > 支持配置SSE协议的 MCP Server。
 
 > 最多添加 10 个 MCP Server。
 
-```
+<a id="code-block"></a>
+
+```python
 # 导入依赖与创建客户端...
 mcp_tool = {
     "type": "mcp",
@@ -34,6 +40,10 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="支持的模型"></a>
+
+<a id="rs9i0j1k2l3m4"></a>
+
 ## 支持的模型
 
 -   千问Max：qwen4-max、Qwen3.8-Max系列、Qwen3.7-Max系列
@@ -45,17 +55,27 @@ print(response.output_text)
 
 仅支持通过 Responses API 调用。
 
+<a id="快速开始"></a>
+
+<a id="rsi8r9s0t1u2v3"></a>
+
 ## 快速开始
 
 以接入网页解析（WebParser）MCP 服务为例，展示如何通过 Responses API 调用 MCP 工具。需要先开通[网页解析（WebParser）MCP 服务](https://bailian.console.aliyun.com/cn-beijing/store/mcp/detail/WebParser)。
 
-需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+需要已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
 > 请将示例代码中 MCP 工具配置的 `server_url` 和 `headers` 替换为您实际使用的 MCP 服务信息。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -89,9 +109,13 @@ print(response.output_text)
 print(f"\n[Token 用量] 输入: {response.usage.input_tokens}, 输出: {response.usage.output_tokens}, 合计: {response.usage.total_tokens}")
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -129,9 +153,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 // 百炼 MCP 工具要求 server_protocol 字段，OpenAI 官方 Java SDK 的 Tool.Mcp 暂未提供该字段，
 // 可通过 putAdditionalProperty 补齐。兼容 JDK 8+ / Spring Boot 2.x。
 // Maven 依赖：com.openai:openai-java:4.67.0（或更新版本）
@@ -184,9 +212,13 @@ public class McpResponsesDemo {
 }
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -211,7 +243,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 运行以上代码可获取如下回复：
 
-```
+<a id="code-block-2"></a>
+
+```text
 [模型回复]
 根据阿里云百炼的官方文档，MCP（Model Context Protocol）目前支持的模型如下：
 
@@ -226,13 +260,23 @@ MCP 功能仅支持通过 Responses API 调用。
 [Token 用量] 输入: 20698, 输出: 711, 合计: 21409
 ```
 
+<a id="流式输出"></a>
+
+<a id="rsw2f3g4h5i6j7"></a>
+
 ## 流式输出
 
 MCP 工具调用可能涉及多次外部服务交互，建议启用流式输出，实时获取工具调用过程与回复内容。
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -274,9 +318,13 @@ for event in stream:
         print(f"\n\n[Token 用量] 输入: {usage.input_tokens}, 输出: {usage.output_tokens}, 合计: {usage.total_tokens}")
 ```
 
+<a id="fig-code-group-2-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-2-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -326,9 +374,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-2-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 // 百炼 MCP 工具要求 server_protocol 字段，OpenAI 官方 Java SDK 的 Tool.Mcp 暂未提供该字段，
 // 可通过 putAdditionalProperty 补齐。兼容 JDK 8+ / Spring Boot 2.x。
 // Maven 依赖：com.openai:openai-java:4.67.0（或更新版本）
@@ -387,9 +439,13 @@ public class McpResponsesStreamDemo {
 }
 ```
 
+<a id="fig-code-group-2-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-2-bash"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -415,7 +471,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 运行以上代码可获取如下回复：
 
-```
+<a id="code-block-3"></a>
+
+```text
 [模型回复]
 根据阿里云百炼（Model Studio）官方文档，目前 MCP（Model Context Protocol）功能支持的模型如下：
 
@@ -440,66 +498,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 [Token 用量] 输入: 20784, 输出: 867, 合计: 21651
 ```
 
+<a id="参数说明"></a>
+
+<a id="rsh3q4r5s6t7u8"></a>
+
 ## 参数说明
 
 `mcp` 工具支持以下参数：
 
-**参数**
-
-**必填**
-
-**说明**
-
-`type`
-
-是
-
-固定为 `"mcp"`。
-
-`server_protocol`
-
-是
-
-与 MCP 服务的通信协议，当前仅支持 `"sse"`。
-
-`server_label`
-
-是
-
-MCP 服务的标签名称，用于标识该服务。
-
-`server_description`
-
-否
-
-MCP 服务的功能描述，供模型理解该服务的能力与适用场景。建议填写以提升模型调用准确性。
-
-`server_url`
-
-是
-
-MCP 服务的端点 URL。
-
-`headers`
-
-否
-
-连接 MCP 服务时携带的请求头，例如 `Authorization` 等认证信息。
-
-示例：
-
-```
-{
-    "type": "mcp",
-    "server_protocol": "sse",
-    "server_label": "WebParser",
-    "server_description": "网页解析（WebParser）MCP 服务，一个专用于网页内容解析的工具包。",
-    "server_url": "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/mcps/WebParser/sse",
-    "headers": {
-        "Authorization": "Bearer YOUR_DASHSCOPE_API_KEY"
+<table><tbody><tr><td><table><thead><tr><th><p><strong>参数</strong></p></th><th><p><strong>必填</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p><code>type</code></p></td><td><p>是</p></td><td><p>固定为 <code>&quot;mcp&quot;</code>。</p></td></tr><tr><td><p><code>server_protocol</code></p></td><td><p>是</p></td><td><p>与 MCP 服务的通信协议，当前仅支持 <code>&quot;sse&quot;</code>。</p></td></tr><tr><td><p><code>server_label</code></p></td><td><p>是</p></td><td><p>MCP 服务的标签名称，用于标识该服务。</p></td></tr><tr><td><p><code>server_description</code></p></td><td><p>否</p></td><td><p>MCP 服务的功能描述，供模型理解该服务的能力与适用场景。建议填写以提升模型调用准确性。</p></td></tr><tr><td><p><code>server_url</code></p></td><td><p>是</p></td><td><p>MCP 服务的端点 URL。</p></td></tr><tr><td><p><code>headers</code></p></td><td><p>否</p></td><td><p>连接 MCP 服务时携带的请求头，例如 <code>Authorization</code> 等认证信息。</p></td></tr></tbody></table></td><td><p>示例：</p><a id="code-block-4"></a><pre class="language-json"><code>{
+    &quot;type&quot;: &quot;mcp&quot;,
+    &quot;server_protocol&quot;: &quot;sse&quot;,
+    &quot;server_label&quot;: &quot;WebParser&quot;,
+    &quot;server_description&quot;: &quot;网页解析（WebParser）MCP 服务，一个专用于网页内容解析的工具包。&quot;,
+    &quot;server_url&quot;: &quot;https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/mcps/WebParser/sse&quot;,
+    &quot;headers&quot;: {
+        &quot;Authorization&quot;: &quot;Bearer YOUR_DASHSCOPE_API_KEY&quot;
     }
 }
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="计费说明"></a>
+
+<a id="rvb5k6l7m8n9o0"></a>
 
 ## 计费说明
 

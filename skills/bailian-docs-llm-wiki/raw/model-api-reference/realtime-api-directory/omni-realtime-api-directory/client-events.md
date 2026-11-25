@@ -2,15 +2,23 @@
 
 Qwen-Omni-Realtime API的客户端事件参考。
 
-**说明**本页为 Qwen-Omni-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-websocket-access.md)、[WebRTC 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-webrtc-access.md)或[AOQ 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md)。
+> **说明**
+>
+> 本页为 Qwen-Omni-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](omni-realtime-websocket-access.md)、[WebRTC 接入](omni-realtime-webrtc-access.md)或[AOQ 接入](omni-realtime-aoq-access.md)。
 
-WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md)和 [Java SDK](raw/_short/omni-realtime-java-sdk-13dfd16f685872d7.md)。型号与协议选择参见[概述](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-api.md)。
+WebSocket SDK 用法参见 [Python SDK](../../../_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md)和 [Java SDK](../../../_short/omni-realtime-java-sdk-13dfd16f685872d7.md)。型号与协议选择参见[概述](omni-realtime-api.md)。
+
+<a id="session-update"></a>
+
+<a id="26a8302028sjm"></a>
 
 ## session.update
 
 建立 WebSocket 连接后，可以发送 `session.update` 来设置会话配置。后续需要调整配置时，只需传入要修改的配置，其他配置会保持不变。
 
 服务端会校验传入的参数。校验通过后，会通过 `session.updated` 返回更新后的完整会话配置；校验失败时，则返回 `error` 事件。
+
+<a id="omni-session-update"></a>
 
 `type`string（必选）
 
@@ -21,6 +29,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 会话配置。
 
 Qwen3.8-Omni-Flash-Realtime 更新会话时必须提供 `session`。全部输入 Token 总数上限为 196608，输入长度计算规则与 Qwen3.5-Omni-Realtime 一致。
+
+<a id="accordion-属性"></a>
 
 属性
 
@@ -39,7 +49,7 @@ Qwen3.8-Omni-Flash-Realtime 更新会话时必须提供 `session`。全部输入
 
 `voice`string（可选）
 
-模型生成音频的音色，支持的音色参见[音色列表](https://help.aliyun.com/zh/model-studio/realtime#f4c9fd97f221z)。
+模型生成音频的音色，支持的音色参见[音色列表](../../../model-user-guide/model-experience/omni-modal/realtime.md#f4c9fd97f221z)。
 
 默认音色：
 
@@ -49,7 +59,13 @@ Qwen3.8-Omni-Flash-Realtime 更新会话时必须提供 `session`。全部输入
 
 `audio`object（可选）
 
+<a id="session-audio"></a>
+
+<a id="qwen38-client"></a>
+
 输入和输出音频配置。未配置时沿用现有默认行为。
+
+<a id="accordion-属性-2"></a>
 
 属性
 
@@ -57,11 +73,15 @@ Qwen3.8-Omni-Flash-Realtime 更新会话时必须提供 `session`。全部输入
 
 用户输入音频配置。
 
+<a id="accordion-属性-3"></a>
+
 属性
 
 `format`object（可选）
 
 输入音频的格式和采样率。建议在会话 IDLE 阶段、发送首段音频前完成配置，音频输入开始后不可修改。
+
+<a id="accordion-属性-4"></a>
 
 属性
 
@@ -73,6 +93,8 @@ Qwen3.8-Omni-Flash-Realtime 更新会话时必须提供 `session`。全部输入
 
 `qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 可选 8000、16000（默认值）、24000、48000 Hz。Qwen3.8-Omni-Flash-Realtime 的多通道输入只能使用 16000 Hz，默认值为 16000 Hz。
 
+<a id="session-audio-multichannel"></a>
+
 以下四个字段适用于 Qwen3.8-Omni-Flash-Realtime 的 WebSocket 多通道输入：
 
 `sample_format`string（可选）
@@ -81,7 +103,7 @@ PCM 采样格式，只能为 `s16le`，默认值为 `s16le`。
 
 `channels`integer（可选）
 
-输入声道数，仅支持 1（默认值）、2、4。2、4 声道空间音频的输入 Token 数均为普通音频的 2 倍，详见[Token 计算](https://help.aliyun.com/zh/model-studio/realtime#cfba3898e4d0h)。
+输入声道数，仅支持 1（默认值）、2、4。2、4 声道空间音频的输入 Token 数均为普通音频的 2 倍，详见[Token 计算](../../../model-user-guide/model-experience/omni-modal/realtime.md#cfba3898e4d0h)。
 
 `packing`string（可选）
 
@@ -97,11 +119,15 @@ PCM 采样格式，只能为 `s16le`，默认值为 `s16le`。
 
 模型输出音频配置。
 
+<a id="accordion-属性-5"></a>
+
 属性
 
 `format`object（可选）
 
 模型输出音频的格式和采样率。建议在会话建立初期、尚未开始音频交互前完成配置。
+
+<a id="accordion-属性-6"></a>
 
 属性
 
@@ -113,13 +139,19 @@ PCM 采样格式，只能为 `s16le`，默认值为 `s16le`。
 
 `qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 可选 8000、16000、24000（默认值）、48000 Hz。
 
+<a id="session-audio-voice"></a>
+
 `voice`string（可选）
 
-Qwen3.8-Omni-Flash-Realtime 的输出音色，默认为 `Tina`。支持的音色及对应的 `voice` 参数值见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。`session.voice` 是兼容旧接入的字段，新接入建议使用 `session.audio.output.voice`。如果两个字段都设置，输出音频使用 `session.audio.output.voice` 指定的音色。
+Qwen3.8-Omni-Flash-Realtime 的输出音色，默认为 `Tina`。支持的音色及对应的 `voice` 参数值见[音色列表](../../../model-user-guide/model-experience/omni-modal/omni-voice-list.md#qwen38-voices)。`session.voice` 是兼容旧接入的字段，新接入建议使用 `session.audio.output.voice`。如果两个字段都设置，输出音频使用 `session.audio.output.voice` 指定的音色。
 
 `input_audio_transcription`object｜null（可选）
 
+<a id="session-input-audio-transcription"></a>
+
 输入音频转录配置。设为 `null` 可关闭。
+
+<a id="accordion-属性-7"></a>
 
 属性
 
@@ -157,6 +189,8 @@ Qwen3.8-Omni-Flash-Realtime 的输出音色，默认为 `Tina`。支持的音色
 `turn_detection`object（可选）
 
 语音活动检测（VAD）配置。首次配置会话时，若未提供此字段，系统会使用默认参数启用 VAD。将此字段设为 `null`，即可禁用 VAD，改由客户端手动触发模型响应。
+
+<a id="accordion-属性-8"></a>
 
 属性
 
@@ -200,6 +234,8 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 联网搜索选项配置，需先启用 `enable_search` 才生效。
 
+<a id="accordion-属性-9"></a>
+
 属性
 
 `enable_source`boolean（可选）
@@ -208,7 +244,11 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 `video`object（可选）
 
+<a id="session-video"></a>
+
 Qwen3.8-Omni-Flash-Realtime 的视频输入配置。
+
+<a id="accordion-属性-10"></a>
 
 属性
 
@@ -216,15 +256,21 @@ Qwen3.8-Omni-Flash-Realtime 的视频输入配置。
 
 视频输入参数。
 
+<a id="accordion-属性-11"></a>
+
 属性
 
 `representation_compact`string（可选）
 
-视频输入表征聚合方式；会话初始默认 `none`，保留完整的细粒度视频输入表征。`normal` 聚合表征以降低计算开销，适用于对视觉细节要求不高的场景；相同视频输入的 Token 数为 `none` 模式的 1/4，详见[Token 计算](https://help.aliyun.com/zh/model-studio/realtime#cfba3898e4d0h)。应在发送首段音频前设置，音频输入开始后不可修改。
+视频输入表征聚合方式；会话初始默认 `none`，保留完整的细粒度视频输入表征。`normal` 聚合表征以降低计算开销，适用于对视觉细节要求不高的场景；相同视频输入的 Token 数为 `none` 模式的 1/4，详见[Token 计算](../../../model-user-guide/model-experience/omni-modal/realtime.md#cfba3898e4d0h)。应在发送首段音频前设置，音频输入开始后不可修改。
 
 `tools`array（可选）
 
+<a id="session-tools"></a>
+
 工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。Qwen3.8-Omni-Flash-Realtime 可在同一会话中同时配置 Function Calling 和 MCP 工具，数组元素按 `type` 区分；`tools` 与 `enable_search` 不可同时开启。
+
+<a id="accordion-function-calling-type-function"></a>
 
 Function Calling（type=function）
 
@@ -235,6 +281,8 @@ Function Calling（type=function）
 `function`object（必选）
 
 自定义函数定义。
+
+<a id="accordion-属性-12"></a>
 
 属性
 
@@ -250,6 +298,8 @@ Function Calling（type=function）
 
 对工具函数入参的描述，模型据此提取所需入参。函数无需入参时可不指定。
 
+<a id="accordion-属性-13"></a>
+
 属性
 
 `type`string（必选）
@@ -264,11 +314,15 @@ Function Calling（type=function）
 
 指定哪些入参为必填项。
 
+<a id="session-tools-mcp"></a>
+
+<a id="accordion-mcp-type-mcp"></a>
+
 MCP（type=mcp）
 
-Qwen3.8-Omni-Flash-Realtime 的 MCP 配置与调用流程参见[交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-websocket-access#qwen38-mcp-flow)。
+Qwen3.8-Omni-Flash-Realtime 的 MCP 配置与调用流程参见[交互流程](omni-realtime-websocket-access.md#qwen38-mcp-flow)。
 
-字段标为“必选”表示该 MCP 数组元素出现时必须提供。每次新增或更新 MCP 配置都必须同时提供 `server_label` 和 `server_url`，不能只传 `server_label` 复用已有配置；仅在没有活动 Response 时更新。MCP 连接、工具发现和调用受服务配额及超时限制，详见[MCP 调用限制](https://help.aliyun.com/zh/model-studio/omni-realtime-websocket-access#qwen38-mcp-limits)。
+字段标为“必选”表示该 MCP 数组元素出现时必须提供。每次新增或更新 MCP 配置都必须同时提供 `server_label` 和 `server_url`，不能只传 `server_label` 复用已有配置；仅在没有活动 Response 时更新。MCP 连接、工具发现和调用受服务配额及超时限制，详见[MCP 调用限制](omni-realtime-websocket-access.md#qwen38-mcp-limits)。
 
 `type`string（必选）
 
@@ -348,7 +402,7 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 > `max_tokens` 不影响模型的生成过程。若模型生成的 Token 数超过 `max_tokens`，响应将被截断。
 
-`qwen3.8-omni-flash-realtime` 的取值范围为 \[1, 65536\]。其他模型的默认值和最大值均为模型的最大输出长度，各模型的最大输出长度参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
+`qwen3.8-omni-flash-realtime` 的取值范围为 \[1, 65536\]。其他模型的默认值和最大值均为模型的最大输出长度，各模型的最大输出长度参见[模型列表](../../../model-user-guide/get-started-with-models/models.md)。
 
 适用于需要限制输出长度的场景，如生成摘要或关键词、控制成本、缩短响应时间等。
 
@@ -388,7 +442,9 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 取值范围：0 到 231−1，默认值为 -1。
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "event_id": "event_ToPZqeobitzUJnt3QqtWg",
     "type": "session.update",
@@ -450,6 +506,10 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 }
 ```
 
+<a id="response-create"></a>
+
+<a id="b4b869840ce6m"></a>
+
 ## response.create
 
 `response.create` 事件用于指示服务端生成模型响应。VAD 模式下，服务端通常根据语音活动自动开始响应；工具调用后的续答仍按下述流程显式触发。Function Calling 场景中，客户端通过 `conversation.item.create` 回传工具结果后，发送此事件触发模型续答。Qwen3.8-Omni-Flash-Realtime 的 MCP 工具由服务端执行；如需基于 MCP 结果续答，应在本次 MCP 调用所在 Response 的 `response.done` 事件到达后发送一次 `response.create`，不附带 MCP 结果。
@@ -460,12 +520,18 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 事件类型，固定为 `response.create`。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "type": "response.create",
     "event_id": "event_1718624400000"
 }
 ```
+
+<a id="response-cancel"></a>
+
+<a id="38f40cb6447up"></a>
 
 ## response.cancel
 
@@ -475,12 +541,18 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 事件类型，固定为 `response.cancel`。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "event_id": "event_B4o9RHSTWobB5OQdEHLTo",
     "type": "response.cancel"
 }
 ```
+
+<a id="input-audio-buffer-append"></a>
+
+<a id="2ea4b5e41fhjd"></a>
 
 ## input\_audio\_buffer.append
 
@@ -494,7 +566,9 @@ WebSocket 接入时，将音频字节追加到输入音频缓冲区。
 
 Base64 编码的音频数据。
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "event_id": "event_B4o9RHSTWobB5OQdEHLTo",
     "type": "input_audio_buffer.append",
@@ -502,27 +576,37 @@ Base64 编码的音频数据。
 }
 ```
 
+<a id="input-audio-buffer-commit"></a>
+
+<a id="1cbea5fa7fkfl"></a>
+
 ## input\_audio\_buffer.commit
 
 提交输入音频缓冲区，在对话中创建新的用户消息项。若音频缓冲区为空，服务端将返回错误事件。
 
--   [VAD 模式](raw/model-user-guide/model-experience/omni-modal/realtime.md)：服务端自动提交音频缓冲区，客户端无需发送此事件。
--   [Manual 模式](raw/model-user-guide/model-experience/omni-modal/realtime.md)：客户端必须提交音频缓冲区才能创建用户消息项。
+-   [VAD 模式](../../../model-user-guide/model-experience/omni-modal/realtime.md)：服务端自动提交音频缓冲区，客户端无需发送此事件。
+-   [Manual 模式](../../../model-user-guide/model-experience/omni-modal/realtime.md)：客户端必须提交音频缓冲区才能创建用户消息项。
 
 提交音频缓冲区不会触发模型响应，服务端将以 `input_audio_buffer.committed` 事件响应。
 
-> 若客户端已发送过 [input\_image\_buffer.append](https://help.aliyun.com/zh/model-studio/client-events#c28ed38410nfw) 事件，input\_audio\_buffer.commit 事件将同时提交图像缓冲区。
+> 若客户端已发送过 [input\_image\_buffer.append](client-events.md#c28ed38410nfw) 事件，input\_audio\_buffer.commit 事件将同时提交图像缓冲区。
 
 `type`string（必选）
 
 事件类型，固定为 `input_audio_buffer.commit`。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "event_id": "event_B4o9RHSTWobB5OQdEHLTo",
     "type": "input_audio_buffer.commit"
 }
 ```
+
+<a id="input-audio-buffer-clear"></a>
+
+<a id="3b44f2f2abakw"></a>
 
 ## input\_audio\_buffer.clear
 
@@ -532,12 +616,18 @@ Base64 编码的音频数据。
 
 事件类型，固定为 `input_audio_buffer.clear`。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.clear"
 }
 ```
+
+<a id="input-image-buffer-append"></a>
+
+<a id="c28ed38410nfw"></a>
 
 ## input\_image\_buffer.append
 
@@ -551,7 +641,7 @@ WebSocket 接入时，将图像数据添加到图像缓冲区。图像可来自�
 -   建议以 1 张/秒的频率向服务端发送图像。
 -   发送 input\_image\_buffer.append 事件前，至少已发送过一次 input\_audio\_buffer.append 事件。
 
-> 图像缓冲区与音频缓冲区通过 [input\_audio\_buffer.commit](https://help.aliyun.com/zh/model-studio/client-events#1cbea5fa7fkfl) 事件一起提交。
+> 图像缓冲区与音频缓冲区通过 [input\_audio\_buffer.commit](client-events.md#1cbea5fa7fkfl) 事件一起提交。
 
 `type`string（必选）
 
@@ -561,13 +651,19 @@ WebSocket 接入时，将图像数据添加到图像缓冲区。图像可来自�
 
 Base64 编码的图像数据。
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_image_buffer.append",
     "image": "xxx"
 }
 ```
+
+<a id="conversation-item-create"></a>
+
+<a id="tc03itemcreateh"></a>
 
 ## conversation.item.create
 
@@ -587,11 +683,15 @@ Base64 编码的图像数据。
 
 服务端返回的审批请求 ID、对话项 ID 和事件 ID 均为不透明字符串，不应依赖其长度、前缀或生成规则。
 
+<a id="accordion-属性-14"></a>
+
 属性
 
 `id`string（可选）
 
 对话项 ID。可预先指定以对齐本地状态；若未提供，由服务端生成。
+
+<a id="qwen38-mcp-approval-response"></a>
 
 `type`string（必选）
 
@@ -616,11 +716,19 @@ Base64 编码的图像数据。
 
 仅 `mcp_approval_response` 必填；`true` 允许执行，`false` 拒绝且本次调用进入 `failed`。
 
+<a id="sec-tabs"></a>
+
+<a id="function-calling-工具结果"></a>
+
+<a id="function-calling-工具结果-h4"></a>
+
 #### Function Calling 工具结果
 
 **Function Calling 工具结果**
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "event_id": "event_55099cddb51b4f208cb95d1a994eef80",
     "type": "conversation.item.create",
@@ -633,11 +741,17 @@ Base64 编码的图像数据。
 }
 ```
 
+<a id="mcp-审批回复-qwen3-8-omni-flash-realtime"></a>
+
+<a id="mcp-审批回复-qwen3-8-omni-flash-realtime-h4"></a>
+
 #### MCP 审批回复（Qwen3.8-Omni-Flash-Realtime）
 
 **MCP 审批回复（Qwen3.8-Omni-Flash-Realtime）**
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
   "event_id": "event_client_xxx",
   "type": "conversation.item.create",
@@ -649,4 +763,4 @@ Base64 编码的图像数据。
 }
 ```
 
-> 另请参见： [实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md) 。
+> 另请参见： [实时（Qwen-Omni-Realtime）](../../../model-user-guide/model-experience/omni-modal/realtime.md) 。

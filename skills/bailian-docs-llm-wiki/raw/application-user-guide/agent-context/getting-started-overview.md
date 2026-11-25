@@ -8,86 +8,38 @@ ParseX 面向开发者和 Agent 提供文档智能能力，将文档、图片和
 
 例如，合同核验 Agent 可以先使用 ParseX 取得合同金额和付款期限，再结合业务规则检查这些条款。
 
+<a id="两种核心能力"></a>
+
 ## 两种核心能力
 
--   [Parse 文档解析](raw/application-user-guide/agent-context/getting-started-overview/overview.md)：将文件解析为便于阅读、检索与下游处理的内容。
--   [Extract 信息提取](raw/application-user-guide/agent-context/getting-started-overview/extract-overview.md)：根据业务字段定义，从文档中提取关键字段结果。
+-   [Parse 文档解析](getting-started-overview/overview.md)：将文件解析为便于阅读、检索与下游处理的内容。
+-   [Extract 信息提取](getting-started-overview/extract-overview.md)：根据业务字段定义，从文档中提取关键字段结果。
+
+<a id="选择解析还是抽取"></a>
 
 ## 选择解析还是抽取
 
-**比较项**
+| 比较项 | 文档解析 | 信息抽取 |
+| --- | --- | --- |
+| 目标 | 读取并整理材料中的内容 | 获得你指定的信息 |
+| 输入 | 文档、图片、音频或视频 | 图文材料，或可复用的图文解析结果 |
+| 需要说明的要求 | 内容范围、图片和媒体处理等要求 | 字段名称、类型和含义 |
+| 输出 | 正文、表格、图片描述，或媒体内容及时间位置 | 字段值和原文来源等结构化信息 |
+| 选择依据 | Agent 需要阅读材料、理解上下文 | 应用已经明确要取哪些数据 |
 
-**文档解析**
-
-**信息抽取**
-
-目标
-
-读取并整理材料中的内容
-
-获得你指定的信息
-
-输入
-
-文档、图片、音频或视频
-
-图文材料，或可复用的图文解析结果
-
-需要说明的要求
-
-内容范围、图片和媒体处理等要求
-
-字段名称、类型和含义
-
-输出
-
-正文、表格、图片描述，或媒体内容及时间位置
-
-字段值和原文来源等结构化信息
-
-选择依据
-
-Agent 需要阅读材料、理解上下文
-
-应用已经明确要取哪些数据
+<a id="面向-agent-的典型场景"></a>
 
 ## 面向 Agent 的典型场景
 
-**Agent 要完成的任务**
+| Agent 要完成的任务 | ParseX 提供的内容 | 应用如何继续使用 |
+| --- | --- | --- |
+| 回答产品手册中的问题 | 手册正文、表格和图示说明 | 建立检索内容，查找相关段落并组织回答 |
+| 分析经营报告 | 报告内容，或预先指定的期间、金额和指标 | 结合历史数据计算变化、解释原因 |
+| 核验合同信息 | 合同主体、金额、期限及原文来源 | 按业务规则逐项检查，并向用户展示依据 |
+| 查找培训视频中的操作步骤 | 视频片段内容及对应时间位置 | 检索相关步骤，引导用户回看片段 |
+| 整理访谈录音 | 语音内容和对应时间位置 | 围绕研究问题归纳观点，并回听原话 |
 
-**ParseX 提供的内容**
-
-**应用如何继续使用**
-
-回答产品手册中的问题
-
-手册正文、表格和图示说明
-
-建立检索内容，查找相关段落并组织回答
-
-分析经营报告
-
-报告内容，或预先指定的期间、金额和指标
-
-结合历史数据计算变化、解释原因
-
-核验合同信息
-
-合同主体、金额、期限及原文来源
-
-按业务规则逐项检查，并向用户展示依据
-
-查找培训视频中的操作步骤
-
-视频片段内容及对应时间位置
-
-检索相关步骤，引导用户回看片段
-
-整理访谈录音
-
-语音内容和对应时间位置
-
-围绕研究问题归纳观点，并回听原话
+<a id="标准工作流"></a>
 
 ## 标准工作流
 
@@ -105,4 +57,4 @@ Agent 需要阅读材料、理解上下文
     
 4.  **通过 API 或 CLI 调用**
     
-    按 [REST API 接入](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/rest-api.md)提交任务并查询结果；也可在终端用 `bl parsex parse submit` / `bl parsex extract submit` 提交，详见[使用 CLI](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/cli.md)。
+    按 [REST API 接入](getting-started-overview/integration-overview/rest-api.md)提交任务并查询结果；也可在终端用 `bl parsex parse submit` / `bl parsex extract submit` 提交，详见[使用 CLI](getting-started-overview/integration-overview/cli.md)。

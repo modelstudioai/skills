@@ -2,25 +2,37 @@
 
 查看、检索调试、更新和删除记忆
 
-建议使用元数据（`meta_data`）对记忆分类管理，便于后续精确检索。查看会话关联的记忆变更参见[记忆观测](raw/application-user-guide/agent-context/memory-library-overview/observability/observation.md)，追溯自动抽取及手动操作的变更记录参见[记忆审计](raw/application-user-guide/agent-context/memory-library-overview/observability/audit.md)。
+建议使用元数据（`meta_data`）对记忆分类管理，便于后续精确检索。查看会话关联的记忆变更参见[记忆观测](../observability/observation.md)，追溯自动抽取及手动操作的变更记录参见[记忆审计](../observability/audit.md)。
+
+<a id="查看记忆详情"></a>
 
 ## 查看记忆详情
 
 在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上点击**查看详情**，进入**记忆详情**标签页。顶部展示事实记忆数、用户画像数、技能记忆数和记忆实体数；下方为实体列表，支持通过实体 ID（`user_id`）模糊搜索。点击操作列的**查看**，按记忆规则查看该实体的事实记忆、用户画像和技能记忆。
 
-通过 API 列出记忆（调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，Python SDK 的服务地址配置见[概览](raw/application-api-reference/long-term-memory-new/api-overview.md)）：
+通过 API 列出记忆（调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](../../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)，Python SDK 的服务地址配置见[概览](../../../../application-api-reference/long-term-memory-new/api-overview.md)）：
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-curl-tab"></a>
 
 cURL
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes?user_id=user_001&page_size=10&page_num=1" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json"
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 from agentscope_runtime.tools.modelstudio_memory import (
     ListMemory, ListMemoryInput,
 )
@@ -40,65 +52,37 @@ async def list_memory_example():
 asyncio.run(list_memory_example())
 ```
 
+<a id="检索调试"></a>
+
 ## 检索调试
 
 在记忆库详情页的**记忆检索**标签页调试检索效果，优化召回准确性和相关性。
 
-参数
+| 参数 | 说明 | 建议值 |
+| --- | --- | --- |
+| **记忆实体 ID** | 写入记忆时设置的 `user_id` | — |
+| **事实记忆规则** | 选择指定规则进行检索 | — |
+| **最大召回数量** | 每次检索返回的记忆条数（1~100） | 按需设置 |
+| **意图判别召回** | 系统判断当前对话是否需要召回记忆，避免无关检索 | 开启 |
+| **改写** | 对用户查询优化改写，提升语义检索准确率 | 口语化提问时开启 |
+| **排序** | 对检索结果重排，提升相关性 | 需要高相关性时开启 |
+| **相似度阈值** | `0.0~1.0`，过滤低相关性结果 | `0.5~0.7` |
 
-说明
-
-建议值
-
-**记忆实体 ID**
-
-写入记忆时设置的 `user_id`
-
-—
-
-**事实记忆规则**
-
-选择指定规则进行检索
-
-—
-
-**最大召回数量**
-
-每次检索返回的记忆条数（1~100）
-
-按需设置
-
-**意图判别召回**
-
-系统判断当前对话是否需要召回记忆，避免无关检索
-
-开启
-
-**改写**
-
-对用户查询优化改写，提升语义检索准确率
-
-口语化提问时开启
-
-**排序**
-
-对检索结果重排，提升相关性
-
-需要高相关性时开启
-
-**相似度阈值**
-
-`0.0~1.0`，过滤低相关性结果
-
-`0.5~0.7`
-
-**说明**排序目前仅支持 `gte-rerank-v2` 模型。相似度过高可能漏召相关记忆，过低可能引入噪声。
+> **说明**
+>
+> 排序目前仅支持 `gte-rerank-v2` 模型。相似度过高可能漏召相关记忆，过低可能引入噪声。
 
 通过 API 检索：
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-curl-tab"></a>
+
 cURL
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/search \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
@@ -111,9 +95,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memo
   }'
 ```
 
+<a id="fig-code-group-2-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 from agentscope_runtime.tools.modelstudio_memory import (
     SearchMemory, SearchMemoryInput, Message,
 )
@@ -136,7 +124,11 @@ async def search_memory_example():
 asyncio.run(search_memory_example())
 ```
 
+<a id="更新和删除记忆"></a>
+
 ## 更新和删除记忆
+
+<a id="编辑事实记忆"></a>
 
 ### 编辑事实记忆
 
@@ -144,23 +136,37 @@ asyncio.run(search_memory_example())
 2.  在**事实记忆规则**下选择对应规则，找到目标记忆卡片，点击详情图标进入**事实记忆详情**。
 3.  点击**编辑**修改记忆内容，再点击**保存**或**保存并关闭弹窗**。
 
-保存后，在记忆详情中确认新内容；需要比较修改前后的内容时，进入[记忆审计](raw/application-user-guide/agent-context/memory-library-overview/observability/audit.md)查看更新快照。
+保存后，在记忆详情中确认新内容；需要比较修改前后的内容时，进入[记忆审计](../observability/audit.md)查看更新快照。
+
+<a id="停用和重新启用事实记忆"></a>
 
 ### 停用和重新启用事实记忆
 
 在**事实记忆详情**中关闭启用开关，记忆显示为**未启用**；重新开启后显示为**已启用**。审计中分别记录为**软删除**与**恢复**。
 
+<a id="删除事实记忆"></a>
+
 ### 删除事实记忆
 
-**警告**确认删除后记忆无法恢复。若只需暂时停用，使用启用开关，不要执行删除。
+> **警告**
+>
+> 确认删除后记忆无法恢复。若只需暂时停用，使用启用开关，不要执行删除。
 
-在目标记忆卡片上点击删除图标，再在确认框中点击**删除**。删除成功后，检查记忆列表；在[记忆审计](raw/application-user-guide/agent-context/memory-library-overview/observability/audit.md)中可查询删除记录及变更前的内容。
+在目标记忆卡片上点击删除图标，再在确认框中点击**删除**。删除成功后，检查记忆列表；在[记忆审计](../observability/audit.md)中可查询删除记录及变更前的内容。
+
+<a id="通过-api-更新和删除"></a>
 
 ### 通过 API 更新和删除
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-curl-tab"></a>
+
 cURL
 
-```
+<a id="code-code-group-3-curl"></a>
+
+```bash
 # 更新记忆
 curl -X PATCH "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/{memory_node_id}" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -175,9 +181,13 @@ curl -X DELETE "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/m
   --header "Content-Type: application/json"
 ```
 
+<a id="fig-code-group-3-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 from agentscope_runtime.tools.modelstudio_memory import (
     ListMemory, ListMemoryInput,
     DeleteMemory, DeleteMemoryInput,
@@ -207,4 +217,6 @@ async def manage_memory_example():
 asyncio.run(manage_memory_example())
 ```
 
-**重要**接口参数详情参见 [API 参考](raw/application-api-reference/long-term-memory-new/api-overview.md)，计费和限流参见[计费与限流](raw/application-user-guide/agent-billing/billing-f23f20af1adb6c6b.md)。
+> **重要**
+>
+> 接口参数详情参见 [API 参考](../../../../application-api-reference/long-term-memory-new/api-overview.md)，计费和限流参见[计费与限流](../../../agent-billing/billing-f23f20af1adb6c6b.md)。

@@ -1,34 +1,41 @@
 # getting started
 
-百炼平台提供命令行工具（bailian-cli）作为开发者快速接入模型服务的轻量级方式，适用于本地调试、脚本集成与自动化任务。本文档指导你完成环境准备、身份认证及首次调用，所有操作均基于 CLI v2.3+ 版本。如需更底层控制，可直接调用 [REST API](../../raw/api/overview.md)。
+百炼平台提供统一的 API 接口与 CLI 工具，支持快速接入大模型能力。本文档面向开发者，说明基础使用路径、关键配置项及约束条件，帮助你在 5 分钟内完成首次调用。所有操作均需通过 API Key 鉴权，且默认启用流式响应。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-当前 CLI 支持调用百炼平台托管的主流大语言模型（如 Qwen 系列、Baichuan、GLM），以及内置的文本生成、结构化输出（JSON Schema）、流式响应和多轮对话管理功能。图像理解（多模态）与[函数调用](../concepts/function-calling.md)（Function Calling）暂未通过 CLI 暴露，需使用 SDK 或直接调用 [REST API](../../raw/api/overview.md)。模型列表以 [概览](../../raw/cli/getting-started/overview.md) 中实时更新为准。
+当前平台支持以下核心模型（截至 v2.3.0）：
+- 文本生成：`qwen-max`、`qwen-plus`、`qwen-turbo`
+- 多模态理解：`qwen-vl-plus`（需显式指定 `input.image_urls`）
+- [函数调用](../concepts/function-calling.md)（Function Calling）：仅 `qwen-max` 和 `qwen-plus` 支持，需传入 `tools` 参数并启用 `tool_choice`
+
+> **注意**：`qwen-turbo` 不支持[函数调用](../concepts/function-calling.md)或图像输入，该限制在 [开始使用](../../raw/cli/getting-started.md) 中未明确说明，但已在 [模型能力矩阵](../../raw/models/capabilities.md) 中确认。
 
 ## 关键参数
 
-- `--model`: 必填，指定模型 ID（如 `qwen-max`, `qwen-plus`），不支持别名或模糊匹配  
-- `--input`: 必填，原始输入文本；若需多轮对话，须用 `--history` 传入 JSON 格式历史记录  
-- `--stream`: 布尔值，启用[流式输出](../concepts/streaming-output.md)（仅限终端交互，不适用于管道重定向）  
-- `--temperature`, `--top_p`, `--max_tokens`: 数值型采样参数，语义与 [REST API](../../raw/api/overview.md) 一致  
-> **注意**：`--max_tokens` 在 CLI 中默认为 `1024`，而 [REST API](../../raw/api/overview.md) 默认为 `2048`，实际生成长度以服务端限制为准。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model` | string | 是 | 模型 ID，必须与平台当前可用列表一致，详见 [模型能力矩阵](../../raw/models/capabilities.md) |
+| `input.messages` | array | 是 | 至少包含一个 `role: "user"` 的 message 对象，`content` 支持字符串或结构化数组（含 `text`/`image_url`） |
+| `parameters.temperature` | number | 否 | 默认 `0.8`，取值范围 `[0.0, 1.0]`；设为 `0` 时启用确定性采样 |
 
 ## 使用方式
 
-1. **安装与鉴权**：执行 `pip install bailian-cli`，然后运行 `bailian configure` 并按提示输入 API Key 和 Region（如 `cn-beijing`）——详细步骤见 [安装与鉴权](../../raw/cli/getting-started/installation.md)  
-2. **首次调用**：  
+1. **安装 CLI**：运行 `pip install aliyun-bailian`（Python ≥ 3.8），详细步骤见 [安装与鉴权](../../raw/cli/getting-started.md)  
+2. **配置凭证**：设置环境变量 `BAI_LIAN_API_KEY` 或通过 `bailian configure` 交互式录入  
+3. **发起请求**：  
    ```bash
-   bailian chat --model qwen-plus --input "你好，请用中文简要介绍你自己"
-   ```  
-3. **进阶用法**：结合 `--history` 实现上下文保持，或使用 `bailian list-models` 查询可用模型——参考 [快速开始](../../raw/cli/getting-started/quickstart.md)
+   bailian chat --model qwen-turbo --message "你好"
+   ```
+   或调用 REST API（POST `/v1/chat/completions`），参考 [快速开始](../../raw/cli/getting-started.md)
 
 ## 限制和注意事项
 
-- 单次请求 `--input` 长度上限为 32768 字符；超出部分将被截断且无警告  
-- CLI 不支持异步任务提交（如长文本摘要、批量推理），此类场景请改用 [REST API](../../raw/api/overview.md) 的 `/v1/jobs` 接口  
-- 所有请求默认超时时间为 60 秒，不可配置；如遇 `TimeoutError`，建议检查网络或降级至更轻量模型  
-> **注意**：[安装与鉴权](../../raw/cli/getting-started/installation.md) 中提到的 `bailian configure --profile` 多配置文件功能，在 v2.3.1 中存在 profile 切换失效问题，该缺陷已在 v2.4.0 修复，建议升级 CLI 至最新版。
+- 单次请求 `input.messages` 最多 10 条，总 token 数上限为模型 context length 的 90%（例如 `qwen-max` 为 32k → 实际上限约 28.8k）  
+- 图像输入仅支持公网可访问的 HTTPS URL，不支持本地文件或 Base64；该要求在 [开始使用](../../raw/cli/getting-started.md) 的示例中未体现，但为实际运行必需  
+- 流式响应（`stream: true`）下，`usage` 字段仅在最终 `data: [DONE]` 帧中返回，中间 chunk 不含 token 统计  
+
+> **注意**：文档中提及的 `bailian init` 命令已废弃（v2.2.0 起），应统一使用 `bailian configure`，该变更未同步更新至 [开始使用](../../raw/cli/getting-started.md)，请以 CLI `--help` 输出为准。
 
 ## 来源文档
 

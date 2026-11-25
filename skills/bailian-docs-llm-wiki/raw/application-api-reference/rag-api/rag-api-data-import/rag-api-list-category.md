@@ -2,9 +2,17 @@
 
 查询当前业务空间下的类目列表，支持按类型、名称、父类目和数据集 ID 过滤。
 
+<a id="前提"></a>
+
+<a id="h-ragapi-list-category-prereq"></a>
+
 ## 前提
 
-已获取阿里云百炼 API Key（[控制台 API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)）并完成鉴权配置，详见 [Knowledge（原RAG） API 概览](raw/application-api-reference/rag-api/rag-api-overview.md)与[鉴权](raw/application-api-reference/rag-api/rag-api-authentication.md)。数据导入接口与其他 Knowledge API（原RAG API） 使用相同的 Base URL 与鉴权方式，路径前缀为 `/api/v1/connector/dash/`。
+已获取阿里云百炼 API Key（[控制台 API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)）并完成鉴权配置，详见 [Knowledge（原RAG） API 概览](../rag-api-overview.md)与[鉴权](../rag-api-authentication.md)。数据导入接口与其他 Knowledge API（原RAG API） 使用相同的 Base URL 与鉴权方式，路径前缀为 `/api/v1/connector/dash/`。
+
+<a id="接口"></a>
+
+<a id="h-ragapi-list-category-endpoint"></a>
 
 ## 接口
 
@@ -12,67 +20,30 @@
 
 查询当前业务空间下的类目列表，支持按类型、名称、父类目和数据集 ID 过滤。
 
+<a id="请求体"></a>
+
+<a id="h-ragapi-list-category-req"></a>
+
 ## 请求体
 
-字段
+| 字段 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `type` | 是 | string | 类目类型。当前仅支持 `UNSTRUCTURED`（非结构化数据类目）。 |
+| `parentId` | 否 | string | 父类目 ID，用于查询子类目。 |
+| `categoryName` | 否 | string | 类目名称，精确匹配。 |
+| `connectorId` | 否 | string | 数据集 ID，按数据集过滤类目。 |
+| `nextToken` | 否 | string | 分页游标，首次查询不传；翻页时传入上一页响应返回的 nextToken 值。 |
+| `maxResult` | 否 | integer | 每页返回的类目数量，默认 20。注意参数名为 maxResult（单数），传入 maxResults（复数）会被静默忽略。 |
 
-必填
+<a id="请求示例"></a>
 
-类型
-
-说明
-
-`type`
-
-是
-
-string
-
-类目类型。当前仅支持 `UNSTRUCTURED`（非结构化数据类目）。
-
-`parentId`
-
-否
-
-string
-
-父类目 ID，用于查询子类目。
-
-`categoryName`
-
-否
-
-string
-
-类目名称，精确匹配。
-
-`connectorId`
-
-否
-
-string
-
-数据集 ID，按数据集过滤类目。
-
-`nextToken`
-
-否
-
-string
-
-分页游标，首次查询不传；翻页时传入上一页响应返回的 nextToken 值。
-
-`maxResult`
-
-否
-
-integer
-
-每页返回的类目数量，默认 20。注意参数名为 maxResult（单数），传入 maxResults（复数）会被静默忽略。
+<a id="h-ragapi-list-category-eg"></a>
 
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST "$BASE_URL/api/v1/connector/dash/listCategory" \
   -H "Authorization: Bearer $BAILIAN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -83,11 +54,17 @@ curl -X POST "$BASE_URL/api/v1/connector/dash/listCategory" \
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`（`{workspace_id}` 为业务空间 ID），`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
+<a id="响应示例"></a>
+
+<a id="h-ragapi-list-category-resp"></a>
+
 ## 响应示例
 
 成功返回 200。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "code": "Success",
   "message": "",
@@ -111,62 +88,29 @@ curl -X POST "$BASE_URL/api/v1/connector/dash/listCategory" \
 }
 ```
 
+<a id="响应字段"></a>
+
+<a id="h-ragapi-list-category-dto"></a>
+
 ### 响应字段
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `code` | string | 响应码，成功时为 `Success`。 |
+| `message` | string | 错误或提示信息，成功时为空字符串。 |
+| `requestId` | string | 请求唯一标识，排查问题时请提供此 ID。 |
+| `data` | object | 查询结果。子字段 `categoryList`（array<object>，类目列表。元素为对象，字段：`categoryId`（string，类目 ID）、`categoryName`（string，类目名称）、`type`（string，类目类型，仅 `UNSTRUCTURED`）、`isDefault`（boolean，是否为默认类目））、`hasNext`（boolean，是否还有下一页）、`maxResult`（integer，本次请求的每页条数）、`totalCount`（integer，符合条件的总条数）。 |
+| `status` | integer | 业务状态码。成功为 `200`，参数错误等失败场景为 `400`。注意失败时 HTTP 状态码仍为 200，需根据本字段与 `code` 判断结果。 |
 
-类型
+<a id="错误码"></a>
 
-说明
-
-`code`
-
-string
-
-响应码，成功时为 `Success`。
-
-`message`
-
-string
-
-错误或提示信息，成功时为空字符串。
-
-`requestId`
-
-string
-
-请求唯一标识，排查问题时请提供此 ID。
-
-`data`
-
-object
-
-查询结果。子字段 `categoryList`（array<object>，类目列表。元素为对象，字段：`categoryId`（string，类目 ID）、`categoryName`（string，类目名称）、`type`（string，类目类型，仅 `UNSTRUCTURED`）、`isDefault`（boolean，是否为默认类目））、`hasNext`（boolean，是否还有下一页）、`maxResult`（integer，本次请求的每页条数）、`totalCount`（integer，符合条件的总条数）。
-
-`status`
-
-integer
-
-业务状态码。成功为 `200`，参数错误等失败场景为 `400`。注意失败时 HTTP 状态码仍为 200，需根据本字段与 `code` 判断结果。
+<a id="h-ragapi-list-category-err"></a>
 
 ## 错误码
 
-HTTP 状态码
-
-错误码 `code`
-
-说明
-
-400
-
-`InvalidParameter`
-
-请求参数无效。`message` 示例：`Required parameter missing or invalid.`
-
-401
-
-`InvalidApiKey`
-
-鉴权失败，API Key 无效或缺失。`message` 示例：`Invalid API-key provided.`
+| HTTP 状态码 | 错误码 `code` | 说明 |
+| --- | --- | --- |
+| 400 | `InvalidParameter` | 请求参数无效。`message` 示例：`Required parameter missing or invalid.` |
+| 401 | `InvalidApiKey` | 鉴权失败，API Key 无效或缺失。`message` 示例：`Invalid API-key provided.` |
 
 业务失败时 HTTP 状态码仍为 200，需根据响应体中的 `status` 与 `code` 判断结果。

@@ -2,35 +2,18 @@
 
 Coding Plan 整合了千问、GLM、Kimi、MiniMax 等模型，并兼容主流 AI 编程工具。通过固定月费模式订阅，成本可控，可有效防范欠费风险。
 
+<a id="套餐详情"></a>
+
+<a id="2bbc4faf2ej0e"></a>
+
 ## 套餐详情
 
-**说明**
+> **说明**
+>
+> 1.  Lite 套餐自 2026 年 3 月 20 日 00:00:00（UTC+08:00）起停止新购（详见[公告](https://www.aliyun.com/notice/118094)）；4 月 13 日 18:00:00（UTC+08:00）起停止续费与升级（详见[公告](https://www.aliyun.com/notice/118175)）。
+> 2.  Lite 套餐支持所有套餐模型（含千问、GLM、Kimi、MiniMax），与 Pro 套餐一致。
 
-1.  Lite 套餐自 2026 年 3 月 20 日 00:00:00（UTC+08:00）起停止新购（详见[公告](https://www.aliyun.com/notice/118094)）；4 月 13 日 18:00:00（UTC+08:00）起停止续费与升级（详见[公告](https://www.aliyun.com/notice/118175)）。
-2.  Lite 套餐支持所有套餐模型（含千问、GLM、Kimi、MiniMax），与 Pro 套餐一致。
-
-**Pro 高级套餐**
-
-支持的模型
-
-仅支持以下精确版本：
-
-推荐模型：**qwen3.7-plus**（支持图片理解）、**qwen3.6-plus**（支持图片理解）、**kimi-k2.5**（支持图片理解）、**glm-5**、**MiniMax-M2.5**
-
-更多模型：qwen3.5-plus（支持图片理解）
-
-价格
-
-**¥ 200**/月
-
-用量限制
-
--   每 5 小时**6,000** 次请求
-    
--   每周**45,000** 次请求
-    
--   每月**90,000** 次请求
-    
+<table><thead><tr><th></th><th><p><strong>Pro 高级套餐</strong></p></th></tr></thead><tbody><tr><td><p>支持的模型</p></td><td><p>仅支持以下精确版本：</p><p>推荐模型：<strong>qwen3.7-plus</strong>（支持图片理解）、<strong>qwen3.6-plus</strong>（支持图片理解）、<strong>kimi-k2.5</strong>（支持图片理解）、<strong>glm-5</strong>、<strong>MiniMax-M2.5</strong></p><p>更多模型：qwen3.5-plus（支持图片理解）</p></td></tr><tr><td><p>价格</p></td><td><p><strong>¥ 200</strong>/月</p></td></tr><tr><td><p>用量限制</p></td><td><ul><li><p>每 5 小时<strong>6,000</strong> 次请求</p></li><li><p>每周<strong>45,000</strong> 次请求</p></li><li><p>每月<strong>90,000</strong> 次请求</p></li></ul></td></tr></tbody></table>
 
 -   **新客首月特惠：**首次订阅 Pro 套餐可享首月 ¥39.90（官网目录价 ¥200/月），后续按 ¥200/月 续费，具体以下单页为准。
     
@@ -44,7 +27,15 @@ Coding Plan 整合了千问、GLM、Kimi、MiniMax 等模型，并兼容主流 A
     2.  每周额度：每周一 00:00:00（UTC+08:00）重置。
     3.  每月额度：在下一个月订阅日的 00:00:00 (UTC+08:00) 重置。
 
+<a id="快速开始"></a>
+
+<a id="5ebfd53ae8b1q"></a>
+
 ## 快速开始
+
+<a id="步骤一-订阅-coding-plan"></a>
+
+<a id="d8bfda628cox3"></a>
 
 ### 步骤一：订阅 Coding Plan
 
@@ -52,10 +43,16 @@ Coding Plan 整合了千问、GLM、Kimi、MiniMax 等模型，并兼容主流 A
 
 主账号可直接订阅该服务，RAM 子账号需完成以下步骤授权后，再进行订阅。
 
+<a id="accordion-ram-子账号授权步骤"></a>
+
 RAM 子账号授权步骤
 
 1.  **添加用户：**使用主账号登录阿里云百炼，访问目标工作空间的 [权限管理](https://bailian.console.aliyun.com/cn-beijing/model/settings/permission)页面，点击**新增用户**添加该 RAM 用户，并定义用户名称，单击**确定**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4734072771/p1057319.png)
 2.  **授予权限：**点击该用户右侧的**权限管理**，添加**管理员**权限，然后点击**确定**完成授权。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4734072771/p1057328.png)
+
+<a id="步骤二-获取套餐-api-key-和-base-url"></a>
+
+<a id="2531c37fd64f9"></a>
 
 ### 步骤二：获取套餐 API Key 和 Base URL
 
@@ -68,73 +65,36 @@ RAM 子账号授权步骤
     -   **OpenAI 兼容协议**：`https://coding.dashscope.aliyuncs.com/v1`
     -   **Anthropic 兼容协议**：`https://coding.dashscope.aliyuncs.com/apps/anthropic`
 
-**说明**Coding Plan 的 API Key 和 Base URL 与百炼按量计费的 API Key（`sk-xxxxx`）和Base URL（`https://dashscope.aliyuncs.com/xxxxxx`）不互通，请勿混用。
+> **说明**
+>
+> Coding Plan 的 API Key 和 Base URL 与百炼按量计费的 API Key（`sk-xxxxx`）和Base URL（`https://dashscope.aliyuncs.com/xxxxxx`）不互通，请勿混用。
+
+<a id="步骤三-接入ai工具"></a>
+
+<a id="5f8507878alf8"></a>
 
 ### 步骤三：接入AI工具
 
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923f.svg)**[OpenClaw](raw/token-plan-user-guide/use-chat-client-or-development-tool/openclaw.md)**
+|  |  |  |
+| --- | --- | --- |
+| ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923f.svg)**[OpenClaw](../use-chat-client-or-development-tool/openclaw.md)**<br><br>开源、自托管个人 AI 助手 | ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923e.svg)**[Hermes Agent](../use-chat-client-or-development-tool/hermes-agent.md)**<br><br>开源 AI 代理框架，内置自学习循环 | ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923d.svg)**[Claude Code](../use-chat-client-or-development-tool/claude-code.md)**<br><br>AI 终端编码助手，支持自然语言编程 |
+| ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923c.svg)**[OpenCode](../use-chat-client-or-development-tool/opencode.md)**<br><br>开源 AI 编程代理工具 | ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9233.svg)**[Cursor](../use-chat-client-or-development-tool/more-tools-guide/cursor.md)**<br><br>AI 原生代码编辑器 | ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9232.svg)**[Codex](../use-chat-client-or-development-tool/codex.md)**<br><br>OpenAI 推出的命令行编程工具 |
+| ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9231.svg)**[Qwen Code](../use-chat-client-or-development-tool/qwen-code.md)**<br><br>开源命令行 AI 编码工具 | ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9237.png)**[QwenPaw](../use-chat-client-or-development-tool/more-tools-guide/qwenpaw.md)**<br><br>开源个人 AI 助手，支持本地与云端部署 | ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9230.svg)**[Cherry Studio](../use-chat-client-or-development-tool/more-tools-guide/cherry-studio.md)**<br><br>多模型桌面客户端 |
+| ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9236.png)**[Chatbox](https://help.aliyun.com/zh/model-studio/cline-tool)**<br><br>跨平台 AI 桌面客户端 | ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9235.svg)**[Cline](../use-chat-client-or-development-tool/more-tools-guide/cline.md)**<br><br>VS Code 扩展，智能代码补全和调试 | ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9234.svg)**[Qoder](../use-chat-client-or-development-tool/qoder-agent.md)**<br><br>面向真实软件开发的 Agentic 编码平台 |
+| ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f924a.svg)**[Kilo CLI](../use-chat-client-or-development-tool/more-tools-guide/kilo-cli.md)**<br><br>轻量高性能命令行编程工具 | ![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9248.svg)**[WorkBuddy](../use-chat-client-or-development-tool/workbuddy.md)**<br><br>桌面 AI Agent 工作台 |  |
+| **[更多工具](../use-chat-client-or-development-tool/more-tools-guide/more-tools.md)**<br><br>其他编程工具 |  |  |
 
-开源、自托管个人 AI 助手
+<a id="步骤四-开始使用"></a>
 
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923e.svg)**[Hermes Agent](raw/token-plan-user-guide/use-chat-client-or-development-tool/hermes-agent.md)**
-
-开源 AI 代理框架，内置自学习循环
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923d.svg)**[Claude Code](raw/token-plan-user-guide/use-chat-client-or-development-tool/claude-code.md)**
-
-AI 终端编码助手，支持自然语言编程
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923c.svg)**[OpenCode](raw/token-plan-user-guide/use-chat-client-or-development-tool/opencode.md)**
-
-开源 AI 编程代理工具
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9233.svg)**[Cursor](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cursor.md)**
-
-AI 原生代码编辑器
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9232.svg)**[Codex](raw/token-plan-user-guide/use-chat-client-or-development-tool/codex.md)**
-
-OpenAI 推出的命令行编程工具
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9231.svg)**[Qwen Code](raw/token-plan-user-guide/use-chat-client-or-development-tool/qwen-code.md)**
-
-开源命令行 AI 编码工具
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9237.png)**[QwenPaw](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/qwenpaw.md)**
-
-开源个人 AI 助手，支持本地与云端部署
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9230.svg)**[Cherry Studio](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cherry-studio.md)**
-
-多模型桌面客户端
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9236.png)**[Chatbox](https://help.aliyun.com/zh/model-studio/cline-tool)**
-
-跨平台 AI 桌面客户端
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9235.svg)**[Cline](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cline.md)**
-
-VS Code 扩展，智能代码补全和调试
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9234.svg)**[Qoder](raw/token-plan-user-guide/use-chat-client-or-development-tool/qoder-agent.md)**
-
-面向真实软件开发的 Agentic 编码平台
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f924a.svg)**[Kilo CLI](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/kilo-cli.md)**
-
-轻量高性能命令行编程工具
-
-![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9248.svg)**[WorkBuddy](raw/token-plan-user-guide/use-chat-client-or-development-tool/workbuddy.md)**
-
-桌面 AI Agent 工作台
-
-**[更多工具](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/more-tools.md)**
-
-其他编程工具
+<a id="h8k6l4m2n1o3p"></a>
 
 ### 步骤四：开始使用
 
 完成以上步骤后，可前往[Coding Plan 使用指南](https://bailian.console.aliyun.com/cn-beijing/model/market)查看详细用法。
+
+<a id="订阅前须知"></a>
+
+<a id="d489c2bd21rap"></a>
 
 ## 订阅前须知
 
@@ -144,22 +104,42 @@ Coding Plan 服务**不支持退款**。因此在订阅前请知悉以下重要�
 2.  **数据使用授权**：使用 Coding Plan 期间，模型输入以及模型生成的内容将用于服务改进与模型优化。停止使用 Coding Plan 服务可终止后续数据授权，但终止授权的范围不涵盖已授权使用的 Coding Plan 数据。详细条款请参见[阿里云百炼服务协议](https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20230728213935489/20230728213935489.html?spm=5176.28197581.0.0.16e829a4HTC9FE)第 5.2 条。
 3.  **账号使用规范**：套餐为订阅人专享使用，禁止共享。账号共享可能导致订阅权益受限。
 
+<a id="常见问题"></a>
+
+<a id="50095a467eg3p"></a>
+
 ## 常见问题
+
+<a id="首次续费为什么没有-5-折优惠"></a>
+
+<a id="5e337a8a8cm5c"></a>
 
 ### 首次续费为什么没有 5 折优惠？
 
 首次续费 5 折活动已于 2026 年 4 月 1 日 00:00:00（UTC+08:00）结束，当前续费价格以下单页为准。
 
+<a id="已购买-coding-plan-为何仍显示欠费-被扣费"></a>
+
+<a id="db649df68086n"></a>
+
 ### 已购买 Coding Plan，为何仍显示欠费/被扣费？
 
-误用了百炼通用 API Key 和 Base URL，系统会识别为按量付费，导致额外扣费。请改用 Coding Plan API Key（以`sk-sp-`开头）和套餐 Base URL（含`coding.dashscope.aliyuncs.com`），配置方法请参见[获取套餐 API Key 和 Base URL](https://help.aliyun.com/zh/model-studio/coding-plan#2531c37fd64f9)。
+误用了百炼通用 API Key 和 Base URL，系统会识别为按量付费，导致额外扣费。请改用 Coding Plan API Key（以`sk-sp-`开头）和套餐 Base URL（含`coding.dashscope.aliyuncs.com`），配置方法请参见[获取套餐 API Key 和 Base URL](coding-plan.md#2531c37fd64f9)。
+
+<a id="lite-版为什么停止新购"></a>
+
+<a id="b2c3d4e5f6g7h"></a>
 
 ### Lite 版为什么停止新购？
 
 因产品升级需要，Coding Plan Lite 基础版本已于 2026 年 3 月 20 日起停止新购（详见[停止新购公告](https://www.aliyun.com/notice/118094)），并于 4 月 13 日起停止续费与升级（详见[停止续费公告](https://www.aliyun.com/notice/118175)）。已购买的用户可继续使用至服务到期。
 
+<a id="已购买-lite-版的用户权益是否受影响"></a>
+
+<a id="f6g7h8i9j0k1l"></a>
+
 ### 已购买 Lite 版的用户权益是否受影响？
 
 已购买 Coding Plan Lite 基础套餐的用户可继续使用至服务到期。Lite 套餐已于 2026 年 4 月 13 日起停止续费与升级，如需继续使用，请订阅 Pro 套餐。
 
-更多问题请参考[常见问题](raw/token-plan-user-guide/coding-plan-guide/coding-plan-faq.md)。
+更多问题请参考[常见问题](coding-plan-faq.md)。

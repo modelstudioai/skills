@@ -2,153 +2,73 @@
 
 可基于如下动态文件操作接口能力获取处理好的文件信息，支持智能体应用的 API 调用通过 parameters.agent\_options.session\_files 参数完成“动态文档解析”工具的文件数据注入。
 
+<a id="文件上传凭证"></a>
+
+<a id="dd65615d8ch3w"></a>
+
 ## 文件上传凭证
 
 获取临时动态文件上传凭证，用于后续提交文档解析的操作。
 
+<a id="请求语法"></a>
+
+<a id="fb3725f2a6g14"></a>
+
 ### 请求语法
 
-```
+<a id="code-block"></a>
+
+```http
 POST /deep-search-agent/file/lease/apply HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="764bba3785jy4"></a>
+
 ### 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| input | object | 是 | 输入字段 |
+| input.request\_id | str | 否 | 请求ID（业务自定义） |
+| input.file\_name | str | 是 | 待上传文件名称 |
+| input.file\_md5 | str | 是 | 待上传文件 md5 |
+| input.file\_size | int | 是 | 待上传文件大小 |
+| parameters | object | 是 | 配置参数字段，该接口下留空 {} |
 
-**类型**
+<a id="返回参数"></a>
 
-**是否必须**
-
-**说明**
-
-input
-
-object
-
-是
-
-输入字段
-
-input.request\_id
-
-str
-
-否
-
-请求ID（业务自定义）
-
-input.file\_name
-
-str
-
-是
-
-待上传文件名称
-
-input.file\_md5
-
-str
-
-是
-
-待上传文件 md5
-
-input.file\_size
-
-int
-
-是
-
-待上传文件大小
-
-parameters
-
-object
-
-是
-
-配置参数字段，该接口下留空 {}
+<a id="185f157a302l4"></a>
 
 ### 返回参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| code | str | 是 | 状态码（成功：200） |
+| message | str | 是 | 状态信息 |
+| output | object | 是 | 输出字段 |
+| output.request\_id | str | 否 | 请求ID（业务自定义） |
+| output.result | object | 是 | 文件处理结果 |
+| output.result.headers | map\[str, str\] | 是 | 用于上传文件的 headers 信息 |
+| output.result.lease\_id | str | 是 | 凭证ID |
+| output.result.pre\_signed\_url | str | 是 | oss预签名地址 |
 
-**类型**
+<a id="示例"></a>
 
-**是否必须**
-
-**说明**
-
-code
-
-str
-
-是
-
-状态码（成功：200）
-
-message
-
-str
-
-是
-
-状态信息
-
-output
-
-object
-
-是
-
-输出字段
-
-output.request\_id
-
-str
-
-否
-
-请求ID（业务自定义）
-
-output.result
-
-object
-
-是
-
-文件处理结果
-
-output.result.headers
-
-map\[str, str\]
-
-是
-
-用于上传文件的 headers 信息
-
-output.result.lease\_id
-
-str
-
-是
-
-凭证ID
-
-output.result.pre\_signed\_url
-
-str
-
-是
-
-oss预签名地址
+<a id="99d580f7f7kzr"></a>
 
 ### 示例
 
+<a id="请求示例"></a>
+
+<a id="f842698af5y13"></a>
+
 #### 请求示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "input": {
         "request_id": "8d1c3d50-b761-4730-ac1a-27a248fa08b5",
@@ -161,9 +81,15 @@ oss预签名地址
 }
 ```
 
+<a id="返回示例"></a>
+
+<a id="9fb8dffe84ixt"></a>
+
 #### 返回示例
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "code": "200",
     "message": "Success",
@@ -181,11 +107,17 @@ oss预签名地址
 }
 ```
 
+<a id="上传文件"></a>
+
+<a id="a964d45aa8ral"></a>
+
 ## 上传文件
 
 上传文件需要在端侧由用户自行完成，基于文件上传凭证，如何上传文件可参考如下代码。
 
-```
+<a id="code-block-4"></a>
+
+```python
 import requests
 from http import HTTPStatus
 
@@ -204,121 +136,69 @@ with open(file_path, 'rb') as file:
         print(f"文件上传失败，{response.status_code}")
 ```
 
+<a id="提交文件解析"></a>
+
+<a id="c670b9ae27w3a"></a>
+
 ## 提交文件解析
 
 应用临时动态文件上传完成后，可基于文件上传凭证提交文档解析。
 
+<a id="请求语法-2"></a>
+
+<a id="e6d53b9301y2a"></a>
+
 ### 请求语法
 
-```
+<a id="code-block-5"></a>
+
+```http
 POST /deep-search-agent/file/parse/submit HTTP/1.1
 ```
 
+<a id="请求参数-2"></a>
+
+<a id="53ce7c4556ckg"></a>
+
 ### 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| input | object | 是 | 输入字段 |
+| input.request\_id | str | 否 | 请求ID（业务自定义） |
+| input.lease\_id | str | 是 | 已上传文件凭证ID |
+| parameters | object | 是 | 配置参数字段，该接口下留空 {} |
 
-**类型**
+<a id="返回参数-2"></a>
 
-**是否必须**
-
-**说明**
-
-input
-
-object
-
-是
-
-输入字段
-
-input.request\_id
-
-str
-
-否
-
-请求ID（业务自定义）
-
-input.lease\_id
-
-str
-
-是
-
-已上传文件凭证ID
-
-parameters
-
-object
-
-是
-
-配置参数字段，该接口下留空 {}
+<a id="381c851a3dbjp"></a>
 
 ### 返回参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| code | str | 是 | 状态码（成功：200） |
+| message | str | 是 | 状态信息 |
+| output | object | 是 | 输出字段 |
+| output.request\_id | str | 否 | 请求ID（业务自定义） |
+| output.result | array\[object\] | 是 | 文件处理结果 |
+| output.result.file\_id | str | 是 | 已提交解析任务文件ID |
 
-**类型**
+<a id="示例-2"></a>
 
-**是否必须**
-
-**说明**
-
-code
-
-str
-
-是
-
-状态码（成功：200）
-
-message
-
-str
-
-是
-
-状态信息
-
-output
-
-object
-
-是
-
-输出字段
-
-output.request\_id
-
-str
-
-否
-
-请求ID（业务自定义）
-
-output.result
-
-array\[object\]
-
-是
-
-文件处理结果
-
-output.result.file\_id
-
-str
-
-是
-
-已提交解析任务文件ID
+<a id="ee93180d7dypk"></a>
 
 ### 示例
 
+<a id="请求示例-2"></a>
+
+<a id="e95e955b5a3it"></a>
+
 #### 请求示例
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "input": {
         "request_id": "4fc80fa9-b66a-4c6a-9dab-1a79ecd972f2",
@@ -328,9 +208,15 @@ str
 }
 ```
 
+<a id="返回示例-2"></a>
+
+<a id="5fda172442304"></a>
+
 #### 返回示例
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
     "code": "200",
     "message": "Success",
@@ -345,119 +231,63 @@ str
 }
 ```
 
+<a id="获取解析状态"></a>
+
+<a id="a859556ab3asy"></a>
+
 ## 获取解析状态
 
 应用临时动态文件提交文档解析后，可获通过文件ID查询文件解析状态。
 
+<a id="请求语法-3"></a>
+
+<a id="cc38c1e323jxh"></a>
+
 ### 请求语法
 
-```
+<a id="code-block-8"></a>
+
+```http
 POST /deep-search-agent/file/parse/status HTTP/1.1
 ```
 
+<a id="请求参数-3"></a>
+
+<a id="9060abd206tbp"></a>
+
 ### 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| input | object | 是 | 输入字段 |
+| input.request\_id | str | 否 | 请求ID（业务自定义） |
+| input.file\_ids | list\[str\] | 是 | 已提交解析任务文件ID集合 |
+| parameters | object | 是 | 配置参数字段，该接口下留空 {} |
 
-**类型**
+<a id="返回参数-3"></a>
 
-**是否必须**
-
-**说明**
-
-input
-
-object
-
-是
-
-输入字段
-
-input.request\_id
-
-str
-
-否
-
-请求ID（业务自定义）
-
-input.file\_ids
-
-list\[str\]
-
-是
-
-已提交解析任务文件ID集合
-
-parameters
-
-object
-
-是
-
-配置参数字段，该接口下留空 {}
+<a id="fabb53844autm"></a>
 
 ### 返回参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| code | str | 是 | 状态码（成功：200） |
+| message | str | 是 | 状态信息 |
+| output | object | 是 | 输出字段 |
+| output.request\_id | str | 否 | 请求ID（业务自定义） |
+| output.result | array\[object\] | 是 | 文件处理结果 |
+| output.result.\[0\].status | str | 是 | 已提交解析任务文件的处理状态 |
 
-**类型**
+<a id="文件状态"></a>
 
-**是否必须**
-
-**说明**
-
-code
-
-str
-
-是
-
-状态码（成功：200）
-
-message
-
-str
-
-是
-
-状态信息
-
-output
-
-object
-
-是
-
-输出字段
-
-output.request\_id
-
-str
-
-否
-
-请求ID（业务自定义）
-
-output.result
-
-array\[object\]
-
-是
-
-文件处理结果
-
-output.result.\[0\].status
-
-str
-
-是
-
-已提交解析任务文件的处理状态
+<a id="580f76b383a5h"></a>
 
 ### 文件状态
 
-```
+<a id="code-block-9"></a>
+
+```text
 文件status包括以下状态：
 - 说明：必须等到状态为 FILE_IS_READY 才能进行问答。
 
@@ -478,11 +308,21 @@ str
 ● FILE_EXPIRED：文件过期。
 ```
 
+<a id="示例-3"></a>
+
+<a id="c0dd672d6exiv"></a>
+
 ### 示例
+
+<a id="请求示例-3"></a>
+
+<a id="71e4c73dfbt2p"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "input": {
         "request_id": "bbe29140-766b-4caf-8558-2c703d9cb641",
@@ -494,9 +334,15 @@ str
 }
 ```
 
+<a id="返回示例-3"></a>
+
+<a id="0825f304b56f3"></a>
+
 #### 返回示例
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
     "code": "200",
     "message": "Success",
@@ -511,11 +357,21 @@ str
 }
 ```
 
+<a id="调用示例"></a>
+
+<a id="ab0dc25cccefs"></a>
+
 ## 调用示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 # coding=utf-8
 
 import os
@@ -649,9 +505,13 @@ if __name__ == "__main__":
             pass
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import java.io.*;
 import java.net.*;
 import java.util.*;

@@ -1,36 +1,36 @@
 # agent development
 
-百炼平台提供多种 Agent 开发范式，支持从低代码编排到高自由度代码沙箱的全栈开发路径。开发者可根据业务复杂度、可控性需求和运维能力选择合适模式，所有类型均统一接入百炼推理网关与可观测性体系。核心能力围绕 LLM 编排、工具调用、状态管理与调试诊断展开。
+百炼平台提供多种 Agent 开发范式，支持从低代码编排到高自由度代码沙箱的全链路开发。开发者可根据业务复杂度、可控性要求和运维能力选择 Managed Agent、Flow Agent 或 Sandbox 模式。所有模式均基于统一的运行时框架，但模型调用、状态管理与扩展机制存在差异。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **Managed Agent**：平台托管的声明式 Agent，通过 YAML 配置定义工具链、记忆策略与终止条件，适合标准化任务（如客服问答、数据查询）；底层默认使用 Qwen-Max 或 Qwen-Plus，支持按需切换 [原文标题](../../raw/application-user-guide/agent-development.md)。
-- **Flow Agent**：可视化流程编排 Agent，支持节点拖拽、条件分支、循环与自定义 Python 脚本节点；完整兼容百炼内置工具（如 WebSearch、数据库连接器）及用户上传的 API 工具 [原文标题](../../raw/application-user-guide/agent-development.md)。
-- **Sandbox Agent**：完全开放的 Python 沙箱环境，允许 `pip install` 第三方包、读写临时文件、调用 `requests` 等标准库，适用于需要深度定制逻辑或集成私有 SDK 的场景 [原文标题](../../raw/application-user-guide/agent-development.md)。
+- **Managed Agent**：封装了意图识别、[工具调用](../concepts/tool-calling.md)、多轮记忆等能力，开箱即用，适用于标准客服、知识问答等场景；底层默认使用 Qwen-Max 或 Qwen-Plus（可配置），详见 [Agent 开发运行](../../raw/application-user-guide/agent-development.md)。  
+- **Flow Agent**：基于可视化流程图构建 LLM 应用，支持条件分支、并行调用、自定义函数节点；其能力边界由所选模型决定，当前仅支持 `qwen-turbo` 及以上模型的流式响应能力，参考 [Flow Agent 文档](../../raw/llm-application.md)。  
+- **Sandbox**：提供 Python 运行环境，允许用户编写任意逻辑（含异步 I/O、第三方库导入），但需自行实现工具注册、上下文维护与错误降级；该模式下模型调用必须通过 `dashscope.Generation.call()` 显式发起，具体约束见 [Sandbox](../../raw/agent-development/sandbox.md)。
 
 ## 关键参数
 
-| 参数名 | 类型 | 说明 | 默认值 |
-|--------|------|------|--------|
-| `timeout_ms` | int | 单次执行最大耗时（毫秒），超时强制中断 | 30000 |
-| `max_iterations` | int | 最大推理步数（仅 Managed/Flow Agent 有效） | 15 |
-| `enable_tracing` | bool | 是否启用全链路追踪（含 LLM 输入/输出、工具调用日志） | `false` |
-| `sandbox_runtime` | string | Sandbox Agent 的 Python 运行时版本 | `3.11` |
+| 参数 | 类型 | 说明 | 默认值 |
+|------|------|------|--------|
+| `model` | string | 指定主推理模型 ID，如 `qwen-max`；Sandbox 中若未显式调用则无效 | `qwen-plus` |
+| `enable_memory` | bool | 是否启用内置对话历史管理（仅 Managed/Flow Agent 生效） | `true` |
+| `max_iterations` | int | [工具调用](../concepts/tool-calling.md)最大循环次数（防死循环） | `5` |
+| `timeout` | int | 单次执行超时（秒），Sandbox 中作用于整个 `run()` 函数 | `30` |
 
-> **注意**：`max_iterations` 在 Sandbox Agent 中不生效，其迭代控制需由用户代码显式实现（如 `while` 循环 + `break` 条件），该行为与 [原文标题](../../raw/application-user-guide/agent-development/managed-agents.md) 中描述的“统一迭代上限”存在不一致，以实际运行时行为为准。
+> **注意**：`enable_memory` 在 Flow Agent 中实际受流程图中 Memory 节点配置控制，与该参数无直接关联；以 [Flow Agent 文档](../../raw/llm-application.md) 中的节点配置为准。
 
 ## 使用方式
 
-1. **创建 Agent**：在控制台「应用开发」→「新建 Agent」中选择类型（Managed / Flow / Sandbox）；
-2. **配置与调试**：填写基础参数，上传工具定义（OpenAPI Spec 或 JSON Schema），使用内置 Playground 实时测试输入输出；
-3. **部署与调用**：发布后获取 HTTP Endpoint，按标准 REST 接口调用（`POST /v1/agents/{id}/invoke`），请求体需包含 `input` 字段（字符串或对象）。
+1. **Managed Agent**：在控制台「Agent 开发」页创建，填写 [prompt](prompt.md)、配置工具集后一键部署，无需编码；  
+2. **Flow Agent**：通过画布拖拽组件构建流程，导出为 YAML 或直接发布为 API；  
+3. **Sandbox**：上传 `main.py` 入口文件及 `requirements.txt`，实现 `def run(inputs: dict) -> dict:` 接口；所有依赖须在 `requirements.txt` 中声明，否则运行时报错。
 
 ## 限制和注意事项
 
-- 所有 Agent 类型均禁止访问内网地址（`10.0.0.0/8`、`172.16.0.0/12`、`192.168.0.0/16`）、本地文件系统（Sandbox 除外）及执行系统命令（如 `os.system`）；
-- Managed Agent 不支持动态加载未预注册的工具，若需新增工具，必须先在「工具中心」完成注册并重新发布 Agent；
-- Flow Agent 的自定义 Python 节点受内存限制（2GB）和 CPU 时间片约束（单节点 ≤ 5s），超限将触发 `RuntimeError`；
-- Sandbox Agent 的 `pip install` 仅支持 PyPI 公共包，不支持 `--find-links` 或私有 index，且安装包体积总和不得超过 100MB。
+- Sandbox 模式不支持持久化存储、系统级进程或 `subprocess` 创建子 shell，且无法访问 `/tmp` 以外的文件路径；  
+- 所有 Agent 类型均禁止调用外部服务（如 HTTP 请求）**除非**已通过平台「网络代理」白名单审核；未审核调用将被拦截并返回 `403`；  
+- Managed Agent 的[工具调用](../concepts/tool-calling.md)结果最大返回长度为 8192 字符，超出部分将被截断——此限制未在 [Agent 开发运行](../../raw/application-user-guide/agent-development.md) 中明确说明，但实测生效；  
+- Flow Agent 的 `max_iterations` 参数对条件分支内的循环无效，仅约束顶层工具调用链深度。
 
 ## 来源文档
 

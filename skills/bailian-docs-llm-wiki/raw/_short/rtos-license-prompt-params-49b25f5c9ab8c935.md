@@ -2,12 +2,24 @@
 
 本文介绍如何基于设备端C SDK实现自定义提示词变量设置。
 
+<a id="1-开发准备"></a>
+
+<a id="7e4f5c9822yar"></a>
+
 ## 1\. 开发准备
+
+<a id="1-1-前置说明"></a>
+
+<a id="45375c150fq4y"></a>
 
 ### 1.1. 前置说明
 
--   本文依赖前置文档 “[基于设备端C SDK实现聊天能力](raw/_short/chat-capability-based-on-rtos-sdk-019f5c7ac38b3d0b.md)” ，请在阅读本文前先完成相关内容的学习与环境准备。
+-   本文依赖前置文档 “[基于设备端C SDK实现聊天能力](chat-capability-based-on-rtos-sdk-019f5c7ac38b3d0b.md)” ，请在阅读本文前先完成相关内容的学习与环境准备。
 -   默认开发者已完成SDK接入，并可正常运行语音交互流程。
+
+<a id="1-2-配置提示词"></a>
+
+<a id="086f9b03fduv7"></a>
 
 ### 1.2. 配置提示词
 
@@ -20,11 +32,21 @@
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4791619671/p1044761.png)
     
 
+<a id="2-端侧功能开发"></a>
+
+<a id="fceb26e9c95km"></a>
+
 ## 2\. 端侧功能开发
+
+<a id="2-1-示例代码"></a>
+
+<a id="367adb38e3514"></a>
 
 ### 2.1. 示例代码
 
-```
+<a id="code-block"></a>
+
+```text
 int main(void)
 {
     c_mmi_prompt_pram_t prompt[] = {
@@ -42,13 +64,23 @@ int main(void)
 }
 ```
 
+<a id="2-2-关键日志"></a>
+
+<a id="9ac34a0a0190i"></a>
+
 ### 2.2. 关键日志
 
-```
+<a id="code-block-2"></a>
+
+```text
 [UT][I][_gen_cmd_start]out [870][{"header":{"action":"run-task","streaming":"duplex","task_id":"Task Id"},"payload":{"task_group":"aigc","task":"multimodal-generation","function":"generation","model":"multimodal-dialog","input":{"workspace_id":"Workspace Id","app_id":"App Id","directive":"Start"},"parameters":{"upstream":{"sample_rate":16000,"type":"AudioAndVideo","mode":"tap2talk","audio_format":"pcm","enable_server_vad_start":false},"downstream":{"voice":"longanhuan","sample_rate":16000,"audio_format":"mp3","volume":50,"speech_rate":100,"pitch_rate":100,"intermediate_text":"transcript,dialog","transmit_rate_limit":16000},"client_info":{"user_id":"test_1","device":{"uuid":"test_1"}},"biz_params":{"user_prompt_params":{"name":"阿云","skill":"唱歌"},"user_defined_params":{"children_story":{"speaker_1_voice":"longxiaochun_v2"}}}}}}]
 ```
 
 如上述日志，可以看到在建立连接时的cmd\_start中包含我们自定义的提示词变量。
+
+<a id="3-典型应用场景介绍"></a>
+
+<a id="1df1710e0cls9"></a>
 
 ## 3\. 典型应用场景介绍
 

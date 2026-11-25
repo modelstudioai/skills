@@ -2,11 +2,19 @@
 
 创建数据库关联授权，在您指定的业务空间，对指定的数据源进行关联关系的创建，创建后可以对数据源下的表结构进行采集。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/DataAnalysisGBI/2024-08-23/CreateDatasourceAuthorization)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,177 +33,46 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>dataanalysisgbi:CreateDatasourceAuthorization</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-dataanalysisgbi:CreateDatasourceAuthorization
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /gbi/create/datasource HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>workspaceId</td><td>string</td><td>是</td><td><div><p>当前请求所使用的阿里云百炼业务空间 id</p></div></td><td>llm-2v3934xtp49esw64</td></tr><tr><td>body</td><td>object</td><td>否</td><td><div><p>请求体参数</p></div></td><td></td></tr><tr><td>type</td><td>integer</td><td>是</td><td><div><p>当前关联数据源的类型</p></div><div><div>枚举值：</div><ul><li>1：mysql类型数据源。</li><li>2：postgresql类型数据源。</li><li>10：hologress类型数据源。</li><li>11：mysql类型数据源使用vpc链接。</li><li>12：postgresql类型数据源使用vpc链接。</li><li>51：mysql类型虚拟数据源实例。</li><li>52：postgresql类型虚拟数据源实例。</li></ul></div></td><td>1</td></tr><tr><td>url</td><td>string</td><td>否</td><td><div><p>当前创建数据源的 jdbc 链接串地址</p></div></td><td>jdbc:mysql://rm-2zedvv990c8d8rj8ejo.mysql.rds.aliyuncs.com:3306/gbi_good_case</td></tr><tr><td>userName</td><td>string</td><td>否</td><td><div><p>登录当前数据源的用户名名称</p></div></td><td>root</td></tr><tr><td>password</td><td>string</td><td>否</td><td><div><p>登录当前数据源所使用的用户名的密码</p></div></td><td>password</td></tr><tr><td>vdbId</td><td>string</td><td>否</td><td><div><p>关联的类型为虚拟数据源时填写，内容为虚拟数据源的实例 id，其他情况无需填写</p></div></td><td>vdb-E0F693C8-9F72-5830-B81A-696C9D8EBBD1</td></tr></tbody></table>
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-当前请求所使用的阿里云百炼业务空间 id
-
-llm-2v3934xtp49esw64
-
-body
-
-object
-
-否
-
-请求体参数
-
-type
-
-integer
-
-是
-
-当前关联数据源的类型
-
-枚举值：
-
--   1：mysql类型数据源。
--   2：postgresql类型数据源。
--   10：hologress类型数据源。
--   11：mysql类型数据源使用vpc链接。
--   12：postgresql类型数据源使用vpc链接。
--   51：mysql类型虚拟数据源实例。
--   52：postgresql类型虚拟数据源实例。
-
-1
-
-url
-
-string
-
-否
-
-当前创建数据源的 jdbc 链接串地址
-
-jdbc:mysql://rm-2zedvv990c8d8rj8ejo.mysql.rds.aliyuncs.com:3306/gbi\_good\_case
-
-userName
-
-string
-
-否
-
-登录当前数据源的用户名名称
-
-root
-
-password
-
-string
-
-否
-
-登录当前数据源所使用的用户名的密码
-
-password
-
-vdbId
-
-string
-
-否
-
-关联的类型为虚拟数据源时填写，内容为虚拟数据源的实例 id，其他情况无需填写
-
-vdb-E0F693C8-9F72-5830-B81A-696C9D8EBBD1
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Result |  |
+| data | any | 返回信息 | true |
+| errorMsg | string | 错误描述信息 | NoAuth |
+| code | string | 错误码 | NoAuth |
+| success | boolean | true 接口调用成功，false 接口调用失败 | true |
+| requestId | string | 请求 id，每次请求都是唯一值，便于后续排查问题 | E0F693C8-9F72-5830-B81A-696C9D8EBBD1 |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Result
-
-data
-
-any
-
-返回信息
-
-true
-
-errorMsg
-
-string
-
-错误描述信息
-
-NoAuth
-
-code
-
-string
-
-错误码
-
-NoAuth
-
-success
-
-boolean
-
-true 接口调用成功，false 接口调用失败
-
-true
-
-requestId
-
-string
-
-请求 id，每次请求都是唯一值，便于后续排查问题
-
-E0F693C8-9F72-5830-B81A-696C9D8EBBD1
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -203,7 +80,9 @@ E0F693C8-9F72-5830-B81A-696C9D8EBBD1
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "data": true,
   "errorMsg": "NoAuth",
@@ -213,30 +92,15 @@ E0F693C8-9F72-5830-B81A-696C9D8EBBD1
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-401
-
-NoAuth
-
-Bad Request: Workspace.Illegal.Auth.
-
-当前所使用的账号无所指定业务空间的权限
-
-401
-
-Internal.Error
-
-Bad Request: Internal Error.
-
-内部错误，请联系客服人员排查
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 401 | NoAuth | Bad Request: Workspace.Illegal.Auth. | 当前所使用的账号无所指定业务空间的权限 |
+| 401 | Internal.Error | Bad Request: Internal Error. | 内部错误，请联系客服人员排查 |
 
 访问[错误中心](https://api.aliyun.com/document/DataAnalysisGBI/2024-08-23/errorCode)查看更多错误码。

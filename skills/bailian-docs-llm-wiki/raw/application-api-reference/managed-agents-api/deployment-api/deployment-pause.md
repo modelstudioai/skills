@@ -2,166 +2,76 @@
 
 暂停指定 Deployment，停止定时触发。
 
+<a id="前提"></a>
+
+<a id="h-pause-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
+已完成 Endpoint 与鉴权配置，详见[API 总览与认证](../managed-agents-api-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-pause-endpoint"></a>
 
 ## 接口
 
 **POST** `/deployments/{deployment_id}/pause`
 
-## 路径参数
+<table><tbody><tr><td><a id="h-pause-path"></a><h2>路径参数</h2><p><strong>deployment_id</strong> <code>string</code> <strong>（必选）</strong></p><p>Deployment ID</p></td><td><a id="h-pause-eg"></a><h2>请求示例</h2><a id="fig-code-group"></a><div><a id="fig-code-group-curl-tab"></a>curl<div><a id="code-code-group-curl"></a><pre class="language-bash"><code>curl -X POST &quot;$AGENTSTUDIO_URL/deployments/depl_xxx/pause&quot; \
+  -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot;
+</code></pre></div></div></td></tr></tbody></table>
 
-**deployment\_id** `string` **（必选）**
-
-Deployment ID
-
-## 请求示例
-
-curl
-
-```
-curl -X POST "$AGENTSTUDIO_URL/deployments/depl_xxx/pause" \
-  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
-```
-
-### 响应字段
-
-**id** `string`
-
-Deployment ID
-
-**type** `string`
-
-固定为 `deployment`
-
-**name** `string`
-
-Deployment 名称
-
-**description** `string`
-
-Deployment 用途说明
-
-**agent** `object`
-
-关联 Agent 在锁定版本的快照
-
-**environment\_id** `string`
-
-关联 Environment ID
-
-**schedule** `object`
-
-定时触发配置。暂停后 `next_run_at` 为 `null`
-
-**initial\_events** `array<object>`
-
-触发时发送给 Agent 的初始事件
-
-**resources** `array<object>`
-
-挂载的文件资源
-
-**vault\_ids** `array<string>`
-
-关联 Vault ID 列表
-
-**metadata** `object`
-
-业务自定义键值对
-
-**status** `string`
-
-此操作后固定为 `paused`
-
-**paused\_reason** `object`
-
-暂停原因
-
-**archived\_at** `string | null`
-
-归档时间，未归档时为 `null`
-
-**created\_at** `string`
-
-创建时间，ISO 8601
-
-**updated\_at** `string`
-
-最近更新时间，ISO 8601
-
-**request\_id** `string`
-
-请求唯一标识
-
-## 响应
-
-```
-{
-  "id": "depl_xxx",
-  "type": "deployment",
-  "name": "每日订单汇总",
-  "status": "paused",
-  "agent": {
-    "id": "agent_xxx",
-    "version": 12
+<table><tbody><tr><td><a id="h-pause-dto"></a><h3>响应字段</h3><p><strong>id</strong> <code>string</code></p><p>Deployment ID</p><p><strong>type</strong> <code>string</code></p><p>固定为 <code>deployment</code></p><p><strong>name</strong> <code>string</code></p><p>Deployment 名称</p><p><strong>description</strong> <code>string</code></p><p>Deployment 用途说明</p><p><strong>agent</strong> <code>object</code></p><p>关联 Agent 在锁定版本的快照</p><p><strong>environment_id</strong> <code>string</code></p><p>关联 Environment ID</p><p><strong>schedule</strong> <code>object</code></p><p>定时触发配置。暂停后 <code>next_run_at</code> 为 <code>null</code></p><p><strong>initial_events</strong> <code>array&lt;object&gt;</code></p><p>触发时发送给 Agent 的初始事件</p><p><strong>resources</strong> <code>array&lt;object&gt;</code></p><p>挂载的文件资源</p><p><strong>vault_ids</strong> <code>array&lt;string&gt;</code></p><p>关联 Vault ID 列表</p><p><strong>metadata</strong> <code>object</code></p><p>业务自定义键值对</p><p><strong>status</strong> <code>string</code></p><p>此操作后固定为 <code>paused</code></p><p><strong>paused_reason</strong> <code>object</code></p><p>暂停原因</p><p><strong>archived_at</strong> <code>string | null</code></p><p>归档时间，未归档时为 <code>null</code></p><p><strong>created_at</strong> <code>string</code></p><p>创建时间，ISO 8601</p><p><strong>updated_at</strong> <code>string</code></p><p>最近更新时间，ISO 8601</p><p><strong>request_id</strong> <code>string</code></p><p>请求唯一标识</p></td><td><a id="h-pause-resp"></a><h2>响应</h2><a id="code-block"></a><pre class="language-json"><code>{
+  &quot;id&quot;: &quot;depl_xxx&quot;,
+  &quot;type&quot;: &quot;deployment&quot;,
+  &quot;name&quot;: &quot;每日订单汇总&quot;,
+  &quot;status&quot;: &quot;paused&quot;,
+  &quot;agent&quot;: {
+    &quot;id&quot;: &quot;agent_xxx&quot;,
+    &quot;version&quot;: 12
   },
-  "environment_id": "env_xxx",
-  "schedule": {
-    "type": "cron",
-    "expression": "0 9 * * 1-5",
-    "timezone": "Asia/Shanghai",
-    "last_run_at": null,
-    "next_run_at": null
+  &quot;environment_id&quot;: &quot;env_xxx&quot;,
+  &quot;schedule&quot;: {
+    &quot;type&quot;: &quot;cron&quot;,
+    &quot;expression&quot;: &quot;0 9 * * 1-5&quot;,
+    &quot;timezone&quot;: &quot;Asia/Shanghai&quot;,
+    &quot;last_run_at&quot;: null,
+    &quot;next_run_at&quot;: null
   },
-  "initial_events": [
+  &quot;initial_events&quot;: [
     {
-      "type": "message",
-      "role": "user",
-      "content": [
+      &quot;type&quot;: &quot;message&quot;,
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
         {
-          "type": "text",
-          "text": "汇总昨日订单数据"
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;汇总昨日订单数据&quot;
         }
       ]
     }
   ],
-  "resources": [],
-  "vault_ids": [],
-  "metadata": {},
-  "paused_reason": {
-    "type": "manual"
+  &quot;resources&quot;: [],
+  &quot;vault_ids&quot;: [],
+  &quot;metadata&quot;: {},
+  &quot;paused_reason&quot;: {
+    &quot;type&quot;: &quot;manual&quot;
   },
-  "archived_at": null,
-  "created_at": "2026-07-28T01:00:00Z",
-  "updated_at": "2026-07-28T01:00:00Z",
-  "request_id": "req_xxx"
+  &quot;archived_at&quot;: null,
+  &quot;created_at&quot;: &quot;2026-07-28T01:00:00Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-07-28T01:00:00Z&quot;,
+  &quot;request_id&quot;: &quot;req_xxx&quot;
 }
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="错误码"></a>
+
+<a id="h-pause-err"></a>
 
 ## 错误码
 
-**状态码**
-
-**错误码**
-
-**说明**
-
-400
-
-`InvalidParameter`
-
-Required parameter missing or invalid.
-
-401
-
-`InvalidApiKey`
-
-Invalid API-key provided.
-
-409
-
-`DEPLOYMENT_STATE_CONFLICT`
-
-Cannot pause an archived deployment.
+| 状态码 | 错误码 | 说明 |
+| --- | --- | --- |
+| 400 | `InvalidParameter` | Required parameter missing or invalid. |
+| 401 | `InvalidApiKey` | Invalid API-key provided. |
+| 409 | `DEPLOYMENT_STATE_CONFLICT` | Cannot pause an archived deployment. |

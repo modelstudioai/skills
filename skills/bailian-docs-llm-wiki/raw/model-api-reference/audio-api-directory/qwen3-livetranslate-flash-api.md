@@ -2,9 +2,13 @@
 
 本文介绍通过 OpenAI 兼容接口调用 qwen3-livetranslate-flash 模型的输入与输出参数。
 
-> 相关文档：[音视频文件翻译-千问](raw/model-user-guide/model-experience/omni-modal/qwen3-livetranslate-flash.md)
+> 相关文档：[音视频文件翻译-千问](../../model-user-guide/model-experience/omni-modal/qwen3-livetranslate-flash.md)
 
 > 不支持通过 DashScope 接口调用。
+
+<a id="openai-兼容"></a>
+
+<a id="d397bcc41eu3q"></a>
 
 ## OpenAI 兼容
 
@@ -14,14 +18,20 @@ POST`https://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/cha
 
 OpenAI SDK 的 `base_url` 为上述请求地址去掉末尾的 `/chat/completions`。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+>
+> 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
--   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+> 您需要已[获取与配置 API Key](../preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过OpenAI SDK进行调用，需要[安装SDK](../preparations/install-sdk.md)。
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+<a id="请求体"></a>
 
-> 您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过OpenAI SDK进行调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+<a id="afcd41d2b57zf"></a>
 
 ### 请求体
 
@@ -33,17 +43,23 @@ OpenAI SDK 的 `base_url` 为上述请求地址去掉末尾的 `/chat/completion
 
 消息数组，用于向大模型传递上下文。仅支持传入一个 User Message。
 
+<a id="accordion-消息类型"></a>
+
 消息类型
 
 `User Message`object（必选）
 
 用户消息。
 
+<a id="accordion-属性"></a>
+
 属性
 
 `content`array（必选）
 
 消息内容。
+
+<a id="accordion-属性-2"></a>
 
 属性
 
@@ -64,11 +80,13 @@ OpenAI SDK 的 `base_url` 为上述请求地址去掉末尾的 `/chat/completion
 
 输入的音频信息。当`type`为`input_audio`时是必选参数。
 
+<a id="accordion-属性-3"></a>
+
 属性
 
 `data`string（必选）
 
-音频的 URL 或Base64 Data URL。传入本地文件请参见：[输入 Base64 编码的本地文件](https://help.aliyun.com/zh/model-studio/qwen-omni#c516d1e824x03)。
+音频的 URL 或Base64 Data URL。传入本地文件请参见：[输入 Base64 编码的本地文件](../../model-user-guide/model-experience/omni-modal/qwen-omni.md#c516d1e824x03)。
 
 `format`string（必选）
 
@@ -78,11 +96,13 @@ OpenAI SDK 的 `base_url` 为上述请求地址去掉末尾的 `/chat/completion
 
 输入的视频文件信息。当`type`为`video_url`时是必选参数。
 
+<a id="accordion-属性-4"></a>
+
 属性
 
 `url`string（必选）
 
-视频文件的公网 URL 或 Base64 Data URL。输入本地视频文件请参见[输入 Base64 编码的本地文件](https://help.aliyun.com/zh/model-studio/qwen-omni#c516d1e824x03)。
+视频文件的公网 URL 或 Base64 Data URL。输入本地视频文件请参见[输入 Base64 编码的本地文件](../../model-user-guide/model-experience/omni-modal/qwen-omni.md#c516d1e824x03)。
 
 `role`string（必选）
 
@@ -97,6 +117,8 @@ OpenAI SDK 的 `base_url` 为上述请求地址去掉末尾的 `/chat/completion
 `stream_options`object（可选）
 
 流式输出的配置项，仅在 `stream` 为 `true` 时生效。
+
+<a id="accordion-属性-5"></a>
 
 属性
 
@@ -124,11 +146,13 @@ OpenAI SDK 的 `base_url` 为上述请求地址去掉末尾的 `/chat/completion
 
 输出音频的音色与格式。`modalities`参数需为`["text","audio"]`。
 
+<a id="accordion-属性-6"></a>
+
 属性
 
 `voice`string（必选）
 
-输出音频的音色。请参见[支持的音色](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash#0a5bde7593gdk)。
+输出音频的音色。请参见[支持的音色](../../model-user-guide/model-experience/omni-modal/qwen3-livetranslate-flash.md#0a5bde7593gdk)。
 
 `format`string（必选）
 
@@ -138,7 +162,7 @@ OpenAI SDK 的 `base_url` 为上述请求地址去掉末尾的 `/chat/completion
 
 用于限制模型输出的最大 Token 数。若生成内容超过此值，响应将被截断。
 
-默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/machine-translation#154957e783dxk)。
+默认值与最大值均为模型的最大输出长度，请参见[模型选型](../../model-user-guide/model-experience/text-generation-model/specialized-models/machine-translation.md#154957e783dxk)。
 
 `seed`integer（可选）
 
@@ -206,21 +230,29 @@ top\_p越高，生成的内容更多样。反之更确定。
 
 需配置的翻译参数。
 
+<a id="accordion-属性-7"></a>
+
 属性
 
 `source_lang`string（可选）
 
-源语言的英文全称，请参见[支持的语种](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash#4ffd192226f0s)。若不设置，模型会自动识别输入的语种。
+源语言的英文全称，请参见[支持的语种](../../model-user-guide/model-experience/omni-modal/qwen3-livetranslate-flash.md#4ffd192226f0s)。若不设置，模型会自动识别输入的语种。
 
 `target_lang`string（必选）
 
-目标语言的英文全称，请参见[支持的语种](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash#4ffd192226f0s)。
+目标语言的英文全称，请参见[支持的语种](../../model-user-guide/model-experience/omni-modal/qwen3-livetranslate-flash.md#4ffd192226f0s)。
 
 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中，配置方式为：`extra_body={"translation_options": xxx}`；通过 Node.js SDK 或 HTTP 方式调用时，请作为顶层参数传递。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -277,9 +309,13 @@ for chunk in completion:
     print(chunk)
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const client = new OpenAI({
@@ -340,9 +376,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 使用请求地址所选地域和业务空间的 API Key。
@@ -382,6 +422,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="chat响应chunk对象-流式输出"></a>
+
+<a id="d48fc149a0w4n"></a>
+
 ### chat响应chunk对象（流式输出）
 
 `id`string
@@ -392,11 +436,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 模型生成内容的数组。若设置`include_usage`参数为`true`，则`choices`在最后一个chunk中为空数组。
 
+<a id="accordion-属性-8"></a>
+
 属性
 
 `delta`object
 
 请求的增量对象。
+
+<a id="accordion-属性-9"></a>
 
 属性
 
@@ -415,6 +463,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 `audio`object
 
 输出的音频信息。
+
+<a id="accordion-属性-10"></a>
 
 属性
 
@@ -482,6 +532,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 本次请求消耗的Token。只在`include_usage`为`true`时，在最后一个chunk显示。
 
+<a id="accordion-属性-11"></a>
+
 属性
 
 `completion_tokens`integer
@@ -499,6 +551,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 `completion_tokens_details`object
 
 输出 Token 的详细信息。
+
+<a id="accordion-属性-12"></a>
 
 属性
 
@@ -518,6 +572,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 输入 Token的细粒度分类。
 
+<a id="accordion-属性-13"></a>
+
 属性
 
 `audio_tokens`integer
@@ -534,9 +590,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 输入视频的 Token 数。
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-文本输出chunk-tab"></a>
+
 文本输出chunk
 
-```
+<a id="code-code-group-2-文本输出chunk"></a>
+
+```json
 {
   "id": "chatcmpl-c22a54b8-40cc-4a1d-988b-f84cdf86868f",
   "choices": [
@@ -562,9 +624,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="fig-code-group-2-音频输出chunk-tab"></a>
+
 音频输出chunk
 
-```
+<a id="code-code-group-2-音频输出chunk"></a>
+
+```json
 {
   "id": "chatcmpl-c22a54b8-40cc-4a1d-988b-f84cdf86868f",
   "choices": [
@@ -595,9 +661,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="fig-code-group-2-token-消耗chunk-tab"></a>
+
 Token 消耗chunk
 
-```
+<a id="code-code-group-2-token-消耗chunk"></a>
+
+```json
 {
   "id": "chatcmpl-c22a54b8-40cc-4a1d-988b-f84cdf86868f",
   "choices": [],
@@ -625,3 +695,5 @@ Token 消耗chunk
   }
 }
 ```
+
+![](data:image/png;base64,)

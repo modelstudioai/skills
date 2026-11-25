@@ -2,11 +2,19 @@
 
 Agent 版本机制、标注测试集评测、Session 版本锁定语义与灰度回滚的做法，把提示词从应用代码剥离为服务端可版本化的资源。
 
+<a id="概述"></a>
+
+<a id="h-pv-intro"></a>
+
 ## 概述
 
 本篇介绍 Managed Agents 的 Agent 版本机制、版本灰度与回滚做法，示例统一使用 REST/curl。
 
 核心是把“提示词”从应用代码里剥离出来，变成服务端可版本化的资源，从而独立于代码走评审与晋升流程。涉及的机制：`POST /agents/{id}`（更新即升 version）、Session 与 Agent 版本的绑定关系（**支持显式锁定历史版本**）、以及 `GET /agents/{id}/versions` 列出历史版本。
+
+<a id="场景"></a>
+
+<a id="h-pv-scenario"></a>
 
 ## 场景
 
@@ -22,11 +30,17 @@ Agent 版本机制、标注测试集评测、Session 版本锁定语义与灰度
 -   **不改 Agent 当前版本，直接锁定历史版本做对比评测**；
 -   把出现回归的 Agent 拉回 v1 行为，全程无需部署。
 
+<a id="环境变量约定"></a>
+
+<a id="h-pv-env"></a>
+
 ## 环境变量约定
 
 本篇 curl 示例统一使用以下变量：
 
-```
+<a id="code-block"></a>
+
+```bash
 AGENTSTUDIO_URL="https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio"
 DASHSCOPE_API_KEY="<你的 DashScope API Key>"
 AGENT_ID="agent_xxx"     # 创建 Agent 后回填
@@ -34,13 +48,21 @@ AGENT_ID="agent_xxx"     # 创建 Agent 后回填
 
 鉴权用 `Authorization: Bearer $DASHSCOPE_API_KEY`，一把 Key 覆盖工作空间内全部资源。当前区域仅 `cn-beijing`。模型 ID 用 `qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus`（本篇用 `qwen3.7-plus`，分类任务足够）。
 
-**说明**本篇的 Agent 是纯 LLM 分类器（无工具调用），**不需要 Environment**——Session 不挂 `environment_id` 也能跑。只有要跑 bash / 读写文件的 Agent 才需要沙箱，见[入门：搭一个数据分析 Agent](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)。
+> **说明**
+>
+> 本篇的 Agent 是纯 LLM 分类器（无工具调用），**不需要 Environment**——Session 不挂 `environment_id` 也能跑。只有要跑 bash / 读写文件的 Agent 才需要沙箱，见[入门：搭一个数据分析 Agent](managed-agents-data-analysis-2249e7a887786f0b.md)。
+
+<a id="第一步-建-agent-v1"></a>
+
+<a id="h-pv-step1"></a>
 
 ## 第一步：建 Agent（v1）
 
 system prompt 让 Agent 把每条工单分类到“团队 + 优先级”，只回一行 JSON：
 
-```
+<a id="code-block-2"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -53,11 +75,17 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 响应带 `version: 1`。之后每次 `POST /agents/{id}`（注意：**更新动词是 POST，不是 PATCH——PATCH 返回 405**；body 里 `name` 与当前 `version` 都是必填）都在同一个 `id` 下产生新版本，版本号自增；这个版本号就是后续绑定和回滚的依据。把响应的 `id` 填入 `AGENT_ID`。
 
+<a id="第二步-加载标注测试集"></a>
+
+<a id="h-pv-step2"></a>
+
 ## 第二步：加载标注测试集
 
 评测 fixture 用下面 4 条工单（每团队 1 条；其中 T3 特意写成“提到 API 用量的账单问题”，为后面制造回归）：
 
-```
+<a id="code-block-3"></a>
+
+```json
 [
   { "id": "T1", "expected": "api-platform",
     "subject": "Error 429 Too Many Requests on POST /v1/chat",
@@ -76,6 +104,10 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 这份测试集独立于 Agent，存在自己的评测脚本或数据文件里即可（每项含工单文本 + 期望团队）。
 
+<a id="第三步-给-v1-打分-建立基线"></a>
+
+<a id="h-pv-step3"></a>
+
 ## 第三步：给 v1 打分（建立基线）
 
 对每条工单跑一遍 v1，得到基线成绩。每条工单的评测流程（下称 triage）如下：
@@ -86,25 +118,19 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 4.  收集 `assistant` 输出文本，解析出 JSON，与 ground truth 比对；
 5.  删除 Session（评测完即删，不留痕）。
 
+<a id="session-与-agent-版本的绑定语义-重要"></a>
+
+<a id="h-pv-binding"></a>
+
 ### Session 与 Agent 版本的绑定语义（重要）
 
 `agent` 字段有**两种传法**，决定了 Session 锁定哪个版本：
 
-`agent` 字段形式
-
-锁定的版本
-
-`"agent_xxx"`（字符串）
-
-创建那一刻的**最新**版本
-
-`{ "id": "agent_xxx", "version": N }`（对象）
-
-**显式指定的版本 N**；版本不存在则 `404 "Agent not found"`
-
-`{ "id": "agent_xxx" }`（对象不带 version）
-
-同字符串形式，锁最新
+| `agent` 字段形式 | 锁定的版本 |
+| --- | --- |
+| `"agent_xxx"`（字符串） | 创建那一刻的**最新**版本 |
+| `{ "id": "agent_xxx", "version": N }`（对象） | **显式指定的版本 N**；版本不存在则 `404 "Agent not found"` |
+| `{ "id": "agent_xxx" }`（对象不带 version） | 同字符串形式，锁最新 |
 
 -   Session 在整个生命周期内都使用这份快照，此后即使 Agent 继续升版，这条已存在的 Session 也不受影响；
 -   顶层加 `version` 字段（与 `agent` 平级）**无效**——会被忽略，仍锁最新。
@@ -114,11 +140,17 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 -   **要评测任意历史版本**，直接传对象形式 `{id, version: N}`，不需要先把它变成“当前最新”（与直觉相反：评测历史版本无需先回滚）；
 -   **默认生产流量**走字符串形式锁最新版本，因此“生产用哪个版本”=“谁控制 Agent 的最新版本状态”。
 
+<a id="triage-的-rest-实现"></a>
+
+<a id="h-pv-triage"></a>
+
 ### triage 的 REST 实现
 
 先创建 Session（`agent` 传 Agent ID 字符串，锁定当前最新版本快照；纯 LLM Agent 无需 `environment_id`）：
 
-```
+<a id="code-block-4"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/sessions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -128,11 +160,15 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
   }'
 ```
 
-**说明**Session 创建**无初始输入字段**（没有 `initial_events`），必须“先建 Session，再发一条 `message` 事件”两步走。
+> **说明**
+>
+> Session 创建**无初始输入字段**（没有 `initial_events`），必须“先建 Session，再发一条 `message` 事件”两步走。
 
 拿到响应里的 `SESSION_ID` 后，发工单（把 `Subject: ...` 和正文拼进 text）：
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -146,16 +182,22 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
 
 轮询历史事件，取最后一条，直到 Session 回到 idle：
 
-```
+<a id="code-block-6"></a>
+
+```bash
 curl -s "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events?order=desc&limit=1" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-**说明**解析细节：判断结束看的 `session_status` / `stop_reason` 在 `session_status` 类型事件的 `content[0].data` 里（`{"stop_reason": {"type": "end_turn"}, "session_status": "idle"}`），不在事件顶层；顶层 `type` 为 `session_status` 即回合结束标记。建议设 60 秒超时。每条 triage 约 8~11 秒。
+> **说明**
+>
+> 解析细节：判断结束看的 `session_status` / `stop_reason` 在 `session_status` 类型事件的 `content[0].data` 里（`{"stop_reason": {"type": "end_turn"}, "session_status": "idle"}`），不在事件顶层；顶层 `type` 为 `session_status` 即回合结束标记。建议设 60 秒超时。每条 triage 约 8~11 秒。
 
 从 `assistant` 消息里拼接 `content` 文本、`json.loads` 解析出 `{"team", "priority"}`，与期望团队比对；最后删除 Session：
 
-```
+<a id="code-block-7"></a>
+
+```bash
 curl -X DELETE "$AGENTSTUDIO_URL/sessions/$SESSION_ID" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
@@ -166,25 +208,16 @@ score 逻辑：对每条工单跑一次 triage，按团队统计“命中 / 总�
 
 **v1 基线结果（4 条集，qwen3.7-plus）：**
 
-团队
+| 团队 | 命中/总数 |
+| --- | --- |
+| api-platform | 1/1 |
+| auth | 1/1 |
+| billing | 1/1（T3 提到 API 用量，仍正确路由 billing） |
+| dashboard | 1/1 |
 
-命中/总数
+<a id="第四步-发布-v2"></a>
 
-api-platform
-
-1/1
-
-auth
-
-1/1
-
-billing
-
-1/1（T3 提到 API 用量，仍正确路由 billing）
-
-dashboard
-
-1/1
+<a id="h-pv-step4"></a>
 
 ## 第四步：发布 v2
 
@@ -192,10 +225,15 @@ PM 想加一条路由规则：凡是提到 API 用量、限流、配额、请求
 
 新的 system prompt = v1 的内容，追加：
 
-```
+<a id="code-block-8"></a>
+
+```text
 ROUTING RULE: If the ticket text mentions API usage, rate limits, quotas, or request volume, route to api-platform. Apply this rule before any other consideration; do not second-guess it based on the rest of the ticket.
 ```
-```
+
+<a id="code-block-9"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -207,6 +245,10 @@ curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID" \
 ```
 
 响应的 `version` 会变成 `2`。
+
+<a id="插曲-代码评审去哪了"></a>
+
+<a id="h-pv-review"></a>
 
 ## 插曲：代码评审去哪了？
 
@@ -220,6 +262,10 @@ curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID" \
 
 落地要点：默认流量（字符串形式）绑定“创建时刻的最新版本快照”，因此“生产用哪个版本”应落在**对 Agent 最新版本的发布控制**上——谁有权限更新 Agent、何时把某个配置发布为当前最新版本。建版本很廉价，SDLC 依然完整。
 
+<a id="第五步-给-v2-打分"></a>
+
+<a id="h-pv-step5"></a>
+
 ## 第五步：给 v2 打分
 
 用同一套评测跑 v2。有两种做法：
@@ -231,25 +277,16 @@ curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID" \
 
 **v2 结果：**
 
-团队
+| 团队 | 命中/总数 |
+| --- | --- |
+| api-platform | 1/1 |
+| auth | 1/1 |
+| billing | 0/1（**回归！** T3 被路由到 api-platform） |
+| dashboard | 1/1 |
 
-命中/总数
+<a id="第六步-回滚"></a>
 
-api-platform
-
-1/1
-
-auth
-
-1/1
-
-billing
-
-0/1（**回归！** T3 被路由到 api-platform）
-
-dashboard
-
-1/1
+<a id="h-pv-step6"></a>
 
 ## 第六步：回滚
 
@@ -257,7 +294,9 @@ dashboard
 
 **回滚做法：发布一个与 v1 等价的新版本。**默认流量（字符串形式）绑定“创建时刻的最新版本”，所以要让生产行为回到 v1，就把 v1 的 system prompt 原样再发一次 `POST /agents/{id}`，产生 v3（版本号继续自增，配置等价于 v1）：
 
-```
+<a id="code-block-10"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -278,14 +317,26 @@ curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID" \
 -   生产可以先留在 v3，或用小流量金丝雀——一部分请求传 `{id, version: N}` 试新版本，其余走默认最新；
 -   修好后建一个新版本，走同样的评测 → 晋升流程。
 
+<a id="清理"></a>
+
+<a id="h-pv-cleanup"></a>
+
 ## 清理
 
-```
+<a id="code-block-11"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID/archive" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-**说明**用 archive（归档）而非删除：**Agent 不支持 DELETE（返回 405）**，归档保留审计记录、拆掉容器、停止计量；版本历史是它存在的意义。评测用的 Session 在循环里已即时 DELETE。
+> **说明**
+>
+> 用 archive（归档）而非删除：**Agent 不支持 DELETE（返回 405）**，归档保留审计记录、拆掉容器、停止计量；版本历史是它存在的意义。评测用的 Session 在循环里已即时 DELETE。
+
+<a id="小结"></a>
+
+<a id="h-pv-summary"></a>
 
 ## 小结
 
@@ -296,18 +347,26 @@ curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID/archive" \
 -   **理解版本绑定语义**：字符串形式锁最新、对象形式 `{id, version}` 锁指定版本（不存在则 404）、顶层 `version` 字段无效；已建立的 Session 不受后续升版影响；
 -   **评测历史版本不需要先回滚**——对象形式直接锁定任意版本对比；回滚是为了让**默认流量**恢复旧行为。
 
+<a id="附-列出全部版本"></a>
+
+<a id="h-pv-versions"></a>
+
 ## 附：列出全部版本
 
 查看某个 Agent 的全部历史版本：
 
-```
+<a id="code-block-12"></a>
+
+```bash
 curl -s "$AGENTSTUDIO_URL/agents/$AGENT_ID/versions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
 响应结构（版本按新到旧排列）：
 
-```
+<a id="code-block-13"></a>
+
+```json
 {
   "data": [
     {
@@ -332,8 +391,12 @@ curl -s "$AGENTSTUDIO_URL/agents/$AGENT_ID/versions" \
 
 注意 `config` 是**内部存储格式的直出**：字段用驼峰（`mcpServers`、`workspaceId`、`gmtCreate`），与创建 API 的 snake\_case 不同；每版都带完整 `system` 与 `created_at`，可用于审计、对比历史提示词，以及决定把哪个版本晋升为生产版本。
 
+<a id="下一步"></a>
+
+<a id="h-pv-next"></a>
+
 ## 下一步
 
--   [进阶：多智能体定制复杂提案](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)：roster 成员的版本锁定语义与这里的 Session 锁定是对偶的。
--   [进阶：生产化定时晨报机器人](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)：Deployment 的版本锁定与漂移陷阱。
--   [配置智能体](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-agent-definition.md)：版本与更新语义的控制台视角。
+-   [进阶：多智能体定制复杂提案](managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)：roster 成员的版本锁定语义与这里的 Session 锁定是对偶的。
+-   [进阶：生产化定时晨报机器人](../application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)：Deployment 的版本锁定与漂移陷阱。
+-   [配置智能体](../application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-agent-definition.md)：版本与更新语义的控制台视角。

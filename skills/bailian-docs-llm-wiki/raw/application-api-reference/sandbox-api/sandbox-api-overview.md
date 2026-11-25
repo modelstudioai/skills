@@ -2,138 +2,109 @@
 
 Sandbox API 的前提条件、Endpoint 拼装、鉴权方式，以及实例与模版管理的可用接口和错误响应。
 
-**说明**调用前请先配置[认证](raw/application-api-reference/sandbox-api/sandbox-api-authentication.md)；错误处理见[错误码](raw/application-api-reference/sandbox-api/sandbox-api-errors.md)。
+> **说明**
+>
+> 调用前请先配置[认证](sandbox-api-authentication.md)；错误处理见[错误码](sandbox-api-errors.md)。
 
 Sandbox API 兼容 [E2B](https://e2b.dev/docs) 协议，提供沙箱实例的生命周期管理、模版管理与文件上传能力。管控面请求经阿里云百炼 AI 网关转发。
 
+<a id="前提条件"></a>
+
+<a id="h-sandbox-api-prereq"></a>
+
 ## 前提条件
 
-1.  已开通阿里云百炼，并[创建 API Key](raw/application-api-reference/sandbox-api/sandbox-api-authentication.md)。
-2.  **完成服务授权**：首次使用 Sandbox 需完成 SLR 授权，详见[快速开始](raw/application-user-guide/agent-development/sandbox/sandbox-start-using/sandbox-quick-start.md)。
+1.  已开通阿里云百炼，并[创建 API Key](sandbox-api-authentication.md)。
+2.  **完成服务授权**：首次使用 Sandbox 需完成 SLR 授权，详见[快速开始](../../application-user-guide/agent-development/sandbox/sandbox-start-using/sandbox-quick-start.md)。
 3.  **获取工作空间 ID**：阿里云百炼控制台右上角下拉菜单查看，形如 `{workspace_id}`。
+
+<a id="endpoint"></a>
+
+<a id="h-sandbox-api-endpoint"></a>
 
 ## Endpoint
 
 API 基地址按工作空间与地域拼装：
 
-```
+<a id="code-block"></a>
+
+```text
 https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio/sandbox
 ```
 
 -   `workspace_id`：工作空间 ID
 -   `region`：地域 ID，当前仅支持 `cn-beijing`
 
+<a id="可用-api"></a>
+
+<a id="h-sandbox-api-list"></a>
+
 ## 可用 API
+
+<a id="实例管理"></a>
+
+<a id="h-sandbox-api-list-instance"></a>
 
 ### 实例管理
 
-**能力**
+| 能力 | 方法 | 路径 |
+| --- | --- | --- |
+| 创建实例 | `POST` | `/sandboxes` |
+| 列举实例 | `GET` | `/v2/sandboxes` |
+| 获取实例 | `GET` | `/sandboxes/{sandboxID}` |
+| 连接实例 | `POST` | `/sandboxes/{sandboxID}/connect` |
+| 暂停实例 | `POST` | `/sandboxes/{sandboxID}/pause` |
+| 恢复实例 | `POST` | `/sandboxes/{sandboxID}/resume` |
+| 释放实例 | `DELETE` | `/sandboxes/{sandboxID}` |
 
-**方法**
+<a id="模版管理"></a>
 
-**路径**
-
-创建实例
-
-`POST`
-
-`/sandboxes`
-
-列举实例
-
-`GET`
-
-`/v2/sandboxes`
-
-获取实例
-
-`GET`
-
-`/sandboxes/{sandboxID}`
-
-连接实例
-
-`POST`
-
-`/sandboxes/{sandboxID}/connect`
-
-暂停实例
-
-`POST`
-
-`/sandboxes/{sandboxID}/pause`
-
-恢复实例
-
-`POST`
-
-`/sandboxes/{sandboxID}/resume`
-
-释放实例
-
-`DELETE`
-
-`/sandboxes/{sandboxID}`
+<a id="h-sandbox-api-list-template"></a>
 
 ### 模版管理
 
-**能力**
+| 能力 | 方法 | 路径 |
+| --- | --- | --- |
+| 创建模版 | `POST` | `/v3/templates` |
+| 列举模版 | `GET` | `/v2/templates` |
+| 获取模版 | `GET` | `/templates/{templateCode}` |
+| 更新模版 | `PUT` | `/templates/{templateCode}` |
+| 获取构建状态 | `GET` | `/templates/{templateCode}/builds/{buildID}/status` |
+| 删除模版 | `DELETE` | `/templates/{templateCode}` |
 
-**方法**
+> **说明**
+>
+> 创建或更新模版时，`mntConfig` 中的文件需先按[文件上传](sandbox-api-overview.md#h-sandbox-api-file-upload)章节上传，并带 `source=sandbox_template`；上传后等待 `status` 变为 `available`。
 
-**路径**
+<a id="文件上传"></a>
 
-创建模版
-
-`POST`
-
-`/v3/templates`
-
-列举模版
-
-`GET`
-
-`/v2/templates`
-
-获取模版
-
-`GET`
-
-`/templates/{templateCode}`
-
-更新模版
-
-`PUT`
-
-`/templates/{templateCode}`
-
-获取构建状态
-
-`GET`
-
-`/templates/{templateCode}/builds/{buildID}/status`
-
-删除模版
-
-`DELETE`
-
-`/templates/{templateCode}`
-
-**说明**创建或更新模版时，`mntConfig` 中的文件需先按[文件上传](https://help.aliyun.com/zh/model-studio/sandbox-api-overview#h-sandbox-api-file-upload)章节上传，并带 `source=sandbox_template`；上传后等待 `status` 变为 `available`。
+<a id="h-sandbox-api-file-upload"></a>
 
 ## 文件上传
 
 挂载文件需通过文件上传接口上传，并在请求中指定 `source=sandbox_template`。
 
+<a id="endpoint-2"></a>
+
+<a id="h-sandbox-api-file-upload-endpoint"></a>
+
 ### Endpoint
 
-```
+<a id="code-block-2"></a>
+
+```text
 POST https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio/files
 ```
 
+<a id="表单上传"></a>
+
+<a id="h-sandbox-api-file-upload-multipart"></a>
+
 ### 表单上传
 
-```
+<a id="code-block-3"></a>
+
+```bash
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/files" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -F "file=@./config.json" \
@@ -142,7 +113,9 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
 
 响应：
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "id": "file_xxx",
   "type": "file",
@@ -156,13 +129,19 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
 }
 ```
 
+<a id="预签名地址上传"></a>
+
+<a id="h-sandbox-api-file-upload-presigned"></a>
+
 ### 预签名地址上传
 
 适合大文件或直传 OSS。
 
 1.  申请上传地址。
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/files" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -181,27 +160,27 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
 4.  轮询 `GET /api/v1/agentstudio/files/{file_id}`，待 `status` 变为 `available`。
     
 
+<a id="文件限制"></a>
+
+<a id="h-sandbox-api-file-upload-limits"></a>
+
 ### 文件限制
 
-维度
-
-限制
-
-单文件大小
-
-50 MB
-
-工作空间文件总容量
-
-100 GB
-
-保存时效
-
-30 天
+| 维度 | 限制 |
+| --- | --- |
+| 单文件大小 | 50 MB |
+| 工作空间文件总容量 | 100 GB |
+| 保存时效 | 30 天 |
 
 文件类型按扩展名校验：`.yaml` 可上传；`.csv`、`.yml`、`.sh`、`.whl`、`.tar.gz` 不支持；`.ts` 返回视频格式错误。完整范围以接口返回为准。
 
-**说明**只有 `source=sandbox_template` 且 `status=available` 的文件可写入 `mntConfig`。文件相关错误码见[错误码](raw/application-api-reference/sandbox-api/sandbox-api-errors.md)。
+> **说明**
+>
+> 只有 `source=sandbox_template` 且 `status=available` 的文件可写入 `mntConfig`。文件相关错误码见[错误码](sandbox-api-errors.md)。
+
+<a id="e2b-官方参考"></a>
+
+<a id="h-sandbox-api-e2b-ref"></a>
 
 ## E2B 官方参考
 
@@ -209,8 +188,14 @@ Sandbox 当前对外提供兼容 E2B 协议的 HTTP API。各接口的方法、�
 
 -   [E2B API Reference](https://docs.e2b.dev/api-reference)
 
-**说明**本文仅列出阿里云百炼侧已支持的接口与阿里云百炼扩展字段。阿里云百炼侧的鉴权、Endpoint 与扩展配置以本文为准；通用协议字段可对照 E2B 官方文档理解。
+> **说明**
+>
+> 本文仅列出阿里云百炼侧已支持的接口与阿里云百炼扩展字段。阿里云百炼侧的鉴权、Endpoint 与扩展配置以本文为准；通用协议字段可对照 E2B 官方文档理解。
+
+<a id="sdk"></a>
+
+<a id="h-sandbox-api-sdk"></a>
 
 ## SDK
 
-除直接调用 REST 接口外，还可通过 E2B 官方 SDK 接入。详见[实例管理与使用](raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)。
+除直接调用 REST 接口外，还可通过 E2B 官方 SDK 接入。详见[实例管理与使用](../../application-user-guide/agent-development/sandbox/sandbox-sdk.md)。

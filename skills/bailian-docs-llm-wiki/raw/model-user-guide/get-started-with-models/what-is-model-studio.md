@@ -2,17 +2,61 @@
 
 提供文本、视觉、语音、全模态及向量模型 API，支持在线调用、推理调度与模型训练。
 
+<a id="从代码调用模型"></a>
+
+<a id="调用前确认"></a>
+
+<a id="模型服务"></a>
+
+<a id="开箱即用的模型"></a>
+
+<a id="模型调优部署和评测"></a>
+
+<a id="模型调优-部署和评测"></a>
+
+<a id="进阶管理"></a>
+
+<a id="产品计费"></a>
+
+<a id="新用户免费额度"></a>
+
+<a id="如何支付费用"></a>
+
+<a id="查看账单与用量"></a>
+
+<a id="模型推理与知识库的计费区分"></a>
+
+<a id="常见问题"></a>
+
+<a id="应用构建"></a>
+
+<a id="你想完成什么"></a>
+
+<a id="开始使用阿里云百炼"></a>
+
+<a id="开发者快速开始"></a>
+
+<a id="overview-quickstart"></a>
+
 ## 快速开始
 
 OpenAI/Anthropic 兼容接口调用
 
 [获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)
 
+<a id="overview-code-example"></a>
+
+<a id="responses"></a>
+
 ![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/openai.svg)Responses
+
+<a id="overview-responses-language"></a>
 
 curlPythonJavaScript/TypeScriptJavaGoC#Ruby
 
-```
+<a id="code-block"></a>
+
+```bash
 curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -22,7 +66,9 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/resp
   }'
 ```
 
-```
+<a id="code-block-2"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -37,7 +83,9 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const client = new OpenAI({
@@ -51,7 +99,9 @@ const response = await client.responses.create({
 console.log(response.output_text);
 ```
 
-```
+<a id="code-block-4"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.responses.Response;
@@ -77,7 +127,9 @@ public class Main {
 }
 ```
 
-```
+<a id="code-block-5"></a>
+
+```go
 package main
 
 import (
@@ -106,7 +158,9 @@ func main() {
 }
 ```
 
-```
+<a id="code-block-6"></a>
+
+```csharp
 #pragma warning disable OPENAI001
 
 using System;
@@ -127,7 +181,9 @@ ResponseResult response = client.CreateResponse(new CreateResponseOptions
 Console.WriteLine(response.GetOutputText());
 ```
 
-```
+<a id="code-block-7"></a>
+
+```ruby
 require "openai"
 
 client = OpenAI::Client.new(
@@ -141,11 +197,17 @@ response = client.responses.create(
 puts response.output_text
 ```
 
+<a id="chat-completions"></a>
+
 ![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/openai.svg)Chat Completions
+
+<a id="overview-chat-completions-language"></a>
 
 curlPythonJavaScript/TypeScriptJavaGoC#Ruby
 
-```
+<a id="code-block-8"></a>
+
+```bash
 curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -155,7 +217,9 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat
   }'
 ```
 
-```
+<a id="code-block-9"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -170,7 +234,9 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-```
+<a id="code-block-10"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const client = new OpenAI({
@@ -184,7 +250,9 @@ const response = await client.chat.completions.create({
 console.log(response.choices[0].message.content);
 ```
 
-```
+<a id="code-block-11"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.chat.completions.ChatCompletion;
@@ -206,7 +274,9 @@ public class Main {
 }
 ```
 
-```
+<a id="code-block-12"></a>
+
+```go
 package main
 
 import (
@@ -236,7 +306,9 @@ func main() {
 }
 ```
 
-```
+<a id="code-block-13"></a>
+
+```csharp
 using System;
 using System.ClientModel;
 using OpenAI;
@@ -253,7 +325,9 @@ ChatCompletion response = client.CompleteChat("你是谁？");
 Console.WriteLine(response.Content[0].Text);
 ```
 
-```
+<a id="code-block-14"></a>
+
+```ruby
 require "openai"
 
 client = OpenAI::Client.new(
@@ -267,11 +341,17 @@ response = client.chat.completions.create(
 puts response.choices.first.message.content
 ```
 
+<a id="messages"></a>
+
 ![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/anthropic.svg)Messages
+
+<a id="overview-messages-language"></a>
 
 curlPythonJavaScript/TypeScriptJavaGoC#RubyPHP
 
-```
+<a id="code-block-15"></a>
+
+```bash
 curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -282,7 +362,9 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messa
   }'
 ```
 
-```
+<a id="code-block-16"></a>
+
+```python
 import os
 from anthropic import Anthropic
 
@@ -300,7 +382,9 @@ for block in response.content:
         print(block.text)
 ```
 
-```
+<a id="code-block-17"></a>
+
+```javascript
 import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic({
@@ -317,7 +401,9 @@ for (const block of response.content) {
 }
 ```
 
-```
+<a id="code-block-18"></a>
+
+```java
 import com.anthropic.client.AnthropicClient;
 import com.anthropic.client.okhttp.AnthropicOkHttpClient;
 import com.anthropic.models.messages.Message;
@@ -342,7 +428,9 @@ public class Main {
 }
 ```
 
-```
+<a id="code-block-19"></a>
+
+```go
 package main
 
 import (
@@ -377,7 +465,9 @@ func main() {
 }
 ```
 
-```
+<a id="code-block-20"></a>
+
+```csharp
 using System;
 using Anthropic;
 using Anthropic.Models.Messages;
@@ -400,7 +490,9 @@ foreach (var block in response.Content)
 }
 ```
 
-```
+<a id="code-block-21"></a>
+
+```ruby
 require "anthropic"
 
 client = Anthropic::Client.new(
@@ -417,7 +509,9 @@ response.content.each do |block|
 end
 ```
 
-```
+<a id="code-block-22"></a>
+
+```php
 <?php
 require __DIR__ . "/vendor/autoload.php";
 
@@ -437,35 +531,23 @@ foreach ($response->content as $block) {
 }
 ```
 
+<a id="模型"></a>
+
 ## 模型
 
 [查看所有模型](https://bailian.console.aliyun.com/cn-beijing/model/market)
 
-[
+|  |  |  |
+| --- | --- | --- |
+| [<br><br>![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/qwen-color.svg)<br><br>**Qwen4-Max**<br><br>旗舰与最强效果<br><br><br><br><br><br>](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen4-max?serviceSite=asia-pacific-china&ref=list) | [<br><br>![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/qwen-color.svg)<br><br>**Qwen3.7-Plus**<br><br>均衡之选<br><br><br><br><br><br>](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus?serviceSite=asia-pacific-china&ref=list) | [<br><br>![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/qwen-color.svg)<br><br>**Qwen3.8-Flash**<br><br>极致速度与高性价比<br><br><br><br><br><br>](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-flash?serviceSite=asia-pacific-china&ref=list) |
 
-**Qwen4-Max**
+<a id="overview-capabilities"></a>
 
-旗舰与最强效果
-
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen4-max?serviceSite=asia-pacific-china&ref=list)
-
-[
-
-**Qwen3.7-Plus**
-
-均衡之选
-
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus?serviceSite=asia-pacific-china&ref=list)
-
-[
-
-**Qwen3.8-Flash**
-
-极致速度与高性价比
-
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-flash?serviceSite=asia-pacific-china&ref=list)
+<a id="开始构建"></a>
 
 ## 开始构建
+
+<a id="overview-build-paths"></a>
 
 [
 
@@ -473,37 +555,87 @@ foreach ($response->content as $block) {
 
 生成文本，理解图像与视频内容
 
-](raw/model-user-guide/model-experience/text-generation-model.md)[
+
+
+
+
+
+
+
+
+](../model-experience/text-generation-model.md)[
 
 **图像生成**
 
 从文字描述生成图像
 
-](raw/model-user-guide/model-experience/image-and-video-generation/image-model/text-to-image.md)[
+
+
+
+
+
+
+
+
+](../model-experience/image-and-video-generation/image-model/text-to-image.md)[
 
 **视频生成**
 
 从文字或图像生成视频
 
-](raw/_short/wan3-video-generation-guide-0e56f533d7040652.md)[
+
+
+
+
+
+
+
+
+](../../_short/wan3-video-generation-guide-0e56f533d7040652.md)[
 
 **语音与音频**
 
 识别、合成语音，接入实时对话
 
-](raw/model-user-guide/model-experience/speech-and-audio.md)[
+
+
+
+
+
+
+
+
+](../model-experience/speech-and-audio.md)[
 
 **全模态**
 
 结合文本、视觉与音频进行交互
 
-](raw/model-user-guide/model-experience/omni-modal.md)[
+
+
+
+
+
+
+
+
+](../model-experience/omni-modal.md)[
 
 **向量与检索**
 
 使用向量与重排序提升检索效果
 
-](raw/model-user-guide/model-experience/embedding-rerank-model.md)
+
+
+
+
+
+
+
+
+](../model-experience/embedding-rerank-model.md)
+
+<a id="模型推理"></a>
 
 ## 模型推理
 
@@ -513,31 +645,73 @@ foreach ($response->content as $block) {
 
 为对输出速度敏感的场景提供高速推理
 
-](raw/model-user-guide/model-high-speed-inference/prime-mode.md)[
+
+
+
+
+
+
+
+
+](../model-high-speed-inference/prime-mode.md)[
 
 **吞吐预留**
 
 预留指定模型的推理容量，保障高峰期吞吐
 
-](raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation.md)[
+
+
+
+
+
+
+
+
+](../model-high-speed-inference/tpm-reservation.md)[
 
 **批量推理**
 
 异步处理无需实时响应的大批量请求
 
-](raw/model-user-guide/model-high-speed-inference/batch-inference.md)[
+
+
+
+
+
+
+
+
+](../model-high-speed-inference/batch-inference.md)[
 
 **专属部署**
 
 为高并发、低延迟场景配置专属推理服务
 
-](raw/model-user-guide/model-high-speed-inference/model-deployment-index.md)[
+
+
+
+
+
+
+
+
+](../model-high-speed-inference/model-deployment-index.md)[
 
 **智能路由**
 
 根据请求内容自动匹配合适的模型
 
-](raw/model-user-guide/model-high-speed-inference/model-routing.md)
+
+
+
+
+
+
+
+
+](../model-high-speed-inference/model-routing.md)
+
+<a id="模型训练"></a>
 
 ## 模型训练
 
@@ -547,25 +721,59 @@ foreach ($response->content as $block) {
 
 管理训练集与评测集，清洗和增强数据
 
+
+
+
+
+
+
+
+
 ](https://help.aliyun.com/zh/model-studio/model-data-overview)[
 
 **模型调优**
 
 使用业务数据训练模型，改善特定场景的表现
 
-](https://help.aliyun.com/zh/model-studio/fine-tuning)[
+
+
+
+
+
+
+
+
+](../fine-tuning.md)[
 
 **模型评测**
 
 评估模型表现，支持模型选型与调优验证
 
-](https://help.aliyun.com/zh/model-studio/model-evaluation-introduction)[
+
+
+
+
+
+
+
+
+](../model-evaluation-introduction.md)[
 
 **模型压缩**
 
 量化调优后的模型，降低推理部署成本
 
-](https://help.aliyun.com/zh/model-studio/model-compression-introduction)
+
+
+
+
+
+
+
+
+](../fine-tuning/model-compression-introduction.md)
+
+<a id="overview-my-models"></a>
 
 [
 
@@ -573,4 +781,14 @@ foreach ($response->content as $block) {
 
 管理调优及导入的模型，衔接推理部署
 
+
+
+
+
+
+
+
+
 ](https://help.aliyun.com/zh/model-studio/my-model-center)
+
+![](data:image/png;base64,)

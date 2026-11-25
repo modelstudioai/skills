@@ -2,162 +2,67 @@
 
 查询异步添加记忆事件的执行状态与结果
 
-查询[异步添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)生成的事件，获取执行状态和抽取结果。
+查询[异步添加记忆](add-memory-async.md)生成的事件，获取执行状态和抽取结果。
+
+<a id="请求方法与路径"></a>
 
 ## 请求方法与路径
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/events/{event_id}`
 
-调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="请求参数"></a>
 
 ## 请求参数
 
-参数
+| 参数 | 类型 | 必填 | 位置 | 说明 |
+| --- | --- | --- | --- | --- |
+| `event_id` | string | 是 | Path | 事件 ID |
 
-类型
-
-必填
-
-位置
-
-说明
-
-`event_id`
-
-string
-
-是
-
-Path
-
-事件 ID
+<a id="返回结果"></a>
 
 ## 返回结果
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `request_id` | string | 请求 ID |
+| `events` | array | 事件列表 |
+| `events[].created_at` | integer | 创建时间 |
+| `events[].event_id` | string | 事件 ID |
+| `events[].event_type` | string | 事件类型 |
+| `events[].memory_library_id` | string | 记忆库 ID |
+| `events[].resource_id` | string | 资源 ID |
+| `events[].resource_type` | string | 资源类型：`observation`、`skill`、`user_profile`、`custom_observation` 或 `custom_skill` |
+| `events[].status` | string | 事件状态：`PENDING`、`RUNNING`、`SUCCEEDED`、`FAILED` 或 `UNRECORDED` |
+| `events[].updated_at` | integer | 更新时间 |
+| `events[].user_id` | string | 子用户 ID |
+| `events[].result` | array | 执行结果。任务成功后返回抽取结果 |
+| `events[].result[].memory_type` | string | 记忆类型：`observation`、`skill` 或 `user_profile` |
+| `events[].result[].content` | string | `ADD` 或 `UPDATE` 时为新内容，`DELETE` 时为旧内容 |
+| `events[].result[].name` | string | 用户画像属性名称，仅画像结果存在时返回 |
+| `events[].result[].event` | string | 操作类型：`ADD`、`UPDATE` 或 `DELETE` |
+| `events[].result[].memory_node_id` | string | observation 或 skill 的记忆节点 ID；user\_profile 结果不返回 |
+| `events[].result[].old_content` | string | 更新前的内容，仅 `event` 为 `UPDATE` 时返回 |
 
-类型
-
-说明
-
-`request_id`
-
-string
-
-请求 ID
-
-`events`
-
-array
-
-事件列表
-
-`events[].created_at`
-
-integer
-
-创建时间
-
-`events[].event_id`
-
-string
-
-事件 ID
-
-`events[].event_type`
-
-string
-
-事件类型
-
-`events[].memory_library_id`
-
-string
-
-记忆库 ID
-
-`events[].resource_id`
-
-string
-
-资源 ID
-
-`events[].resource_type`
-
-string
-
-资源类型：`observation`、`skill`、`user_profile`、`custom_observation` 或 `custom_skill`
-
-`events[].status`
-
-string
-
-事件状态：`PENDING`、`RUNNING`、`SUCCEEDED`、`FAILED` 或 `UNRECORDED`
-
-`events[].updated_at`
-
-integer
-
-更新时间
-
-`events[].user_id`
-
-string
-
-子用户 ID
-
-`events[].result`
-
-array
-
-执行结果。任务成功后返回抽取结果
-
-`events[].result[].memory_type`
-
-string
-
-记忆类型：`observation`、`skill` 或 `user_profile`
-
-`events[].result[].content`
-
-string
-
-`ADD` 或 `UPDATE` 时为新内容，`DELETE` 时为旧内容
-
-`events[].result[].name`
-
-string
-
-用户画像属性名称，仅画像结果存在时返回
-
-`events[].result[].event`
-
-string
-
-操作类型：`ADD`、`UPDATE` 或 `DELETE`
-
-`events[].result[].memory_node_id`
-
-string
-
-observation 或 skill 的记忆节点 ID；user\_profile 结果不返回
-
-`events[].result[].old_content`
-
-string
-
-更新前的内容，仅 `event` 为 `UPDATE` 时返回
+<a id="请求示例"></a>
 
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/events/07c054c438584f279ff7db7c3243fa51' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="响应示例"></a>
+
 ## 响应示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "request_id": "bb499327-79c6-9a65-9f2d-c0c6abda6419",
   "events": [
@@ -184,4 +89,6 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/
 }
 ```
 
-**重要**`status` 为 `PENDING` 或 `RUNNING` 时任务仍在后台执行，请稍后重新查询。
+> **重要**
+>
+> `status` 为 `PENDING` 或 `RUNNING` 时任务仍在后台执行，请稍后重新查询。

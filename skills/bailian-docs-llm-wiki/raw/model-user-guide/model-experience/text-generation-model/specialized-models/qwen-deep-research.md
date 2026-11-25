@@ -2,19 +2,31 @@
 
 自动完成复杂研究课题——规划研究步骤、执行多轮联网搜索与信息整合，最终生成结构化研究报告，无需手动搜索。
 
-**说明**本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> **说明**
+>
+> 本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+
+<a id="快速开始"></a>
+
+<a id="e3fc617de8ilo"></a>
 
 ## 快速开始
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+您需要已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](../../../../model-api-reference/preparations/install-sdk.md)。
 
 模型采用两步工作流：**第一步**，模型提出细化问题，确认你的研究方向；**第二步**，基于你的回复执行完整研究并生成报告。第一步不是多余的——它让模型在启动耗时的多轮搜索前先对齐研究范围，避免跑偏。
 
 > 模型目前仅支持 DashScope SDK调用，暂不支持 Java 版 DashScope SDK，也不支持 OpenAI 兼容接口调用。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -221,9 +233,13 @@ if __name__ == "__main__":
     main()
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 echo "第一步：模型反问确认"
 # 以下为华北2（北京）地域的URL，各地域的URL不同。
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
@@ -270,27 +286,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="模型列表"></a>
+
+<a id="caabe0e04a4pw"></a>
+
 ## 模型列表
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>上下文长度 (Token)</strong></p></th><th><p><strong>最大输入 (Token)</strong></p></th><th><p><strong>最大输出 (Token)</strong></p></th></tr></thead><tbody><tr><td><p>qwen-deep-research</p></td><td rowspan="2"><p>1,000,000</p></td><td rowspan="2"><p>997,952</p></td><td rowspan="2"><p>32,768</p></td></tr><tr><td><p>qwen-deep-research-2025-12-15</p></td></tr></tbody></table>
 
-**上下文长度 (Token)**
+> **说明**
+>
+> `qwen-deep-research`为主线模型，持续更新优化。`qwen-deep-research-2025-12-15`为快照版本，研究深度和报告质量更优，额外支持 **MCP 工具调用**。两个模型均支持**图片输入**，独立计费。
 
-**最大输入 (Token)**
+<a id="核心能力"></a>
 
-**最大输出 (Token)**
-
-qwen-deep-research
-
-1,000,000
-
-997,952
-
-32,768
-
-qwen-deep-research-2025-12-15
-
-**说明**`qwen-deep-research`为主线模型，持续更新优化。`qwen-deep-research-2025-12-15`为快照版本，研究深度和报告质量更优，额外支持 **MCP 工具调用**。两个模型均支持**图片输入**，独立计费。
+<a id="1995ce02edlpq"></a>
 
 ## 核心能力
 
@@ -330,6 +340,10 @@ qwen-deep-research-2025-12-15
 
 长任务间隙发送，用于维持连接。此阶段不包含业务内容，忽略并继续处理后续响应即可。
 
+<a id="图片输入"></a>
+
+<a id="s4w8x9y0z1a2b"></a>
+
 ## 图片输入
 
 两个模型均支持在用户消息中传入图片，模型能理解图片内容并结合图片进行深入研究。`content`字段使用数组格式，同时包含`image`和`text`对象。
@@ -340,9 +354,15 @@ qwen-deep-research-2025-12-15
 
 **请求示例**
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -376,9 +396,13 @@ for response in responses:
             print(content, end='', flush=True)
 ```
 
+<a id="fig-code-group-2-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-2-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
 --header 'X-DashScope-SSE: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -399,19 +423,35 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="mcp-工具调用"></a>
+
+<a id="q3v7w8x9y0z1a"></a>
+
 ## MCP 工具调用
 
-**说明**MCP 工具调用仅`qwen-deep-research-2025-12-15`支持，主线模型`qwen-deep-research`不支持此功能。
+> **说明**
+>
+> MCP 工具调用仅`qwen-deep-research-2025-12-15`支持，主线模型`qwen-deep-research`不支持此功能。
 
 通过 `research_tools` 参数接入 MCP（Model Context Protocol）服务后，`qwen-deep-research-2025-12-15`可在 WebResearch 阶段调用知识库、内部文档、专有数据库等私有数据源，与公网搜索结合使用。响应格式与标准调用一致。
 
-> `research_tools` 的完整参数说明和 MCP 工具规范请参考 [Qwen-Deep-Research 深入研究模型](raw/model-api-reference/more-models/qwen-deep-research-api.md) 。
+> `research_tools` 的完整参数说明和 MCP 工具规范请参考 [Qwen-Deep-Research 深入研究模型](../../../../model-api-reference/more-models/qwen-deep-research-api.md) 。
+
+<a id="请求示例"></a>
+
+<a id="o0s3t4u5v6w7x"></a>
 
 ### 请求示例
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -452,9 +492,13 @@ for response in responses:
             print(content, end='', flush=True)
 ```
 
+<a id="fig-code-group-3-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-3-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
 --header 'X-DashScope-SSE: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -484,33 +528,22 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="计费说明"></a>
+
+<a id="a74bc7db2bb70"></a>
+
 ## 计费说明
 
-**模型名称**
-
-**输入成本 (每千Token)**
-
-**输出成本 (每千Token)**
-
-**免费额度**
-
-qwen-deep-research
-
-0.054元
-
-0.163元
-
-无免费额度
-
-qwen-deep-research-2025-12-15
-
-0.079元
-
-0.236元
-
-无免费额度
+| 模型名称 | 输入成本 (每千Token) | 输出成本 (每千Token) | 免费额度 |
+| --- | --- | --- | --- |
+| qwen-deep-research | 0.054元 | 0.163元 | 无免费额度 |
+| qwen-deep-research-2025-12-15 | 0.079元 | 0.236元 | 无免费额度 |
 
 按输入和输出 Token 总量计费。输入 Token 包含用户消息和模型内置系统提示词；输出 Token 包含反问确认、研究计划、搜索查询和最终研究报告等所有生成内容。两个模型独立计费。
+
+<a id="应用于生产环境"></a>
+
+<a id="e73f7681ebe17"></a>
 
 ## 应用于生产环境
 
@@ -529,6 +562,10 @@ qwen-deep-research-2025-12-15
 **连接保持**
 
 `KeepAlive` 阶段用于维持长任务间的连接，不包含业务内容，忽略并继续处理后续响应即可。
+
+<a id="常见问题"></a>
+
+<a id="e030128758ws1"></a>
 
 ## 常见问题
 
@@ -561,14 +598,26 @@ qwen-deep-research-2025-12-15
     在`parameters`中将`enable_feedback`设为`false`，模型将跳过反问确认阶段，直接进入研究流程。
     
 
+<a id="api参考"></a>
+
+<a id="7e9866a3cd2d7"></a>
+
 ## API参考
 
-关于 Qwen-Deep-Research 模型的输入与输出参数，请参考[Qwen-Deep-Research 深入研究模型](raw/model-api-reference/more-models/qwen-deep-research-api.md)。
+关于 Qwen-Deep-Research 模型的输入与输出参数，请参考[Qwen-Deep-Research 深入研究模型](../../../../model-api-reference/more-models/qwen-deep-research-api.md)。
+
+<a id="错误码"></a>
+
+<a id="3e8eb683f5chk"></a>
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../../model-api-reference/preparations/error-code.md)进行解决。
+
+<a id="限流"></a>
+
+<a id="78d5c053b093m"></a>
 
 ## 限流
 
-模型限流触发条件请参考：[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+模型限流触发条件请参考：[限流](../../../get-started-with-models/rate-limit.md)。

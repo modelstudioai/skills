@@ -2,193 +2,67 @@
 
 提交结构化信息抽取任务，返回 biz\_id 用于异步查询
 
-提交结构化信息抽取任务，返回 `biz_id`。输入可以是文件 URL，也可以是此前解析任务返回的 `parsed_file_biz_id`。信息抽取为异步任务：提交后使用该 ID 调用[查询抽取结果](raw/application-api-reference/api-overview/field-extraction/extract-result.md)获取处理状态和结构化结果。
+提交结构化信息抽取任务，返回 `biz_id`。输入可以是文件 URL，也可以是此前解析任务返回的 `parsed_file_biz_id`。信息抽取为异步任务：提交后使用该 ID 调用[查询抽取结果](extract-result.md)获取处理状态和结构化结果。
 
-**说明**调用前请确保已获取 API Key，详见[鉴权](raw/application-api-reference/api-overview/authentication.md)。
+> **说明**
+>
+> 调用前请确保已获取 API Key，详见[鉴权](../authentication.md)。
+
+<a id="请求参数"></a>
 
 ## 请求参数
 
-参数
-
-类型
-
-必填
-
-说明
-
-`file_url`
-
-string
-
-否
-
-待抽取文档的可访问 URL。与 `parsed_file_biz_id` 二选一
-
-`parsed_file_biz_id`
-
-string
-
-否
-
-已完成解析的业务任务 ID。与 `file_url` 二选一
-
-`file_name`
-
-string
-
-否
-
-文件名
-
-`file_name_extension`
-
-string
-
-否
-
-文件类型
-
-`config_id`
-
-string
-
-否
-
-已保存的 Extract 配置 ID，例如 `config_xxx`。
-
-`processing`
-
-object
-
-否
-
-内联处理配置，优先级高于 `config_id`。
-
-`processing.user_prompt`
-
-string
-
-否
-
-用户 Prompt
-
-`processing.extract_processing_config`
-
-object
-
-否
-
-内联抽取处理配置。使用 `processing` 时必须提供
-
-`processing.extract_processing_config.citation_required`
-
-boolean
-
-否
-
-是否返回引用信息，默认 `true`
-
-`processing.extract_processing_config.allow_inference`
-
-boolean
-
-否
-
-是否允许推断，默认 `false`
-
-`processing.extract_processing_config.extract_schema`
-
-object
-
-否
-
-抽取 Schema，值为 JSON 对象。使用内联处理配置时必须提供
-
-`output`
-
-object
-
-否
-
-输出配置
-
-`output.oss_config`
-
-object
-
-否
-
-OSS 输出配置
-
-`output.oss_config.bucket`
-
-string
-
-否
-
-OSS Bucket 名称
-
-`output.oss_config.endpoint`
-
-string
-
-否
-
-OSS Endpoint
-
-`output.oss_config.access_key_id`
-
-string
-
-否
-
-OSS AccessKey ID
-
-`output.oss_config.access_key_secret`
-
-string
-
-否
-
-OSS AccessKey Secret
-
-`output.oss_config.security_token`
-
-string
-
-否
-
-OSS Security Token
-
-**说明**请求需要分别完成两组二选一：文件来源使用 `file_url` 或 `parsed_file_biz_id`；处理定义使用 `config_id` 或内联 `processing`。复用解析结果时，该结果需要仍在 7 天保留期内，并且输入类型必须支持复用。
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `file_url` | string | 否 | 待抽取文档的可访问 URL。与 `parsed_file_biz_id` 二选一 |
+| `parsed_file_biz_id` | string | 否 | 已完成解析的业务任务 ID。与 `file_url` 二选一 |
+| `file_name` | string | 否 | 文件名 |
+| `file_name_extension` | string | 否 | 文件类型 |
+| `config_id` | string | 否 | 已保存的 Extract 配置 ID，例如 `config_xxx`。 |
+| `processing` | object | 否 | 内联处理配置，优先级高于 `config_id`。 |
+| `processing.user_prompt` | string | 否 | 用户 Prompt |
+| `processing.extract_processing_config` | object | 否 | 内联抽取处理配置。使用 `processing` 时必须提供 |
+| `processing.extract_processing_config.citation_required` | boolean | 否 | 是否返回引用信息，默认 `true` |
+| `processing.extract_processing_config.allow_inference` | boolean | 否 | 是否允许推断，默认 `false` |
+| `processing.extract_processing_config.extract_schema` | object | 否 | 抽取 Schema，值为 JSON 对象。使用内联处理配置时必须提供 |
+| `output` | object | 否 | 输出配置 |
+| `output.oss_config` | object | 否 | OSS 输出配置 |
+| `output.oss_config.bucket` | string | 否 | OSS Bucket 名称 |
+| `output.oss_config.endpoint` | string | 否 | OSS Endpoint |
+| `output.oss_config.access_key_id` | string | 否 | OSS AccessKey ID |
+| `output.oss_config.access_key_secret` | string | 否 | OSS AccessKey Secret |
+| `output.oss_config.security_token` | string | 否 | OSS Security Token |
+
+> **说明**
+>
+> 请求需要分别完成两组二选一：文件来源使用 `file_url` 或 `parsed_file_biz_id`；处理定义使用 `config_id` 或内联 `processing`。复用解析结果时，该结果需要仍在 7 天保留期内，并且输入类型必须支持复用。
+
+<a id="返回结果"></a>
 
 ## 返回结果
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `request_id` | string | 请求 ID |
+| `data.biz_id` | string | 业务任务 ID，用于调用 `/extract/result` |
 
-类型
-
-说明
-
-`request_id`
-
-string
-
-请求 ID
-
-`data.biz_id`
-
-string
-
-业务任务 ID，用于调用 `/extract/result`
+<a id="代码示例"></a>
 
 ## 代码示例
 
 以下示例分别展示两种处理定义， `config_id` 与 `processing` 同时存在时，`processing` 会优先生效。示例中的 URL、任务 ID 和配置 ID 均为脱敏占位值。
 
+<a id="sec-tabs"></a>
+
+<a id="使用已保存配置"></a>
+
+<a id="使用已保存配置-h4"></a>
+
 #### 使用已保存配置
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x/extract/submit' \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H 'Content-Type: application/json' \
@@ -199,11 +73,17 @@ curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/par
   }'
 ```
 
+<a id="使用内联配置"></a>
+
+<a id="使用内联配置-h4"></a>
+
 #### 使用内联配置
 
 `extract_schema` 是字符串，因此其中的 JSON 需要转义。
 
-```
+<a id="code-block-2"></a>
+
+```bash
 curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x/extract/submit' \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H 'Content-Type: application/json' \
@@ -230,7 +110,9 @@ curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/par
 }'
 ```
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "request_id": "request_xxx",
   "data": {
@@ -239,6 +121,10 @@ curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/par
 }
 ```
 
-**警告**抽取不支持音视频输入。复用的解析结果若已超过 7 天保留期或类型不匹配，接口会返回对应错误；详见[错误码](raw/application-api-reference/api-overview/errors.md)。Schema 规模和长文档页数仅按工程设计边界规划，公开配额以正式页面为准，见[支持的文件与限制](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations/supported-files-and-limits.md)。
+> **警告**
+>
+> 抽取不支持音视频输入。复用的解析结果若已超过 7 天保留期或类型不匹配，接口会返回对应错误；详见[错误码](../errors.md)。Schema 规模和长文档页数仅按工程设计边界规划，公开配额以正式页面为准，见[支持的文件与限制](../../../application-user-guide/agent-context/getting-started-overview/settings-configurations/supported-files-and-limits.md)。
 
-**重要**提交后，使用[查询抽取结果](raw/application-api-reference/api-overview/field-extraction/extract-result.md)轮询任务状态并获取结构化结果。
+> **重要**
+>
+> 提交后，使用[查询抽取结果](extract-result.md)轮询任务状态并获取结构化结果。

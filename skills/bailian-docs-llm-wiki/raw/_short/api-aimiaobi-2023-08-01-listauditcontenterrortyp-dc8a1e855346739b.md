@@ -2,11 +2,19 @@
 
 获取审核维度列表
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListAuditContentErrorTypes)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,203 +33,49 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:ListAuditContentErrorTypes</td><td>list</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:ListAuditContentErrorTypes
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| MaxResults | integer | 否 | 最大记录数 | 100 |
+| NextToken | string | 否 | 下一页 Token | cEoBWREAXdxaOyjq/cqAbg== |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-否
-
-[业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-xxxx
-
-MaxResults
-
-integer
-
-否
-
-最大记录数
-
-100
-
-NextToken
-
-string
-
-否
-
-下一页 Token
-
-cEoBWREAXdxaOyjq/cqAbg==
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-xxxxx
-
-Code
-
-string
-
-错误码
-
-DataNotExists
-
-Message
-
-string
-
-错误消息
-
-success
-
-HttpStatusCode
-
-integer
-
-HTTP 状态码
-
-200
-
-Success
-
-boolean
-
-此次请求是否成功
-
-true
-
-Data
-
-array<object>
-
-审核维度列表
-
-data
-
-object
-
-主审核维度
-
-MajorClassCode
-
-string
-
-主审核维度 Code
-
-ContentAccuracy
-
-SubClasses
-
-array<object>
-
-子审核维度列表
-
-subClasses
-
-object
-
-子审核维度
-
-ClassCode
-
-string
-
-子审核维度 Code
-
-PunctuationError
-
-ClassName
-
-string
-
-子审核维度名称
-
-标点符号错误
-
-MajorClassName
-
-string
-
-子审核维度名称
-
-内容准确性
-
-NextToken
-
-string
-
-下一页 Token
-
-下一页的token
-
-TotalCount
-
-integer
-
-总记录条数
-
-20
-
-MaxResults
-
-integer
-
-当前返回的最大记录数
-
-20
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | xxxxx |
+| Code | string | 错误码 | DataNotExists |
+| Message | string | 错误消息 | success |
+| HttpStatusCode | integer | HTTP 状态码 | 200 |
+| Success | boolean | 此次请求是否成功 | true |
+| Data | array<object> | 审核维度列表 |  |
+| data | object | 主审核维度 |  |
+| MajorClassCode | string | 主审核维度 Code | ContentAccuracy |
+| SubClasses | array<object> | 子审核维度列表 |  |
+| subClasses | object | 子审核维度 |  |
+| ClassCode | string | 子审核维度 Code | PunctuationError |
+| ClassName | string | 子审核维度名称 | 标点符号错误 |
+| MajorClassName | string | 子审核维度名称 | 内容准确性 |
+| NextToken | string | 下一页 Token | 下一页的token |
+| TotalCount | integer | 总记录条数 | 20 |
+| MaxResults | integer | 当前返回的最大记录数 | 20 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -229,7 +83,9 @@ integer
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "RequestId": "xxxxx",
   "Code": "DataNotExists",
@@ -253,6 +109,10 @@ integer
   "MaxResults": 20
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

@@ -2,6 +2,10 @@
 
 本文提供妙策链路 API的最佳示例，帮助您快速入门并开发您自己的业务应用。
 
+<a id="前提要求"></a>
+
+<a id="61244679d1saw"></a>
+
 ## 前提要求
 
 -   阿里云账号已开通产品；
@@ -9,7 +13,9 @@
 -   获取WorkSpaceId [获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)；
 -   引入妙笔SDK [注意获取最新SDK版本](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc)；
 
-```
+<a id="code-block"></a>
+
+```json
 <dependency>
   <groupId>com.aliyun</groupId>
   <artifactId>alibabacloud-aimiaobi20230801</artifactId>
@@ -19,8 +25,10 @@
 
 -   引入其他三方依赖。
 
-```
-<dependency>
+<a id="code-block-2"></a>
+
+```xml
+  <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.30</version>
@@ -39,11 +47,17 @@
   </dependency>
 ```
 
+<a id="新闻话题聚合"></a>
+
+<a id="312c5c7c63kmg"></a>
+
 ## 新闻话题聚合
 
 > 给定一批内容，按照语义聚合成不同的主题。
 
-```
+<a id="code-block-3"></a>
+
+```java
 package org.example.miaoce;
 
 import com.alibaba.fastjson2.JSONObject;
@@ -148,13 +162,19 @@ public class MiaoCeSubmitDocClusterTaskTest {
 }
 ```
 
+<a id="自定义话题聚合"></a>
+
+<a id="e214f44c4ahz6"></a>
+
 ## 自定义话题聚合
 
 > 给定一批内容，或者一个热点事件，针对这个事件从热门视角、网友观点、时效性、新颖性角度进行
 
 > 分析，并生成选题策划。
 
-```
+<a id="code-block-4"></a>
+
+```java
 package org.example.miaoce;
 
 import com.alibaba.fastjson2.JSONObject;
@@ -328,11 +348,17 @@ public class MiaoCeSubmitTopicSelectionPerspectiveAnalysisTaskTest {
 }
 ```
 
+<a id="自定义视角分析"></a>
+
+<a id="8e18eca4ececf"></a>
+
 ## 自定义视角分析
 
 > 给定一批内容，或者一个热点事件，按照用户指定的视角进行热点分析并生成选题策划的大纲。
 
-```
+<a id="code-block-5"></a>
+
+```java
 package org.example.miaoce;
 
 import com.alibaba.fastjson2.JSONObject;
@@ -444,11 +470,17 @@ public class MiaoCeSubmitCustomTopicSelectionPerspectiveAnalysisTaskTest {
 }
 ```
 
+<a id="sass页面查询类接口"></a>
+
+<a id="4ae77b92a11pj"></a>
+
 ## SASS页面查询类接口
 
-涉及接口：[获取三方热榜源列表](raw/_short/api-aimiaobi-2023-08-01-listhotsources-0d21da74b7aa0b35.md)、[获取热点话题列表](raw/_short/api-aimiaobi-2023-08-01-listhottopics-c4f5349d89ca55f4.md)、[获取热门视角列表](raw/_short/api-aimiaobi-2023-08-01-listhotviewpoints-f5b56834fe3de5e8.md)、[获取网友视角列表](raw/_short/api-aimiaobi-2023-08-01-listwebreviewpoints-3943abfd6701e5cd.md)、[获取新颖视角列表](raw/_short/api-aimiaobi-2023-08-01-listfreshviewpoints-5ac76a5b6c3f4436.md)、[获取时效性视角列表](raw/_short/api-aimiaobi-2023-08-01-listtimedviewattitude-87c50823d6877c36.md)。
+涉及接口：[获取三方热榜源列表](api-aimiaobi-2023-08-01-listhotsources-0d21da74b7aa0b35.md)、[获取热点话题列表](api-aimiaobi-2023-08-01-listhottopics-c4f5349d89ca55f4.md)、[获取热门视角列表](api-aimiaobi-2023-08-01-listhotviewpoints-f5b56834fe3de5e8.md)、[获取网友视角列表](api-aimiaobi-2023-08-01-listwebreviewpoints-3943abfd6701e5cd.md)、[获取新颖视角列表](api-aimiaobi-2023-08-01-listfreshviewpoints-5ac76a5b6c3f4436.md)、[获取时效性视角列表](api-aimiaobi-2023-08-01-listtimedviewattitude-87c50823d6877c36.md)。
 
-```
+<a id="code-block-6"></a>
+
+```java
 package org.example.miaoce;
 
 import com.aliyun.auth.credentials.Credential;
@@ -642,16 +674,22 @@ public class MiaoCePortalQueryDemoTest {
 }
 ```
 
+<a id="自定义数据源"></a>
+
+<a id="42209ec83blza"></a>
+
 ## 自定义数据源
 
 > 请参照以下demo示例进行调用。
 
-**说明**
+> **说明**
+>
+> -   调用自定义数据源的前提：请点击[全妙智能检索生成应用后付费API](https://common-buy.aliyun.com/?commodityCode=sfm_quanmiaoAPI_public_cn)进行开通。
+> -   自定义数据源的计费说明：自定义数据源是按照token消耗计费，妙策其他接口即购买妙笔和妙策公有云预付费版本即可调用，自定义数据源计费详见：《[计费说明（妙策-自定义数据源）](billing-document-miaoce-custom-data-source-11fc07e66a1ed255.md)》。
 
--   调用自定义数据源的前提：请点击[全妙智能检索生成应用后付费API](https://common-buy.aliyun.com/?commodityCode=sfm_quanmiaoAPI_public_cn)进行开通。
--   自定义数据源的计费说明：自定义数据源是按照token消耗计费，妙策其他接口即购买妙笔和妙策公有云预付费版本即可调用，自定义数据源计费详见：《[计费说明（妙策-自定义数据源）](raw/_short/billing-document-miaoce-custom-data-source-11fc07e66a1ed255.md)》。
+<a id="code-block-7"></a>
 
-```
+```java
 package org.example.miaoce;
 
 import com.alibaba.fastjson2.JSONObject;

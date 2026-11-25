@@ -2,11 +2,19 @@
 
 本文档介绍如何在阿里云百炼平台调用 智谱 直供的模型推理服务。
 
-**重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+> **重要**
+>
+> 本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。
 
-**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+> **重要**
+>
+> 阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+>
+> 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+<a id="服务开通"></a>
+
+<a id="305311640441x"></a>
 
 ## 服务开通
 
@@ -15,21 +23,43 @@
 
 完成以上步骤即可调用智谱提供的 GLM 模型服务。
 
+<a id="快速开始"></a>
+
+<a id="61623d75547kl"></a>
+
 ## 快速开始
 
 ZHIPU/GLM-5.3 是 GLM 系列模型，支持真正可用的 1M 上下文。运行以下代码快速调用思考模式的 ZHIPU/GLM-5.3 模型。
 
-需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+需要已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="sec-tabs"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
 
-**说明**`enable_thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK 作为顶层参数传入。
+> **说明**
+>
+> `enable_thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK 作为顶层参数传入。
+
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
+<a id="ddb5892c91y4c"></a>
+
 ### 示例代码
 
-```
+<a id="code-block"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -83,9 +113,13 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
+<a id="f2828e7338ck1"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-2"></a>
+
+```text
 ====================思考过程====================
 
 让我仔细思考用户提出的这个看似简单但实际上很有深度的问题。
@@ -117,11 +151,19 @@ for chunk in completion:
 CompletionUsage(completion_tokens=344, prompt_tokens=7, total_tokens=351, completion_tokens_details=None, prompt_tokens_details=None)
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
+
+<a id="25ed2818c5km2"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -191,9 +233,13 @@ async function main() {
 main();
 ```
 
+<a id="1f1fdf8de1624"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```text
 ====================思考过程====================
 
 让我仔细思考用户的问题"你是谁"。这需要从多个角度来分析和回应。
@@ -217,13 +263,27 @@ main();
 { prompt_tokens: 7, completion_tokens: 248, total_tokens: 255 }
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
+
+<a id="bcaf8f53f8n2x"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-3"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-5"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -245,43 +305,45 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="流式工具调用"></a>
+
+<a id="h7i8j9k0l1m2n"></a>
+
 ## 流式工具调用
 
 ZHIPU/GLM-5.3-FlashX、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5支持`tool_stream`参数（boolean，默认`false`），仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回。
 
 `stream`与`tool_stream`的组合行为如下：
 
-**stream**
+| stream | tool\_stream | tool\_call 返回方式 |
+| --- | --- | --- |
+| true | true | arguments 以增量方式分多个 chunk 返回 |
+| true | false（默认） | arguments 在一个 chunk 中完整返回 |
+| false | true/false | tool\_stream 不生效，arguments 在完整响应中一次性返回 |
 
-**tool\_stream**
+<a id="sec-tabs-4"></a>
 
-**tool\_call 返回方式**
+<a id="openai兼容-2"></a>
 
-true
-
-true
-
-arguments 以增量方式分多个 chunk 返回
-
-true
-
-false（默认）
-
-arguments 在一个 chunk 中完整返回
-
-false
-
-true/false
-
-tool\_stream 不生效，arguments 在完整响应中一次性返回
+<a id="openai兼容-2-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-5"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
+
 #### Python
+
+<a id="ts35o6p7q8r9s"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-6"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -335,11 +397,19 @@ for chunk in completion:
         print(f"[usage] {chunk.usage}")
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
+
+<a id="ts39i2j3k4l5m"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-7"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -411,9 +481,15 @@ async function main() {
 main();
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-8"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -448,32 +524,19 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="思考控制-thinking-type-与-reasoning-effort"></a>
+
+<a id="glm_tc_title"></a>
+
 ## 思考控制（thinking.type 与 reasoning\_effort）
 
 ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash 与 ZHIPU/GLM-5.3-FlashX 始终以思考模式运行，不支持关闭思考，请保持 `thinking.type` 为 `enabled`（使用 `enable_thinking` 时保持为 `true`），并通过 `reasoning_effort` 控制推理深度。
 
-**参数**
+<table><thead><tr><th><p><strong>参数</strong></p></th><th><p><strong>说明</strong></p></th><th><p><strong>支持的值</strong></p></th></tr></thead><tbody><tr><td><p><code>thinking.type</code></p></td><td><p>控制是否开启思考，默认为 <code>enabled</code>。ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash 与 ZHIPU/GLM-5.3-FlashX 不再支持 <code>disabled</code>，传入 <code>disabled</code> 会导致 API 请求失败。</p></td><td><p><code>enabled</code></p></td></tr><tr><td><p><code>reasoning_effort</code></p></td><td><p>控制模型的推理深度。未传入时默认为 <code>max</code>，推荐使用 <code>max</code>。</p></td><td><ul><li><p><code>max</code>（默认）：深度推理</p></li><li><p><code>high</code>：增强推理</p></li><li><p><code>low</code>：轻度推理</p></li></ul></td></tr></tbody></table>
 
-**说明**
+<a id="清除历史思考-clear-thinking"></a>
 
-**支持的值**
-
-`thinking.type`
-
-控制是否开启思考，默认为 `enabled`。ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash 与 ZHIPU/GLM-5.3-FlashX 不再支持 `disabled`，传入 `disabled` 会导致 API 请求失败。
-
-`enabled`
-
-`reasoning_effort`
-
-控制模型的推理深度。未传入时默认为 `max`，推荐使用 `max`。
-
--   `max`（默认）：深度推理
-    
--   `high`：增强推理
-    
--   `low`：轻度推理
-    
+<a id="glm_ct_section_title"></a>
 
 ## 清除历史思考（clear\_thinking）
 
@@ -482,15 +545,29 @@ ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash 与 ZHIPU/GLM-5.3-FlashX 始终以思考模�
 -   `true`：忽略历史轮次的 `reasoning_content`，仅使用可见文本、工具调用与结果等非推理内容作为上下文输入，可降低上下文长度与成本。
 -   `false`（默认）：保留历史轮次的 `reasoning_content` 并随上下文一同提供给模型。若希望启用 Preserved Thinking，必须在 messages 中完整、未修改、按原顺序透传历史 `reasoning_content`，缺失、裁剪、改写或重排会导致效果下降或无法生效。
 
-**说明**该参数只影响跨轮次的历史思考内容，不改变模型在当前轮次内是否产生/输出思考。
+> **说明**
+>
+> 该参数只影响跨轮次的历史思考内容，不改变模型在当前轮次内是否产生/输出思考。
 
 以下示例使用同一组多轮 messages（`assistant` 消息中携带 `reasoning_content`）。设置 `clear_thinking`\=`true` 后，历史思考内容不会被计入上下文，因此 `prompt_tokens` 少于 `false`（默认）的情况，实际数值取决于历史 `reasoning_content` 的长度。
 
+<a id="sec-tabs-6"></a>
+
+<a id="openai兼容-3"></a>
+
+<a id="openai兼容-3-h4"></a>
+
 #### OpenAI兼容
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -522,9 +599,13 @@ completion = client.chat.completions.create(
 print(completion.usage.prompt_tokens)  # true 时少于 false
 ```
 
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -545,15 +626,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="多模态理解"></a>
+
+<a id="glm_mm_title"></a>
+
 ## 多模态理解
 
 ZHIPU/GLM-5.3-Flash 与 ZHIPU/GLM-5.3-FlashX 原生支持图像、视频与文件输入，文本参数与 ZHIPU/GLM-5.3 一致。传入图片时，在 `messages[].content` 数组中添加 `type` 为 `image_url` 的内容块，通过 `image_url.url` 传入图片 URL（推荐）或 Base64 Data URL；传入多张图片时添加多个 `image_url` 内容块。
 
+<a id="sec-tabs-7"></a>
+
+<a id="openai兼容-4"></a>
+
+<a id="openai兼容-4-h4"></a>
+
 #### OpenAI兼容
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -584,9 +681,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-2-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -613,225 +714,38 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="其它功能"></a>
+
+<a id="d062ed0e4d5fe"></a>
+
 ## 其它功能
 
-**模型**
+<table><thead><tr><th><strong>模型</strong></th><th><p><a href="../../model-experience/text-generation-model/multi-round-conversation.md">多轮对话</a></p></th><th><p><a href="../../model-experience/text-generation-model/tool-calls/qwen-function-calling.md#dd5a3dca390k9">Function Calling</a></p></th><th><p><a href="../../model-experience/text-generation-model/qwen-structured-output.md">结构化输出</a></p></th><th><p><a href="../../model-experience/text-generation-model/tool-calls/web-search.md">联网搜索</a></p></th><th><p><a href="../../model-experience/text-generation-model/partial-mode.md">前缀续写</a></p></th><th><p><a href="../../model-experience/text-generation-model/context-cache.md">上下文缓存</a></p></th><th><p><a href="https://docs.bigmodel.cn/cn/guide/start/concept-param#reasoning_effort"><strong>思考深度控制</strong></a></p></th></tr></thead><tbody><tr><td><p>ZHIPU/GLM-5.3</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>不支持</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>支持</p><blockquote><p>reasoning_effort</p></blockquote></td></tr><tr><td><p>ZHIPU/GLM-5.3-Flash</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>不支持</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>支持</p><blockquote><p>reasoning_effort</p></blockquote></td></tr><tr><td><p>ZHIPU/GLM-5.3-FlashX</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>不支持</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>支持</p><blockquote><p>reasoning_effort</p></blockquote></td></tr><tr><td><p>ZHIPU/GLM-5.2</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>支持</p><blockquote><p>仅非思考模式</p></blockquote></td><td><p>不支持</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>支持</p><blockquote><p>reasoning_effort</p></blockquote></td></tr><tr><td><p>ZHIPU/GLM-5.1</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>支持</p><blockquote><p>仅非思考模式</p></blockquote></td><td><p>不支持</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>不支持</p></td></tr><tr><td><p>ZHIPU/GLM-5</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>支持</p><blockquote><p>仅非思考模式</p></blockquote></td><td><p>不支持</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>不支持</p></td></tr></tbody></table>
 
-[多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
-
-[Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#dd5a3dca390k9)
-
-[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)
-
-[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
-
-[前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)
-
-[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)
-
-[**思考深度控制**](https://docs.bigmodel.cn/cn/guide/start/concept-param#reasoning_effort)
-
-ZHIPU/GLM-5.3
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-支持
-
-支持
-
-> reasoning\_effort
-
-ZHIPU/GLM-5.3-Flash
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-支持
-
-支持
-
-> reasoning\_effort
-
-ZHIPU/GLM-5.3-FlashX
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-支持
-
-支持
-
-> reasoning\_effort
-
-ZHIPU/GLM-5.2
-
-支持
-
-支持
-
-支持
-
-> 仅非思考模式
-
-不支持
-
-支持
-
-支持
-
-支持
-
-> reasoning\_effort
-
-ZHIPU/GLM-5.1
-
-支持
-
-支持
-
-支持
-
-> 仅非思考模式
-
-不支持
-
-支持
-
-支持
-
-不支持
-
-ZHIPU/GLM-5
-
-支持
-
-支持
-
-支持
-
-> 仅非思考模式
-
-不支持
-
-支持
-
-支持
-
-不支持
-
-上下文缓存类型为隐式缓存，自动开启，与阿里云百炼的[隐式缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)服务有以下不同：
+上下文缓存类型为隐式缓存，自动开启，与阿里云百炼的[隐式缓存](../../model-experience/text-generation-model/context-cache.md)服务有以下不同：
 
 -   缓存最少 Token 数为 512（百炼为 1024）。
 
+<a id="参数默认值"></a>
+
+<a id="5c21b5ebd7so8"></a>
+
 ## 参数默认值
 
-**模型**
-
-**enable\_thinking**
-
-**temperature**
-
-**top\_p**
-
-**top\_k**
-
-**repetition\_penalty**
-
-ZHIPU/GLM-5.3
-
-true（不可关闭）
-
-1.0
-
-0.95
-
-\-
-
-\-
-
-ZHIPU/GLM-5.3-Flash
-
-true（不可关闭）
-
-1.0
-
-0.95
-
-\-
-
-\-
-
-ZHIPU/GLM-5.3-FlashX
-
-true（不可关闭）
-
-1.0
-
-0.95
-
-\-
-
-\-
-
-ZHIPU/GLM-5.2
-
-true
-
-1.0
-
-0.95
-
-\-
-
-\-
-
-ZHIPU/GLM-5.1
-
-true
-
-1.0
-
-0.95
-
-\-
-
-\-
-
-ZHIPU/GLM-5
-
-true
-
-1.0
-
-0.95
-
-\-
-
-\-
+| 模型 | enable\_thinking | temperature | top\_p | top\_k | repetition\_penalty |
+| --- | --- | --- | --- | --- | --- |
+| ZHIPU/GLM-5.3 | true（不可关闭） | 1.0 | 0.95 | \- | \- |
+| ZHIPU/GLM-5.3-Flash | true（不可关闭） | 1.0 | 0.95 | \- | \- |
+| ZHIPU/GLM-5.3-FlashX | true（不可关闭） | 1.0 | 0.95 | \- | \- |
+| ZHIPU/GLM-5.2 | true | 1.0 | 0.95 | \- | \- |
+| ZHIPU/GLM-5.1 | true | 1.0 | 0.95 | \- | \- |
+| ZHIPU/GLM-5 | true | 1.0 | 0.95 | \- | \- |
 
 \-表示没有默认值，也不支持设置。
+
+<a id="模型列表与计费"></a>
+
+<a id="a1208aad3d0k8"></a>
 
 ## 模型列表与计费
 
@@ -843,180 +757,14 @@ GLM 系列模型是智谱AI专为智能体设计的混合推理模型，提供�
 
 > 思考模式下，思维链按照输出 Token 计费。
 
+<a id="错误码"></a>
+
+<a id="2048aa1f92x46"></a>
+
 ## 错误码
 
-如果执行报错，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果执行报错，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。
 
 以下为智谱独有的业务错误码。HTTP 错误码与百炼通用错误码一致，请参见上述链接。
 
-**错误分类**
-
-**错误码**
-
-**错误信息**
-
-基础错误
-
-500
-
-内部错误
-
-身份验证错误
-
-1000
-
-身份验证失败
-
-1001
-
-Header 中未收到 Authentication 参数，无法进行身份验证
-
-1002
-
-Authentication Token 非法，请确认 Authentication Token 正确传递
-
-1003
-
-Authentication Token 已过期，请重新生成/获取
-
-1004
-
-通过 Authentication Token 的验证失败
-
-1100
-
-账户读写
-
-账户错误
-
-1110
-
-您的账户当前处于非活动状态。请检查账户信息
-
-1111
-
-您的账户不存在
-
-1112
-
-您的账户已被锁定，请联系客服解锁
-
-1113
-
-您的账户已欠费，请充值后重试
-
-1120
-
-无法成功访问您的账户，请稍后重试
-
-1121
-
-账户存违规行为，账号已被锁定
-
-API 调用错误
-
-1200
-
-API 调用错误
-
-1210
-
-API 调用参数有误，请检查文档
-
-1211
-
-模型不存在，请检查模型代码
-
-1212
-
-当前模型不支持 `${method}` 调用方式
-
-1213
-
-未正常接收到 `${field}` 参数
-
-1214
-
-`${field}` 参数非法。请检查文档
-
-1215
-
-`${field1}` 与 `${field2}` 不能同时设置，请检查文档
-
-1220
-
-您无权访问 `${API_name}`
-
-1221
-
-API `${API_name}` 已下线
-
-1222
-
-API `${API_name}` 不存在
-
-1230
-
-API 调用流程出错
-
-1231
-
-您已有请求：`${request_id}`
-
-1234
-
-网络错误，错误id：`${error_id}`，请联系客服
-
-1261
-
-Prompt 超长
-
-API 策略阻止错误
-
-1300
-
-API 调用被策略阻止
-
-1301
-
-系统检测到输入或生成内容可能包含不安全或敏感内容，请您避免输入易产生敏感内容的提示语，感谢您的配合
-
-1302
-
-您当前使用该 API 的并发数过高，请降低并发，或联系客服增加限额
-
-1303
-
-您当前使用该 API 的频率过高，请降低频率，或联系客服增加限额
-
-1304
-
-该 API 已达今日调用次数限额，如有更多需求，请联系客服购买
-
-1305
-
-该 API 已触发流量限制
-
-1308
-
-已达到 `${number}` `${unit}` 的使用上限。您的限额将在 `${next_flush_time}` 重置
-
-1309
-
-您的 GLM Coding Plan 套餐已到期，暂无法使用，前往官方续订后即可恢复 [](https://bigmodel.cn/claude-code)**[https://bigmodel.cn/claude-code](https://bigmodel.cn/claude-code)**
-
-1310
-
-您已达到每周/每月使用上限，您的限额将在 `${next_flush_time}` 重置
-
-1311
-
-当前订阅套餐暂未开放`${model_name}`权限
-
-1312
-
-该模型当前访问量过大，请您稍后再试，或切换其他模型如 `${model_name}` 等
-
-1313
-
-您的账户当前使用模式不符合公平使用策略，请求频率已受到限制。详情请参阅《条款与协议-订阅及自动续费协议》，如需恢复请前往个人中心-编程套餐总览-顶部申请解除限制
+<table><thead><tr><th><p><strong>错误分类</strong></p></th><th><p><strong>错误码</strong></p></th><th><p><strong>错误信息</strong></p></th></tr></thead><tbody><tr><td><p>基础错误</p></td><td><p>500</p></td><td><p>内部错误</p></td></tr><tr><td rowspan="6"><p>身份验证错误</p></td><td><p>1000</p></td><td><p>身份验证失败</p></td></tr><tr><td><p>1001</p></td><td><p>Header 中未收到 Authentication 参数，无法进行身份验证</p></td></tr><tr><td><p>1002</p></td><td><p>Authentication Token 非法，请确认 Authentication Token 正确传递</p></td></tr><tr><td><p>1003</p></td><td><p>Authentication Token 已过期，请重新生成/获取</p></td></tr><tr><td><p>1004</p></td><td><p>通过 Authentication Token 的验证失败</p></td></tr><tr><td><p>1100</p></td><td><p>账户读写</p></td></tr><tr><td rowspan="6"><p>账户错误</p></td><td><p>1110</p></td><td><p>您的账户当前处于非活动状态。请检查账户信息</p></td></tr><tr><td><p>1111</p></td><td><p>您的账户不存在</p></td></tr><tr><td><p>1112</p></td><td><p>您的账户已被锁定，请联系客服解锁</p></td></tr><tr><td><p>1113</p></td><td><p>您的账户已欠费，请充值后重试</p></td></tr><tr><td><p>1120</p></td><td><p>无法成功访问您的账户，请稍后重试</p></td></tr><tr><td><p>1121</p></td><td><p>账户存违规行为，账号已被锁定</p></td></tr><tr><td rowspan="14"><p>API 调用错误</p></td><td><p>1200</p></td><td><p>API 调用错误</p></td></tr><tr><td><p>1210</p></td><td><p>API 调用参数有误，请检查文档</p></td></tr><tr><td><p>1211</p></td><td><p>模型不存在，请检查模型代码</p></td></tr><tr><td><p>1212</p></td><td><p>当前模型不支持 <code>${method}</code> 调用方式</p></td></tr><tr><td><p>1213</p></td><td><p>未正常接收到 <code>${field}</code> 参数</p></td></tr><tr><td><p>1214</p></td><td><p><code>${field}</code> 参数非法。请检查文档</p></td></tr><tr><td><p>1215</p></td><td><p><code>${field1}</code> 与 <code>${field2}</code> 不能同时设置，请检查文档</p></td></tr><tr><td><p>1220</p></td><td><p>您无权访问 <code>${API_name}</code></p></td></tr><tr><td><p>1221</p></td><td><p>API <code>${API_name}</code> 已下线</p></td></tr><tr><td><p>1222</p></td><td><p>API <code>${API_name}</code> 不存在</p></td></tr><tr><td><p>1230</p></td><td><p>API 调用流程出错</p></td></tr><tr><td><p>1231</p></td><td><p>您已有请求：<code>${request_id}</code></p></td></tr><tr><td><p>1234</p></td><td><p>网络错误，错误id：<code>${error_id}</code>，请联系客服</p></td></tr><tr><td><p>1261</p></td><td><p>Prompt 超长</p></td></tr><tr><td rowspan="12"><p>API 策略阻止错误</p></td><td><p>1300</p></td><td><p>API 调用被策略阻止</p></td></tr><tr><td><p>1301</p></td><td><p>系统检测到输入或生成内容可能包含不安全或敏感内容，请您避免输入易产生敏感内容的提示语，感谢您的配合</p></td></tr><tr><td><p>1302</p></td><td><p>您当前使用该 API 的并发数过高，请降低并发，或联系客服增加限额</p></td></tr><tr><td><p>1303</p></td><td><p>您当前使用该 API 的频率过高，请降低频率，或联系客服增加限额</p></td></tr><tr><td><p>1304</p></td><td><p>该 API 已达今日调用次数限额，如有更多需求，请联系客服购买</p></td></tr><tr><td><p>1305</p></td><td><p>该 API 已触发流量限制</p></td></tr><tr><td><p>1308</p></td><td><p>已达到 <code>${number}</code> <code>${unit}</code> 的使用上限。您的限额将在 <code>${next_flush_time}</code> 重置</p></td></tr><tr><td><p>1309</p></td><td><p>您的 GLM Coding Plan 套餐已到期，暂无法使用，前往官方续订后即可恢复 <a href="https://bigmodel.cn/claude-code"><strong></strong></a><strong><a href="https://bigmodel.cn/claude-code">https://bigmodel.cn/claude-code</a></strong></p></td></tr><tr><td><p>1310</p></td><td><p>您已达到每周/每月使用上限，您的限额将在 <code>${next_flush_time}</code> 重置</p></td></tr><tr><td><p>1311</p></td><td><p>当前订阅套餐暂未开放<code>${model_name}</code>权限</p></td></tr><tr><td><p>1312</p></td><td><p>该模型当前访问量过大，请您稍后再试，或切换其他模型如 <code>${model_name}</code> 等</p></td></tr><tr><td><p>1313</p></td><td><p>您的账户当前使用模式不符合公平使用策略，请求频率已受到限制。详情请参阅《条款与协议-订阅及自动续费协议》，如需恢复请前往个人中心-编程套餐总览-顶部申请解除限制</p></td></tr></tbody></table>

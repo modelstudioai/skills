@@ -2,6 +2,14 @@
 
 在 千问 中使用阿里云百炼模型。
 
+<a id="快速开始"></a>
+
+<a id="qoa-quickstart-h"></a>
+
+<a id="qoa_prereq_h"></a>
+
+<a id="qoa_steps_h"></a>
+
 ## 快速开始
 
 1.  1
@@ -23,51 +31,61 @@
     
     验证
     
+    <a id="qoa-verify-h"></a>
+    
     在工作助理中发送一条消息，模型正常返回响应即表示配置成功。
     
 
+<a id="可用模型"></a>
+
+<a id="qoa_models_h"></a>
+
 ## 可用模型
 
-模型
+| 模型 | 定位 |
+| --- | --- |
+| Qwen3.8-Max | 复杂推理与编程 |
+| Qwen3.8-Flash | 快速、低成本 |
+| Qwen3.7-Max | 复杂推理 |
+| Qwen3.7-Plus | 性能与成本均衡 |
+| Qwen3.6-Flash | 快速、低成本 |
 
-定位
+<a id="错误码"></a>
 
-Qwen3.8-Max
-
-复杂推理与编程
-
-Qwen3.8-Flash
-
-快速、低成本
-
-Qwen3.7-Max
-
-复杂推理
-
-Qwen3.7-Plus
-
-性能与成本均衡
-
-Qwen3.6-Flash
-
-快速、低成本
+<a id="qoa-error-h"></a>
 
 ## 错误码
 
 配置过程中遇到报错，参考对应计费方案的常见问题文档：
 
--   Token Plan：[Token Plan 常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq#tpt-h-errors)
+-   Token Plan：[Token Plan 常见问题](../../token-plan-guide/token-plan-faq.md#tpt-h-errors)
+
+<a id="常见问题"></a>
+
+<a id="qoa_faq_h"></a>
 
 ## 常见问题
 
+<a id="accordion-是否支持按量计费或-coding-plan"></a>
+
 是否支持按量计费或 Coding Plan
+
+<a id="qoa_faq_plan_h"></a>
 
 千问工作助理仅支持 Token Plan（个人版和团队版），不支持按量计费或 Coding Plan。
 
+<a id="accordion-手机-app-找不到-token-plan-模型入口"></a>
+
 手机 APP 找不到 Token Plan 模型入口
+
+<a id="qoa_faq_version_h"></a>
 
 请确认千问 APP 已升级到 7.1.2 及以上版本。低版本不支持此功能。
 
+<a id="accordion-校验-api-key-失败"></a>
+
 校验 API Key 失败
 
-请确认使用的是 Token Plan API Key，而非按量计费的 API Key。不同计费方案的凭证不通用。更多错误信息请参考 [Token Plan 常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq#tpt-h-errors)。
+<a id="qoa_faq_error_h"></a>
+
+请确认使用的是 Token Plan API Key，而非按量计费的 API Key。不同计费方案的凭证不通用。更多错误信息请参考 [Token Plan 常见问题](../../token-plan-guide/token-plan-faq.md#tpt-h-errors)。

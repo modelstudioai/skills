@@ -2,6 +2,10 @@
 
 执行信息抽取或结构化数据生成任务时，大模型可能返回多余文本（如 \`\`\`json ）导致下游解析失败。开启结构化输出可确保大模型输出标准格式的 JSON 字符串，使用 JSON Schema 模式还能精确控制输出结构和类型，无需额外验证或重试。
 
+<a id="使用方式"></a>
+
+<a id="364b79f28ebin"></a>
+
 ## 使用方式
 
 结构化输出支持JSON Object 与 JSON Schema两种模式：
@@ -10,7 +14,7 @@
     
     1.  **设置**`response_format`**参数**：在请求体中，将 `response_format` 参数设置为 `{"type": "json_object"}`。
     2.  **提示词包含 JSON 关键词**：System Message 或 User Message 中需要包含 "JSON" 关键词（不区分大小写），否则会报错：`'messages' must contain the word 'json' in some form, to use 'response_format' of type 'json_object'.`
--   [**JSON Schema 模式**](https://help.aliyun.com/zh/model-studio/qwen-structured-output#a4f5d7108anxd)：确保输出内容为指定的结构。使用方式：设置 `response_format` 为`{"type": "json_schema", "json_schema": {..., "strict": true}}`。
+-   [**JSON Schema 模式**](qwen-structured-output.md#a4f5d7108anxd)：确保输出内容为指定的结构。使用方式：设置 `response_format` 为`{"type": "json_schema", "json_schema": {..., "strict": true}}`。
     
     > 提示词无需包含 JSON 关键词。
     
@@ -19,53 +23,38 @@
 
 功能对比：
 
-**特性**
+| 特性 | JSON Object 模式 | JSON Schema 模式 |
+| --- | --- | --- |
+| 输出有效 JSON | 是 | 是 |
+| 严格遵循 Schema | 否 | 是 |
+| 支持模型 | Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun | 仅支持部分模型 |
+| `response_format` 参数设置 | `{"type": "json_object"}` | `{"type": "json_schema", "json_schema": {..., "strict": true}}` |
+| 提示词要求 | 必须包含 "JSON" | 建议明确说明 |
+| 适用场景 | 灵活的 JSON 输出 | 精确的结构验证 |
 
-**JSON Object 模式**
+<a id="支持的模型"></a>
 
-**JSON Schema 模式**
-
-输出有效 JSON
-
-是
-
-是
-
-严格遵循 Schema
-
-否
-
-是
-
-支持模型
-
-Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
-
-仅支持部分模型
-
-`response_format` 参数设置
-
-`{"type": "json_object"}`
-
-`{"type": "json_schema", "json_schema": {..., "strict": true}}`
-
-提示词要求
-
-必须包含 "JSON"
-
-建议明确说明
-
-适用场景
-
-灵活的 JSON 输出
-
-精确的结构验证
+<a id="7a8e438e89xeq"></a>
 
 ## 支持的模型
 
-**说明**标注为"非思考模式"的模型，仅在非思考模式下支持结构化输出。
+> **说明**
+>
+> 标注为"非思考模式"的模型，仅在非思考模式下支持结构化输出。
+
+<a id="sec-tabs"></a>
+
+<a id="json-object"></a>
+
+<a id="json-object-h4"></a>
 
 #### JSON Object
+
+<a id="sec-tabs-2"></a>
+
+<a id="千问"></a>
+
+<a id="千问-h4"></a>
 
 #### 千问
 
@@ -90,6 +79,10 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
     -   千问Omni：Qwen3.8-Omni-Flash、Qwen3.5-Omni-Plus系列
     -   Qwen3-VL 开源系列（非思考模式）
 
+<a id="kimi"></a>
+
+<a id="kimi-h4"></a>
+
 #### Kimi
 
 -   阿里云百炼部署
@@ -99,6 +92,10 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
 -   月之暗面部署
     
     -   kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code 、kimi/kimi-k2.6、kimi/kimi-k2.5
+
+<a id="deepseek"></a>
+
+<a id="deepseek-h4"></a>
 
 #### DeepSeek
 
@@ -111,14 +108,26 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
     
     -   vanchin/deepseek-v3.2-think、vanchin/deepseek-v3、vanchin/deepseek-ocr
 
+<a id="glm"></a>
+
+<a id="glm-h4"></a>
+
 #### GLM
 
 -   glm-5.1
 -   非思考模式：glm-5
 
+<a id="stepfun"></a>
+
+<a id="stepfun-h4"></a>
+
 #### Stepfun
 
 仅思考模式：stepfun/step-3.7-flash、stepfun/step-5-preview
+
+<a id="ling"></a>
+
+<a id="ling-h4"></a>
 
 #### Ling
 
@@ -126,11 +135,19 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
     
     -   antdigital/Ling-3.1-flash
 
+<a id="json-schema"></a>
+
+<a id="json-schema-h4"></a>
+
 #### JSON Schema
 
 qwen4-max、Qwen3.7-Plus 系列、Qwen3.8-Flash 系列、Qwen3.7-Flash 系列、Qwen3.7-Max 系列、Qwen3.8-Max 系列，以及 DeepSeek：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro
 
 阿里云百炼部署的 `deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`：北京地域的 OpenAI 兼容 Chat Completions API 支持 JSON Schema 模式，思考模式与非思考模式均支持。
+
+<a id="快速开始"></a>
+
+<a id="d571e02f03kzc"></a>
 
 ## 快速开始
 
@@ -138,13 +155,27 @@ qwen4-max、Qwen3.7-Plus 系列、Qwen3.8-Flash 系列、Qwen3.7-Flash 系列、
 
 > JSON Object 模式不保证键名与字段类型稳定，不同提示词或不同次调用的返回结果可能存在差异。如需固定结构，请使用 JSON Schema 模式。
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+您需要已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="sec-tabs-3"></a>
+
+<a id="openai兼容-chat-completions-api"></a>
+
+<a id="openai兼容-chat-completions-api-h4"></a>
 
 #### OpenAI兼容-Chat Completions API
 
+<a id="sec-tabs-4"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
+<a id="code-block"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -175,18 +206,28 @@ json_string = completion.choices[0].message.content
 print(json_string)
 ```
 
+<a id="8977446b570mi"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "姓名": "刘五",
   "年龄": 34
 }
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -218,18 +259,28 @@ const jsonString = completion.choices[0].message.content;
 console.log(jsonString);
 ```
 
+<a id="749fedf19cbe2"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```text
 {
   "姓名": "刘五",
   "年龄": 34
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-5"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下是北京地域base_url，如果使用华北2（北京）地域的模型，需要将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions
@@ -255,11 +306,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="d86488b630toi"></a>
+
 ### 返回结果
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "choices": [
         {
@@ -288,13 +343,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="openai兼容-responses-api"></a>
+
+<a id="openai兼容-responses-api-h4"></a>
+
 #### OpenAI兼容-Responses API
 
-Responses API 是 Chat Completions API 的演进版本，结构化输出通过 `text.format` 参数设置，参数说明和迁移指南请参见 [OpenAI兼容-Responses](raw/model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md)。
+Responses API 是 Chat Completions API 的演进版本，结构化输出通过 `text.format` 参数设置，参数说明和迁移指南请参见 [OpenAI兼容-Responses](../../../model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md)。
+
+<a id="sec-tabs-5"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-7"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -314,15 +381,25 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="rqf1a3fd2ec"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-8"></a>
+
+```text
 {"姓名": "刘五", "年龄": 34}
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-9"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -340,15 +417,25 @@ const response = await openai.responses.create({
 console.log(response.output_text);
 ```
 
+<a id="rqee0c50665"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-10"></a>
+
+```text
 {"姓名": "刘五", "年龄": 34}
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-11"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -363,11 +450,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="rqf57db0094"></a>
+
 ### 返回结果
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
     "id": "resp_3b59521f-fbef-9873-9c54-c3fdc94da946",
     "created_at": 1793277220,
@@ -417,11 +508,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope-api"></a>
+
+<a id="dashscope-api-h4"></a>
+
 #### DashScope API
+
+<a id="sec-tabs-6"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-13"></a>
+
+```python
 import os
 import dashscope
 
@@ -452,20 +555,30 @@ json_string = response.choices[0].message.content
 print(json_string)
 ```
 
+<a id="1ace537a92bhb"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-14"></a>
+
+```text
 {
   "姓名": "刘五",
   "年龄": 34
 }
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
 DashScope Java SDK版本需要不低于 2.21.4。
 
-```
+<a id="code-block-15"></a>
+
+```java
 // DashScope Java SDK 版本需要不低于 2.21.4
 
 import java.util.Arrays;
@@ -514,18 +627,28 @@ public class Main {
 }
 ```
 
+<a id="ef0aa49700s2j"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-16"></a>
+
+```text
 {
   "姓名": "刘五",
   "年龄": 34
 }
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-17"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为北京地域url，若使用华北2（北京）地域的模型，需将url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
@@ -555,9 +678,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="b6a74ab88100q"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-18"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -584,19 +711,37 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
-> 思考模型（如 qwen3.8-max）默认开启深度思考，使用结构化输出时无需额外设置 `enable_thinking`。如需在流式输出中区分思考过程与回复内容，请参见[思考模型的流式输出](https://help.aliyun.com/zh/model-studio/stream#ae5fd8099d208)。
+> 思考模型（如 qwen3.8-max）默认开启深度思考，使用结构化输出时无需额外设置 `enable_thinking`。如需在流式输出中区分思考过程与回复内容，请参见[思考模型的流式输出](stream.md#ae5fd8099d208)。
+
+<a id="图片-视频数据处理"></a>
+
+<a id="270b260cb6or2"></a>
 
 ## 图片、视频数据处理
 
 多模态模型同样支持对图像和视频数据进行结构化输出。通过JSON Mode，可以从视觉内容中提取结构化数据，例如票据字段、图像中的目标位置或视频中的事件信息。
 
-> 图片、视频文件限制请参见 [图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md) 。
+> 图片、视频文件限制请参见 [图像与视频理解](vision.md) 。
+
+<a id="sec-tabs-7"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-8"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-19"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -634,9 +779,13 @@ json_string = completion.choices[0].message.content
 print(json_string)
 ```
 
+<a id="a5167ab3671kq"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-20"></a>
+
+```text
 {
   "ticket": [
     {
@@ -656,9 +805,15 @@ print(json_string)
 }
 ```
 
+<a id="node-js-3"></a>
+
+<a id="node-js-3-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-21"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -702,9 +857,13 @@ async function main() {
 main()
 ```
 
+<a id="417c43da438tm"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-22"></a>
+
+```text
 {
   "ticket": [
     {
@@ -724,9 +883,15 @@ main()
 }
 ```
 
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-23"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下是北京地域base_url，如果使用华北2（北京）地域的模型，需要将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions
@@ -751,11 +916,15 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="3e819e48b3l57"></a>
+
 ### 返回结果
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-24"></a>
+
+```json
 {
   "choices": [{
     "message": {
@@ -782,11 +951,23 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-9"></a>
+
+<a id="python-5"></a>
+
+<a id="python-5-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-25"></a>
+
+```python
 import os
 import dashscope
 
@@ -818,7 +999,10 @@ response = client.multimodal.chat.create(
 json_string = response.choices[0].message.content
 print(json_string)
 ```
-```
+
+<a id="code-block-26"></a>
+
+```python
 import os
 import dashscope
 
@@ -852,9 +1036,13 @@ json_string = response.choices[0].message.content
 print(json_string)
 ```
 
+<a id="cd0baa7bde793"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-27"></a>
+
+```text
 {
   "ticket": [
     {
@@ -874,9 +1062,15 @@ print(json_string)
 }
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-28"></a>
+
+```java
 // DashScope Java SDK 版本需要不低于 2.21.4
 
 import java.util.Arrays;
@@ -928,9 +1122,13 @@ public class Main {
 }
 ```
 
+<a id="03b4dac8cb5qa"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-29"></a>
+
+```text
 {
   "ticket": [
     {
@@ -950,9 +1148,15 @@ public class Main {
 }
 ```
 
+<a id="curl-5"></a>
+
+<a id="curl-5-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-30"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为北京地域url，若使用华北2（北京）地域的模型，需将url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
@@ -982,9 +1186,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="7efa44bdefdst"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-31"></a>
+
+```json
 {
   "output": {
     "choices": [
@@ -1018,15 +1226,33 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="优化提示词"></a>
+
+<a id="c0861fb7263ey"></a>
+
 ## 优化提示词
 
 模糊的提示词（如”返回用户信息”）会导致输出结构不可预期。为获得可靠的结果，建议在提示词中明确描述预期的 Schema：指定字段名称、类型、是否必填、格式要求（如日期格式），并提供示例。
 
+<a id="sec-tabs-10"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
+
 #### OpenAI兼容
+
+<a id="sec-tabs-11"></a>
+
+<a id="python-6"></a>
+
+<a id="python-6-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-32"></a>
+
+```python
 from openai import OpenAI
 import os
 import json
@@ -1135,9 +1361,13 @@ json_string = completion.choices[0].message.content
 print(json_string)
 ```
 
+<a id="d8f5ec9969u1b"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-33"></a>
+
+```text
 {
   "info": {
     "name": "刘五",
@@ -1148,9 +1378,15 @@ print(json_string)
 }
 ```
 
+<a id="node-js-4"></a>
+
+<a id="node-js-4-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-34"></a>
+
+```javascript
 import OpenAI from "openai";
 
 // 预定义示例响应（用于向模型展示期望的输出格式）
@@ -1244,9 +1480,13 @@ const jsonString = completion.choices[0].message.content;
 console.log(jsonString);
 ```
 
+<a id="046598ad25wks"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-35"></a>
+
+```text
 {
   "info": {
     "name": "刘五",
@@ -1260,11 +1500,23 @@ console.log(jsonString);
 }
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-12"></a>
+
+<a id="python-7"></a>
+
+<a id="python-7-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-36"></a>
+
+```python
 import os
 import json
 import dashscope
@@ -1352,9 +1604,13 @@ json_string = response.choices[0].message.content
 print(json_string)
 ```
 
+<a id="b2923f364b9im"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-37"></a>
+
+```text
 {
   "info": {
     "name": "刘五",
@@ -1368,9 +1624,15 @@ print(json_string)
 }
 ```
 
+<a id="java-3"></a>
+
+<a id="java-3-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-38"></a>
+
+```java
 // DashScope Java SDK 版本需要不低于 2.21.4
 
 import java.util.Arrays;
@@ -1450,9 +1712,13 @@ A：{"info":{"name":"王五","age":"40岁","email":"wangwu@example.com"}}"""))).
 }
 ```
 
+<a id="454cba97e68gz"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-39"></a>
+
+```text
 {
   "info": {
     "name": "刘五",
@@ -1466,15 +1732,27 @@ A：{"info":{"name":"王五","age":"40岁","email":"wangwu@example.com"}}"""))).
 }
 ```
 
+<a id="获取指定格式的输出"></a>
+
+<a id="a4f5d7108anxd"></a>
+
 ## 获取指定格式的输出
 
 将`response_format`的`type`设为`json_object`，可返回标准 JSON 字符串，但内容结构可能不符合预期，适用于简单场景。对于自动化解析、API 互操作等需要严格类型约束的复杂场景，可将 `type` 设置为 `json_schema`，强制大模型输出严格符合指定格式的内容。`response_format` 格式与示例如下：
 
-**说明**多模态输入（图像、视频、音频等）不支持 `json_schema`，会自动降级为 `json_object`，schema 约束不生效。
+> **说明**
+>
+> 多模态输入（图像、视频、音频等）不支持 `json_schema`，会自动降级为 `json_object`，schema 约束不生效。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-格式-tab"></a>
 
 格式
 
-```
+<a id="code-code-group-格式"></a>
+
+```json
 {
   "type": "json_schema",
   "json_schema": {
@@ -1490,9 +1768,13 @@ A：{"info":{"name":"王五","age":"40岁","email":"wangwu@example.com"}}"""))).
 }
 ```
 
+<a id="fig-code-group-示例-tab"></a>
+
 示例
 
-```
+<a id="code-code-group-示例"></a>
+
+```json
 {
   "type": "json_schema",
   "json_schema": {
@@ -1523,15 +1805,31 @@ A：{"info":{"name":"王五","age":"40岁","email":"wangwu@example.com"}}"""))).
 
 上述示例会强制模型输出包含 `name` 和 `age` 两个必填字段，以及可选的 `email` 字段的 JSON 对象。
 
+<a id="使用方法"></a>
+
+<a id="fb991adf9eqe7"></a>
+
 ### 使用方法
 
 通过 OpenAI SDK 的 `parse` 方法，可直接传入 Python Pydantic 类或 Node.js Zod 对象。SDK 会自动将其转换为 JSON Schema，无需手动编写复杂 JSON。DashScope SDK 需参考上文格式，手动构造 JSON Schema。
 
+<a id="sec-tabs-13"></a>
+
+<a id="openai兼容-chat-completions-api-2"></a>
+
+<a id="openai兼容-chat-completions-api-2-h4"></a>
+
 #### OpenAI兼容-Chat Completions API
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 from pydantic import BaseModel, Field
 from openai import OpenAI
 import os
@@ -1559,9 +1857,13 @@ result = completion.choices[0].message.parsed
 print(f"姓名：{result.name}，年龄：{result.age}")
 ```
 
+<a id="fig-code-group-2-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-2-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
@@ -1595,15 +1897,23 @@ console.log(`年龄：${userInfo.age}`);
 
 运行代码可获得以下输出：
 
-```
+<a id="code-block-40"></a>
+
+```text
 姓名：刘五，年龄：25
 ```
+
+<a id="openai兼容-responses-api-2"></a>
+
+<a id="openai兼容-responses-api-2-h4"></a>
 
 #### OpenAI兼容-Responses API
 
 Responses API 通过 `text.format` 参数设置结构化输出，支持 `json_schema` 和 `json_object` 两种类型。OpenAI SDK 的 `parse` 方法同样可用，通过 `text_format` 传入 Pydantic 类或 Zod 对象。
 
-```
+<a id="code-block-41"></a>
+
+```python
 from pydantic import BaseModel, Field
 from openai import OpenAI
 import os
@@ -1630,17 +1940,25 @@ print(f"姓名：{result.name}，年龄：{result.age}")
 
 运行代码可获得以下输出：
 
-```
+<a id="code-block-42"></a>
+
+```text
 姓名：刘五，年龄：25
 ```
 
-参数说明请参见 [Responses API 的 text 参数](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+参数说明请参见 [Responses API 的 text 参数](../../../model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+
+<a id="dashscope-api-2"></a>
+
+<a id="dashscope-api-2-h4"></a>
 
 #### DashScope API
 
 > 暂不支持 Java SDK。
 
-```
+<a id="code-block-43"></a>
+
+```python
 import os
 import dashscope
 import json
@@ -1685,9 +2003,15 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
 
 运行代码可获得以下输出：
 
-```
+<a id="code-block-44"></a>
+
+```text
 姓名：刘五，年龄：25
 ```
+
+<a id="配置指南"></a>
+
+<a id="001cb6ae072tc"></a>
 
 ### 配置指南
 
@@ -1698,7 +2022,9 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
     推荐将必填字段列在 `required`数组中。可选字段可不列入，例如：
     
 
-```
+<a id="code-block-45"></a>
+
+```json
 {
   "properties": {
     "name": {"type": "string"},
@@ -1716,7 +2042,9 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
     除不列入 `required` 外，也可通过允许 `null` 类型实现：
     
 
-```
+<a id="code-block-46"></a>
+
+```json
 {
   "properties": {
     "name": {"type": "string"},
@@ -1733,7 +2061,9 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
     控制是否允许输出未在 schema 中定义的额外字段：
     
 
-```
+<a id="code-block-47"></a>
+
+```json
 {
   "properties": {"name": {"type": "string"}},
   "required": ["name"],
@@ -1743,23 +2073,10 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
 
 示例输入：`"我叫张三，25岁"`；输出：`{"name": "张三", "age": 25}`（包含未定义的 `age` 字段）。
 
-**值**
-
-**行为**
-
-**适用场景**
-
-`false`
-
-只输出定义的字段
-
-需要精确控制结构
-
-`true`
-
-允许额外字段
-
-需要捕获更多信息
+| 值 | 行为 | 适用场景 |
+| --- | --- | --- |
+| `false` | 只输出定义的字段 | 需要精确控制结构 |
+| `true` | 允许额外字段 | 需要捕获更多信息 |
 
 -   **支持的 JSON Schema 关键字**
     
@@ -1767,74 +2084,30 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
     
     **Schema 层面公共关键字**
     
-    **关键字**
-    
-    **说明**
-    
-    `type`
-    
-    支持 `string`、`number`、`integer`、`boolean`、`null`、`array`、`object`；也支持联合类型，如 `["string", "null"]`
-    
-    `enum` / `const`
-    
-    `enum` 限制取值范围，`const` 限制为固定值
-    
-    `$defs` + `$ref`
-    
-    支持本地引用（如 `#/$defs/address`）；外部 URL 引用不报错但不生效
-    
-    `anyOf` / `oneOf` / `allOf` / `not`
-    
-    支持组合与条件约束。其中 `oneOf` 不严格保证 exactly-one 语义
-    
-    `if` / `then` / `else`
-    
-    支持条件 Schema，可根据字段值动态切换校验规则
-    
-    `title` / `description` / `default` / `examples`
-    
-    可正常提交，作为模型生成的语义提示，不参与硬性校验
-    
-    `$schema` / `$id` / `$comment`
-    
-    元标识符，可正常提交，不影响校验行为
-    
-    `deprecated` / `readOnly` / `writeOnly`
-    
-    注解关键字，可正常提交，不影响校验行为
+    | 关键字 | 说明 |
+    | --- | --- |
+    | `type` | 支持 `string`、`number`、`integer`、`boolean`、`null`、`array`、`object`；也支持联合类型，如 `["string", "null"]` |
+    | `enum` / `const` | `enum` 限制取值范围，`const` 限制为固定值 |
+    | `$defs` + `$ref` | 支持本地引用（如 `#/$defs/address`）；外部 URL 引用不报错但不生效 |
+    | `anyOf` / `oneOf` / `allOf` / `not` | 支持组合与条件约束。其中 `oneOf` 不严格保证 exactly-one 语义 |
+    | `if` / `then` / `else` | 支持条件 Schema，可根据字段值动态切换校验规则 |
+    | `title` / `description` / `default` / `examples` | 可正常提交，作为模型生成的语义提示，不参与硬性校验 |
+    | `$schema` / `$id` / `$comment` | 元标识符，可正常提交，不影响校验行为 |
+    | `deprecated` / `readOnly` / `writeOnly` | 注解关键字，可正常提交，不影响校验行为 |
     
     **各类型专属关键字**
     
-    **类型**
+    | 类型 | 支持的关键字 | 不支持的关键字（400 错误） |
+    | --- | --- | --- |
+    | `string` | `minLength`、`maxLength`、`pattern`、`format`（如 `email`、`date`）、`contentMediaType`、`contentEncoding` | \- |
+    | `number` / `integer` | `minimum`、`maximum`、`exclusiveMinimum`、`exclusiveMaximum` | `multipleOf` |
+    | `array` | `items`、`prefixItems`（元组模式）、`minItems`、`maxItems`、`unevaluatedItems` | `uniqueItems`、`contains`、`minContains`、`maxContains`、`additionalItems` |
+    | `object` | `properties`、`required`、`additionalProperties`、`minProperties`、`maxProperties`、`dependentRequired`、`dependentSchemas`、`unevaluatedProperties` | `patternProperties`、`propertyNames` |
     
-    **支持的关键字**
-    
-    **不支持的关键字（400 错误）**
-    
-    `string`
-    
-    `minLength`、`maxLength`、`pattern`、`format`（如 `email`、`date`）、`contentMediaType`、`contentEncoding`
-    
-    \-
-    
-    `number` / `integer`
-    
-    `minimum`、`maximum`、`exclusiveMinimum`、`exclusiveMaximum`
-    
-    `multipleOf`
-    
-    `array`
-    
-    `items`、`prefixItems`（元组模式）、`minItems`、`maxItems`、`unevaluatedItems`
-    
-    `uniqueItems`、`contains`、`minContains`、`maxContains`、`additionalItems`
-    
-    `object`
-    
-    `properties`、`required`、`additionalProperties`、`minProperties`、`maxProperties`、`dependentRequired`、`dependentSchemas`、`unevaluatedProperties`
-    
-    `patternProperties`、`propertyNames`
-    
+
+<a id="应用于生产环境"></a>
+
+<a id="3c31d76c389ij"></a>
 
 ## 应用于生产环境
 
@@ -1850,9 +2123,15 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
     
     推荐使用 SDK 自动生成 Schema，避免手动维护导致的错误，并可以自动验证和解析。
     
+    <a id="fig-code-group-3"></a>
+    
+    <a id="fig-code-group-3-python-tab"></a>
+    
     Python
     
-    ```
+    <a id="code-code-group-3-python"></a>
+    
+    ```python
     from pydantic import BaseModel, Field
     from typing import Optional
     from openai import OpenAI
@@ -1881,9 +2160,13 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
     print(f"姓名：{result.name}，年龄：{result.age}")
     ```
     
+    <a id="fig-code-group-3-node-js-tab"></a>
+    
     Node.js
     
-    ```
+    <a id="code-code-group-3-node-js"></a>
+    
+    ```javascript
     import { z } from "zod";
     import { zodResponseFormat } from "openai/helpers/zod";
     import OpenAI from "openai";
@@ -1915,6 +2198,10 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
     ```
     
 
+<a id="错误码"></a>
+
+<a id="efc117f59a2gm"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。

@@ -2,39 +2,44 @@
 
 停用自定义 MCP 服务，保留服务定义和已保存配置。
 
+<a id="接口"></a>
+
+<a id="h-mcp-disable-endpoint"></a>
+
 ## 接口
 
 **POST** `/api/v1/mcp/servers/{mcpCode}/disable`
 
-仅支持自定义 MCP。停用会关闭服务实例，但保留服务定义和已保存配置，之后可以通过[启用自定义 MCP](raw/application-api-reference/overview/overview/enable.md)重新启用。
+仅支持自定义 MCP。停用会关闭服务实例，但保留服务定义和已保存配置，之后可以通过[启用自定义 MCP](enable.md)重新启用。
+
+<a id="请求参数"></a>
+
+<a id="h-mcp-disable-params"></a>
 
 ## 请求参数
 
-参数
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| mcpCode | `string` | 是 | 自定义 MCP 编码 |
 
-类型
+<a id="响应"></a>
 
-必填
-
-说明
-
-mcpCode
-
-`string`
-
-是
-
-自定义 MCP 编码
+<a id="h-mcp-disable-response"></a>
 
 ## 响应
 
 返回 `DetailResponse`，仅填充 `mcp_code`、`server_status` 和 `server_status_text`，其余字段为 `null`。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/servers/mcp-a1b2c3d4e5f6g7h8/disable" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
-```
+
+<a id="code-block-2"></a>
+
+```json
 {
   "success": true,
   "error_code": null,
@@ -55,40 +60,16 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/ser
 }
 ```
 
+<a id="错误"></a>
+
+<a id="h-mcp-disable-errors"></a>
+
 ## 错误
 
-HTTP 状态码
-
-error\_code
-
-说明
-
-400
-
-InvalidParameter
-
-携带了查询参数或请求体
-
-400
-
-OperationNotSupported
-
-官方 MCP
-
-400
-
-DisableFailed
-
-停用失败，例如服务正在部署中
-
-404
-
-McpServerNotFound
-
-MCP 服务不存在
-
-409
-
-McpServerBusy
-
-MCP 服务有操作执行中
+| HTTP 状态码 | error\_code | 说明 |
+| --- | --- | --- |
+| 400 | InvalidParameter | 携带了查询参数或请求体 |
+| 400 | OperationNotSupported | 官方 MCP |
+| 400 | DisableFailed | 停用失败，例如服务正在部署中 |
+| 404 | McpServerNotFound | MCP 服务不存在 |
+| 409 | McpServerBusy | MCP 服务有操作执行中 |

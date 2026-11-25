@@ -2,7 +2,15 @@
 
 提示（Prompt）是您输入给大模型（LLM）的文本信息，用于明确地告诉模型您想要解决的问题或完成的任务，也是大语言模型理解用户需求并生成相关、准确回答或内容的基础。 为了帮助您更高效地使用 LLM ，本教程为您提供一系列实用的技巧，帮助您设计和优化 Prompt。
 
+<a id="设计-prompt"></a>
+
+<a id="e944c14e9bwom"></a>
+
 ## 设计 Prompt
+
+<a id="构建清晰明确的-prompt"></a>
+
+<a id="baf7d9b5edk9y"></a>
 
 ### 构建清晰明确的 Prompt
 
@@ -10,45 +18,22 @@
 
 使用 LLM 也一样，您的任务描述（Prompt）越清晰、具体、没有歧义，LLM 的表现越能符合您的期望。
 
-**说明**构建一个清晰具体的 Prompt 是充分发挥大模型能力的最重要一步。
+> **说明**
+>
+> 构建一个清晰具体的 Prompt 是充分发挥大模型能力的最重要一步。
 
-**模糊的 Prompt**
-
-**清晰具体的 Prompt**
-
-我想推广公司的新产品。我的公司名为阿里云百炼，新产品名为 Zephyr Z9，是一款轻薄便携的手机。帮我创建一条微博帖子。
-
-请为我司“阿里云百炼”最新推出的“Zephyr Z9”轻薄便携手机设计一条吸引眼球的微博推广帖。
-
-内容需彰显Zephyr Z9的独特卖点，如极致轻薄设计、高性能配置及用户便利性，同时融入创意元素以提升观众兴趣和互动意愿。
-
-记得提及阿里云百炼品牌声誉，激发受众好奇心，引导他们探索更多产品信息或直接进行购买。
-
-贴文应简洁有力，符合微博平台的风格与字数限制，适宜社交媒体传播。
-
-你是一位资深PHP编程专家，现在接到一个明确的开发任务。诉求是：${require}。请使用PHP语言详细描述一种实现该诉求的算法或方法，并考虑在实现过程中可能遇到的边界情况和错误处理，以及如何通过高效且安全的代码来满足此需求。
-
-作为一位经验丰富的PHP编程专家，您面临的具体开发任务为：${require}。
-
-请运用您的专业知识，详细阐述一种利用PHP实现该任务需求的高效算法或方法论。
-
-在您的描述中，请务必涵盖以下几点：
-
-\- 具体实现步骤，包括必要的函数、类及数据结构的选择与设计。
-
-\- 边界条件分析，识别并解释潜在的边缘案例及如何妥善处理这些情况。
-
-\- 错误处理机制，描述如何在代码中实施健壮的错误检测与异常处理逻辑，以确保程序稳定性。
-
-\- 安全性考量，讨论可能的安全威胁及推荐的防范措施，确保代码执行过程中的数据安全与隐私保护。
-
-\- 性能优化建议，提出提高代码执行效率的方法，包括但不限于算法优化、资源管理和缓存策略。
-
-请确保您的解答不仅技术准确，而且条理清晰、易于理解，以便其他开发者能够快速掌握并应用于实际项目中。
+| 模糊的 Prompt | 清晰具体的 Prompt |
+| --- | --- |
+| 我想推广公司的新产品。我的公司名为阿里云百炼，新产品名为 Zephyr Z9，是一款轻薄便携的手机。帮我创建一条微博帖子。 | 请为我司“阿里云百炼”最新推出的“Zephyr Z9”轻薄便携手机设计一条吸引眼球的微博推广帖。<br><br>内容需彰显Zephyr Z9的独特卖点，如极致轻薄设计、高性能配置及用户便利性，同时融入创意元素以提升观众兴趣和互动意愿。<br><br>记得提及阿里云百炼品牌声誉，激发受众好奇心，引导他们探索更多产品信息或直接进行购买。<br><br>贴文应简洁有力，符合微博平台的风格与字数限制，适宜社交媒体传播。 |
+| 你是一位资深PHP编程专家，现在接到一个明确的开发任务。诉求是：${require}。请使用PHP语言详细描述一种实现该诉求的算法或方法，并考虑在实现过程中可能遇到的边界情况和错误处理，以及如何通过高效且安全的代码来满足此需求。 | 作为一位经验丰富的PHP编程专家，您面临的具体开发任务为：${require}。<br><br>请运用您的专业知识，详细阐述一种利用PHP实现该任务需求的高效算法或方法论。<br><br>在您的描述中，请务必涵盖以下几点：<br><br>\- 具体实现步骤，包括必要的函数、类及数据结构的选择与设计。<br><br>\- 边界条件分析，识别并解释潜在的边缘案例及如何妥善处理这些情况。<br><br>\- 错误处理机制，描述如何在代码中实施健壮的错误检测与异常处理逻辑，以确保程序稳定性。<br><br>\- 安全性考量，讨论可能的安全威胁及推荐的防范措施，确保代码执行过程中的数据安全与隐私保护。<br><br>\- 性能优化建议，提出提高代码执行效率的方法，包括但不限于算法优化、资源管理和缓存策略。<br><br>请确保您的解答不仅技术准确，而且条理清晰、易于理解，以便其他开发者能够快速掌握并应用于实际项目中。 |
 
 阿里云百炼提供了Prompt一键优化工具，您可以在**[Prompt](https://bailian.console.aliyun.com/flow-agent/component-manage/prompt)**页面点击**自动优化**尝试该工具。该工具能针对输入的提示（Prompt）进行**自动扩写和细节添加**，推荐您先将 Prompt经过优化工具扩写改进，再接着阅读和体验其他优化技巧。
 
 > Prompt优化功能通过调用大模型实现，需要消耗一定量的Token，按照模型推理费用计费。
+
+<a id="使用-prompt-框架"></a>
+
+<a id="77a6060c2bmoe"></a>
 
 ### 使用 Prompt 框架
 
@@ -65,200 +50,42 @@
 -   **受众**：明确指出内容面向的读者群体，无论是专业人士、入门学习者还是儿童等，这样LLM就能调整语言和内容深度，使之更加贴合受众需求。
 -   **输出**：规定输出内容的具体形式，确保LLM提供的成果能直接满足后续应用的需求，比如列表、JSON数据格式、专业分析报告等形式。
 
-**未使用 Prompt 框架**
-
-**使用 Prompt 框架**
-
-Prompt
-
-我想推广公司的新产品。我的公司名为阿里云百炼，新产品名为 Zephyr Z9，是一款轻薄便携的手机。帮我创建一条微博帖子，简洁而深具影响力。
-
-#背景#
-
-我想为公司的新产品做广告。我公司的名字叫阿里云百炼，产品叫阿里云百炼 Zephyr Z9，是一款轻薄便携的手机。
-
-#目的#
-
-为我创建一个微博帖子（限制：500字），旨在让人们有兴趣点击产品链接购买。
-
-#风格#
-
-遵循知名科技公司为类似产品做广告的写作风格。
-
-#语气#
-
-有说服力
-
-#受众#
-
-我公司在微博上的受众通常是年轻一辈人。定制你的帖子，保证喜欢数码产品的人能快速关注到你的帖子。
-
-#输出#
-
-微博上的帖子，简洁而有影响力。
-
-输出
-
-【轻启未来，风起云涌】
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850289.png)阿里云百炼新品，Zephyr Z9震撼上市！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850290.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850311.png)携手Zephyr Z9，让科技与轻盈同行。这不仅是一部手机，它是你探索世界的轻便伴侣。厚度挑战极限，设计引领风尚，Z9在手中，灵感随时迸发。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850323.png)超越想象的性能，搭载极速处理器，流畅如风，无论是工作狂飙还是游戏征途，Zephyr Z9都是你的首选座驾。续航强劲，让每一份热情持续燃烧！
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850326.png)捕捉生活每一刻，Z9相机创新升级，夜景、人像、广角，每一拍都是封面大片，让美好记忆永不褪色。
-
-轻薄，重在体验。#百炼ZephyrZ9# ，为不凡而生，为你而来。立即拥抱未来，开启属于你的轻盈科技时代！
-
-官方网站：\[[www.bailian.com/Z9](http://www.bailian.com/Z9)\] (请替换为实际网址）
-
-#轻薄旗舰 #科技新风尚 #掌中艺术品
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850302.png)【独家揭秘】阿里云百炼Zephyr Z9，轻薄界的颠覆者来了！
-
-在这个快节奏的时代，每克重量都是对自由的负担。百炼深谙此道，匠心打造了Zephyr Z9——一款专为追求极致轻盈与强大性能平衡的你而生的手机！悬浮般的手感，一触难忘！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850307.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850308.png)【超薄设计，尽在掌握】
-
-Zephyr Z9以其令人惊叹的纤薄机身，重新定义了“轻薄”。仅X.Xmm的厚度，轻松滑入口袋，是你日常出行的完美伴侣。携带它，就像带着未来穿梭于都市丛林！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850317.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850316.png)【顶尖配置，性能怪兽】
-
-别看它轻，内核全是硬实力！搭载最新的XXXX处理器，流畅度爆表，无论是多任务处理还是大型游戏，Z9都能游刃有余，让你时刻处于科技最前沿。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850320.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850330.png)【摄影大师，记录生活】
-
-配备XXMP超感光镜头，夜晚也清晰。AI智能场景识别，让每一张照片都堪比大片。用Zephyr Z9，记录每一个不凡瞬间，让你的朋友圈从此与众不同。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850331.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850333.png)【续航无忧，能量满满】
-
-小身材，大能量！Zephyr Z9内置高效能电池，搭配XXX快充技术，片刻充电，长久陪伴。告别电量焦虑，你的创意和灵感不再受限。⚡
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850334.png)【限时福利，不容错过】
-
-前100名通过链接购机的用户，将享受神秘大礼包！包含定制保护壳、XXX会员年卡等多重好礼，只为尊贵的你！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850335.png)
-
-立刻行动，让百炼Zephyr Z9成为你探索世界的全新伙伴！点击下方链接，开启轻盈新纪元！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850336.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850339.png)\[立即抢购百炼Zephyr Z9\] \[产品链接\]
-
-#百炼ZephyrZ9 #轻薄旗舰 #科技美学 #数码潮流 #性能怪兽
+|  | 未使用 Prompt 框架 | 使用 Prompt 框架 |
+| --- | --- | --- |
+| Prompt | 我想推广公司的新产品。我的公司名为阿里云百炼，新产品名为 Zephyr Z9，是一款轻薄便携的手机。帮我创建一条微博帖子，简洁而深具影响力。 | #背景#<br><br>我想为公司的新产品做广告。我公司的名字叫阿里云百炼，产品叫阿里云百炼 Zephyr Z9，是一款轻薄便携的手机。<br><br>#目的#<br><br>为我创建一个微博帖子（限制：500字），旨在让人们有兴趣点击产品链接购买。<br><br>#风格#<br><br>遵循知名科技公司为类似产品做广告的写作风格。<br><br>#语气#<br><br>有说服力<br><br>#受众#<br><br>我公司在微博上的受众通常是年轻一辈人。定制你的帖子，保证喜欢数码产品的人能快速关注到你的帖子。<br><br>#输出#<br><br>微博上的帖子，简洁而有影响力。 |
+| 输出 | 【轻启未来，风起云涌】<br><br>![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850289.png)阿里云百炼新品，Zephyr Z9震撼上市！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850290.png)<br><br>![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850311.png)携手Zephyr Z9，让科技与轻盈同行。这不仅是一部手机，它是你探索世界的轻便伴侣。厚度挑战极限，设计引领风尚，Z9在手中，灵感随时迸发。<br><br>![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850323.png)超越想象的性能，搭载极速处理器，流畅如风，无论是工作狂飙还是游戏征途，Zephyr Z9都是你的首选座驾。续航强劲，让每一份热情持续燃烧！<br><br>![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850326.png)捕捉生活每一刻，Z9相机创新升级，夜景、人像、广角，每一拍都是封面大片，让美好记忆永不褪色。<br><br>轻薄，重在体验。#百炼ZephyrZ9# ，为不凡而生，为你而来。立即拥抱未来，开启属于你的轻盈科技时代！<br><br>官方网站：\[[www.bailian.com/Z9](http://www.bailian.com/Z9)\] (请替换为实际网址）<br><br>#轻薄旗舰 #科技新风尚 #掌中艺术品 | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850302.png)【独家揭秘】阿里云百炼Zephyr Z9，轻薄界的颠覆者来了！<br><br>在这个快节奏的时代，每克重量都是对自由的负担。百炼深谙此道，匠心打造了Zephyr Z9——一款专为追求极致轻盈与强大性能平衡的你而生的手机！悬浮般的手感，一触难忘！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850307.png)<br><br>![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850308.png)【超薄设计，尽在掌握】<br><br>Zephyr Z9以其令人惊叹的纤薄机身，重新定义了“轻薄”。仅X.Xmm的厚度，轻松滑入口袋，是你日常出行的完美伴侣。携带它，就像带着未来穿梭于都市丛林！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850317.png)<br><br>![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850316.png)【顶尖配置，性能怪兽】<br><br>别看它轻，内核全是硬实力！搭载最新的XXXX处理器，流畅度爆表，无论是多任务处理还是大型游戏，Z9都能游刃有余，让你时刻处于科技最前沿。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850320.png)<br><br>![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850330.png)【摄影大师，记录生活】<br><br>配备XXMP超感光镜头，夜晚也清晰。AI智能场景识别，让每一张照片都堪比大片。用Zephyr Z9，记录每一个不凡瞬间，让你的朋友圈从此与众不同。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850331.png)<br><br>![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850333.png)【续航无忧，能量满满】<br><br>小身材，大能量！Zephyr Z9内置高效能电池，搭配XXX快充技术，片刻充电，长久陪伴。告别电量焦虑，你的创意和灵感不再受限。⚡<br><br>![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850334.png)【限时福利，不容错过】<br><br>前100名通过链接购机的用户，将享受神秘大礼包！包含定制保护壳、XXX会员年卡等多重好礼，只为尊贵的你！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850335.png)<br><br>立刻行动，让百炼Zephyr Z9成为你探索世界的全新伙伴！点击下方链接，开启轻盈新纪元！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850336.png)<br><br>![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850339.png)\[立即抢购百炼Zephyr Z9\] \[产品链接\]<br><br>#百炼ZephyrZ9 #轻薄旗舰 #科技美学 #数码潮流 #性能怪兽 |
 
 在未使用 Prompt 框架时，LLM 输出虽表现尚可，但显得过于泛化，缺乏必要的细节和针对特定群体的吸引力。而在使用 Prompt 框架时，框架不仅提醒您考虑需求的其它方面，特别是一般 Prompt 中缺少的风格、语气和受众，还帮助 LLM 生成更针对年轻群体、细节更多、语言表达更加富有张力的输出。
 
-**说明**Prompt 框架在实践中有非常多的种类，您可以根据您的任务需求增减其结构组成。当然您也可以在后续章节观察到本教程对该 Prompt 框架的灵活运用。
+> **说明**
+>
+> Prompt 框架在实践中有非常多的种类，您可以根据您的任务需求增减其结构组成。当然您也可以在后续章节观察到本教程对该 Prompt 框架的灵活运用。
+
+<a id="优化-prompt"></a>
+
+<a id="ca1fcc5a37ffi"></a>
 
 ## 优化 Prompt
+
+<a id="技巧一-为模型提供输出样例"></a>
+
+<a id="48dbb207cbaf0"></a>
 
 ### 技巧一：为模型提供输出样例
 
 在 Prompt 中提供您期望的输出示例，可以让 LLM “模仿”我们所要求的规范、格式、概念、文法、语气进行输出。同时，提供样例可以让大模型多次输出的结果更一致，从而稳定模型表现。
 
-**未添加样例**
-
-**添加样例**
-
-Prompt
-
-#背景#
-
-你很擅长编写小红书种草笔记，喜欢增加丰富的emoji元素。
-
-#目的#
-
-请生成一篇小红书种草笔记，推广强森吹风机。吹风机的优点是：体积小、高颜值、风力大、干的快、智能控温不伤发。
-
-#受众#
-
-喜欢追求时尚的年轻人，尤其是年轻女性
-
-#输出#
-
-小红书文章格式，充满emoji元素，简洁但内容充实
-
-#背景#
-
-你很擅长编写小红书种草笔记，喜欢增加丰富的emoji元素。
-
-#目的#
-
-请生成一篇小红书种草笔记，推广强森吹风机。吹风机的优点是：体积小、高颜值、风力大、干得快、智能控温不伤发。
-
-#受众#
-
-喜欢追求时尚的年轻人，尤其是年轻女性
-
-#输出#
-
-小红书文章格式，充满emoji元素，简洁但内容充实
-
-#语气与风格#
-
-1.  我亲测过+n种好物+谁适合谁受益 这个秘诀让你的话语超有信服力！ 比如：亲自尝试了很多美白神器，终于挖到宝！仅俩月，肌肤变得嫩滑透亮，自我感觉飘飘欲仙~ 此法特为想大晒体验的小伙伴们量身定制，还能精准安利，助人避坑！
-    
-2.  难题出没+揭秘原因+终极解药 这公式助你条理清晰地分享，内容价值爆棚！ 案例：渴望秀发如丝？揭秘时刻来啦！原来我一直遗漏关键一步，直到遇见它！换用这款洗发水，秀发显著改善，光泽get！ 此法逻辑严密，不仅分享秘籍，还引导读者找到问题破解之道。
-    
-3.  独到见解+深度剖析+巧妙推荐 这公式帮你自然流露心声，还能温馨种草！ 示例：我觉得每个女孩都该有份挚爱，生活因此而精彩。手帐成了我的小确幸，每当提笔，幸福指数飙升！ 它助你畅所欲言，同时不经意间传递心头好，双赢策略！
-    
-4.  亲身经历+成果展示 这公式让你的情感表达鲜活又感人！ 场景：回想起夏夜海边的蚊灾，满身红包的绝望，直到遇见救星！现在，光滑肌肤让我裙摆飞扬，自信回归！ 它让你的故事活灵活现，分享喜悦与感恩之情，触动人心！
-    
-
-输出
-
-标题：![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850340.png)强森小巧魔力风机，速干护发新宠儿![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850341.png)
-
-正文：
-
-Hey宝贝们！今天要给你们种草一颗美发界的璀璨新星![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850342.png) —— 强森吹风机！它不仅仅是个工具，简直是随身携带的美发沙龙![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850343.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850345.png)体积小巧，旅行必备 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850346.png)
-
-首先，它的迷你身材直接击中我心！旅行包包再满也能轻松塞进，不占空间，随时随地凹造型![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850348.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850350.png) 高颜值，时尚出街 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850351.png)
-
-看这设计，简直就是艺术品呀！无论是极简白还是高级粉，拿在手里就是街头最靓的崽！手机？不，这是我的新时尚配饰![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850354.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850355.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850356.png)风力强劲，速干神器 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850358.png)
-
-别看它小，风力可一点都不含糊！早上赶时间？强森帮你5分钟搞定出门发型，效率MAX！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850359.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850360.png)干得快，还护发 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850361.png)
-
-智能控温技术，温柔呵护你的每一根秀发。告别热损伤，只留下柔顺光泽，每次吹发都像做了次沙龙护理～![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850363.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850364.png)智能控温，细心之选 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850365.png)
-
-懂你的不只是风力，还有温度。根据发质自动调节最适宜的热量，守护秀发健康，长期使用也不怕伤发![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850367.png)
-
-总之，强森吹风机就是那个能让你爱不释手的小可爱！赶紧加入购物车，给你的美丽加速吧！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850368.png)
-
-#强森吹风机 #美发达人 #快速护发秘籍
-
-标记你的朋友，让她们也来感受这份轻巧与高效吧！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850370.png)
-
-记得，爱护自己从“头”开始，强森与你一起，绽放自信光彩！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850372.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850375.png)吹风机也能成为美发时尚单品？强森小钢炮告诉你答案！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850377.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850379.png)自从我用了![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850381.png)强森吹风机![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850382.png)，不仅旅行包轻便多了![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850384.png)，每次吹发都变成享受时光![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850385.png)！用了几次后，朋友们都夸我发质看起来好了不止一个度，就像刚从沙龙出来的样子![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850386.png)。它绝对是短途出游或宿舍生活的完美伴侣哦！适合所有追求高效护发的宝贝们～![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850387.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850390.png)面对湿漉漉的长发瀑布，每次都得耗时半小时以上？![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850395.png)别怕，强森智能控温科技来了![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850397.png)！它能迅速吹干每一根发丝，而且风力强劲却不伤发，秘密就在于它能智能调节温度，保护你的秀发不受热损伤![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850398.png)。从此，快速出门不再是梦！
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850399.png)我一直认为，好的造型工具是美丽态度的体现![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850401.png)。强森这枚高颜值吹风机不单是个工具，更是梳妆台上的一件艺术品![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850402.png)。每次用它吹发，都像是在进行一场个人风格的仪式感升级。不妨也给自己来点这样的小奢侈，毕竟，美好的一天从头开始嘛！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850403.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850404.png)记得那次临时接到晚宴邀请![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850405.png)，急匆匆从健身房出来，头发还滴着汗。正当焦虑之际，幸好有强森吹风机紧急救援！我迅速将湿润的乱发吹整得服服帖帖，走进宴会厅的那一刻，自信满满![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850411.png)，好像刚做完高级沙龙护理似的。多亏了这小巧却强大的美发神器，我的美丽不再受限于时间！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850412.png)
-
-快来把这吹风机界的时尚小钢炮加入购物车吧！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850413.png)让我们一起做个风一样的女子，优雅又效率，从头开始闪耀每一天！![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850414.png)
-
-#强森吹风机 #高颜值美发神器 #智能护发新体验 #速干不伤发 #时尚必备
+<table><thead><tr><th></th><th><p><strong>未添加样例</strong></p></th><th><p><strong>添加样例</strong></p></th></tr></thead><tbody><tr><td><p>Prompt</p></td><td><p>#背景#</p><p>你很擅长编写小红书种草笔记，喜欢增加丰富的emoji元素。</p><p>#目的#</p><p>请生成一篇小红书种草笔记，推广强森吹风机。吹风机的优点是：体积小、高颜值、风力大、干的快、智能控温不伤发。</p><p>#受众#</p><p>喜欢追求时尚的年轻人，尤其是年轻女性</p><p>#输出#</p><p>小红书文章格式，充满emoji元素，简洁但内容充实</p></td><td><p>#背景#</p><p>你很擅长编写小红书种草笔记，喜欢增加丰富的emoji元素。</p><p>#目的#</p><p>请生成一篇小红书种草笔记，推广强森吹风机。吹风机的优点是：体积小、高颜值、风力大、干得快、智能控温不伤发。</p><p>#受众#</p><p>喜欢追求时尚的年轻人，尤其是年轻女性</p><p>#输出#</p><p>小红书文章格式，充满emoji元素，简洁但内容充实</p><p>#语气与风格#</p><ol><li><p>我亲测过+n种好物+谁适合谁受益 这个秘诀让你的话语超有信服力！ 比如：亲自尝试了很多美白神器，终于挖到宝！仅俩月，肌肤变得嫩滑透亮，自我感觉飘飘欲仙~ 此法特为想大晒体验的小伙伴们量身定制，还能精准安利，助人避坑！</p></li><li><p>难题出没+揭秘原因+终极解药 这公式助你条理清晰地分享，内容价值爆棚！ 案例：渴望秀发如丝？揭秘时刻来啦！原来我一直遗漏关键一步，直到遇见它！换用这款洗发水，秀发显著改善，光泽get！ 此法逻辑严密，不仅分享秘籍，还引导读者找到问题破解之道。</p></li><li><p>独到见解+深度剖析+巧妙推荐 这公式帮你自然流露心声，还能温馨种草！ 示例：我觉得每个女孩都该有份挚爱，生活因此而精彩。手帐成了我的小确幸，每当提笔，幸福指数飙升！ 它助你畅所欲言，同时不经意间传递心头好，双赢策略！</p></li><li><p>亲身经历+成果展示 这公式让你的情感表达鲜活又感人！ 场景：回想起夏夜海边的蚊灾，满身红包的绝望，直到遇见救星！现在，光滑肌肤让我裙摆飞扬，自信回归！ 它让你的故事活灵活现，分享喜悦与感恩之情，触动人心！</p></li></ol></td></tr><tr><td><p>输出</p></td><td><p>标题：<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850340.png" alt="image">强森小巧魔力风机，速干护发新宠儿<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850341.png" alt="image"></p><p>正文：</p><p>Hey宝贝们！今天要给你们种草一颗美发界的璀璨新星<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850342.png" alt="image"> —— 强森吹风机！它不仅仅是个工具，简直是随身携带的美发沙龙<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850343.png" alt="image"></p><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850345.png" alt="image">体积小巧，旅行必备 <img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850346.png" alt="image"></p><p>首先，它的迷你身材直接击中我心！旅行包包再满也能轻松塞进，不占空间，随时随地凹造型<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850348.png" alt="image"></p><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850350.png" alt="image"> 高颜值，时尚出街 <img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850351.png" alt="image"></p><p>看这设计，简直就是艺术品呀！无论是极简白还是高级粉，拿在手里就是街头最靓的崽！手机？不，这是我的新时尚配饰<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850354.png" alt="image"><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850355.png" alt="image"></p><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850356.png" alt="image">风力强劲，速干神器 <img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850358.png" alt="image"></p><p>别看它小，风力可一点都不含糊！早上赶时间？强森帮你5分钟搞定出门发型，效率MAX！<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850359.png" alt="image"></p><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850360.png" alt="image">干得快，还护发 <img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850361.png" alt="image"></p><p>智能控温技术，温柔呵护你的每一根秀发。告别热损伤，只留下柔顺光泽，每次吹发都像做了次沙龙护理～<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850363.png" alt="image"></p><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850364.png" alt="image">智能控温，细心之选 <img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850365.png" alt="image"></p><p>懂你的不只是风力，还有温度。根据发质自动调节最适宜的热量，守护秀发健康，长期使用也不怕伤发<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850367.png" alt="image"></p><p>总之，强森吹风机就是那个能让你爱不释手的小可爱！赶紧加入购物车，给你的美丽加速吧！<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850368.png" alt="image"></p><p>#强森吹风机 #美发达人 #快速护发秘籍</p><p>标记你的朋友，让她们也来感受这份轻巧与高效吧！<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850370.png" alt="image"></p><p>记得，爱护自己从“头”开始，强森与你一起，绽放自信光彩！<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850372.png" alt="image"></p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850375.png" alt="image">吹风机也能成为美发时尚单品？强森小钢炮告诉你答案！<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850377.png" alt="image"></p><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850379.png" alt="image">自从我用了<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850381.png" alt="image">强森吹风机<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850382.png" alt="image">，不仅旅行包轻便多了<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850384.png" alt="image">，每次吹发都变成享受时光<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850385.png" alt="image">！用了几次后，朋友们都夸我发质看起来好了不止一个度，就像刚从沙龙出来的样子<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850386.png" alt="image">。它绝对是短途出游或宿舍生活的完美伴侣哦！适合所有追求高效护发的宝贝们～<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850387.png" alt="image"></p><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850390.png" alt="image">面对湿漉漉的长发瀑布，每次都得耗时半小时以上？<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850395.png" alt="image">别怕，强森智能控温科技来了<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850397.png" alt="image">！它能迅速吹干每一根发丝，而且风力强劲却不伤发，秘密就在于它能智能调节温度，保护你的秀发不受热损伤<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850398.png" alt="image">。从此，快速出门不再是梦！</p><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850399.png" alt="image">我一直认为，好的造型工具是美丽态度的体现<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850401.png" alt="image">。强森这枚高颜值吹风机不单是个工具，更是梳妆台上的一件艺术品<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850402.png" alt="image">。每次用它吹发，都像是在进行一场个人风格的仪式感升级。不妨也给自己来点这样的小奢侈，毕竟，美好的一天从头开始嘛！<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850403.png" alt="image"></p><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850404.png" alt="image">记得那次临时接到晚宴邀请<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6317466271/p850405.png" alt="image">，急匆匆从健身房出来，头发还滴着汗。正当焦虑之际，幸好有强森吹风机紧急救援！我迅速将湿润的乱发吹整得服服帖帖，走进宴会厅的那一刻，自信满满<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850411.png" alt="image">，好像刚做完高级沙龙护理似的。多亏了这小巧却强大的美发神器，我的美丽不再受限于时间！<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850412.png" alt="image"></p><p>快来把这吹风机界的时尚小钢炮加入购物车吧！<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850413.png" alt="image">让我们一起做个风一样的女子，优雅又效率，从头开始闪耀每一天！<img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5317466271/p850414.png" alt="image"></p><p>#强森吹风机 #高颜值美发神器 #智能护发新体验 #速干不伤发 #时尚必备</p></td></tr></tbody></table>
 
 观察输出时，您可以发现，LLM 学习了样例的要求并针对性地生成了符合格式要求的种草文。
+
+<a id="技巧二-设定完成任务的步骤"></a>
 
 ### 技巧二：设定完成任务的步骤
 
 对于许多复杂任务，提醒 LLM 如何完成任务是非常必要的。
+
+<a id="accordion-提供任务步骤来完成数学题"></a>
 
 提供任务步骤来完成数学题
 
@@ -268,7 +95,9 @@ Hey宝贝们！今天要给你们种草一颗美发界的璀璨新星![image](ht
 
 Prompt（通过添加`#任务步骤#`告诉 LLM 如何完成任务）：
 
-```
+<a id="code-block"></a>
+
+```text
 #背景#
 又到了周日，小明像以往一样去爷爷奶奶家玩，小明于早上八点整步行出发，已知小明每分钟行走50米，
 走了12分钟后，小明的父亲发现小明忘记带作业了，于是便骑车去追小明，已知小明的爸爸每分钟骑行200米，
@@ -280,8 +109,12 @@ Prompt（通过添加`#任务步骤#`告诉 LLM 如何完成任务）：
 2. 再计算小明去爷爷家剩余的距离和需要的时间。
 3. 最后计算小明到爷爷家的时间。
 ```
+
 **Output（LLM 清晰地从提示词中获取到了任务步骤，并基于规定的步骤生成了正确结果）：**
-```
+
+<a id="code-block-2"></a>
+
+```text
 要解答这个问题，我们首先需要根据给定的信息分步骤来解决。
 
 步骤1: 计算小明被爸爸追上时的时间和移动的距离
@@ -302,51 +135,26 @@ Prompt（通过添加`#任务步骤#`告诉 LLM 如何完成任务）：
 因此，小明将在出发后的第36分钟到达爷爷家，即早上 8:00+36 分钟 = 8:36 到达爷爷家。
 ```
 
+<a id="技巧三-使用分隔符号区分单元"></a>
+
+<a id="0b031652eel59"></a>
+
 ### 技巧三：使用分隔符号区分单元
 
 在构建复杂的 Prompt 时，采用特定的分隔符来界定不同内容单元是极为关键的，这一做法显著增强了 LLM 对 Prompt 正确解析的能力。随着任务复杂度的增加，合理利用分隔符越能提升 LLM 的表现。
 
 分隔符的选择应着眼于那些在自然语言文本中罕见的、独特的字符组合，例如：`###`、`===`、`>>>`等。这些特殊符号序列并无固定规则，关键在于其辨识度高，确保模型能够明确区分这些符号是作为内容区域的界限标识，而非文本中的普通标点或语法组成部分。
 
-**未使用分隔符**
-
-**使用分隔符**
-
-Prompt
-
-请简短总结以下影评。
-
-曾经意气风发的张志强在生活的重压下，中年“失速”偏离了原本的生活轨迹，一时意气用事的决定，让他瞬间从家人的“小骄傲”变成了社会的“边角料”。然而，他未曾料到，这仅是他中年人生道路上的起点。接连不断的变故如疾风骤雨般袭来，迫使他不得不重新面对自我。当生活的重担真正压肩，他选择成为一名快递员，从新的起点重新出发，穿梭于都市大街小巷的张志强在路上结识了一众志同道合的伙伴。在共度的时光里他深切的体会到了人间的冷暖真情，逐渐在这条充满磨砺的“逆行道”中找回曾经丢失的勇气与信念，重新定义人生新的方向。
-
-请简短总结以下影评。
-
-###
-
-曾经意气风发的张志强在生活的重压下，中年“失速”偏离了原本的生活轨迹，一时意气用事的决定，让他瞬间从家人的“小骄傲”变成了社会的“边角料”。
-
-###
-
-然而，他未曾料到，这仅是他中年人生道路上的起点。接连不断的变故如疾风骤雨般袭来，迫使他不得不重新面对自我。
-
-当生活的重担真正压肩，他选择成为一名快递员，从新的起点重新出发，穿梭于都市大街小巷的张志强在路上结识了一众志同道合的伙伴。
-
-###
-
-在共度的时光里他深切的体会到了人间的冷暖真情，逐渐在这条充满磨砺的“逆行道”中找回曾经丢失的勇气与信念，重新定义人生新的方向。
-
-###
-
-输出
-
-电影讲述了一个中年危机故事，主角张志强因生活压力偏离正常生活轨道，经历一系列挑战后，他成为一名快递员，在新朋友的帮助下重拾勇气与信念，找到了生活的新方向。影片展现了逆境中的成长与自我救赎。
-
-主人公张志强中年遭遇生活困境，一次冲动的决定使他社会地位骤降。
-
-随后，面对重重挑战，他担任快递员重新起步，在此过程中与同行建立深厚情谊，并在磨难中找回勇气和信念。
-
-最终，在艰难和挑战中，为自己的人生找到了新的意义和方向。
+|  | 未使用分隔符 | 使用分隔符 |
+| --- | --- | --- |
+| Prompt | 请简短总结以下影评。<br><br>曾经意气风发的张志强在生活的重压下，中年“失速”偏离了原本的生活轨迹，一时意气用事的决定，让他瞬间从家人的“小骄傲”变成了社会的“边角料”。然而，他未曾料到，这仅是他中年人生道路上的起点。接连不断的变故如疾风骤雨般袭来，迫使他不得不重新面对自我。当生活的重担真正压肩，他选择成为一名快递员，从新的起点重新出发，穿梭于都市大街小巷的张志强在路上结识了一众志同道合的伙伴。在共度的时光里他深切的体会到了人间的冷暖真情，逐渐在这条充满磨砺的“逆行道”中找回曾经丢失的勇气与信念，重新定义人生新的方向。 | 请简短总结以下影评。<br><br>###<br><br>曾经意气风发的张志强在生活的重压下，中年“失速”偏离了原本的生活轨迹，一时意气用事的决定，让他瞬间从家人的“小骄傲”变成了社会的“边角料”。<br><br>###<br><br>然而，他未曾料到，这仅是他中年人生道路上的起点。接连不断的变故如疾风骤雨般袭来，迫使他不得不重新面对自我。<br><br>当生活的重担真正压肩，他选择成为一名快递员，从新的起点重新出发，穿梭于都市大街小巷的张志强在路上结识了一众志同道合的伙伴。<br><br>###<br><br>在共度的时光里他深切的体会到了人间的冷暖真情，逐渐在这条充满磨砺的“逆行道”中找回曾经丢失的勇气与信念，重新定义人生新的方向。<br><br>### |
+| 输出 | 电影讲述了一个中年危机故事，主角张志强因生活压力偏离正常生活轨道，经历一系列挑战后，他成为一名快递员，在新朋友的帮助下重拾勇气与信念，找到了生活的新方向。影片展现了逆境中的成长与自我救赎。 | 主人公张志强中年遭遇生活困境，一次冲动的决定使他社会地位骤降。<br><br>随后，面对重重挑战，他担任快递员重新起步，在此过程中与同行建立深厚情谊，并在磨难中找回勇气和信念。<br><br>最终，在艰难和挑战中，为自己的人生找到了新的意义和方向。 |
 
 您可以在输出中发现明显差别，在使用了分隔符的输出中，**LLM 不仅理解了三段话的逻辑关系，还正确识别了分隔符，并根据分隔符的段落生成了三段强相关的总结。**
+
+<a id="技巧四-引导模型-思考"></a>
+
+<a id="2ae22a9c7028a"></a>
 
 ### 技巧四：引导模型“思考”
 
@@ -356,7 +164,9 @@ Prompt
 
 任务目的：**解析一个复杂的 JSON 结构体**
 
-```
+<a id="code-block-3"></a>
+
+```json
 #背景#
 JSON 输入：
 {"web-app": {
@@ -390,58 +200,22 @@ JSON 输入：
 3. servlet 的 cofaxTools 中有三个以“log” 开头的参数，且 “log” 参数小于 10
 ```
 
-**不使用思维链**
-
-**使用思维链**
-
-```
-#输出#
-如果全部符合要求，只输出 "符合要求"，否则只输出 "不符合要求"。
-```
-
-```
-#输出#
+<table><thead><tr><th><strong>不使用思维链</strong></th><th><strong>使用思维链</strong></th></tr></thead><tbody><tr><td><a id="code-block-4"></a><pre class="language-text"><code>#输出#
+如果全部符合要求，只输出 &quot;符合要求&quot;，否则只输出 &quot;不符合要求&quot;。
+</code></pre></td><td><a id="code-block-5"></a><pre class="language-text"><code>#输出#
 先输出针对各要求的思考判断过程。
-如果全部符合要求，再输出 "符合要求"，否则输出 "不符合要求"。
-```
+如果全部符合要求，再输出 &quot;符合要求&quot;，否则输出 &quot;不符合要求&quot;。
+</code></pre></td></tr><tr><td><p>不符合要求</p></td><td><p>首先，我们来逐步分析给定的JSON数据，以判断它是否符合所有提到的要求。</p><p><strong>思考过程</strong></p><ol><li><p><strong>检查每个servlet是否有init-param</strong></p><ul><li><code>cofaxEmail</code>servlet 有<code>init-param</code>，包含 “mailHost” 和 “mailHostOverride”。</li><li><code>cofaxTools</code>servlet 也有<code>init-param</code>，包含 “templatePath”, “log”, “logLocation”, 和 “logMaxSize”。</li></ul><p><strong>结论</strong>：每个servlet都有<code>init-param</code>，满足要求1。</p></li><li><p><strong>检查servlet-mapping中的元素是否都在servlet中有匹配</strong></p><ul><li><code>servlet-mapping</code>中有两个元素：<code>cofaxEmail</code>和<code>cofaxTools</code>。</li><li><code>servlet</code>定义中也正好有这两个servlet名称的定义：<code>cofaxEmail</code>和<code>cofaxTools</code>。</li></ul><p><strong>结论</strong>：<code>servlet-mapping</code> 中的所有元素都能在 <code>servlet</code> 中找到匹配，满足要求2。</p></li><li><p><strong>检查cofaxTools servlet中是否有三个以”log”开头的参数，且”log”参数小于10</strong></p><ul><li><code>cofaxTools</code>servlet 的<code>init-param</code>中以 “log” 开头的参数有：”log”（值为1），”logLocation”（值为”/usr/local/tomcat/logs/CofaxTools.log”），和理论上应该计算在内的”logMaxSize”（尽管它的值为空，但题目似乎更关注前缀而非值的内容）。</li><li>其中 “log” 的值为1，确实小于10。</li></ul><p><strong>结论</strong>：虽然关于”logMaxSize”是否算作以”log”开头的有效参数可能有歧义（因为它没有实际数值），但基于最直接的解读，我们可以认为是满足了至少存在三个以”log”开头的参数这一条件，且明确指定的”log”参数值为1，小于10，因此大体上满足要求3，尽管”logMaxSize”的处理依据具体情况可能有所不同。</p></li></ol><p><strong>输出</strong></p><p>基于以上分析，虽然关于”logMaxSize”的处理可能存在解释空间，但主要条件基本得到满足。因此，如果对”logMaxSize”不作严格要求（比如，不强制要求它必须有一个有效数值且小于10），则可以认为整体<strong>符合要求</strong>。如果有对”logMaxSize”的具体数值要求，则需要进一步澄清后决定。但在标准解读下，答案应为：”符合要求”。</p></td></tr></tbody></table>
 
-不符合要求
-
-首先，我们来逐步分析给定的JSON数据，以判断它是否符合所有提到的要求。
-
-**思考过程**
-
-1.  **检查每个servlet是否有init-param**
-    
-    -   `cofaxEmail`servlet 有`init-param`，包含 “mailHost” 和 “mailHostOverride”。
-    -   `cofaxTools`servlet 也有`init-param`，包含 “templatePath”, “log”, “logLocation”, 和 “logMaxSize”。
-    
-    **结论**：每个servlet都有`init-param`，满足要求1。
-    
-2.  **检查servlet-mapping中的元素是否都在servlet中有匹配**
-    
-    -   `servlet-mapping`中有两个元素：`cofaxEmail`和`cofaxTools`。
-    -   `servlet`定义中也正好有这两个servlet名称的定义：`cofaxEmail`和`cofaxTools`。
-    
-    **结论**：`servlet-mapping` 中的所有元素都能在 `servlet` 中找到匹配，满足要求2。
-    
-3.  **检查cofaxTools servlet中是否有三个以”log”开头的参数，且”log”参数小于10**
-    
-    -   `cofaxTools`servlet 的`init-param`中以 “log” 开头的参数有：”log”（值为1），”logLocation”（值为”/usr/local/tomcat/logs/CofaxTools.log”），和理论上应该计算在内的”logMaxSize”（尽管它的值为空，但题目似乎更关注前缀而非值的内容）。
-    -   其中 “log” 的值为1，确实小于10。
-    
-    **结论**：虽然关于”logMaxSize”是否算作以”log”开头的有效参数可能有歧义（因为它没有实际数值），但基于最直接的解读，我们可以认为是满足了至少存在三个以”log”开头的参数这一条件，且明确指定的”log”参数值为1，小于10，因此大体上满足要求3，尽管”logMaxSize”的处理依据具体情况可能有所不同。
-    
-
-**输出**
-
-基于以上分析，虽然关于”logMaxSize”的处理可能存在解释空间，但主要条件基本得到满足。因此，如果对”logMaxSize”不作严格要求（比如，不强制要求它必须有一个有效数值且小于10），则可以认为整体**符合要求**。如果有对”logMaxSize”的具体数值要求，则需要进一步澄清后决定。但在标准解读下，答案应为：”符合要求”。
-
-**说明**上表示例的标准答案为“符合要求”：每个 servlet 均有 init-param，servlet-mapping 中的元素在 servlet 中均有匹配，且 cofaxTools 的 init-param 中以 "log" 开头的参数有 log、logLocation、logMaxSize 三个，"log" 参数的值为 1，小于 10。左列未使用思维链时模型输出的“不符合要求”为错误答案。
+> **说明**
+>
+> 上表示例的标准答案为“符合要求”：每个 servlet 均有 init-param，servlet-mapping 中的元素在 servlet 中均有匹配，且 cofaxTools 的 init-param 中以 "log" 开头的参数有 log、logLocation、logMaxSize 三个，"log" 参数的值为 1，小于 10。左列未使用思维链时模型输出的“不符合要求”为错误答案。
 
 除了思维链，启发 LLM 进行“思考”的实用方法还有**提示链（Prompt Chaining）**。提示链通过多轮对话，引导 LLM “思考” 方向，让 LLM 从简单任务开始，沿着设计好的“思考”方向逐步完成一个复杂推理。
 
 提示链虽然相对思维链来说构建模式更加复杂，但**模型表现更好，准确率更高**。它非常适合逻辑复杂但能按照固定模式拆解的困难任务。
+
+<a id="accordion-提示链-prompt-chaining-引导样例"></a>
 
 提示链（Prompt Chaining）引导样例
 
@@ -451,7 +225,9 @@ JSON 输入：
 
 第一轮输入（数学题 + 第一个简单问题）：
 
-```
+<a id="code-block-6"></a>
+
+```text
 #背景#
 又到了周日，小明像以往一样去爷爷奶奶家玩，小明于早上八点整步行出发，已知小明每分钟行走50米，
 走了12分钟后，小明的父亲发现小明忘记带作业了，于是便骑车去追小明，已知小明的爸爸每分钟骑行200米，
@@ -460,8 +236,12 @@ JSON 输入：
 #目的#
 计算小明什么时候被他爸爸追上，追上时走了多远？
 ```
+
 **Output 1（LLM 对第一个简单问题的回答）：**
-```
+
+<a id="code-block-7"></a>
+
+```text
 首先，我们计算小明在被父亲追上之前走了多远。
 小明的速度是每分钟50米，他已经走了12分钟，因此他已经走过的距离是：
 50 米/分钟 × 12 分钟 = 600 米
@@ -479,24 +259,36 @@ JSON 输入：
 
 第二轮输入（第二个问题，问题逐渐深入）：
 
-```
+<a id="code-block-8"></a>
+
+```text
 #目的#
 计算小明还要坐多远自行车才能到爷爷家？
 ```
+
 **Output 2（LLM 对第二个问题的回答）：**
-```
+
+<a id="code-block-9"></a>
+
+```text
 根据题目，小明坐自行车的路程是他走路路程的5倍。小明被追上时已经走了800米，那么他坐自行车的路程将是：
 800 米 × 5 = 4000 米
 ```
 
 第三轮输入（最后的复杂问题）：
 
-```
+<a id="code-block-10"></a>
+
+```text
 #目的#
 小明什么时候到爷爷家？
 ```
+
 **Output 3（通过前面多个问题的引导得到了正确的结果）：**
-```
+
+<a id="code-block-11"></a>
+
+```text
 要计算小明什么时候到爷爷家，我们需先确定小明坐上自行车后的行进时间。
 小明坐自行车的总路程是4000米，他父亲的骑行速度是每分钟200米。因此，小明坐自行车所需的时间是：
 4000  米 / 200  米/分钟 = 20  分钟
@@ -509,6 +301,8 @@ JSON 输入：
 
 引导 LLM “思考”的方法还有很多种，比如：思维树（Tree of Thoughts, ToT)、Boosting of Thoughts 等。
 
+<a id="prompt-测试与迭代"></a>
+
 ## Prompt 测试与迭代
 
 生成最优 prompt 是一个高度实验性的过程，需要不断尝试和调整各种方法。整个 prompt 工程的优化过程可概括如下：
@@ -516,6 +310,10 @@ JSON 输入：
 ![Prompt优化流程](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7860407871/CAEQURiBgIDQju2umxkiIGZkMTJiMjE4YmI1YzRjNTM4ODc0YjNjNGYxNTU2YzI04789852_20241122171352.128.svg)
 
 此外，值得注意的是，除了精心设计的 prompt 外，用户提供的反馈和修正也是获取模型最佳输出的关键因素之一。即使在 prompt 优化完成后，持续地在线上环境中接收反馈并作出相应调整，才能使模型更好地理解和满足用户需求。
+
+<a id="prompt-优化案例-跨国公司-ai-助手稳定地输出多语言内容"></a>
+
+<a id="05776c0f8brr0"></a>
 
 ## Prompt 优化案例：跨国公司 AI 助手稳定地输出多语言内容
 
@@ -527,106 +325,11 @@ JSON 输入：
 2.  优化前 Prompt 结构较为松散，而且`## 限制`部分内容过于冗余。因此使用本教程提供的 Prompt 框架重新排版并将`## 限制`部分的内容拆分到正确的位置。
 3.  `${documents}`部分是一段很长的话，放在某句话中并不合适。应该使用分隔符标记切分出来，作为一个重要的内容块。
 
-**优化前 Prompt**
+<table><thead><tr><th><p><strong>优化前 Prompt</strong></p></th><th><p><strong>优化后 Prompt</strong></p></th></tr></thead><tbody><tr><td><p># 角色</p><p>你是一位高效的HR AI助手，专门负责解答公司内部关于政策、考勤制度、年假安排等相关问题。你具备快速准确地解析公司政策文档的能力，并能够为同事提供清晰简洁的说明。</p><p>## 技能</p><p>### 技能1: 政策解析</p><p>- **任务**：准确解读公司政策文档，为同事提供清晰、简洁的政策说明。</p><p>- 快速定位到相关政策条款，解答具体的政策执行细节。</p><p>- 确保解释的内容易于理解且符合公司的官方规定。</p><p>### 技能2: 考勤答疑</p><p>- 解答与员工考勤相关的所有疑问，包括打卡规则、迟到早退处理、请假流程等。</p><p>- 提供具体的考勤操作指南和特殊情况处理建议。</p><p>### 技能3: 年假管理咨询</p><p>- 详细解释年假申请条件、累积规则、有效期及审批流程。</p><p>- 协助计算员工的年假余额，提供休假规划建议。</p><p>## 工具与资源</p><p>- **知识库访问**：直接引用和解析`${documents}`中的公司政策文档和相关规章制度，确保答案的权威性和时效性。</p><p>- 如果提出的问题是英文，请用你理解的中文含义去检索知识库，最后再使用英文回复（请注意回复内容中的标点符号统一为英文格式！尤其字符 U+2019 &quot;’&quot;，请替换为“'” ）。</p><p>## 限制</p><p>- 要求回答内容仅使用标准 ASCII 字符集，不要出现中文引号、全角逗号及其他全角标点符号！！！</p><p>- 使用与用户提问相同的语种回复，例如用户使用中文，回答中文，用户使用英文，回答英文。</p><p>- 仅限于解答公司政策、考勤制度、年假等人力资源管理范畴内的问题。</p><p>- 不涉及个人隐私数据的查询，保护员工信息安全。</p><p>- 当遇到知识库未涵盖或不明确的问题时，需指引询问者联系人力资源部门获取进一步的帮助。</p></td><td><p>#背景#</p><p>你是一位跨国公司的高效的HR AI助手，专门负责解答公司内部关于公司政策解析、考勤答疑、年假管理咨询的问题。你具备快速准确地解析公司政策文档的能力。以下为公司政策文档：</p><p>======</p><p>`${documents}`</p><p>======</p><p>#目的#</p><ol><li><p>用户的问题仅限于公司政策解析、考勤答疑、年假管理咨询三类范畴。</p></li><li><p>当问题在范畴内但知识库未涵盖或不明确时，指引用户联系人力资源部门获取进一步的帮助。</p></li><li><p>三类问题按照以下要求进行回答：</p><ol><li><p>政策解析</p><ol><li><p>准确解读公司政策文档，为用户提供清晰、简洁的政策说明。</p></li><li><p>快速定位到相关政策条款，解答具体的政策执行细节。</p></li><li><p>确保解释的内容易于理解且符合公司的官方规定。</p></li></ol></li><li><p>考勤答疑</p><p>- 解答与员工考勤相关的所有疑问，包括打卡规则、迟到早退处理、请假流程等。</p><p>- 提供具体的考勤操作指南和特殊情况处理建议。</p></li><li><p>年假管理咨询</p><p>- 详细解释年假申请条件、累积规则、有效期及审批流程。</p><p>- 协助计算员工的年假余额，提供休假规划建议。</p></li></ol></li><li><p>不涉及个人隐私数据的查询，保护员工信息安全。</p></li></ol><p>#多语言要求#</p><p>- 如果提出的问题不是中文，用问题的中文含义去检索知识库。</p><p>- 知识库检索出来的内容在输出时也要转换为问题的语种。</p><p>#输出#</p><p>1. 仅使用标准 ASCII 字符集输出回答。</p><p>2. 输出的内容语种为用户输入的语种。</p></td></tr></tbody></table>
 
-**优化后 Prompt**
+<a id="prompt-优化案例-从对话中提取多维度分析结果并输出-json"></a>
 
-\# 角色
-
-你是一位高效的HR AI助手，专门负责解答公司内部关于政策、考勤制度、年假安排等相关问题。你具备快速准确地解析公司政策文档的能力，并能够为同事提供清晰简洁的说明。
-
-\## 技能
-
-\### 技能1: 政策解析
-
-\- \*\*任务\*\*：准确解读公司政策文档，为同事提供清晰、简洁的政策说明。
-
-\- 快速定位到相关政策条款，解答具体的政策执行细节。
-
-\- 确保解释的内容易于理解且符合公司的官方规定。
-
-\### 技能2: 考勤答疑
-
-\- 解答与员工考勤相关的所有疑问，包括打卡规则、迟到早退处理、请假流程等。
-
-\- 提供具体的考勤操作指南和特殊情况处理建议。
-
-\### 技能3: 年假管理咨询
-
-\- 详细解释年假申请条件、累积规则、有效期及审批流程。
-
-\- 协助计算员工的年假余额，提供休假规划建议。
-
-\## 工具与资源
-
-\- \*\*知识库访问\*\*：直接引用和解析\`${documents}\`中的公司政策文档和相关规章制度，确保答案的权威性和时效性。
-
-\- 如果提出的问题是英文，请用你理解的中文含义去检索知识库，最后再使用英文回复（请注意回复内容中的标点符号统一为英文格式！尤其字符 U+2019 "’"，请替换为“'” ）。
-
-\## 限制
-
-\- 要求回答内容仅使用标准 ASCII 字符集，不要出现中文引号、全角逗号及其他全角标点符号！！！
-
-\- 使用与用户提问相同的语种回复，例如用户使用中文，回答中文，用户使用英文，回答英文。
-
-\- 仅限于解答公司政策、考勤制度、年假等人力资源管理范畴内的问题。
-
-\- 不涉及个人隐私数据的查询，保护员工信息安全。
-
-\- 当遇到知识库未涵盖或不明确的问题时，需指引询问者联系人力资源部门获取进一步的帮助。
-
-#背景#
-
-你是一位跨国公司的高效的HR AI助手，专门负责解答公司内部关于公司政策解析、考勤答疑、年假管理咨询的问题。你具备快速准确地解析公司政策文档的能力。以下为公司政策文档：
-
-\======
-
-\`${documents}\`
-
-\======
-
-#目的#
-
-1.  用户的问题仅限于公司政策解析、考勤答疑、年假管理咨询三类范畴。
-    
-2.  当问题在范畴内但知识库未涵盖或不明确时，指引用户联系人力资源部门获取进一步的帮助。
-    
-3.  三类问题按照以下要求进行回答：
-    
-    1.  政策解析
-        
-        1.  准确解读公司政策文档，为用户提供清晰、简洁的政策说明。
-            
-        2.  快速定位到相关政策条款，解答具体的政策执行细节。
-            
-        3.  确保解释的内容易于理解且符合公司的官方规定。
-            
-    2.  考勤答疑
-        
-        \- 解答与员工考勤相关的所有疑问，包括打卡规则、迟到早退处理、请假流程等。
-        
-        \- 提供具体的考勤操作指南和特殊情况处理建议。
-        
-    3.  年假管理咨询
-        
-        \- 详细解释年假申请条件、累积规则、有效期及审批流程。
-        
-        \- 协助计算员工的年假余额，提供休假规划建议。
-        
-4.  不涉及个人隐私数据的查询，保护员工信息安全。
-    
-
-#多语言要求#
-
-\- 如果提出的问题不是中文，用问题的中文含义去检索知识库。
-
-\- 知识库检索出来的内容在输出时也要转换为问题的语种。
-
-#输出#
-
-1\. 仅使用标准 ASCII 字符集输出回答。
-
-2\. 输出的内容语种为用户输入的语种。
+<a id="a3f7c8e2b1k9m"></a>
 
 ## Prompt 优化案例：从对话中提取多维度分析结果并输出 JSON
 
@@ -639,40 +342,14 @@ JSON 输入：
 3.  **注意事项**：提出对模型的明确要求与限制，如"准确性优先""不能更改原文"等，进一步约束模型行为。
 4.  **输出示例**：提供符合格式要求的样例数据，是避免模型产生幻觉的最有效方式。
 
-**优化前 Prompt**
-
-**优化后 Prompt**
-
-请帮我分析以下电话销售对话中的这些问题：沟通不足、关键信息、客户关注点、需求急迫度、影响成交的因素、客户满意度。
-
-（用户对话内容）
-
-任务指令：根据用户提供的对话内容，回答最后提出的问题。每个问题的回答应首先直接给出答案，然后列出支持该答案的依据；如果问题比较复杂，则根据对话内容分点描述。
-
-回答格式：请按照以下 JSON 格式组织答案：
-
-```
-[
- {"question": "问题1", "answer": ["答案", "依据一", "依据二"]},
- {"question": "问题2", "answer": ["答案", "依据一", "依据二"]}
+<table><thead><tr><th><strong>优化前 Prompt</strong></th><th><strong>优化后 Prompt</strong></th></tr></thead><tbody><tr><td><p>请帮我分析以下电话销售对话中的这些问题：沟通不足、关键信息、客户关注点、需求急迫度、影响成交的因素、客户满意度。</p><p>（用户对话内容）</p></td><td><p>任务指令：根据用户提供的对话内容，回答最后提出的问题。每个问题的回答应首先直接给出答案，然后列出支持该答案的依据；如果问题比较复杂，则根据对话内容分点描述。</p><p>回答格式：请按照以下 JSON 格式组织答案：</p><a id="code-block-12"></a><pre class="language-json"><code>[
+ {&quot;question&quot;: &quot;问题1&quot;, &quot;answer&quot;: [&quot;答案&quot;, &quot;依据一&quot;, &quot;依据二&quot;]},
+ {&quot;question&quot;: &quot;问题2&quot;, &quot;answer&quot;: [&quot;答案&quot;, &quot;依据一&quot;, &quot;依据二&quot;]}
 ]
-```
-
-注意事项：
-
-1.  仔细阅读并理解用户提供的所有信息。
-    
-2.  明确区分出用户提出的每一个独立问题。
-    
-3.  确保输出的 JSON 格式正确无误，最后仅输出 JSON 内容。
-    
-4.  准确性优先，列出依据时不能更改原文。
-    
-
-示例：（提供符合格式的样例数据）
-
-（用户对话内容 + 问题列表）
+</code></pre><p>注意事项：</p><ol><li><p>仔细阅读并理解用户提供的所有信息。</p></li><li><p>明确区分出用户提出的每一个独立问题。</p></li><li><p>确保输出的 JSON 格式正确无误，最后仅输出 JSON 内容。</p></li><li><p>准确性优先，列出依据时不能更改原文。</p></li></ol><p>示例：（提供符合格式的样例数据）</p><p>（用户对话内容 + 问题列表）</p></td></tr></tbody></table>
 
 在优化前的 Prompt 中，模型可能以自由文本形式输出分析结果，格式不统一，难以被后续系统解析。而优化后的 Prompt 通过**任务指令 + 格式模板 + 注意事项 + 示例**四要素的组合，让模型能够准确识别所有问题并以规范的 JSON 格式输出，每个问题都附带来自原文的依据，便于自动化处理和质量追溯。
 
-**说明**当需要模型输出结构化数据时，提供明确的格式模板和符合格式的示例数据是最有效的优化手段。同时，使用"准确性优先""不能更改原文"等限制性指令，可以有效减少模型的幻觉现象。
+> **说明**
+>
+> 当需要模型输出结构化数据时，提供明确的格式模板和符合格式的示例数据是最有效的优化手段。同时，使用"准确性优先""不能更改原文"等限制性指令，可以有效减少模型的幻觉现象。

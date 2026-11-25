@@ -2,7 +2,11 @@
 
 对于数据标注、内容生成等无需实时响应的场景，实时推理API存在成本高、并发受限的问题。阿里云百炼的批量对话（Batch Chat）API ，保持了与实时API一致的同步调用方式，您只需发起请求等待最终结果返回。目前该功能享有 官网限时 5 折优惠 ，能将您的推理成本直接降低 50%。
 
-> 本接口仅支持提交单个请求。如需一次性传入多个请求，可通过文件方式提交，详情请参考[OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)。
+> 本接口仅支持提交单个请求。如需一次性传入多个请求，可通过文件方式提交，详情请参考[OpenAI兼容-Batch（文件输入）](batch-interfaces-compatible-with-openai.md)。
+
+<a id="工作原理"></a>
+
+<a id="b5a1e1c0f0pm4"></a>
 
 ## 工作原理
 
@@ -15,34 +19,58 @@
     > 如果超过最长等待时间，连接将自动断开并返回超时错误。
     
 
+<a id="适用范围"></a>
+
+<a id="db634c824cnsq"></a>
+
 ## 适用范围
+
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
 -   **文本生成模型：**qwen4-max、qwen3.8-max、qwen3.8-flash、qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen-plus、qwen-flash
 -   **图像与视频理解模型：**qwen4-max、qwen3.8-max、qwen3.8-flash、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3.5-omni-plus、qwen3.5-omni-flash、qwen3-vl-plus
 
-**重要**
+> **重要**
+>
+> -   在Batch 场景下，`qwen3.8-max`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`、`qwen3.5-omni-flash`和`qwen3.5-omni-plus`单次请求的上下文 Token 数最大支持 256K，`qwen3.5-omni-plus`、`qwen3.5-omni-flash`不支持语音输出。
+> -   部分模型支持思考模式，开启后会产生思考`tokens`导致成本增加。
+> -   `qwen3.8`、`qwen3.7`、`qwen3.6`和`qwen3.5` 系列模型默认开启思考模式。建议使用混合思考模型时，显式设置`enable_thinking`参数（`true`开启/`false`关闭）。
+> -   在 JSONL 请求体中，`enable_thinking` 为 `body` 的顶层参数，须与 `model` 同级传入，不能放在 `extra_body` 中。
 
--   在Batch 场景下，`qwen3.8-max`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`、`qwen3.5-omni-flash`和`qwen3.5-omni-plus`单次请求的上下文 Token 数最大支持 256K，`qwen3.5-omni-plus`、`qwen3.5-omni-flash`不支持语音输出。
--   部分模型支持思考模式，开启后会产生思考`tokens`导致成本增加。
--   `qwen3.8`、`qwen3.7`、`qwen3.6`和`qwen3.5` 系列模型默认开启思考模式。建议使用混合思考模型时，显式设置`enable_thinking`参数（`true`开启/`false`关闭）。
--   在 JSONL 请求体中，`enable_thinking` 为 `body` 的顶层参数，须与 `model` 同级传入，不能放在 `extra_body` 中。
+<a id="如何使用"></a>
+
+<a id="0193a7c785jez"></a>
 
 ## 如何使用
 
+<a id="前提条件"></a>
+
+<a id="775d9d6151wyi"></a>
+
 ### 前提条件
 
--   已开通阿里云百炼服务，并已[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+-   已开通阿里云百炼服务，并已[获取 API Key](../preparations/get-api-key.md)。
     
     > 建议[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)中以降低API Key的泄露风险。
     
--   若通过OpenAI SDK进行调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+-   若通过OpenAI SDK进行调用，需要[安装SDK](../preparations/install-sdk.md)。
     
 
-```
+<a id="code-block"></a>
+
+```bash
 pip3 install -U openai
 ```
+
+<a id="步骤1-配置-api-端点"></a>
+
+<a id="59d4777741z2b"></a>
 
 ### 步骤1：配置 API 端点
 
@@ -52,6 +80,10 @@ pip3 install -U openai
 
 **HTTP调用：**请求端点为`POST https://batch.dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
 
+<a id="步骤2-发起调用"></a>
+
+<a id="54c7b37eabwub"></a>
+
 ### 步骤2：发起调用
 
 此处以文本对话为例，展示如何调用 Batch Chat 接口。
@@ -60,10 +92,19 @@ pip3 install -U openai
 
 > 下方示例展示如何主动设置一个自定义的超时时间（60-3600秒）作为参考。
 
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
 **请求示例**
-```
+
+<a id="code-block-2"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -82,15 +123,26 @@ completion = client.chat.completions.create(
 )
 print(completion.choices[0].message.content)
 ```
+
 **响应示例**
-```
+
+<a id="code-block-3"></a>
+
+```json
 我是千问，阿里巴巴集团旗下的超大规模语言模型。我能够回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
+
+<a id="java"></a>
+
+<a id="java-h4"></a>
 
 #### Java
 
 **请求示例**
-```
+
+<a id="code-block-4"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.chat.completions.ChatCompletion;
@@ -122,16 +174,27 @@ public class Main {
     }
 }
 ```
+
 **响应示例**
-```
+
+<a id="code-block-5"></a>
+
+```json
 ChatCompletion{id=chatcmpl-a12c115e-15fc-94f9-a984-81bd65f0527b, choices=[Choice{finishReason=stop, index=0, logprobs=, message=ChatCompletionMessage{
 content=我是千问，阿里巴巴集团旗下的超大规模语言模型。我可以帮助你回答问题、创作文字、提供信息查询等服务。很高兴认识你！, refusal=, role=assistant, annotations=, audio=, functionCall=, toolCalls=, additionalProperties={}}, additionalProperties={}}], created=1763609020, model=qwen-plus, object_=chat.completion, serviceTier=, systemFingerprint=, usage=CompletionUsage{completionTokens=33, promptTokens=10, totalTokens=43, completionTokensDetails=, promptTokensDetails=, additionalProperties={}}, additionalProperties={}}
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
 **请求示例**
-```
+
+<a id="code-block-6"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI(
@@ -158,8 +221,12 @@ async function main() {
 
 main();
 ```
+
 **响应示例**
-```
+
+<a id="code-block-7"></a>
+
+```json
 {
     "created": 1763618557,
     "usage": {
@@ -183,10 +250,17 @@ main();
 }
 ```
 
+<a id="go"></a>
+
+<a id="go-h4"></a>
+
 #### Go
 
 **请求示例**
-```
+
+<a id="code-block-8"></a>
+
+```go
 package main
 
 import (
@@ -224,15 +298,26 @@ func main() {
     println(chatCompletion.Choices[0].Message.Content)
 }
 ```
+
 **响应示例**
-```
+
+<a id="code-block-9"></a>
+
+```json
 我是千问，由阿里云研发的超大规模语言模型。我可以生成各种类型的文本，如文章、故事、诗歌、故事等，并能够根据不同的场景和需求进行变换和扩展。此外，我还能够回答各种问题，提供帮助和解决方案。很高兴为您服务！
 ```
+
+<a id="c-http"></a>
+
+<a id="c-http-h4"></a>
 
 #### C#（HTTP）
 
 **请求示例**
-```
+
+<a id="code-block-10"></a>
+
+```csharp
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -306,8 +391,12 @@ class Program
     }
 }
 ```
+
 **响应示例**
-```
+
+<a id="code-block-11"></a>
+
+```json
 {
     "created": 1763620689,
     "usage": {
@@ -331,10 +420,17 @@ class Program
 }
 ```
 
+<a id="php-http"></a>
+
+<a id="php-http-h4"></a>
+
 #### PHP（HTTP）
 
 **请求示例**
-```
+
+<a id="code-block-12"></a>
+
+```php
 <?php
 // 设置Batch Chat 请求 的 URL
 $url = 'https://batch.dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
@@ -382,8 +478,12 @@ curl_close($ch);
 echo $response;
 ?>
 ```
+
 **响应示例**
-```
+
+<a id="code-block-13"></a>
+
+```json
 {
     "created": 1763621824,
     "usage": {
@@ -407,13 +507,19 @@ echo $response;
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
 **请求示例**
 
 > 设置最长等待时间max-time为1800秒，最长支持3600秒。
 
-```
+<a id="code-block-14"></a>
+
+```bash
 curl -X POST https://batch.dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
 --max-time 1800 \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -432,8 +538,12 @@ curl -X POST https://batch.dashscope.aliyuncs.com/compatible-mode/v1/chat/comple
     ]
 }'
 ```
+
 **响应示例**
-```
+
+<a id="code-block-15"></a>
+
+```json
 {
     "created": 1763622152,
     "usage": {
@@ -457,6 +567,10 @@ curl -X POST https://batch.dashscope.aliyuncs.com/compatible-mode/v1/chat/comple
 }
 ```
 
+<a id="使用限制"></a>
+
+<a id="3d488affb644p"></a>
+
 ## 使用限制
 
 -   **等待时间**：提交请求后，会同步等待结果，服务端最长会保持连接3600秒（1小时）。可根据实际需求设置自定义超时时间，取值范围为60-3600秒。
@@ -468,16 +582,30 @@ curl -X POST https://batch.dashscope.aliyuncs.com/compatible-mode/v1/chat/comple
     > 此上限为系统设定的理论最大值。在实际调用中，API的可用资源会受到整体系统负载的动态影响，建议您在代码中实现重试逻辑。
     
 
+<a id="计费说明"></a>
+
+<a id="fecc98d9514rv"></a>
+
 ## 计费说明
 
--   **计费单价：**按成功请求的输入和输出Token计费，目录价与对应模型实时调用价格一致。**官网限时为 Batch Chat 调用提供 5 折优惠，其最终费用为实时调用价格的 50%**，具体请参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
+-   **计费单价：**按成功请求的输入和输出Token计费，目录价与对应模型实时调用价格一致。**官网限时为 Batch Chat 调用提供 5 折优惠，其最终费用为实时调用价格的 50%**，具体请参见[模型列表](../../model-user-guide/get-started-with-models/models.md)。
 -   **计费范围：**仅对任务中成功执行的请求进行计费。任何失败的请求（包括系统错误或超时）均不计费。
 
-**重要**批量推理为独立计费项，不支持[预付费](https://common-buy.aliyun.com/?commodityCode=sfm_llminference_spn_public_cn)（节省计划、资源包）、[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)等优惠，以及[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)等功能。
+> **重要**
+>
+> 批量推理为独立计费项，不支持[预付费](https://common-buy.aliyun.com/?commodityCode=sfm_llminference_spn_public_cn)（节省计划、资源包）、[新人免费额度](../../model-user-guide/test-1/new-free-quota.md)等优惠，以及[上下文缓存](../../model-user-guide/model-experience/text-generation-model/context-cache.md)等功能。
+
+<a id="错误码"></a>
+
+<a id="efc117f59a2gm"></a>
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../preparations/error-code.md)进行解决。
+
+<a id="常见问题"></a>
+
+<a id="d1decfa0cf0dj"></a>
 
 ## 常见问题
 
@@ -494,7 +622,11 @@ curl -X POST https://batch.dashscope.aliyuncs.com/compatible-mode/v1/chat/comple
     不保证。Batch Chat 使用的是 Batch 资源，完成情况取决于系统资源分配情况。如果系统资源繁忙，请求可能在队列中等待。若超过最长等待时间仍未被调度执行，连接将超时断开，此时请求不会被计费，可以稍后重试。
     
 
+<a id="相关文档"></a>
+
+<a id="78a981373cqe1"></a>
+
 ## 相关文档
 
--   查看模型实时调用的完整参数列表，请参阅[OpenAI兼容-Chat](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。
--   如需通过提交文件进行批量处理，并异步获取结果，请参阅[OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)。
+-   查看模型实时调用的完整参数列表，请参阅[OpenAI兼容-Chat](../qwen-api-reference/qwen-api-via-openai-chat-completions.md)。
+-   如需通过提交文件进行批量处理，并异步获取结果，请参阅[OpenAI兼容-Batch（文件输入）](batch-interfaces-compatible-with-openai.md)。

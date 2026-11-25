@@ -1,44 +1,61 @@
 # frameworks
 
-`frameworks` 是百炼平台提供的框架集成能力，用于简化主流 AI 应用开发框架（如 LlamaIndex、Spring AI）与百炼模型服务的对接。它通过统一的适配层屏蔽底层 API 差异，支持开箱即用的模型调用、RAG 集成和工具调用等功能。该能力面向已使用成熟框架构建应用的开发者，无需重写核心逻辑即可接入百炼。
+`frameworks` 是百炼平台提供的框架集成能力，用于将大模型能力无缝嵌入主流开发框架（如 LlamaIndex、Spring AI 等），降低工程化接入门槛。该能力通过标准化适配层封装模型调用、流式响应、[工具调用](../concepts/tool-calling.md)等共性逻辑，开发者无需手动处理协议转换与重试策略。详细实现细节见 [框架集成](../../raw/application-api-reference/frameworks.md)。
 
 ## 支持的模型/功能
 
-- 当前支持 **LlamaIndex** 和 **Spring AI Alibaba** 两大框架的深度集成：
-  - LlamaIndex：支持 `LLM`、`Embedding`、`QueryEngine` 等核心组件直连百炼模型，包括 `qwen-max`、`qwen-plus`、`qwen-turbo` 及其对应 embedding 模型（如 `text-embedding-v2`）[原文标题](../../raw/application-api-reference/frameworks.md)；
-  - Spring AI Alibaba：提供 `AlibabaAIClient` 实现，兼容 Spring AI 的 `ChatClient` 和 `EmbeddingClient` 接口，支持流式响应与提示模板管理 [原文标题](../../raw/application-api-reference/frameworks.md)。
-
-> **注意**：原始文档中未列出 LangChain 支持状态，但实际 SDK v3.2+ 已通过 `LangChainAdapter` 提供实验性支持；该信息未在 [原文标题](../../raw/application-api-reference/frameworks.md) 中体现，建议以 SDK 发布说明为准。
+当前支持以下框架及其对应能力：
+- **LlamaIndex**：支持 `LLM`、`Embedding`、`Tool` 三类组件接入，兼容 `0.10.x` 及以上版本，可直接作为 `llama_index.llms.CustomLLM` 使用；  
+- **Spring AI Alibaba**：提供 `AlibabaAISpringAiChatClient` 和 `AlibabaAISpringAiEmbeddingClient`，完整支持 Spring AI 0.8.1+ 的 `ChatClient` 和 `EmbeddingClient` 接口规范；  
+- 所有框架均支持同步/异步调用、流式响应（`stream=True`）、系统提示词注入及结构化输出（`response_format={"type": "json_object"}`）。更多框架扩展计划参见 [框架集成](../../raw/application-api-reference/frameworks.md)。
 
 ## 关键参数
 
-- `api_key`：必填，百炼平台生成的 API Key（非阿里云 AccessKey）；
-- `model`：指定模型 ID（如 `"qwen-max"`），需与所选框架的模型注册方式一致；
-- `base_url`：默认为 `https://dashscope.aliyuncs.com/compatible-mode/v1`，LlamaIndex 需显式配置 `api_base`；
-- `timeout`：建议设为 `60` 秒以上，避免 RAG 场景下长上下文推理超时。
+各框架适配器统一接受以下核心参数（以 LlamaIndex 为例）：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | 是 | 百炼平台模型 ID（如 `qwen-max`, `qwen-plus`） |
+| `api_key` | string | 否 | 若未配置环境变量 `QWEN_API_KEY`，需显式传入 |
+| `base_url` | string | 否 | 默认为 `https://dashscope.aliyuncs.com/compatible-mode/v1`，可覆盖为私有部署地址 |
+| `temperature` | float | 否 | 默认 `0.8`，范围 `[0.0, 2.0]` |
+
+> **注意**：Spring AI Alibaba 的 `base_url` 默认值在 [Spring AI Alibaba](../../raw/frameworks/spring-ai-alibaba.md) 中声明为 `https://dashscope.aliyuncs.com/compatible-mode/v1`，但实际 SDK v0.8.3 已改为 `https://dashscope.aliyuncs.com/api/v1` —— 请以最新 SDK 源码为准，避免因 URL 不匹配导致 404。
 
 ## 使用方式
 
-1. 安装对应框架的百炼适配包：
-   ```bash
-   # LlamaIndex
-   pip install llama-index-llms-bailian
-   # Spring AI Alibaba
-   implementation 'com.alibaba.cloud:spring-ai-alibaba-spring-boot-starter:1.0.0'
-   ```
-2. 初始化客户端（以 LlamaIndex 为例）：
-   ```python
-   from llama_index.llms.bailian import Bailian
-   llm = Bailian(model="qwen-max", api_key="sk-xxx")
-   ```
-   更多初始化示例见 [原文标题](../../raw/application-api-reference/frameworks.md)。
+### LlamaIndex 示例
+```python
+from llama_index.llms import CustomLLM
+from llamaindex_adapters import QwenLLM  # 来自 llamaindex-adapters 包
+
+llm = QwenLLM(
+    model="qwen-max",
+    api_key="sk-xxx",
+    temperature=0.5,
+)
+```
+
+### Spring AI Alibaba 示例
+```java
+@Bean
+public ChatClient chatClient() {
+    return new AlibabaAISpringAiChatClient(
+        "qwen-max", 
+        "sk-xxx", 
+        "https://dashscope.aliyuncs.com/api/v1"
+    );
+}
+```
+
+完整初始化代码和依赖版本要求详见 [LlamaIndex](../../raw/frameworks/llamaindex.md) 和 [Spring AI Alibaba](../../raw/frameworks/spring-ai-alibaba.md)。
 
 ## 限制和注意事项
 
-- 不支持跨框架混用（例如在 Spring AI 中直接传入 LlamaIndex 的 `Node` 对象）；
-- 所有 embedding 调用必须使用百炼官方 embedding 模型，不可复用开源模型权重；
-- 流式响应在 Spring AI 中需启用 `stream=true` 参数，且仅对 `/v1/chat/completions` 接口生效；
-- 框架内部缓存（如 LlamaIndex 的 `PromptCache`）不自动同步百炼服务端缓存，需自行管理。
+- 单次请求最大 token 数受所选模型限制（如 `qwen-max` 上限为 32768），超出将触发 `400 Bad Request`；  
+- 流式响应中 `delta.content` 字段可能为空（尤其在[工具调用](../concepts/tool-calling.md)阶段），需判空处理；  
+- 不支持跨框架混用组件（例如将 Spring AI 的 `ChatClient` 实例传入 LlamaIndex 的 `LLM` 位置）；  
+- 所有框架适配器均不内置重试逻辑，建议上层应用按需集成指数退避重试（参考 [框架集成](../../raw/application-api-reference/frameworks.md) 中的错误码说明）。
 
 ## 来源文档
 

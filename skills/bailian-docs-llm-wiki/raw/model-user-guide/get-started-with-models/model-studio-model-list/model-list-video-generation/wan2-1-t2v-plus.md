@@ -2,112 +2,77 @@
 
 Wan2.1 text to video Plus version, one sentence generated video. Support for large and complex movements, adherence to physical laws, artistic styles, and visual quality of movies. The ability to follow instructions is further improved, and better video quality.
 
+<a id="推理服务供应商"></a>
+
+<a id="h-490b2834e6"></a>
+
 ## 推理服务供应商
 
 `wan2.1-t2v-plus`模型的推理服务供应商为阿里云百炼。
 
+<a id="模型能力"></a>
+
+<a id="h-77230e94b5"></a>
+
 ## 模型能力
 
-能力项
+| 能力项 | 支持情况 | 能力项 | 支持情况 |
+| --- | --- | --- | --- |
+| 输入模态 | **Text** | 输出模态 | **Video** |
+| 模型体验 | 不支持 | Function Calling | 不支持 |
+| 结构化输出 | 不支持 | 联网搜索 | 不支持 |
+| 前缀续写 | 不支持 | 上下文缓存 | 不支持 |
+| 批量推理 | 不支持 | 模型调优 | 不支持 |
 
-支持情况
+<a id="上下文限制"></a>
 
-能力项
-
-支持情况
-
-输入模态
-
-**Text**
-
-输出模态
-
-**Video**
-
-模型体验
-
-不支持
-
-Function Calling
-
-不支持
-
-结构化输出
-
-不支持
-
-联网搜索
-
-不支持
-
-前缀续写
-
-不支持
-
-上下文缓存
-
-不支持
-
-批量推理
-
-不支持
-
-模型调优
-
-不支持
+<a id="h-01b911f555"></a>
 
 ## 上下文限制
 
-参数
+| 参数 | 值 | 参数 | 值 |
+| --- | --- | --- | --- |
+| 最大输入长度 | — | 最大输出长度 | — |
+| 上下文长度 | — |  |  |
 
-值
+<a id="模型价格"></a>
 
-参数
-
-值
-
-最大输入长度
-
-—
-
-最大输出长度
-
-—
-
-上下文长度
-
-—
+<a id="h-74d147ef75"></a>
 
 ## 模型价格
 
 本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)查看活动优惠。
 
+<a id="sec-tabs"></a>
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
+
 #### 新加坡
 
 部署范围：国际
 
-计费项
+| 计费项 | 价格（元） | 单位 |
+| --- | --- | --- |
+| 视频生成（720P） | 0.733924 | 每秒 |
 
-价格（元）
+<a id="限流"></a>
 
-单位
-
-视频生成（720P）
-
-0.733924
-
-每秒
+<a id="h-aaa16dc1a8"></a>
 
 ## 限流
 
+<a id="sec-tabs-2"></a>
+
+<a id="新加坡-2"></a>
+
+<a id="新加坡-2-h4"></a>
+
 #### 新加坡
 
 部署范围：国际
 
-参数
-
-值
-
-RPM（每分钟请求数）
-
-120
+| 参数 | 值 |
+| --- | --- |
+| RPM（每分钟请求数） | 120 |

@@ -2,39 +2,44 @@
 
 关闭当前工作空间下已开通的官方 MCP 服务。One Key MCP 不支持关闭。
 
+<a id="接口"></a>
+
+<a id="h-mcp-deactivate-endpoint"></a>
+
 ## 接口
 
 **POST** `/api/v1/mcp/servers/{mcpCode}/deactivate`
 
 仅支持官方 MCP，且不支持 One Key MCP。关闭后服务状态变为 `INACTIVE`，状态文案为“未开通”。
 
+<a id="请求参数"></a>
+
+<a id="h-mcp-deactivate-params"></a>
+
 ## 请求参数
 
-参数
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| mcpCode | `string` | 是 | 官方 MCP 编码 |
 
-类型
+<a id="响应"></a>
 
-必填
-
-说明
-
-mcpCode
-
-`string`
-
-是
-
-官方 MCP 编码
+<a id="h-mcp-deactivate-response"></a>
 
 ## 响应
 
 返回 `DetailResponse`，仅填充 `mcp_code`、`server_status` 和 `server_status_text`，其余字段为 `null`。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/servers/amap-maps/deactivate" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
-```
+
+<a id="code-block-2"></a>
+
+```json
 {
   "success": true,
   "error_code": null,
@@ -55,40 +60,16 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/ser
 }
 ```
 
+<a id="错误"></a>
+
+<a id="h-mcp-deactivate-errors"></a>
+
 ## 错误
 
-HTTP 状态码
-
-error\_code
-
-说明
-
-400
-
-InvalidParameter
-
-携带了查询参数或请求体
-
-400
-
-OperationNotSupported
-
-自定义 MCP
-
-400
-
-DeActivateFailed
-
-One Key MCP，或服务正在部署中
-
-404
-
-McpServerNotFound
-
-MCP 服务不存在
-
-404
-
-McpServerUnavailable
-
-MCP 服务已下架
+| HTTP 状态码 | error\_code | 说明 |
+| --- | --- | --- |
+| 400 | InvalidParameter | 携带了查询参数或请求体 |
+| 400 | OperationNotSupported | 自定义 MCP |
+| 400 | DeActivateFailed | One Key MCP，或服务正在部署中 |
+| 404 | McpServerNotFound | MCP 服务不存在 |
+| 404 | McpServerUnavailable | MCP 服务已下架 |

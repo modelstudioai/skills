@@ -2,47 +2,55 @@
 
 人像风格重绘模型可以将您提供的人物照片，转换为多种预设或自定义的艺术风格。
 
-**重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> **重要**
+>
+> 本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+
+<a id="模型概览"></a>
+
+<a id="4055b961cesbx"></a>
 
 ## 模型概览
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>计费单价</strong></p></th><th colspan="2"><p><strong>限流（主账号与RAM子账号共享）</strong></p></th><th rowspan="2"><p><strong>免费额度</strong><a href="../../../test-1/new-free-quota.md">（查看）</a></p></th></tr><tr><th><p><strong>任务下发接口QPS限制</strong></p></th><th><p><strong>同时处理中任务数量</strong></p></th></tr></thead><tbody><tr><td><p>wanx-style-repaint-v1</p></td><td><p>0.12元/张</p></td><td><p>2</p></td><td><p>1</p></td><td><p>500张</p></td></tr></tbody></table>
 
-**计费单价**
+<a id="快速开始"></a>
 
-**限流（主账号与RAM子账号共享）**
-
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
-
-**任务下发接口QPS限制**
-
-**同时处理中任务数量**
-
-wanx-style-repaint-v1
-
-0.12元/张
-
-2
-
-1
-
-500张
+<a id="e4267a7c30jos"></a>
 
 ## 快速开始
 
+<a id="前提条件"></a>
+
+<a id="bde65177ecpsw"></a>
+
 #### 前提条件
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+您需要已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+
+<a id="示例代码"></a>
+
+<a id="cb4adb2a62lfx"></a>
 
 #### 示例代码
 
 本模型**仅提供 HTTP API**，请参考curl示例代码。
 
+<a id="sec-tabs"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-**说明**HTTP调用新手指南请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
+> **说明**
+>
+> HTTP调用新手指南请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 由于图像生成耗时较长，API 采用异步模式，调用流程分两步：
+
+<a id="4b7a4318d1oh1"></a>
 
 ##### 步骤1：创建任务获取任务ID
 
@@ -50,11 +58,19 @@ wanx-style-repaint-v1
 
 **请求示例**
 
+<a id="sec-tabs-2"></a>
+
+<a id="使用预置风格"></a>
+
+<a id="使用预置风格-h4"></a>
+
 #### 使用预置风格
 
 设置style\_index（不能设为-1）。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -68,11 +84,17 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="使用自定义风格"></a>
+
+<a id="使用自定义风格-h4"></a>
+
 #### 使用自定义风格
 
 设置style\_ref\_url（风格参考图），并将 style\_index 设为 -1。
 
-```
+<a id="code-block-2"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -91,7 +113,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 `task_id`查询有效期为24小时。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "output": {
         "task_status": "PENDING",
@@ -101,23 +125,30 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="7d2e6ba72fdjg"></a>
+
 ##### 步骤2：查询任务结果
 
 使用 `task_id` 轮询任务状态，直至完成并获取生成的图像URL。
 
 **请求示例**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-4"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
 **响应示例**
 
 > 图像URL有效期为24小时，请及时下载图像。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "request_id": "f7fee4f1-1f68-9f17-85df-xxxxx",
     "output": {
@@ -142,23 +173,33 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-**说明**
-
--   如需集成至现有项目，需自行实现对应语言的 HTTP 调用逻辑，如 Python、Java、Node.js 等。
--   本文仅提供 Python 示例（非官方 SDK，仅为基于 HTTP 的调用实现参考）。
+> **说明**
+>
+> -   如需集成至现有项目，需自行实现对应语言的 HTTP 调用逻辑，如 Python、Java、Node.js 等。
+> -   本文仅提供 Python 示例（非官方 SDK，仅为基于 HTTP 的调用实现参考）。
 
 **环境配置**
 
 -   推荐使用Python 3.9及以上版本。
 -   请安装必要的依赖包。
 
-```
+<a id="code-block-6"></a>
+
+```bash
 pip install -U requests
 ```
+
 **请求示例**
-```
+
+<a id="code-block-7"></a>
+
+```python
 import os
 import requests
 import time
@@ -246,8 +287,12 @@ if __name__ == '__main__':
     if task_id:
         query_task_result(task_id)
 ```
+
 **响应示例**
-```
+
+<a id="code-block-8"></a>
+
+```json
 任务提交成功，任务ID为: b6496481-4fdc-476b-b20f-xxxxxx
 开始查询任务状态...
 任务正在处理中，当前状态: RUNNING...
@@ -256,7 +301,15 @@ if __name__ == '__main__':
   生成图片_1 URL: https://dashscope-result-wlcb.oss-cn-wulanchabu.aliyuncs.com/1d/e0/20250812/b1be3297/20250812175256936406_style3_w52l3kpz6i.jpg?Expires=xxxx
 ```
 
+<a id="输入图像限制"></a>
+
+<a id="4f5ce6ca50gms"></a>
+
 ## 输入图像限制
+
+<a id="人物图像"></a>
+
+<a id="42fbf4d0caa0x"></a>
 
 #### 人物图像
 
@@ -274,8 +327,12 @@ if __name__ == '__main__':
         
     -   对于本地文件，可通过以下两种方式获取合法参数值：
         
-        -   获取URL：请参见[上传文件获取临时URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-        -   生成Base64编码字符串：请参见[图像Base64编码传值方式](https://help.aliyun.com/zh/model-studio/style-repaint#fa664addf5wph)。
+        -   获取URL：请参见[上传文件获取临时URL](../../../../model-api-reference/more-about-models/get-temporary-file-url.md)。
+        -   生成Base64编码字符串：请参见[图像Base64编码传值方式](style-repaint.md#fa664addf5wph)。
+
+<a id="风格参考图"></a>
+
+<a id="b6662cef16rdd"></a>
 
 #### 风格参考图
 
@@ -291,8 +348,12 @@ if __name__ == '__main__':
         
     -   对于本地文件，可通过以下两种方式获取合法参数值：
         
-        -   获取URL：请参见[上传文件获取临时URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-        -   生成Base64编码字符串：请参见[图像Base64编码传值方式](https://help.aliyun.com/zh/model-studio/style-repaint#fa664addf5wph)。
+        -   获取URL：请参见[上传文件获取临时URL](../../../../model-api-reference/more-about-models/get-temporary-file-url.md)。
+        -   生成Base64编码字符串：请参见[图像Base64编码传值方式](style-repaint.md#fa664addf5wph)。
+
+<a id="图像base64编码传值方式"></a>
+
+<a id="fa664addf5wph"></a>
 
 #### 图像Base64编码传值方式
 
@@ -304,29 +365,13 @@ if __name__ == '__main__':
     
 -   图像格式与MIME 类型对应关系：
     
-    图像格式
-    
-    MIME Type
-    
-    JPEG
-    
-    image/jpeg
-    
-    JPG
-    
-    image/jpeg
-    
-    PNG
-    
-    image/png
-    
-    BMP
-    
-    image/bmp
-    
-    WEBP
-    
-    image/webp
+    | 图像格式 | MIME Type |
+    | --- | --- |
+    | JPEG | image/jpeg |
+    | JPG | image/jpeg |
+    | PNG | image/png |
+    | BMP | image/bmp |
+    | WEBP | image/webp |
     
 -   示例值：`"image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABDg......"`。
     
@@ -335,7 +380,9 @@ if __name__ == '__main__':
 -   示例代码：获取图像Base64编码字符串。
     
 
-```
+<a id="code-block-9"></a>
+
+```python
 import base64
 import mimetypes
 
@@ -353,6 +400,10 @@ if __name__ == "__main__":
     print(encode_file("./image_demo_input.png"))
 ```
 
+<a id="计费与限流"></a>
+
+<a id="d34d4c23aew5n"></a>
+
 ## 计费与限流
 
 **计费规则**
@@ -363,13 +414,13 @@ if __name__ == "__main__":
     
 -   抵扣顺序：优先消耗免费额度。额度用尽后，默认转为按量付费。
     
-    -   您可开启“免费额度用完即停”功能，以避免免费额度耗尽后产生额外费用。详情请参见[免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+    -   您可开启“免费额度用完即停”功能，以避免免费额度耗尽后产生额外费用。详情请参见[免费额度](../../../test-1/new-free-quota.md)。
 -   失败不计费：模型调用失败或处理错误不产生任何费用，也不消耗免费额度。
     
 
 **免费额度**
 
-关于免费额度的领取、查询、使用方法等详情，请参见[免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+关于免费额度的领取、查询、使用方法等详情，请参见[免费额度](../../../test-1/new-free-quota.md)。
 
 **调用量查询**
 
@@ -377,20 +428,32 @@ if __name__ == "__main__":
 
 **限流**
 
-模型限流规则及常见问题，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+模型限流规则及常见问题，请参见[限流](../../../get-started-with-models/rate-limit.md)。
+
+<a id="api参考"></a>
+
+<a id="38217b078az79"></a>
 
 ## API参考
 
-API的输入输出参数，请参见[人像风格重绘](raw/model-api-reference/image-generation/image-creative-tools-api-reference/portrait-style-redraw-api-reference.md)。
+API的输入输出参数，请参见[人像风格重绘](../../../../model-api-reference/image-generation/image-creative-tools-api-reference/portrait-style-redraw-api-reference.md)。
+
+<a id="常见问题"></a>
+
+<a id="8d7aed59567jr"></a>
 
 ## 常见问题
+
+<a id="5f38019a05w2t"></a>
 
 ##### Q: 如何处理本地图片？
 
 A: 本API支持公网URL，支持 Base64 编码。若要使用本地文件，可通过以下两种方式获取合法参数值：
 
-1.  获取URL：请将图片上传至对象存储（如阿里云OSS），或使用阿里云百炼提供的[临时存储](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-2.  生成Base64编码字符串：请参见[图像Base64编码传值方式](https://help.aliyun.com/zh/model-studio/style-repaint#fa664addf5wph)。
+1.  获取URL：请将图片上传至对象存储（如阿里云OSS），或使用阿里云百炼提供的[临时存储](../../../../model-api-reference/more-about-models/get-temporary-file-url.md)。
+2.  生成Base64编码字符串：请参见[图像Base64编码传值方式](style-repaint.md#fa664addf5wph)。
+
+<a id="89131d7c311s3"></a>
 
 ##### Q: 如何优化图片生成效果？
 
@@ -399,11 +462,13 @@ A: 好的输入决定了好的输出。请尝试以下方法：
 -   提升人物照片质量：使用高清、光线好、五官清晰无遮挡的正面照。
 -   挑选风格参考图：选择风格鲜明，且匹配人物主题的图片。
 
+<a id="11b89d3ae5am4"></a>
+
 ##### Q：预置风格和自定义风格可以同时使用吗？
 
 A：不可以，两者互斥，需选择其中一种模式：
 
--   使用预置风格：请设置 style\_index（不为-1），枚举值请参见[人像风格重绘](raw/model-api-reference/image-generation/image-creative-tools-api-reference/portrait-style-redraw-api-reference.md)。
+-   使用预置风格：请设置 style\_index（不为-1），枚举值请参见[人像风格重绘](../../../../model-api-reference/image-generation/image-creative-tools-api-reference/portrait-style-redraw-api-reference.md)。
     
 -   使用自定义风格：请提供风格参考图 URL（style\_ref\_url），并将 style\_index设置为 -1。
     

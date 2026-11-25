@@ -2,6 +2,10 @@
 
 通义晓蜜对话分析专注于对话信息抽取、场景分类、满意度判定等分析需求，擅长处理复杂业务逻辑的质检规则，支持自定义分析标准，具备强大的多轮对话理解和语义推理能力。
 
+<a id="核心功能"></a>
+
+<a id="core-features"></a>
+
 ## 核心功能
 
 -   **对话信息抽取**：从非结构化对话中自动提取关键信息，如时间、地点、产品、问题描述、客户诉求等
@@ -29,7 +33,11 @@
     典型应用：客户情绪监控、潜在投诉预警、销售机会识别
     
 
-以上功能可通过自定义Prompt实现，具体用法请参见[功能示例](https://help.aliyun.com/zh/model-studio/dialogue-analysis#4a4215c01b0e3)。
+以上功能可通过自定义Prompt实现，具体用法请参见[功能示例](dialogue-analysis.md#4a4215c01b0e3)。
+
+<a id="适用范围"></a>
+
+<a id="012e407511cz2"></a>
 
 ## 适用范围
 
@@ -42,54 +50,33 @@
     -   **tongyi-xiaomi-analysis-flash**：用于信息抽取、场景分类等结构化分析任务，适用于对响应时延要求较高的在线分析，及成本敏感的离线分析任务
     -   **tongyi-xiaomi-analysis-pro**：专为处理复杂逻辑推理和深度语义理解而设计，适用于多条件嵌套的质检规则、上下文依赖强的多轮对话分析等场景；相比Flash模型，其推理和理解能力更强，但成本与延迟也相应更高
     
-    更多信息请参见[选择模型](raw/model-user-guide/get-started-with-models/models.md)
+    更多信息请参见[选择模型](../../../get-started-with-models/models.md)
     
--   模型支持[隐式缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)，命中缓存的 Token 按照隐式缓存计量计费。
+-   模型支持[隐式缓存](../context-cache.md)，命中缓存的 Token 按照隐式缓存计量计费。
     
+
+<a id="模型选型"></a>
+
+<a id="8daf9cc2c256p"></a>
 
 ## 模型选型
 
-**应用场景**
+| 应用场景 | 推荐模型 | 模型优势 | 使用建议 |
+| --- | --- | --- | --- |
+| **快速信息提取与场景分类** | tongyi-xiaomi-analysis-flash | 低时延，成本低，适合高频实时调用 | 适用于标准化的信息抽取和分类任务，不涉及复杂推理 |
+| **标准化质检** | tongyi-xiaomi-analysis-flash | 准确理解对话语义和情感倾向，支持自定义判定规则，满足大部分质检需求 | 适用于规则明确的质检场景，复杂业务逻辑建议使用 pro 模型 |
+| **复杂逻辑质检** | tongyi-xiaomi-analysis-pro | 更强的推理能力，支持多条件嵌套、上下文关联等复杂业务规则 | 成本较flash高，适用于金融、医疗等对准确性要求极高的场景 |
+| **多轮对话深度分析** | tongyi-xiaomi-analysis-pro | 更强的对话理解能力，准确理解指代关系和隐含意图 | 适用于售后工单分析、投诉根因挖掘等需要全局理解的场景 |
 
-**推荐模型**
+<a id="快速开始"></a>
 
-**模型优势**
-
-**使用建议**
-
-**快速信息提取与场景分类**
-
-tongyi-xiaomi-analysis-flash
-
-低时延，成本低，适合高频实时调用
-
-适用于标准化的信息抽取和分类任务，不涉及复杂推理
-
-**标准化质检**
-
-tongyi-xiaomi-analysis-flash
-
-准确理解对话语义和情感倾向，支持自定义判定规则，满足大部分质检需求
-
-适用于规则明确的质检场景，复杂业务逻辑建议使用 pro 模型
-
-**复杂逻辑质检**
-
-tongyi-xiaomi-analysis-pro
-
-更强的推理能力，支持多条件嵌套、上下文关联等复杂业务规则
-
-成本较flash高，适用于金融、医疗等对准确性要求极高的场景
-
-**多轮对话深度分析**
-
-tongyi-xiaomi-analysis-pro
-
-更强的对话理解能力，准确理解指代关系和隐含意图
-
-适用于售后工单分析、投诉根因挖掘等需要全局理解的场景
+<a id="d6ff1784ddq9q"></a>
 
 ## 快速开始
+
+<a id="使用建议"></a>
+
+<a id="usage-recommendations"></a>
 
 ### 使用建议
 
@@ -98,7 +85,9 @@ tongyi-xiaomi-analysis-pro
     示例：
     
 
-```
+<a id="code-block"></a>
+
+```text
 [1] 客服：您好，欢迎致电AB电商平台，请问有什么可以帮您？
 [2] 客户：你好，我上周在你们店买了一台料理机，现在运行时有点异响。
 [3] 客服：很抱歉给您带来困扰，请问异响是在开机后立刻出现还是运行一段时间后出现的呢？
@@ -120,15 +109,31 @@ tongyi-xiaomi-analysis-pro
 -   **控制输出格式**：为提供可解析及可控的分析结果，建议在 `prompt` 中明确输出格式，必要时可给定输出示例。
     
 
+<a id="代码示例"></a>
+
+<a id="575157a85ai5x"></a>
+
 ### 代码示例
 
-**前提条件**：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。如果通过SDK调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**前提条件**：已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)。如果通过SDK调用，需要[安装最新版SDK](../../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="sec-tabs"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+````python
 from openai import OpenAI
 import os
 
@@ -231,11 +236,15 @@ completion = client.chat.completions.create(
 )
 
 print(completion.choices[0].message.content)
-```
+````
+
+<a id="fig-code-group-java-tab"></a>
 
 Java
 
-```
+<a id="code-code-group-java"></a>
+
+````java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.core.JsonValue;
@@ -348,11 +357,15 @@ public class Main {
         return analysisPrompt;
     }
 }
-```
+````
+
+<a id="fig-code-group-node-js-tab"></a>
 
 Node.js
 
-```
+<a id="code-code-group-node-js"></a>
+
+```javascript
 // 需要 Node.js v18+，需在 ES Module 环境下运行
 import OpenAI from "openai";
 const openai = new OpenAI(
@@ -381,9 +394,13 @@ console.log(completion.choices[0].message.content);
 // console.log(JSON.stringify(completion, null, 4));
 ```
 
+<a id="fig-code-group-go-tab"></a>
+
 Go
 
-```
+<a id="code-code-group-go"></a>
+
+```go
 // OpenAI Go SDK版本不低于 v2.4.0
 package main
 
@@ -432,9 +449,13 @@ func main() {
 }
 ```
 
+<a id="fig-code-group-curl-tab"></a>
+
 cURL
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 # 华北2（北京）地域的URL。
 # 将{WorkspaceId}替换为真实的业务空间ID。各地域的URL不同
 curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
@@ -453,11 +474,21 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+````python
 import dashscope
 import os
 from dashscope import DashScopeError
@@ -565,11 +596,15 @@ except DashScopeError as e:
     print(f"错误码：{e.code}")
     print(f"错误信息：{e.message}")
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
-```
+````
+
+<a id="fig-code-group-2-java-tab"></a>
 
 Java
 
-```
+<a id="code-code-group-2-java"></a>
+
+````java
 import java.util.Arrays;
 import java.lang.System;
 import com.alibaba.dashscope.aigc.generation.Generation;
@@ -693,11 +728,15 @@ public class Main {
         return analysisPrompt;
     }
 }
-```
+````
+
+<a id="fig-code-group-2-curl-tab"></a>
 
 cURL
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 # 华北2（北京）地域的URL。
 # 将{WorkspaceId}替换为真实的业务空间ID。各地域的URL不同
 curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
@@ -721,9 +760,19 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="功能示例"></a>
+
+<a id="4a4215c01b0e3"></a>
+
 ## 功能示例
 
-以下每个功能示例提供可直接运行的 `content`，替换[代码示例](https://help.aliyun.com/zh/model-studio/dialogue-analysis#575157a85ai5x)中的 `content` 即可体验。
+以下每个功能示例提供可直接运行的 `content`，替换[代码示例](dialogue-analysis.md#575157a85ai5x)中的 `content` 即可体验。
+
+<a id="sec-tabs-2"></a>
+
+<a id="对话信息抽取"></a>
+
+<a id="对话信息抽取-h4"></a>
 
 #### 对话信息抽取
 
@@ -737,7 +786,9 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 **content示例**：
 
-```
+<a id="code-block-2"></a>
+
+````text
 请从以下对话中提取关键信息，并按照 JSON 格式输出。
 
 对话内容：
@@ -773,7 +824,11 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 ```
 
 注意：如果某项信息在对话中未提及，请填写 "未提及"。
-```
+````
+
+<a id="场景分类"></a>
+
+<a id="场景分类-h4"></a>
 
 #### 场景分类
 
@@ -787,7 +842,9 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 **content示例**：
 
-```
+<a id="code-block-3"></a>
+
+````text
 请判断以下对话属于哪个业务场景。
 
 对话内容：
@@ -814,7 +871,11 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 置信度：[高/中/低]
 判断依据：[简要说明判断理由，1-2句话]
 ```
-```
+````
+
+<a id="满意度挖掘"></a>
+
+<a id="满意度挖掘-h4"></a>
 
 #### 满意度挖掘
 
@@ -828,7 +889,9 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 **content示例**：
 
-```
+<a id="code-block-4"></a>
+
+````text
 请根据以下对话判定客户满意度。
 
 对话内容：
@@ -864,7 +927,11 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 问题是否解决：[是/否/部分解决]
 判定理由：[详细说明判定依据，结合评估维度]
 ```
-```
+````
+
+<a id="复杂质检"></a>
+
+<a id="复杂质检-h4"></a>
 
 #### 复杂质检
 
@@ -878,7 +945,9 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 **content示例**：
 
-```
+<a id="code-block-5"></a>
+
+````text
 请根据以下金融行业客服质检规则，对对话进行质检。
 
 对话内容：
@@ -931,7 +1000,11 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 综合评价：[总结性评价，1-2句话]
 ```
-```
+````
+
+<a id="多轮对话理解"></a>
+
+<a id="多轮对话理解-h4"></a>
 
 #### 多轮对话理解
 
@@ -945,7 +1018,9 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 **content示例**：
 
-```
+<a id="code-block-6"></a>
+
+````text
 请从以下对话中提取完整的工单信息，需要整合多轮对话中分散的信息。
 
 对话内容：
@@ -983,7 +1058,11 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 7. **后续预案**（如果方案无效的备选方案）
 
 请以结构化格式输出，并标注每条信息来源于哪几轮对话。
-```
+````
+
+<a id="深层语义理解"></a>
+
+<a id="深层语义理解-h4"></a>
 
 #### 深层语义理解
 
@@ -997,7 +1076,9 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 **content示例**：
 
-```
+<a id="code-block-7"></a>
+
+````text
 请对以下对话进行深层语义分析。
 
 对话内容：
@@ -1036,8 +1117,12 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
    - 如何改进可以提升客户满意度？
 
 输出格式：按照上述四个维度，清晰地输出分析结果。
-```
+````
+
+<a id="api参考"></a>
+
+<a id="t2IgP"></a>
 
 ## API参考
 
-关于模型的输入与输出参数，请参见[文本生成](raw/model-api-reference/qwen-api-reference.md)。
+关于模型的输入与输出参数，请参见[文本生成](../../../../model-api-reference/qwen-api-reference.md)。

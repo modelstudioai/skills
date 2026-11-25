@@ -4,34 +4,58 @@
 
 **相较于OpenAI Chat Completions API 的优势：**
 
--   **内置工具**：内置联网搜索、网页抓取、代码解释器、文搜图、图搜图等工具，可在处理复杂任务时获得更佳效果，详情参考[调用内置工具](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#11cd08d0ffnxw)。
+-   **内置工具**：内置联网搜索、网页抓取、代码解释器、文搜图、图搜图等工具，可在处理复杂任务时获得更佳效果，详情参考[调用内置工具](compatibility-with-openai-responses-api.md#11cd08d0ffnxw)。
 -   **更灵活的输入**：支持直接传入字符串作为模型输入，也兼容 Chat 格式的消息数组。
 -   **简化上下文管理**：通过传递上一轮响应的 `previous_response_id`，无需手动构建完整的消息历史数组。
 
-输入输出参数说明请参考[OpenAI Responses API参考](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+输入输出参数说明请参考[OpenAI Responses API参考](../qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+
+<a id="前提条件"></a>
+
+<a id="780c8d0e61pln"></a>
 
 ## 前提条件
 
-您需要先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过 OpenAI SDK 进行调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+您需要先[获取与配置 API Key](../preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过 OpenAI SDK 进行调用，需要[安装SDK](../preparations/install-sdk.md)。
+
+<a id="支持的模型"></a>
+
+<a id="models-title"></a>
 
 ## 支持的模型
 
 `qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
 
-**重要**非列表中阿里云百炼直供文本生成模型仅支持基础兼容能力，Agent 能力（内置工具等）受限。
+> **重要**
+>
+> 非列表中阿里云百炼直供文本生成模型仅支持基础兼容能力，Agent 能力（内置工具等）受限。
 
-使用 `qwen3.8-omni-flash` 处理音视频输入并生成文本回复，示例见[Omni 调用指南](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。
+使用 `qwen3.8-omni-flash` 处理音视频输入并生成文本回复，示例见[Omni 调用指南](../../model-user-guide/model-experience/omni-modal/qwen-omni.md#qwen38-offline)。
+
+<a id="服务地址"></a>
+
+<a id="endpoints-title"></a>
 
 ## 服务地址
 
-**重要**OpenAI 兼容接口 Responses API 的旧版路径 `/api/v2/apps/protocols/compatible-mode/v1/responses` 已经停止维护，将不再保证功能可用性，请尽快迁移至新版路径 `/compatible-mode/v1/responses`。
+> **重要**
+>
+> OpenAI 兼容接口 Responses API 的旧版路径 `/api/v2/apps/protocols/compatible-mode/v1/responses` 已经停止维护，将不再保证功能可用性，请尽快迁移至新版路径 `/compatible-mode/v1/responses`。
 
-**重要**阿里云百炼为华北2（北京）、新加坡、中国香港地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡、中国香港地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+>
+> 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
--   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+<a id="sec-tabs"></a>
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
@@ -39,7 +63,11 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
@@ -47,7 +75,11 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyu
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/responses`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="美国-弗吉尼亚"></a>
+
+<a id="美国-弗吉尼亚-h4"></a>
 
 #### 美国（弗吉尼亚）
 
@@ -55,13 +87,21 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.c
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/responses`
 
+<a id="德国-法兰克福"></a>
+
+<a id="德国-法兰克福-h4"></a>
+
 #### 德国（法兰克福）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/responses`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="日本-东京"></a>
+
+<a id="日本-东京-h4"></a>
 
 #### 日本（东京）
 
@@ -69,7 +109,11 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-northeast-1.maas.aliyu
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/responses`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="中国香港"></a>
+
+<a id="中国香港-h4"></a>
 
 #### 中国香港
 
@@ -77,17 +121,31 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/responses`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="代码示例"></a>
+
+<a id="examples-title"></a>
 
 ## 代码示例
+
+<a id="基础调用"></a>
+
+<a id="example-basic-title"></a>
 
 ### 基础调用
 
 最简单的调用方式，发送一条消息并获取模型回复。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -107,9 +165,13 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -131,9 +193,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -149,7 +215,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "created_at": 1771225825,
     "id": "0c842a11-c7d1-45da-b7ec-4e668c389xxx",
@@ -209,15 +277,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="多轮对话"></a>
+
+<a id="example-multiturn-title"></a>
+
 ### 多轮对话
 
 通过 `previous_response_id` 参数自动关联上下文，无需手动构建消息历史，当前响应`id`有效期为7天。
 
 > `previous_response_id` 应传入上一轮响应中的顶层 `id` （`resp_xxx`，UUID格式），而不是 `output` 数组内消息的 `id` （`msg_56c860c4-3ad8-4a96-8553-d2f94c259xxx`）。
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -242,9 +320,13 @@ response2 = client.responses.create(
 print(f"第二轮回复: {response2.output_text}")
 ```
 
+<a id="fig-code-group-2-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-2-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -272,9 +354,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-2-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 # 第一轮对话
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -299,7 +385,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "id": "f0dbb153-117f-9bbf-8176-5284b47f3xxx",
   "created_at": 1769169951.0,
@@ -337,15 +425,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 **说明：**第二轮对话的 `input_tokens` 为 73，包含了第一轮的上下文，模型成功记住了名字"张三"。
 
+<a id="深度思考"></a>
+
+<a id="example-deep-thinking-title"></a>
+
 ### 深度思考
 
-通过 `reasoning.effort` 控制思考强度，支持的档位及默认值因模型而异，详见 [reasoning 参数说明](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。思考内容通过 `reasoning` 类型的输出项返回。
+通过 `reasoning.effort` 控制思考强度，支持的档位及默认值因模型而异，详见 [reasoning 参数说明](../qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。思考内容通过 `reasoning` 类型的输出项返回。
 
 下方 `qwen3.8-max` 示例使用 `reasoning.effort`，该参数的优先级高于 `enable_thinking`；不支持通过 `thinking_budget` 控制最大思考长度。
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -374,9 +472,13 @@ for item in response.output:
 print(f"\n思考 Token 数: {response.usage.output_tokens_details.reasoning_tokens}")
 ```
 
+<a id="fig-code-group-3-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-3-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -410,9 +512,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-3-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-3-curl"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -427,7 +533,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "created_at": 1774498317,
     "id": "resp_xxx",
@@ -487,13 +595,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="流式输出"></a>
+
+<a id="example-stream-title"></a>
+
 ### 流式输出
 
 通过流式输出实时接收模型生成的内容，适合长文本生成场景。
 
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -519,9 +637,13 @@ for event in stream:
         print(f"总 Token 数: {event.response.usage.total_tokens}")
 ```
 
+<a id="fig-code-group-4-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-4-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -551,9 +673,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-4-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-4-curl"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -568,7 +694,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-4"></a>
+
+```json
 {"response":{"id":"47a71e7d-868c-4204-9693-ef8ff9058xxx","created_at":1769417481.0,"error":null,"incomplete_details":null,"instructions":null,"metadata":null,"model":"","object":"response","output":[],"parallel_tool_calls":false,"temperature":null,"tool_choice":"auto","tools":[],"top_p":null,"background":null,"completed_at":null,"conversation":null,"max_output_tokens":null,"max_tool_calls":null,"previous_response_id":null,"prompt":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":null,"safety_identifier":null,"service_tier":null,"status":"queued","text":null,"top_logprobs":null,"truncation":null,"usage":null,"user":null},"sequence_number":0,"type":"response.created"}
 {"response":{"id":"47a71e7d-868c-4204-9693-ef8ff9058xxx","created_at":1769417481.0,"error":null,"incomplete_details":null,"instructions":null,"metadata":null,"model":"","object":"response","output":[],"parallel_tool_calls":false,"temperature":null,"tool_choice":"auto","tools":[],"top_p":null,"background":null,"completed_at":null,"conversation":null,"max_output_tokens":null,"max_tool_calls":null,"previous_response_id":null,"prompt":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":null,"safety_identifier":null,"service_tier":null,"status":"in_progress","text":null,"top_logprobs":null,"truncation":null,"usage":null,"user":null},"sequence_number":1,"type":"response.in_progress"}
 {"item":{"id":"msg_16db29d6-c1d3-47d7-9177-0fba81964xxx","content":[],"role":"assistant","status":"in_progress","type":"message"},"output_index":0,"sequence_number":2,"type":"response.output_item.added"}
@@ -587,15 +715,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 {"response":{"id":"47a71e7d-868c-4204-9693-ef8ff9058xxx","created_at":1769417481.0,"error":null,"incomplete_details":null,"instructions":null,"metadata":null,"model":"qwen3.8-max","object":"response","output":[{"id":"msg_16db29d6-c1d3-47d7-9177-0fba81964xxx","content":[{"annotations":[],"text":"人工智能（Artificial Intelligence，简称 AI）是xxxxxx","type":"output_text","logprobs":null}],"role":"assistant","status":"completed","type":"message"}],"parallel_tool_calls":false,"temperature":null,"tool_choice":"auto","tools":[],"top_p":null,"background":null,"completed_at":null,"conversation":null,"max_output_tokens":null,"max_tool_calls":null,"previous_response_id":null,"prompt":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":null,"safety_identifier":null,"service_tier":null,"status":"completed","text":null,"top_logprobs":null,"truncation":null,"usage":{"input_tokens":37,"input_tokens_details":{"cached_tokens":0},"output_tokens":166,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":203},"user":null},"sequence_number":44,"type":"response.completed"}
 ```
 
+<a id="调用内置工具"></a>
+
+<a id="11cd08d0ffnxw"></a>
+
 ### 调用内置工具
 
-开启内置工具可在处理复杂任务时获得更佳效果，当前网页抓取与代码解释器工具限时免费，支持的工具请参见[工具调用](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)。
+开启内置工具可在处理复杂任务时获得更佳效果，当前网页抓取与代码解释器工具限时免费，支持的工具请参见[工具调用](../../model-user-guide/model-experience/text-generation-model/tool-calls.md)。
 
 `qwen3.8-omni-flash` 的内置工具仅支持 `web_search`，同时支持自定义 `function` 工具。
 
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-5-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -621,9 +759,13 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-5-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-5-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -659,9 +801,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-5-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-5-curl"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -684,7 +830,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 **响应示例**
-```
+
+<a id="code-block-5"></a>
+
+```json
 {
     "id": "69258b21-5099-9d09-92e8-8492b1955xxx",
     "object": "response",
@@ -766,11 +915,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="session-缓存"></a>
+
+<a id="example-session-cache-title"></a>
+
 ### Session 缓存
 
 在多轮对话场景中，开启 Session 缓存可让服务端自动缓存对话上下文，降低推理延迟与使用成本。您无需手动管理缓存，只需按正常多轮对话方式调用即可。
 
-自动生效的隐式缓存另见[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
+自动生效的隐式缓存另见[上下文缓存](../../model-user-guide/model-experience/text-generation-model/context-cache.md)。
 
 **使用方式**：在请求 Header 中添加 `x-dashscope-session-cache: enable` 开启，或设置为 `disable` 关闭。默认值为 `disable`。
 
@@ -778,14 +931,20 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 -   启用 Session 缓存：
     
-    -   模型支持显式缓存：使用显式缓存，计费和相关约束参照[显式缓存](https://help.aliyun.com/zh/model-studio/context-cache#825f201c5fy6o)。
-    -   模型不支持显式缓存但支持隐式缓存：使用隐式缓存，计费和相关约束参照[隐式缓存](https://help.aliyun.com/zh/model-studio/context-cache#2317ea09cfxok)。
+    -   模型支持显式缓存：使用显式缓存，计费和相关约束参照[显式缓存](../../model-user-guide/model-experience/text-generation-model/context-cache.md#825f201c5fy6o)。
+    -   模型不支持显式缓存但支持隐式缓存：使用隐式缓存，计费和相关约束参照[隐式缓存](../../model-user-guide/model-experience/text-generation-model/context-cache.md#2317ea09cfxok)。
 -   不启用 Session 缓存：与正常调用行为一致。支持隐式缓存的模型，隐式缓存仍自动开启，但不享受 Session 缓存带来的增益。
     
 
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-6-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -820,9 +979,13 @@ print(f"输入 Token: {usage.input_tokens}")
 print(f"缓存命中 Token: {usage.input_tokens_details.cached_tokens}")
 ```
 
+<a id="fig-code-group-6-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-6-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -859,9 +1022,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-6-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-6-curl"></a>
+
+```bash
 # 第一轮对话
 # 请将 input 替换为超过 1024 Token 的长文本，以确保触发缓存创建
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
@@ -885,17 +1052,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="从-chat-completions-迁移到-responses-api"></a>
+
+<a id="migration-title"></a>
+
 ## 从 Chat Completions 迁移到 Responses API
 
 如果您当前使用的是 OpenAI Chat Completions API，可以通过以下步骤迁移到 Responses API。Responses API 提供了更简洁的接口和更强大的功能，同时保持了与 Chat Completions 的兼容性。
+
+<a id="1-更新端点地址"></a>
+
+<a id="migration-step1-title"></a>
 
 ### 1\. 更新端点地址
 
 从 `/v1/chat/completions` 更新为 `/v1/responses`。
 
+<a id="fig-code-group-7"></a>
+
+<a id="fig-code-group-7-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-7-python"></a>
+
+```python
 # Chat Completions API
 completion = client.chat.completions.create(
     model="qwen4-max",
@@ -924,9 +1105,13 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-7-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-7-node-js"></a>
+
+```javascript
 // Chat Completions API
 const completion = await client.chat.completions.create({
     model: "qwen4-max",
@@ -955,9 +1140,13 @@ const response2 = await client.responses.create({
 console.log(response2.output_text);
 ```
 
+<a id="fig-code-group-7-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-7-curl"></a>
+
+```bash
 # Chat Completions API
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -980,210 +1169,221 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="2-更新响应处理"></a>
+
+<a id="migration-step2-title"></a>
+
 ### 2\. 更新响应处理
 
 Responses API 的响应结构有所不同。使用 `output_text` 快捷方法获取文本输出，或通过 `output` 数组访问详细信息。
 
 **响应对比**
 
-以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
-
-```
-# Chat Completions 响应
+<table><tbody><tr><td><p>以下为 <code>qwen3.8-max</code> 的返回示例，用于说明响应字段。</p><a id="code-block-6"></a><pre class="language-json"><code># Chat Completions 响应
 {
-  "id": "chatcmpl-416b0ea5-e362-9fec-97c5-0a60b5d7xxx",
-  "choices": [
+  &quot;id&quot;: &quot;chatcmpl-416b0ea5-e362-9fec-97c5-0a60b5d7xxx&quot;,
+  &quot;choices&quot;: [
     {
-      "finish_reason": "stop",
-      "index": 0,
-      "logprobs": null,
-      "message": {
-        "content": "你好！很高兴见到你～ 有什么我可以帮你的吗？",
-        "refusal": null,
-        "role": "assistant",
-        "function_call": null,
-        "tool_calls": null
+      &quot;finish_reason&quot;: &quot;stop&quot;,
+      &quot;index&quot;: 0,
+      &quot;logprobs&quot;: null,
+      &quot;message&quot;: {
+        &quot;content&quot;: &quot;你好！很高兴见到你～ 有什么我可以帮你的吗？&quot;,
+        &quot;refusal&quot;: null,
+        &quot;role&quot;: &quot;assistant&quot;,
+        &quot;function_call&quot;: null,
+        &quot;tool_calls&quot;: null
       }
     }
   ],
-  "created": 1769416269,
-  "model": "qwen3.8-max",
-  "object": "chat.completion",
-  "service_tier": null,
-  "system_fingerprint": null,
-  "usage": {
-    "completion_tokens": 14,
-    "prompt_tokens": 22,
-    "total_tokens": 36,
-    "prompt_tokens_details": {
-      "cached_tokens": 0
+  &quot;created&quot;: 1769416269,
+  &quot;model&quot;: &quot;qwen3.8-max&quot;,
+  &quot;object&quot;: &quot;chat.completion&quot;,
+  &quot;service_tier&quot;: null,
+  &quot;system_fingerprint&quot;: null,
+  &quot;usage&quot;: {
+    &quot;completion_tokens&quot;: 14,
+    &quot;prompt_tokens&quot;: 22,
+    &quot;total_tokens&quot;: 36,
+    &quot;prompt_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0
     }
   }
 }
-```
-
-以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
-
-```
-# Responses API 响应
+</code></pre></td><td><p>以下为 <code>qwen3.8-max</code> 的返回示例，用于说明响应字段。</p><a id="code-block-7"></a><pre class="language-json"><code># Responses API 响应
 {
-  "id": "d69c735d-0f5e-4b6c-9c2a-8cab5eb14xxx",
-  "created_at": 1769416269.0,
-  "model": "qwen3.8-max",
-  "object": "response",
-  "status": "completed",
-  "output": [
+  &quot;id&quot;: &quot;d69c735d-0f5e-4b6c-9c2a-8cab5eb14xxx&quot;,
+  &quot;created_at&quot;: 1769416269.0,
+  &quot;model&quot;: &quot;qwen3.8-max&quot;,
+  &quot;object&quot;: &quot;response&quot;,
+  &quot;status&quot;: &quot;completed&quot;,
+  &quot;output&quot;: [
     {
-      "id": "msg_3426d3e5-8da7-4dd8-a6a5-7c2cd866xxx",
-      "type": "message",
-      "role": "assistant",
-      "status": "completed",
-      "content": [
+      &quot;id&quot;: &quot;msg_3426d3e5-8da7-4dd8-a6a5-7c2cd866xxx&quot;,
+      &quot;type&quot;: &quot;message&quot;,
+      &quot;role&quot;: &quot;assistant&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;content&quot;: [
         {
-          "type": "output_text",
-          "text": "你好！今天是2026年1月26日，星期一。有什么我可以帮你的吗？",
-          "annotations": []
+          &quot;type&quot;: &quot;output_text&quot;,
+          &quot;text&quot;: &quot;你好！今天是2026年1月26日，星期一。有什么我可以帮你的吗？&quot;,
+          &quot;annotations&quot;: []
         }
       ]
     }
   ],
-  "usage": {
-    "input_tokens": 34,
-    "output_tokens": 25,
-    "total_tokens": 59,
-    "input_tokens_details": {
-      "cached_tokens": 0
+  &quot;usage&quot;: {
+    &quot;input_tokens&quot;: 34,
+    &quot;output_tokens&quot;: 25,
+    &quot;total_tokens&quot;: 59,
+    &quot;input_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0
     },
-    "output_tokens_details": {
-      "reasoning_tokens": 0
+    &quot;output_tokens_details&quot;: {
+      &quot;reasoning_tokens&quot;: 0
     }
   }
 }
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="3-简化多轮对话管理"></a>
+
+<a id="migration-step3-title"></a>
 
 ### 3\. 简化多轮对话管理
 
 在 Chat Completions 中需要手动管理消息历史数组，而 Responses API 提供了 `previous_response_id` 参数自动关联上下文，当前响应`id`有效期为7天。
 
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
-# Chat Completions - 需要手动管理消息历史
+<table><tbody><tr><td><a id="code-block-8"></a><pre class="language-python"><code># Chat Completions - 需要手动管理消息历史
 messages = [
-    {"role": "system", "content": "你是一个有帮助的助手。"},
-    {"role": "user", "content": "法国的首都是哪里？"}
+    {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;你是一个有帮助的助手。&quot;},
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;法国的首都是哪里？&quot;}
 ]
 res1 = client.chat.completions.create(
-    model="qwen4-max",
+    model=&quot;qwen4-max&quot;,
     messages=messages
 )
 
 # 手动添加响应到历史
 messages.append(res1.choices[0].message)
-messages.append({"role": "user", "content": "它的人口是多少？"})
+messages.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;它的人口是多少？&quot;})
 
 res2 = client.chat.completions.create(
-    model="qwen4-max",
+    model=&quot;qwen4-max&quot;,
     messages=messages
 )
-```
-
-```
-# Responses API - 使用 previous_response_id 自动关联
+</code></pre></td><td><a id="code-block-9"></a><pre class="language-python"><code># Responses API - 使用 previous_response_id 自动关联
 res1 = client.responses.create(
-    model="qwen4-max",
-    input="法国的首都是哪里？"
+    model=&quot;qwen4-max&quot;,
+    input=&quot;法国的首都是哪里？&quot;
 )
 
 # 只需传递上一轮的 ID
 res2 = client.responses.create(
-    model="qwen4-max",
-    input="它的人口是多少？",
+    model=&quot;qwen4-max&quot;,
+    input=&quot;它的人口是多少？&quot;,
     previous_response_id=res1.id
 )
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
 
 #### Node.js
 
-```
-// Chat Completions - 需要手动管理消息历史
+<table><tbody><tr><td><a id="code-block-10"></a><pre class="language-javascript"><code>// Chat Completions - 需要手动管理消息历史
 let messages = [
-    { role: "system", content: "你是一个有帮助的助手。" },
-    { role: "user", content: "法国的首都是哪里？" }
+    { role: &quot;system&quot;, content: &quot;你是一个有帮助的助手。&quot; },
+    { role: &quot;user&quot;, content: &quot;法国的首都是哪里？&quot; }
 ];
 const res1 = await client.chat.completions.create({
-    model: "qwen4-max",
+    model: &quot;qwen4-max&quot;,
     messages
 });
 
 // 手动添加响应到历史
 messages = messages.concat([res1.choices[0].message]);
-messages.push({ role: "user", content: "它的人口是多少？" });
+messages.push({ role: &quot;user&quot;, content: &quot;它的人口是多少？&quot; });
 
 const res2 = await client.chat.completions.create({
-    model: "qwen4-max",
+    model: &quot;qwen4-max&quot;,
     messages
 });
-```
-
-```
-// Responses API - 使用 previous_response_id 自动关联
+</code></pre></td><td><a id="code-block-11"></a><pre class="language-javascript"><code>// Responses API - 使用 previous_response_id 自动关联
 const res1 = await client.responses.create({
-    model: "qwen4-max",
-    input: "法国的首都是哪里？"
+    model: &quot;qwen4-max&quot;,
+    input: &quot;法国的首都是哪里？&quot;
 });
 
 // 只需传递上一轮的 ID
 const res2 = await client.responses.create({
-    model: "qwen4-max",
-    input: "它的人口是多少？",
+    model: &quot;qwen4-max&quot;,
+    input: &quot;它的人口是多少？&quot;,
     previous_response_id: res1.id
 });
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="4-使用内置工具"></a>
+
+<a id="migration-step4-title"></a>
 
 ### 4\. 使用内置工具
 
-Responses API 内置了多种工具，无需自行实现。只需在 `tools` 参数中指定即可，当前代码解释器与网页抓取工具限时免费，详情请参见[工具调用](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)。
+Responses API 内置了多种工具，无需自行实现。只需在 `tools` 参数中指定即可，当前代码解释器与网页抓取工具限时免费，详情请参见[工具调用](../../model-user-guide/model-experience/text-generation-model/tool-calls.md)。
+
+<a id="sec-tabs-3"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
-# Chat Completions - 需要自己实现工具函数
+<table><tbody><tr><td><a id="code-block-12"></a><pre class="language-python"><code># Chat Completions - 需要自己实现工具函数
 def web_search(query):
     # 需要自己实现网络搜索逻辑
     import requests
-    r = requests.get(f"https://api.example.com/search?q={query}")
-    return r.json().get("results", [])
+    r = requests.get(f&quot;https://api.example.com/search?q={query}&quot;)
+    return r.json().get(&quot;results&quot;, [])
 
 completion = client.chat.completions.create(
-    model="qwen4-max",
-    messages=[{"role": "user", "content": "法国现任总统是谁？"}],
+    model=&quot;qwen4-max&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;法国现任总统是谁？&quot;}],
     functions=[{
-        "name": "web_search",
-        "description": "搜索网络信息",
-        "parameters": {
-            "type": "object",
-            "properties": {"query": {"type": "string"}},
-            "required": ["query"]
+        &quot;name&quot;: &quot;web_search&quot;,
+        &quot;description&quot;: &quot;搜索网络信息&quot;,
+        &quot;parameters&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;properties&quot;: {&quot;query&quot;: {&quot;type&quot;: &quot;string&quot;}},
+            &quot;required&quot;: [&quot;query&quot;]
         }
     }]
 )
-```
-
-```
-# Responses API - 直接使用内置工具
+</code></pre></td><td><a id="code-block-13"></a><pre class="language-python"><code># Responses API - 直接使用内置工具
 response = client.responses.create(
-    model="qwen4-max",
-    input="法国现任总统是谁？",
-    tools=[{"type": "web_search"}]  # 直接启用网络搜索
+    model=&quot;qwen4-max&quot;,
+    input=&quot;法国现任总统是谁？&quot;,
+    tools=[{&quot;type&quot;: &quot;web_search&quot;}]  # 直接启用网络搜索
 )
 print(response.output_text)
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
 
 #### Node.js
 
-```
-// Chat Completions - 需要自己实现工具函数
+<table><tbody><tr><td><a id="code-block-14"></a><pre class="language-javascript"><code>// Chat Completions - 需要自己实现工具函数
 async function web_search(query) {
     const fetch = (await import('node-fetch')).default;
     const res = await fetch(`https://api.example.com/search?q=${query}`);
@@ -1192,65 +1392,78 @@ async function web_search(query) {
 }
 
 const completion = await client.chat.completions.create({
-    model: "qwen4-max",
-    messages: [{ role: "user", content: "法国现任总统是谁？" }],
+    model: &quot;qwen4-max&quot;,
+    messages: [{ role: &quot;user&quot;, content: &quot;法国现任总统是谁？&quot; }],
     functions: [{
-        name: "web_search",
-        description: "搜索网络信息",
+        name: &quot;web_search&quot;,
+        description: &quot;搜索网络信息&quot;,
         parameters: {
-            type: "object",
-            properties: { query: { type: "string" } },
-            required: ["query"]
+            type: &quot;object&quot;,
+            properties: { query: { type: &quot;string&quot; } },
+            required: [&quot;query&quot;]
         }
     }]
 });
-```
-
-```
-// Responses API - 直接使用内置工具
+</code></pre></td><td><a id="code-block-15"></a><pre class="language-javascript"><code>// Responses API - 直接使用内置工具
 const response = await client.responses.create({
-    model: "qwen4-max",
-    input: "法国现任总统是谁？",
-    tools: [{ type: "web_search" }]  // 直接启用网络搜索
+    model: &quot;qwen4-max&quot;,
+    input: &quot;法国现任总统是谁？&quot;,
+    tools: [{ type: &quot;web_search&quot; }]  // 直接启用网络搜索
 });
 console.log(response.output_text);
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
 
 #### curl
 
-```
-# Chat Completions - 需要自己实现工具
+<table><tbody><tr><td><a id="code-block-16"></a><pre class="language-bash"><code># Chat Completions - 需要自己实现工具
 # 这里展示调用外部搜索 API 的示例
 curl https://api.example.com/search \
   -G \
-  --data-urlencode "q=法国现任总统" \
-  --data-urlencode "key=$SEARCH_API_KEY"
-```
-
-```
-# Responses API - 直接使用内置工具
+  --data-urlencode &quot;q=法国现任总统&quot; \
+  --data-urlencode &quot;key=$SEARCH_API_KEY&quot;
+</code></pre></td><td><a id="code-block-17"></a><pre class="language-bash"><code># Responses API - 直接使用内置工具
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
+-H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
+-H &quot;Content-Type: application/json&quot; \
 -d '{
-    "model": "qwen4-max",
-    "input": "法国现任总统是谁？",
-    "tools": [{"type": "web_search"}]
+    &quot;model&quot;: &quot;qwen4-max&quot;,
+    &quot;input&quot;: &quot;法国现任总统是谁？&quot;,
+    &quot;tools&quot;: [{&quot;type&quot;: &quot;web_search&quot;}]
 }'
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="常见问题"></a>
+
+<a id="faq-title"></a>
 
 ## 常见问题
+
+<a id="q-如何传递多轮对话的上下文"></a>
+
+<a id="9c46dd5a352cp"></a>
 
 ### Q：如何传递多轮对话的上下文？
 
 A：在发起新一轮对话请求时，请将上一轮模型响应成功返回的`id`作为 `previous_response_id` 参数传入。
 
+<a id="q-为何无法打印-output-text"></a>
+
+<a id="9e44ac2b5af26"></a>
+
 ### Q：为何无法打印 output\_text？
 
 A：OpenAI Python SDK 在某些版本（如1.99.2）错误移除了该属性，请更新 SDK 为最新版以避免该报错。
 
+<a id="相关文档"></a>
+
+<a id="related-title"></a>
+
 ## 相关文档
 
--   [创建响应](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)
--   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
+-   [创建响应](../qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)
+-   [获取与配置 API Key](../preparations/get-api-key.md)
 -   [配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)

@@ -4,117 +4,58 @@
 
 获取指定画像模板的详情，包含字段定义和配置信息。
 
+<a id="请求方法与路径"></a>
+
 ## 请求方法与路径
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/profile_schemas/{profile_schema_id}`
 
-调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="请求参数"></a>
 
 ## 请求参数
 
-参数
+| 参数 | 类型 | 必填 | 位置 | 说明 |
+| --- | --- | --- | --- | --- |
+| `profile_schema_id` | string | 是 | Path | 画像模板 ID |
+| `memory_library_id` | string | 否 | Query | 记忆库 ID |
 
-类型
-
-必填
-
-位置
-
-说明
-
-`profile_schema_id`
-
-string
-
-是
-
-Path
-
-画像模板 ID
-
-`memory_library_id`
-
-string
-
-否
-
-Query
-
-记忆库 ID
+<a id="返回结果"></a>
 
 ## 返回结果
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `request_id` | string | 请求 ID |
+| `name` | string | 画像模板名称 |
+| `description` | string | 画像模板描述 |
+| `plan_version` | string | 收费计划 |
+| `extract_scene` | string | 提取场景 |
+| `attributes` | array | 画像属性列表 |
+| `attributes[].attribute_id` | string | 属性 ID |
+| `attributes[].name` | string | 属性名称 |
+| `attributes[].description` | string | 属性描述 |
 
-类型
-
-说明
-
-`request_id`
-
-string
-
-请求 ID
-
-`name`
-
-string
-
-画像模板名称
-
-`description`
-
-string
-
-画像模板描述
-
-`plan_version`
-
-string
-
-收费计划
-
-`extract_scene`
-
-string
-
-提取场景
-
-`attributes`
-
-array
-
-画像属性列表
-
-`attributes[].attribute_id`
-
-string
-
-属性 ID
-
-`attributes[].name`
-
-string
-
-属性名称
-
-`attributes[].description`
-
-string
-
-属性描述
+<a id="代码示例"></a>
 
 ## 代码示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/profile_schemas/{profile_schema_id}" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json"
 ```
 
+<a id="响应示例"></a>
+
 ## 响应示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "attributes": [
     {"attribute_id": "04eb06f5f04a437b82d07ceb088103f9", "description": "用户的兴趣爱好", "name": "爱好"},
@@ -129,4 +70,6 @@ curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memo
 }
 ```
 
-**重要**更新模板使用 [UpdateProfileSchema](raw/application-api-reference/long-term-memory-new/profiles-overview/update-schema.md)。
+> **重要**
+>
+> 更新模板使用 [UpdateProfileSchema](update-schema.md)。

@@ -2,20 +2,41 @@
 
 Qwen-Coder 是专用于代码任务的语言模型。通过 API，您可以调用模型执行代码生成、代码补全，并通过工具调用与外部系统交互。
 
-**说明**推荐使用最新的通用模型替代 Qwen-Coder 模型，请参见[文本生成](raw/model-user-guide/model-experience/text-generation-model.md)选择适合您场景的模型。
+> **说明**
+>
+> 推荐使用最新的通用模型替代 Qwen-Coder 模型，请参见[文本生成](../../text-generation-model.md)选择适合您场景的模型。
+
+<a id="快速开始"></a>
+
+<a id="0178a09d90562"></a>
 
 ## 快速开始
 
-API 使用前提：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)
+API 使用前提：已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](../../../../model-api-reference/preparations/install-sdk.md)
 
 以下示例将演示如何调用`qwen3-coder-flash`模型编写一个寻找质数的 Python 函数。
 
+<a id="sec-tabs"></a>
+
+<a id="openai兼容-chat-completions-api"></a>
+
+<a id="openai兼容-chat-completions-api-h4"></a>
+
 #### OpenAI兼容-Chat Completions API
+
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
 **请求示例**
-```
+
+<a id="code-block"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -34,8 +55,12 @@ completion = client.chat.completions.create(
 )
 print(completion.choices[0].message.content)
 ```
+
 **返回结果**
-```
+
+<a id="code-block-2"></a>
+
+```text
 def find_prime_numbers(n):
     if n <= 2:
         return []
@@ -53,10 +78,17 @@ def find_prime_numbers(n):
     return primes
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
 **请求示例**
-```
+
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const client = new OpenAI(
@@ -82,8 +114,12 @@ async function main() {
 
 main();
 ```
+
 **返回结果**
-```
+
+<a id="code-block-4"></a>
+
+```text
 def find_prime_numbers(n):
     if n <= 2:
         return []
@@ -101,13 +137,19 @@ def find_prime_numbers(n):
     return primes
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
 **请求示例**
 
 各地域的URL不同。
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -125,8 +167,12 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     ]
 }'
 ```
+
 **返回结果**
-```
+
+<a id="code-block-6"></a>
+
+```json
 {
     "model": "qwen3-coder-flash",
     "id": "chatcmpl-3123d5cb-01b8-9a90-98cc-5bffbb369xxx",
@@ -150,12 +196,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-3"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
 **请求示例**
-```
+
+<a id="code-block-7"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -191,8 +250,12 @@ except DashScopeError as e:
     print(f"错误信息：{e.message}")
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
+
 **返回结果**
-```
+
+<a id="code-block-8"></a>
+
+```python
 def find_prime_numbers(n):
     if n <= 2:
         return []
@@ -210,10 +273,17 @@ def find_prime_numbers(n):
     return primes
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
 **请求示例**
-```
+
+<a id="code-block-9"></a>
+
+```java
 import java.util.Arrays;
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
@@ -256,8 +326,12 @@ public class Main {
     }
 }
 ```
+
 **返回结果**
-```
+
+<a id="code-block-10"></a>
+
+```python
 def find_prime_numbers(n):
     if n <= 2:
         return []
@@ -275,13 +349,19 @@ def find_prime_numbers(n):
     return primes
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
 **请求示例**
 
 各地域的URL不同。
 
-```
+<a id="code-block-11"></a>
+
+```bash
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -304,8 +384,12 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
     }
 }'
 ```
+
 **返回结果**
-```
+
+<a id="code-block-12"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -327,11 +411,19 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }
 ```
 
+<a id="核心能力"></a>
+
+<a id="85e281ad1funr"></a>
+
 ## 核心能力
+
+<a id="调用工具"></a>
+
+<a id="0d16182be2r05"></a>
 
 ### 调用工具
 
-为使模型能够与外部环境交互（例如，读写文件、调用 API、操作数据库），您可以为其提供一系列工具。模型会根据您的指令，决定是否以及如何调用这些工具。详情请参见[Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)。
+为使模型能够与外部环境交互（例如，读写文件、调用 API、操作数据库），您可以为其提供一系列工具。模型会根据您的指令，决定是否以及如何调用这些工具。详情请参见[Function Calling](../tool-calls/qwen-function-calling.md)。
 
 完整的工具调用流程包括：
 
@@ -341,11 +433,25 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 以下示例将演示如何引导模型生成代码，并使用 `write_file` 工具将其保存到本地文件。
 
+<a id="sec-tabs-4"></a>
+
+<a id="openai兼容-chat-completions-api-2"></a>
+
+<a id="openai兼容-chat-completions-api-2-h4"></a>
+
 #### OpenAI兼容-Chat Completions API
+
+<a id="sec-tabs-5"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-13"></a>
+
+```python
 import os
 import json
 from openai import OpenAI
@@ -443,16 +549,26 @@ else:
         messages.append(assistant_output)
     print(f"模型最终回复：{assistant_output.content}")
 ```
+
 **返回结果**
-```
+
+<a id="code-block-14"></a>
+
+```text
 正在调用工具 [write_file]，参数：{'content': 'def quick_sort(arr):\\n    if len(arr) <= 1:\\n        return arr\\n    pivot = arr[len(arr) // 2]\\n    left = [x for x in arr if x < pivot]\\n    middle = [x for x in arr if x == pivot]\\n    right = [x for x in arr if x > pivot]\\n    return quick_sort(left) + middle + quick_sort(right)\\n\\nif __name__ == \\"__main__\\":\\n    example_list = [3, 6, 8, 10, 1, 2, 1]\\n    print(\\"Original list:\\", example_list)\\n    sorted_list = quick_sort(example_list)\\n    print(\\"Sorted list:\\", sorted_list)', 'path': 'quick_sort.py'}
 工具返回：成功: 文件 'quick_sort.py' 已写入
 模型最终回复：好的，已经为你创建了名为 `quick_sort.py` 的文件，其中包含了快速排序的 Python 实现。你可以运行这个文件查看示例输出。如果需要进一步修改或解释，请告诉我！
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-15"></a>
+
+```javascript
 import OpenAI from "openai";
 import fs from "fs/promises";
 import path from "path";
@@ -559,8 +675,12 @@ async function main() {
 
 main();
 ```
+
 **返回结果**
-```
+
+<a id="code-block-16"></a>
+
+```text
 正在调用工具 [write_file]，参数： {
   content: 'def quick_sort(arr):\\n    if len(arr) <= 1:\\n        return arr\\n    pivot = arr[len(arr) // 2]\\n    left = [x for x in arr if x < pivot]\\n    middle = [x for x in arr if x == pivot]\\n    right = [x for x in arr if x > pivot]\\n    return quick_sort(left) + middle + quick_sort(right)\\n\\nif __name__ == \\"__main__\\":\\n    example_list = [3, 6, 8, 10, 1, 2, 1]\\n    print(\\"Original list:\\", example_list)\\n    sorted_list = quick_sort(example_list)\\n    print(\\"Sorted list:\\", sorted_list)',
   path: 'quick_sort.py'
@@ -569,13 +689,19 @@ main();
 模型最终回复：已成功创建 `quick_sort.py` 文件，其中包含快速排序的 Python 实现。你可以运行该文件以查看示例列表的排序结果。如果需要进一步修改或解释，请告诉我！
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
 该示例展示了工具调用流程的第一步：发起请求并获得模型的工具调用意图。
 
 各地域的URL不同。
 
-```
+<a id="code-block-17"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -612,8 +738,12 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     ]
 }'
 ```
+
 **返回结果**
-```
+
+<a id="code-block-18"></a>
+
+```json
 {
     "choices": [
         {
@@ -653,11 +783,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-6"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-19"></a>
+
+```python
 import os
 import json
 import dashscope
@@ -759,16 +901,26 @@ except DashScopeError as e:
     print(f"错误信息：{e.message}")
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
+
 **返回结果**
-```
+
+<a id="code-block-20"></a>
+
+```text
 正在调用工具 [write_file]，参数：{'content': 'def quick_sort(arr):\\n    if len(arr) <= 1:\\n        return arr\\n    pivot = arr[len(arr) // 2]\\n    left = [x for x in arr if x < pivot]\\n    middle = [x for x in arr if x == pivot]\\n    right = [x for x in arr if x > pivot]\\n    return quick_sort(left) + middle + quick_sort(right)\\n\\nif __name__ == \\"__main__\\":\\n    example_list = [3, 6, 8, 10, 1, 2, 1]\\n    print(\\"Original list:\\", example_list)\\n    sorted_list = quick_sort(example_list)\\n    print(\\"Sorted list:\\", sorted_list)', 'path': 'quick_sort.py'}
 工具返回：成功: 文件 'quick_sort.py' 已写入
 模型最终回复：已成功创建 `quick_sort.py` 文件，其中包含快速排序的 Python 实现。你可以运行该文件以查看示例列表的排序结果。如果需要进一步修改或解释，请告诉我！
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-21"></a>
+
+```java
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
@@ -893,12 +1045,20 @@ public class Main {
     }
 }
 ```
+
 **返回结果**
-```
+
+<a id="code-block-22"></a>
+
+```text
 正在调用工具 [write_file]，参数：{"content": "def quick_sort(arr):\\n    if len(arr) <= 1:\\n        return arr\\n    pivot = arr[len(arr) // 2]\\n    left = [x for x in arr if x < pivot]\\n    middle = [x for x in arr if x == pivot]\\n    right = [x for x in arr if x > pivot]\\n    return quick_sort(left) + middle + quick_sort(right)\\n\\nif __name__ == \\\"__main__\\\":\\n    example_array = [3, 6, 8, 10, 1, 2, 1]\\n    print(\\\"Original array:\\\", example_array)\\n    sorted_array = quick_sort(example_array)\\n    print(\\\"Sorted array:\\\", sorted_array)", "path": "quick_sort.py"}
 工具返回：成功: 文件 'quick_sort.py' 已写入
 模型最终回复：已成功为您创建了快速排序的Python代码文件 `quick_sort.py`。该文件包含一个 `quick_sort` 函数和一个示例用法，您可以在终端或编辑器中运行它来测试快速排序功能。
 ```
+
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
 
 #### curl
 
@@ -906,7 +1066,9 @@ public class Main {
 
 各地域的URL不同。
 
-```
+<a id="code-block-23"></a>
+
+```bash
 curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -946,8 +1108,12 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **返回结果**
-```
+
+<a id="code-block-24"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -983,18 +1149,39 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="代码补全"></a>
+
+<a id="b24b6b1f771zx"></a>
+
+<a id="47f042bf4am3w"></a>
+
 ### 代码补全
 
 Qwen-Coder 通过前缀续写（Partial Mode）实现代码补全，适用于所有 Qwen-Coder 模型和地域。此功能用于在您写了一半的代码（前缀）基础上，让模型自动完成剩余部分。
 
-通过在 `messages` 列表中加入一个 `role` 为 `assistant` 的消息，并设置 `partial: true` 来实现。`assistant` 消息的 `content` 即为您提供的代码前缀。详情请参见[前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)。
+通过在 `messages` 列表中加入一个 `role` 为 `assistant` 的消息，并设置 `partial: true` 来实现。`assistant` 消息的 `content` 即为您提供的代码前缀。详情请参见[前缀续写](../partial-mode.md)。
+
+<a id="sec-tabs-7"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
+
+<a id="sec-tabs-8"></a>
+
+<a id="python-5"></a>
+
+<a id="python-5-h4"></a>
 
 #### Python
 
 **请求示例**
-```
+
+<a id="code-block-25"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1019,8 +1206,12 @@ completion = client.chat.completions.create(
     )
 print(completion.choices[0].message.content)
 ```
+
 **返回结果**
-```
+
+<a id="code-block-26"></a>
+
+```text
 (n):
     primes = []
     for i in range(2, n+1):
@@ -1037,10 +1228,17 @@ prime_numbers = generate_prime_number(100)
 print(prime_numbers)
 ```
 
+<a id="node-js-3"></a>
+
+<a id="node-js-3-h4"></a>
+
 #### Node.js
 
 **请求示例**
-```
+
+<a id="code-block-27"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const client = new OpenAI(
@@ -1066,8 +1264,12 @@ async function main() {
 
 main();
 ```
+
 **返回结果**
-```
+
+<a id="code-block-28"></a>
+
+```text
 (n):
     primes = []
     for i in range(2, n+1):
@@ -1084,13 +1286,19 @@ prime_numbers = generate_prime_number(100)
 print(prime_numbers)
 ```
 
+<a id="curl-5"></a>
+
+<a id="curl-5-h4"></a>
+
 #### curl
 
 **请求示例**
 
 各地域的URL不同。
 
-```
+<a id="code-block-29"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -1107,8 +1315,12 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     }]
 }'
 ```
+
 **返回结果**
-```
+
+<a id="code-block-30"></a>
+
+```json
 {
     "choices": [
         {
@@ -1137,12 +1349,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-9"></a>
+
+<a id="python-6"></a>
+
+<a id="python-6-h4"></a>
 
 #### Python
 
 **请求示例**
-```
+
+<a id="code-block-31"></a>
+
+```python
 import dashscope
 import os
 from dashscope import DashScopeError
@@ -1177,8 +1402,12 @@ except DashScopeError as e:
     print(f"错误信息：{e.message}")
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
+
 **返回结果**
-```
+
+<a id="code-block-32"></a>
+
+```text
 (n):
     primes = []
     for i in range(2, n+1):
@@ -1195,13 +1424,19 @@ prime_numbers = generate_prime_number(100)
 print(prime_numbers)
 ```
 
+<a id="curl-6"></a>
+
+<a id="curl-6-h4"></a>
+
 #### curl
 
 **请求示例**
 
 各地域的URL不同。
 
-```
+<a id="code-block-33"></a>
+
+```bash
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -1223,8 +1458,12 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
     }
 }'
 ```
+
 **返回结果**
-```
+
+<a id="code-block-34"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -1249,50 +1488,78 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }
 ```
 
+<a id="应用于生产环境"></a>
+
+<a id="5d656bcca5zi4"></a>
+
 ## 应用于生产环境
 
 为优化千问代码模型的使用效率并降低成本，可参考以下建议：
 
--   **启用**[流式输出](raw/model-user-guide/model-experience/text-generation-model/stream.md): 设置 `stream=True` 可以实时返回中间结果，降低超时风险，提升用户体验。
+-   **启用**[流式输出](../stream.md): 设置 `stream=True` 可以实时返回中间结果，降低超时风险，提升用户体验。
 -   **降低温度参数**: 代码生成任务通常要求结果的确定性和准确性。建议降低 `temperature` 参数，以减少生成结果的随机性。
--   **使用支持上下文缓存的模型**: 在包含大量重复前缀的场景（如代码补全、代码审查），推荐使用支持[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)的模型，以有效降低开销。
--   **控制工具数量**：为确保模型调用的效率和成本效益，建议单次传入的工具`tools`数量不超过20个。传入大量工具描述会消耗过多输入Token，这不仅会增加费用、降低响应速度，还会加大模型选择正确工具的难度，详情可参见[Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)。
+-   **使用支持上下文缓存的模型**: 在包含大量重复前缀的场景（如代码补全、代码审查），推荐使用支持[上下文缓存](../context-cache.md)的模型，以有效降低开销。
+-   **控制工具数量**：为确保模型调用的效率和成本效益，建议单次传入的工具`tools`数量不超过20个。传入大量工具描述会消耗过多输入Token，这不仅会增加费用、降低响应速度，还会加大模型选择正确工具的难度，详情可参见[Function Calling](../tool-calls/qwen-function-calling.md)。
+
+<a id="计费与限流"></a>
+
+<a id="dabab9c6413c9"></a>
 
 ## 计费与限流
 
--   **基本计费**：根据每次请求的输入 `Token` 数和输出 `Token` 数计费。不同模型的单价不同，具体价格请参考[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
+-   **基本计费**：根据每次请求的输入 `Token` 数和输出 `Token` 数计费。不同模型的单价不同，具体价格请参考[模型列表](../../../get-started-with-models/models.md)。
     
 -   **特殊计费项**：
     
     -   **阶梯计费**： `qwen3-coder` 系列模型采取阶梯计费。当**单次**请求的输入Token数达到特定阶梯后，该请求的全部输入和输出Token均按此阶梯的单价计费。
-    -   **上下文缓存**：对于支持上下文缓存的模型，当多次请求包含大量重复输入时（如代码审查），缓存机制可显著降低成本。命中**隐式缓存**的输入文本按单价的 20% 计费，命中**显式缓存**的输入文本按单价的 10% 计费。详情请参见[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
+    -   **上下文缓存**：对于支持上下文缓存的模型，当多次请求包含大量重复输入时（如代码审查），缓存机制可显著降低成本。命中**隐式缓存**的输入文本按单价的 20% 计费，命中**显式缓存**的输入文本按单价的 10% 计费。详情请参见[上下文缓存](../context-cache.md)。
     -   **工具调用 (Function Calling)**：使用工具调用功能时，您在 `tools` 参数中定义的工具描述会作为输入内容计入 `Token` 总量并产生费用。
--   **限流**：API调用受到每分钟请求数（RPM）和每分钟Token数（TPM）的双重限制。详情请参见[限流](https://help.aliyun.com/zh/model-studio/rate-limit#f7770a0349vq5)。
+-   **限流**：API调用受到每分钟请求数（RPM）和每分钟Token数（TPM）的双重限制。详情请参见[限流](../../../get-started-with-models/rate-limit.md#f7770a0349vq5)。
     
--   **免费额度（仅北京地域）（仅新加坡地域）**：从开通百炼或模型申请通过之日起计算有效期，有效期90天内，Qwen-Coder各模型分别提供100万Token的[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+-   **免费额度（仅北京地域）（仅新加坡地域）**：从开通百炼或模型申请通过之日起计算有效期，有效期90天内，Qwen-Coder各模型分别提供100万Token的[新人免费额度](../../../test-1/new-free-quota.md)。
     
+
+<a id="api参考"></a>
+
+<a id="8ab23616d6hl0"></a>
 
 ## API参考
 
-关于千问代码模型的输入与输出参数，请参见[文本生成](raw/model-api-reference/qwen-api-reference.md)。
+关于千问代码模型的输入与输出参数，请参见[文本生成](../../../../model-api-reference/qwen-api-reference.md)。
+
+<a id="常见问题"></a>
+
+<a id="3375489aa0n2r"></a>
 
 ## 常见问题
 
+<a id="使用qwen-code-claude-code等开发工具时-为什么会消耗大量-token"></a>
+
+<a id="6227c12121l69"></a>
+
 ### 使用Qwen Code、Claude Code等开发工具时，为什么会消耗大量 Token？
 
-通过外部开发工具调用 Qwen-Coder 模型处理问题时，该工具可能会多次调用 API，从而消耗大量 Token。关于具体的监控和减少Token消耗的方法，请参考[Qwen Code](raw/token-plan-user-guide/use-chat-client-or-development-tool/qwen-code.md)和[Claude Code](raw/token-plan-user-guide/use-chat-client-or-development-tool/claude-code.md)文档。您可开启[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)功能，以避免免费额度耗尽后产生额外费用。
+通过外部开发工具调用 Qwen-Coder 模型处理问题时，该工具可能会多次调用 API，从而消耗大量 Token。关于具体的监控和减少Token消耗的方法，请参考[Qwen Code](../../../../token-plan-user-guide/use-chat-client-or-development-tool/qwen-code.md)和[Claude Code](../../../../token-plan-user-guide/use-chat-client-or-development-tool/claude-code.md)文档。您可开启[免费额度用完即停](../../../test-1/new-free-quota.md#d1cb80ac11i92)功能，以避免免费额度耗尽后产生额外费用。
 
-您也可以购买 AI 编码套餐，采用固定月费，提供月度请求额度，支持在AI工具中使用，详情请参见[Coding Plan概述](raw/token-plan-user-guide/coding-plan-guide/coding-plan.md)。
+您也可以购买 AI 编码套餐，采用固定月费，提供月度请求额度，支持在AI工具中使用，详情请参见[Coding Plan概述](../../../../token-plan-user-guide/coding-plan-guide/coding-plan.md)。
+
+<a id="如何查看模型调用量"></a>
+
+<a id="ad7eeff4db6nk"></a>
 
 ### 如何查看模型调用量？
 
-模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
+模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](../../../model-monitoring/model-telemetry.md)文档。
 
 > 监控数据按分钟级更新，仅供参考，不作为计费依据。
+
+<a id="如何让模型只输出代码-不包含任何解释性文字"></a>
+
+<a id="f63daa6c63ztv"></a>
 
 ### 如何让模型只输出代码，不包含任何解释性文字？
 
 可参考以下方法：
 
 1.  **提示词约束**: 在提示词中明确指示，例如：“只返回代码，不要包含任何解释、注释或 markdown 标记。”
-2.  **设置**`stop`**序列**: 使用 `stop=["\n# 解释:", "说明", "Explanation:", "Note:"]` 等词组，在模型开始生成解释性文字时提前终止，详情请参见[千问 API 参考](raw/model-api-reference/qwen-api-reference.md)。
+2.  **设置**`stop`**序列**: 使用 `stop=["\n# 解释:", "说明", "Explanation:", "Note:"]` 等词组，在模型开始生成解释性文字时提前终止，详情请参见[千问 API 参考](../../../../model-api-reference/qwen-api-reference.md)。

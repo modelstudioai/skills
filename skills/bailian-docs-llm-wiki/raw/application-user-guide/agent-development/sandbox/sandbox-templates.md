@@ -4,93 +4,87 @@
 
 模版是创建沙箱实例的前提。一个模版可创建多个实例，实例继承模版的运行环境配置。在 [Sandbox > 我的模版](https://bailian.console.aliyun.com/cn-beijing/sandbox/my-template) 管理全部模版。
 
+<a id="创建模版"></a>
+
+<a id="h-sandbox-tpl-create"></a>
+
 ## 创建模版
 
 点击**创建模版**，配置以下字段。
+
+<a id="选择镜像"></a>
+
+<a id="h-sandbox-tpl-image"></a>
 
 ### 选择镜像
 
 从三种基础镜像中选择其一：
 
-**镜像**
+| 镜像 | 说明 | 适用场景 |
+| --- | --- | --- |
+| 代码解释器 | 轻量代码执行环境，支持 Python / Node.js | 代码执行、数据分析、脚本运行 |
+| 浏览器 | 浏览器执行环境，可进行 UI 操作 | 网页自动化、截图、UI 测试 |
+| 全能型 | 集成多种运行时的镜像 | 需要多语言或综合能力的任务 |
 
-**说明**
+<a id="基础配置"></a>
 
-**适用场景**
-
-代码解释器
-
-轻量代码执行环境，支持 Python / Node.js
-
-代码执行、数据分析、脚本运行
-
-浏览器
-
-浏览器执行环境，可进行 UI 操作
-
-网页自动化、截图、UI 测试
-
-全能型
-
-集成多种运行时的镜像
-
-需要多语言或综合能力的任务
+<a id="h-sandbox-tpl-basic"></a>
 
 ### 基础配置
 
-**字段**
+| 字段 | 说明 |
+| --- | --- |
+| 模版名称 | 必填，自定义 |
+| 资源配置 | 必选。配置 1（1 Core｜2 GB，推荐）或配置 2（4 Core｜8 GB） |
 
-**说明**
+<a id="高级配置"></a>
 
-模版名称
-
-必填，自定义
-
-资源配置
-
-必选。配置 1（1 Core｜2 GB，推荐）或配置 2（4 Core｜8 GB）
+<a id="h-sandbox-tpl-advanced"></a>
 
 ### 高级配置
 
 按需展开高级配置，设置以下能力。
 
-**配置项**
-
-**说明**
-
-文件挂载
-
-选择本地文件初始化到 `/home/user/workspace/uploads/`，最多上传 5 个文件
-
-网络配置
-
-设置访问白名单规则与黑名单规则
-
-环境变量
-
-以键值对形式注入环境变量
-
-生命周期控制
-
-空闲超时与最大存活时间二选一，最长保持 7 天
+| 配置项 | 说明 |
+| --- | --- |
+| 文件挂载 | 选择本地文件初始化到 `/home/user/workspace/uploads/`，最多上传 5 个文件 |
+| 网络配置 | 设置访问白名单规则与黑名单规则 |
+| 环境变量 | 以键值对形式注入环境变量 |
+| 生命周期控制 | 空闲超时与最大存活时间二选一，最长保持 7 天 |
 
 -   **空闲超时（秒）**：无请求超时后自动休眠，不恢复状态，最长保持 7 天后释放。
 -   **最大存活时间（秒）**：实例首次创建或恢复后最长运行 7 天。
 
-**说明**通过 API 创建模版时，`mntConfig.mountPath` 必须以 `/home/user/workspace/uploads/` 开头。路径不在该目录下时，接口接受配置，但实例中不会出现文件。详见[文件上传](https://help.aliyun.com/zh/model-studio/sandbox-api-overview#h-sandbox-api-file-upload)。
+> **说明**
+>
+> 通过 API 创建模版时，`mntConfig.mountPath` 必须以 `/home/user/workspace/uploads/` 开头。路径不在该目录下时，接口接受配置，但实例中不会出现文件。详见[文件上传](../../../application-api-reference/sandbox-api/sandbox-api-overview.md#h-sandbox-api-file-upload)。
 
 填写完成后点击**创建**。创建成功后模版出现在列表中。
+
+<a id="查看与编辑模版"></a>
+
+<a id="h-sandbox-tpl-edit"></a>
 
 ## 查看与编辑模版
 
 在模版列表中点击目标模版，查看基本信息并编辑资源规格、网络策略、环境变量等配置。每次更新后模版版本递增。
 
+<a id="删除模版"></a>
+
+<a id="h-sandbox-tpl-delete"></a>
+
 ## 删除模版
 
 在模版列表中删除不再使用的模版。
 
-**说明**若模版仍存在运行中或已暂停的实例，将无法删除，需先释放这些实例。释放实例的操作详见[实例管理与使用](raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)。
+> **说明**
+>
+> 若模版仍存在运行中或已暂停的实例，将无法删除，需先释放这些实例。释放实例的操作详见[实例管理与使用](sandbox-sdk.md)。
+
+<a id="通过-api-管理模版"></a>
+
+<a id="h-sandbox-tpl-api"></a>
 
 ## 通过 API 管理模版
 
-除控制台外，还可通过 API 管理模版。详见 [Sandbox API - 模版管理](raw/application-api-reference/sandbox-api/sandbox-api-overview.md)。
+除控制台外，还可通过 API 管理模版。详见 [Sandbox API - 模版管理](../../../application-api-reference/sandbox-api/sandbox-api-overview.md)。

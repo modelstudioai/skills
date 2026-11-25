@@ -2,11 +2,19 @@
 
 获取文体列表。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListWritingStyles)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,229 +33,46 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:ListWritingStyles</td><td>list</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:ListWritingStyles
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>WorkspaceId</td><td>string</td><td>是</td><td><div><p><a href="https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id">业务空间 ID</a></p></div></td><td>llm-xxxxx</td></tr><tr><td>Scene</td><td>string</td><td>是</td><td><div><p>写作场景筛选</p></div><div><div>枚举值：</div><ul><li>market：营销写作。</li><li>government：法定公文 。</li><li>custom：自定义写作。</li><li>media：传媒类。</li><li>office：事务公文。</li></ul></div></td><td>media</td></tr><tr><td>MaxResults</td><td>integer</td><td>否</td><td><div><p>返回的最大结果数</p></div></td><td>100</td></tr><tr><td>NextToken</td><td>string</td><td>否</td><td><div><p>写一页 Token</p></div></td><td>下一页token</td></tr></tbody></table>
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-是
-
-[业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xxxxx
-
-Scene
-
-string
-
-是
-
-写作场景筛选
-
-枚举值：
-
--   market：营销写作。
--   government：法定公文 。
--   custom：自定义写作。
--   media：传媒类。
--   office：事务公文。
-
-media
-
-MaxResults
-
-integer
-
-否
-
-返回的最大结果数
-
-100
-
-NextToken
-
-string
-
-否
-
-写一页 Token
-
-下一页token
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-TotalCount
-
-integer
-
-总记录数
-
-58
-
-MaxResults
-
-integer
-
-最大返回结果数
-
-100
-
-NextToken
-
-string
-
-下一个 token
-
-下一页token
-
-Code
-
-string
-
-错误码
-
-successful
-
-Message
-
-string
-
-错误消息
-
-数据不存在
-
-Success
-
-string
-
-此次请求是否成功
-
-true
-
-Data
-
-array<object>
-
-文体列表
-
-data
-
-object
-
-文体对象
-
-StyleName
-
-string
-
-文体名称
-
-文体名称
-
-StyleKey
-
-string
-
-文体唯一标识 KEY
-
-文体唯一标识
-
-StyleDescription
-
-string
-
-文体描述
-
-文体描述
-
-DistributeWriting
-
-boolean
-
-是否支持分步骤写作
-
-false
-
-StyleImage
-
-string
-
-文体图片
-
-文体图片
-
-Emoji
-
-string
-
-文体小图标（字符符号表示）
-
-小图标
-
-TemplateDefine
-
-WritingStyleTemplateDefine
-
-文体模板定义
-
-DistributeStepTemplateDefine
-
-WritingStyleTemplateDefine
-
-分步骤模板定义
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| TotalCount | integer | 总记录数 | 58 |
+| MaxResults | integer | 最大返回结果数 | 100 |
+| NextToken | string | 下一个 token | 下一页token |
+| Code | string | 错误码 | successful |
+| Message | string | 错误消息 | 数据不存在 |
+| Success | string | 此次请求是否成功 | true |
+| Data | array<object> | 文体列表 |  |
+| data | object | 文体对象 |  |
+| StyleName | string | 文体名称 | 文体名称 |
+| StyleKey | string | 文体唯一标识 KEY | 文体唯一标识 |
+| StyleDescription | string | 文体描述 | 文体描述 |
+| DistributeWriting | boolean | 是否支持分步骤写作 | false |
+| StyleImage | string | 文体图片 | 文体图片 |
+| Emoji | string | 文体小图标（字符符号表示） | 小图标 |
+| TemplateDefine | WritingStyleTemplateDefine | 文体模板定义 |  |
+| DistributeStepTemplateDefine | WritingStyleTemplateDefine | 分步骤模板定义 |  |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -255,7 +80,9 @@ WritingStyleTemplateDefine
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "RequestId": "1813ceee-7fe5-41b4-87e5-982a4d18cca5",
   "TotalCount": 58,
@@ -393,6 +220,10 @@ WritingStyleTemplateDefine
   ]
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

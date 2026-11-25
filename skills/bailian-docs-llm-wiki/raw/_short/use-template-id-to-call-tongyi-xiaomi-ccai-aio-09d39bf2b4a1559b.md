@@ -1,13 +1,25 @@
 # 通过模板ID调用伶鹊CCAI-对话分析AIO应用
 
+<a id="前提条件"></a>
+
+<a id="5ab571aa30ht6"></a>
+
 ## 前提条件
 
 -   本文向您介绍伶鹊CCAI-对话分析AIO应用SDK的安装、使用及注意事项。
 -   如果您还未创建AccessKeyID和AccessKeySecret，请参考[获取 AccessKey 与 AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
--   如果您使用子账号调用接口，请参考[伶鹊CCAI-对话分析RAM子账号使用方式和授权操作](raw/_short/use-and-authorize-ram-users-for-ccai-dialogue-an-e83b0ec9dc63d2ff.md)。
--   各API详细出入参说明请查看左侧目录中的[API目录](raw/_short/api-contactcenterai-2024-06-03-dir-f5fdcb398b72451f.md)。
+-   如果您使用子账号调用接口，请参考[伶鹊CCAI-对话分析RAM子账号使用方式和授权操作](use-and-authorize-ram-users-for-ccai-dialogue-an-e83b0ec9dc63d2ff.md)。
+-   各API详细出入参说明请查看左侧目录中的[API目录](api-contactcenterai-2024-06-03-dir-f5fdcb398b72451f.md)。
+
+<a id="接口入参位置"></a>
+
+<a id="93a6fa8be5eso"></a>
 
 ## 接口入参位置
+
+<a id="workspaceid"></a>
+
+<a id="2f31b33e5flgz"></a>
 
 ### workspaceId
 
@@ -16,6 +28,10 @@
 1.  访问[**业务空间管理**](https://bailian.console.aliyun.com/?admin=1#/efm/business_management)页面。
 2.  业务空间管理列表中Workspace ID为入参中workspaceId。
 
+<a id="appid"></a>
+
+<a id="47b6d769670rm"></a>
+
 ### appId
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9089763871/p1086579.png)
@@ -23,6 +39,10 @@
 1.  访问**应用广场**页面，点击伶鹊CCAI-对话分析AIO的**查看详情**。
 2.  点击上方**我的应用**，展示应用卡片列表。
 3.  每个卡片上的应用ID即为接口参数中appId。
+
+<a id="templateids"></a>
+
+<a id="0add240362sic"></a>
 
 ### templateIds
 
@@ -36,7 +56,17 @@
 6.  **自定义模板**列表中**模板ID**为入参中templateIds。
 7.  如果还未创建自定义模板，请直接点击右上角**保存指令模板**按钮。
 
+<a id="安装sdk"></a>
+
+<a id="acd7931e70w6n"></a>
+
 ## 安装SDK
+
+<a id="sec-tabs"></a>
+
+<a id="同步java"></a>
+
+<a id="同步java-h4"></a>
 
 #### 同步Java
 
@@ -50,6 +80,10 @@
 
 </dependency>
 
+<a id="异步java"></a>
+
+<a id="异步java-h4"></a>
+
 #### 异步Java
 
 <dependency>
@@ -62,15 +96,27 @@
 
 </dependency>
 
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
 pip install alibabacloud\_contactcenterai20240603
 
+<a id="异步流式调用"></a>
+
+<a id="b70dd2f94bg2a"></a>
+
 ## 异步流式调用
 
-**说明**请将workspaceId替换示例中的YOUR\_WORKSPACEID，AccessKeyID替换示例中的YOUR\_ACCESS\_KEY\_ID，AccessKeySecret替换示例中的YOUR\_ACCESS\_KEY\_SECRET，appId替换示例中的YOUR\_APPID，templateIds替换示例中的YOUR\_TEMPLATE，代码才能正常运行。
+> **说明**
+>
+> 请将workspaceId替换示例中的YOUR\_WORKSPACEID，AccessKeyID替换示例中的YOUR\_ACCESS\_KEY\_ID，AccessKeySecret替换示例中的YOUR\_ACCESS\_KEY\_SECRET，appId替换示例中的YOUR\_APPID，templateIds替换示例中的YOUR\_TEMPLATE，代码才能正常运行。
 
-```
+<a id="code-block"></a>
+
+```java
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -166,13 +212,25 @@ public class CcaiPaasTest {
 }
 ```
 
+<a id="异步非流式调用"></a>
+
+<a id="67cf40d69f5za"></a>
+
 ## 异步非流式调用
 
-**说明**请将workspaceId替换示例中的YOUR\_WORKSPACEID，AccessKeyID替换示例中的YOUR\_ACCESS\_KEY\_ID，AccessKeySecret替换示例中的YOUR\_ACCESS\_KEY\_SECRET，appId替换示例中的YOUR\_APPID，templateIds替换示例中的YOUR\_TEMPLATE，代码才能正常运行。
+> **说明**
+>
+> 请将workspaceId替换示例中的YOUR\_WORKSPACEID，AccessKeyID替换示例中的YOUR\_ACCESS\_KEY\_ID，AccessKeySecret替换示例中的YOUR\_ACCESS\_KEY\_SECRET，appId替换示例中的YOUR\_APPID，templateIds替换示例中的YOUR\_TEMPLATE，代码才能正常运行。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-java-tab"></a>
 
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -257,9 +315,13 @@ public class CcaiPaasTest {
 }
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import asyncio
 
 from alibabacloud_contactcenterai20240603.client import Client
@@ -315,13 +377,25 @@ if __name__ == '__main__':
     asyncio.run(run_async())
 ```
 
+<a id="同步非流式调用"></a>
+
+<a id="631d49f647ni2"></a>
+
 ## 同步非流式调用
 
-**说明**请将workspaceId替换示例中的YOUR\_WORKSPACEID，AccessKeyID替换示例中的YOUR\_ACCESS\_KEY\_ID，AccessKeySecret替换示例中的YOUR\_ACCESS\_KEY\_SECRET，appId替换示例中的YOUR\_APPID，templateIds替换示例中的YOUR\_TEMPLATE，代码才能正常运行。
+> **说明**
+>
+> 请将workspaceId替换示例中的YOUR\_WORKSPACEID，AccessKeyID替换示例中的YOUR\_ACCESS\_KEY\_ID，AccessKeySecret替换示例中的YOUR\_ACCESS\_KEY\_SECRET，appId替换示例中的YOUR\_APPID，templateIds替换示例中的YOUR\_TEMPLATE，代码才能正常运行。
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-java-tab"></a>
 
 java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -376,9 +450,13 @@ public class CcaiPaasTest {
 }
 ```
 
+<a id="fig-code-group-2-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 from alibabacloud_contactcenterai20240603.client import Client
 
 import alibabacloud_contactcenterai20240603

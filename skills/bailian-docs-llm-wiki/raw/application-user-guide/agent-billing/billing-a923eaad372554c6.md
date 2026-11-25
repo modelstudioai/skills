@@ -2,117 +2,78 @@
 
 Agent 安全高级防护的计费规则、限时免费说明、服务授权与计费示例。正式计费后采用后付费模式，由防御席位费和超额 Credits 用量两部分组成。
 
-**说明**截至 2026 年 9 月，Agent 安全高级防护仍处于**限时免费**阶段。平台将在正式收费前至少提前一个月通知，正式收费后将按以下规则计费。
+> **说明**
+>
+> 截至 2026 年 9 月，Agent 安全高级防护仍处于**限时免费**阶段。平台将在正式收费前至少提前一个月通知，正式收费后将按以下规则计费。
 
 百炼默认防护（Agent 身份签发、内容安全、供应链静态扫描、凭证隔离等）随 Agent 使用自动生效，无需额外开通或付费。高级防护需完成服务授权后开通，计费规则见下文。
+
+<a id="计费项"></a>
+
+<a id="h-security-billing-items"></a>
 
 ## 计费项
 
 正式计费后，高级防护采用后付费模式，按“运行席位按小时计费 + 每日默认 Credit 额度 + 超额 Credit 计费”组合计费。
 
-计费项
-
-单价
-
-计费方式
-
-**Agent 防御席位费**
-
-0.42 元 / 席位·小时
-
-按处于运行中且使用高级防护的 Agent 席位数量与时长计费
-
-**超额 Credits 用量**
-
-0.0015 元 / Credit
-
-超出每日默认 Credit 额度的部分，按实际用量计费
+| 计费项 | 单价 | 计费方式 |
+| --- | --- | --- |
+| **Agent 防御席位费** | 0.42 元 / 席位·小时 | 按处于运行中且使用高级防护的 Agent 席位数量与时长计费 |
+| **超额 Credits 用量** | 0.0015 元 / Credit | 超出每日默认 Credit 额度的部分，按实际用量计费 |
 
 **席位**：即一个处于运行状态且使用了高级防护的 Agent。仅在 Agent 实际运行并使用高级防护能力时计费，Agent 未运行时不产生席位费用。
 
+<a id="credit-额度与消耗"></a>
+
+<a id="h-security-billing-credits"></a>
+
 ## Credit 额度与消耗
 
-项目
+| 项目 | 说明 |
+| --- | --- |
+| 默认额度 | 每个席位每日默认提供 300 Credits |
+| 额度隔离 | 每个 Agent 独立计算额度，不同 Agent 之间不可共享 |
+| 有效期 | Credit 有效期为 24 小时（按自然日计算），到期后不结转 |
+| 消耗规则 | Credit 消耗与接受检测的内容量相关。系统根据被检测内容的 Token 数量换算 Credit，内容越长消耗越多。实际消耗量以控制台或账单记录为准 |
 
-说明
+<a id="服务授权"></a>
 
-默认额度
-
-每个席位每日默认提供 300 Credits
-
-额度隔离
-
-每个 Agent 独立计算额度，不同 Agent 之间不可共享
-
-有效期
-
-Credit 有效期为 24 小时（按自然日计算），到期后不结转
-
-消耗规则
-
-Credit 消耗与接受检测的内容量相关。系统根据被检测内容的 Token 数量换算 Credit，内容越长消耗越多。实际消耗量以控制台或账单记录为准
+<a id="h-security-billing-auth"></a>
 
 ## 服务授权
 
 开通高级防护时，系统将自动创建以下服务关联角色，用于完成 Agent 安全中心的开通与安全检测能力的调用。
 
-角色名称
+| 角色名称 | 角色说明 |
+| --- | --- |
+| AliyunServiceRoleForSFMSecurity | 由百炼侧发起 Agent 安全中心开通与服务访问，调用安全检测与防御相关能力 |
+| AliyunServiceRoleForSas | AI 安全中心（AI Security Center）服务关联角色，访问其他云产品中的资源 |
+| AliyunServiceRoleForSasCspm | 云安全中心-多账号管理（sas-rd）服务关联角色 |
+| AliyunServiceRoleForSasAI | 云安全中心-CSPM（sas-cspm）服务关联角色 |
+| AliyunServiceRoleForEiam | 云安全中心（sas）服务关联角色 |
 
-角色说明
+> **说明**
+>
+> 开通前需阅读并同意《百炼 Agent 安全（按量付费）服务协议》及《百炼安全服务关联角色授权》。点击确认开通即表示知悉并同意协议及授权操作。
 
-AliyunServiceRoleForSFMSecurity
+<a id="计费示例"></a>
 
-由百炼侧发起 Agent 安全中心开通与服务访问，调用安全检测与防御相关能力
-
-AliyunServiceRoleForSas
-
-AI 安全中心（AI Security Center）服务关联角色，访问其他云产品中的资源
-
-AliyunServiceRoleForSasCspm
-
-云安全中心-多账号管理（sas-rd）服务关联角色
-
-AliyunServiceRoleForSasAI
-
-云安全中心-CSPM（sas-cspm）服务关联角色
-
-AliyunServiceRoleForEiam
-
-云安全中心（sas）服务关联角色
-
-**说明**开通前需阅读并同意《百炼 Agent 安全（按量付费）服务协议》及《百炼安全服务关联角色授权》。点击确认开通即表示知悉并同意协议及授权操作。
+<a id="h-security-billing-example"></a>
 
 ## 计费示例
 
 场景：账号下 3 个 Agent 开启高级防护，全部运行 24 小时；期间安全检测共消耗 10,000 Credits。
 
-计费项
+| 计费项 | 计算 | 金额 |
+| --- | --- | --- |
+| Agent 防御席位费 | 3 席位 × 24 小时 × 0.42 元/席位·小时 | 30.24 元 |
+| 当日默认额度 | 3 席位 × 300 Credits | 900 Credits（免费） |
+| 超额 Credits 用量 | (10,000 - 900) Credits × 0.0015 元/Credit | 13.65 元 |
+| **当日总计** |  | **43.89 元** |
 
-计算
+<a id="开通流程"></a>
 
-金额
-
-Agent 防御席位费
-
-3 席位 × 24 小时 × 0.42 元/席位·小时
-
-30.24 元
-
-当日默认额度
-
-3 席位 × 300 Credits
-
-900 Credits（免费）
-
-超额 Credits 用量
-
-(10,000 - 900) Credits × 0.0015 元/Credit
-
-13.65 元
-
-**当日总计**
-
-**43.89 元**
+<a id="h-security-billing-activation"></a>
 
 ## 开通流程
 
@@ -122,35 +83,26 @@ Agent 防御席位费
 4.  勾选“我已阅读并同意”相关协议。
 5.  点击 **确认开通**，系统自动创建服务关联角色并完成开通。
 
-**说明**开通时默认开通 6 项安全策略，内容安全策略需开通后手动开启。如需调整安全策略，可在安全策略页面点击“前往安全配置”进行修改。
+> **说明**
+>
+> 开通时默认开通 6 项安全策略，内容安全策略需开通后手动开启。如需调整安全策略，可在安全策略页面点击“前往安全配置”进行修改。
+
+<a id="默认防护与高级防护"></a>
+
+<a id="h-security-billing-types"></a>
 
 ## 默认防护与高级防护
 
-防护类型
+| 防护类型 | 费用 | 包含能力 | 开通方式 |
+| --- | --- | --- | --- |
+| **默认防护** | 免费 | Agent 身份签发、内容安全、供应链静态扫描、凭证隔离、Session 生命周期治理 | 随 Agent 使用自动生效，无需开通 |
+| **高级防护** | 限时免费（正式计费后按量付费） | 7 项安全策略配置与风险监测、风险与审计 | 需在安全策略页面完成服务授权后开通 |
 
-费用
+<a id="相关页面"></a>
 
-包含能力
-
-开通方式
-
-**默认防护**
-
-免费
-
-Agent 身份签发、内容安全、供应链静态扫描、凭证隔离、Session 生命周期治理
-
-随 Agent 使用自动生效，无需开通
-
-**高级防护**
-
-限时免费（正式计费后按量付费）
-
-7 项安全策略配置与风险监测、风险与审计
-
-需在安全策略页面完成服务授权后开通
+<a id="h-security-billing-related"></a>
 
 ## 相关页面
 
--   [安全策略](raw/application-user-guide/agent-governance/security-guide/section-adv/policy.md)：按需启用高级防护策略
--   [防护总览](raw/application-user-guide/agent-governance/security-guide/section-assets/overview.md)：查看防护全景与拦截统计
+-   [安全策略](../agent-governance/security-guide/section-adv/policy.md)：按需启用高级防护策略
+-   [防护总览](../agent-governance/security-guide/section-assets/overview.md)：查看防护全景与拦截统计

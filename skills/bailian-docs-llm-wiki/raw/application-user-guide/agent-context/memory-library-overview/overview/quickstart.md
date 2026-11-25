@@ -2,7 +2,9 @@
 
 3 步体验记忆的写入、查看和检索
 
-用默认记忆库，3 步跑通记忆的写入、查看和检索。如需自定义记忆规则，参见[创建记忆库](raw/application-user-guide/agent-context/memory-library-overview/create-memory.md)。
+用默认记忆库，3 步跑通记忆的写入、查看和检索。如需自定义记忆规则，参见[创建记忆库](../create-memory.md)。
+
+<a id="记忆体验路径"></a>
 
 ## 记忆体验路径
 
@@ -12,11 +14,19 @@
 
 将示例对话交给 AddMemory，提取事实。
 
+
+
+
+
 ](#h-memory-qs-add)[
 
 **2\. 查看记忆**
 
 在控制台或 ListMemory 中核对 user\_001 的记忆。
+
+
+
+
 
 ](#h-memory-qs-list)[
 
@@ -24,18 +34,28 @@
 
 为同一用户检索相关事实。
 
+
+
+
+
 ](#h-memory-qs-search)
+
+<a id="前提条件"></a>
+
+<a id="h-memory-qs-prereq"></a>
 
 ## 前提条件
 
 -   首次使用需开通记忆库服务：进入[百炼控制台记忆库页面](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)，点击**立即开通**
--   已获取 `DASHSCOPE_API_KEY`，获取方式见[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   已获取[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，并将下文请求地址中的 `{WorkspaceId}` 替换为该 ID。API Key 须属于同一业务空间
+-   已获取 `DASHSCOPE_API_KEY`，获取方式见[获取 API Key](../../../../model-api-reference/preparations/get-api-key.md)
+-   已获取[业务空间 ID](../../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)，并将下文请求地址中的 `{WorkspaceId}` 替换为该 ID。API Key 须属于同一业务空间
 -   如使用 Python SDK，先安装：`pip install agentscope-runtime`，并设置服务地址：`export MEMORY_SERVICE_ENDPOINT="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory"` 注意：agentscope-runtime 依赖 `mcp.server.fastmcp`，该模块在 mcp 2.x 中已移除；若环境中 mcp 为 2.x 版本，需一并约束：`pip install agentscope-runtime "mcp<2"`，否则 import 时会报 `No module named 'mcp.server.fastmcp'`。
 
 在运行示例的终端中显式设置 API Key；先替换占位值，不要将真实密钥提交到仓库：
 
-```
+<a id="code-block"></a>
+
+```bash
 export DASHSCOPE_API_KEY="sk-xxxxxxxxxxxxxxxx"
 ```
 
@@ -43,13 +63,23 @@ Python 示例使用同一终端中设置的 `DASHSCOPE_API_KEY` 和 `MEMORY_SERV
 
 本页使用独立 Memory 服务，与 Managed Agents 的 Memory Store 分开管理。
 
+<a id="步骤一-写入记忆"></a>
+
+<a id="h-memory-qs-add"></a>
+
 ## 步骤一：写入记忆
 
 调用 `AddMemory` 接口，将对话传入记忆库。系统自动从对话中提取事实记忆。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-curl-tab"></a>
+
 cURL
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/add \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
@@ -63,9 +93,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memo
   }'
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 from agentscope_runtime.tools.modelstudio_memory import (
     AddMemory, AddMemoryInput, Message,
 )
@@ -89,23 +123,37 @@ async def add_memory_example():
 asyncio.run(add_memory_example())
 ```
 
+<a id="步骤二-查看记忆"></a>
+
+<a id="h-memory-qs-list"></a>
+
 ## 步骤二：查看记忆
 
 在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)进入默认记忆库的**记忆详情**标签页，输入记忆实体 ID `user_001`，点击**查看**，即可看到系统自动提取的事实记忆。
 
 也可通过 API 列出记忆：
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-curl-tab"></a>
+
 cURL
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes?user_id=user_001&page_size=10&page_num=1" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json"
 ```
 
+<a id="fig-code-group-2-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 from agentscope_runtime.tools.modelstudio_memory import (
     ListMemory, ListMemoryInput,
 )
@@ -127,15 +175,25 @@ async def list_memory_example():
 asyncio.run(list_memory_example())
 ```
 
+<a id="步骤三-检索记忆"></a>
+
+<a id="h-memory-qs-search"></a>
+
 ## 步骤三：检索记忆
 
 在控制台切换到**记忆检索**标签页，输入记忆实体 ID `user_001`，在输入框输入"我需要做什么？"，点击**运行**查看相关记忆。
 
 通过 API 检索：
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-curl-tab"></a>
+
 cURL
 
-```
+<a id="code-code-group-3-curl"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/search \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
@@ -148,9 +206,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memo
   }'
 ```
 
+<a id="fig-code-group-3-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 from agentscope_runtime.tools.modelstudio_memory import (
     SearchMemory, SearchMemoryInput, Message,
 )
@@ -171,9 +233,15 @@ async def search_memory_example():
 asyncio.run(search_memory_example())
 ```
 
-**说明**到这里你已经完成了记忆的写入、查看和检索。核对 `user_001` 的列表与检索结果中的事实是否对应写入的对话。示例记录和检索提醒相关的事实，并不会自动创建定时提醒任务。将检索结果注入 Prompt 即可实现个性化回答。
+> **说明**
+>
+> 到这里你已经完成了记忆的写入、查看和检索。核对 `user_001` 的列表与检索结果中的事实是否对应写入的对话。示例记录和检索提醒相关的事实，并不会自动创建定时提醒任务。将检索结果注入 Prompt 即可实现个性化回答。
 
-**重要**体验完核心流程后，继续[创建记忆库](raw/application-user-guide/agent-context/memory-library-overview/create-memory.md)配置自定义记忆规则。
+> **重要**
+>
+> 体验完核心流程后，继续[创建记忆库](../create-memory.md)配置自定义记忆规则。
+
+<a id="下一步"></a>
 
 ## 下一步
 
@@ -183,16 +251,28 @@ asyncio.run(search_memory_example())
 
 创建适合业务的记忆库。
 
-](raw/application-user-guide/agent-context/memory-library-overview/create-memory.md)[
+
+
+
+
+](../create-memory.md)[
 
 **理解记忆模型**
 
 了解记忆实体与事实记忆。
 
-](raw/application-user-guide/agent-context/memory-library-overview/overview/concepts.md)[
+
+
+
+
+](concepts.md)[
 
 **调整检索**
 
 查看检索参数并将结果用于 Prompt。
 
-](raw/application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)
+
+
+
+
+](../../../../application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)

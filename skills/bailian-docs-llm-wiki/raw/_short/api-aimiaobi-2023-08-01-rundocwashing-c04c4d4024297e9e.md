@@ -2,11 +2,19 @@
 
 把一篇文章改换成指定风格。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/RunDocWashing)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,269 +33,67 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:RunDocWashing</td><td>get</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:RunDocWashing
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /quanmiao/aimiaobi/runDocWashing HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-2setzb9x4ewsd |
+| SessionId | string | 否 | 通道 Id | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| WritingTypeName | string | 否 | 文体类型名字 | 小红书文体 朋友圈文体 专业新闻文体 政府公文文体 报纸文章文体 意见信文体 |
+| WritingTypeRefDoc | string | 否 | 文体示例文章 | 该值若不为空则按该值优先 |
+| ReferenceContent | string | 是 | 要进行改写的文章 | 文章内容 |
+| Topic | string | 否 | 改写文章主题 | 云南旅游主题 |
+| WordNumber | integer | 否 | 改写后的字数要求 | 500 |
+| Prompt | string | 否 | 附加要求提示词 | 按英文输出 |
+| ModelId | string | 否 | 模型 id | quanmiao-max、quanmiao-plus |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-2setzb9x4ewsd
-
-SessionId
-
-string
-
-否
-
-通道 Id
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-WritingTypeName
-
-string
-
-否
-
-文体类型名字
-
-小红书文体 朋友圈文体 专业新闻文体 政府公文文体 报纸文章文体 意见信文体
-
-WritingTypeRefDoc
-
-string
-
-否
-
-文体示例文章
-
-该值若不为空则按该值优先
-
-ReferenceContent
-
-string
-
-是
-
-要进行改写的文章
-
-文章内容
-
-Topic
-
-string
-
-否
-
-改写文章主题
-
-云南旅游主题
-
-WordNumber
-
-integer
-
-否
-
-改写后的字数要求
-
-500
-
-Prompt
-
-string
-
-否
-
-附加要求提示词
-
-按英文输出
-
-ModelId
-
-string
-
-否
-
-模型 id
-
-quanmiao-max、quanmiao-plus
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-End
-
-boolean
-
-响应包是否结束
-
-false
-
-Header
-
-object
-
-响应头
-
-Event
-
-string
-
-事件类型
-
-task-finished
-
-EventInfo
-
-string
-
-事件描述
-
-模型生成事件
-
-RequestId
-
-string
-
-请求 RequestId
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-SessionId
-
-string
-
-会话 ID
-
-20247a52-23e2-46fb-943d-309cdee2bc6d
-
-TaskId
-
-string
-
-任务 ID
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-TraceId
-
-string
-
-全链路 ID
-
-2150451a17191950923411783e2927
-
-Payload
-
-object
-
-响应体
-
-Output
-
-object
-
-输出
-
-Text
-
-string
-
-输出内容
-
-文本生成结果
-
-Usage
-
-object
-
-token 消耗
-
-InputTokens
-
-long
-
-输入 Token 数量
-
-100
-
-OutputTokens
-
-long
-
-输出 Token 数量
-
-100
-
-TotalTokens
-
-long
-
-总 oken 数量
-
-200
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| End | boolean | 响应包是否结束 | false |
+| Header | object | 响应头 |  |
+| Event | string | 事件类型 | task-finished |
+| EventInfo | string | 事件描述 | 模型生成事件 |
+| RequestId | string | 请求 RequestId | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| SessionId | string | 会话 ID | 20247a52-23e2-46fb-943d-309cdee2bc6d |
+| TaskId | string | 任务 ID | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| TraceId | string | 全链路 ID | 2150451a17191950923411783e2927 |
+| Payload | object | 响应体 |  |
+| Output | object | 输出 |  |
+| Text | string | 输出内容 | 文本生成结果 |
+| Usage | object | token 消耗 |  |
+| InputTokens | long | 输入 Token 数量 | 100 |
+| OutputTokens | long | 输出 Token 数量 | 100 |
+| TotalTokens | long | 总 oken 数量 | 200 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -295,7 +101,9 @@ long
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "RequestId": "1813ceee-7fe5-41b4-87e5-982a4d18cca5",
   "End": false,
@@ -320,22 +128,14 @@ long
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-403
-
-NoPermission
-
-You are not authorized to perform this action.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。

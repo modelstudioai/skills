@@ -2,109 +2,44 @@
 
 通过公共请求头设置接口必要的参数信息，在签名机制的实现上屏蔽了接口风格的差异，更标准、更简单。本文提供了详细的指南，用于帮助您了解和实施阿里云SDK V3版的请求结构和签名过程。您会了解如何构造标准的HTTP请求，以及如何使用正确的签名算法来验证请求的身份，确保传输的数据的完整性和安全性。如果您想自研阿里云OpenAPI的请求签名，您可以参考本文。
 
+<a id="请求编码"></a>
+
+<a id="h2-ydf-ik7-o2l"></a>
+
 ## 请求编码
 
 请求及返回结果都使用UTF-8字符集进行编码。
+
+<a id="requestheader-公共请求头"></a>
+
+<a id="title-q07-6vy-64e"></a>
 
 ## RequestHeader（公共请求头）
 
 一个完整的阿里云 OpenAPI 请求，包含以下部分。
 
-**名称**
+| 名称 | 类型 | 是否必选 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| x-acs-action | String | 是 | API的名称。 | RunInstances |
+| x-acs-version | String | 是 | API 版本。 | 2014-05-26 |
+| Authorization | String | 非匿名请求必须 | 用于验证请求合法性的认证信息，格式为Authorization:SignatureAlgorithmCredential=AccessKeyId,SignedHeaders=SignedHeaders,Signature=YOUR\_SIGNATURE<br><br>Credential为用户的访问密钥ID。您可以在[RAM 控制台](https://ram.console.aliyun.com/manage/ak)查看您的 AccessKeyId。如需创建 AccessKey，请参见[创建AccessKey](https://help.aliyun.com/zh/document_detail/53045.html)。SignedHeaders为请求头中包含的参与签名字段键名，【说明】：除Authorization外的所有公共请求头，只要存在必须被加入签名。<br><br>Signature为请求签名，取值参见签名机制。 | ACS3-HMAC-SHA256 Credential=YourAccessKeyId,SignedHeaders=host;x-acs-action;x-acs-content-sha256;x-acs-date;x-acs-signature-nonce;x-acs-version,Signature=YOUR\_SIGNATURE |
+| x-acs-signature-nonce | String | 否 | 签名唯一随机数。用于防止网络重放攻击，建议您每一次请求都使用不同的随机数。 | d410180a5abf7fe235dd9b74aca91fc0 |
+| x-acs-date | String | 是 | 按照ISO 8601标准表示的UTC时间，格式为yyyy-MM-ddTHH:mm:ssZ，例如2018-01-01T12:00:00Z。值为请求发出前15分钟内的时间。 | 2023-10-26T09:01:01Z |
+| host | String | 是 | 即 Endpoint。您可以查阅不同云产品的服务接入地址文档，查阅不同服务区域下的服务地址。 | ecs.cn-shanghai.aliyuncs.com |
+| x-acs-content-sha256 | String | 是 | 请求正文Hash摘要后再base-16编码的结果，与HashedRequestPayload一致。 | e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 |
+| x-acs-security-token | String | STS认证必传 | 为调用Assumerole接口返回值中SecurityToken的值。 |  |
 
-**类型**
+<a id="签名机制"></a>
 
-**是否必选**
-
-**描述**
-
-**示例值**
-
-x-acs-action
-
-String
-
-是
-
-API的名称。
-
-RunInstances
-
-x-acs-version
-
-String
-
-是
-
-API 版本。
-
-2014-05-26
-
-Authorization
-
-String
-
-非匿名请求必须
-
-用于验证请求合法性的认证信息，格式为Authorization:SignatureAlgorithmCredential=AccessKeyId,SignedHeaders=SignedHeaders,Signature=YOUR\_SIGNATURE
-
-Credential为用户的访问密钥ID。您可以在[RAM 控制台](https://ram.console.aliyun.com/manage/ak)查看您的 AccessKeyId。如需创建 AccessKey，请参见[创建AccessKey](https://help.aliyun.com/zh/document_detail/53045.html)。SignedHeaders为请求头中包含的参与签名字段键名，【说明】：除Authorization外的所有公共请求头，只要存在必须被加入签名。
-
-Signature为请求签名，取值参见签名机制。
-
-ACS3-HMAC-SHA256 Credential=YourAccessKeyId,SignedHeaders=host;x-acs-action;x-acs-content-sha256;x-acs-date;x-acs-signature-nonce;x-acs-version,Signature=YOUR\_SIGNATURE
-
-x-acs-signature-nonce
-
-String
-
-否
-
-签名唯一随机数。用于防止网络重放攻击，建议您每一次请求都使用不同的随机数。
-
-d410180a5abf7fe235dd9b74aca91fc0
-
-x-acs-date
-
-String
-
-是
-
-按照ISO 8601标准表示的UTC时间，格式为yyyy-MM-ddTHH:mm:ssZ，例如2018-01-01T12:00:00Z。值为请求发出前15分钟内的时间。
-
-2023-10-26T09:01:01Z
-
-host
-
-String
-
-是
-
-即 Endpoint。您可以查阅不同云产品的服务接入地址文档，查阅不同服务区域下的服务地址。
-
-ecs.cn-shanghai.aliyuncs.com
-
-x-acs-content-sha256
-
-String
-
-是
-
-请求正文Hash摘要后再base-16编码的结果，与HashedRequestPayload一致。
-
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-
-x-acs-security-token
-
-String
-
-STS认证必传
-
-为调用Assumerole接口返回值中SecurityToken的值。
+<a id="title-i7i-a5o-rov"></a>
 
 ## 签名机制
 
 为保证API的安全调用，在调用API时阿里云会对每个API请求通过签名（Signature）进行身份验证。无论使用HTTP还是HTTPS协议提交请求，都需要在请求中包含签名信息。本文指导您如何进行签名处理。
+
+<a id="步骤一-构造规范化请求"></a>
+
+<a id="b5c1a1d5e1e12"></a>
 
 ### 步骤一：构造规范化请求
 
@@ -112,7 +47,9 @@ STS认证必传
 
 构造规范化请求（CanonicalRequest）的伪代码如下：
 
-```
+<a id="code-block"></a>
+
+```java
 CanonicalRequest =
   HTTPRequestMethod + '\n' +    //http请求方法，全大写
   CanonicalURI + '\n' +         //规范化URI
@@ -180,7 +117,9 @@ CanonicalRequest =
     -   多个请求头名称（小写）按首字母升序排列并以英文分号（`;`）分隔，例如`content-type;host;x-acs-date`。
     -   伪代码如下：
 
-```
+<a id="code-block-2"></a>
+
+```java
 CanonicalHeaderEntry = Lowercase(HeaderName) + ':' + Trim(HeaderValue) + '\n'
 
 CanonicalHeaders =
@@ -196,26 +135,23 @@ CanonicalHeaders =
     
     表1：签名协议与签名算法、摘要函数的对应关系
     
-    签名协议（SignatureAlgorithm）
+    |  |  |  |
+    | --- | --- | --- |
+    | 签名协议（SignatureAlgorithm） | 处理RequestPayload以及CanonicalRequest时使用的摘要函数（Hash） | 计算签名时实际使用的签名算法<br><br>（SignatureMethod） |
+    | ACS3-HMAC-SHA256 | SHA256 | HMAC-SHA256 |
     
-    处理RequestPayload以及CanonicalRequest时使用的摘要函数（Hash）
-    
-    计算签名时实际使用的签名算法
-    
-    （SignatureMethod）
-    
-    ACS3-HMAC-SHA256
-    
-    SHA256
-    
-    HMAC-SHA256
-    
+
+<a id="步骤二-构造待签名字符串"></a>
+
+<a id="title-lf5-3js-rwx"></a>
 
 ## 步骤二：构造待签名字符串
 
 按照以下伪代码构造待签名字符串（stringToSign）：
 
-```
+<a id="code-block-3"></a>
+
+```java
 StringToSign =
     SignatureAlgorithm + '\n' +
     HashedCanonicalRequest
@@ -230,18 +166,26 @@ StringToSign =
     规范化请求摘要串，计算方法伪代码如下：
     
 
-```
+<a id="code-block-4"></a>
+
+```java
 HashedCanonicalRequest = HexEncode(Hash(CanonicalRequest))
 ```
 
 1.  使用哈希函数（Hash）对步骤一中得到的规范化请求（CanonicalRequest）进行摘要处理，具体使用的Hash函数取决于签名协议（SignatureAlgorithm），参见表1，例如，当签名协议为ACS3-HMAC-SHA256时，应使用SHA256作为Hash函数。
 2.  将上一步得到的摘要结果以小写的十六进制形式编码。
 
+<a id="步骤三-计算签名"></a>
+
+<a id="title-vma-nl0-oyb"></a>
+
 ## 步骤三：计算签名
 
 按照以下伪代码计算签名值（Signature）
 
-```
+<a id="code-block-5"></a>
+
+```java
 Signature = HexEncode(SignatureMethod(Secret, StringToSign))
 ```
 
@@ -250,15 +194,25 @@ Signature = HexEncode(SignatureMethod(Secret, StringToSign))
 -   Secret：用户的签名密钥，为二进制数据。
 -   HexEncode：以小写的十六进制的形式返回摘要的编码函数（即Base16编码）。
 
+<a id="步骤四-将签名添加到请求中"></a>
+
+<a id="title-7a4-rkv-y9m"></a>
+
 ## 步骤四：将签名添加到请求中
 
 计算完签名后，构造Authorization请求头，格式为：`Authorization:<SignatureAlgorithm>Credential=<AccessKeyId>,SignedHeaders=<SignedHeaders>,Signature=<Signature>`
+
+<a id="接口签名示例"></a>
+
+<a id="title-h9n-xj6-ue8"></a>
 
 ## 接口签名示例
 
 运行Java示例，需要您在pom.xml中添加以下Maven依赖。
 
-```
+<a id="code-block-6"></a>
+
+```java
 <dependency>
     <groupId>org.apache.httpcomponents</groupId>
     <artifactId>httpclient</artifactId>
@@ -276,7 +230,10 @@ Signature = HexEncode(SignatureMethod(Secret, StringToSign))
     <scope>provided</scope>
 </dependency>
 ```
-```
+
+<a id="code-block-7"></a>
+
+```java
 package org.example.service;
 
 import com.alibaba.fastjson.JSONObject;
@@ -640,20 +597,10 @@ public class RoaDemo {
 }
 ```
 
+<a id="签名失败常见报错"></a>
+
+<a id="bb6c120d11yy1"></a>
+
 ## 签名失败常见报错
 
-Code
-
-Message
-
-解决方案
-
-SignatureDoesNotMatch
-
-Specified signature does not match our calculation.
-
-在签名过程中，您可能遗漏了对参数进行升序排序，也可能是多加了空格。请您仔细阅读签名机制的讲解，可以根据提供的固定参数示例验证您的签名过程是否正确。
-
-IncompleteSignature
-
-The request signature does not conform to Aliyun standards.
+<table><tbody><tr><td><p>Code</p></td><td><p>Message</p></td><td><p>解决方案</p></td></tr><tr><td><p>SignatureDoesNotMatch</p></td><td><p>Specified signature does not match our calculation.</p></td><td rowspan="2"><p>在签名过程中，您可能遗漏了对参数进行升序排序，也可能是多加了空格。请您仔细阅读签名机制的讲解，可以根据提供的固定参数示例验证您的签名过程是否正确。</p></td></tr><tr><td><p>IncompleteSignature</p></td><td><p>The request signature does not conform to Aliyun standards.</p></td></tr></tbody></table>

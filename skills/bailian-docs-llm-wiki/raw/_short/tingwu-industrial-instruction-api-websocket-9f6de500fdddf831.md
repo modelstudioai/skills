@@ -8,21 +8,35 @@ WebSocket是一种支持全双工通信的网络协议。客户端和服务器�
 
 建议您先了解WebSocket的基本原理和技术细节，再参照本文进行开发。
 
+<a id="前提条件"></a>
+
+<a id="8a24f2ed09vr0"></a>
+
 ## 前提条件
 
-已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+已开通服务并[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
 
-**说明**当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
+> **说明**
+>
+> 当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](../model-api-reference/more-about-models/generate-temporary-api-key.md)。
+>
+> 与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
+>
+> 使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
 
-与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
+<a id="调用时序图"></a>
 
-使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
+<a id="59688082e2hnj"></a>
 
 ## 调用时序图
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2125297571/p1003336.png)
 
 您必须遵循时序图中所展示的时序进行调用，否则会有运行失败的风险。
+
+<a id="websocket建联"></a>
+
+<a id="a2ed5abb5bmgm"></a>
 
 ## WebSocket建联
 
@@ -34,19 +48,35 @@ WebSocket是一种支持全双工通信的网络协议。客户端和服务器�
 -   PHP：`Ratchet`
 -   Node.js：`ws`
 
+<a id="建联请求头"></a>
+
+<a id="3c275453aa0s7"></a>
+
 ### 建联请求头
 
-```
+<a id="code-block"></a>
+
+```http
 Authorization: Bearer {api-key} // 需将{api-key}替换为实际的API Key
 Upgrade: websocket
 Connection: Upgrade
 ```
 
+<a id="websocket接入地址"></a>
+
+<a id="e8ae9f13941un"></a>
+
 ### WebSocket接入地址
 
-```
+<a id="code-block-2"></a>
+
+```http
 wss://dashscope.aliyuncs.com/api-ws/v1/inference
 ```
+
+<a id="向服务端发送指令"></a>
+
+<a id="a250fc064efcp"></a>
 
 ## 向服务端发送指令
 
@@ -54,117 +84,41 @@ wss://dashscope.aliyuncs.com/api-ws/v1/inference
 
 指令分为两种，run-task和finish-task，都需要以Text Frame方式发送的JSON格式的数据，具体协议如下：
 
+<a id="run-task指令"></a>
+
+<a id="11ac2fdc3fp9i"></a>
+
 ### run-task指令
 
 对应时序图中过程2，通知服务端开始一个转写任务。
 
 协议字段如下：
 
-**字段**
-
-**类型**
-
-**说明**
-
-header
-
-Object
-
-header.action
-
-String
-
-固定填写run-task。
-
-header.task\_id
-
-String
-
-自定义16位随机字符串，排查问题使用，后续finish-task也应该使用这个task\_id。
-
-header.streaming
-
-String
-
-固定填写duplex。
-
-payload
-
-Object
-
-payload.model
-
-String
-
-固定填写tingwu-industrial-instruction。
-
-payload.task\_group
-
-String
-
-固定填写aigc。
-
-payload.task
-
-String
-
-固定填写multimodal-generation。
-
-payload.function
-
-String
-
-固定填写generation。
-
-payload.input
-
-Object
-
-payload.input.appId
-
-String
-
-填写工业指令转写控制台中的应用id，可从控制台获取。
-
-payload.input.directive
-
-String
-
-固定传start。
-
-payload.parameters
-
-Object
-
-payload.parameters.sampleRate
-
-Integer
-
-音频采样率，目前只支持16000。
-
-payload.parameters.format
-
-String
-
-设置待识别音频格式。支持的音频格式：pcm、wav、mp3、opus、speex、aac、amr。对于opus和speex格式的音频，需要ogg封装；对于wav格式的音频，需要pcm编码。
-
-payload.parameters.maxEndSilence
-
-Integer
-
-最大静音时长，单位ms，在出字后检测到超过此时长则会认为一句话结束，取值范围为\[0, 6000\]。
-
-非必传，默认值为1500。
-
-payload.parameters.terminology
-
-String
-
-转写指令集id，可从控制台获取。
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| header | Object |  |
+| header.action | String | 固定填写run-task。 |
+| header.task\_id | String | 自定义16位随机字符串，排查问题使用，后续finish-task也应该使用这个task\_id。 |
+| header.streaming | String | 固定填写duplex。 |
+| payload | Object |  |
+| payload.model | String | 固定填写tingwu-industrial-instruction。 |
+| payload.task\_group | String | 固定填写aigc。 |
+| payload.task | String | 固定填写multimodal-generation。 |
+| payload.function | String | 固定填写generation。 |
+| payload.input | Object |  |
+| payload.input.appId | String | 填写工业指令转写控制台中的应用id，可从控制台获取。 |
+| payload.input.directive | String | 固定传start。 |
+| payload.parameters | Object |  |
+| payload.parameters.sampleRate | Integer | 音频采样率，目前只支持16000。 |
+| payload.parameters.format | String | 设置待识别音频格式。支持的音频格式：pcm、wav、mp3、opus、speex、aac、amr。对于opus和speex格式的音频，需要ogg封装；对于wav格式的音频，需要pcm编码。 |
+| payload.parameters.maxEndSilence | Integer | 最大静音时长，单位ms，在出字后检测到超过此时长则会认为一句话结束，取值范围为\[0, 6000\]。<br><br>非必传，默认值为1500。 |
+| payload.parameters.terminology | String | 转写指令集id，可从控制台获取。 |
 
 run-task指令示例如下：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -190,81 +144,35 @@ run-task指令示例如下：
 }
 ```
 
+<a id="finish-task"></a>
+
+<a id="7fefe56eca9g5"></a>
+
 ### finish-task
 
 对应时序图中过程5，通知服务端音频已全部发送完成，录音已结束。
 
 协议字段如下：
 
-**字段**
-
-**类型**
-
-**说明**
-
-header
-
-Object
-
-header.action
-
-String
-
-固定填写finish-task。
-
-header.task\_id
-
-String
-
-请填写run-task指令中填写的task\_id。
-
-header.streaming
-
-String
-
-固定填写duplex。
-
-payload
-
-Object
-
-payload.model
-
-String
-
-固定填写tingwu-industrial-instruction。
-
-payload.task\_group
-
-String
-
-固定填写aigc。
-
-payload.task
-
-String
-
-固定填写multimodal-generation。
-
-payload.function
-
-String
-
-固定填写generation。
-
-payload.input
-
-Object
-
-payload.input.directive
-
-String
-
-固定传stop。
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| header | Object |  |
+| header.action | String | 固定填写finish-task。 |
+| header.task\_id | String | 请填写run-task指令中填写的task\_id。 |
+| header.streaming | String | 固定填写duplex。 |
+| payload | Object |  |
+| payload.model | String | 固定填写tingwu-industrial-instruction。 |
+| payload.task\_group | String | 固定填写aigc。 |
+| payload.task | String | 固定填写multimodal-generation。 |
+| payload.function | String | 固定填写generation。 |
+| payload.input | Object |  |
+| payload.input.directive | String | 固定传stop。 |
 
 finish-task指令示例如下：
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "header": {
     "action": "finish-task",
@@ -283,6 +191,10 @@ finish-task指令示例如下：
 }
 ```
 
+<a id="向服务端发送音频"></a>
+
+<a id="bddbf3f850pju"></a>
+
 ## 向服务端发送音频
 
 将原始音频直接转为二进制流即可，无需额外处理。但需要注意：
@@ -291,11 +203,19 @@ finish-task指令示例如下：
 -   音频编码格式需要与run-task中填写的一致。
 -   支持的音频格式：pcm、wav、mp3、opus、speex、aac、amr。对于opus和speex格式的音频，需要ogg封装；对于wav格式的音频，需要pcm编码。
 
+<a id="接收服务端返回的事件"></a>
+
+<a id="cb15739e9d5f4"></a>
+
 ## 接收服务端返回的事件
 
 在指令或音频发送后，服务端会向您发送不同种类的事件，每个事件代表不同的处理阶段，请严格遵循时序图对不同事件做相应处理。
 
 事件总共分为四种，分别是speech-listen事件、recognize-result事件、ai-result事件及speech-end事件。
+
+<a id="speech-listen事件"></a>
+
+<a id="77593af423r5u"></a>
 
 ### speech-listen事件
 
@@ -303,51 +223,21 @@ finish-task指令示例如下：
 
 协议字段如下：
 
-**字段**
-
-**类型**
-
-**说明**
-
-header
-
-Object
-
-header.event
-
-String
-
-固定为result-generated。
-
-header.task\_id
-
-String
-
-您在run-task指令中填写的task\_id。
-
-payload
-
-Object
-
-payload.output
-
-Object
-
-payload.output.action
-
-String
-
-固定为speech-listen。
-
-payload.output.dataId
-
-String
-
-您本次转写的任务id，您可以通过该id向我们反馈问题，同时在账单中也可以通过该id查看对应任务的计费项。
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| header | Object |  |
+| header.event | String | 固定为result-generated。 |
+| header.task\_id | String | 您在run-task指令中填写的task\_id。 |
+| payload | Object |  |
+| payload.output | Object |  |
+| payload.output.action | String | 固定为speech-listen。 |
+| payload.output.dataId | String | 您本次转写的任务id，您可以通过该id向我们反馈问题，同时在账单中也可以通过该id查看对应任务的计费项。 |
 
 speech-listen事件的示例如下：
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
   "header": {
     "event": "result-generated",
@@ -362,185 +252,56 @@ speech-listen事件的示例如下：
 }
 ```
 
+<a id="recognize-result事件"></a>
+
+<a id="a8c1ff5e8b3i8"></a>
+
 ### recognize-result事件
 
 对应时序图中的过程4，recognize-result事件会在您发送一段时间的音频后返回，也可能会在您发送finish-task指令后返回，代表当前服务端识别到的原文和译文结果。
 
 协议字段如下：
 
-**字段**
-
-**类型**
-
-**说明**
-
-header
-
-Object
-
-header.event
-
-String
-
-固定为result-generated。
-
-header.task\_id
-
-String
-
-您在run-task指令中填写的task\_id。
-
-payload
-
-Object
-
-payload.output
-
-Object
-
-payload.output.action
-
-String
-
-固定为recognize-result。
-
-payload.output.transcription
-
-Object
-
-转写的原始结果。
-
-payload.output.transcription.sentenceId
-
-Integer
-
-句子序号。
-
-payload.output.transcription.beginTime
-
-Integer
-
-当前句子已识别部分的第一个字在音频中的开始时间，单位ms。
-
-payload.output.transcription.endTime
-
-Integer
-
-当前句子已识别部分的最后一个字在音频中的结束时间，单位ms。
-
-payload.output.transcription.sentenceEnd
-
-Boolean
-
-当前句子是否已结束。
-
-payload.output.transcription.text
-
-String
-
-当前句子已识别部分的内容。
-
-payload.output.transcription.words
-
-List\[Word\]
-
-句子分词信息。
-
-payload.output.translations
-
-Object
-
-转写的翻译结果。
-
-payload.output.translations.sentenceEnd
-
-Boolean
-
-当前句子是否结束。
-
-payload.output.translations.translations
-
-Object
-
-转写的翻译目标语种结果集合。
-
-payload.output.translations.translations.zh
-
-Object
-
-目前只支持翻译成中文，所以只会有zh一个对象。
-
-payload.output.translations.translations.zh.lang
-
-String
-
-固定为zh。
-
-payload.output.translations.translations.zh.sentenceId
-
-Integer
-
-句子序号。
-
-payload.output.translations.translations.zh.beginTime
-
-Integer
-
-当前句子已翻译部分的第一个字在音频中的开始时间，单位ms。
-
-payload.output.translations.translations.zh.endTime
-
-Integer
-
-当前句子已翻译部分的最后一个字在音频中的结束时间，单位ms。
-
-payload.output.translations.translations.zh.sentenceEnd
-
-Boolean
-
-当前句子是否已结束。
-
-payload.output.translations.translations.zh.text
-
-String
-
-当前句子已翻译部分的内容。
-
-payload.output.translations.translations.zh.words
-
-List\[Word\]
-
-已翻译句子分词信息。
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| header | Object |  |
+| header.event | String | 固定为result-generated。 |
+| header.task\_id | String | 您在run-task指令中填写的task\_id。 |
+| payload | Object |  |
+| payload.output | Object |  |
+| payload.output.action | String | 固定为recognize-result。 |
+| payload.output.transcription | Object | 转写的原始结果。 |
+| payload.output.transcription.sentenceId | Integer | 句子序号。 |
+| payload.output.transcription.beginTime | Integer | 当前句子已识别部分的第一个字在音频中的开始时间，单位ms。 |
+| payload.output.transcription.endTime | Integer | 当前句子已识别部分的最后一个字在音频中的结束时间，单位ms。 |
+| payload.output.transcription.sentenceEnd | Boolean | 当前句子是否已结束。 |
+| payload.output.transcription.text | String | 当前句子已识别部分的内容。 |
+| payload.output.transcription.words | List\[Word\] | 句子分词信息。 |
+| payload.output.translations | Object | 转写的翻译结果。 |
+| payload.output.translations.sentenceEnd | Boolean | 当前句子是否结束。 |
+| payload.output.translations.translations | Object | 转写的翻译目标语种结果集合。 |
+| payload.output.translations.translations.zh | Object | 目前只支持翻译成中文，所以只会有zh一个对象。 |
+| payload.output.translations.translations.zh.lang | String | 固定为zh。 |
+| payload.output.translations.translations.zh.sentenceId | Integer | 句子序号。 |
+| payload.output.translations.translations.zh.beginTime | Integer | 当前句子已翻译部分的第一个字在音频中的开始时间，单位ms。 |
+| payload.output.translations.translations.zh.endTime | Integer | 当前句子已翻译部分的最后一个字在音频中的结束时间，单位ms。 |
+| payload.output.translations.translations.zh.sentenceEnd | Boolean | 当前句子是否已结束。 |
+| payload.output.translations.translations.zh.text | String | 当前句子已翻译部分的内容。 |
+| payload.output.translations.translations.zh.words | List\[Word\] | 已翻译句子分词信息。 |
 
 Word类型协议如下：
 
-**字段**
-
-**类型**
-
-**说明**
-
-beginTime
-
-Integer
-
-当前词在音频中的开始时间。
-
-endTime
-
-Integer
-
-当前词在音频中的结束时间。
-
-text
-
-String
-
-当前词的内容。
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| beginTime | Integer | 当前词在音频中的开始时间。 |
+| endTime | Integer | 当前词在音频中的结束时间。 |
+| text | String | 当前词的内容。 |
 
 recognize-result事件的示例如下：
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
   "header": {
     "event":"result-generated",
@@ -658,61 +419,32 @@ recognize-result事件的示例如下：
 }
 ```
 
+<a id="ai-result事件"></a>
+
+<a id="18e28a820eaqu"></a>
+
 ### ai-result事件
 
 对应时序图中的过程6。ai-result事件会在最后一条recognize-result事件后返回给您，代表工业指令转写结合指令集纠正后的最终结果。
 
 协议字段如下：
 
-**字段**
-
-**类型**
-
-**说明**
-
-header
-
-Object
-
-header.event
-
-String
-
-固定为result-generated。
-
-header.task\_id
-
-String
-
-您在run-task指令中填写的task\_id。
-
-payload
-
-Object
-
-payload.output
-
-Object
-
-payload.output.action
-
-String
-
-固定为ai-result。
-
-payload.output.aiResult
-
-Object
-
-payload.output.aiResult.correction
-
-String
-
-工业指令转写最终结果
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| header | Object |  |
+| header.event | String | 固定为result-generated。 |
+| header.task\_id | String | 您在run-task指令中填写的task\_id。 |
+| payload | Object |  |
+| payload.output | Object |  |
+| payload.output.action | String | 固定为ai-result。 |
+| payload.output.aiResult | Object |  |
+| payload.output.aiResult.correction | String | 工业指令转写最终结果 |
 
 ai-result事件的示例如下：
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
   "header": {
     "event": "result-generated",
@@ -729,51 +461,30 @@ ai-result事件的示例如下：
 }
 ```
 
+<a id="speech-end事件"></a>
+
+<a id="89639ad802fjh"></a>
+
 ### speech-end事件
 
 对应时序图中的过程7。speech-end事件会在ai-result事件后发送给您，代表工业指令转写完全结束，之后您可以关闭WebSocket连接。
 
 协议字段如下：
 
-**字段**
-
-**类型**
-
-**说明**
-
-header
-
-Object
-
-header.event
-
-String
-
-固定为result-generated。
-
-header.task\_id
-
-String
-
-您在run-task指令中填写的task\_id。
-
-payload
-
-Object
-
-payload.output
-
-Object
-
-payload.output.action
-
-String
-
-固定为speech-end。
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| header | Object |  |
+| header.event | String | 固定为result-generated。 |
+| header.task\_id | String | 您在run-task指令中填写的task\_id。 |
+| payload | Object |  |
+| payload.output | Object |  |
+| payload.output.action | String | 固定为speech-end。 |
 
 speech-end事件的示例如下：
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
   "header": {
     "event": "result-generated",
@@ -787,63 +498,32 @@ speech-end事件的示例如下：
 }
 ```
 
+<a id="task-failed事件"></a>
+
+<a id="16bb062bce7lg"></a>
+
 ### task-failed事件
 
 若在任务过程中，由于客户端传参错误或服务端内部错误导致任务失败，服务端会返回给您task-failed事件，随即会中断WebSocket连接。
 
 协议字段如下：
 
-**字段**
-
-**类型**
-
-**说明**
-
-header
-
-Object
-
-header.event
-
-String
-
-固定为result-generated。
-
-header.task\_id
-
-String
-
-您在run-task指令中填写的task\_id。
-
-payload
-
-Object
-
-payload.output
-
-Object
-
-payload.output.action
-
-String
-
-固定为task-failed。
-
-payload.output.errorCode
-
-String
-
-错误码
-
-payload.output.errorMessage
-
-String
-
-错误信息
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| header | Object |  |
+| header.event | String | 固定为result-generated。 |
+| header.task\_id | String | 您在run-task指令中填写的task\_id。 |
+| payload | Object |  |
+| payload.output | Object |  |
+| payload.output.action | String | 固定为task-failed。 |
+| payload.output.errorCode | String | 错误码 |
+| payload.output.errorMessage | String | 错误信息 |
 
 task-failed事件的示例如下：
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
   "header": {
     "event": "result-generated",
@@ -859,7 +539,11 @@ task-failed事件的示例如下：
 }
 ```
 
-具体错误码及其含义，可以参考[错误码](raw/_short/tingwu-industrial-instruction-api-websocket-9f6de500fdddf831.md)。
+具体错误码及其含义，可以参考[错误码](tingwu-industrial-instruction-api-websocket-9f6de500fdddf831.md)。
+
+<a id="websocket连接复用"></a>
+
+<a id="a5bf6a1f4bhzy"></a>
 
 ## WebSocket连接复用
 
@@ -867,11 +551,21 @@ task-failed事件的示例如下：
 
 若连接15s内无文本消息或二进制消息发送，连接将自动断开。
 
+<a id="代码示例"></a>
+
+<a id="2eaad17c283gt"></a>
+
 ## 代码示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-java-tab"></a>
 
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 package nls.alibaba;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -1092,9 +786,13 @@ public class TingwuIndustrialInstructionUsage extends WebSocketClient {
 }
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 const WebSocket = require('ws');
 const fs = require('fs');
 const path = require('path');
@@ -1290,102 +988,28 @@ ws.on('close', () => {
 });
 ```
 
+<a id="错误码"></a>
+
+<a id="1c7019de52cyt"></a>
+
 ## 错误码
 
-**错误码**
+| 错误码 | 错误信息 | 说明 |
+| --- | --- | --- |
+| InvalidParameter | Invalid parameter. Please refer to the official documents. | 参数错误，请检查您传入的参数。 |
+| InvalidParameter | MaxEndSilence invalid, must between \[0. 6000\]. | 传入的maxEndSilence参数不合法。 |
+| InvalidParameter | Terminology not exist. | 传入的指令集不存在。 |
+| InvalidParameter | SampleRate invalid. | 传入的采样率参数不合法。 |
+| InvalidParameter | Audio format invalid. | 传入的音频编码格式参数不合法。 |
+| InvalidParameter | Terminology invalid. | 传入的指令集Id不合法。 |
+| Agent.FrameSequenceIllegal | Agent Websocket Frame Sequence Illegal. | 调用指令时序不合法。 |
+| Agent.InputActionIllegal | Agent Input Action Illegal. | 传入的指令action字段不合法。 |
+| Agent.InputAppIdIllegal | Agent Input appId illegal. | 传入的应用Id字段不合法。 |
+| Agent.AppNotPublished | Agent App not published. | 传入的应用Id尚未发布。 |
+| Agent.CustomTaskIdInvalid | The length of custom task id must be 16. | 传入的taskId字段长度不合法。 |
+| BIL.ServiceNotActivate | User hasn't activate service. | 您尚未开通听悟Agent服务。 |
+| BIL.UserArrears | User is in arrears. | 您目前处在欠费状态。 |
+| Agent.AppInfoNotExist | Agent App Info not exist. | 传入的应用Id信息不存在，请先在控制台保存并发布应用配置信息。 |
+| ServerError | Server error. | 服务端内部错误。 |
 
-**错误信息**
-
-**说明**
-
-InvalidParameter
-
-Invalid parameter. Please refer to the official documents.
-
-参数错误，请检查您传入的参数。
-
-InvalidParameter
-
-MaxEndSilence invalid, must between \[0. 6000\].
-
-传入的maxEndSilence参数不合法。
-
-InvalidParameter
-
-Terminology not exist.
-
-传入的指令集不存在。
-
-InvalidParameter
-
-SampleRate invalid.
-
-传入的采样率参数不合法。
-
-InvalidParameter
-
-Audio format invalid.
-
-传入的音频编码格式参数不合法。
-
-InvalidParameter
-
-Terminology invalid.
-
-传入的指令集Id不合法。
-
-Agent.FrameSequenceIllegal
-
-Agent Websocket Frame Sequence Illegal.
-
-调用指令时序不合法。
-
-Agent.InputActionIllegal
-
-Agent Input Action Illegal.
-
-传入的指令action字段不合法。
-
-Agent.InputAppIdIllegal
-
-Agent Input appId illegal.
-
-传入的应用Id字段不合法。
-
-Agent.AppNotPublished
-
-Agent App not published.
-
-传入的应用Id尚未发布。
-
-Agent.CustomTaskIdInvalid
-
-The length of custom task id must be 16.
-
-传入的taskId字段长度不合法。
-
-BIL.ServiceNotActivate
-
-User hasn't activate service.
-
-您尚未开通听悟Agent服务。
-
-BIL.UserArrears
-
-User is in arrears.
-
-您目前处在欠费状态。
-
-Agent.AppInfoNotExist
-
-Agent App Info not exist.
-
-传入的应用Id信息不存在，请先在控制台保存并发布应用配置信息。
-
-ServerError
-
-Server error.
-
-服务端内部错误。
-
-若错误码不在上述错误列表中，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
+若错误码不在上述错误列表中，请参见[错误码](../model-api-reference/preparations/error-code.md)进行排查。

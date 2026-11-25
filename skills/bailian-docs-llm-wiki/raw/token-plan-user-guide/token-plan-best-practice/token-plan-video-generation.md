@@ -2,45 +2,34 @@
 
 在 Agent 工具中调用 Token Plan 视频生成模型，提交异步任务并在生成完成后下载视频。
 
+<a id="支持的模型"></a>
+
+<a id="tp-video-models"></a>
+
 ## 支持的模型
 
-模型
+| 模型 | 输入 | 说明 |
+| --- | --- | --- |
+| `happyhorse-1.1-t2v` | 文本 | 文生视频 |
+| `happyhorse-1.1-i2v` | 首帧图片、文本 | 图生视频 |
+| `happyhorse-1.1-r2v` | 参考图片、文本 | 参考生视频 |
+| `wan3.0-video` | 文本、图片或参考素材 | 全能视频生成 |
 
-输入
+更多模型以 [个人版](../token-plan-personal/token-plan-personal-overview.md#tppo-h-models)和[团队版](../token-plan-team-edition/token-plan-team-overview.md#tpto-h-models)支持的模型 为准。
 
-说明
+<a id="前提"></a>
 
-`happyhorse-1.1-t2v`
-
-文本
-
-文生视频
-
-`happyhorse-1.1-i2v`
-
-首帧图片、文本
-
-图生视频
-
-`happyhorse-1.1-r2v`
-
-参考图片、文本
-
-参考生视频
-
-`wan3.0-video`
-
-文本、图片或参考素材
-
-全能视频生成
-
-更多模型以 [个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tppo-h-models)和[团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpto-h-models)支持的模型 为准。
+<a id="tp-video-prereq"></a>
 
 ## 前提
 
--   已订阅 Token Plan，并获取以 `sk-sp-` 开头的 API Key。获取方式见[接入概览](https://help.aliyun.com/zh/model-studio/token-plan-integration-overview#tp-ext-prereq)。
+-   已订阅 Token Plan，并获取以 `sk-sp-` 开头的 API Key。获取方式见[接入概览](token-plan-integration-overview.md#tp-ext-prereq)。
 -   本地已安装 Python 3.9 及以上版本。
--   使用的 AI 编程工具支持 Slash Command。其他工具的配置路径见[其他工具](https://help.aliyun.com/zh/model-studio/token-plan-integration-overview#tp-ext-tools)。
+-   使用的 AI 编程工具支持 Slash Command。其他工具的配置路径见[其他工具](token-plan-integration-overview.md#tp-ext-tools)。
+
+<a id="接口"></a>
+
+<a id="tp-video-endpoint"></a>
 
 ## 接口
 
@@ -50,13 +39,19 @@
 
 请求头使用 `Authorization: Bearer $ANTHROPIC_AUTH_TOKEN`。提交任务时还需要 `X-DashScope-Async: enable`。
 
+<a id="步骤一-创建-slash-command"></a>
+
+<a id="tp-video-step1"></a>
+
 ## 步骤一：创建 Slash Command
 
 将套餐 API Key 配置为环境变量 `$ANTHROPIC_AUTH_TOKEN`。
 
 在项目根目录创建 `.claude/commands/text-to-video.md`，写入以下内容：
 
-```
+<a id="code-block"></a>
+
+````text
 调用 Token Plan 视频生成 API，提交文生视频任务，等待完成后下载视频。
 
 视频描述：$ARGUMENTS
@@ -120,51 +115,35 @@ while True:
 ```
 
 4. 输出下载后的视频文件路径。
-```
+````
+
+<a id="步骤二-生成视频"></a>
+
+<a id="tp-video-step2"></a>
 
 ## 步骤二：生成视频
 
 在 Claude Code 中输入 `/text-to-video 一只白色的猫在阳台上晒太阳`。如需调整时长、分辨率或宽高比，在指令中写明即可，例如 `/text-to-video 生成 10 秒、1080P、9:16 的城市夜景`。
 
+<a id="请求参数"></a>
+
+<a id="tp-video-params"></a>
+
 ## 请求参数
 
-参数
+| 参数 | 必选 | 说明 |
+| --- | --- | --- |
+| `model` | 是 | 视频生成模型 ID。 |
+| `input.prompt` | 是 | 视频描述。 |
+| `parameters.resolution` | 否 | 分辨率，支持 `480P`、`720P`、`1080P`，默认 `1080P`。 |
+| `parameters.ratio` | 否 | 宽高比，支持 `16:9`、`9:16`、`1:1` 等，默认 `16:9`。 |
+| `parameters.duration` | 否 | 时长，取值范围 3 到 15 秒，默认 5 秒。 |
 
-必选
+更多参数见 [HappyHorse 文生视频 API](../../model-api-reference/video-generation-api/happyhorse-api-reference/happyhorse-text-to-video-api-reference.md)。
 
-说明
+<a id="返回结果"></a>
 
-`model`
-
-是
-
-视频生成模型 ID。
-
-`input.prompt`
-
-是
-
-视频描述。
-
-`parameters.resolution`
-
-否
-
-分辨率，支持 `480P`、`720P`、`1080P`，默认 `1080P`。
-
-`parameters.ratio`
-
-否
-
-宽高比，支持 `16:9`、`9:16`、`1:1` 等，默认 `16:9`。
-
-`parameters.duration`
-
-否
-
-时长，取值范围 3 到 15 秒，默认 5 秒。
-
-更多参数见 [HappyHorse 文生视频 API](raw/model-api-reference/video-generation-api/happyhorse-api-reference/happyhorse-text-to-video-api-reference.md)。
+<a id="tp-video-response"></a>
 
 ## 返回结果
 
@@ -173,12 +152,20 @@ while True:
 -   任务状态包括 `PENDING`、`RUNNING`、`SUCCEEDED`、`FAILED`、`CANCELED` 和 `UNKNOWN`。
 -   视频 URL 有时效，生成后及时下载。
 
+<a id="限制"></a>
+
+<a id="tp-video-limits"></a>
+
 ## 限制
 
 -   视频生成是异步任务，提交后需要轮询结果。`task_id` 有效期为 24 小时。
 -   不同模型支持的输入类型、分辨率、时长和宽高比不同，以对应模型文档为准。
 -   视频生成消耗高于图像和语音合成，具体以控制台[用量统计](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal)为准。
 
+<a id="其他工具"></a>
+
+<a id="tp-video-other-tools"></a>
+
 ## 其他工具
 
-其他工具的扩展机制和配置路径见[接入概览](https://help.aliyun.com/zh/model-studio/token-plan-integration-overview#tp-ext-tools)。将上面的 Slash Command 内容保存到对应路径即可。
+其他工具的扩展机制和配置路径见[接入概览](token-plan-integration-overview.md#tp-ext-tools)。将上面的 Slash Command 内容保存到对应路径即可。

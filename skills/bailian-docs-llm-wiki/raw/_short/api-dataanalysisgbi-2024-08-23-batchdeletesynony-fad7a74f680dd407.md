@@ -2,11 +2,19 @@
 
 批量删除当前指定业务空间下的同义词。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/DataAnalysisGBI/2024-08-23/BatchDeleteSynonyms)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,135 +33,51 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>dataanalysisgbi:BatchDeleteSynonyms</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-dataanalysisgbi:BatchDeleteSynonyms
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /gbi/batchDelete/synonyms HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 当前请求所使用的百炼业务空间 id | llm-2v3934xtp49esw64 |
+| body | object | 否 | 请求体参数 |  |
+| synonymIdKeys | array | 是 | 需要指定删除的同义词的 id 列表 |  |
+| Id | string | 否 | 同义词 id | synonym-AAAAAAAAh6cWOUPagYstkg |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-当前请求所使用的百炼业务空间 id
-
-llm-2v3934xtp49esw64
-
-body
-
-object
-
-否
-
-请求体参数
-
-synonymIdKeys
-
-array
-
-是
-
-需要指定删除的同义词的 id 列表
-
-Id
-
-string
-
-否
-
-同义词 id
-
-synonym-AAAAAAAAh6cWOUPagYstkg
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Result |  |
+| data | any | 返回信息 | true |
+| errorMsg | string | 错误描述信息 | NoAuth |
+| code | string | 错误码 | NoAuth |
+| success | boolean | true 接口调用成功，false 接口调用失败 | true |
+| requestId | string | 请求 id，每次请求都是唯一值，便于后续排查问题 | 45390C6D-016D-5030-BF65-031ED1F65003 |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Result
-
-data
-
-any
-
-返回信息
-
-true
-
-errorMsg
-
-string
-
-错误描述信息
-
-NoAuth
-
-code
-
-string
-
-错误码
-
-NoAuth
-
-success
-
-boolean
-
-true 接口调用成功，false 接口调用失败
-
-true
-
-requestId
-
-string
-
-请求 id，每次请求都是唯一值，便于后续排查问题
-
-45390C6D-016D-5030-BF65-031ED1F65003
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -161,7 +85,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "data": true,
   "errorMsg": "NoAuth",
@@ -171,46 +97,17 @@ string
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-401
-
-Internal.Error
-
-Bad Request: Internal Error.
-
-内部错误，请联系客服人员排查
-
-401
-
-NoResourceAuth
-
-Bad Request: Resource Auth Error.
-
-没有请求的资源的权限，请确保所请求的资源属于当前参数中的业务空间
-
-401
-
-NoAuth
-
-Bad Request: Workspace.Illegal.Auth.
-
-当前所使用的账号无所指定业务空间的权限
-
-401
-
-SystemOperationInProgress
-
-Xiyan GBI is learning your previous modifications. Please try again later.
-
-析言GBI正在学习您之前的修改内容，请稍后重试
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 401 | Internal.Error | Bad Request: Internal Error. | 内部错误，请联系客服人员排查 |
+| 401 | NoResourceAuth | Bad Request: Resource Auth Error. | 没有请求的资源的权限，请确保所请求的资源属于当前参数中的业务空间 |
+| 401 | NoAuth | Bad Request: Workspace.Illegal.Auth. | 当前所使用的账号无所指定业务空间的权限 |
+| 401 | SystemOperationInProgress | Xiyan GBI is learning your previous modifications. Please try again later. | 析言GBI正在学习您之前的修改内容，请稍后重试 |
 
 访问[错误中心](https://api.aliyun.com/document/DataAnalysisGBI/2024-08-23/errorCode)查看更多错误码。

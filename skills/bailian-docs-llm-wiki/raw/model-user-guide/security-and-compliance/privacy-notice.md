@@ -1,10 +1,18 @@
 # 合规资质与隐私说明
 
+<a id="合规资质"></a>
+
+<a id="d8f49e2ba0htw"></a>
+
 ## 合规资质
 
 百炼以无保留意见通过 SOC 2 审计，标志着其在安全、可用性和保密性方面建立了严苛的控制体系，为全球关键业务的人工智能转型提供符合国际标准的可信保障。
 
 参考：[合规文档中心](https://security.aliyun.com/compliance-repository?spm=5176.34248323.J_oxCbIPYwH8En90P61GCp_.1.6df649f1sVpkA8)
+
+<a id="隐私保护"></a>
+
+<a id="f50f10a7d566i"></a>
 
 ## 隐私保护
 

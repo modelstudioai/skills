@@ -2,11 +2,19 @@
 
 妙读获取文档列表。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListDocs)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,271 +33,56 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:ListDocs</td><td>list</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:ListDocs
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。 | llm-2setzb9x4ewsd |
+| DocName | string | 否 | 文档名称 | 企业2022年報 |
+| DocType | string | 否 | 文档类型 | pdf |
+| Skip | integer | 否 | 跳过 n 条记录，用于分页 | 10 |
+| MaxResults | integer | 否 | 返回的最大结果数 | 20 |
+| NextToken | string | 否 | 下一页的 token | 52a33dc83779f63641e16f5146cd7125 |
+| Statuses | array | 否 | 文档状态列表 |  |
+|  | integer | 否 | 状态值 | 0 |
+| CategoryId | string | 否 | 文档所在目录 | default |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间 ID。获取方式请参见[如何使用业务空间](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。
-
-llm-2setzb9x4ewsd
-
-DocName
-
-string
-
-否
-
-文档名称
-
-企业2022年報
-
-DocType
-
-string
-
-否
-
-文档类型
-
-pdf
-
-Skip
-
-integer
-
-否
-
-跳过 n 条记录，用于分页
-
-10
-
-MaxResults
-
-integer
-
-否
-
-返回的最大结果数
-
-20
-
-NextToken
-
-string
-
-否
-
-下一页的 token
-
-52a33dc83779f63641e16f5146cd7125
-
-Statuses
-
-array
-
-否
-
-文档状态列表
-
-integer
-
-否
-
-状态值
-
-0
-
-CategoryId
-
-string
-
-否
-
-文档所在目录
-
-default
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-Code
-
-string
-
-返回结果编码。
-
-successful
-
-Data
-
-array<object>
-
-返回数据结果列表
-
-Data
-
-object
-
-分页数据
-
-CreateTime
-
-long
-
-创建时间
-
-2024-01-04 11:46:07
-
-DocId
-
-string
-
-文档 ID
-
-12345
-
-DocName
-
-string
-
-文档名称
-
-标题093
-
-DocType
-
-string
-
-文档类型
-
-pdf
-
-Status
-
-integer
-
-状态
-
-0
-
-StatusMessage
-
-string
-
-状态消息
-
-导入完成
-
-CategoryId
-
-string
-
-文档所在目录
-
-default
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-MaxResults
-
-integer
-
-最大返回结果数
-
-10
-
-Message
-
-string
-
-返回消息。
-
-successful
-
-NextToken
-
-string
-
-下一页 Token
-
-CAESGgoSChAKDGNvbXBsZXRlVGltZRABCgQiAggAGAAiQAoJANEQ4mYAAAAACjMDLgAAADFTNzMyZDMwMzAzMDM4NzA3MjZjN2E2NDYyNzUzODMxMzY3ODM0NmIzNTZkNjc=
-
-RequestId
-
-string
-
-请求 Id
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功
-
-true
-
-TotalCount
-
-integer
-
-总记录数
-
-70
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| Code | string | 返回结果编码。 | successful |
+| Data | array<object> | 返回数据结果列表 |  |
+| Data | object | 分页数据 |  |
+| CreateTime | long | 创建时间 | 2024-01-04 11:46:07 |
+| DocId | string | 文档 ID | 12345 |
+| DocName | string | 文档名称 | 标题093 |
+| DocType | string | 文档类型 | pdf |
+| Status | integer | 状态 | 0 |
+| StatusMessage | string | 状态消息 | 导入完成 |
+| CategoryId | string | 文档所在目录 | default |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| MaxResults | integer | 最大返回结果数 | 10 |
+| Message | string | 返回消息。 | successful |
+| NextToken | string | 下一页 Token | CAESGgoSChAKDGNvbXBsZXRlVGltZRABCgQiAggAGAAiQAoJANEQ4mYAAAAACjMDLgAAADFTNzMyZDMwMzAzMDM4NzA3MjZjN2E2NDYyNzUzODMxMzY3ODM0NmIzNTZkNjc= |
+| RequestId | string | 请求 Id | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功 | true |
+| TotalCount | integer | 总记录数 | 70 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -297,7 +90,9 @@ integer
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Code": "successful",
   "Data": [
@@ -321,22 +116,14 @@ integer
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-403
-
-NoPermission
-
-You are not authorized to perform this action.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。

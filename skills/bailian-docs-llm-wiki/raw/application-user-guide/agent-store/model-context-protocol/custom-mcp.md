@@ -6,6 +6,10 @@
 2.  **从 AI 网关导入**：面向**已有的 API**。适用于需要将一个**现成的、非 MCP 规范的 RESTful API**（例如公司内部的业务接口、第三方服务接口）封装成可供大模型调用的工具。
 3.  **从阿里云 OpenAPI 导入**：面向**阿里云生态**。适用于需要让大模型能够操作**其他的阿里云产品**（如 OSS, ECS 等）。
 
+<a id="使用脚本部署"></a>
+
+<a id="5d7ca1c899ymm"></a>
+
 ## 使用脚本部署
 
 对于自行开发或开源社区的 MCP 服务代码，阿里云百炼支持使用[函数计算 FC](https://www.aliyun.com/product/fc)进行托管。
@@ -22,108 +26,37 @@
     
     按照以下指引填写配置，确认无误后提交部署。
     
-    **配置项**
-    
-    **用途**
-    
-    **本案例的配置**
-    
-    **服务名称****描述**
-    
-    用于区分不同的 MCP 服务，不影响大模型的判断和调用。
-    
-    **服务名称**：长期记忆
-    
-    **描述**：该服务使大模型能够记录个性化信息，并在后续交互中调用这些信息进行回复。
-    
-    **安装方式**
-    
-    如果需要托管本地 MCP 服务（stdio），支持以下方式：
-    
-    -   **npx**：启动使用 Node.js 开发的 MCP 服务
-    -   **uvx**：启动使用 Python 开发的 MCP 服务。
-    
-    如果需要连接远程 MCP 服务，支持以下方式：
-    
-    -   **http**：连接到一个已有的、运行在别处的远程 MCP 服务器。
-    
-    选择：**npx**
-    
-    **部署方式**
-    
-    （仅限 npx/uvx）
-    
-    **基础模式：按次计费**：适用于按需启动、节省成本、可以承受较慢响应的场景。
-    
-    **极速模式**：适用于持续运行、快速响应、可以承受较高成本的场景。
-    
-    > 详细计费规则请参考[计费说明](https://help.aliyun.com/zh/model-studio/mcp-introduction#fb482455a3u8c)。
-    
-    保持**基础模式：按次计费**，关闭**极速模式**
-    
-    **部署地域**
-    
-    （仅限 npx/uvx）
-    
-    为获得最佳响应速度，建议选择靠近其他已有云服务的地域。若不确定如何选择，推荐使用“**北京**”地域。
-    
-    选择：**北京**
-    
-    **MCP 服务配置**
-    
-    **重要**请务必核实 MCP 服务的来源和源代码，以免遭受钓鱼攻击。
-    
-    **重要**并非全部 MCP 服务都支持 npx/uvx/http 方式部署。若缺少相应配置代码，则无法直接部署到阿里云百炼。建议参考 [MCP 官方文档](https://modelcontextprotocol.io/quickstart/server)进行本地部署。
-    
-    **说明**使用 Java 开发的 MCP 服务，可以[自行部署到阿里云函数计算](https://help.aliyun.com/zh/functioncompute/mcp-server)，再通过 http 托管到阿里云百炼。
-    
-    -   如需部署开源社区 MCP 服务，请直接粘贴从 MCP 服务详情页获取的配置代码。
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5067198471/p963082.png)
-    -   如需部署自行开发的 MCP 服务，请参考以下模板编写配置代码。
-        
-        **说明**此配置模板适用于[基于 npx/uvx/http 最佳实践开发的 MCP 服务](https://modelcontextprotocol.io/examples)。若采用其他开发方式，请对模板进行相应修改。
-        
-    
-    ```
-    {
-      "mcpServers": {
-        "本地 MCP 服务": {
-          "type": "stdio",
-          "command": "npx",
-          "args": [
-            "-y",
-            "@your_acc_name/your_pkg_name"
+    <table><thead><tr><th><strong>配置项</strong></th><th><strong>用途</strong></th><th><strong>本案例的配置</strong></th></tr></thead><tbody><tr><td><strong>服务名称</strong><strong>描述</strong></td><td><p>用于区分不同的 MCP 服务，不影响大模型的判断和调用。</p></td><td><p><strong>服务名称</strong>：长期记忆</p><p><strong>描述</strong>：该服务使大模型能够记录个性化信息，并在后续交互中调用这些信息进行回复。</p></td></tr><tr><td><strong>安装方式</strong></td><td><p>如果需要托管本地 MCP 服务（stdio），支持以下方式：</p><ul><li><strong>npx</strong>：启动使用 Node.js 开发的 MCP 服务</li><li><strong>uvx</strong>：启动使用 Python 开发的 MCP 服务。</li></ul><p>如果需要连接远程 MCP 服务，支持以下方式：</p><ul><li><strong>http</strong>：连接到一个已有的、运行在别处的远程 MCP 服务器。</li></ul></td><td><p>选择：<strong>npx</strong></p></td></tr><tr><td><strong>部署方式</strong><p>（仅限 npx/uvx）</p></td><td><p><strong>基础模式：按次计费</strong>：适用于按需启动、节省成本、可以承受较慢响应的场景。</p><p><strong>极速模式</strong>：适用于持续运行、快速响应、可以承受较高成本的场景。</p><blockquote><p>详细计费规则请参考<a href="mcp-introduction.md#fb482455a3u8c">计费说明</a>。</p></blockquote></td><td><p>保持<strong>基础模式：按次计费</strong>，关闭<strong>极速模式</strong></p></td></tr><tr><td><strong>部署地域</strong><p>（仅限 npx/uvx）</p></td><td><p>为获得最佳响应速度，建议选择靠近其他已有云服务的地域。若不确定如何选择，推荐使用“<strong>北京</strong>”地域。</p></td><td><p>选择：<strong>北京</strong></p></td></tr><tr><td><strong>MCP 服务配置</strong></td><td><div><div><p><strong>重要</strong>请务必核实 MCP 服务的来源和源代码，以免遭受钓鱼攻击。</p></div></div><div><div><p><strong>重要</strong>并非全部 MCP 服务都支持 npx/uvx/http 方式部署。若缺少相应配置代码，则无法直接部署到阿里云百炼。建议参考 <a href="https://modelcontextprotocol.io/quickstart/server">MCP 官方文档</a>进行本地部署。</p></div></div><div><div><p><strong>说明</strong>使用 Java 开发的 MCP 服务，可以<a href="https://help.aliyun.com/zh/functioncompute/mcp-server">自行部署到阿里云函数计算</a>，再通过 http 托管到阿里云百炼。</p></div></div><ul><li><p>如需部署开源社区 MCP 服务，请直接粘贴从 MCP 服务详情页获取的配置代码。</p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5067198471/p963082.png" alt="image"></li><li><p>如需部署自行开发的 MCP 服务，请参考以下模板编写配置代码。</p><div><div><p><strong>说明</strong>此配置模板适用于<a href="https://modelcontextprotocol.io/examples">基于 npx/uvx/http 最佳实践开发的 MCP 服务</a>。若采用其他开发方式，请对模板进行相应修改。</p></div></div></li></ul><a id="code-block"></a><pre class="language-json"><code>{
+      &quot;mcpServers&quot;: {
+        &quot;本地 MCP 服务&quot;: {
+          &quot;type&quot;: &quot;stdio&quot;,
+          &quot;command&quot;: &quot;npx&quot;,
+          &quot;args&quot;: [
+            &quot;-y&quot;,
+            &quot;@your_acc_name/your_pkg_name&quot;
           ],
-          "env": {
-            "YOUR_ENV_KEY": "YOUR_ENV_VALUE"
+          &quot;env&quot;: {
+            &quot;YOUR_ENV_KEY&quot;: &quot;YOUR_ENV_VALUE&quot;
           }
         },
-        "远程 MCP 服务": {
-          "type": "sse/streamableHttp",
-          "url": "https://your-mcp-server/sse"
+        &quot;远程 MCP 服务&quot;: {
+          &quot;type&quot;: &quot;sse/streamableHttp&quot;,
+          &quot;url&quot;: &quot;https://your-mcp-server/sse&quot;
         }
       }
     }
-    ```
-    
-    直接使用以下配置代码:
-    
-    ```
-    {
-      "mcpServers": {
-        "memory": {
-          "command": "npx",
-          "args": [
-            "-y",
-            "@modelcontextprotocol/server-memory"
+    </code></pre></td><td><p>直接使用以下配置代码:</p><a id="code-block-2"></a><pre class="language-json"><code>{
+      &quot;mcpServers&quot;: {
+        &quot;memory&quot;: {
+          &quot;command&quot;: &quot;npx&quot;,
+          &quot;args&quot;: [
+            &quot;-y&quot;,
+            &quot;@modelcontextprotocol/server-memory&quot;
           ]
         }
       }
     }
-    ```
-    
-    或在[MCP 广场](https://bailian.console.aliyun.com/?tab=mcp#/mcp-market)找到这个 MCP 服务，点击进入详情页，找到标题为 `NPX` 的配置代码。
+    </code></pre><p>或在<a href="https://bailian.console.aliyun.com/?tab=mcp#/mcp-market">MCP 广场</a>找到这个 MCP 服务，点击进入详情页，找到标题为 <code>NPX</code> 的配置代码。</p></td></tr></tbody></table>
     
 3.  **管理 MCP 服务**
     
@@ -139,7 +72,9 @@
         
         ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9001984471/p944533.png)
         
-        **说明**函数计算 FC 的日志服务会产生一定费用，详情请参考控制台的日志服务计费说明。
+        > **说明**
+        >
+        > 函数计算 FC 的日志服务会产生一定费用，详情请参考控制台的日志服务计费说明。
         
     2.  **测试工具效果：**
         
@@ -152,8 +87,12 @@
         
 4.  **使用 MCP 服务**
     
-    部署完成后，即可将自定义 MCP 服务[在智能体或工作流中配置 MCP 服务](https://help.aliyun.com/zh/model-studio/official-and-third-party-mcp#8319d03864jym)。
+    部署完成后，即可将自定义 MCP 服务[在智能体或工作流中配置 MCP 服务](official-and-third-party-mcp.md#8319d03864jym)。
     
+
+<a id="从-ai-网关导入"></a>
+
+<a id="61462f8e002mf"></a>
 
 ## 从 AI 网关导入
 
@@ -171,41 +110,22 @@
     
     按照下表指引填写配置信息，确认无误后点击**确认导入**。
     
-    **配置项**
-    
-    **配置说明**
-    
-    **示例**
-    
-    **网关所在区域**
-    
-    AI 网关所在地域
-    
-    华东 1（杭州）
-    
-    **网关实例**
-    
-    AI 网关实例
-    
-    test
-    
-    **选择MCP服务**
-    
-    AI 网关托管的 MCP 服务
-    
-    test
-    
-    **选择接入点**
-    
-    AI 网关托管的 MCP 服务的接入点。系统会自动生成一个可供测试的接入点。
-    
-    \[自动生成\]
+    | 配置项 | 配置说明 | 示例 |
+    | --- | --- | --- |
+    | **网关所在区域** | AI 网关所在地域 | 华东 1（杭州） |
+    | **网关实例** | AI 网关实例 | test |
+    | **选择MCP服务** | AI 网关托管的 MCP 服务 | test |
+    | **选择接入点** | AI 网关托管的 MCP 服务的接入点。系统会自动生成一个可供测试的接入点。 | \[自动生成\] |
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7729282571/p987431.png)
 4.  **完成导入**
     
     导入完成后，可在**MCP 管理自定义服务**查看从 AI 网关导入的 MCP 服务。
     
+
+<a id="从阿里云-openapi-导入"></a>
+
+<a id="351e0dd197yms"></a>
 
 ## 从阿里云 OpenAPI 导入
 
@@ -223,29 +143,11 @@
     
     按照以下指引填写配置，检查无误后点击**确认导入**。
     
-    **配置项**
-    
-    **配置说明**
-    
-    **示例**
-    
-    **服务名称**
-    
-    需要导入的 OpenAPI MCP 服务。
-    
-    oss
-    
-    **访问阿里云 OpenAPI 角色**
-    
-    阿里云百炼访问 OpenAPI 时的角色。可使用已有角色，或在此处**创建角色**。
-    
-    BailianMcpRoleFoross
-    
-    **权限策略**
-    
-    前往[RAM 权限策略](https://ram.console.aliyun.com/policies)，使用此处的 JSON 脚本创建权限策略，并为**访问阿里云 OpenAPI 角色**授予该权限策略。
-    
-    \[自动生成\]
+    | 配置项 | 配置说明 | 示例 |
+    | --- | --- | --- |
+    | **服务名称** | 需要导入的 OpenAPI MCP 服务。 | oss |
+    | **访问阿里云 OpenAPI 角色** | 阿里云百炼访问 OpenAPI 时的角色。可使用已有角色，或在此处**创建角色**。 | BailianMcpRoleFoross |
+    | **权限策略** | 前往[RAM 权限策略](https://ram.console.aliyun.com/policies)，使用此处的 JSON 脚本创建权限策略，并为**访问阿里云 OpenAPI 角色**授予该权限策略。 | \[自动生成\] |
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7729282571/p987389.png)
 4.  **完成导入**

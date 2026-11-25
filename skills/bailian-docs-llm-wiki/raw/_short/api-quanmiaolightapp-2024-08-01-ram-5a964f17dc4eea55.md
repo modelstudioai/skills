@@ -4,11 +4,17 @@
 
 本文为您介绍大模型服务平台百炼（QuanMiaoLightApp）为RAM权限策略定义的操作（Action）、资源（Resource）和条件（Condition）。大模型服务平台百炼（QuanMiaoLightApp）的RAM代码（RamCode）为 quanmiaolightapp，支持的授权粒度为操作级。
 
+<a id="权限策略通用结构"></a>
+
+<a id="auth-detail-51"></a>
+
 ## 权限策略通用结构
 
 权限策略支持JSON格式，其通用结构如下：
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Version": "1",
   "Statement": [
@@ -42,6 +48,10 @@
     -   Condition\_key：条件关键字。
     -   Condition\_value：条件关键字对应的值。
 
+<a id="操作-action"></a>
+
+<a id="title-auth-detail-2"></a>
+
 ## 操作（Action）
 
 下表是大模型服务平台百炼（QuanMiaoLightApp）定义的操作，这些操作可以在RAM权限策略语句的`Action`元素中使用，用来授予执行该操作的权限。下面对表中的具体项提供说明：
@@ -61,599 +71,69 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
-
-API
-
-访问级别
-
-资源类型
-
-条件关键字
-
-关联操作
-
-quanmiaolightapp:CancelAsyncTask
-
-CancelAsyncTask
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:ExportAnalysisTagDetailByTaskId
-
-ExportAnalysisTagDetailByTaskId
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:GenerateBroadcastNews
-
-GenerateBroadcastNews
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:GenerateOutputFormat
-
-GenerateOutputFormat
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:GetEnterpriseVocAnalysisTask
-
-GetEnterpriseVocAnalysisTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:GetEssayCorrectionTask
-
-GetEssayCorrectionTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:GetFileContent
-
-GetFileContent
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:GetTagMiningAnalysisTask
-
-GetTagMiningAnalysisTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:GetVideoAnalysisConfig
-
-GetVideoAnalysisConfig
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:GetVideoAnalysisTask
-
-GetVideoAnalysisTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:GetVideoDetectShotConfig
-
-GetVideoDetectShotConfig
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:GetVideoDetectShotTask
-
-GetVideoDetectShotTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:HotNewsRecommend
-
-HotNewsRecommend
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:ListAnalysisTagDetailByTaskId
-
-ListAnalysisTagDetailByTaskId
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:ListHotTopicSummaries
-
-ListHotTopicSummaries
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunEnterpriseVocAnalysis
-
-RunEnterpriseVocAnalysis
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunEssayCorrection
-
-RunEssayCorrection
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunHotTopicChat
-
-RunHotTopicChat
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunHotTopicSummary
-
-RunHotTopicSummary
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunMarketingInformationExtract
-
-RunMarketingInformationExtract
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunMarketingInformationWriting
-
-RunMarketingInformationWriting
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunNetworkContentAudit
-
-RunNetworkContentAudit
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunOcrParse
-
-RunOcrParse
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunScriptChat
-
-RunScriptChat
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunScriptContinue
-
-RunScriptContinue
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunScriptPlanning
-
-RunScriptPlanning
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunScriptRefine
-
-RunScriptRefine
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunStyleWriting
-
-RunStyleWriting
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunTagMiningAnalysis
-
-RunTagMiningAnalysis
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunVideoAnalysis
-
-RunVideoAnalysis
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:RunVideoDetectShot
-
-RunVideoDetectShot
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:SubmitEnterpriseVocAnalysisTask
-
-SubmitEnterpriseVocAnalysisTask
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:SubmitEssayCorrectionTask
-
-SubmitEssayCorrectionTask
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:SubmitTagMiningAnalysisTask
-
-SubmitTagMiningAnalysisTask
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:SubmitVideoAnalysisTask
-
-SubmitVideoAnalysisTask
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:SubmitVideoDetectShotTask
-
-SubmitVideoDetectShotTask
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:UpdateVideoAnalysisConfig
-
-UpdateVideoAnalysisConfig
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:UpdateVideoAnalysisTask
-
-UpdateVideoAnalysisTask
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:UpdateVideoAnalysisTasks
-
-UpdateVideoAnalysisTasks
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:UpdateVideoDetectShotConfig
-
-UpdateVideoDetectShotConfig
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-quanmiaolightapp:UpdateVideoDetectShotTask
-
-UpdateVideoDetectShotTask
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
+| 操作 | API | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- | --- |
+| quanmiaolightapp:CancelAsyncTask | CancelAsyncTask | create | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:ExportAnalysisTagDetailByTaskId | ExportAnalysisTagDetailByTaskId | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:GenerateBroadcastNews | GenerateBroadcastNews | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:GenerateOutputFormat | GenerateOutputFormat | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:GetEnterpriseVocAnalysisTask | GetEnterpriseVocAnalysisTask | get | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:GetEssayCorrectionTask | GetEssayCorrectionTask | get | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:GetFileContent | GetFileContent | get | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:GetTagMiningAnalysisTask | GetTagMiningAnalysisTask | get | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:GetVideoAnalysisConfig | GetVideoAnalysisConfig | get | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:GetVideoAnalysisTask | GetVideoAnalysisTask | get | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:GetVideoDetectShotConfig | GetVideoDetectShotConfig | get | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:GetVideoDetectShotTask | GetVideoDetectShotTask | get | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:HotNewsRecommend | HotNewsRecommend | create | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:ListAnalysisTagDetailByTaskId | ListAnalysisTagDetailByTaskId | list | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:ListHotTopicSummaries | ListHotTopicSummaries | list | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunEnterpriseVocAnalysis | RunEnterpriseVocAnalysis | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunEssayCorrection | RunEssayCorrection | create | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunHotTopicChat | RunHotTopicChat | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunHotTopicSummary | RunHotTopicSummary | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunMarketingInformationExtract | RunMarketingInformationExtract | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunMarketingInformationWriting | RunMarketingInformationWriting | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunNetworkContentAudit | RunNetworkContentAudit | create | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunOcrParse | RunOcrParse | create | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunScriptChat | RunScriptChat | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunScriptContinue | RunScriptContinue | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunScriptPlanning | RunScriptPlanning | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunScriptRefine | RunScriptRefine | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunStyleWriting | RunStyleWriting | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunTagMiningAnalysis | RunTagMiningAnalysis | create | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunVideoAnalysis | RunVideoAnalysis | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:RunVideoDetectShot | RunVideoDetectShot | none | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:SubmitEnterpriseVocAnalysisTask | SubmitEnterpriseVocAnalysisTask | create | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:SubmitEssayCorrectionTask | SubmitEssayCorrectionTask | create | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:SubmitTagMiningAnalysisTask | SubmitTagMiningAnalysisTask | create | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:SubmitVideoAnalysisTask | SubmitVideoAnalysisTask | create | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:SubmitVideoDetectShotTask | SubmitVideoDetectShotTask | create | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:UpdateVideoAnalysisConfig | UpdateVideoAnalysisConfig | update | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:UpdateVideoAnalysisTask | UpdateVideoAnalysisTask | update | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:UpdateVideoAnalysisTasks | UpdateVideoAnalysisTasks | update | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:UpdateVideoDetectShotConfig | UpdateVideoDetectShotConfig | update | \*全部资源<br><br>`*` | 无 | 无 |
+| quanmiaolightapp:UpdateVideoDetectShotTask | UpdateVideoDetectShotTask | update | \*全部资源<br><br>`*` | 无 | 无 |
+
+<a id="资源-resource"></a>
+
+<a id="title-auth-detail-3"></a>
 
 ## 资源（Resource）
 
 大模型服务平台百炼（QuanMiaoLightApp）不支持在RAM权限策略语句的`Resource`中指定资源ARN。如果要允许对大模型服务平台百炼（QuanMiaoLightApp）的访问权限，请在策略语句中指定`"Resource": "*"`。
 
+<a id="条件-condition"></a>
+
+<a id="title-auth-detail-4"></a>
+
 ## 条件（Condition）
 
 大模型服务平台百炼（QuanMiaoLightApp）未定义产品级别的条件关键字。如需查看适用于所有云产品的通用条件关键字，请参见[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
+
+<a id="相关操作"></a>
+
+<a id="auth-detail-71"></a>
 
 ## 相关操作
 

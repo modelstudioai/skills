@@ -2,13 +2,17 @@
 
 把品牌形象图交给 wan3.0-video，一次生成带原生人声、口型同步的 15 秒口播成片。
 
-**说明**
-
-**免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
+> **说明**
+>
+> **免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
 
 本篇用一张虚构的橘猫主播形象图跑通品牌口播：没有真人出镜，也没有拍摄和后期配音，把“问候 → 产品 → 卖点 → 收尾”四句台词按顺序写进同一条提示词，模型一次生成约 15 秒、自带人声和口型同步的成片。
 
 调用链：`qwen3.8-flash`（可选，整理口播台词）→ `wan2.7-image`（生成虚构角色形象图）→ `wan3.0-video`（first\_frame 模式，duration 15，一次生成完整成片）。
+
+<a id="实测产出"></a>
+
+<a id="tp-pb-brand-result"></a>
 
 ## 实测产出
 
@@ -22,37 +26,55 @@
 
 ![成片连续抽帧·嘴部开合](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f90bd.jpg)
 
+<a id="步骤-把四句台词写进同一次生成"></a>
+
+<a id="tp-pb-brand-step1"></a>
+
 ## 步骤：把四句台词写进同一次生成
 
 两点通用设置：出图和视频命令都加 `--watermark false`。首帧图若带“AI 生成”水印，会原样带进视频；图片和视频都关水印，成片才不会叠加图片水印。整段台词写进同一次 first\_frame 生成，音色与画面天然统一，无需分段拼接。
 
 先设置 Token Plan 的 Base URL 和 API Key。Token Plan 的 Key 以 `sk-sp-` 开头，需与 Token Plan Base URL 配套使用：
 
-```
+<a id="code-block"></a>
+
+```bash
 export BASE_URL="https://token-plan.cn-beijing.maas.aliyuncs.com"
 export API_KEY="sk-sp-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
+<a id="①-可选-把卖点整理成口播台词"></a>
+
 ### ①（可选）把卖点整理成口播台词
 
-```
+<a id="code-block-2"></a>
+
+```bash
 # 台词短、口语化、一句一个动作；避免"必爆/最强/第一"等绝对化表述与效果承诺。
 bl text chat --api-key "$API_KEY" --base-url "$BASE_URL" --model qwen3.8-flash --message \
   "给一款虚构的中式绿茶茶叶罐写 3 句 15 字以内的口播台词，语气治愈、口语化，供虚拟主播逐字念白，不使用绝对化用语。"
 ```
 
+<a id="②-造虚构角色形象图"></a>
+
 ### ② 造虚构角色形象图
 
-```
+<a id="code-block-3"></a>
+
+```bash
 # 角色形象图直接让「橘猫主播 + 茶罐」同框（完整成片以它作 first_frame 起帧，保证茶罐全程在画面里、画面统一）。
 # 首帧图也要加 --watermark false：图片自带的「AI 生成」水印会原样带进成片。
 bl image generate --api-key "$API_KEY" --base-url "$BASE_URL" --model wan2.7-image --size "1536*2688" --watermark false \
   --prompt "一只拟人化的橘猫品牌主播，戴着黑色头戴式耳机，脖子系暖橙色方巾，端坐在中式茶室的木质桌前正面朝向镜头；桌上右手边显眼地摆着一只青绿色陶瓷茶叶罐（罐身手绘金色竹叶纹样、木质罐盖、竖排中文标签『中式茶饮罐』），旁边一只粗陶茶杯；背景是竹帘与青瓷花瓶，暖黄灯光，写实治愈风格，正面半身构图，嘴微微张开" --out-dir . --out-prefix role_cat_host
 ```
 
+<a id="③-完整成片-一次生成串起四句口播"></a>
+
 ### ③ 完整成片 · 一次生成串起四句口播
 
-```
+<a id="code-block-4"></a>
+
+```bash
 # 把「问候→产品→卖点→收尾」四句按顺序写进同一条 first_frame prompt、duration 15，一次即产出音色/画面（含茶罐）全程统一的连续口播，无需分段拼接。
 # 口型需在 prompt 中明确约束：台词逐字写入并加「嘴唇和下巴要有清晰明显的开合动作」；仅写表情（如「兴奋地喊」）会得到闭口静止的画面。
 # --watermark false 关闭视频模型水印；首帧图已用同一参数生成，成片不会带入图片水印。
@@ -63,6 +85,10 @@ bl video generate --api-key "$API_KEY" --base-url "$BASE_URL" --model wan3.0-vid
 # 15s 长片段建议加 --async --output json 先取 task_id，再轮询 GET $BASE_URL/api/v1/tasks/{task_id} 到 SUCCEEDED 后从 output.video_url 下载，避免默认轮询超时。
 # 一条成片即含四句连念、音色画面全程统一；若只需某一句，直接从 g_full.mp4 按时间轴截取片段即可，无需另行生成。
 ```
+
+<a id="说明"></a>
+
+<a id="tp-pb-brand-notes"></a>
 
 ## 说明
 

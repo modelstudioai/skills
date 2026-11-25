@@ -2,6 +2,10 @@
 
 本文档介绍了如何通过对话分析Agent方式创建应用
 
+<a id="创建应用"></a>
+
+<a id="c05203c3f3j1b"></a>
+
 ## 创建应用
 
 -   第一步：首先点击**我的应用**按钮，再点击**创建应用**按钮；
@@ -12,6 +16,10 @@
         
     -   **应用创建方式：**
         -   这里选择**基于对话分析Agent创建**：通过预置最佳实践示例或上传对话数据，体验大模型生成式摘要、总结、服务质检等全场景应用能力。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086487.png)
+
+<a id="基于对话分析agent创建"></a>
+
+<a id="ca65213aa5qck"></a>
 
 ### 基于对话分析Agent创建
 
@@ -86,7 +94,9 @@
             
     -   专业构建模式说明
         
-        **说明**在模式切换时，当前模式所编辑的内容不再生效，对话内容将会重置。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086503.png)
+        > **说明**
+        >
+        > 在模式切换时，当前模式所编辑的内容不再生效，对话内容将会重置。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086503.png)
         
         ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086505.png)
         
@@ -103,7 +113,7 @@
             -   在编辑完成后，即可在指令信息中插入，使用“/”进行插入保存的变量。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086513.png)
         -   **分析对象类型：**可以分为三种，纯文本、语音、图片，同时支持添加知识库进行辅助分析，支持添加热词组有助于提升语音转译准确性。
             
-            -   **知识库：**开启后可添加文档、表格、图片等类型知识用于辅助分析，当分析对象类型选择为图片时无法使用知识库。具体介绍可参考文档：[知识库的使用](raw/_short/using-the-knowledge-base-45443dab8b55a045.md)。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086514.png)
+            -   **知识库：**开启后可添加文档、表格、图片等类型知识用于辅助分析，当分析对象类型选择为图片时无法使用知识库。具体介绍可参考文档：[知识库的使用](using-the-knowledge-base-45443dab8b55a045.md)。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086514.png)
                 
             -   **选择文本时**：需要按照以下格式编写对话信息，同时也可以通过使用已经提供的行业对话示例。
                 

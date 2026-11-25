@@ -2,21 +2,31 @@
 
 本文档说明如何在浏览器端通过 WebRTC + JavaScript 接入通义多模态交互套件（multimodal-dialog），实现与多模态 AI 应用的实时音视频交互。
 
-**说明**多模态交互套件面向 **AI/AR 眼镜、学习机、智能机器人**等硬件场景，提供可视化应用配置、预置 Agent/插件、音色管理等完整业务能力。WebRTC 模式下音频通过 UDP 直接传输，内置回声消除和降噪，适合浏览器端低延迟交互场景。
+> **说明**
+>
+> 多模态交互套件面向 **AI/AR 眼镜、学习机、智能机器人**等硬件场景，提供可视化应用配置、预置 Agent/插件、音色管理等完整业务能力。WebRTC 模式下音频通过 UDP 直接传输，内置回声消除和降噪，适合浏览器端低延迟交互场景。
+
+<a id="前提条件及注意事项"></a>
+
+<a id="bpwrtcmd-s01h2"></a>
 
 ## 前提条件及注意事项
 
 1.  已在百炼控制台完成以下准备：
     
-    -   已[配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[设置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    -   创建多模态交互应用，获取 **Workspace ID** 和 **App ID**（详情请参见[应用创建](raw/_short/multimodal-app-creation-ef194a004f7549d5.md)）。
-    -   在应用中完成模型、音色、提示词、Agent/插件等配置（详情请参见[应用配置](raw/_short/multimodal-app-configuration-8919f99b339e17da.md)）。
+    -   已[配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并将其[设置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+    -   创建多模态交互应用，获取 **Workspace ID** 和 **App ID**（详情请参见[应用创建](../../../_short/multimodal-app-creation-ef194a004f7549d5.md)）。
+    -   在应用中完成模型、音色、提示词、Agent/插件等配置（详情请参见[应用配置](../../../_short/multimodal-app-configuration-8919f99b339e17da.md)）。
 2.  使用支持 WebRTC 的现代浏览器（Chrome、Edge、Firefox、Safari 等）。
     
 3.  浏览器需要麦克风权限；如需视频交互，还需摄像头权限。
     
 4.  浏览器无法直接向服务端发起 SDP 交换请求（受 CORS 限制），Demo 中需通过终端执行 curl 命令完成连接建立；正式产品中由业务后端代理时不存在此限制。
     
+
+<a id="实现实时通话"></a>
+
+<a id="bpwrtcmd-s02h2"></a>
 
 ## 实现实时通话
 
@@ -26,17 +36,25 @@ WebRTC 多模态交互套件实时通话流程时序图
 
 ![1111](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6265914871/p1088078.svg)
 
+<a id="创建-rtcpeerconnection"></a>
+
+<a id="bpwrtcmd-s02ah2"></a>
+
 ### 创建 RTCPeerConnection
 
 调用浏览器原生 `RTCPeerConnection` 构造函数创建连接实例。服务端采用 ICE-lite 模式直连，无需配置 ICE 服务器。
 
-```
+<a id="code-block"></a>
+
+```javascript
 pc = new RTCPeerConnection();
 ```
 
 同时注册关键回调：
 
-```
+<a id="code-block-2"></a>
+
+```javascript
 pc.onconnectionstatechange = () => {
   if (pc.connectionState === 'connected') {
     // 连接成功
@@ -55,16 +73,27 @@ pc.ontrack = (e) => {
 };
 ```
 
+<a id="获取本地媒体流"></a>
+
+<a id="bpwrtcmd-s02bh2"></a>
+
 ### 获取本地媒体流
 
 通过 `navigator.mediaDevices.getUserMedia` 获取麦克风权限（必须），以及摄像头权限（可选）。
 
 **纯音频模式：**
-```
+
+<a id="code-block-3"></a>
+
+```javascript
 const localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 ```
+
 **音视频模式（需要 AI 视觉理解时）：**
-```
+
+<a id="code-block-4"></a>
+
+```javascript
 const localStream = await navigator.mediaDevices.getUserMedia({
   audio: true,
   video: {
@@ -76,20 +105,31 @@ const localStream = await navigator.mediaDevices.getUserMedia({
 });
 ```
 
-**说明**视频帧率根据场景调整。需要 AI 实时理解画面的场景（如物体识别、场景描述）建议 15-30 fps。
+> **说明**
+>
+> 视频帧率根据场景调整。需要 AI 实时理解画面的场景（如物体识别、场景描述）建议 15-30 fps。
+
+<a id="添加媒体轨道到-peerconnection"></a>
+
+<a id="bpwrtcmd-s02ch2"></a>
 
 ### 添加媒体轨道到 PeerConnection
 
 将本地音频轨道添加到 PeerConnection。如果开启了视频，视频轨道一并添加。
 
-```
+<a id="code-block-5"></a>
+
+```javascript
 localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
 ```
+
 **维持视频发送质量（可选）：**
 
 在弱网环境下，浏览器可能自动降低视频分辨率。可通过设置 sender 参数尽量维持：
 
-```
+<a id="code-block-6"></a>
+
+```javascript
 const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video');
 if (sender) {
   const params = sender.getParameters();
@@ -102,11 +142,17 @@ if (sender) {
 }
 ```
 
+<a id="创建-datachannel"></a>
+
+<a id="bpwrtcmd-s02dh2"></a>
+
 ### 创建 DataChannel
 
 创建名为 `oai-events` 的 DataChannel，用于与服务端交换控制消息（run-task、事件通知等）。
 
-```
+<a id="code-block-7"></a>
+
+```javascript
 const dc = pc.createDataChannel('oai-events');
 
 dc.onopen = () => {
@@ -123,7 +169,9 @@ dc.onmessage = (e) => {
 
 同时监听 `pc.ondatachannel` 以处理服务端主动创建的 DataChannel：
 
-```
+<a id="code-block-8"></a>
+
+```javascript
 pc.ondatachannel = (event) => {
   const ch = event.channel;
   if (ch.label === 'txt' || ch.label === 'oai-events') {
@@ -133,16 +181,26 @@ pc.ondatachannel = (event) => {
 };
 ```
 
+<a id="生成-offer-sdp"></a>
+
+<a id="bpwrtcmd-s02eh2"></a>
+
 ### 生成 Offer SDP
 
 调用 `createOffer` 并 `setLocalDescription`，浏览器生成包含本地媒体能力描述的 Offer SDP。服务端采用 ICE-lite 模式，客户端无需等待 ICE candidates 收集完成，`setLocalDescription` 后即可发送。
 
-```
+<a id="code-block-9"></a>
+
+```javascript
 const offer = await pc.createOffer();
 await pc.setLocalDescription(offer);
 
 // offer.sdp 即为待发送的 Offer SDP 字符串
 ```
+
+<a id="交换-sdp-http-post"></a>
+
+<a id="bpwrtcmd-s02fh2"></a>
 
 ### 交换 SDP（HTTP POST）
 
@@ -152,31 +210,17 @@ await pc.setLocalDescription(offer);
 
 **请求配置：**
 
-**配置项**
+| 配置项 | 说明 |
+| --- | --- |
+| 请求地址 | `POST https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/webrtc/inference?model=multimodal-dialog` |
+| Content-Type | `application/sdp` |
+| 请求头 | `Authorization: Bearer {DASHSCOPE_API_KEY}` |
+| 请求体 | 客户端生成的 Offer SDP 字符串 |
+| 响应 | 成功：HTTP 200，返回服务端 Answer SDP 字符串 |
 
-**说明**
+<a id="code-block-10"></a>
 
-请求地址
-
-`POST https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/webrtc/inference?model=multimodal-dialog`
-
-Content-Type
-
-`application/sdp`
-
-请求头
-
-`Authorization: Bearer {DASHSCOPE_API_KEY}`
-
-请求体
-
-客户端生成的 Offer SDP 字符串
-
-响应
-
-成功：HTTP 200，返回服务端 Answer SDP 字符串
-
-```
+```javascript
 const API_KEY = 'your-api-key';       // 百炼控制台获取
 const WORKSPACE_ID = '{workspace-id}';  // 百炼控制台获取
 const REGION = 'cn-beijing';
@@ -195,30 +239,47 @@ if (!resp.ok) throw new Error('SDP 交换失败: ' + resp.status);
 const answerSdp = await resp.text();
 ```
 
-**说明**由于浏览器端受 CORS 限制无法直接请求服务端，Demo 中需用户手动在终端执行 curl 命令。正式产品中应通过业务后端代理此请求。
+> **说明**
+>
+> 由于浏览器端受 CORS 限制无法直接请求服务端，Demo 中需用户手动在终端执行 curl 命令。正式产品中应通过业务后端代理此请求。
 
 **curl 命令格式：**
-```
+
+<a id="code-block-11"></a>
+
+```bash
 curl -X POST 'https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/webrtc/inference?model=multimodal-dialog' \
   -H 'Content-Type: application/sdp' \
   -H 'Authorization: Bearer $DASHSCOPE_API_KEY' \
   --data-binary '<Offer SDP 内容>'
 ```
 
+<a id="设置-answer-sdp-建立连接"></a>
+
+<a id="bpwrtcmd-s02gh2"></a>
+
 ### 设置 Answer SDP 建立连接
 
 将从服务端获取的 Answer SDP 设置为远端描述，WebRTC 连接随即建立。
 
-```
+<a id="code-block-12"></a>
+
+```javascript
 await pc.setRemoteDescription({ type: 'answer', sdp: answerSdp });
 // 连接建立完成，pc.connectionState 将变为 'connected'
 ```
+
+<a id="发送-run-task-启动会话"></a>
+
+<a id="bpwrtcmd-s02hh2"></a>
 
 ### 发送 run-task 启动会话
 
 WebRTC 连接建立、DataChannel 就绪后，客户端发送 **run-task** 消息启动多模态会话。
 
-```
+<a id="code-block-13"></a>
+
+```javascript
 let currentTaskId = null;
 
 function sendStartMessage(channel) {
@@ -272,81 +333,30 @@ function generateTaskId() {
   return (Date.now().toString(16) + r() + r()).slice(0, 32);
 }
 ```
+
 **参数说明：**
 
-**参数路径**
+| 参数路径 | 类型 | 说明 |
+| --- | --- | --- |
+| `payload.input.workspace_id` | string | 百炼工作空间 ID，在控制台“应用管理”中获取 |
+| `payload.input.app_id` | string | 多模态交互应用 ID，在控制台“应用管理”中获取 |
+| `payload.input.directive` | string | 固定值 `Start` |
+| `payload.parameters.client_info.user_id` | string | 业务系统中的用户标识，用于日志追踪 |
+| `payload.parameters.client_info.device.uuid` | string | 设备唯一标识，用于设备维度的数据分析 |
+| `payload.parameters.upstream.mode` | string | 交互模式：`duplex`（全双工）、`push2talk`（按住说话）、`tap2talk`（点击说话） |
+| `payload.parameters.upstream.type` | string | 上行媒体类型：`Audio`（纯语音）或 `AudioAndVideo`（音视频） |
+| `payload.parameters.upstream.sample_rate` | string | 上行音频采样率，通常 `16000` |
+| `payload.parameters.downstream.voice` | string | 下行音色，可在百炼控制台音色列表中选取 |
+| `payload.parameters.downstream.sample_rate` | number | 下行音频采样率，通常 `24000` |
+| `payload.parameters.dialog_attributes.vocabulary_id` | string | 可选，热词表 ID，提升专有名词识别准确率 |
 
-**类型**
+> **说明**
+>
+> 应用中的模型选择、提示词、Agent/插件、知识库等配置均在百炼控制台可视化完成，无需通过代码传入。run-task 只需指定 `workspace_id` 和 `app_id`，服务端会自动加载对应配置。
 
-**说明**
+<a id="实时对话"></a>
 
-`payload.input.workspace_id`
-
-string
-
-百炼工作空间 ID，在控制台“应用管理”中获取
-
-`payload.input.app_id`
-
-string
-
-多模态交互应用 ID，在控制台“应用管理”中获取
-
-`payload.input.directive`
-
-string
-
-固定值 `Start`
-
-`payload.parameters.client_info.user_id`
-
-string
-
-业务系统中的用户标识，用于日志追踪
-
-`payload.parameters.client_info.device.uuid`
-
-string
-
-设备唯一标识，用于设备维度的数据分析
-
-`payload.parameters.upstream.mode`
-
-string
-
-交互模式：`duplex`（全双工）、`push2talk`（按住说话）、`tap2talk`（点击说话）
-
-`payload.parameters.upstream.type`
-
-string
-
-上行媒体类型：`Audio`（纯语音）或 `AudioAndVideo`（音视频）
-
-`payload.parameters.upstream.sample_rate`
-
-string
-
-上行音频采样率，通常 `16000`
-
-`payload.parameters.downstream.voice`
-
-string
-
-下行音色，可在百炼控制台音色列表中选取
-
-`payload.parameters.downstream.sample_rate`
-
-number
-
-下行音频采样率，通常 `24000`
-
-`payload.parameters.dialog_attributes.vocabulary_id`
-
-string
-
-可选，热词表 ID，提升专有名词识别准确率
-
-**说明**应用中的模型选择、提示词、Agent/插件、知识库等配置均在百炼控制台可视化完成，无需通过代码传入。run-task 只需指定 `workspace_id` 和 `app_id`，服务端会自动加载对应配置。
+<a id="bpwrtcmd-s02ih2"></a>
 
 ### 实时对话
 
@@ -356,7 +366,9 @@ run-task 发送成功后，进入实时对话状态：
 -   **下行音频**：AI 语音回复通过 `ontrack` 回调接收并播放
 -   **下行事件**：通过 DataChannel 接收业务事件
 
-```
+<a id="code-block-14"></a>
+
+```javascript
 function handleServerEvent(evt, channel) {
   const type = evt.type || evt.header?.action;
 
@@ -390,28 +402,43 @@ function handleServerEvent(evt, channel) {
 }
 ```
 
-**说明****open\_videochat 机制**：当 `upstream.type` 设为 `AudioAndVideo` 时，客户端已通过 WebRTC 发送视频轨道。服务端在需要时（如 AI Agent 判断需要"看"画面）会推送 `open_videochat` 事件，客户端需回复 `continue-task` 确认视频通道建立。该机制允许按需开启视频处理，节省服务端资源。
+> **说明**
+>
+> **open\_videochat 机制**：当 `upstream.type` 设为 `AudioAndVideo` 时，客户端已通过 WebRTC 发送视频轨道。服务端在需要时（如 AI Agent 判断需要"看"画面）会推送 `open_videochat` 事件，客户端需回复 `continue-task` 确认视频通道建立。该机制允许按需开启视频处理，节省服务端资源。
 
 **静音 / 取消静音：**
-```
+
+<a id="code-block-15"></a>
+
+```javascript
 // 静音
 localStream.getAudioTracks().forEach(t => { t.enabled = false; });
 // 取消静音
 localStream.getAudioTracks().forEach(t => { t.enabled = true; });
 ```
+
 **开启/关闭视频：**
-```
+
+<a id="code-block-16"></a>
+
+```javascript
 // 关闭视频
 localStream.getVideoTracks().forEach(t => { t.enabled = false; });
 // 开启视频
 localStream.getVideoTracks().forEach(t => { t.enabled = true; });
 ```
 
+<a id="结束会话与资源清理"></a>
+
+<a id="bpwrtcmd-s02jh2"></a>
+
 ### 结束会话与资源清理
 
 通话结束后需要正确释放所有资源，避免内存泄漏和设备占用。
 
-```
+<a id="code-block-17"></a>
+
+```javascript
 function endSession() {
   // 1. 关闭 DataChannel
   if (dataChannel) {
@@ -436,6 +463,10 @@ function endSession() {
 }
 ```
 
+<a id="注意事项"></a>
+
+<a id="bpwrtcmd-s03h2"></a>
+
 ## 注意事项
 
 1.  **API Key 安全**：切勿将 API Key 硬编码在前端代码中。生产环境应通过后端服务代理 SDP 交换请求，API Key 仅存放在服务端。
@@ -445,6 +476,10 @@ function endSession() {
 5.  **视频帧率**：视频理解场景建议 15-30 fps；如果仅需偶尔拍照识别，可降低帧率节省带宽。
 6.  **浏览器兼容性**：推荐使用 Chrome 90+、Edge 90+、Firefox 85+、Safari 15+。
 7.  **单实例限制**：同一页面同时只应维护一个 `RTCPeerConnection` 实例，创建新会话前需先关闭旧连接。
+
+<a id="完整-demo-示例下载"></a>
+
+<a id="bpwrtcmd-s04h2"></a>
 
 ## 完整 Demo 示例下载
 
@@ -462,10 +497,14 @@ function endSession() {
 6.  连接建立后，对着麦克风说话即可与多模态 AI 实时对话。
 7.  通话结束后可点击“下载远端音频”保存 AI 回复的录音。
 
+<a id="相关文档"></a>
+
+<a id="bpwrtcmd-s05h2"></a>
+
 ## 相关文档
 
--   [通义多模态交互开发套件产品概述](raw/application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-products-overview.md)
--   [多模态交互套件使用指南](raw/application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-guidelines.md)
+-   [通义多模态交互开发套件产品概述](../../../application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-products-overview.md)
+-   [多模态交互套件使用指南](../../../application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-guidelines.md)
 -   [多模态交互 SDK（Python/Java）GitHub 示例代码](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/multimodal_dialog)
 -   [WebRTC API (MDN)](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API)
--   [WebRTC 接入模型/应用](https://help.aliyun.com/zh/model-studio/realtime-api-overview#conn-rtc-title)
+-   [WebRTC 接入模型/应用](../../../model-api-reference/realtime-api-directory/realtime-api-overview.md#conn-rtc-title)

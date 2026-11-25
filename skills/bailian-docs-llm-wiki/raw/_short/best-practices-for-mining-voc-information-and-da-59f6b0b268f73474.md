@@ -2,6 +2,10 @@
 
 本文的主要介绍借助 全妙-泛企业VOC挖掘 和 析言GBI 两个产品挖掘VOC信息并进行数据分析。
 
+<a id="目标"></a>
+
+<a id="56015ae77e5t4"></a>
+
 ## 目标
 
 针对海量非结构化的VOC数据快速打标，整理成结构化标签数据，在通过ChatBI的方式进行实时标签分析，帮助企业完成VOC洞察的一整套流程。
@@ -9,6 +13,10 @@
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910970.png)
 
 * * *
+
+<a id="前提条件"></a>
+
+<a id="51826b4271a9z"></a>
 
 ## 前提条件
 
@@ -25,14 +33,20 @@
 
 * * *
 
+<a id="安装依赖"></a>
+
+<a id="be26372b0601a"></a>
+
 ## 安装依赖
 
 1.  获取析言GBI和全秒-泛企业VOC挖掘[JAVA SDK](https://api.aliyun.com/api-tools/sdk/DataAnalysisGBI?version=2024-08-23&language=java-async-tea&tab=primer-doc)最新版本号。
 2.  打开您的Maven项目的`pom.xml`文件。
 3.  在`<dependencies>`标签内添加以下依赖信息，并将`<version></version>`标签中的版本号替换为最新的版本号。
 
-```
-<dependency>
+<a id="code-block"></a>
+
+```xml
+  <dependency>
   <groupId>com.aliyun</groupId>
   <artifactId>alibabacloud-dataanalysisgbi20240823</artifactId>
   <version>1.0.0</version>
@@ -67,15 +81,25 @@
 
 * * *
 
+<a id="操作步骤"></a>
+
+<a id="69d8fb7842b4d"></a>
+
 ## 操作步骤
+
+<a id="步骤一-通过全妙-泛企业voc挖掘提取内容标签"></a>
+
+<a id="65decec7c40kc"></a>
 
 ### 步骤一：通过全妙-泛企业VOC挖掘提取内容标签
 
-基于全妙泛企业VOC挖掘的接口[妙策-企业VOC挖掘](raw/_short/api-aimiaobi-2023-08-01-dir-miaoce-enterprise-vo-a7ab49071e679b62.md)（例如：本示例中的`SubmitEnterpriseVocAnalysisTask`接口），来帮您实现对已有工单类数据的Voc挖掘、标签提取。
+基于全妙泛企业VOC挖掘的接口[妙策-企业VOC挖掘](api-aimiaobi-2023-08-01-dir-miaoce-enterprise-vo-a7ab49071e679b62.md)（例如：本示例中的`SubmitEnterpriseVocAnalysisTask`接口），来帮您实现对已有工单类数据的Voc挖掘、标签提取。
 
 请将代码示例中的`accessKeyId`、`accessKeySecret`及`workspaceId`替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-2"></a>
+
+````java
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.aliyun.auth.credentials.Credential;
@@ -292,7 +316,7 @@ public class EnterpriseVocTest {
     }
 
 }
-```
+````
 
 在如上的代码示例中，企业Voc挖掘接口，会将如下图所示的工单数据：
 
@@ -300,7 +324,9 @@ public class EnterpriseVocTest {
 
 提取出我们所需要的各种信息、标签类型，并以结构化信息的形式返回：
 
-```
+<a id="code-block-3"></a>
+
+```json
 [
     {
         "tagName": "产品反馈-用户情感倾向",
@@ -419,11 +445,17 @@ public class EnterpriseVocTest {
 ]
 ```
 
+<a id="步骤二-将内容标签的结构化数据转存到数据库"></a>
+
+<a id="2a2e6e801dh8x"></a>
+
 ### 步骤二：将内容标签的结构化数据转存到数据库
 
 根据企业Voc挖掘结果中的tagName，将其构建成数据库中的列名并生成数据库DDL语句，构建数据库。以MySQL数据库为例。
 
-```
+<a id="code-block-4"></a>
+
+```text
 CREATE TABLE `analyze_table` (
   `Uid` varchar(50) COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT '用户的id',
   `服务站省` varchar(50) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT '表示当前工单提交的省份',
@@ -448,9 +480,15 @@ CREATE TABLE `analyze_table` (
 
 并将tags的内容当作具体的列值插入数据库。
 
-```
+<a id="code-block-5"></a>
+
+```json
 INSERT INTO `chat_bi`.`analyze_table` (`Uid`, `服务站省`, `服务站市`, `服务站区`, `服务里程`, `提交时间`, `提交来源`, `经销商名称`, `经销商编码`, `机型`, `情绪情感`, `问题描述`, `故障件`, `问题类型一级标签`, `问题类型二级标签`, `问题类型三级标签`) VALUES ('001eeb2d-bd96-4bbe-a2f9-15b05d65ff7c', '辽宁省', '大连市', '中山区', 774, '2025-01-02 20:07:00', '电话', '经销商C', 'ed1de1b2-3b5b-4564-b881-5fab9f29fbb1', '机型1', '负向', '关于车架的故障问题进行了描述。', '车架', '配件咨询', '配件开箱破损（含售后衍生品）', '配件内物破损');
 ```
+
+<a id="步骤三-将数据库关联到析言gbi并进行对话分析"></a>
+
+<a id="e02b923be377c"></a>
 
 ### 步骤三：将数据库关联到析言GBI并进行对话分析
 
@@ -461,8 +499,12 @@ INSERT INTO `chat_bi`.`analyze_table` (`Uid`, `服务站省`, `服务站市`, `�
     
     ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910973.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910971.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910969.png)
 
+<a id="可选-步骤四-将析言gbi的对话接口集成到业务系统"></a>
+
+<a id="b4810d51db8tu"></a>
+
 ### （可选）步骤四：将析言GBI的对话接口集成到业务系统
 
-可以采用析言GBI云服务所提供的[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)来实现如图所示的chatbi能力，并集成到自己的业务系统。
+可以采用析言GBI云服务所提供的[Chat对话接口](api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)来实现如图所示的chatbi能力，并集成到自己的业务系统。
 
-代码示例参考：[操作步骤](https://help.aliyun.com/zh/model-studio/gbi-best-practices#32e4142297fh2)
+代码示例参考：[操作步骤](../application-user-guide/agent-development/application-gallery/xiyan-gbi/gbi-best-practices.md#32e4142297fh2)

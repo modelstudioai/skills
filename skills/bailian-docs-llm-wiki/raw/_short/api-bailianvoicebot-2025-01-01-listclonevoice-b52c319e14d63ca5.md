@@ -2,9 +2,17 @@
 
 获取实例详情
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,284 +31,41 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| bailianvoicebot:ListCloneVoice | list | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-bailianvoicebot:ListCloneVoice
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+<table><thead><tr><th><p><strong>名称</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>必填</strong></p></th><th><p><strong>描述</strong></p></th><th><p><strong>示例值</strong></p></th></tr></thead><tbody><tr><td>BusinessUnitId</td><td><p>string</p></td><td><p>否</p></td><td><div><p>百炼业务空间 ID</p></div></td><td><p>llm-3pptowd2olrctsvc</p></td></tr><tr><td>Status</td><td><p>string</p></td><td><p>否</p></td><td><div><p>状态</p></div><div><p><strong>枚举值：</strong></p><ul><li>Draft :<div><p>Draft</p></div></li><li>Published :<div><p>Published</p></div></li></ul></div></td><td><p>Published</p></td></tr><tr><td>PageNumber</td><td><p>integer</p></td><td><p>否</p></td><td><div><p>页号</p></div></td><td><p>1</p></td></tr><tr><td>PageSize</td><td><p>integer</p></td><td><p>否</p></td><td><div><p>每页条数</p></div></td><td><p>10</p></td></tr></tbody></table>
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-BusinessUnitId
-
-string
-
-否
-
-百炼业务空间 ID
-
-llm-3pptowd2olrctsvc
-
-Status
-
-string
-
-否
-
-状态
-
-**枚举值：**
-
--   Draft :
-    
-    Draft
-    
--   Published :
-    
-    Published
-    
-
-Published
-
-PageNumber
-
-integer
-
-否
-
-页号
-
-1
-
-PageSize
-
-integer
-
-否
-
-每页条数
-
-10
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
+<table><thead><tr><th><p><strong>名称</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>描述</strong></p></th><th><p><strong>示例值</strong></p></th></tr></thead><tbody><tr><td></td><td><p>object</p></td><td><div><p>Schema of Response</p></div></td><td></td></tr><tr><td>RequestId</td><td><p>string</p></td><td><div><p>请求 ID</p></div></td><td><p>D771A1B6-3D5F-174A-BEE1-98CE1000D337</p></td></tr><tr><td>Code</td><td><p>string</p></td><td><div><p>内部错误码</p></div></td><td><p>OK</p></td></tr><tr><td>HttpStatusCode</td><td><p>integer</p></td><td><div><p>http 状态码</p></div></td><td><p>200</p></td></tr><tr><td>Message</td><td><p>string</p></td><td><div><p>错误信息</p></div></td><td><p>Instance llm-xdne77rxe14ziszr does not exist.</p></td></tr><tr><td>Data</td><td><p>object</p></td><td><div><p>克隆音列表分页数据</p></div></td><td></td></tr><tr><td>PageNumber</td><td><p>integer</p></td><td><div><p>页号</p></div></td><td><p>1</p></td></tr><tr><td>PageSize</td><td><p>integer</p></td><td><div><p>每页条数</p></div></td><td><p>10</p></td></tr><tr><td>TotalCount</td><td><p>integer</p></td><td><div><p>总数量</p></div></td><td><p>100</p></td></tr><tr><td>CloneVoices</td><td><p>array&lt;object&gt;</p></td><td><div><p>克隆音列表</p></div></td><td></td></tr><tr><td></td><td><p>object</p></td><td><div><p>克隆音对象</p></div></td><td></td></tr><tr><td>CloneVoiceId</td><td><p>string</p></td><td><div><p>克隆音 ID</p></div></td><td><p>8ee1160a-6999-478f-8df6-f33ef21f27d5</p></td></tr><tr><td>CreatedTime</td><td><p>integer</p></td><td><div><p>创建时间</p></div></td><td><p>1760494691000</p></td></tr><tr><td>UpdatedTime</td><td><p>integer</p></td><td><div><p>更新时间</p></div></td><td><p>1760494691000</p></td></tr><tr><td>InstanceId</td><td><p>string</p></td><td><div><p>业务空间 ID</p></div></td><td><p>llm-xdne77rxe14ziszr</p></td></tr><tr><td>TenantId</td><td><p>string</p></td><td><div><p>租户 ID</p></div></td><td><p>1655449505171</p></td></tr><tr><td>Voice</td><td><p>string</p></td><td><div><p>发音人</p></div></td><td><p>cosyvoice-v3-plus-voicebot2-3666e4bbb2b94832ac4f4107b5804c34</p></td></tr><tr><td>Name</td><td><p>string</p></td><td><div><p>克隆音名称</p></div></td><td><p>测试克隆音</p></td></tr><tr><td>NlsEngine</td><td><p>string</p></td><td><div><p>TTS 引擎</p></div></td><td><p>BAILIAN</p></td></tr><tr><td>Status</td><td><p>string</p></td><td><div><p>状态</p></div><div><p><strong>枚举值：</strong></p><ul><li>Draft :<div><p>Draft</p></div></li><li>Published :<div><p>Published</p></div></li></ul></div></td><td><p>Published</p></td></tr><tr><td>Model</td><td><p>string</p></td><td><div><p>克隆模型</p></div><div><p><strong>枚举值：</strong></p><ul><li>CosyVoice :<div><p>CosyVoice</p></div></li><li>QwenVc :<div><p>QwenVc</p></div></li></ul></div></td><td><p>CosyVoice</p></td></tr></tbody></table>
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-请求 ID
-
-D771A1B6-3D5F-174A-BEE1-98CE1000D337
-
-Code
-
-string
-
-内部错误码
-
-OK
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误信息
-
-Instance llm-xdne77rxe14ziszr does not exist.
-
-Data
-
-object
-
-克隆音列表分页数据
-
-PageNumber
-
-integer
-
-页号
-
-1
-
-PageSize
-
-integer
-
-每页条数
-
-10
-
-TotalCount
-
-integer
-
-总数量
-
-100
-
-CloneVoices
-
-array<object>
-
-克隆音列表
-
-object
-
-克隆音对象
-
-CloneVoiceId
-
-string
-
-克隆音 ID
-
-8ee1160a-6999-478f-8df6-f33ef21f27d5
-
-CreatedTime
-
-integer
-
-创建时间
-
-1760494691000
-
-UpdatedTime
-
-integer
-
-更新时间
-
-1760494691000
-
-InstanceId
-
-string
-
-业务空间 ID
-
-llm-xdne77rxe14ziszr
-
-TenantId
-
-string
-
-租户 ID
-
-1655449505171
-
-Voice
-
-string
-
-发音人
-
-cosyvoice-v3-plus-voicebot2-3666e4bbb2b94832ac4f4107b5804c34
-
-Name
-
-string
-
-克隆音名称
-
-测试克隆音
-
-NlsEngine
-
-string
-
-TTS 引擎
-
-BAILIAN
-
-Status
-
-string
-
-状态
-
-**枚举值：**
-
--   Draft :
-    
-    Draft
-    
--   Published :
-    
-    Published
-    
-
-Published
-
-Model
-
-string
-
-克隆模型
-
-**枚举值：**
-
--   CosyVoice :
-    
-    CosyVoice
-    
--   QwenVc :
-    
-    QwenVc
-    
-
-CosyVoice
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -308,7 +73,9 @@ CosyVoice
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "RequestId": "D771A1B6-3D5F-174A-BEE1-98CE1000D337",
   "Code": "OK",
@@ -336,9 +103,17 @@ CosyVoice
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/BailianVoiceBot/2025-01-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

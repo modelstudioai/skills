@@ -2,10 +2,16 @@
 
 百炼轻应用传媒/零售文章风格与格式学习为您提供零代码训练新文本的能力，即其可以帮助您分析文章的文风得到对应的文体大模型，方便您后续创作自定义文体的文章。
 
-**重要**传媒/零售文章风格与格式学习应用限时免费，额度用完后再按实际调用模型对应的输入、输出Token以后付费方式来计费。
+> **重要**
+>
+> 传媒/零售文章风格与格式学习应用限时免费，额度用完后再按实际调用模型对应的输入、输出Token以后付费方式来计费。
+>
+> -   更多关于新用户限时免费福利信息，请参见[新用户限时免费福利](../model-user-guide/test-1/new-free-quota.md)。
+> -   关于Token的计算方法和模型的计费详情，请参见[计费项](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
 
--   更多关于新用户限时免费福利信息，请参见[新用户限时免费福利](raw/model-user-guide/test-1/new-free-quota.md)。
--   关于Token的计算方法和模型的计费详情，请参见[计费项](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
+<a id="功能入口"></a>
+
+<a id="0335d9162anx4"></a>
 
 ## 功能入口
 
@@ -13,13 +19,25 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0922853471/p935613.png)
 
+<a id="功能介绍"></a>
+
+<a id="e3d1368b17l32"></a>
+
 ## 功能介绍
+
+<a id="应用详情"></a>
+
+<a id="a55badfd1e7hr"></a>
 
 ### 应用详情
 
 在**传媒/零售文章风格与格式学习**应用的**应用详情**页签，您可以查看功能描述、最佳实践、计费规则。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7724413371/p881513.png)
+
+<a id="效果调试"></a>
+
+<a id="7433159d2d3w8"></a>
 
 ### 效果调试
 
@@ -41,16 +59,20 @@
     
     -   如果对分析结果和学习结果满意，您可直接采用。
     -   如果分析结果和学习结果与预期出入很大，您可点击**重新分析特点并学习**，模型会对内容进行重新分析特点和学习。
-    -   如果仅对学习结果感觉不符合预期，您可将文章特点分析结果复制到**已有分析结果**文本框中，单击**创作**，进行文章学习（仅执行[测试学习效果](raw/_short/media-retail-article-style-and-format-learning-8c4530ece55cc26f.md)）。
+    -   如果仅对学习结果感觉不符合预期，您可将文章特点分析结果复制到**已有分析结果**文本框中，单击**创作**，进行文章学习（仅执行[测试学习效果](media-retail-article-style-and-format-learning-8c4530ece55cc26f.md)）。
     
-    **重要**
-    
-    -   文章特点分析结果和学习效果测试结果均需消耗Token。
-    -   当单击**重新分析特点并学习**时，右侧窗口中生成的文章特点分析结果和学习效果测试结果均需消耗Token。
-    -   当仅执行**第2步：测试学习结果**时，右侧窗口中生成的**文章特点分析结果**不消耗Token，**学习效果测试结果**消耗Token。
+    > **重要**
+    >
+    > -   文章特点分析结果和学习效果测试结果均需消耗Token。
+    > -   当单击**重新分析特点并学习**时，右侧窗口中生成的文章特点分析结果和学习效果测试结果均需消耗Token。
+    > -   当仅执行**第2步：测试学习结果**时，右侧窗口中生成的**文章特点分析结果**不消耗Token，**学习效果测试结果**消耗Token。
     
     下图为学习文章示例。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7724413371/p881523.png)
     
+
+<a id="查看api示例"></a>
+
+<a id="b4be9a6149q6g"></a>
 
 ### 查看API示例
 

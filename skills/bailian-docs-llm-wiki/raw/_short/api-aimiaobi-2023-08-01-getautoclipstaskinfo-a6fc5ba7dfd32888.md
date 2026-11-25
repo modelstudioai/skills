@@ -2,9 +2,17 @@
 
 获得剪辑任务状态
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,747 +31,136 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:GetAutoClipsTaskInfo | get | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:GetAutoClipsTaskInfo
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| TaskId | string | 是 | 任务唯一 ID | 0dbf1055f8a2475d99904c3b76a0ffba |
+| WorkspaceId | string | 是 | [工作空间](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | 百炼工作空间Id |
+| ShowResourceInfo | boolean | 否 | 展示视频素材信息 | false |
+| ShowAnalysisResults | boolean | 否 | 展示视频理解结果 | false |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-TaskId
-
-string
-
-是
-
-任务唯一 ID
-
-0dbf1055f8a2475d99904c3b76a0ffba
-
-WorkspaceId
-
-string
-
-是
-
-[工作空间](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-百炼工作空间Id
-
-ShowResourceInfo
-
-boolean
-
-否
-
-展示视频素材信息
-
-false
-
-ShowAnalysisResults
-
-boolean
-
-否
-
-展示视频理解结果
-
-false
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Code
-
-string
-
-状态码
-
-successful
-
-Data
-
-object
-
-业务数据
-
-TaskId
-
-string
-
-任务唯一 ID
-
-e5a1a59c82d0454fad6454e8a04d0093
-
-Step
-
-string
-
-当前所处状态
-
-clips
-
-Status
-
-integer
-
-状态
-
-0-待执行、1-执行中、2-执行成功、3-暂停、4-执行失败-可重试、5-执行失败-不可重试,6-任务取消
-
-Content
-
-string
-
-全部口播内容
-
-口播内容
-
-Timelines
-
-array<object>
-
-口播时间线数组
-
-array<object>
-
-口播时间线
-
-TimelineId
-
-string
-
-时间线 id
-
-20774ebd9abc71ef80486632b68f0102
-
-Content
-
-string
-
-口播内容
-
-口播内容
-
-Clips
-
-array<object>
-
-剪辑片段数组
-
-object
-
-剪辑片段
-
-ClipId
-
-string
-
-剪辑 Id
-
-20774ebd9abc71ef80486632b68f0102
-
-VideoName
-
-string
-
-视频名字
-
-123.mp4
-
-VideoId
-
-string
-
-视频 Id
-
-20774ebd9abc71ef80486632b68f0102
-
-In
-
-integer
-
-片段开始时间（秒）已经废弃
-
-0
-
-Out
-
-integer
-
-片段结束时间（秒）已经废弃
-
-5
-
-ContentInner
-
-string
-
-口播分段内容
-
-口播分段内容
-
-InEx
-
-number
-
-片段开始时间（毫秒）
-
-0.33
-
-OutEx
-
-number
-
-片段结束时间 (毫秒)
-
-3.45
-
-VoiceStyle
-
-string
-
-口播声音类型
-
-温柔女声
-
-MusicStyle
-
-string
-
-推荐音乐类型
-
-国风
-
-MusicUrl
-
-string
-
-背景音乐地址
-
-[http://music.mp4](http://music.mp4)
-
-MusicVolume
-
-integer
-
-音乐音量
-
-5
-
-VoiceVolume
-
-integer
-
-口播音量
-
-5
-
-SubtitleFontSize
-
-integer
-
-字幕大小
-
-5
-
-OutputVideoUrl
-
-string
-
-成片地址
-
-[http://output.mp4](http://output.mp4)
-
-MediaCloudTimeline
-
-string
-
-视频云 timeline
-
-视频云格式timeline
-
-ColorWords
-
-array<object>
-
-花字信息数组
-
-object
-
-花字信息元素
-
-Content
-
-string
-
-花字内容
-
-花字内容
-
-TimelineIn
-
-integer
-
-花字开始时间（秒）
-
-0
-
-TimelineOut
-
-integer
-
-花字结束时间（秒）
-
-5
-
-X
-
-number
-
-花字位置横坐标
-
-0.2
-
-Y
-
-number
-
-花字位置纵坐标
-
-0.5
-
-FontSize
-
-integer
-
-花字大小
-
-5
-
-EffectColorStyle
-
-string
-
-花字效果
-
-CS0002-000008
-
-ErrorMessage
-
-string
-
-错误信息
-
-错误信息
-
-CloseVoice
-
-boolean
-
-关闭口播
-
-CloseSubtitle
-
-boolean
-
-关闭字幕
-
-CloseMusic
-
-boolean
-
-关闭音乐
-
-CustomVoiceUrl
-
-string
-
-自定义声道文件地址
-
-http://xxx/xxx.mp4
-
-CustomVoiceVolume
-
-integer
-
-自定义声道音量
-
-0
-
-Stickers
-
-array<object>
-
-贴纸数组
-
-object
-
-贴纸结构
-
-Url
-
-string
-
-贴纸 gif 文件地址
-
-http://xxx/xxx.gif
-
-TimelineIn
-
-integer
-
-贴纸开始时间（秒）
-
-10
-
-Duration
-
-integer
-
-贴纸出现时长
-
-10
-
-X
-
-number
-
-贴纸出现位置横坐标
-
-100
-
-Y
-
-number
-
-贴纸出现位置纵坐标
-
-100
-
-Width
-
-integer
-
-贴纸宽度
-
-200
-
-Height
-
-integer
-
-贴纸高度
-
-200
-
-DyncFrames
-
-integer
-
-贴纸高度
-
-8
-
-CustomVoiceStyle
-
-string
-
-cosyvoice 的音色
-
-longxian\_normal
-
-OutputVideoFileKey
-
-string
-
-输出结果 fileKey
-
-oss://xxx/xxx.mp4
-
-OpeningCreditsUrl
-
-string
-
-片头视频地址
-
-http://xxx/xxx.mp4
-
-ClosingCreditsUrl
-
-string
-
-片尾视频地址
-
-http://xxx/xxx.mp4
-
-SourceVideos
-
-array<object>
-
-剪辑素材结构列表
-
-object
-
-剪辑素材结构
-
-VideoId
-
-string
-
-视频 ID
-
-fdaswe
-
-VideoName
-
-string
-
-视频名称
-
-video001.mp4
-
-VideoUrl
-
-string
-
-视频地址。
-
-http://xxx/xxx.mp4
-
-ReferenceVideo
-
-object
-
-参考视频信息
-
-VideoId
-
-string
-
-视频 ID
-
-90ca686b11c371f08339752281ed0102
-
-VideoName
-
-string
-
-视频名称
-
-video001.mp4
-
-VideoUrl
-
-string
-
-视频 URL
-
-http://xxx/xxx.mp4
-
-AnalysisResults
-
-array<object>
-
-视频理解结果列表
-
-array<object>
-
-视频理解结果
-
-MediaId
-
-string
-
-视频 Id
-
-975e1d91a8d057e132cc5d88e4d5b360
-
-MediaName
-
-string
-
-视频名字
-
-video001.mp4
-
-MediaUrl
-
-string
-
-视频地址
-
-http://xxx/xxx.mp4
-
-LensInfos
-
-array<object>
-
-镜头信息列表
-
-array<object>
-
-镜头信息
-
-StartTime
-
-object
-
-开始时间
-
-Hour
-
-integer
-
-小时
-
-2
-
-Minute
-
-integer
-
-分钟
-
-1
-
-Second
-
-integer
-
-秒
-
-30
-
-MillSecond
-
-integer
-
-毫秒
-
-100
-
-EndTime
-
-object
-
-结束时间
-
-Hour
-
-integer
-
-时
-
-2
-
-Minute
-
-integer
-
-分
-
-1
-
-Second
-
-integer
-
-秒
-
-30
-
-MillSecond
-
-integer
-
-毫秒
-
-100
-
-AnalysisContent
-
-string
-
-理解内容
-
-视频理解内容
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Code | string | 状态码 | successful |
+| Data | object | 业务数据 |  |
+| TaskId | string | 任务唯一 ID | e5a1a59c82d0454fad6454e8a04d0093 |
+| Step | string | 当前所处状态 | clips |
+| Status | integer | 状态 | 0-待执行、1-执行中、2-执行成功、3-暂停、4-执行失败-可重试、5-执行失败-不可重试,6-任务取消 |
+| Content | string | 全部口播内容 | 口播内容 |
+| Timelines | array<object> | 口播时间线数组 |  |
+|  | array<object> | 口播时间线 |  |
+| TimelineId | string | 时间线 id | 20774ebd9abc71ef80486632b68f0102 |
+| Content | string | 口播内容 | 口播内容 |
+| Clips | array<object> | 剪辑片段数组 |  |
+|  | object | 剪辑片段 |  |
+| ClipId | string | 剪辑 Id | 20774ebd9abc71ef80486632b68f0102 |
+| VideoName | string | 视频名字 | 123.mp4 |
+| VideoId | string | 视频 Id | 20774ebd9abc71ef80486632b68f0102 |
+| In | integer | 片段开始时间（秒）已经废弃 | 0 |
+| Out | integer | 片段结束时间（秒）已经废弃 | 5 |
+| ContentInner | string | 口播分段内容 | 口播分段内容 |
+| InEx | number | 片段开始时间（毫秒） | 0.33 |
+| OutEx | number | 片段结束时间 (毫秒) | 3.45 |
+| VoiceStyle | string | 口播声音类型 | 温柔女声 |
+| MusicStyle | string | 推荐音乐类型 | 国风 |
+| MusicUrl | string | 背景音乐地址 | [http://music.mp4](http://music.mp4) |
+| MusicVolume | integer | 音乐音量 | 5 |
+| VoiceVolume | integer | 口播音量 | 5 |
+| SubtitleFontSize | integer | 字幕大小 | 5 |
+| OutputVideoUrl | string | 成片地址 | [http://output.mp4](http://output.mp4) |
+| MediaCloudTimeline | string | 视频云 timeline | 视频云格式timeline |
+| ColorWords | array<object> | 花字信息数组 |  |
+|  | object | 花字信息元素 |  |
+| Content | string | 花字内容 | 花字内容 |
+| TimelineIn | integer | 花字开始时间（秒） | 0 |
+| TimelineOut | integer | 花字结束时间（秒） | 5 |
+| X | number | 花字位置横坐标 | 0.2 |
+| Y | number | 花字位置纵坐标 | 0.5 |
+| FontSize | integer | 花字大小 | 5 |
+| EffectColorStyle | string | 花字效果 | CS0002-000008 |
+| ErrorMessage | string | 错误信息 | 错误信息 |
+| CloseVoice | boolean | 关闭口播 |  |
+| CloseSubtitle | boolean | 关闭字幕 |  |
+| CloseMusic | boolean | 关闭音乐 |  |
+| CustomVoiceUrl | string | 自定义声道文件地址 | http://xxx/xxx.mp4 |
+| CustomVoiceVolume | integer | 自定义声道音量 | 0 |
+| Stickers | array<object> | 贴纸数组 |  |
+|  | object | 贴纸结构 |  |
+| Url | string | 贴纸 gif 文件地址 | http://xxx/xxx.gif |
+| TimelineIn | integer | 贴纸开始时间（秒） | 10 |
+| Duration | integer | 贴纸出现时长 | 10 |
+| X | number | 贴纸出现位置横坐标 | 100 |
+| Y | number | 贴纸出现位置纵坐标 | 100 |
+| Width | integer | 贴纸宽度 | 200 |
+| Height | integer | 贴纸高度 | 200 |
+| DyncFrames | integer | 贴纸高度 | 8 |
+| CustomVoiceStyle | string | cosyvoice 的音色 | longxian\_normal |
+| OutputVideoFileKey | string | 输出结果 fileKey | oss://xxx/xxx.mp4 |
+| OpeningCreditsUrl | string | 片头视频地址 | http://xxx/xxx.mp4 |
+| ClosingCreditsUrl | string | 片尾视频地址 | http://xxx/xxx.mp4 |
+| SourceVideos | array<object> | 剪辑素材结构列表 |  |
+|  | object | 剪辑素材结构 |  |
+| VideoId | string | 视频 ID | fdaswe |
+| VideoName | string | 视频名称 | video001.mp4 |
+| VideoUrl | string | 视频地址。 | http://xxx/xxx.mp4 |
+| ReferenceVideo | object | 参考视频信息 |  |
+| VideoId | string | 视频 ID | 90ca686b11c371f08339752281ed0102 |
+| VideoName | string | 视频名称 | video001.mp4 |
+| VideoUrl | string | 视频 URL | http://xxx/xxx.mp4 |
+| AnalysisResults | array<object> | 视频理解结果列表 |  |
+|  | array<object> | 视频理解结果 |  |
+| MediaId | string | 视频 Id | 975e1d91a8d057e132cc5d88e4d5b360 |
+| MediaName | string | 视频名字 | video001.mp4 |
+| MediaUrl | string | 视频地址 | http://xxx/xxx.mp4 |
+| LensInfos | array<object> | 镜头信息列表 |  |
+|  | array<object> | 镜头信息 |  |
+| StartTime | object | 开始时间 |  |
+| Hour | integer | 小时 | 2 |
+| Minute | integer | 分钟 | 1 |
+| Second | integer | 秒 | 30 |
+| MillSecond | integer | 毫秒 | 100 |
+| EndTime | object | 结束时间 |  |
+| Hour | integer | 时 | 2 |
+| Minute | integer | 分 | 1 |
+| Second | integer | 秒 | 30 |
+| MillSecond | integer | 毫秒 | 100 |
+| AnalysisContent | string | 理解内容 | 视频理解内容 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -771,7 +168,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "RequestId": "1813ceee-7fe5-41b4-87e5-982a4d18cca5",
   "Code": "successful",
@@ -882,25 +281,21 @@ true
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-**HTTP status code**
-
-**错误码**
-
-**错误信息**
-
-**描述**
-
-403
-
-NoPermission
-
-You are not authorized to perform this action.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

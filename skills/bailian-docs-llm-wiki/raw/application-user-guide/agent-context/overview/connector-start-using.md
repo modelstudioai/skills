@@ -1,4 +1,4 @@
 # 开始使用
 
--   [快速开始](raw/application-user-guide/agent-context/overview/connector-start-using/quickstart.md)
--   [核心概念](raw/application-user-guide/agent-context/overview/connector-start-using/concepts.md)
+-   [快速开始](connector-start-using/quickstart.md)
+-   [核心概念](connector-start-using/concepts.md)

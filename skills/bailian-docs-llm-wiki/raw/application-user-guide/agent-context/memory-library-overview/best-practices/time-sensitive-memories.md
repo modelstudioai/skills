@@ -6,11 +6,17 @@
 
 本文介绍一种实测有效的做法：利用记忆自带的**时间戳**，让模型在回答时感知每条记忆距当前的时间。
 
+<a id="记忆的时间戳"></a>
+
+<a id="h-ts-mem-timestamp"></a>
+
 ## 记忆的时间戳
 
-每条记忆节点都带有 `timestamp` 字段（Unix 秒级时间戳），在[检索记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)、[列出记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/list-memory.md)、[获取记忆节点](raw/application-api-reference/long-term-memory-new/fragments-overview/get-memory-node.md)的响应中均返回：
+每条记忆节点都带有 `timestamp` 字段（Unix 秒级时间戳），在[检索记忆](../../../../application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)、[列出记忆](../../../../application-api-reference/long-term-memory-new/fragments-overview/list-memory.md)、[获取记忆节点](../../../../application-api-reference/long-term-memory-new/fragments-overview/get-memory-node.md)的响应中均返回：
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "memory_node_id": "7cf9b14c4e5b42b183bfb5630b69151d",
   "content": "用户处于脚踝扭伤恢复期，暂停下肢高强度训练",
@@ -22,6 +28,10 @@
 -   `timestamp` 是**消息发生时间**（服务端接收该轮对话的时间），`created_at` 是记忆写入时间。正常实时接入时两者接近，以 `timestamp` 为准。
 -   `timestamp` 由服务端记录，调用方不能指定。如需回填历史对话并保留原始时间，可将原始日期写入记忆正文（例如“（2026-09-01）用户……”）作为替代。
 
+<a id="推荐做法"></a>
+
+<a id="h-ts-mem-practice"></a>
+
 ## 推荐做法
 
 检索召回记忆后，将时间戳格式化为可读日期，连同**当前日期**和**时效性指令**一起注入系统提示词：
@@ -32,9 +42,13 @@
 
 仅附加时间戳而不加时效指令时，多数模型会忽略日期、仍按当前事实作答；两者需要同时使用。
 
-**说明**检索默认 `min_score=0.3`（pro 计划），可能过滤掉语义相关但分数不高的记忆。召回结果为空时，先调低 `min_score` 排查，详见[检索记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)。
+> **说明**
+>
+> 检索默认 `min_score=0.3`（pro 计划），可能过滤掉语义相关但分数不高的记忆。召回结果为空时，先调低 `min_score` 排查，详见[检索记忆](../../../../application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)。
 
-```
+<a id="code-block-2"></a>
+
+```python
 from datetime import datetime
 import requests
 
@@ -71,29 +85,31 @@ answer = requests.post(LLM_URL, headers=HEADERS, json={
 }).json()
 ```
 
+<a id="效果对比"></a>
+
+<a id="h-ts-mem-compare"></a>
+
 ## 效果对比
 
 以一条 6 周前写入的记忆“用户处于脚踝扭伤恢复期，暂停下肢高强度训练”为例，用户提问“今天想安排深蹲训练，可以吗”：
 
-注入方式
+| 注入方式 | 模型表现 |
+| --- | --- |
+| 只注入记忆正文 | 直接按当前事实劝阻：“不建议，您正处于恢复期” |
+| 注入正文 + 记录时间 | 仍会按当前事实作答，时间信息未被使用 |
+| 正文 + 记录时间 + 时效指令 | 能识别记忆已过期：“该记录已是 6 周前，一般扭伤恢复期已结束，可以从轻重量开始尝试” |
 
-模型表现
+<a id="配合记忆过期时间"></a>
 
-只注入记忆正文
-
-直接按当前事实劝阻：“不建议，您正处于恢复期”
-
-注入正文 + 记录时间
-
-仍会按当前事实作答，时间信息未被使用
-
-正文 + 记录时间 + 时效指令
-
-能识别记忆已过期：“该记录已是 6 周前，一般扭伤恢复期已结束，可以从轻重量开始尝试”
+<a id="h-ts-mem-ttl"></a>
 
 ## 配合记忆过期时间
 
-时间戳注入解决的是**模型推理层面**的时效判断。如果某类记忆到期后应彻底不可召回，可在记忆规则上配置**记忆过期时间**（7 天 / 30 天 / 180 天 / 永不过期，见[配置记忆规则](raw/application-user-guide/agent-context/memory-library-overview/create-memory/configure-rules.md)），到期后记忆自动失效，不再参与检索。两者可以叠加使用：过期时间负责硬失效，时间戳负责让模型对仍在有效期内的记忆做出时间感知。
+时间戳注入解决的是**模型推理层面**的时效判断。如果某类记忆到期后应彻底不可召回，可在记忆规则上配置**记忆过期时间**（7 天 / 30 天 / 180 天 / 永不过期，见[配置记忆规则](../create-memory/configure-rules.md)），到期后记忆自动失效，不再参与检索。两者可以叠加使用：过期时间负责硬失效，时间戳负责让模型对仍在有效期内的记忆做出时间感知。
+
+<a id="适用范围"></a>
+
+<a id="h-ts-mem-scope"></a>
 
 ## 适用范围
 

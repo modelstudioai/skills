@@ -2,11 +2,19 @@
 
 保存用户写作信源配置，通用搜索信源配置的配置信息。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SaveDataSourceOrderConfig)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,205 +33,35 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:SaveDataSourceOrderConfig</td><td>create</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:SaveDataSourceOrderConfig
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>AgentKey</td><td>string</td><td>是</td><td><div><p>业务空间唯一标识： <a href="https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey">AgentKey</a></p></div></td><td>c160c841c8e54295bf2f441432785944_p_efm</td></tr><tr><td>ProductCode</td><td>string</td><td>是</td><td><div><p>产品类型，可选值如下：</p><ul><li><p>miaobi</p></li><li><p>miaosou</p></li></ul></div></td><td>miaobi</td></tr><tr><td>UserConfigDataSourceList</td><td>array&lt;object&gt;</td><td>是</td><td><div><p>用户数据源配置</p></div></td><td></td></tr><tr><td>UserConfigDataSourceList</td><td>object</td><td>是</td><td></td><td></td></tr><tr><td>Code</td><td>string</td><td>是</td><td><div><p>code 描述</p></div></td><td>QuarkCommonNews</td></tr><tr><td>Name</td><td>string</td><td>否</td><td><div><p>显示名称</p></div></td><td>夸克通用搜索</td></tr><tr><td>Number</td><td>integer</td><td>是</td><td><div><p>数量</p></div></td><td>20</td></tr><tr><td>Type</td><td>string</td><td>是</td><td><div><p>type 类型</p></div></td><td>SystemSearch</td></tr><tr><td>Enable</td><td>boolean</td><td>否</td><td><div><p>是否启用</p></div></td><td></td></tr><tr><td>GenerateTechnology</td><td>string</td><td>否</td><td><div><p>productCode=miaosou 时，对应妙搜：生成技术</p><p>可选值如下：</p><ul><li><p>copilotPrecise</p></li><li><p>copilotReference</p></li></ul></div></td><td>copilotReference</td></tr></tbody></table>
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-AgentKey
-
-string
-
-是
-
-业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
-
-c160c841c8e54295bf2f441432785944\_p\_efm
-
-ProductCode
-
-string
-
-是
-
-产品类型，可选值如下：
-
--   miaobi
-    
--   miaosou
-    
-
-miaobi
-
-UserConfigDataSourceList
-
-array<object>
-
-是
-
-用户数据源配置
-
-UserConfigDataSourceList
-
-object
-
-是
-
-Code
-
-string
-
-是
-
-code 描述
-
-QuarkCommonNews
-
-Name
-
-string
-
-否
-
-显示名称
-
-夸克通用搜索
-
-Number
-
-integer
-
-是
-
-数量
-
-20
-
-Type
-
-string
-
-是
-
-type 类型
-
-SystemSearch
-
-Enable
-
-boolean
-
-否
-
-是否启用
-
-GenerateTechnology
-
-string
-
-否
-
-productCode=miaosou 时，对应妙搜：生成技术
-
-可选值如下：
-
--   copilotPrecise
-    
--   copilotReference
-    
-
-copilotReference
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PlainResult |  |
+| Code | string | 状态码 | successful |
+| Data | boolean | 业务数据 | true |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | successful |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-PlainResult
-
-Code
-
-string
-
-状态码
-
-successful
-
-Data
-
-boolean
-
-业务数据
-
-true
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-successful
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -231,7 +69,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Code": "successful",
   "Data": true,
@@ -241,6 +81,10 @@ true
   "Success": true
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

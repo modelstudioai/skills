@@ -2,15 +2,27 @@
 
 流式答题解析接口，客户输入需要解答题题目文本或图片，算法会返回题目详细的解答内容。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 开通 EduTutor 服务。本接口在公测阶段，每个账号每天可以免费调用 1000 次。
+
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
 
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/EduTutor/2025-07-07/AnswerSSE)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -29,271 +41,80 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>edututor:AnswerSSE</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-edututor:AnswerSSE
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /service/answerSSE HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 当前请求所使用的百炼业务空间 id。 | llm-1ijrzuv3v0ivvls7 |
+| body | object | 否 | 请求 body。 |  |
+| messages | array<object> | 否 | 多轮对话内容。 |  |
+|  | object | 否 |  |  |
+| role | string | 是 | 当前对话的角色。 | user |
+| content | array<object> | 否 | 当前对话内容。 |  |
+|  | object | 否 | 对话内容，可以是文本（text）、图片（image）。 |  |
+|  | string | 否 | 文本或图片链接。 | {"image": "image-url"} {"text": "回答这个问题"} |
+| parameters | object | 否 | 参数配置。 |  |
+| grade | integer | 否 | 年级，输入为整型数字，可选如下： 0--学前、 1--一年级、 2--二年级、 3--三年级、 4--四年级、 5--五年级、 6--六年级、 7--七年级（初一）、 8--八年级（初二）、 9--九年级（初三）、 10--高一、 11--高二、 12--高三、 14--大学一年级、 15--大学二年级、 16--大学三年级、 17--大学四年级、 99--其他。 | 6 |
+| stage | string | 否 | 学段。 | other |
+| subject | string | 否 | 学科名称。 | other |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-当前请求所使用的百炼业务空间 id。
-
-llm-1ijrzuv3v0ivvls7
-
-body
-
-object
-
-否
-
-请求 body。
-
-messages
-
-array<object>
-
-否
-
-多轮对话内容。
-
-object
-
-否
-
-role
-
-string
-
-是
-
-当前对话的角色。
-
-user
-
-content
-
-array<object>
-
-否
-
-当前对话内容。
-
-object
-
-否
-
-对话内容，可以是文本（text）、图片（image）。
-
-string
-
-否
-
-文本或图片链接。
-
-{"image": "image-url"} {"text": "回答这个问题"}
-
-parameters
-
-object
-
-否
-
-参数配置。
-
-grade
-
-integer
-
-否
-
-年级，输入为整型数字，可选如下： 0--学前、 1--一年级、 2--二年级、 3--三年级、 4--四年级、 5--五年级、 6--六年级、 7--七年级（初一）、 8--八年级（初二）、 9--九年级（初三）、 10--高一、 11--高二、 12--高三、 14--大学一年级、 15--大学二年级、 16--大学三年级、 17--大学四年级、 99--其他。
-
-6
-
-stage
-
-string
-
-否
-
-学段。
-
-other
-
-subject
-
-string
-
-否
-
-学科名称。
-
-other
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| requestId | string | 请求 id，每次请求都是唯一值，便于后续排查问题。 | CED92479-FFA7-5B8F-AE6F-C8693BB4941C |
+| success | boolean | 调用是否成功。 | True |
+| code | string | 响应状态码。 | SUCCESS |
+| httpStatusCode | integer | http 状态码。 | 200 |
+| message | string | 返回码描述。 | success |
+| data | string | 返回结果。 | '{"message": {"content": \[{"text": "### 【考点分析】：\\\\n本题涉及的核心知识点包括代数表达式的简化和代值计算。题目给出了 \\\\\\\\(a + b = -1\\\\\\\\) 和 \\\\\\\\(ab = 4\\\\\\\\) 两个条件，要求我们求解表达式 \\\\\\\\((4a - 5b - 3ab) - (3a - 6b + ab)\\\\\\\\) 的值。这类题目常见于代数基础部分，考查学生对代数式的基本运算和代入法的掌握。\\\\n\\\\n### 【方法点拨】：\\\\n1. \*\*简化表达式\*\*：首先对给定的表达式进行简化，合并同类项。\\\\n2. \*\*代入已知条件\*\*：将 \\\\\\\\(a + b = -1\\\\\\\\) 和 \\\\\\\\(ab = 4\\\\\\\\) 代入简化后的表达式中，进行计算。\\\\n3. \*\*逐步求解\*\*：通过逐步代入和计算，得到最终结果。\\\\n\\\\n### 【详细解析】：\\\\n\\\\n#### 第一步：简化表达式\\\\n表达式为 \\\\\\\\((4a - 5b - 3ab) - (3a - 6b + ab)\\\\\\\\)。\\\\n\\\\n先去掉括号并合并同类项：\\\\n\\\\\\\\\[\\\\n(4a - 5b - 3ab) - (3a - 6b + ab) = 4a - 5b - 3ab - 3a + 6b - ab\\\\n\\\\\\\\\]\\\\n\\\\n合并同类项：\\\\n\\\\\\\\\[\\\\n= (4a - 3a) + (-5b + 6b) + (-3ab - ab) = a + b - 4ab\\\\n\\\\\\\\\]\\\\n\\\\n#### 第二步：代入已知条件\\\\n根据题目条件 \\\\\\\\(a + b = -1\\\\\\\\) 和 \\\\\\\\(ab = 4\\\\\\\\)，将这些值代入简化后的表达式：\\\\n\\\\\\\\\[\\\\na + b - 4ab = -1 - 4 \\\\\\\\times 4 = -1 - 16 = -17\\\\n\\\\\\\\\]\\\\n\\\\n#### 第三步：得出最终结果\\\\n因此，表达式的值为 \\\\\\\\(-17\\\\\\\\)。\\\\n\\\\n### 【最终答案】:\\\\n\\\\\\\\(\\\\\\\\boxed{-17}\\\\\\\\) \\\\n\\\\n所以，该表达式的值为 \\\\\\\\(\\\\\\\\boxed{-17}\\\\\\\\)。"}\], "role": "assistant"}}' |
+| finish\_reason | string | 流式输出标志位，用于判断流式输出是否结果，结束时返回 stop。 | stop |
+| input\_tokens | integer | 此次调用输入消耗的 token 数。 | 654 |
+| output\_tokens | integer | 此次调用输出消耗的 token 数。 | 457 |
 
-类型
+<a id="算法结果字段-data"></a>
 
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-requestId
-
-string
-
-请求 id，每次请求都是唯一值，便于后续排查问题。
-
-CED92479-FFA7-5B8F-AE6F-C8693BB4941C
-
-success
-
-boolean
-
-调用是否成功。
-
-True
-
-code
-
-string
-
-响应状态码。
-
-SUCCESS
-
-httpStatusCode
-
-integer
-
-http 状态码。
-
-200
-
-message
-
-string
-
-返回码描述。
-
-success
-
-data
-
-string
-
-返回结果。
-
-'{"message": {"content": \[{"text": "### 【考点分析】：\\\\n本题涉及的核心知识点包括代数表达式的简化和代值计算。题目给出了 \\\\\\\\(a + b = -1\\\\\\\\) 和 \\\\\\\\(ab = 4\\\\\\\\) 两个条件，要求我们求解表达式 \\\\\\\\((4a - 5b - 3ab) - (3a - 6b + ab)\\\\\\\\) 的值。这类题目常见于代数基础部分，考查学生对代数式的基本运算和代入法的掌握。\\\\n\\\\n### 【方法点拨】：\\\\n1. \*\*简化表达式\*\*：首先对给定的表达式进行简化，合并同类项。\\\\n2. \*\*代入已知条件\*\*：将 \\\\\\\\(a + b = -1\\\\\\\\) 和 \\\\\\\\(ab = 4\\\\\\\\) 代入简化后的表达式中，进行计算。\\\\n3. \*\*逐步求解\*\*：通过逐步代入和计算，得到最终结果。\\\\n\\\\n### 【详细解析】：\\\\n\\\\n#### 第一步：简化表达式\\\\n表达式为 \\\\\\\\((4a - 5b - 3ab) - (3a - 6b + ab)\\\\\\\\)。\\\\n\\\\n先去掉括号并合并同类项：\\\\n\\\\\\\\\[\\\\n(4a - 5b - 3ab) - (3a - 6b + ab) = 4a - 5b - 3ab - 3a + 6b - ab\\\\n\\\\\\\\\]\\\\n\\\\n合并同类项：\\\\n\\\\\\\\\[\\\\n= (4a - 3a) + (-5b + 6b) + (-3ab - ab) = a + b - 4ab\\\\n\\\\\\\\\]\\\\n\\\\n#### 第二步：代入已知条件\\\\n根据题目条件 \\\\\\\\(a + b = -1\\\\\\\\) 和 \\\\\\\\(ab = 4\\\\\\\\)，将这些值代入简化后的表达式：\\\\n\\\\\\\\\[\\\\na + b - 4ab = -1 - 4 \\\\\\\\times 4 = -1 - 16 = -17\\\\n\\\\\\\\\]\\\\n\\\\n#### 第三步：得出最终结果\\\\n因此，表达式的值为 \\\\\\\\(-17\\\\\\\\)。\\\\n\\\\n### 【最终答案】:\\\\n\\\\\\\\(\\\\\\\\boxed{-17}\\\\\\\\) \\\\n\\\\n所以，该表达式的值为 \\\\\\\\(\\\\\\\\boxed{-17}\\\\\\\\)。"}\], "role": "assistant"}}'
-
-finish\_reason
-
-string
-
-流式输出标志位，用于判断流式输出是否结果，结束时返回 stop。
-
-stop
-
-input\_tokens
-
-integer
-
-此次调用输入消耗的 token 数。
-
-654
-
-output\_tokens
-
-integer
-
-此次调用输出消耗的 token 数。
-
-457
+<a id="responseParamsSupplement"></a>
 
 ### 算法结果字段 data
 
 -   需要序列化，字段说明如下：
 
-名称
-
-类型
-
-描述
-
-示例值
-
-message
-
-array
-
-message\[0\].content
-
-array
-
-message\[0\].content\[0\].text
-
-string
-
-大模型解题结果。
-
-"### 【考点分析】：\\n 本题涉及的核心知识点包括代数表..."
-
-message\[0\].role
-
-string
-
-角色。
-
-"assistant"
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+| message | array |  |  |
+| message\[0\].content | array |  |  |
+| message\[0\].content\[0\].text | string | 大模型解题结果。 | "### 【考点分析】：\\n 本题涉及的核心知识点包括代数表..." |
+| message\[0\].role | string | 角色。 | "assistant" |
 
 举例如下：
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "message": {
       "content": [
@@ -306,13 +127,19 @@ string
 }
 ```
 
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
+
 ## 示例
 
 正常返回示例
 
 `JSON`格式
 
-```
+<a id="code-block-3"></a>
+
+```text
 {
   "requestId": "CED92479-FFA7-5B8F-AE6F-C8693BB4941C",
   "success": true,
@@ -326,16 +153,21 @@ string
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/EduTutor/2025-07-07/errorCode)查看更多错误码。
 
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
+
 ## 变更历史
 
-变更时间
-
-变更内容概要
-
-操作
+| 变更时间 | 变更内容概要 | 操作 |
+| --- | --- | --- |
 
 暂无变更历史

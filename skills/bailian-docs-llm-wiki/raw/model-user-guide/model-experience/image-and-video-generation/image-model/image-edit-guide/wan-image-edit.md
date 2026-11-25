@@ -2,35 +2,49 @@
 
 万相图像编辑模型系列支持多图输入与多图输出，通过文本指令实现图像编辑、多图融合、主体特征保持、目标检测与分割等能力。
 
+<a id="快速开始"></a>
+
+<a id="title-quickstart"></a>
+
 ## 快速开始
 
 本示例将演示如何使用`wan2.7-image-pro`模型，基于2张输入图片和提示词生成编辑后的图像。
 
 > 提示词：把图2的涂鸦喷绘在图1的汽车上
 
-**输入图像1**
+| 输入图像1 | 输入图像2 | 输出图像（wan2.7-image-pro） |
+| --- | --- | --- |
+| ![umbrella](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039710.webp) | ![input2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039712.webp) | ![1774509357\_902b1408-2026-03-30-16-12-31](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1063463.webp) |
 
-**输入图像2**
+在调用前，先[获取与配置 API Key](../../../../../model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如需通过SDK进行调用，请[安装DashScope SDK](../../../../../model-api-reference/preparations/install-sdk.md)。
 
-**输出图像（wan2.7-image-pro）**
+<a id="sec-tabs"></a>
 
-![umbrella](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039710.webp)
+<a id="同步调用"></a>
 
-![input2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039712.webp)
-
-![1774509357\_902b1408-2026-03-30-16-12-31](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1063463.webp)
-
-在调用前，先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+<a id="同步调用-h4"></a>
 
 #### 同步调用
 
-**重要****请确保 DashScope Python SDK 版本不低于**`2.1.0`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
+> **重要**
+>
+> **请确保 DashScope Python SDK 版本不低于**`2.1.0`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
+
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
+<a id="1f90197d8cagy"></a>
+
 ### 请求示例
 
-```
+<a id="code-block"></a>
+
+```python
 import os
 import base64
 import mimetypes
@@ -96,11 +110,15 @@ for i, image_url in enumerate(job.image_urls):
     print(f"Image saved to {file_name}")
 ```
 
+<a id="b0515f126ag6l"></a>
+
 ### 响应示例
 
 > URL 有效期24小时，请及时下载图像。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "request_id": "81d868c6-6ce1-92d8-a90d-d2ee71xxxxxx",
     "task_id": "127ec645-118f-4884-955d-0eba8dxxxxxx",
@@ -122,11 +140,19 @@ for i, image_url in enumerate(job.image_urls):
 }
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
+
+<a id="189e4d8658kmi"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-3"></a>
+
+```java
 import com.alibaba.dashscope.aigc.imagegeneration.*;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
@@ -240,11 +266,15 @@ public class Main {
 }
 ```
 
+<a id="e4fbc7f75d4gg"></a>
+
 ### 响应示例
 
 > URL 有效期24小时，请及时下载并保存图像。
 
-```
+<a id="code-block-4"></a>
+
+```java
 {
     "requestId": "1bf6173a-e8de-9f75-94d3-5e618f875xxx",
     "usage": {
@@ -277,11 +307,19 @@ public class Main {
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
+
+<a id="d2c90c950ejvd"></a>
 
 ##### 请求示例
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -307,9 +345,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="547d87944433t"></a>
+
 ##### 响应示例
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -339,15 +381,31 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="异步调用"></a>
+
+<a id="异步调用-h4"></a>
+
 #### 异步调用
 
-**重要****请确保 DashScope Python SDK 版本不低于**`2.1.0`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
+> **重要**
+>
+> **请确保 DashScope Python SDK 版本不低于**`2.1.0`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
+
+<a id="sec-tabs-3"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
+<a id="7bd0a67abeuuz"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-7"></a>
+
+```python
 import os
 import base64
 import mimetypes
@@ -439,11 +497,15 @@ if __name__ == "__main__":
     wait_for_completion(job)
 ```
 
+<a id="d5de68e40618u"></a>
+
 ### 响应示例
 
 1、创建任务的响应示例
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "request_id": "4fb3050f-de57-4a24-84ff-e37ee5xxxxxx",
     "task_id": "127ec645-118f-4884-955d-0eba8dxxxxxx",
@@ -455,7 +517,9 @@ if __name__ == "__main__":
 
 > URL 有效期24小时，请及时下载图像。
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "request_id": "3b99aae5-d26f-9059-8dd0-ee9ca4804xxx",
     "task_id": "127ec645-118f-4884-955d-0eba8dxxxxxx",
@@ -477,11 +541,19 @@ if __name__ == "__main__":
 }
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
+
+<a id="5ce97169950io"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-10"></a>
+
+```java
 import com.alibaba.dashscope.aigc.imagegeneration.*;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
@@ -607,11 +679,15 @@ public class Main {
 }
 ```
 
+<a id="02dea79668owz"></a>
+
 ### 响应示例
 
 1、创建任务的响应示例
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
     "requestId": "ccf4b2f4-bf30-9e13-9461-3a28c6a7bxxx",
     "output": {
@@ -628,7 +704,9 @@ public class Main {
 
 > URL 有效期24小时，请及时下载并保存图像。
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
     "requestId": "60a08540-f1c1-9e76-8cd3-d5949db8cxxx",
     "usage": {
@@ -666,11 +744,19 @@ public class Main {
 }
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
+
+<a id="wan27-async-step1-title"></a>
 
 ### 步骤1：创建任务获取任务ID
 
-```
+<a id="code-block-13"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -696,8 +782,12 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **响应示例**
-```
+
+<a id="code-block-14"></a>
+
+```json
 {
     "output": {
         "task_status": "PENDING",
@@ -707,21 +797,28 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="wan27-async-step2-title"></a>
+
 #### 步骤2：根据任务ID查询结果
 
 使用上一步获取的 `task_id`，通过接口轮询任务状态，直到 `task_status` 变为 SUCCEEDED 或 FAILED。
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-15"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
 **响应示例**
 
 > 图像URL有效期为24小时，请及时下载图像。
 
-```
+<a id="code-block-16"></a>
+
+```json
 {
     "request_id": "810fa5f5-334c-91f3-aaa4-ed89cf0caxxx",
     "output": {
@@ -758,21 +855,41 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 wan2.5-i2i-preview使用不同的API端点和参数传入方式，其调用示例如下：
 
+<a id="accordion-点击查看wan2-5-i2i-preview调用示例"></a>
+
 点击查看wan2.5-i2i-preview调用示例
+
+<a id="sec-tabs-4"></a>
+
+<a id="同步调用-2"></a>
+
+<a id="同步调用-2-h4"></a>
 
 #### 同步调用
 
-**重要****请确保 DashScope Python SDK 版本不低于**2.0.1**， DashScope Java SDK 版本不低于**`2.22.2`**。**
+> **重要**
+>
+> **请确保 DashScope Python SDK 版本不低于**2.0.1**， DashScope Java SDK 版本不低于**`2.22.2`**。**
+>
+> 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装或升级SDK](../../../../../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装或升级SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="sec-tabs-5"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
 
 #### Python
 
 本示例支持三种图像输入方式：**公网URL、Base64编码、本地文件路径**。
 
+<a id="b3db89a8696pz"></a>
+
 ##### 请求示例
 
-```
+<a id="code-block-17"></a>
+
+```text
 import base64
 import mimetypes
 from urllib.parse import urlparse, unquote
@@ -845,11 +962,15 @@ for result in job.results:
         f.write(requests.get(result.url).content)
 ```
 
+<a id="6e842f301amoi"></a>
+
 ##### 响应示例
 
 > url 有效期24小时，请及时下载图像。
 
-```
+<a id="code-block-18"></a>
+
+```text
 {
     "request_id": "8ad45834-4321-44ed-adf5-xxxxxx",
     "task_id": "3aff9ebd-35fc-4339-98a3-xxxxxx",
@@ -872,13 +993,21 @@ for result in job.results:
 }
 ```
 
+<a id="java-3"></a>
+
+<a id="java-3-h4"></a>
+
 #### Java
 
 本示例支持三种图像输入方式：公网URL、Base64编码、本地文件路径。
 
+<a id="237c0af5bdj68"></a>
+
 ##### 请求示例
 
-```
+<a id="code-block-19"></a>
+
+```text
 // Copyright (c) Alibaba, Inc. and its affiliates.
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesis;
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisResult;
@@ -999,11 +1128,15 @@ public class Image2Image {
 }
 ```
 
+<a id="5e411fb9fc9pu"></a>
+
 ##### 响应示例
 
 > url 有效期24小时，请及时下载图像。
 
-```
+<a id="code-block-20"></a>
+
+```text
 {
     "request_id": "d362685b-757f-4eac-bab5-xxxxxx",
     "output": {
@@ -1028,19 +1161,35 @@ public class Image2Image {
 }
 ```
 
+<a id="异步调用-2"></a>
+
+<a id="异步调用-2-h4"></a>
+
 #### 异步调用
 
-**重要****请确保 DashScope Python SDK 版本不低于**2.0.1**， DashScope Java SDK 版本不低于**`2.22.2`**。**
+> **重要**
+>
+> **请确保 DashScope Python SDK 版本不低于**2.0.1**， DashScope Java SDK 版本不低于**`2.22.2`**。**
+>
+> 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装或升级SDK](../../../../../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装或升级SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="sec-tabs-6"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
 
 #### Python
 
 本示例使用公网URL方式传入图片。
 
+<a id="b9b6d3bf42rc7"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-21"></a>
+
+```python
 import os
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
@@ -1107,11 +1256,15 @@ if __name__ == '__main__':
     async_call()
 ```
 
+<a id="4f9da575fdd1b"></a>
+
 ### 响应示例
 
 1、创建任务的响应示例
 
-```
+<a id="code-block-22"></a>
+
+```json
 {
     "request_id": "31b04171-011c-96bd-ac00-f0383b669cc7",
     "task_id": "4f90cf14-a34e-4eae-xxxxxxxx",
@@ -1123,7 +1276,9 @@ if __name__ == '__main__':
 
 > url 有效期24小时，请及时下载图像。
 
-```
+<a id="code-block-23"></a>
+
+```text
 {
     "request_id": "8ad45834-4321-44ed-adf5-xxxxxx",
     "task_id": "3aff9ebd-35fc-4339-98a3-xxxxxx",
@@ -1146,13 +1301,21 @@ if __name__ == '__main__':
 }
 ```
 
+<a id="java-4"></a>
+
+<a id="java-4-h4"></a>
+
 #### Java
 
 本示例默认使用公网URL方式传入图片。
 
+<a id="f7b9a75fbbo26"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-24"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesis;
@@ -1255,11 +1418,15 @@ public class Image2Image {
 }
 ```
 
+<a id="228c690525jkh"></a>
+
 ### 响应示例
 
 1、创建任务的响应示例
 
-```
+<a id="code-block-25"></a>
+
+```json
 {
 	"request_id": "5dbf9dc5-4f4c-9605-85ea-542f97709ba8",
 	"output": {
@@ -1273,7 +1440,9 @@ public class Image2Image {
 
 > url 有效期24小时，请及时下载图片。
 
-```
+<a id="code-block-26"></a>
+
+```text
 {
     "request_id": "d362685b-757f-4eac-bab5-xxxxxx",
     "output": {
@@ -1298,24 +1467,34 @@ public class Image2Image {
 }
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
 本示例包含创建任务和查询结果两个步骤。
 
-**说明**
+> **说明**
+>
+> -   异步调用必须设置 Header 参数`X-DashScope-Async` 为`enable`。
+> -   异步任务的 `task_id` 查询有效期为 24 小时，过期后任务状态将变为 `UNKNOWN`。
+> -   新手建议使用 [Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)调用API。
 
--   异步调用必须设置 Header 参数`X-DashScope-Async` 为`enable`。
--   异步任务的 `task_id` 查询有效期为 24 小时，过期后任务状态将变为 `UNKNOWN`。
--   新手建议使用 [Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)调用API。
+<a id="8ebfcd81c7uem"></a>
 
 #### 步骤1：发起创建任务请求
 
 该请求会返回一个任务ID（`task_id`）。
 
+<a id="16580067f1ofj"></a>
+
 ##### 请求示例
 
-```
-curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+<a id="code-block-27"></a>
+
+```text
+ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
@@ -1333,8 +1512,12 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **响应示例**
-```
+
+<a id="code-block-28"></a>
+
+```json
 {
     "output": {
         "task_status": "PENDING",
@@ -1344,23 +1527,30 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="23dce082faw3n"></a>
+
 #### 步骤2：根据任务ID查询结果
 
 使用上一步获取的 `task_id`，通过接口轮询任务状态，直到 `task_status` 变为 SUCCEEDED 或 FAILED。
 
 **请求示例**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-29"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
 **响应示例**
 
 > 图像URL有效期为24小时，请及时下载图像。
 
-```
+<a id="code-block-30"></a>
+
+```json
 {
     "request_id": "d1f2a1be-9c58-48af-b43f-xxxxxx",
     "output": {
@@ -1387,40 +1577,49 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
+<a id="模型选型"></a>
+
+<a id="title-model-selection"></a>
+
 ## 模型选型
 
 -   **wan2.7-image-pro、wan2.7-image**（推荐）：适合对编辑精度要求高、或需要生成多张内容连贯图像的场景。
     
-    -   [精准局部编辑](https://help.aliyun.com/zh/model-studio/wan-image-edit#f257e128e517d)：框选图中指定区域，对该区域的对象进行移动、替换或添加新元素，适用于电商修图、设计稿调整
+    -   [精准局部编辑](wan-image-edit.md#f257e128e517d)：框选图中指定区域，对该区域的对象进行移动、替换或添加新元素，适用于电商修图、设计稿调整
     -   多格连续图生成：一次输出多张风格统一的图像，适用于漫画分镜、产品系列图、故事连环图
 -   wan2.6-image：适合图文混排或带多张参考图的风格化编辑场景，支持在生成图像时生成对应文字内容，最多支持 4 张参考图输入。
     
 -   wan2.5-i2i-preview：适合简单的图像编辑和多图融合。
     
 
-各模型的输入和输出规格见[输入图像规格](https://help.aliyun.com/zh/model-studio/wan-image-edit#title-input-images)、[输出图像分辨率](https://help.aliyun.com/zh/model-studio/wan-image-edit#ebc41fe492cyx)。
+各模型的输入和输出规格见[输入图像规格](wan-image-edit.md#title-input-images)、[输出图像分辨率](wan-image-edit.md#ebc41fe492cyx)。
+
+<a id="效果展示"></a>
+
+<a id="title-features"></a>
 
 ## 效果展示
 
+<a id="图生组图"></a>
+
+<a id="909dbca612c2i"></a>
+
 ### 图生组图
 
-**输入图像**
+| 输入图像 | 输出图像 |
+| --- | --- |
+| ![Wan\_图片生成\_一位 20 岁的东亚男性，头发是卷卷的半长发，文艺气质，五官立体，眉眼清秀，穿着简约白色 T 恤或浅蓝色衬衫，少年感，自然气质。-2026-03-31-19-26-24](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064359.webp) | ![output](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064360.webp) |
+| ![wan\_image\_reqid\_57d7a71c-1932-4de8-8c32-be0f3fd5696f\_n1-2026-03-31-19-32-44](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064362.webp) | ![output](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064361.webp) |
 
-**输出图像**
-
-![Wan\_图片生成\_一位 20 岁的东亚男性，头发是卷卷的半长发，文艺气质，五官立体，眉眼清秀，穿着简约白色 T 恤或浅蓝色衬衫，少年感，自然气质。-2026-03-31-19-26-24](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064359.webp)
-
-![output](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064360.webp)
-
-![wan\_image\_reqid\_57d7a71c-1932-4de8-8c32-be0f3fd5696f\_n1-2026-03-31-19-32-44](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064362.webp)
-
-![output](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064361.webp)
+<a id="accordion-点击查看提示词"></a>
 
 点击查看提示词
 
 案例1：摄影写真
 
-```
+<a id="code-block-31"></a>
+
+```text
 基础人物设定：一位 20 岁的东亚男性，头发是卷卷的半长发，文艺气质，五官立体，眉眼清秀，穿着简约白色 T 恤或浅蓝色衬衫，少年感，自然气质。
 1. 民国文人风 (Republic Era Scholar)
 提示词：
@@ -1455,7 +1654,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 案例2：视觉设计
 
-```
+<a id="code-block-32"></a>
+
+```text
 图1：一张商业级产品摄影主视觉封面图，正视全景构图，一款复古未来主义风格的无线头戴式耳机悬浮于几何石膏体之上，耳机呈现完全对称美学，材质为香槟金金属与奶油白外壳，背景为深度虚化的温暖室内光影，光线柔和地勾勒出产品轮廓，画面留白处具有极强的呼吸感，营造静谧的听觉暗示，8k超高清分辨率，极简高级感。
 图2：100mm微距镜头拍摄的产品材质特写，极近距离聚焦于耳机的伸缩臂连接处，清晰展示香槟金拉丝铝合金的金属纹理与CNC精密精割倒角，一道锐利的侧逆光在金属边缘形成星芒高光，背景深暗以突出金属的工业精密感，画质极度锐利，无噪点。
 图3：极近距离的微距材质特写，聚焦于摩卡色蛋白皮耳罩的表面，通过侧光展现皮革细腻的毛孔纹理、柔软的按压褶皱与透气孔细节，传达极致的亲肤佩戴舒适度与回弹感，光影层次丰富，色调温暖湿润，超高清微距摄影。
@@ -1466,177 +1667,112 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 图8：品牌生活方式的全家福静物摄影，复古未来主义耳机被收纳在配套的精致皮箱旁，桌面上摆放着黑胶唱片机、一张正在旋转的黑胶唱片与一杯冒着热气的咖啡，背景有暖色调的氛围灯渲染，深胡桃木色调为主，传递慢生活与高保真音质结合的品牌生活哲学，电影感叙事光影。
 ```
 
+<a id="交互式编辑"></a>
+
+<a id="4f6d37d6acmy5"></a>
+
 ### 交互式编辑
 
-**输入图像**
+| 输入图像 | 输出图像 |
+| --- | --- |
+| ![5eecdaf48460cde5f7fd58249809b192a118accde85283f275b8339e1c4c24831b75b38faadcd24bec177c308ebd5304463ca8e345548eb5f551b6ba01cd2c8d2d9b5606fa569ff7ba4077816ac9b801464f65aedbcf494f4fb4c8ed7016461c-combine](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064355.webp) | ![5eecdaf48460cde5f7fd58249809b192a118accde85283f275b8339e1c4c24831b75b38faadcd24bec177c308ebd530460436714d0283cee289325430893028097a53a8e5d630fb1c2d4c85d8cbb68a4387575c4b03700344fb4c8ed7016461c-2026-03-31-19-13-38](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064356.webp)<br><br>将图1中框选的图案放置到图二中框选处 |
 
-**输出图像**
+<a id="多图融合"></a>
 
-![5eecdaf48460cde5f7fd58249809b192a118accde85283f275b8339e1c4c24831b75b38faadcd24bec177c308ebd5304463ca8e345548eb5f551b6ba01cd2c8d2d9b5606fa569ff7ba4077816ac9b801464f65aedbcf494f4fb4c8ed7016461c-combine](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064355.webp)
-
-![5eecdaf48460cde5f7fd58249809b192a118accde85283f275b8339e1c4c24831b75b38faadcd24bec177c308ebd530460436714d0283cee289325430893028097a53a8e5d630fb1c2d4c85d8cbb68a4387575c4b03700344fb4c8ed7016461c-2026-03-31-19-13-38](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1064356.webp)
-
-将图1中框选的图案放置到图二中框选处
+<a id="1e9c5e513eioi"></a>
 
 ### 多图融合
 
-**输入图像**
+| 输入图像 | 输出图像 |
+| --- | --- |
+| ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304e9d05d028a65a9ac270ee730e44b8c75c6634a9b9a7a70240d438b02b2f2153dc68966b442378d1d4fb4c8ed7016461c-combine](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039962.webp) | ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd53044b9a1d72dee2f8507ee704b9cef3832907ff1182f52507c9bc4737520762d46a722e658f57cda6524fb4c8ed7016461c-2025-12-29-19-11-31](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039963.webp)<br><br>给图1的男生和图2的狗拍一张写真，男生搂着这只狗，人和狗都很开心，摄影棚柔和灯光，蓝色纹理背景 |
+| ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304f060ec7a363e318af9bfaaa5e07be972cfc1ea4e21b47637fcdb2dfc53130c40a8efed5defc408a04fb4c8ed7016461c-combine](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039968.webp) | ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304922cbdef3e3c42f83239de6d0f35a8b76f0e38934cc5170f7a908ec12140fb0af6590c72bcf1ba6f4fb4c8ed7016461c-2025-12-29-19-15-53](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039971.webp)<br><br>给图1的裙子按照图2鸟的颜色进行配色，充满艺术感，衣服款式不变，模特不变 |
 
-**输出图像**
+<a id="主体特征保持"></a>
 
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304e9d05d028a65a9ac270ee730e44b8c75c6634a9b9a7a70240d438b02b2f2153dc68966b442378d1d4fb4c8ed7016461c-combine](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039962.webp)
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd53044b9a1d72dee2f8507ee704b9cef3832907ff1182f52507c9bc4737520762d46a722e658f57cda6524fb4c8ed7016461c-2025-12-29-19-11-31](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039963.webp)
-
-给图1的男生和图2的狗拍一张写真，男生搂着这只狗，人和狗都很开心，摄影棚柔和灯光，蓝色纹理背景
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304f060ec7a363e318af9bfaaa5e07be972cfc1ea4e21b47637fcdb2dfc53130c40a8efed5defc408a04fb4c8ed7016461c-combine](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039968.webp)
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304922cbdef3e3c42f83239de6d0f35a8b76f0e38934cc5170f7a908ec12140fb0af6590c72bcf1ba6f4fb4c8ed7016461c-2025-12-29-19-15-53](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039971.webp)
-
-给图1的裙子按照图2鸟的颜色进行配色，充满艺术感，衣服款式不变，模特不变
+<a id="1feb2b5af9nwg"></a>
 
 ### 主体特征保持
 
-**输入图像**
+| 输入图像 | 输出图像 |
+| --- | --- |
+| ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304448a972b9f2ee7a7aadcc61495f4975a049f009e7721cbc833dc3a8005b1b026a54eaaec109d73484fb4c8ed7016461c-2025-12-29-20-00-21](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040012.webp) | ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304cc1b4a509823c5fb5e60999898811f8b51d7419220a118c9ff82110bc9525725a9ad7338f75985794fb4c8ed7016461c-2025-12-29-20-00-21](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040013.webp)<br><br>请生成一套4宫格“季节变迁”主题的拍立得套图，共四张。每一张照片都是在同一个地点，公园里的一棵树下拍摄的，但分别展现了春夏秋冬四个季节的景象。人物的着装也需与季节相匹配，春天的薄外套、夏天的短袖、秋天的风衣、冬天的围巾和厚大衣。并将这组照片放在餐桌上。 |
 
-**输出图像**
+<a id="检测和分割"></a>
 
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304448a972b9f2ee7a7aadcc61495f4975a049f009e7721cbc833dc3a8005b1b026a54eaaec109d73484fb4c8ed7016461c-2025-12-29-20-00-21](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040012.webp)
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304cc1b4a509823c5fb5e60999898811f8b51d7419220a118c9ff82110bc9525725a9ad7338f75985794fb4c8ed7016461c-2025-12-29-20-00-21](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040013.webp)
-
-请生成一套4宫格“季节变迁”主题的拍立得套图，共四张。每一张照片都是在同一个地点，公园里的一棵树下拍摄的，但分别展现了春夏秋冬四个季节的景象。人物的着装也需与季节相匹配，春天的薄外套、夏天的短袖、秋天的风衣、冬天的围巾和厚大衣。并将这组照片放在餐桌上。
+<a id="5505b6129bgtw"></a>
 
 ### 检测和分割
 
-**输入图像**
+| 输入图像 | 输出图像 |
+| --- | --- |
+| ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304b025e74206dc2cec5c2e587c3fe6fb135293836c9479220355470da15476dc934b26018061e9db0b4fb4c8ed7016461c-2025-12-29-19-54-33](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040006.webp) | ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd530451385eb561b49b0fe1f2169526b6a7e15bd78940def3c640c801511c349f6df35dceb72f4d3755f94fb4c8ed7016461c-2025-12-29-19-54-33](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040007.webp)<br><br>检测图片中的笔记本电脑和闹钟，画框并标注“laptop”和“clock” |
+| ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd530440256f9add4113787af5d4f3a55469b38ef2422f018076640eb7cb552584c02ee729fcb23fec3bca4fb4c8ed7016461c-2025-12-29-19-54-33](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040008.webp) | ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304f0612d67f5c810ebef958385624ebd17323047aa5d00465d0e35257de5a2ea49d4b375d2e57693fa4fb4c8ed7016461c-2025-12-29-19-54-32](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040009.webp)<br><br>分割图片中的玻璃杯 |
 
-**输出图像**
+<a id="提取元素"></a>
 
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304b025e74206dc2cec5c2e587c3fe6fb135293836c9479220355470da15476dc934b26018061e9db0b4fb4c8ed7016461c-2025-12-29-19-54-33](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040006.webp)
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd530451385eb561b49b0fe1f2169526b6a7e15bd78940def3c640c801511c349f6df35dceb72f4d3755f94fb4c8ed7016461c-2025-12-29-19-54-33](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040007.webp)
-
-检测图片中的笔记本电脑和闹钟，画框并标注“laptop”和“clock”
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd530440256f9add4113787af5d4f3a55469b38ef2422f018076640eb7cb552584c02ee729fcb23fec3bca4fb4c8ed7016461c-2025-12-29-19-54-33](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040008.webp)
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304f0612d67f5c810ebef958385624ebd17323047aa5d00465d0e35257de5a2ea49d4b375d2e57693fa4fb4c8ed7016461c-2025-12-29-19-54-32](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040009.webp)
-
-分割图片中的玻璃杯
+<a id="db3a9b052anng"></a>
 
 ### 提取元素
 
-**输入图像**
+| 输入图像 | 输出图像 |
+| --- | --- |
+| ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd53046b83761f1ab18c40e144f5db2b388e5f865ba9a5961d98b2710ce177c6a0f4baff63fe52259c44364fb4c8ed7016461c-2025-12-29-19-48-27](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040000.webp) | ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd53048e2a0d1d2805d92ba8d45a3bd1368528dd76f517b21ad1f545eb4097610838497cbdb5196da94ff54fb4c8ed7016461c-2025-12-29-19-48-27](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040001.webp)<br><br>从上传照片中提取穿搭单品，将它们以平铺展示的方式排列在纯白背景上，保持真实细节与材质质感，时尚电商风格，适合服装展示。 |
 
-**输出图像**
+<a id="文本编辑"></a>
 
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd53046b83761f1ab18c40e144f5db2b388e5f865ba9a5961d98b2710ce177c6a0f4baff63fe52259c44364fb4c8ed7016461c-2025-12-29-19-48-27](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040000.webp)
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd53048e2a0d1d2805d92ba8d45a3bd1368528dd76f517b21ad1f545eb4097610838497cbdb5196da94ff54fb4c8ed7016461c-2025-12-29-19-48-27](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1040001.webp)
-
-从上传照片中提取穿搭单品，将它们以平铺展示的方式排列在纯白背景上，保持真实细节与材质质感，时尚电商风格，适合服装展示。
+<a id="1881e5e754w2w"></a>
 
 ### 文本编辑
 
-**输入图像**
+| 输入图像 | 输出图像 |
+| --- | --- |
+| ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd530490f493eca22f34f0197173ddfdef17a04b34cb94813178b9d4eee36d246d3530a3e2fc6258cca0694fb4c8ed7016461c-2025-12-29-19-28-35](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039976.webp) | ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304fe77776567f4ef79cb621289a6fdaa981f3364fe4c7c56265403b5d9d5ac43eaf5931f62db14952f4fb4c8ed7016461c-2025-12-29-19-28-35](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039977.webp)<br><br>去除全图水印 |
+| ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd530476e971380812b1b9dbeac68272a27057175499fe84f0781c7b6fa6535f438c67f3556acc8c7324394fb4c8ed7016461c-2025-12-29-19-28-35](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039978.webp) | ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd53047be52c6f41edecdefa77f0d93335d1492f1821b47dff7a1b08f60e99bdafcc84c31e3658fc593c904fb4c8ed7016461c-2025-12-29-19-28-35](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039979.webp)<br><br>用手在沙滩上随意的写上“Time for Holiday？” |
+| ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304fdb284f8d5c8ead814d11890da1a49411a6d9d41ad1bb2a4bf0b93d0bee5d792e8f5b419a3da9d534fb4c8ed7016461c-2025-12-29-19-28-34](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039980.webp) | ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304df1c8787530497f4cc3bee0b84d3ba51d0353fceb8d0518ded6a25e8c0ddfec714f719154ac1c9354fb4c8ed7016461c-2025-12-29-19-28-34](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039981.webp)<br><br>把18改成29，把JUNE改成SEPTEMBER |
 
-**输出图像**
+<a id="镜头与视角编辑"></a>
 
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd530490f493eca22f34f0197173ddfdef17a04b34cb94813178b9d4eee36d246d3530a3e2fc6258cca0694fb4c8ed7016461c-2025-12-29-19-28-35](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039976.webp)
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304fe77776567f4ef79cb621289a6fdaa981f3364fe4c7c56265403b5d9d5ac43eaf5931f62db14952f4fb4c8ed7016461c-2025-12-29-19-28-35](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039977.webp)
-
-去除全图水印
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd530476e971380812b1b9dbeac68272a27057175499fe84f0781c7b6fa6535f438c67f3556acc8c7324394fb4c8ed7016461c-2025-12-29-19-28-35](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039978.webp)
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd53047be52c6f41edecdefa77f0d93335d1492f1821b47dff7a1b08f60e99bdafcc84c31e3658fc593c904fb4c8ed7016461c-2025-12-29-19-28-35](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039979.webp)
-
-用手在沙滩上随意的写上“Time for Holiday？”
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304fdb284f8d5c8ead814d11890da1a49411a6d9d41ad1bb2a4bf0b93d0bee5d792e8f5b419a3da9d534fb4c8ed7016461c-2025-12-29-19-28-34](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039980.webp)
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304df1c8787530497f4cc3bee0b84d3ba51d0353fceb8d0518ded6a25e8c0ddfec714f719154ac1c9354fb4c8ed7016461c-2025-12-29-19-28-34](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039981.webp)
-
-把18改成29，把JUNE改成SEPTEMBER
+<a id="a3f76982969rn"></a>
 
 ### 镜头与视角编辑
 
-**输入图像**
+| 输入图像 | 输出图像 |
+| --- | --- |
+| ![image (2)-2025-12-29-19-42-44](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039991.webp) | ![image (3)-2025-12-29-19-42-44](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039992.webp)<br><br>保持人物的特征不变，生成正视图、侧视图和背视图 |
+| ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304a53988b2efdd2fb6b95cb3b1b02701e6ff2c4902170b1ee230a9b4e3726a891c93646d68b821de294fb4c8ed7016461c-2025-12-29-19-42-43](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039995.webp) | ![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd530428783dee341e41eb06234dfb75bd149d774f4850000123559a98bcd7ece97dc4a6c3cefa983ae8ac4fb4c8ed7016461c-2025-12-29-19-42-43](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039996.webp)<br><br>用鱼眼镜头重新拍摄这张照片 |
 
-**输出图像**
+<a id="输入说明"></a>
 
-![image (2)-2025-12-29-19-42-44](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039991.webp)
-
-![image (3)-2025-12-29-19-42-44](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039992.webp)
-
-保持人物的特征不变，生成正视图、侧视图和背视图
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd5304a53988b2efdd2fb6b95cb3b1b02701e6ff2c4902170b1ee230a9b4e3726a891c93646d68b821de294fb4c8ed7016461c-2025-12-29-19-42-43](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039995.webp)
-
-![5eecdaf48460cde5544f9fac410016bc2fe4c1b4d23666c075b8339e1c4c24831b75b38faadcd24bec177c308ebd530428783dee341e41eb06234dfb75bd149d774f4850000123559a98bcd7ece97dc4a6c3cefa983ae8ac4fb4c8ed7016461c-2025-12-29-19-42-43](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9952205771/p1039996.webp)
-
-用鱼眼镜头重新拍摄这张照片
+<a id="title-input"></a>
 
 ## 输入说明
 
+<a id="输入图像规格"></a>
+
+<a id="title-input-images"></a>
+
 ## 输入图像规格
 
-**规格**
+| 规格 | wan2.7-image-pro、wan2.7-image | wan2.6-image | wan2.5-i2i-preview |
+| --- | --- | --- | --- |
+| 输入图像数量 | 0～9 张（0张对应文生图模式） | 图像编辑 1～4 张 / 图文混排 0～1 张 | 1～3 张 |
+| 图片格式 | JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP | JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP | JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP |
+| 图片宽高范围 | \[240, 8000\] 像素 | \[240, 8000\] 像素 | \[384, 5000\] 像素 |
+| 文件大小 | ≤ 20MB | ≤ 10MB | ≤ 10MB |
+| 宽高比 | \[1:8, 8:1\] | 不限 | \[1:4, 4:1\] |
 
-**wan2.7-image-pro、wan2.7-image**
+<a id="图像输入顺序"></a>
 
-**wan2.6-image**
-
-**wan2.5-i2i-preview**
-
-输入图像数量
-
-0～9 张（0张对应文生图模式）
-
-图像编辑 1～4 张 / 图文混排 0～1 张
-
-1～3 张
-
-图片格式
-
-JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP
-
-JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP
-
-JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP
-
-图片宽高范围
-
-\[240, 8000\] 像素
-
-\[240, 8000\] 像素
-
-\[384, 5000\] 像素
-
-文件大小
-
-≤ 20MB
-
-≤ 10MB
-
-≤ 10MB
-
-宽高比
-
-\[1:8, 8:1\]
-
-不限
-
-\[1:4, 4:1\]
+<a id="87e8051f646bi"></a>
 
 ### 图像输入顺序
 
 多图输入时，按照数组中的顺序定义图像顺序。因此，提示词引用的图像编号需要**与图像数组中的顺序一一对应**，例如：数组中的第一张图片为"图1"，第二张为"图2"，或者使用标记形式如"\[图1\]"、"\[图2\]"。
 
-```
+<a id="code-block-33"></a>
+
+```json
 {
     "content": [
         {"text": "编辑指令，如：将图1中的闹钟放置到图2的餐桌的花瓶旁边位置"},
@@ -1646,35 +1782,25 @@ JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP
 }
 ```
 
-**输入图像**
+<table><thead><tr><th colspan="2"><p><strong>输入图像</strong></p></th><th colspan="2"><p><strong>输出图像</strong></p></th></tr></thead><tbody><tr><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1025838.webp" alt="image (19)-转换自-png"></p><p>图1</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7142593671/p1025839.webp" alt="image (20)-转换自-png"></p><p>图2</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1021092.webp" alt="04e0fc39-7ad6-41e0-9df9-1f69ac3ce825-转换自-png"></p><p>提示词：把图1移动到图2上</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1021093.webp" alt="36ed450d-bd54-4169-b13f-3d0f26d9d360-转换自-png"></p><p>提示词：把图2移动到图1上</p></td></tr></tbody></table>
 
-**输出图像**
+<a id="图像传入方式"></a>
 
-![image (19)-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1025838.webp)
-
-图1
-
-![image (20)-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7142593671/p1025839.webp)
-
-图2
-
-![04e0fc39-7ad6-41e0-9df9-1f69ac3ce825-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1021092.webp)
-
-提示词：把图1移动到图2上
-
-![36ed450d-bd54-4169-b13f-3d0f26d9d360-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1021093.webp)
-
-提示词：把图2移动到图1上
+<a id="8db0e2215frua"></a>
 
 ### 图像传入方式
 
 支持通过以下方式传入图像：
+
+<a id="accordion-方式一-公网url"></a>
 
 方式一：公网URL
 
 -   提供一个公网可访问的图像地址，支持 HTTP 或 HTTPS 协议。
 -   示例值：`https://xxxx/img.png`。
 -   适用场景：图片已托管在对象存储（如OSS）或公开图床上。
+
+<a id="accordion-方式二-base64编码"></a>
 
 方式二：Base64编码
 
@@ -1686,36 +1812,24 @@ JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP
     
 -   {MIME\_type}：表示图像的媒体类型，需与文件格式对应。
     
-    **图像格式**
-    
-    **MIME Type**
-    
-    JPEG
-    
-    image/jpeg
-    
-    JPG
-    
-    image/jpeg
-    
-    PNG
-    
-    image/png
-    
-    BMP
-    
-    image/bmp
-    
-    WEBP
-    
-    image/webp
+    | 图像格式 | MIME Type |
+    | --- | --- |
+    | JPEG | image/jpeg |
+    | JPG | image/jpeg |
+    | PNG | image/png |
+    | BMP | image/bmp |
+    | WEBP | image/webp |
     
 -   适合场景：本地图片、私有图片或需要加密传输的场景。
     
 
+<a id="accordion-代码示例-图像base64编码"></a>
+
 代码示例：图像Base64编码
 
-```
+<a id="code-block-34"></a>
+
+```python
 import os
 import base64
 import mimetypes
@@ -1731,56 +1845,33 @@ def encode_file(file_path):
 image = encode_file("/path/to/your/image.png")
 ```
 
+<a id="accordion-方式三-本地文件路径-仅限sdk"></a>
+
 方式三：本地文件路径（仅限SDK）
 
 -   **Python SDK**：支持传入文件的**绝对路径和相对路径**。文件路径规则如下：
     
-    **系统**
-    
-    **传入的文件路径**
-    
-    **示例（绝对路径）**
-    
-    **示例（相对路径）**
-    
-    Linux或macOS系统
-    
-    file://{文件的绝对路径或相对路径}
-    
-    file:///home/images/test.png
-    
-    file://./images/test.png
-    
-    Windows系统
-    
-    file://D:/images/test.png
-    
-    file://./images/test.png
+    <table><thead><tr><th><p><strong>系统</strong></p></th><th><p><strong>传入的文件路径</strong></p></th><th><p><strong>示例（绝对路径）</strong></p></th><th><p><strong>示例（相对路径）</strong></p></th></tr></thead><tbody><tr><td><p>Linux或macOS系统</p></td><td rowspan="2"><p>file://{文件的绝对路径或相对路径}</p></td><td><p>file:///home/images/test.png</p></td><td><p>file://./images/test.png</p></td></tr><tr><td><p>Windows系统</p></td><td><p>file://D:/images/test.png</p></td><td><p>file://./images/test.png</p></td></tr></tbody></table>
     
 -   **Java SDK**：仅支持传入文件的**绝对路径**。文件路径规则如下：
     
-    **系统**
-    
-    **传入的文件路径**
-    
-    **示例（绝对路径）**
-    
-    Linux或macOS系统
-    
-    file://{文件的绝对路径}
-    
-    file:///home/images/test.png
-    
-    Windows系统
-    
-    file:///{文件的绝对路径}
-    
-    file:///D:/images/test.png
+    | 系统 | 传入的文件路径 | 示例（绝对路径） |
+    | --- | --- | --- |
+    | Linux或macOS系统 | file://{文件的绝对路径} | file:///home/images/test.png |
+    | Windows系统 | file:///{文件的绝对路径} | file:///D:/images/test.png |
     
 -   适用场景：适合在本地开发环境中快速测试。
     
 
+<a id="关键能力"></a>
+
+<a id="title-params"></a>
+
 ## 关键能力
+
+<a id="1-指令遵循-提示词"></a>
+
+<a id="527b35fad3899"></a>
 
 ### 1\. 指令遵循（提示词）
 
@@ -1789,37 +1880,15 @@ image = encode_file("/path/to/your/image.png")
 -   **text \\ prompt（正向提示词）**：描述希望在画面中看到的内容、主体、场景、风格、光照和构图。
 -   **negative\_prompt（反向提示词）**：描述不希望在画面中出现的内容，如“模糊”、“多余的手指”等。仅用于辅助优化生成质量。
 
-**参数**
+| 参数 | wan2.7-image-pro、wan2.7-image | wan2.6-image | wan2.5-i2i-preview |
+| --- | --- | --- | --- |
+| text | 必选，最多5000字符 | 必选，最多2000字符 | 不支持 |
+| prompt | 不支持 | 不支持 | 必选，最多2000字符 |
+| negative\_prompt | 不支持 | 支持，最多500字符 | 支持，最多500字符 |
 
-**wan2.7-image-pro、wan2.7-image**
+<a id="2-开启prompt智能改写"></a>
 
-**wan2.6-image**
-
-**wan2.5-i2i-preview**
-
-text
-
-必选，最多5000字符
-
-必选，最多2000字符
-
-不支持
-
-prompt
-
-不支持
-
-不支持
-
-必选，最多2000字符
-
-negative\_prompt
-
-不支持
-
-支持，最多500字符
-
-支持，最多500字符
+<a id="5ad5ca93c187i"></a>
 
 ### 2\. 开启prompt智能改写
 
@@ -1832,68 +1901,27 @@ negative\_prompt
 -   建议开启：当输入 Prompt 较简洁或宽泛时，此功能可提升图像效果。
 -   建议关闭：若需控制画面细节、或已提供详细描述，或对响应延迟敏感。请将参数 `prompt_extend` **显式设为**`false`。
 
-**参数**
+| 参数 | wan2.7-image-pro、wan2.7-image | wan2.6-image | wan2.5-i2i-preview |
+| --- | --- | --- | --- |
+| prompt\_extend | 不支持 | 支持（仅图像编辑模式） | 支持 |
 
-**wan2.7-image-pro、wan2.7-image**
+<a id="3-设置输出图像分辨率"></a>
 
-**wan2.6-image**
-
-**wan2.5-i2i-preview**
-
-prompt\_extend
-
-不支持
-
-支持（仅图像编辑模式）
-
-支持
+<a id="ebc41fe492cyx"></a>
 
 ### 3\. 设置输出图像分辨率
 
 参数: `parameters.size` (string)，格式为 `"宽*高"`。
 
-**重要**同名档位 `1K` 在不同模型中的定义不同：wan2.7 系列输出总像素接近 1024_1024，wan2.6-image 接近 1280_1280。切换模型时请注意输出分辨率的差异。
+> **重要**
+>
+> 同名档位 `1K` 在不同模型中的定义不同：wan2.7 系列输出总像素接近 1024_1024，wan2.6-image 接近 1280_1280。切换模型时请注意输出分辨率的差异。
 
-**参数**
+<table><thead><tr><th><strong>参数</strong></th><th><strong>wan2.7-image-pro、wan2.7-image</strong></th><th><strong>wan2.6-image</strong></th><th><strong>wan2.5-i2i-preview</strong></th></tr></thead><tbody><tr><td><p>size</p></td><td><strong>方式一：指定输出图片的分辨率（推荐）</strong><p>编辑模式（传入至少一张图片），可选的输出分辨率档位：<code>1K</code>、<code>2K</code>（默认）。</p><ul><li><code>1K</code>：输出总像素接近 1024*1024，宽高比与最后一张输入图像一致。</li><li><code>2K</code>：输出总像素接近 2048*2048，宽高比与最后一张输入图像一致。</li></ul><strong>方式二：指定生成图像的宽高像素值</strong><ul><li>总像素在 [768<em>768, 2048</em>2048] 之间，宽高比范围为 [1:8, 8:1]。</li></ul><blockquote><p>仅文生图场景的wan2.7-image-pro支持4K分辨率</p></blockquote></td><td><strong>方式一：参考输入图比例（推荐）</strong><p>编辑模式（<code>enable_interleave=false</code>），可选的输出分辨率档位：<code>1K</code>（默认）、<code>2K</code>。</p><ul><li><code>1K</code>：输出总像素接近 1280*1280，宽高比与最后一张输入图像一致。</li><li><code>2K</code>：输出总像素接近 2048*2048，宽高比与最后一张输入图像一致。</li></ul><strong>方式二：指定生成图像的宽高像素值</strong><ul><li>总像素在 [768<em>768, 2048</em>2048] 之间，宽高比范围为 [1:4, 4:1]。</li></ul><blockquote><p>实际输出图像的像素值为接近指定值的16的倍数。</p></blockquote></td><td><strong>仅支持指定生成图像的宽高像素值</strong><ul><li>总像素在 [768<em>768, 1280</em>1280] 之间，宽高比范围为 [1:4, 4:1]。</li><li>若未指定<code>size</code>，系统将默认生成总像素为 <code>1280*1280</code> 的图像，宽高比与最后一张输入图像一致。</li></ul></td></tr></tbody></table>
 
-**wan2.7-image-pro、wan2.7-image**
+<a id="4-交互式精准编辑"></a>
 
-**wan2.6-image**
-
-**wan2.5-i2i-preview**
-
-size
-
-**方式一：指定输出图片的分辨率（推荐）**
-
-编辑模式（传入至少一张图片），可选的输出分辨率档位：`1K`、`2K`（默认）。
-
--   `1K`：输出总像素接近 1024\*1024，宽高比与最后一张输入图像一致。
--   `2K`：输出总像素接近 2048\*2048，宽高比与最后一张输入图像一致。
-
-**方式二：指定生成图像的宽高像素值**
-
--   总像素在 \[768_768, 2048_2048\] 之间，宽高比范围为 \[1:8, 8:1\]。
-
-> 仅文生图场景的wan2.7-image-pro支持4K分辨率
-
-**方式一：参考输入图比例（推荐）**
-
-编辑模式（`enable_interleave=false`），可选的输出分辨率档位：`1K`（默认）、`2K`。
-
--   `1K`：输出总像素接近 1280\*1280，宽高比与最后一张输入图像一致。
--   `2K`：输出总像素接近 2048\*2048，宽高比与最后一张输入图像一致。
-
-**方式二：指定生成图像的宽高像素值**
-
--   总像素在 \[768_768, 2048_2048\] 之间，宽高比范围为 \[1:4, 4:1\]。
-
-> 实际输出图像的像素值为接近指定值的16的倍数。
-
-**仅支持指定生成图像的宽高像素值**
-
--   总像素在 \[768_768, 1280_1280\] 之间，宽高比范围为 \[1:4, 4:1\]。
--   若未指定`size`，系统将默认生成总像素为 `1280*1280` 的图像，宽高比与最后一张输入图像一致。
+<a id="f257e128e517d"></a>
 
 ### 4\. 交互式精准编辑
 
@@ -1905,7 +1933,9 @@ size
 
 示例：输入 3 张图片，其中第 2 张无框选，第 1 张有两个框选：
 
-```
+<a id="code-block-35"></a>
+
+```json
 [
   [[0, 0, 12, 12], [25, 25, 100, 100]],
   [],
@@ -1913,9 +1943,13 @@ size
 ]
 ```
 
+<a id="accordion-点击查看调用示例"></a>
+
 点击查看调用示例
 
-```
+<a id="code-block-36"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1942,13 +1976,17 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="accordion-如何确定编辑区域坐标"></a>
+
 如何确定编辑区域坐标
 
 **方法一：OpenCV 画框**
 
 在图片上拖拽鼠标画框，精准直观：
 
-```
+<a id="code-block-37"></a>
+
+```python
 # 安装依赖：pip install opencv-python
 import cv2
 import urllib.request
@@ -1968,11 +2006,14 @@ cv2.destroyAllWindows()
 bbox = [x, y, x + w, y + h]
 print(f"框选坐标: {bbox}")  # 将此坐标传入 parameters.bbox_list
 ```
+
 **方法二：视觉理解模型**
 
 通过 qwen3.6-plus 自动识别目标区域坐标，用自然语言描述目标即可获取坐标：
 
-```
+<a id="code-block-38"></a>
+
+````python
 # 安装依赖：pip install dashscope pillow
 import os
 import json
@@ -2066,43 +2107,45 @@ bbox = get_bbox_list(image_url, "薰衣草盆栽")
 
 # 结果可作为 bbox_list 数组中的元素
 # 注意：单张图片最多支持 2 个边界框
-```
+````
+
+<a id="计费与限流"></a>
+
+<a id="5c8103963fq6g"></a>
 
 ## 计费与限流
 
--   模型免费额度和计费单价请参见[模型列表与价格](raw/model-user-guide/get-started-with-models/models.md)。
+-   模型免费额度和计费单价请参见[模型列表与价格](../../../../get-started-with-models/models.md)。
     
--   模型限流请参见[万相](https://help.aliyun.com/zh/model-studio/rate-limit#513e0a3df24v7)。
+-   模型限流请参见[万相](../../../../get-started-with-models/rate-limit.md#513e0a3df24v7)。
     
 -   计费说明：
     
     -   按成功生成的 **图像张数** 计费。仅当接口返回`task_status`为`SUCCEEDED` 并成功生成图像后，才会计费。
-    -   模型调用失败或处理错误不产生任何费用，也不消耗[免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+    -   模型调用失败或处理错误不产生任何费用，也不消耗[免费额度](../../../../test-1/new-free-quota.md)。
+
+<a id="api参考"></a>
+
+<a id="title-api-ref"></a>
 
 ## API参考
 
 各模型使用不同的端点和请求结构：
 
-**模型**
-
-**端点****（以北京地域为例）**
-
-`wan2.7-image` 、 `wan2.7-image-pro`、`wan2.6-image`
-
-同步接口：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
-
-异步接口：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
-
-`wan2.5-i2i-preview`
-
-异步接口：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis`
+<table><thead><tr><th><p><strong>模型</strong></p></th><th><p><strong>端点</strong><strong>（以北京地域为例）</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p><code>wan2.7-image</code> 、 <code>wan2.7-image-pro</code>、<code>wan2.6-image</code></p></td><td rowspan="2"><div><p>同步接口：<code>POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation</code></p><p>异步接口：<code>POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation</code></p></div></td></tr><tr><td><p><code>wan2.5-i2i-preview</code></p></td><td><div><p>异步接口：<code>POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis</code></p></div></td></tr></tbody></table>
 
 -   `wan2.7` / `wan2.6`：`messages` 格式，在 `messages[].content` 数组中，通过 `image` 传入图像，通过`text`传入提示词。
 -   `wan2.5`：通过 `input.images`数组 传入图像，通过`input.prompt` 传入提示词
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-wan2-7-image-pro-wan2-7-image-wan2-6-image-tab"></a>
+
 wan2.7-image-pro、wan2.7-image、wan2.6-image
 
-```
+<a id="code-code-group-wan2-7-image-pro-wan2-7-image-wan2-6-image"></a>
+
+```json
 "input": {
     "messages": [
         {
@@ -2117,9 +2160,13 @@ wan2.7-image-pro、wan2.7-image、wan2.6-image
 }
 ```
 
+<a id="fig-code-group-wan2-5-i2i-preview-tab"></a>
+
 wan2.5-i2i-preview
 
-```
+<a id="code-code-group-wan2-5-i2i-preview"></a>
+
+```json
 "input": {
     "prompt": "将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
     "images": [
@@ -2129,4 +2176,4 @@ wan2.5-i2i-preview
 }
 ```
 
-输入和输出参数请参见[万相-图像生成与编辑2.7 API参考](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-and-editing-api-reference.md)、[万相-图像生成与编辑2.6 API参考](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-api-reference.md)、[万相-通用图像编辑2.5 API参考](raw/model-api-reference/image-generation/wan-image-api-reference/wan2-5-image-edit-api-reference.md)。
+输入和输出参数请参见[万相-图像生成与编辑2.7 API参考](../../../../../model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-and-editing-api-reference.md)、[万相-图像生成与编辑2.6 API参考](../../../../../model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-api-reference.md)、[万相-通用图像编辑2.5 API参考](../../../../../model-api-reference/image-generation/wan-image-api-reference/wan2-5-image-edit-api-reference.md)。

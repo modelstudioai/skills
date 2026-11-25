@@ -2,9 +2,13 @@
 
 阿里云百炼 CLI 的版本更新记录
 
+<a id="2-11-0-2026-11-24"></a>
+
 ## 2.11.0 | 2026-11-24
 
 -   新增全局 `--biz-source <source>` 参数，全部命令支持该参数；调用方（skill、agent、产品）可声明业务来源，归一化后的来源上报到 AEM 专用扁平列 `c6`（及 `ext`），支持按来源统计命令调用的 PV/UV。缺省省略；空白或非法值归一化为 `unknown`。
+
+<a id="2-10-5-2026-11-23"></a>
 
 ## 2.10.5 | 2026-11-23
 
@@ -14,6 +18,8 @@
 -   变更 PTU 思考输出容量：`bl deploy text create --thinking-output-tpm` 不再在本地对 PTU 拒绝，是否支持由模型决定并由服务端校验。
 -   变更部署删除：`bl deploy delete` 识别模型路由（`plan=mr`），允许 RUNNING 路由无需停机即可删除。
 
+<a id="2-10-4-2026-11-20"></a>
+
 ## 2.10.4 | 2026-11-20
 
 -   新增 `bl finetune rl` 命令组，覆盖百炼强化学习训练的端到端链路：`authorize` 检查准入白名单、服务关联角色与业务开通状态，绝不自动创建角色，缺失时中止并给出双语手动授权指引；`run` 通过 flag 或 YAML 规格提交训练任务并打包 Rollout/Reward 函数代码，在托管 OS 沙箱 Python 运行时内执行（仅 macOS/Linux），创建任务消耗计费的 MTU 算力；`get` / `list` / `watch` / `logs` / `cancel` / `delete` 经共享 fine-tunes 后端管理任务。
@@ -22,13 +28,19 @@
 -   新增沙箱网络拒绝提示：连接级网络拒绝（`EPERM` / `EACCES` / `ENETUNREACH` / `EHOSTUNREACH`）给出双语提示，说明执行环境可能阻断出站网络，并引导放行网络、改在普通终端执行或设置 `HTTPS_PROXY`。
 -   变更代理环境变量：大写变量未设置时，小写 `http_proxy` / `https_proxy` / `no_proxy` 作为兜底生效，大写仍优先。
 
+<a id="2-10-3-2026-11-18"></a>
+
 ## 2.10.3 | 2026-11-18
 
 -   修复 `bl workspace list` 现在返回全部可访问的业务空间，不再只返回网关默认的第一页（10 个）。遥测、告警、日志、数据集、文件与部署命令使用的控制台工作空间解析同样覆盖第一页之外的空间。
 
+<a id="2-10-2-2026-11-17"></a>
+
 ## 2.10.2 | 2026-11-17
 
 -   变更 `bl monitor delivery enable` 与 `bl log audit/inference enable` 不再自动创建服务关联角色，改为检查角色状态，缺失时以双语指引中止并指向模型可观测文档，避免静默授予跨服务权限。
+
+<a id="2-10-1-2026-11-13"></a>
 
 ## 2.10.1 | 2026-11-13
 
@@ -36,12 +48,16 @@
 -   修复 `bl usage free` 与 `bl usage freetier` 在针对全部模型、且尚未解析出模型列表时，试运行结果会标明范围为全部模型且尚未解析，避免被当成已经确定的模型集合。
 -   修复 API Key 登录密钥校验改为遵循已配置的请求超时，不再在固定的短时限处中断。
 
+<a id="2-10-0-2026-11-13"></a>
+
 ## 2.10.0 | 2026-11-13
 
 -   新增 `bl flow-agent` 命令组，通过控制台网关管理百炼应用。`bl flow-agent create` / `get` / `update` / `publish` / `delete` / `copy` / `versions` 管理智能体与工作流；`delete` 为高风险操作，需 `--yes`。`bl flow-agent workflow get` / `save` / `publish` / `export` 管理工作流画布；`save` 整幅替换草稿并带乐观锁版本，`publish` 按控制台编辑器逻辑规范化触发器。
 -   智能体配置更新先读取当前草稿，再合并 `--model` / `--instructions` / `--config-json` / `--config-file`。
 -   `bl flow-agent list --type workflow` 按控制台排除法列出工作流。
 -   `bl app call` / `bl app list` 已废弃，请改用 `bl flow-agent call` / `bl flow-agent list`，将在未来版本移除。
+
+<a id="2-9-0-2026-11-12"></a>
 
 ## 2.9.0 | 2026-11-12
 
@@ -51,6 +67,8 @@
 -   修复免费额度模型操作的确认闸门与错误处理；恢复操作保持在确认闸门之后。
 -   修复 API Key 回退后保留显式 `--config` 配置 profile，并为命名 profile 追加 `--config` 提示。
 
+<a id="2-8-6-2026-11-12"></a>
+
 ## 2.8.6 | 2026-11-12
 
 -   新增 `bl dataset groups`，支持分页和名称筛选；新增 `bl dataset version`，通过 `--dataset-group-id` 列出组内版本，或通过 `--dataset-id` 查询单版本详情，可选 `--include-status` 补充状态。
@@ -58,6 +76,8 @@
 -   新增 `bl deploy instances`，支持分页、关键词和模型服务 ID 筛选。
 -   修复 Console 响应处理：正确解析嵌套成功与失败响应，保留服务端错误消息、错误码及请求 ID，避免将有效工作空间列表误判为空。
 -   修复工作空间参数校验：拒绝显式传入空白 `--workspace-id`，避免静默回退到其他已配置工作空间。
+
+<a id="2-8-5-2026-11-10"></a>
 
 ## 2.8.5 | 2026-11-10
 
@@ -67,10 +87,14 @@
 -   修复模型调用示例仅返回精确匹配型号的示例代码，不再回退到同系列其他型号。
 -   修复数据集上传帮助中不受支持的 `evaluation` purpose 示例已删除，默认值仍为 `fine-tune`。
 
+<a id="2-8-4-2026-11-06"></a>
+
 ## 2.8.4 | 2026-11-06
 
 -   新增 `bl finetune params`，查询基础模型的训练超参配置，支持 `--training-type`、`--param-type`、`--mtu-spec-code` 筛选及 `--modality` / `--reasoning-mode` 动态训练选项。
 -   新增 `bl finetune metrics`，查询微调任务的训练指标，支持 `--page` / `--page-size` 显式分页。
+
+<a id="2-8-3-2026-11-06"></a>
 
 ## 2.8.3 | 2026-11-06
 
@@ -78,9 +102,13 @@
 -   `bl text chat` 新增 `--enable-search`，支持模型内置联网搜索；qwen3.8-max 默认开启，可用 `--enable-search false` 关闭。
 -   Profile 可按搜索模式（`model` / `mcp`）声明凭证，切换搜索模式时自动选择对应 Profile 凭证。
 
+<a id="2-8-2-2026-11-04"></a>
+
 ## 2.8.2 | 2026-11-04
 
 -   内部维护：完善 CLI 使用统计。
+
+<a id="2-8-1-2026-11-04"></a>
 
 ## 2.8.1 | 2026-11-04
 
@@ -88,6 +116,8 @@
 -   修复异步并发图片生成和编辑任务未完整保留图片结果的问题，兼容不同任务使用不同响应格式的情况。
 -   修复 Chat Completions 提前断流被误判为成功的问题；结构化输出保留完整 `tool_calls` 并返回 `finish_reason`。
 -   避免待发送的遥测请求拖延 CLI 退出，并在遥测初始化失败时保留已排队事件。
+
+<a id="2-8-0-2026-11-03"></a>
 
 ## 2.8.0 | 2026-11-03
 
@@ -104,14 +134,20 @@
 -   使用缓存结果时仍能显示可升级通知。
 -   避免重复错误信息，完善模型推荐和精调费用查询的请求诊断。
 
+<a id="2-7-2-2026-10-30"></a>
+
 ## 2.7.2 | 2026-10-30
 
 -   `bl image generate`、`bl image edit`、`bl video generate`、`bl speech synthesize` 和 `bl speech recognize` 新增 `--model auto`，通过百炼自研 MCP 实现 AIGC 模型自动路由。
 -   自研 SSE MCP 客户端替换为官方 MCP SDK。
 
+<a id="2-7-1-2026-10-29"></a>
+
 ## 2.7.1 | 2026-10-29
 
 -   `bl usage token-plan` 支持展示接口返回的全部配额窗口；JSON 输出新增 `hasQuotaData`，用于区分无配额数据与正常结果。
+
+<a id="2-7-0-2026-10-29"></a>
 
 ## 2.7.0 | 2026-10-29
 
@@ -121,6 +157,8 @@
 -   修复 `bl auth login` 在 MaaS Endpoint 上拒绝有效工作空间 API Key 的问题。
 -   API Key 校验保留服务端及网络错误，不再把全部失败统一报告为 Key 无效。
 
+<a id="2-6-2-2026-10-28"></a>
+
 ## 2.6.2 | 2026-10-28
 
 -   `bl alert`、`bl monitor` 和 `bl log` 的业务结果统一默认 JSON，即使 Profile 配置为 text。依赖文本输出的脚本需显式传入 `--output text` 或设置 `DASHSCOPE_OUTPUT=text`。
@@ -129,6 +167,8 @@
 -   `log audit count` 和 `log inference count` 使用对应列表接口的 `totalCount`，修复列表非空而计数为 0 的问题。
 -   推理计数保留多模型、多 API Key 过滤，去重后按单值组合查询并汇总；支持异步轮询，仅全部成功后输出。
 -   dry-run 展示工作空间身份解析计划和实际计数请求组合，不发送业务请求。
+
+<a id="2-6-1-2026-10-28"></a>
 
 ## 2.6.1 | 2026-10-28
 
@@ -141,6 +181,8 @@
 -   修复 Node.js 26 下 fetch 与 dispatcher 不兼容及代理初始化问题。
 -   正确识别嵌套业务错误，保留非 JSON 错误正文及请求 ID，避免把错误响应当作成功结果。
 
+<a id="2-6-0-2026-10-27"></a>
+
 ## 2.6.0 | 2026-10-27
 
 -   新增 `bl knowledge init`，串联样例上传、建库、检索服务创建及首次检索验证，支持恢复和资源复用。
@@ -152,12 +194,16 @@
 -   拒绝知识库命令中的空白必填参数。
 -   切片批量删除失败时，明确报告已完成批次、结果未确认批次及未执行部分。
 
+<a id="2-5-1-2026-10-23"></a>
+
 ## 2.5.1 | 2026-10-23
 
 -   控制台登录支持 `--no-browser` 手动打开登录地址，以及 `--token-stdin` 从标准输入导入并校验控制台凭证。
 -   支持声明 Agent 来源、Skill 名称和版本；未声明来源记为未知。
 -   修复浏览器快速回调时的登录完成判定；未收到凭证时明确报告超时。
 -   修复控制台凭证刷新的地域选择，刷新后验证请求成功再保存凭证。
+
+<a id="2-5-0-2026-10-20"></a>
 
 ## 2.5.0 | 2026-10-20
 
@@ -178,7 +224,9 @@ Memory 命令的不兼容变更：
 
 修复 `bl memory add` 的完成判定：空事件列表或缺少事件 ID 时不再误报完成，部分任务失败时返回非零退出码。
 
-使用方法见 [Memory](raw/cli/capabilities/agent-infrastructure/memory.md)。
+使用方法见 [Memory](../capabilities/agent-infrastructure/memory.md)。
+
+<a id="2-4-0-2026-10-19"></a>
 
 ## 2.4.0 | 2026-10-19
 
@@ -187,6 +235,8 @@ Memory 命令的不兼容变更：
 -   创建 Agent 时可通过 `--environment`、`--vault` 和 `--mcp` 绑定默认 Environment、Vault 及 MCP 市场服务。
 -   创建 Session、运行 Session 和创建 Deployment 时可重复传入 `--environment_variables KEY=VALUE`。
 
+<a id="2-3-3-2026-10-19"></a>
+
 ## 2.3.3 | 2026-10-19
 
 -   修复二进制 CLI 的模型 API 请求失败问题，包括语音和视频生成。
@@ -194,13 +244,19 @@ Memory 命令的不兼容变更：
 -   修复 Windows 打开浏览器时控制台登录链接的查询参数丢失问题。
 -   控制台登录后或执行 `bl auth status` 时，若未配置模型 API Key，会提示模型调用仍需配置 Key。
 
+<a id="2-3-2-2026-10-16"></a>
+
 ## 2.3.2 | 2026-10-16
 
 -   `bl update` 在升级失败或无法获取最新版本时返回非零退出码，便于脚本和 Agent 识别失败。
 
+<a id="2-3-1-2026-10-16"></a>
+
 ## 2.3.1 | 2026-10-16
 
 -   设置超过 300 秒的请求超时后，不再被默认的响应头超时提前中断。
+
+<a id="2-3-0-2026-10-14"></a>
 
 ## 2.3.0 | 2026-10-14
 
@@ -208,6 +264,8 @@ Memory 命令的不兼容变更：
 -   支持在完整命令路径前使用全局参数，例如 `bl --config token-plan auth status`；命令专属参数和鉴权参数需放在路径后。
 -   帮助和版本查询会校验已传入的参数；未知参数、缺少参数值或参数值非法时返回用法错误退出码 2，解析错误提示跟随 Profile 语言。
 -   本地文件上传到临时 OSS 时，`--timeout` 可设置传输超时。
+
+<a id="2-2-2-2026-10-14"></a>
 
 ## 2.2.2 | 2026-10-14
 
@@ -218,19 +276,27 @@ Memory 命令的不兼容变更：
 -   只接受命令已定义的参数；未知参数、缺少参数值或参数值非法时返回用法错误退出码 2。
 -   本地文件上传到临时 OSS 时遵循 `--timeout`，不再固定为 120 秒。
 
+<a id="2-2-1-2026-10-12"></a>
+
 ## 2.2.1 | 2026-10-12
 
 -   `bl config agent --agent hermes` 改为写入 Hermes 实际读取的位置：`$HERMES_HOME/config.yaml`，或平台原生默认路径（Windows 为 `%LOCALAPPDATA%\hermes`，其他平台为 `~/.hermes`）。
 
+<a id="2-2-0-2026-10-12"></a>
+
 ## 2.2.0 | 2026-10-12
 
 -   `bl usage token-plan` 只展示月度额度（使用百分比与重置时间），不再显示 5 小时和 1 周窗口。
+
+<a id="2-1-0-2026-09-28"></a>
 
 ## 2.1.0 | 2026-09-28
 
 `bl finetune text create` 新增任务名、优先级、LoRA、评估、Checkpoint 保存、数据集切分与数据增强等高级参数；`bl finetune get` 返回更完整的任务元数据与超参数。
 
 修复 Windows 下 Skill 安装：兼容传统路径长度限制，运行中的 Agent 占用目录时原地更新已安装的 Skill。
+
+<a id="2-0-1-2026-09-22"></a>
 
 ## 2.0.1 | 2026-09-22
 
@@ -249,6 +315,8 @@ Memory 命令的不兼容变更：
 
 `bl text chat` 与 `bl video generate` 新增 `--prime`，以 Prime 模式通过工作空间专用端点调用，可用 `--workspace-id` 指定工作空间。
 
+<a id="2-0-0-2026-09-22"></a>
+
 ## 2.0.0 | 2026-09-22
 
 新增 MCP 原生注册命令：
@@ -258,61 +326,91 @@ Memory 命令的不兼容变更：
 
 Skill 安装与更新扩展到 WorkBuddy、Trae CLI 与 DeepSeek DSH，`bl skill init`、`bl skill add`、`bl skill update`、`bl skill remove` 支持 `--dry-run` 预览。
 
+<a id="1-28-0-2026-09-20"></a>
+
 ## 1.28.0 | 2026-09-20
 
 新增 Agent 安全命令：`bl agents security overview` 查看最近 24 小时的防护总览，`bl agents security alerts` 查看告警列表，支持按风险等级、资产类型、状态等筛选。
+
+<a id="1-27-0-2026-09-18"></a>
 
 ## 1.27.0 | 2026-09-18
 
 新增 `bl monitor`、`bl log`、`bl alert` 命令组，支持查看模型调用量、Token 用量、调用日志与配置告警；新增 `bl model search` 按相关度搜索模型目录，`bl model code` 获取 SDK 调用示例代码。
 
+<a id="1-26-0-2026-09-17"></a>
+
 ## 1.26.0 | 2026-09-17
 
 简化认证方式：默认推荐控制台登录，需要时可自动创建普通 API Key；API Key 保存前自动校验并自动选择可用地域。已有普通 API Key 和 Token Plan 订阅 Key 统一使用 `bl auth login --api-key` 登录。
+
+<a id="1-25-0-2026-09-14"></a>
 
 ## 1.25.0 | 2026-09-14
 
 新增 Token Plan harness 权益额度查询（`bl token-plan harness-quota`）。
 
+<a id="1-24-0-2026-09-11"></a>
+
 ## 1.24.0 | 2026-09-11
 
 新增 Sandbox 沙箱实例与模版生命周期命令。
+
+<a id="1-23-0-2026-09-10"></a>
 
 ## 1.23.0 | 2026-09-10
 
 语音识别支持即时热词（`--vocabulary`）与上下文增强（`--context`），新增语音热词表管理命令。
 
+<a id="1-22-0-2026-09-08"></a>
+
 ## 1.22.0 | 2026-09-08
 
 Managed Agent 项目 Build / Publish 流程调整：`project init` 默认在 `./managed-agent` 子目录初始化，`project build` 无需确认，Publish 仍需显式确认。
+
+<a id="1-21-0-2026-09-07"></a>
 
 ## 1.21.0 | 2026-09-07
 
 Managed Agent 支持本地目录项目、项目版本管理与 Workbench。
 
+<a id="1-20-0-2026-09-03"></a>
+
 ## 1.20.0 | 2026-09-03
 
 Managed Agent 新增 AgentStudio 资源操作命令（Agent、Environment、Skill、Vault、Deployment、Session、File）。
+
+<a id="1-19-0-2026-09-01"></a>
 
 ## 1.19.0 | 2026-09-01
 
 高风险操作新增确认机制：未加 `--yes` 时阻断执行（退出码 7），`--dry-run` 可预览。
 
+<a id="1-18-0-2026-08-27"></a>
+
 ## 1.18.0 | 2026-08-27
 
 支持 Profile API Key 自动回退；视频生成默认模型升级至 Wan3.0。
+
+<a id="1-17-0-2026-08-18"></a>
 
 ## 1.17.0 | 2026-08-18
 
 Managed Agent 支持原生 Deployment；CLI 支持中英文界面切换。
 
+<a id="1-16-0-2026-08-17"></a>
+
 ## 1.16.0 | 2026-08-17
 
 新增知识库全生命周期管理命令。
 
+<a id="1-15-0-2026-08-14"></a>
+
 ## 1.15.0 | 2026-08-14
 
 新增订阅套餐用量视图（`bl usage token-plan`、`bl usage coding-plan`）。
+
+<a id="1-14-0-2026-08-04"></a>
 
 ## 1.14.0 | 2026-08-04
 

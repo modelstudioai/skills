@@ -2,135 +2,61 @@
 
 本文为您介绍通义数据挖掘文档上传API的语法及示例。
 
+<a id="1-申请上传租约"></a>
+
+<a id="6547f73dec499"></a>
+
 ## 1\. 申请上传租约
+
+<a id="请求语法"></a>
+
+<a id="fc7e5abcedu3y"></a>
 
 ### 请求语法
 
-```
+<a id="code-block"></a>
+
+```bash
 POST /zhiwen-file/apply_upload_lease HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="7ee89e9538w3k"></a>
+
 ### 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| fileName | string | 是 | 文档名称 | 阿里云百炼.pdf |
+| sizeBytes | number | 是 | 上传文档的大小，单位字节 | 28123 |
+| md5 | string | 是 | 文档md5 |  |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-fileName
-
-string
-
-是
-
-文档名称
-
-阿里云百炼.pdf
-
-sizeBytes
-
-number
-
-是
-
-上传文档的大小，单位字节
-
-28123
-
-md5
-
-string
-
-是
-
-文档md5
+<a id="e4d7abfd02lfi"></a>
 
 ### 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 |
+| --- | --- | --- |
+| code | int | 状态码 |
+| data | object | 相应数据 |
+| \-param | object | 用于上传文档的 HTTP 请求参数 |
+| \-headers | object | 第2步上传文档时，需要放到 Header 中的 K-V 字段，K 和 V 均为字符串 |
+| \-x-bailian-extra | string |  |
+| \-Content-Type | string |  |
+| \-method | string | HTTP 调用方法 |
+| \-url | string | 第2步上传文档时请求的url |
+| \-type | string | 文档的上传方式 |
+| \-lease\_id | string | 租约唯一 ID，第3步提交文档解析接口时，需要使用该参数 |
+| requestId | string | 请求ID |
+| success | boolean | 是否成功 |
+| message | string | 响应消息 |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-code
-
-int
-
-状态码
-
-data
-
-object
-
-相应数据
-
-\-param
-
-object
-
-用于上传文档的 HTTP 请求参数
-
-\-headers
-
-object
-
-第2步上传文档时，需要放到 Header 中的 K-V 字段，K 和 V 均为字符串
-
-\-x-bailian-extra
-
-string
-
-\-Content-Type
-
-string
-
-\-method
-
-string
-
-HTTP 调用方法
-
-\-url
-
-string
-
-第2步上传文档时请求的url
-
-\-type
-
-string
-
-文档的上传方式
-
-\-lease\_id
-
-string
-
-租约唯一 ID，第3步提交文档解析接口时，需要使用该参数
-
-requestId
-
-string
-
-请求ID
-
-success
-
-boolean
-
-是否成功
-
-message
-
-string
-
-响应消息
+<a id="f3d8cb046admd"></a>
 
 ### 示例
 
@@ -138,7 +64,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "code": 200,
   "data": {
@@ -159,13 +87,23 @@ string
 }
 ```
 
+<a id="2-上传文档到oss"></a>
+
+<a id="6761acb4740qo"></a>
+
 ## 2\. 上传文档到OSS
 
 使用上一步（申请文档上传租约）返回的`data.param.url`、`data.param.method`、`data.param.headers`中`x-bailian-extra`和`Content-Type`等参数，将您在本地的文档上传至OSS。示例代码如下。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 # 示例代码仅供参考，请勿在生产环境中直接使用
 import requests
 
@@ -200,9 +138,13 @@ if __name__ == "__main__":
     upload_file(pre_signed_url_or_http_url, file_path)
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 // 示例代码仅供参考，请勿在生产环境中直接使用
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
@@ -271,113 +213,58 @@ public class UploadFile{
 }
 ```
 
+<a id="3-提交解析文档"></a>
+
+<a id="72c5683ab7kp4"></a>
+
 ## 3\. 提交解析文档
+
+<a id="请求语法-2"></a>
+
+<a id="5873960683060"></a>
 
 ### 请求语法
 
-```
+<a id="code-block-3"></a>
+
+```bash
 POST /zhiwen-file/submit_parse_file HTTP/1.1
 ```
 
+<a id="请求参数-2"></a>
+
+<a id="99ca41e176h74"></a>
+
 ### 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| leaseId | string | 是 | 租约唯一 ID，通过申请租约获取。 | 3631bf9f24ea4ac7b3dr5135deee7fec.1752176287488 |
 
-**类型**
+<a id="返回参数-2"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-leaseId
-
-string
-
-是
-
-租约唯一 ID，通过申请租约获取。
-
-3631bf9f24ea4ac7b3dr5135deee7fec.1752176287488
+<a id="a5a197737alfz"></a>
 
 ### 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 |
+| --- | --- | --- |
+| code | int | 状态码 |
+| data | object |  |
+| \-fileSize | string | 文档大小 |
+| \-docId | string | docId |
+| \-name | string | 文档名称 |
+| \-pageSize | number | 页数 |
+| \-type | string | 文档类型 |
+| \-url | string | 文档地址 |
+| \-fileId | string | 文档ID，后续对话需使用此ID |
+| requestId | string | 请求ID |
+| success | boolean | 是否成功 |
+| message | string | 响应消息 |
 
-**类型**
+<a id="示例-2"></a>
 
-**描述**
-
-code
-
-int
-
-状态码
-
-data
-
-object
-
-\-fileSize
-
-string
-
-文档大小
-
-\-docId
-
-string
-
-docId
-
-\-name
-
-string
-
-文档名称
-
-\-pageSize
-
-number
-
-页数
-
-\-type
-
-string
-
-文档类型
-
-\-url
-
-string
-
-文档地址
-
-\-fileId
-
-string
-
-文档ID，后续对话需使用此ID
-
-requestId
-
-string
-
-请求ID
-
-success
-
-boolean
-
-是否成功
-
-message
-
-string
-
-响应消息
+<a id="cc39b84ea4x3n"></a>
 
 ### 示例
 
@@ -385,7 +272,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "code": 200,
   "data": {
@@ -403,11 +292,21 @@ string
 }
 ```
 
+<a id="调用示例"></a>
+
+<a id="8ec4a33de18o6"></a>
+
 ## 调用示例
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import hashlib
 import os
 import requests
@@ -482,11 +381,16 @@ if response.status_code == HTTPStatus.OK:
 else:
     print(f'response={response.json()}')
     print(f'code={response.status_code}')
+
 ```
+
+<a id="fig-code-group-2-java-tab"></a>
 
 java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -687,6 +591,10 @@ public class FileUploadDemo {
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="d21b8ed072sib"></a>
+
 ## 错误码
 
-请参见[错误码-通义数据挖掘](raw/_short/docmining-error-code-d4361ce416c8ad2d.md)。
+请参见[错误码-通义数据挖掘](docmining-error-code-d4361ce416c8ad2d.md)。

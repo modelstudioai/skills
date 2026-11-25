@@ -2,9 +2,17 @@
 
 本文提供智能审校API的几个最佳实践,帮助您快速入门并开发您自己的业务应用。
 
+<a id="前提条件"></a>
+
+<a id="13e2af6d97opa"></a>
+
 ## 前提条件
 
 -   [已开通 政务公文配套工具 服务](https://aimiaobi.console.aliyun.com/#/audit)
+
+<a id="相关api参考"></a>
+
+<a id="71b1d256f4ggc"></a>
 
 ## 相关API参考
 
@@ -16,13 +24,23 @@
 -   确认并处理规则库：[ConfirmAndPostProcessAuditNote](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ConfirmAndPostProcessAuditNote)
 -   查询语义化索引状态：[GetAuditNotePostProcessingStatus](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/GetAuditNotePostProcessingStatus)
 
+<a id="快速运行步骤"></a>
+
+<a id="49c1b756e33xf"></a>
+
 ## 快速运行步骤
+
+<a id="添加maven依赖"></a>
+
+<a id="66bdd68f7bwky"></a>
 
 ### 添加Maven依赖
 
 建议您前往 [阿里云 OpenAPI 门户](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc) 查询并使用最新版本。
 
-```
+<a id="code-block"></a>
+
+```xml
 <dependency>
     <groupId>com.aliyun</groupId>
     <artifactId>alibabacloud-aimiaobi20230801</artifactId>
@@ -36,33 +54,31 @@
 </dependency>
 ```
 
+<a id="配置环境变量"></a>
+
+<a id="516926a20adqk"></a>
+
 ### 配置环境变量
 
-环境变量名称
+|  |  |
+| --- | --- |
+| 环境变量名称 | 描述 |
+| ALIBABA\_CLOUD\_ACCESS\_KEY\_ID | [阿里云AccessKey，用于标识用户身份。](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey) |
+| ALIBABA\_CLOUD\_ACCESS\_KEY\_SECRET | [阿里云AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey) |
+| WORKSPACE\_ID | [获取百炼业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h) |
+| ENDPOINT | 智能审校服务入口地址。固定为：<br><br>aimiaobi.cn-beijing.aliyuncs.com |
 
-描述
+<a id="复制工具类到工程中"></a>
 
-ALIBABA\_CLOUD\_ACCESS\_KEY\_ID
-
-[阿里云AccessKey，用于标识用户身份。](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
-
-ALIBABA\_CLOUD\_ACCESS\_KEY\_SECRET
-
-[阿里云AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
-
-WORKSPACE\_ID
-
-[获取百炼业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)
-
-ENDPOINT
-
-智能审校服务入口地址。固定为：
-
-aimiaobi.cn-beijing.aliyuncs.com
+<a id="43a2f6ab0fcnm"></a>
 
 ### 复制工具类到工程中
 
 将 AuditUtils 复制到代码工程中
+
+<a id="运行主类"></a>
+
+<a id="fd3a0f40e82p5"></a>
 
 ### 运行主类
 
@@ -72,11 +88,17 @@ aimiaobi.cn-beijing.aliyuncs.com
 4.  规则库-规则准备：RuleLibraryPreparationExample
 5.  规则库-审校：RuleBasedContentAuditExample
 
+<a id="1-通用工具类"></a>
+
+<a id="db0d8a3ecbf3p"></a>
+
 ## 1\. 通用工具类
 
 > 访问下面示例时请复制此工具类到您的工程代码中
 
-```
+<a id="code-block-2"></a>
+
+```java
 package org.example.audit;
 
 import java.io.File;
@@ -403,6 +425,10 @@ public class AuditUtils {
 }
 ```
 
+<a id="2-文章审校"></a>
+
+<a id="a7e6bd1c75rv3"></a>
+
 ## 2\. 文章审校
 
 基础内容审核示例 本示例演示如何使用基础审核维度进行内容审核：
@@ -412,7 +438,9 @@ public class AuditUtils {
 3.  轮询获取审核结果
 4.  导出审核报告
 
-```
+<a id="code-block-3"></a>
+
+```java
 package org.example.audit;
 
 import java.util.ArrayList;
@@ -578,6 +606,10 @@ public class ContentAuditBasicExample {
 }
 ```
 
+<a id="3-图片审校"></a>
+
+<a id="4c8486d5e0kdw"></a>
+
 ## 3\. 图片审校
 
 本示例演示如何使用图片审核功能进行内容审核：
@@ -588,7 +620,9 @@ public class ContentAuditBasicExample {
 
 注意：图片审核的编码为：ImageAudit。在提交审核任务时，需要将此编码添加到 subCodes 参数中。
 
-```
+<a id="code-block-4"></a>
+
+```java
 package org.example.audit;
 
 import java.util.Arrays;
@@ -696,6 +730,10 @@ public class ImageAuditExample {
 }
 ```
 
+<a id="4-联网事实性审校"></a>
+
+<a id="bd1bac1942pzd"></a>
+
 ## 4\. 联网事实性审校
 
 本示例演示如何使用事实性审核功能进行内容审核：
@@ -721,7 +759,9 @@ WrongFactError：事实性审核-错误项
 
 **影响**：配置的信源质量直接影响事实性审核的准确性。建议选择权威、可靠的数据源。
 
-```
+<a id="code-block-5"></a>
+
+```java
 package org.example.audit;
 
 import java.util.Arrays;
@@ -891,6 +931,10 @@ public class FactAuditExample {
 }
 ```
 
+<a id="5-规则库审校"></a>
+
+<a id="716e7c7027z0g"></a>
+
 ## 5\. 规则库审校
 
 **功能说明**
@@ -902,6 +946,10 @@ public class FactAuditExample {
 1.  **首次使用：** 先运行 RuleLibraryPreparationExample 完成规则库的准备
 2.  **日常审核：** 运行 RuleBasedContentAuditExample 进行内容审核
 3.  **更新规则：** 如需更新规则库，重新运行阶段一的示例
+
+<a id="规则准备阶段"></a>
+
+<a id="cad4ac6865wca"></a>
 
 ### 规则准备阶段
 
@@ -932,7 +980,9 @@ public class FactAuditExample {
 -   确认并处理规则库：[ConfirmAndPostProcessAuditNote](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ConfirmAndPostProcessAuditNote)
 -   查询语义化索引状态：[GetAuditNotePostProcessingStatus](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/GetAuditNotePostProcessingStatus)
 
-```
+<a id="code-block-6"></a>
+
+```java
 package org.example.audit;
 
 import java.util.concurrent.ExecutionException;
@@ -1090,6 +1140,10 @@ public class RuleLibraryPreparationExample {
 }
 ```
 
+<a id="内容审校阶段"></a>
+
+<a id="c1fdde195fxhz"></a>
+
 ### 内容审校阶段
 
 **功能说明：**
@@ -1102,7 +1156,9 @@ public class RuleLibraryPreparationExample {
 -   **审核编码：** 规则库审核的编码为 WrongQuestionBook，在提交审核任务时，需要将此编码添加到 subCodes 参数中
 -   请将示例文本替换为您需要审核的实际内容
 
-```
+<a id="code-block-7"></a>
+
+```java
 package org.example.audit;
 
 import java.util.Collections;

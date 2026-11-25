@@ -2,6 +2,10 @@
 
 通过 AOQ 接入 fun-asr-realtime，发送麦克风音频并实时接收语音识别结果。客户端代码以 Android Java 为例，AOQ 支持的其他平台使用相同的接口。
 
+<a id="方案概述"></a>
+
+<a id="asr-overview-title"></a>
+
 ## 方案概述
 
 fun-asr-realtime 将音频流实时转写为带标点的文本。AOQ SDK 将媒体和事件分轨传输：客户端通过 Audio 轨上行音频，通过 Data 轨发送控制事件并接收识别事件。该模型使用 Inference 事件协议，而不是 Realtime 事件协议。
@@ -13,22 +17,38 @@ fun-asr-realtime 将音频流实时转写为带标点的文本。AOQ SDK 将媒�
 3.  客户端建立 AOQ 连接并发送 run-task；收到 task-started 后开始上行麦克风音频。
 4.  服务端持续返回 result-generated；客户端发送 finish-task 后等待最终结果和 task-finished。
 
+<a id="准备工作"></a>
+
+<a id="asr-prerequisites-title"></a>
+
 ## 准备工作
 
-1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
-2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
-3.  从[SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。本文传输 Opus 音频，需先导入 Opus 插件。
-4.  按 [Fun-ASR-Realtime 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-aoq-access#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+1.  开通阿里云百炼，并按[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
+2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](../model-user-guide/get-started-with-models/regions.md)。
+3.  从[SDK 下载](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。本文传输 Opus 音频，需先导入 Opus 插件。
+4.  按 [Fun-ASR-Realtime 的 AOQ 鉴权步骤](fun-asr-realtime-aoq-access-18b59bd85ad6d915.md#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+
+<a id="导入-sdk"></a>
+
+<a id="asr-import-sdk-title"></a>
 
 ### 导入 SDK
 
 根据开发平台选择相应的 SDK 导入方式。后续客户端实现以 Android Java 为例；其他平台使用相同的接口设计和事件流程。
 
+<a id="sec-tabs"></a>
+
+<a id="android"></a>
+
+<a id="android-h4"></a>
+
 #### Android
 
 1.  将 Opus 插件中的 libPluginOpus.so 按 ABI 放入 app/src/main/jniLibs/armeabi-v7a/ 和 app/src/main/jniLibs/arm64-v8a/，将 AoqClientSdk-release.aar 放入 app/libs 目录，并在 app/build.gradle 中配置依赖和 ABI：
 
-```
+<a id="code-block"></a>
+
+```groovy
 android {
     defaultConfig {
         minSdk 21
@@ -43,7 +63,9 @@ dependencies {
 
 2.  在 AndroidManifest.xml 中声明网络和录音权限：
 
-```
+<a id="code-block-2"></a>
+
+```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -52,17 +74,27 @@ dependencies {
 
 3.  在开始录音前动态申请 RECORD\_AUDIO 权限。纯语音识别不需要 CAMERA 权限。
 
+<a id="ios"></a>
+
+<a id="ios-h4"></a>
+
 #### iOS
 
 1.  将 AoqClientSdk.framework 与 PluginOpus.framework 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
 2.  在 Info.plist 中添加 NSMicrophoneUsageDescription。纯语音识别不需要 NSCameraUsageDescription。
 3.  Swift 工程使用 import AoqClientSdk；Objective-C 工程使用 #import <AoqClientSdk/AoqClientSdk.h>。
 
+<a id="harmonyos"></a>
+
+<a id="harmonyos-h4"></a>
+
 #### HarmonyOS
 
 1.  将 Opus 插件中的 libPluginOpus.so 放入 entry/libs/arm64-v8a/，将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "dependencies": {
     "@aoq/client-sdk": "file:./libs/AoqClientSdk.har"
@@ -72,7 +104,9 @@ dependencies {
 
 2.  在 entry/src/main/module.json5 中声明网络和麦克风权限：
 
-```
+<a id="code-block-4"></a>
+
+```json
 "requestPermissions": [
   { "name": "ohos.permission.INTERNET" },
   {
@@ -85,17 +119,27 @@ dependencies {
 
 3.  在开始录音前调用 abilityAccessCtrl.createAtManager().requestPermissionsFromUser 申请麦克风权限。
 
+<a id="linux-python"></a>
+
+<a id="linux-python-h4"></a>
+
 #### Linux (Python)
 
 1.  解压 SDK，并保持 aoq\_client\_sdk.py、libAoqClientSdk.so 和 libonnxruntime.so.1.16.3 位于同一目录。
 2.  将 SDK 目录加入 Python 和动态库搜索路径：
 
-```
+<a id="code-block-5"></a>
+
+```bash
 export PYTHONPATH="$PWD/AoqClientSdk:$PYTHONPATH"
 export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 ```
 
 3.  在 Python 代码中使用 import aoq\_client\_sdk。也可通过 AOQ\_CLIENT\_SDK\_LIB 指定 libAoqClientSdk.so 的绝对路径。
+
+<a id="体验-demo"></a>
+
+<a id="asr-experience-demo-title"></a>
 
 ## 体验 Demo
 
@@ -104,6 +148,10 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 扫描以下二维码下载 Demo：
 
 ![Demo 下载二维码](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f92cd.png)
+
+<a id="实现流程"></a>
+
+<a id="asr-flow-title"></a>
 
 ## 实现流程
 
@@ -116,11 +164,17 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 
 ![aoq-realtime-asr-sequence-zh](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5276066871/p1094760.png)
 
+<a id="appserver-获取-token"></a>
+
+<a id="asr-token-request-title"></a>
+
 ## AppServer 获取 Token
 
 在 AppServer 设置 DASHSCOPE\_API\_KEY，并使用所选地域的 Endpoint 发送请求。clientIp 为终端的真实公网 IP；该字段可选，但建议传入，以便服务分配合适的 Relay 接入点。
 
-```
+<a id="code-block-6"></a>
+
+```bash
 curl -X POST \
   "https://{endpoint}/api/v1/webrtc/inference?model=fun-asr-realtime" \
   -H "Content-Type: application/json" \
@@ -129,43 +183,40 @@ curl -X POST \
   -d "{\"clientIp\": \"${CLIENT_REAL_IP}\"}"
 ```
 
-**说明**如果 AppServer 无法获取终端真实公网 IP，请从请求体中删除 clientIp 字段，不要传空字符串。
+> **说明**
+>
+> 如果 AppServer 无法获取终端真实公网 IP，请从请求体中删除 clientIp 字段，不要传空字符串。
 
 AppServer 将响应中的以下字段返回客户端。API Key 仅保存在 AppServer。
 
-**响应字段**
+|  |  |
+| --- | --- |
+| **响应字段** | **SDK 字段** |
+| aoqTokenForClient | AoqConnectConfig.token |
+| sid | AoqConnectConfig.sid |
+| clientRelayCertFingerprint | AoqConnectConfig.certFingerprint |
+| clientRelayEndpoints | AoqConnectConfig.relayEndpoints |
+| extraInfo.workspaceIdHash | AoqConnectConfig.workspaceIdHash |
 
-**SDK 字段**
+<a id="实现-android-客户端"></a>
 
-aoqTokenForClient
-
-AoqConnectConfig.token
-
-sid
-
-AoqConnectConfig.sid
-
-clientRelayCertFingerprint
-
-AoqConnectConfig.certFingerprint
-
-clientRelayEndpoints
-
-AoqConnectConfig.relayEndpoints
-
-extraInfo.workspaceIdHash
-
-AoqConnectConfig.workspaceIdHash
+<a id="asr-implementation-title"></a>
 
 ## 实现 Android 客户端
 
 以下步骤按连接和任务的实际执行顺序拆分 Android Java 客户端代码。各片段来自后文的完整示例。
 
+<a id="1-创建引擎并设置回调"></a>
+
+<a id="asr-step-engine-title"></a>
+
 ### 1\. 创建引擎并设置回调
 
 创建 AOQ 客户端引擎，并注册连接状态和 Data 轨事件回调。请根据业务逻辑实现回调处理；连接成功后再启动识别任务。
 
-```
+<a id="code-block-7"></a>
+
+```java
 AoqClientListener listener = new AoqClientListener() {
     @Override
     public void onConnectionStatusChange(AoqClientEngine.AoqConnectionStatus status) {
@@ -187,11 +238,17 @@ createConfig.workDir = context.getFilesDir().getAbsolutePath();
 engine = AoqClientEngine.createEngine(context, createConfig, listener);
 ```
 
+<a id="2-配置音频编码"></a>
+
+<a id="asr-step-encoder-title"></a>
+
 ### 2\. 配置音频编码
 
-配置发送给模型的音频编码。请根据业务需求和模型要求设置格式、采样率和声道数。以下代码以 16 kHz 单声道 Opus 为例；支持范围请参见[客户端事件](https://help.aliyun.com/zh/model-studio/fun-asr-client-events#9cae7e7b85ebm)中的 run-task 参数。
+配置发送给模型的音频编码。请根据业务需求和模型要求设置格式、采样率和声道数。以下代码以 16 kHz 单声道 Opus 为例；支持范围请参见[客户端事件](fun-asr-client-events-a037d05e99747fff.md#9cae7e7b85ebm)中的 run-task 参数。
 
-```
+<a id="code-block-8"></a>
+
+```java
 AoqClientEngine.AoqAudioCodecConfig encoder =
         new AoqClientEngine.AoqAudioCodecConfig();
 encoder.trackType = AoqClientEngine.AoqTrackType.AoqTrackTypeAudio;
@@ -202,11 +259,17 @@ encoder.bitrate = 24000;
 engine.setAudioEncoderConfig(encoder);
 ```
 
+<a id="3-配置连接和传输轨道"></a>
+
+<a id="asr-step-tracks-title"></a>
+
 ### 3\. 配置连接和传输轨道
 
 使用 AppServer 返回的凭证配置 AOQ 连接，并根据业务需要选择发布和订阅的轨道。以下代码为实时语音识别发布 Audio 和 Data 轨，并订阅 Data 轨。
 
-```
+<a id="code-block-9"></a>
+
+```java
 addTrack(connectConfig, true,
         AoqClientEngine.AoqTrackType.AoqTrackTypeAudio);
 addTrack(connectConfig, true,
@@ -215,11 +278,17 @@ addTrack(connectConfig, false,
         AoqClientEngine.AoqTrackType.AoqTrackTypeData);
 ```
 
+<a id="4-启动音频采集并建立连接"></a>
+
+<a id="asr-step-capture-title"></a>
+
 ### 4\. 启动音频采集并建立连接
 
 配置音频采集方式并建立 AOQ 连接。请根据业务选择内置或外部采集、是否启用 VoIP 模式以及声道数。收到 task-started 前保持 Audio 轨发送关闭。
 
-```
+<a id="code-block-10"></a>
+
+```java
 AoqClientEngine.AoqAudioCaptureConfig capture =
         new AoqClientEngine.AoqAudioCaptureConfig();
 capture.isExternal = false;
@@ -233,11 +302,17 @@ engine.enableSendMediaStream(
 engine.connect(connectConfig);
 ```
 
+<a id="5-启动识别任务"></a>
+
+<a id="asr-step-run-title"></a>
+
 ### 5\. 启动识别任务
 
-连接成功后生成任务 ID，并发送 run-task 启动识别。请根据实际使用的模型和音频输入配置 model、format、sample\_rate 及其他任务参数，完整说明请参见[客户端事件](raw/_short/fun-asr-client-events-a037d05e99747fff.md)。
+连接成功后生成任务 ID，并发送 run-task 启动识别。请根据实际使用的模型和音频输入配置 model、format、sample\_rate 及其他任务参数，完整说明请参见[客户端事件](fun-asr-client-events-a037d05e99747fff.md)。
 
-```
+<a id="code-block-11"></a>
+
+```java
 taskId = UUID.randomUUID().toString();
 JSONObject header = createHeader("run-task");
 JSONObject parameters = new JSONObject()
@@ -253,11 +328,17 @@ JSONObject payload = new JSONObject()
 send(new JSONObject().put("header", header).put("payload", payload));
 ```
 
+<a id="6-处理服务端事件"></a>
+
+<a id="asr-step-events-title"></a>
+
 ### 6\. 处理服务端事件
 
-处理任务状态、识别结果和错误事件，并将结果传递给业务层。请根据应用的展示和状态管理需求实现回调逻辑；收到 task-started 后再发送音频，展示结果时过滤心跳事件。完整响应结构请参见[服务端事件](raw/_short/fun-asr-server-events-83aa266f52f1f8c7.md)。
+处理任务状态、识别结果和错误事件，并将结果传递给业务层。请根据应用的展示和状态管理需求实现回调逻辑；收到 task-started 后再发送音频，展示结果时过滤心跳事件。完整响应结构请参见[服务端事件](fun-asr-server-events-83aa266f52f1f8c7.md)。
 
-```
+<a id="code-block-12"></a>
+
+```java
 String eventName = header.optString("event", "");
 if ("task-started".equals(eventName)) {
     taskStarted = true;
@@ -284,11 +365,17 @@ if ("task-started".equals(eventName)) {
 }
 ```
 
+<a id="7-结束识别任务"></a>
+
+<a id="asr-step-finish-title"></a>
+
 ### 7\. 结束识别任务
 
-用户结束本轮录音时，停止采集音频，并通过 Data 轨发送 `finish-task`。保持连接直至收到最终识别结果和 task-finished；后续可按业务需要启动新任务或释放连接。事件格式请参见[客户端事件](raw/_short/fun-asr-client-events-a037d05e99747fff.md)。
+用户结束本轮录音时，停止采集音频，并通过 Data 轨发送 `finish-task`。保持连接直至收到最终识别结果和 task-finished；后续可按业务需要启动新任务或释放连接。事件格式请参见[客户端事件](fun-asr-client-events-a037d05e99747fff.md)。
 
-```
+<a id="code-block-13"></a>
+
+```java
 engine.stopAudioCapture();
 JSONObject payload = new JSONObject().put("input", new JSONObject());
 send(new JSONObject()
@@ -296,11 +383,17 @@ send(new JSONObject()
         .put("payload", payload));
 ```
 
+<a id="8-断开连接并销毁引擎"></a>
+
+<a id="asr-step-close-title"></a>
+
 ### 8\. 断开连接并销毁引擎
 
 页面销毁或不再需要识别时，释放音频采集、AOQ 连接和引擎资源。请根据应用生命周期决定释放时机，不要在刚发送 finish-task 时立即释放。
 
-```
+<a id="code-block-14"></a>
+
+```java
 engine.enableSendMediaStream(
         AoqClientEngine.AoqTrackType.AoqTrackTypeAudio, false);
 engine.stopAudioCapture();
@@ -308,11 +401,17 @@ engine.disconnect();
 AoqClientEngine.destroy();
 ```
 
+<a id="完整示例"></a>
+
+<a id="asr-complete-example-title"></a>
+
 ## 完整示例
 
 该 Android Java 类将 AppServer 返回的 JSON 转换为 AoqConnectConfig，并组合前述连接、采集、任务和资源释放逻辑。
 
-```
+<a id="code-block-15"></a>
+
+```java
 import android.content.Context;
 
 import com.alibaba.aoq.clientsdk.AoqClientEngine;
@@ -545,11 +644,17 @@ public final class AsrClient {
 }
 ```
 
+<a id="调用示例"></a>
+
+<a id="asr-call-client-title"></a>
+
 ### 调用示例
 
 将 AppServer 的 Token 响应传给 parseConnectConfig，然后创建客户端。首次连接成功后自动开始识别。停止按钮只结束当前任务；页面销毁时才释放连接和本地资源。
 
-```
+<a id="code-block-16"></a>
+
+```java
 private AsrClient client;
 
 void startRecognition(Context context, String tokenResponseText) {
@@ -585,13 +690,19 @@ void onPageDestroyed() {
 }
 ```
 
+<a id="运行并验证"></a>
+
+<a id="asr-run-title"></a>
+
 ## 运行并验证
 
 1.  启动 AppServer，确认 Token 请求返回 HTTP 200，并包含 sid、aoqTokenForClient、clientRelayEndpoints、clientRelayCertFingerprint 和 extraInfo.workspaceIdHash。
 2.  在 Android 设备上安装并运行应用，授予麦克风权限，然后说一段话。
 3.  观察回调。正常事件顺序如下：
 
-```
+<a id="code-block-17"></a>
+
+```text
 task-started
 result-generated (sentence_end=false)
 result-generated (sentence_end=true)
@@ -600,51 +711,56 @@ task-finished
 
 说话过程中应持续收到中间识别文本。调用 finishRecognition 后，应收到当前句的最终文本和 task-finished。不要在 finish-task 发送后立即断开连接。
 
+<a id="典型场景"></a>
+
+<a id="asr-scenarios-title"></a>
+
 ## 典型场景
+
+<a id="同一连接多次识别"></a>
+
+<a id="asr-scenario-multiple-title"></a>
 
 ### 同一连接多次识别
 
 收到 task-finished 后调用 beginRecognition，可在同一 AOQ 连接上启动下一轮识别。`beginRecognition` 会重新启动音频采集。每轮任务必须使用新的 task\_id，不需要重新申请 Token 或重建连接；如果连接已经断开，则需要重新获取连接凭证。
 
+<a id="android-后台识别"></a>
+
+<a id="asr-scenario-background-title"></a>
+
 ### Android 后台识别
 
 Android 10 及以上版本中，如需在应用进入后台后继续采集麦克风音频，应使用 foregroundServiceType=microphone 的前台服务，并在应用仍对用户可见时启动该服务。
 
+<a id="常见问题"></a>
+
+<a id="asr-troubleshooting-title"></a>
+
 ## 常见问题
 
-**问题**
+|  |  |
+| --- | --- |
+| **问题** | **处理方法** |
+| 连接失败 | 确认 Token 尚未过期、Endpoint 与业务地域一致，并检查 AppServer 是否传入了终端真实公网 IP。连接断开后不要复用旧 Token。 |
+| 任务已启动但没有识别结果 | 确认收到 task-started 后才开启 Audio 轨发送，并根据当前模型的[客户端事件](fun-asr-client-events-a037d05e99747fff.md#9cae7e7b85ebm)检查音频格式、采样率等输入参数。 |
+| 收不到最终结果 | 发送 finish-task 后，保持连接，直到收到最终 result-generated 和 task-finished。 |
+| Android 加载 SDK 失败 | 确认 AAR 已加入依赖，并且应用只打包 SDK 支持的 armeabi-v7a 或 arm64-v8a ABI。 |
+| 同一连接的下一轮任务被拒绝 | 确认上一轮已经收到 task-finished，并为新一轮 run-task 生成新的 task\_id。 |
 
-**处理方法**
+<a id="相关文档"></a>
 
-连接失败
-
-确认 Token 尚未过期、Endpoint 与业务地域一致，并检查 AppServer 是否传入了终端真实公网 IP。连接断开后不要复用旧 Token。
-
-任务已启动但没有识别结果
-
-确认收到 task-started 后才开启 Audio 轨发送，并根据当前模型的[客户端事件](https://help.aliyun.com/zh/model-studio/fun-asr-client-events#9cae7e7b85ebm)检查音频格式、采样率等输入参数。
-
-收不到最终结果
-
-发送 finish-task 后，保持连接，直到收到最终 result-generated 和 task-finished。
-
-Android 加载 SDK 失败
-
-确认 AAR 已加入依赖，并且应用只打包 SDK 支持的 armeabi-v7a 或 arm64-v8a ABI。
-
-同一连接的下一轮任务被拒绝
-
-确认上一轮已经收到 task-finished，并为新一轮 run-task 生成新的 task\_id。
+<a id="asr-related-title"></a>
 
 ## 相关文档
 
 如需查询完整参数、事件字段或其他平台接口，请参见：
 
--   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
--   [SDK 简介](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
--   [Fun-ASR-Realtime AOQ 接入](raw/_short/fun-asr-realtime-aoq-access-18b59bd85ad6d915.md)
--   [实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)
--   [客户端事件](raw/_short/fun-asr-client-events-a037d05e99747fff.md)
--   [服务端事件](raw/_short/fun-asr-server-events-83aa266f52f1f8c7.md)
+-   [获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)
+-   [选择地域、服务部署范围和接入域名](../model-user-guide/get-started-with-models/regions.md)
+-   [SDK 简介](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   [SDK 下载](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
+-   [Fun-ASR-Realtime AOQ 接入](fun-asr-realtime-aoq-access-18b59bd85ad6d915.md)
+-   [实时语音识别](../model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)
+-   [客户端事件](fun-asr-client-events-a037d05e99747fff.md)
+-   [服务端事件](fun-asr-server-events-83aa266f52f1f8c7.md)

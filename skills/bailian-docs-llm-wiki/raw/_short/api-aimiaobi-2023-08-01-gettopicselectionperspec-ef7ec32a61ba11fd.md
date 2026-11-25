@@ -2,11 +2,19 @@
 
 获取选题视角分析任务结果。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/GetTopicSelectionPerspectiveAnalysisTask)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,801 +33,134 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:GetTopicSelectionPerspectiveAnalysisTask</td><td>get</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:GetTopicSelectionPerspectiveAnalysisTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| AgentKey | string | 是 | 业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey) | xxxxx\_p\_efm |
+| TaskId | string | 否 | 任务唯一 ID<br><br>**说明** TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。 | c9f226b02cca4f42a84c5e955c39dfd2 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-AgentKey
-
-string
-
-是
-
-业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
-
-xxxxx\_p\_efm
-
-TaskId
-
-string
-
-否
-
-任务唯一 ID
-
-**说明** TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。
-
-c9f226b02cca4f42a84c5e955c39dfd2
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-PlainResult
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Data
-
-object
-
-业务数据
-
-ErrorMessage
-
-string
-
-错误信息
-
-错误信息
-
-FreshViewPointsResult
-
-object
-
-新颖选题视角分析结果
-
-Attitudes
-
-array<object>
-
-新颖选题视角-观点列表
-
-Attitude
-
-object
-
-Attitude
-
-string
-
-当前观点
-
-当前观点
-
-AttitudeType
-
-string
-
-观点类型
-
-观点类型
-
-Ratio
-
-string
-
-当前观点占比
-
-当前观点占比
-
-ViewPoints
-
-array<object>
-
-选题视角列表
-
-ViewPoint
-
-object
-
-Outlines
-
-array<object>
-
-大纲
-
-Outline
-
-object
-
-大纲列表
-
-Outline
-
-string
-
-大纲
-
-大纲
-
-Summary
-
-string
-
-大纲摘要
-
-大纲摘要
-
-Point
-
-string
-
-生成的视角
-
-视角
-
-Summary
-
-string
-
-摘要
-
-摘要
-
-HotViewPointsResult
-
-object
-
-热门选题视角分析结果
-
-Attitudes
-
-array<object>
-
-热门选题视角-观点列表
-
-Attitude
-
-object
-
-热门选题视角-观点列表
-
-Attitude
-
-string
-
-当前观点
-
-当前观点
-
-AttitudeType
-
-string
-
-观点类型
-
-观点类型
-
-News
-
-array<object>
-
-相关新闻列表
-
-New
-
-object
-
-新闻对象
-
-Content
-
-string
-
-新闻内容
-
-Content
-
-DocId
-
-string
-
-文档-自定义的唯一 ID
-
-9957175DEDCF49C5ACF7A956B4FD67B2
-
-DocUuid
-
-string
-
-文章唯一 ID
-
-"123456"
-
-ImageUrls
-
-array
-
-文章配图 URL
-
-ImageUrl
-
-string
-
-文章图片外链
-
-[https://www.example.com/aaa.png](https://www.example.com/aaa.png)
-
-Source
-
-string
-
-新闻来源
-
-夸克
-
-Summary
-
-string
-
-新闻摘要
-
-新闻摘要
-
-Tags
-
-array
-
-标签
-
-Tag
-
-string
-
-文章标签
-
-\["标签1","标签2"\]
-
-Title
-
-string
-
-新闻标题
-
-新闻标题
-
-Topic
-
-string
-
-文章主题
-
-文章主题
-
-Url
-
-string
-
-URL 链接
-
-[http://www.example.com](http://www.example.com)
-
-CreateTime
-
-string
-
-创建时间
-
-2024-05-08 02:23:01
-
-PubTime
-
-string
-
-发布时间
-
-2024-05-08 02:23:02
-
-Ratio
-
-string
-
-当前观点占比
-
-当前观点占比
-
-ViewPoints
-
-array<object>
-
-选题视角列表
-
-ViewPoint
-
-object
-
-Outlines
-
-array<object>
-
-大纲
-
-Outline
-
-object
-
-大纲对象
-
-Outline
-
-string
-
-大纲
-
-大纲
-
-Summary
-
-string
-
-大纲摘要
-
-大纲摘要
-
-Point
-
-string
-
-生成的视角
-
-视角
-
-Summary
-
-string
-
-摘要
-
-摘要
-
-Status
-
-string
-
-任务状态（PENDING：待执行, RUNNING：执行中, SUCCESSED：成功, SUSPENDED：暂停, FAILED：失败, CANCELED：取消）
-
-SUSPENDED
-
-TimedViewPointsResult
-
-object
-
-时效性选题视角分析结果
-
-Attitudes
-
-array<object>
-
-时效性选题视角-观点列表
-
-Attitude
-
-object
-
-观点对象
-
-Attitude
-
-string
-
-当前观点
-
-当前观点
-
-AttitudeType
-
-string
-
-观点类型
-
-观点类型
-
-PubTime
-
-string
-
-发布时间
-
-2024-01-22 10:29
-
-Ratio
-
-string
-
-当前观点占比
-
-当前观点占比
-
-Source
-
-string
-
-新闻来源
-
-新浪
-
-Title
-
-string
-
-当前观点，等价于新闻标题
-
-标题
-
-Url
-
-string
-
-新闻 URL
-
-[http://www.example.com/news/1.html](http://www.example.com/news/1.html)
-
-ViewPoints
-
-array<object>
-
-选题视角列表
-
-ViewPoint
-
-object
-
-视角对象
-
-Outlines
-
-array<object>
-
-大纲
-
-Outline
-
-object
-
-大纲对象
-
-Outline
-
-string
-
-大纲
-
-大纲
-
-Summary
-
-string
-
-大纲摘要
-
-大纲摘要
-
-Point
-
-string
-
-生成的视角
-
-视角
-
-Summary
-
-string
-
-摘要
-
-摘要
-
-Topic
-
-string
-
-热点主题事件
-
-热点主题事件
-
-TopicSummaryResult
-
-object
-
-热点主题事件摘要
-
-Summaries
-
-array<object>
-
-摘要列表
-
-Summarie
-
-object
-
-摘要对象
-
-DocList
-
-array<object>
-
-生成该标题摘要引用的文章
-
-DocList
-
-object
-
-文章对象
-
-Source
-
-string
-
-文章源
-
-头条
-
-Title
-
-string
-
-文章标题
-
-标题
-
-Url
-
-string
-
-文章 URL
-
-[http://www.example.com](http://www.example.com)
-
-Summary
-
-string
-
-摘要
-
-摘要
-
-Title
-
-string
-
-标题
-
-标题
-
-WebReviewPointsResult
-
-object
-
-网评选题视角分析结果
-
-Attitudes
-
-array<object>
-
-网友选题视角-观点列表
-
-Attitude
-
-object
-
-Attitude
-
-string
-
-当前观点
-
-当前观点
-
-AttitudeType
-
-string
-
-观点类型
-
-观点类型
-
-Comments
-
-array<object>
-
-网友观点列表
-
-Comment
-
-object
-
-对象
-
-Source
-
-string
-
-来源
-
-来源
-
-Text
-
-string
-
-内容
-
-内容
-
-Title
-
-string
-
-标题
-
-标题
-
-Url
-
-string
-
-当前所属的 URL
-
-当前所属的URL
-
-Username
-
-string
-
-用户名
-
-用户名
-
-Ratio
-
-string
-
-当前观点占比
-
-当前观点占比
-
-ViewPoints
-
-array<object>
-
-选题视角列表
-
-ViewPoint
-
-object
-
-Outlines
-
-array<object>
-
-大纲
-
-Outline
-
-object
-
-大纲对象
-
-Outline
-
-string
-
-大纲
-
-大纲
-
-Summary
-
-string
-
-大纲摘要
-
-大纲摘要
-
-Point
-
-string
-
-生成的视角
-
-视角
-
-Summary
-
-string
-
-摘要
-
-摘要
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PlainResult |  |
+| Code | string | 状态码 | NoData |
+| Data | object | 业务数据 |  |
+| ErrorMessage | string | 错误信息 | 错误信息 |
+| FreshViewPointsResult | object | 新颖选题视角分析结果 |  |
+| Attitudes | array<object> | 新颖选题视角-观点列表 |  |
+| Attitude | object |  |  |
+| Attitude | string | 当前观点 | 当前观点 |
+| AttitudeType | string | 观点类型 | 观点类型 |
+| Ratio | string | 当前观点占比 | 当前观点占比 |
+| ViewPoints | array<object> | 选题视角列表 |  |
+| ViewPoint | object |  |  |
+| Outlines | array<object> | 大纲 |  |
+| Outline | object | 大纲列表 |  |
+| Outline | string | 大纲 | 大纲 |
+| Summary | string | 大纲摘要 | 大纲摘要 |
+| Point | string | 生成的视角 | 视角 |
+| Summary | string | 摘要 | 摘要 |
+| HotViewPointsResult | object | 热门选题视角分析结果 |  |
+| Attitudes | array<object> | 热门选题视角-观点列表 |  |
+| Attitude | object | 热门选题视角-观点列表 |  |
+| Attitude | string | 当前观点 | 当前观点 |
+| AttitudeType | string | 观点类型 | 观点类型 |
+| News | array<object> | 相关新闻列表 |  |
+| New | object | 新闻对象 |  |
+| Content | string | 新闻内容 | Content |
+| DocId | string | 文档-自定义的唯一 ID | 9957175DEDCF49C5ACF7A956B4FD67B2 |
+| DocUuid | string | 文章唯一 ID | "123456" |
+| ImageUrls | array | 文章配图 URL |  |
+| ImageUrl | string | 文章图片外链 | [https://www.example.com/aaa.png](https://www.example.com/aaa.png) |
+| Source | string | 新闻来源 | 夸克 |
+| Summary | string | 新闻摘要 | 新闻摘要 |
+| Tags | array | 标签 |  |
+| Tag | string | 文章标签 | \["标签1","标签2"\] |
+| Title | string | 新闻标题 | 新闻标题 |
+| Topic | string | 文章主题 | 文章主题 |
+| Url | string | URL 链接 | [http://www.example.com](http://www.example.com) |
+| CreateTime | string | 创建时间 | 2024-05-08 02:23:01 |
+| PubTime | string | 发布时间 | 2024-05-08 02:23:02 |
+| Ratio | string | 当前观点占比 | 当前观点占比 |
+| ViewPoints | array<object> | 选题视角列表 |  |
+| ViewPoint | object |  |  |
+| Outlines | array<object> | 大纲 |  |
+| Outline | object | 大纲对象 |  |
+| Outline | string | 大纲 | 大纲 |
+| Summary | string | 大纲摘要 | 大纲摘要 |
+| Point | string | 生成的视角 | 视角 |
+| Summary | string | 摘要 | 摘要 |
+| Status | string | 任务状态（PENDING：待执行, RUNNING：执行中, SUCCESSED：成功, SUSPENDED：暂停, FAILED：失败, CANCELED：取消） | SUSPENDED |
+| TimedViewPointsResult | object | 时效性选题视角分析结果 |  |
+| Attitudes | array<object> | 时效性选题视角-观点列表 |  |
+| Attitude | object | 观点对象 |  |
+| Attitude | string | 当前观点 | 当前观点 |
+| AttitudeType | string | 观点类型 | 观点类型 |
+| PubTime | string | 发布时间 | 2024-01-22 10:29 |
+| Ratio | string | 当前观点占比 | 当前观点占比 |
+| Source | string | 新闻来源 | 新浪 |
+| Title | string | 当前观点，等价于新闻标题 | 标题 |
+| Url | string | 新闻 URL | [http://www.example.com/news/1.html](http://www.example.com/news/1.html) |
+| ViewPoints | array<object> | 选题视角列表 |  |
+| ViewPoint | object | 视角对象 |  |
+| Outlines | array<object> | 大纲 |  |
+| Outline | object | 大纲对象 |  |
+| Outline | string | 大纲 | 大纲 |
+| Summary | string | 大纲摘要 | 大纲摘要 |
+| Point | string | 生成的视角 | 视角 |
+| Summary | string | 摘要 | 摘要 |
+| Topic | string | 热点主题事件 | 热点主题事件 |
+| TopicSummaryResult | object | 热点主题事件摘要 |  |
+| Summaries | array<object> | 摘要列表 |  |
+| Summarie | object | 摘要对象 |  |
+| DocList | array<object> | 生成该标题摘要引用的文章 |  |
+| DocList | object | 文章对象 |  |
+| Source | string | 文章源 | 头条 |
+| Title | string | 文章标题 | 标题 |
+| Url | string | 文章 URL | [http://www.example.com](http://www.example.com) |
+| Summary | string | 摘要 | 摘要 |
+| Title | string | 标题 | 标题 |
+| WebReviewPointsResult | object | 网评选题视角分析结果 |  |
+| Attitudes | array<object> | 网友选题视角-观点列表 |  |
+| Attitude | object |  |  |
+| Attitude | string | 当前观点 | 当前观点 |
+| AttitudeType | string | 观点类型 | 观点类型 |
+| Comments | array<object> | 网友观点列表 |  |
+| Comment | object | 对象 |  |
+| Source | string | 来源 | 来源 |
+| Text | string | 内容 | 内容 |
+| Title | string | 标题 | 标题 |
+| Url | string | 当前所属的 URL | 当前所属的URL |
+| Username | string | 用户名 | 用户名 |
+| Ratio | string | 当前观点占比 | 当前观点占比 |
+| ViewPoints | array<object> | 选题视角列表 |  |
+| ViewPoint | object |  |  |
+| Outlines | array<object> | 大纲 |  |
+| Outline | object | 大纲对象 |  |
+| Outline | string | 大纲 | 大纲 |
+| Summary | string | 大纲摘要 | 大纲摘要 |
+| Point | string | 生成的视角 | 视角 |
+| Summary | string | 摘要 | 摘要 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -827,7 +168,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Code": "NoData",
   "Data": {
@@ -976,6 +319,10 @@ true
   "Success": true
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

@@ -2,11 +2,21 @@
 
 本文介绍如何配置并使用通义听悟-工业生产指令转写Agent。
 
+<a id="准备工作"></a>
+
+<a id="cfcc565184fdr"></a>
+
 ## 准备工作
 
 [开通](https://common-buy.aliyun.com/?commodityCode=sfm_TingWuAgent_public_cn)通义听悟 Agent 服务。
 
-**说明**开通后即可使用阿里云百炼平台全系通义听悟 Agent 服务。
+> **说明**
+>
+> 开通后即可使用阿里云百炼平台全系通义听悟 Agent 服务。
+
+<a id="一-创建应用"></a>
+
+<a id="00458686b0nqj"></a>
 
 ## 一、创建应用
 
@@ -14,9 +24,17 @@
 
 ![42](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4025297571/p1004408.webp)
 
+<a id="二-调试配置"></a>
+
+<a id="fded198e69tqd"></a>
+
 ## 二、调试配置
 
-完成调试配置后，您可多次[体验效果](https://help.aliyun.com/zh/model-studio/tingwu-industrial-instruction-guidelines#0212744c1075p)，确认效果满足预期后再[发布应用](https://help.aliyun.com/zh/model-studio/tingwu-industrial-instruction-guidelines#54ad18c3206oz)，并参照[API接入](https://help.aliyun.com/zh/model-studio/tingwu-industrial-instruction-guidelines#18067199c3nfh)进行实际开发调用。
+完成调试配置后，您可多次[体验效果](tingwu-industrial-instruction-guidelines-b514adbf5a1bf5c6.md#0212744c1075p)，确认效果满足预期后再[发布应用](tingwu-industrial-instruction-guidelines-b514adbf5a1bf5c6.md#54ad18c3206oz)，并参照[API接入](tingwu-industrial-instruction-guidelines-b514adbf5a1bf5c6.md#18067199c3nfh)进行实际开发调用。
+
+<a id="1-选择指令集"></a>
+
+<a id="dff06118e337u"></a>
 
 ### 1\. 选择指令集
 
@@ -37,15 +55,29 @@
 
 您最多可以添加10个指令集，指令集在所有工业指令转写应用间共享。
 
+<a id="2-语音输入"></a>
+
+<a id="4c5387822cib9"></a>
+
 ### 2\. 语音输入
 
 ![44](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4025297571/p1004413.webp)
+
+<a id="sec-tabs"></a>
+
+<a id="模型选择"></a>
+
+<a id="模型选择-h4"></a>
 
 #### 模型选择
 
 目前支持以下模型：
 
 -   一句话识别及翻译 V1.0模型（支持最长60s的音频识别和翻译）。
+
+<a id="输入语种"></a>
+
+<a id="输入语种-h4"></a>
 
 #### 输入语种
 
@@ -54,27 +86,51 @@
 -   多语种：将自动识别发言语种。
 -   单语种：若您的应用场景仅存在单一语种，可以指定单一语种，目前支持中文、英文、粤语、韩语、日语、德语、法语、俄语、意大利语和西班牙语。
 
-**说明**界面化的应用配置在发布后会对 API 生效。
+> **说明**
+>
+> 界面化的应用配置在发布后会对 API 生效。
 
-完成上述配置后，即可点击**立即录音**按钮进行调试（步骤[3\. 应用信息](https://help.aliyun.com/zh/model-studio/tingwu-industrial-instruction-guidelines#b20c42d508vop)仅在接口调用时需要参考）。
+完成上述配置后，即可点击**立即录音**按钮进行调试（步骤[3\. 应用信息](tingwu-industrial-instruction-guidelines-b514adbf5a1bf5c6.md#b20c42d508vop)仅在接口调用时需要参考）。
 
-如需查看**调试效果**和**测试记录**，请参见[体验效果](https://help.aliyun.com/zh/model-studio/tingwu-industrial-instruction-guidelines#0212744c1075p)。
+如需查看**调试效果**和**测试记录**，请参见[体验效果](tingwu-industrial-instruction-guidelines-b514adbf5a1bf5c6.md#0212744c1075p)。
+
+<a id="3-应用信息"></a>
+
+<a id="b20c42d508vop"></a>
 
 ### 3\. 应用信息
 
 ![415](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4025297571/p1004417.webp)
 
+<a id="sec-tabs-2"></a>
+
+<a id="应用名称"></a>
+
+<a id="应用名称-h4"></a>
+
 #### 应用名称
 
 在此处复制或修改本应用名称。
+
+<a id="应用id"></a>
+
+<a id="应用id-h4"></a>
 
 #### 应用ID
 
 在此处查看或复制本应用ID。
 
+<a id="应用描述"></a>
+
+<a id="应用描述-h4"></a>
+
 #### 应用描述
 
 在此处添加本应用的描述信息。
+
+<a id="三-体验效果"></a>
+
+<a id="0212744c1075p"></a>
 
 ## 三、体验效果
 
@@ -84,13 +140,27 @@
 
 ![46](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4025297571/p1004439.webp)
 
+<a id="sec-tabs-3"></a>
+
+<a id="对话内容"></a>
+
+<a id="对话内容-h4"></a>
+
 #### 对话内容
 
 对话内容中显示的是输入音频的中文翻译结果。
 
+<a id="指令纠正"></a>
+
+<a id="指令纠正-h4"></a>
+
 #### 指令纠正
 
 指令纠正中显示的是对话内容通过大模型纠正后的指令结果。
+
+<a id="测试记录"></a>
+
+<a id="测试记录-h4"></a>
 
 #### 测试记录
 
@@ -102,11 +172,19 @@
 
 ![416](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4025297571/p1004442.webp)
 
+<a id="四-发布应用"></a>
+
+<a id="54ad18c3206oz"></a>
+
 ## 四、发布应用
 
 点击控制台右上角的**发布**按钮，输入版本描述信息，即可完成发布，应用发布后线上将立即生效。
 
 ![48](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4025297571/p1004443.webp)
+
+<a id="版本管理"></a>
+
+<a id="0551030be1t70"></a>
 
 ### 版本管理
 
@@ -114,11 +192,19 @@
 
 ![419](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4025297571/p1004447.webp)
 
+<a id="五-api接入"></a>
+
+<a id="18067199c3nfh"></a>
+
 ## 五、API接入
 
 应用发布完成后，稍等片刻，点击控制台顶部**API 接入**按钮，查看对应的 Java 和 Python 接入参考代码，然后接入到您的业务系统中。
 
 ![412](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4025297571/p1004446.webp)
+
+<a id="六-删除应用"></a>
+
+<a id="6659473930ruf"></a>
 
 ## 六、删除应用
 

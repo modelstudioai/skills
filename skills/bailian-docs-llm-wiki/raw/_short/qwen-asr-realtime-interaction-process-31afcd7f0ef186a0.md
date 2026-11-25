@@ -2,95 +2,96 @@
 
 Qwen-ASR-Realtime 实时语音识别服务通过 WebSocket 协议，接收实时音频流并实时转写。支持 VAD 模式 和 Manual 模式 交互流程。
 
-使用 Python 调用模型时，请参见 [Qwen-ASR-Realtime Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-asr-realtime-281dee62f7074a94.md)。
+使用 Python 调用模型时，请参见 [Qwen-ASR-Realtime Python SDK](realtime-websocket-python-sdk-qwen-asr-realtime-281dee62f7074a94.md)。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md)，示例代码请参见[实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)。
+**用户指南：**关于模型介绍和选型建议请参见[语音识别](../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md)，示例代码请参见[实时语音识别](../model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)。
+
+<a id="接口地址"></a>
+
+<a id="07bfd546805pn"></a>
 
 ## 接口地址
 
 WebSocket URL 固定如下，通过查询参数 `model` 指定要调用的模型名称（将 `<model_name>` 替换为实际的模型）：
 
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
+
 #### 华北2（北京）
 
 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+>
+> `{WorkspaceId}`需要替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。现有域名仍可正常使用。
 
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+> **重要**
+>
+> URL 必须使用 `wss://` 协议。Authorization 在请求头中设置（参见[请求头](qwen-asr-realtime-interaction-process-31afcd7f0ef186a0.md#b02603aacf7e9)），模型通过 URL 查询参数 `model` 指定。
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
+<a id="请求头"></a>
 
-**重要**URL 必须使用 `wss://` 协议。Authorization 在请求头中设置（参见[请求头](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-interaction-process#b02603aacf7e9)），模型通过 URL 查询参数 `model` 指定。
+<a id="b02603aacf7e9"></a>
 
 ## 请求头
 
 请求头中需添加如下信息：
 
-**参数**
+| 参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- |
+| Authorization | string | 是 | 鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。 |
+| user-agent | string | 否 | 客户端标识，便于服务端追踪来源。 |
+| X-DashScope-WorkSpace | string | 否 | 阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。 |
+| X-DashScope-DataInspection | string | 否 | 是否启用数据合规检测功能。默认不传或设为`enable`。如非必要，请勿启用该参数。 |
 
-**类型**
+> **重要**
+>
+> Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
 
-**是否必选**
+<a id="交互流程"></a>
 
-**说明**
-
-Authorization
-
-string
-
-是
-
-鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。
-
-user-agent
-
-string
-
-否
-
-客户端标识，便于服务端追踪来源。
-
-X-DashScope-WorkSpace
-
-string
-
-否
-
-阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。
-
-X-DashScope-DataInspection
-
-string
-
-否
-
-是否启用数据合规检测功能。默认不传或设为`enable`。如非必要，请勿启用该参数。
-
-**重要**Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
+<a id="qwen-asr-flow-h2"></a>
 
 ## 交互流程
 
-客户端事件和服务端事件的详细说明，请参见[客户端事件](raw/_short/qwen-asr-realtime-client-events-1496b1c0718012d4.md)和[服务端事件](raw/_short/qwen-asr-realtime-server-events-5dc40b9e8a313c98.md)。
+客户端事件和服务端事件的详细说明，请参见[客户端事件](qwen-asr-realtime-client-events-1496b1c0718012d4.md)和[服务端事件](qwen-asr-realtime-server-events-5dc40b9e8a313c98.md)。
 
 支持两种交互模式：
 
 -   **VAD 模式（默认）**：服务端自动检测语音的起点和终点（断句），适用于实时对话、会议记录等场景。
 -   **Manual 模式**：由客户端控制断句，适用于客户端能明确判断语句边界的场景，如聊天软件中的发送语音。
 
+<a id="recognition-results"></a>
+
 该模型不返回转写文本的句级、字词级时间戳。VAD 事件中的语音起止时间用于描述语音活动边界，字段说明见对应事件。
+
+<a id="vad-模式-默认"></a>
+
+<a id="9b49887720jcw"></a>
 
 ### VAD 模式（默认）
 
-`silence_duration_ms` 的服务端默认值为 `800`，对话、聊天等需要快速断句的场景可参考 `400`；`threshold` 的服务端默认值为 `0.2`。完整配置见[客户端事件](raw/_short/qwen-asr-realtime-client-events-1496b1c0718012d4.md)。
+`silence_duration_ms` 的服务端默认值为 `800`，对话、聊天等需要快速断句的场景可参考 `400`；`threshold` 的服务端默认值为 `0.2`。完整配置见[客户端事件](qwen-asr-realtime-client-events-1496b1c0718012d4.md)。
 
 服务端自动检测语音的起点和终点（断句）。开发者只需持续发送音频流，服务端会在检测到一句话结束时自动返回最终识别结果。此模式适用于实时对话、会议记录等场景。
 
@@ -108,7 +109,9 @@ string
     
 -   客户端在音频提交完后，发送`session.finish`事件通知服务端结束当前会话。
     
-    **警告**在 VAD 模式下，推完音频后必须先发送`session.finish`事件再关闭连接。如果客户端直接关闭 WebSocket 连接而未发送该事件，服务端将丢弃当前 in\_progress item，`conversation.item.input_audio_transcription.completed` 等事件将不会到达。建议在调用 `ws.Close()` 之前，先发送 `{"type":"session.finish"}`，并等待收到`session.finished`事件后再关闭连接。
+    > **警告**
+    >
+    > 在 VAD 模式下，推完音频后必须先发送`session.finish`事件再关闭连接。如果客户端直接关闭 WebSocket 连接而未发送该事件，服务端将丢弃当前 in\_progress item，`conversation.item.input_audio_transcription.completed` 等事件将不会到达。建议在调用 `ws.Close()` 之前，先发送 `{"type":"session.finish"}`，并等待收到`session.finished`事件后再关闭连接。
     
 -   服务端在检测到语音结束时返回`input_audio_buffer.speech_stopped`事件。
     
@@ -122,6 +125,10 @@ string
     
 -   服务端返回`session.finished`事件，通知客户端识别结束，此时客户端需要主动断开连接。
     
+
+<a id="manual-模式"></a>
+
+<a id="ee09a3493fsuc"></a>
 
 ### Manual 模式
 
@@ -139,27 +146,49 @@ string
 -   服务端返回`conversation.item.input_audio_transcription.completed`事件，其中包含语音识别最终结果。
 -   服务端返回`session.finished`事件，通知客户端识别结束，此时客户端需要主动断开连接。
 
+<a id="调用示例"></a>
+
+<a id="examples"></a>
+
 ## 调用示例
 
 以下示例使用 qwen3-asr-flash-realtime。在[控制台获取 API Key 和 Base URL](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)，分别配置环境变量 `DASHSCOPE_API_KEY` 和 `DASHSCOPE_BASE_URL`。
 
 下载[示例音频](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav)并保存为 `asr_example.wav`。音频为 16 kHz、单声道、16-bit PCM 编码的 WAV 文件。
 
-**说明**示例代码读取 `asr_example.pcm`（PCM16、16 kHz、单声道）。如仅有 MP3/WAV 等格式，可使用 ffmpeg 转换：
+> **说明**
+>
+> 示例代码读取 `asr_example.pcm`（PCM16、16 kHz、单声道）。如仅有 MP3/WAV 等格式，可使用 ffmpeg 转换：
+>
+> <a id="code-block"></a>
+>
+> ```bash
+> ffmpeg -i asr_example.wav -ar 16000 -ac 1 -f s16le asr_example.pcm
+> ```
 
-```
-ffmpeg -i asr_example.wav -ar 16000 -ac 1 -f s16le asr_example.pcm
-```
+> **说明**
+>
+> 使用非 VAD（Manual）模式时，建议单次会话持续发送的音频时长累加不超过 60 秒。
 
-**说明**使用非 VAD（Manual）模式时，建议单次会话持续发送的音频时长累加不超过 60 秒。
+<a id="sec-tabs-2"></a>
+
+<a id="java"></a>
+
+<a id="java-h4"></a>
 
 #### Java
 
 在运行示例前，请确保已安装Java-WebSocket依赖：
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-maven-tab"></a>
+
 Maven
 
-```
+<a id="code-code-group-maven"></a>
+
+```xml
 <dependency>
     <groupId>org.java-websocket</groupId>
     <artifactId>Java-WebSocket</artifactId>
@@ -172,14 +201,20 @@ Maven
 </dependency>
 ```
 
+<a id="fig-code-group-gradle-tab"></a>
+
 Gradle
 
-```
+<a id="code-code-group-gradle"></a>
+
+```groovy
 implementation 'org.java-websocket:Java-WebSocket:1.5.6'
 implementation 'org.json:json:20240303'
 ```
 
-```
+<a id="code-block-2"></a>
+
+```java
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
@@ -376,17 +411,27 @@ public class QwenASRRealtimeClient {
 }
 ```
 
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
 在运行示例前，请确保已使用以下命令安装依赖：
 
-```
+<a id="code-block-3"></a>
+
+```bash
 python -m pip install websocket-client
 ```
 
-**说明**不要将示例文件命名为 `websocket.py`，以免与 `websocket` 模块重名，导致导入冲突。
+> **说明**
+>
+> 不要将示例文件命名为 `websocket.py`，以免与 `websocket` 模块重名，导致导入冲突。
 
-```
+<a id="code-block-4"></a>
+
+```python
 # pip install websocket-client
 import os
 import time
@@ -551,18 +596,26 @@ thread.start()
 ws.run_forever()
 ```
 
+<a id="go"></a>
+
+<a id="go-h4"></a>
+
 #### Go
 
 新建 Go 示例目录后初始化模块并安装依赖：
 
-```
+<a id="code-block-5"></a>
+
+```bash
 go mod init asr-example
 go get github.com/gorilla/websocket@v1.5.3
 ```
 
 在运行示例前，请确保已安装相关依赖：
 
-```
+<a id="code-block-6"></a>
+
+```go
 package main
 
 import (
@@ -743,14 +796,23 @@ func receiveMessages(conn *websocket.Conn, sessionFinished chan<- bool) {
 }
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
 在运行示例前，请确保已使用以下命令安装依赖：
 
-```
+<a id="code-block-7"></a>
+
+```bash
 npm install ws
 ```
-```
+
+<a id="code-block-8"></a>
+
+```javascript
 /**
  * Qwen-ASR Realtime WebSocket 客户端（Node.js版）
  * 功能：
@@ -932,13 +994,19 @@ function sendAudio(audioPath) {
 
 将代码保存为 `asr_example.mjs`，运行 `node asr_example.mjs`。
 
+<a id="c"></a>
+
+<a id="c-h4"></a>
+
 #### C#
 
 将代码保存为 `Program.cs`，使用 .NET 控制台项目运行。
 
 示例代码如下：
 
-```
+<a id="code-block-9"></a>
+
+```csharp
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -1088,6 +1156,10 @@ class Program {
 }
 ```
 
+<a id="php"></a>
+
+<a id="php-h4"></a>
+
 #### PHP
 
 将依赖配置保存为 `composer.json`，执行 `composer install` 后运行 PHP 示例。
@@ -1104,7 +1176,9 @@ my-php-project/
 
 composer.json内容如下，相关依赖的版本号请根据实际情况自行决定：
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "require": {
         "react/event-loop": "^1.3",
@@ -1116,7 +1190,9 @@ composer.json内容如下，相关依赖的版本号请根据实际情况自行�
 
 index.php内容如下：
 
-```
+<a id="code-block-11"></a>
+
+```php
 <?php
 
 require __DIR__ . '/vendor/autoload.php';
@@ -1244,7 +1320,9 @@ function sendAudioStream($conn, $audio_file_path, $enable_server_vad, $loop, &$i
 }
 ```
 
+<a id="可用的-sdk"></a>
+
 ## 可用的 SDK
 
--   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-asr-realtime-281dee62f7074a94.md)
--   [Java SDK](raw/_short/qwen-asr-realtime-java-sdk-d0faa50c48463b79.md)
+-   [Python SDK](realtime-websocket-python-sdk-qwen-asr-realtime-281dee62f7074a94.md)
+-   [Java SDK](qwen-asr-realtime-java-sdk-d0faa50c48463b79.md)

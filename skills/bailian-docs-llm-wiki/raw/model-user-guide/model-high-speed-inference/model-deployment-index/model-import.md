@@ -2,63 +2,35 @@
 
 介绍百炼从阿里云 OSS 导入 LoRA 模型的全流程操作，涵盖首次 OSS 授权、模型文件准备、导入表单填写、导入模型管理与常见问题排查。
 
+<a id="模型导入概述"></a>
+
+<a id="h2-overview"></a>
+
 ## 模型导入概述
 
-本篇介绍将本地训练的 LoRA 模型从阿里云对象存储 OSS 导入到百炼的全流程，覆盖首次 OSS 授权、模型文件准备、导入表单填写、模型查看管理与删除，以及导入失败、已失效等常见问题排查。导入成功后即可部署服务，部署、扩缩容与下线操作详见[部署运维](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)，通过 API 完成部署与调用详见[使用 API 进行模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)，部署前置概念与计费方案对比详见[模型部署简介](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)，本篇与三者构成概念、导入、部署、调用的完整链路。
+本篇介绍将本地训练的 LoRA 模型从阿里云对象存储 OSS 导入到百炼的全流程，覆盖首次 OSS 授权、模型文件准备、导入表单填写、模型查看管理与删除，以及导入失败、已失效等常见问题排查。导入成功后即可部署服务，部署、扩缩容与下线操作详见[部署运维](model-deployment-introduction.md)，通过 API 完成部署与调用详见[使用 API 进行模型部署](model-deployment-quick-start.md)，部署前置概念与计费方案对比详见[模型部署简介](model-deployment-introduction.md)，本篇与三者构成概念、导入、部署、调用的完整链路。
 
 导入页基础模型字段由百炼接口动态返回当前支持导入的基础模型清单，可能随版本更新，请以控制台可选列表为准。当前支持的基础模型如下：
+
+<a id="accordion-当前支持的基础模型清单-点击展开"></a>
 
 当前支持的基础模型清单（点击展开）
 
 以下清单由后端接口动态返回，可能随版本更新而调整，请以控制台实际可选项为准。
 
-**模型系列**
-
-**模型名称**
-
-千问3
-
-千问3-32B
-
-千问3
-
-千问3-14B
-
-千问3
-
-千问3-8B
-
-千问3
-
-千问3-4B-Instruct-2507
-
-千问3-VL
-
-千问3-VL-8B-Instruct
-
-千问2.5
-
-千问2.5-72B-Instruct
-
-千问2.5
-
-千问2.5-32B-Instruct
-
-千问2.5
-
-千问2.5-14B-Instruct
-
-千问2.5
-
-千问2.5-7B-Instruct
-
-千问2.5-VL
-
-千问2.5-VL-72B-Instruct
-
-千问2.5-VL
-
-千问2.5-VL-7B-Instruct
+| 模型系列 | 模型名称 |
+| --- | --- |
+| 千问3 | 千问3-32B |
+| 千问3 | 千问3-14B |
+| 千问3 | 千问3-8B |
+| 千问3 | 千问3-4B-Instruct-2507 |
+| 千问3-VL | 千问3-VL-8B-Instruct |
+| 千问2.5 | 千问2.5-72B-Instruct |
+| 千问2.5 | 千问2.5-32B-Instruct |
+| 千问2.5 | 千问2.5-14B-Instruct |
+| 千问2.5 | 千问2.5-7B-Instruct |
+| 千问2.5-VL | 千问2.5-VL-72B-Instruct |
+| 千问2.5-VL | 千问2.5-VL-7B-Instruct |
 
 训练方式可选项取决于所选基础模型的声明，选择基础模型后训练方式字段自动渲染可选项并默认选中第一项。当前版本支持导入 LoRA 模型，全参微调模型不可导入。
 
@@ -66,11 +38,21 @@
 
 导入成功后的模型状态为创建成功，可在[我的模型](https://bailian.console.aliyun.com/cn-beijing/model/custom)列表中部署服务；从 OSS 导入的模型不支持增量训练，如需迭代请重新训练后再次导入。导入后将使用百炼提供的免费存储空间存放模型记录。
 
+<a id="首次导入前完成-oss-授权"></a>
+
+<a id="h2-authorize-oss"></a>
+
 ## 首次导入前完成 OSS 授权
 
-首次从 OSS 导入模型前，须完成 OSS 服务关联角色授权，并为目标 Bucket 添加访问标签。授权通过导入页一键完成，授权后系统自动创建服务关联角色 AliyunServiceRoleForSFMDataHubOSSImport（服务名 datahub.sfm.aliyuncs.com，权限策略 AliyunServiceRolePolicyForSFMDataHubOSSImport），通常秒级生效。服务关联角色说明详见[OSS 服务关联角色](raw/application-api-reference/more/bailian-service-linked-role.md)，主账号与子账号的概念与区别详见[主账号与子账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
+首次从 OSS 导入模型前，须完成 OSS 服务关联角色授权，并为目标 Bucket 添加访问标签。授权通过导入页一键完成，授权后系统自动创建服务关联角色 AliyunServiceRoleForSFMDataHubOSSImport（服务名 datahub.sfm.aliyuncs.com，权限策略 AliyunServiceRolePolicyForSFMDataHubOSSImport），通常秒级生效。服务关联角色说明详见[OSS 服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role)，主账号与子账号的概念与区别详见[主账号与子账号](../../security-and-compliance/permission-management-overview.md)。
 
 在[导入模型页](https://bailian.console.aliyun.com/cn-beijing/model/custom/import_model)的“导入来源”选择“从 OSS 导入”后，若未授权，OSS 字段区会提示“您还未授权OSS”并显示“前往授权”链接，确定按钮在未授权时不可用。主账号与子账号的授权路径不同，请按账号类型选择。
+
+<a id="sec-tabs"></a>
+
+<a id="使用主账号"></a>
+
+<a id="使用主账号-h4"></a>
 
 #### 使用主账号
 
@@ -78,6 +60,10 @@
 2.  在弹出的对话框中点击“立即授权”，系统自动创建服务关联角色 AliyunServiceRoleForSFMDataHubOSSImport，通常秒级生效，服务高峰期可能稍有延迟。
 3.  为目标 OSS Bucket 添加标签：访问 OSS 管理控制台的 Bucket 列表，找到目标 Bucket，悬停标签列图标并点击“前往编辑”→“创建标签”，添加标签名 bailian-datahub-access、标签值 read，保存。
 4.  返回导入模型页，重新选择目标 Bucket 再尝试导入。百炼不支持访问 Bucket 根目录下的文件，须选择 Bucket 下已有的子目录或新建子目录。
+
+<a id="使用子账号"></a>
+
+<a id="使用子账号-h4"></a>
 
 #### 使用子账号
 
@@ -90,7 +76,9 @@
     1.  主账号登录 RAM 控制台，在左侧导航栏选择“权限管理 → 权限策略”，点击“创建权限策略”。
     2.  选择“脚本编辑”，在 Effect、Action、Resource、Condition 中分别输入以下脚本内容，点击“确定”：
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "Action": [
         "ram:CreateServiceLinkedRole"
@@ -115,23 +103,43 @@
 
 OSS Bucket 存储类型不支持归档、冷归档或深度冷归档，服务端加密方式支持 OSS 完全托管，不支持 KMS 托管密钥（SSE-KMS）等其他服务端加密方式。支持私有 Bucket。百炼不支持访问 Bucket 根目录下的文件，须选择 Bucket 下已有的子目录或新建子目录。
 
+<a id="旧授权方式升级"></a>
+
+<a id="h3-auth-upgrade"></a>
+
 ### 旧授权方式升级
 
 若您此前使用的是旧授权方式，导入页 Bucket 字段下方会提示“建议转换为新的 Bucket 授权方式，提升安全性”并提供“直接转换”链接。点击后弹出确认框，确认即可升级为服务关联角色授权方式，升级不影响原有数据。
+
+<a id="未开通-oss-产品"></a>
+
+<a id="h3-auth-oss-not-opened"></a>
 
 ### 未开通 OSS 产品
 
 若主账号尚未开通对象存储 OSS，导入页会提示“您还未开通OSS”并提供前往购买的链接。须由主账号前往 OSS 控制台开通 OSS 后返回导入页重新授权。
 
+<a id="准备-lora-模型文件"></a>
+
+<a id="h2-prepare-files"></a>
+
 ## 准备 LoRA 模型文件
 
 导入前须将 LoRA 模型文件按以下要求存放在 OSS Bucket 的子目录中（不支持 Bucket 根目录），并在提交前通过系统的自动校验。模型文件须直接放在所选子目录下，系统会自动识别。
 
-**Important**当前版本支持导入 LoRA 模型，不支持导入全参微调模型。
+> **Important**当前版本支持导入 LoRA 模型，不支持导入全参微调模型。
+
+<a id="必需文件与目录结构"></a>
+
+<a id="h3-pf-required"></a>
 
 ### 必需文件与目录结构
 
 子目录中须包含以下文件：adapter\_model.safetensors（LoRA 适配器权重，SafeTensors 格式）、adapter\_config.json（含 rank、alpha 等参数的配置文件）、config.json（基础模型配置）。选中目录后系统会自动校验这些文件的格式与完整性。
+
+<a id="训练参数约束"></a>
+
+<a id="h3-pf-constraints"></a>
 
 ### 训练参数约束
 
@@ -142,7 +150,9 @@ OSS Bucket 存储类型不支持归档、冷归档或深度冷归档，服务端
 
 可在导入前运行以下脚本检查 adapter\_model.safetensors 是否含 visual 开头的参数键，以判断 VIT 是否冻结。
 
-```
+<a id="code-block-2"></a>
+
+```python
 from safetensors import safe_open
 import argparse
 
@@ -174,9 +184,17 @@ if __name__ == "__main__":
 
 判断方法：若脚本输出中存在以 visual 开头的参数键（如 visual.encoder.layer.0...），说明 VIT 部分未被冻结，该模型无法导入；若仅含 lora\_A、lora\_B 等 LoRA 相关参数键，则 VIT 已冻结，可正常导入。
 
+<a id="提交前自动校验"></a>
+
+<a id="h3-pf-autocheck"></a>
+
 ### 提交前自动校验
 
 在[导入页](https://bailian.console.aliyun.com/cn-beijing/model/custom/import_model)选中模型目录后，系统会自动调用文件校验接口检查目录下模型文件的格式与完整性。校验失败会在目录字段下方显示红标提示并阻断提交，须按提示修正文件后再提交。常见失败原因如缺少必需文件，对应错误码 AvailableModelFileNotFound。
+
+<a id="导入-lora-模型"></a>
+
+<a id="h2-import"></a>
 
 ## 导入 LoRA 模型
 
@@ -184,65 +202,35 @@ if __name__ == "__main__":
 
 1.  在“我的模型”页面，点击右上角的“导入模型”按钮进入导入模型创建页。
 2.  按下方表格填写模型信息，其中基础模型须与 LoRA 训练时的基座一致，Bucket 须已添加 bailian-datahub-access=read 标签，模型目录选中后系统会自动校验文件。
-3.  确认信息无误后点击确定提交，系统自动验证文件格式和完整性，通过后开始导入；如需放弃点击取消返回列表页。导入后可在[管理导入的模型](https://help.aliyun.com/zh/model-studio/model-import#h2-manage)查看状态。
+3.  确认信息无误后点击确定提交，系统自动验证文件格式和完整性，通过后开始导入；如需放弃点击取消返回列表页。导入后可在[管理导入的模型](model-import.md#h2-manage)查看状态。
 
 导入模型表单各字段含义如下：
 
-**字段**
+| 字段 | 说明 | 约束 |
+| --- | --- | --- |
+| 模型名称 | 输入模型的显示名称。 | 必填，最多 50 字符 |
+| 基础模型 | 选择 LoRA 训练时的基座模型，须与训练基座一致。 | 必填，下拉选择 |
+| 训练方式 | 可选项取决于所选基础模型，选择基础模型后自动渲染并默认选中第一项。 | 必填，下拉选择 |
+| 导入来源 | 为“从 OSS 导入”，无其他选项。 | 只读，默认选中 |
+| Bucket | 选择存放模型文件的 OSS Bucket，仅列出已添加 bailian-datahub-access=read 标签且当前地域支持的 Bucket（华北2（北京）：国内所有地域；新加坡：国内所有地域及新加坡地域）。 | 必填，下拉选择 |
+| 模型目录 | 在选定 Bucket 中浏览并选择模型 Checkpoint 所在子目录，不支持选 Bucket 根目录。 | 必填，树形选择 |
+| 模型加密 | 百炼自动为导出的模型文件开启 OSS 服务端加密（SSE-OSS），使用 OSS 完全托管密钥，加密算法为 AES256。 | 只读，百炼强制 |
 
-**说明**
-
-**约束**
-
-模型名称
-
-输入模型的显示名称。
-
-必填，最多 50 字符
-
-基础模型
-
-选择 LoRA 训练时的基座模型，须与训练基座一致。
-
-必填，下拉选择
-
-训练方式
-
-可选项取决于所选基础模型，选择基础模型后自动渲染并默认选中第一项。
-
-必填，下拉选择
-
-导入来源
-
-为“从 OSS 导入”，无其他选项。
-
-只读，默认选中
-
-Bucket
-
-选择存放模型文件的 OSS Bucket，仅列出已添加 bailian-datahub-access=read 标签且当前地域支持的 Bucket（华北2（北京）：国内所有地域；新加坡：国内所有地域及新加坡地域）。
-
-必填，下拉选择
-
-模型目录
-
-在选定 Bucket 中浏览并选择模型 Checkpoint 所在子目录，不支持选 Bucket 根目录。
-
-必填，树形选择
-
-模型加密
-
-百炼自动为导出的模型文件开启 OSS 服务端加密（SSE-OSS），使用 OSS 完全托管密钥，加密算法为 AES256。
-
-只读，百炼强制
-
-若尚未完成 OSS 授权，确定按钮不可用，须先完成[首次导入前完成 OSS 授权](https://help.aliyun.com/zh/model-studio/model-import#h2-authorize-oss)后再提交。导入成功后即可部署，部署操作详见[部署运维](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)。
+若尚未完成 OSS 授权，确定按钮不可用，须先完成[首次导入前完成 OSS 授权](model-import.md#h2-authorize-oss)后再提交。导入成功后即可部署，部署操作详见[部署运维](model-deployment-introduction.md)。
 
 导入后的模型状态包括创建中（正在导入）、创建成功（可部署）、创建失败（导入失败）和已失效（源文件已变更）。
+
+<a id="管理导入的模型"></a>
+
+<a id="h2-manage"></a>
 
 ## 管理导入的模型
 
 导入提交后返回[我的模型](https://bailian.console.aliyun.com/cn-beijing/model/custom)列表页，可查看与管理所有导入的模型。列表展示以下 6 列：模型名称/ID（附复制按钮）、基础模型、来源、支持部署方式、状态和操作。右上角提供**导入模型**和**返回旧版**入口。
+
+<a id="状态与流转"></a>
+
+<a id="h3-mng-status"></a>
 
 ### 状态与流转
 
@@ -252,53 +240,77 @@ Bucket
 
 已失效状态可悬停查看弹出框，展示“如下文件检测到更新”及发生变更的源文件名列表，提示须重新导入。
 
+<a id="操作列可用性"></a>
+
+<a id="h3-mng-ops"></a>
+
 ### 操作列可用性
 
 每行操作列固定提供**部署**、**增量训练**和**删除**三个按钮，按钮可用性取决于模型状态：
 
--   **部署**：仅创建成功状态可点击，点击后跳转部署创建页，部署操作详见[部署运维](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)；其余状态或无可选部署方式时按钮不可用。
+-   **部署**：仅创建成功状态可点击，点击后跳转部署创建页，部署操作详见[部署运维](model-deployment-introduction.md)；其余状态或无可选部署方式时按钮不可用。
 -   **增量训练**：从 OSS 导入的模型不支持增量训练，按钮不可用。
 -   **删除**：创建中状态不可删除；量化模型须前往模型压缩界面删除。
 
 在操作列点击删除并确认后，仅删除百炼侧的模型记录，不影响 OSS 源文件。其余状态删除时会调用删除接口清理记录。
 
-**Important**删除操作不可恢复：仅移除百炼侧的模型记录，须重新导入才能恢复；不会删除 OSS 中的源文件。
+> **Important**删除操作不可恢复：仅移除百炼侧的模型记录，须重新导入才能恢复；不会删除 OSS 中的源文件。
 
-列表顶部搜索框可按模型名称筛选模型，支持清空重置。**来源**列按导入来源渲染：OSS 导入显示 oss://bucket/path，训练任务显示来源任务 ID（已删除则显示“训练任务已删除”）。**支持部署方式**列展示模型支持的部署方式和训练方式标签（如全参、LoRA 或量化标签），以及计费方式（如按 Token 计费、按模型单元计费），无可选部署方式时显示“-”。通过 API 调用已部署模型详见[使用 API 进行模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)。
+列表顶部搜索框可按模型名称筛选模型，支持清空重置。**来源**列按导入来源渲染：OSS 导入显示 oss://bucket/path，训练任务显示来源任务 ID（已删除则显示“训练任务已删除”）。**支持部署方式**列展示模型支持的部署方式和训练方式标签（如全参、LoRA 或量化标签），以及计费方式（如按 Token 计费、按模型单元计费），无可选部署方式时显示“-”。通过 API 调用已部署模型详见[使用 API 进行模型部署](model-deployment-quick-start.md)。
 
 所有操作按单个模型进行，不支持批量删除或批量部署。
+
+<a id="常见问题"></a>
+
+<a id="h2-troubleshoot"></a>
 
 ## 常见问题
 
 汇总导入过程中常见的问题与处理方式。
 
+<a id="accordion-导入失败提示-availablemodelfilenotfound-怎么办"></a>
+
 导入失败提示 AvailableModelFileNotFound 怎么办？
 
 该错误表示模型目录文件校验未通过（格式或完整性问题），不是单纯重传文件可解决。请检查所选目录是否包含齐全合规的 adapter\_model.safetensors、adapter\_config.json、config.json，并确认 rank、词汇表、chat\_template 等约束均满足，修正后重新选择目录提交。
+
+<a id="accordion-模型状态显示-已失效-是怎么回事"></a>
 
 模型状态显示“已失效”是怎么回事？
 
 已失效表示该模型创建成功后，OSS 源模型文件发生了变更，属正常检测行为而非故障。将鼠标悬停在已失效状态上可查看发生变更的文件名列表，需重新导入模型方可恢复可用。
 
+<a id="accordion-遇到-10041495-报错怎么办"></a>
+
 遇到“10041495”报错怎么办？
 
 一般是由于主账号尚未开通对象存储服务 OSS。须由主账号前往 OSS 管理控制台按界面指引开通 OSS，再返回百炼导入模型界面重新尝试授权。
 
+<a id="accordion-子账号授权-oss-失败怎么办"></a>
+
 子账号授权 OSS 失败怎么办？
 
-子账号授权失败是因为没有创建服务关联角色的权限，并非真失败。须先由主账号在 RAM 控制台创建自定义权限策略（操作为 ram:CreateServiceLinkedRole，针对服务 datahub.sfm.aliyuncs.com）并授予子账号，再由子账号重新点击授权。OSS 服务关联角色说明详见[OSS 服务关联角色](raw/application-api-reference/more/bailian-service-linked-role.md)。
+子账号授权失败是因为没有创建服务关联角色的权限，并非真失败。须先由主账号在 RAM 控制台创建自定义权限策略（操作为 ram:CreateServiceLinkedRole，针对服务 datahub.sfm.aliyuncs.com）并授予子账号，再由子账号重新点击授权。OSS 服务关联角色说明详见[OSS 服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role)。
+
+<a id="accordion-bucket-下拉列表中目标-bucket-不可选怎么办"></a>
 
 Bucket 下拉列表中目标 Bucket 不可选怎么办？
 
 这是授权或地域要求而非故障。新授权方式下，未添加 bailian-datahub-access=read 标签的 Bucket 在下拉中不可选，须到 OSS 管理控制台为目标 Bucket 添加该标签后返回导入页重新选择；此外，下拉列表仅展示当前地域支持的 Bucket：华北2（北京）展示国内所有地域的 Bucket，新加坡展示国内所有地域及新加坡地域的 Bucket。
 
+<a id="accordion-我的模型列表每隔几秒自动刷新是故障吗"></a>
+
 我的模型列表每隔几秒自动刷新是故障吗？
 
 不是故障。列表检测到有处于创建中状态的模型时，会每 3 秒静默刷新以获取最新状态，无创建中状态时自动停止，属正常行为。
 
+<a id="accordion-为什么导入的模型与本地使用-vllm-sglang-推理的效果不一致"></a>
+
 为什么导入的模型与本地使用 vLLM、SGLang 推理的效果不一致？
 
-推理参数对齐详见[API部署指南](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)。
+推理参数对齐详见[API部署指南](model-deployment-quick-start.md)。
+
+<a id="accordion-删除导入的模型会影响-oss-中的源文件吗"></a>
 
 删除导入的模型会影响 OSS 中的源文件吗？
 

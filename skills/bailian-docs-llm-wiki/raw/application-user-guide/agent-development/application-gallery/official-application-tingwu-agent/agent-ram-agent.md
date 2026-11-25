@@ -2,15 +2,27 @@
 
 如果您有让子账号授权管理阿里云百炼服务调用的需求，首先需要创建RAM用户。您既需要通过RAM控制台进行RAM授权，也需要通过阿里云百炼控制台进行控制台授权。
 
+<a id="创建ram用户"></a>
+
+<a id="437b40c870kw8"></a>
+
 ## 创建RAM用户
 
 请参考文档[创建RAM用户](https://help.aliyun.com/zh/ram/user-guide/create-a-ram-user)完成RAM用户创建。
+
+<a id="通过ram控制台授权"></a>
+
+<a id="8976a2506dqx4"></a>
 
 ## 通过RAM控制台授权
 
 1.  请访问[RAM控制台](https://ram.console.aliyun.com/users)。
 2.  在左侧导航栏选择**身份管理用户**。
 3.  在待授权的RAM子账号的**操作**列，点击**添加权限**。在**权限策略**区域的搜索框中搜索并勾选管理听悟服务（Tingwu）的权限（AliyunTingwuFullAccess），并单击**确认新增授权**，完成授权操作。
+
+<a id="通过阿里云百炼控制台授权"></a>
+
+<a id="f6f88a2e83c35"></a>
 
 ## 通过阿里云百炼控制台授权
 

@@ -2,30 +2,42 @@
 
 让 Agent 工具自动创建并运行语音客户端，接入 Token Plan 的实时语音对话模型。
 
+<a id="支持的模型"></a>
+
+<a id="tp-rt-models"></a>
+
 ## 支持的模型
 
-模型
+| 模型 | 能力 |
+| --- | --- |
+| `qwen-audio-3.0-realtime-plus` | 实时语音对话 |
 
-能力
+更多模型以 [个人版](../token-plan-personal/token-plan-personal-overview.md#tppo-h-models)和[团队版](../token-plan-team-edition/token-plan-team-overview.md#tpto-h-models)支持的实时语音对话模型 为准。
 
-`qwen-audio-3.0-realtime-plus`
+<a id="前提"></a>
 
-实时语音对话
-
-更多模型以 [个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tppo-h-models)和[团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpto-h-models)支持的实时语音对话模型 为准。
+<a id="tp-rt-prereq"></a>
 
 ## 前提
 
 -   已订阅 Token Plan。个人版在 [我的订阅（个人版）](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal) 获取以 `sk-sp-` 开头的 API Key；团队版在 [成员管理](https://bailian.console.aliyun.com/cn-beijing/subscription/uac-admin/organization/members/list) 分配席位后获取 API Key。
 -   本地已安装 Python 3.9 及以上版本，并有可用的麦克风和扬声器。
 
+<a id="步骤一-把接入指令发给-agent-工具"></a>
+
+<a id="tp-rt-send"></a>
+
 ## 步骤一：把接入指令发给 Agent 工具
 
 展开下面的接入指令，复制后发给当前使用的 Agent 工具。它会读取已配置的 Token Plan Key、安装依赖、创建 `qwen_realtime_voice.py` 并运行，不需要手动配置 Key 或编写 Python。
 
+<a id="accordion-接入指令-含语音客户端脚本"></a>
+
 接入指令（含语音客户端脚本）
 
-```
+<a id="code-block"></a>
+
+````text
 请在当前项目接入 Token Plan 实时语音对话模型 qwen-audio-3.0-realtime-plus：
 
 1. 使用当前 Agent 工具已配置的 Token Plan API Key（优先读取 TOKEN_PLAN_API_KEY，其次读取 ANTHROPIC_AUTH_TOKEN）。如果两者都没有，提示我先在 Agent 工具中配置 Token Plan Key。不要向我展示 Key，也不要写入文件或日志。
@@ -53,6 +65,7 @@ WS_URL = "wss://token-plan.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model
 
 play_queue = queue.Queue()
 
+
 def play_audio():
     with sd.RawOutputStream(samplerate=24000, channels=1, dtype="int16") as stream:
         while True:
@@ -60,6 +73,7 @@ def play_audio():
             if chunk is None:
                 break
             stream.write(chunk)
+
 
 async def receive(ws):
     transcript = []
@@ -77,6 +91,7 @@ async def receive(ws):
             transcript.clear()
         elif event_type == "error":
             print(f"[错误] {event}", flush=True)
+
 
 async def send_mic(ws):
     loop = asyncio.get_running_loop()
@@ -103,6 +118,7 @@ async def send_mic(ws):
                     }
                 )
             )
+
 
 async def main():
     context = ssl.create_default_context(cafile=certifi.where())
@@ -135,6 +151,7 @@ async def main():
         threading.Thread(target=play_audio, daemon=True).start()
         await asyncio.gather(receive(ws), send_mic(ws))
 
+
 if __name__ == "__main__":
     try:
         asyncio.run(main())
@@ -146,67 +163,45 @@ if __name__ == "__main__":
 
 4. 使用 Bash 工具运行 python3 qwen_realtime_voice.py，timeout 设为 600000 毫秒。
 5. 启动后提示“开始说话，按 Ctrl+C 结束”。
-```
+````
 
-**说明**首次运行时，需要在系统设置中允许运行 Agent 工具的应用（如 Cursor、Terminal）访问麦克风，否则脚本收不到声音。建议使用耳机，避免扬声器播放的语音被麦克风采集，触发模型打断。
+> **说明**
+>
+> 首次运行时，需要在系统设置中允许运行 Agent 工具的应用（如 Cursor、Terminal）访问麦克风，否则脚本收不到声音。建议使用耳机，避免扬声器播放的语音被麦克风采集，触发模型打断。
+
+<a id="步骤二-开始语音对话"></a>
+
+<a id="tp-rt-start"></a>
 
 ## 步骤二：开始语音对话
 
 Agent 工具运行脚本后，看到“开始说话”提示即可说话。终端显示识别结果和模型回复，扬声器播放模型语音。按 Ctrl+C 结束会话。
 
-**说明**Agent 工具负责安装依赖、创建脚本和启动会话。语音数据在本地客户端和 Token Plan 之间传输，不经过 Agent 工具的文本模型。
+> **说明**
+>
+> Agent 工具负责安装依赖、创建脚本和启动会话。语音数据在本地客户端和 Token Plan 之间传输，不经过 Agent 工具的文本模型。
+
+<a id="保存为工具扩展"></a>
+
+<a id="tp-rt-reuse"></a>
 
 ## 保存为工具扩展
 
 需要再次使用时，让 Agent 工具把上面的指令保存为当前工具的 Skill、Slash Command 或 Agent 配置，之后通过该工具的触发方式启动。常见工具的扩展机制和路径如下：
 
-工具
+| 工具 | 扩展机制 | 配置文件路径 |
+| --- | --- | --- |
+| Claude Code | Slash Command | `.claude/commands/voice-chat.md` |
+| Codex | Skill | `~/.codex/skills/token-plan-voice/SKILL.md` |
+| Qwen Code | Skill | `~/.qwen/skills/voice-chat/SKILL.md` |
+| OpenCode | Agent | `.opencode/agents/voice-chat.md` |
+| OpenClaw | Skill | `~/.openclaw/workspace/skills/token-plan-voice/SKILL.md` |
+| Hermes Agent | Skill | `~/.hermes/skills/media/voice-chat/SKILL.md` |
+| Qoder | Skill | `~/.qoder/skills/voice-chat/SKILL.md` |
 
-扩展机制
+<a id="限制"></a>
 
-配置文件路径
-
-Claude Code
-
-Slash Command
-
-`.claude/commands/voice-chat.md`
-
-Codex
-
-Skill
-
-`~/.codex/skills/token-plan-voice/SKILL.md`
-
-Qwen Code
-
-Skill
-
-`~/.qwen/skills/voice-chat/SKILL.md`
-
-OpenCode
-
-Agent
-
-`.opencode/agents/voice-chat.md`
-
-OpenClaw
-
-Skill
-
-`~/.openclaw/workspace/skills/token-plan-voice/SKILL.md`
-
-Hermes Agent
-
-Skill
-
-`~/.hermes/skills/media/voice-chat/SKILL.md`
-
-Qoder
-
-Skill
-
-`~/.qoder/skills/voice-chat/SKILL.md`
+<a id="tp-rt-limits"></a>
 
 ## 限制
 

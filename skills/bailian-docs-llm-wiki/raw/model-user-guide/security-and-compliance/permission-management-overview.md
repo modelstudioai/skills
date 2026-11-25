@@ -2,9 +2,13 @@
 
 阿里云百炼权限管理支持基于控制台页面级、模型级的多维度权限控制，满足多地域、多用户的复杂组织架构需求。
 
+<a id="阿里云百炼身份管理"></a>
+
+<a id="2ed065c9409eu"></a>
+
 ## 阿里云百炼身份管理
 
-单个业务空间是进行**精细化权限管理**（模型、用户）和[阿里云账单分账](https://help.aliyun.com/zh/model-studio/permission-management-overview#23e1b216deked)的最小管理单元。
+单个业务空间是进行**精细化权限管理**（模型、用户）和[阿里云账单分账](permission-management-overview.md#23e1b216deked)的最小管理单元。
 
 百炼的业务空间权限管理基于三种角色：
 
@@ -12,77 +16,20 @@
 2.  **业务空间管理员**：只负责**某个特定业务空间**内的用户权限和资源管理。
 3.  **普通用户**：根据分配的权限使用资源。
 
-**业务空间权限**
+| 业务空间权限 | 超级管理员**（拥有[AliyunBailianFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailianfullaccess)系统策略**） | 业务空间管理员 | 普通用户 |
+| --- | --- | --- | --- |
+| 允许特定模型调用 & 限流 | 支持 | 不支持 | 不支持 |
+| 允许特定模型调优 | 支持 | 不支持 | 不支持 |
+| 允许特定模型部署 | 支持 | 不支持 | 不支持 |
+| 用户管理 | 支持 | 支持 | 不支持 |
+| 用户可用页面管理 | 支持 | 支持 | 不支持 |
+| API Key 管理 | 支持 | 支持 | 不支持 |
+| 访问/使用被授权的空间、页面、资源 | 支持 | 支持 | 支持 |
+| [OpenAPI 接口权限](permission-management-overview.md#4adcb2854f9rv) | 不支持 | 不支持 | 不支持 |
 
-**超级管理员**（拥有[AliyunBailianFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailianfullaccess)系统策略**）**
+<a id="超级管理员"></a>
 
-**业务空间管理员**
-
-普通用户
-
-允许特定模型调用 & 限流
-
-支持
-
-不支持
-
-不支持
-
-允许特定模型调优
-
-支持
-
-不支持
-
-不支持
-
-允许特定模型部署
-
-支持
-
-不支持
-
-不支持
-
-用户管理
-
-支持
-
-支持
-
-不支持
-
-用户可用页面管理
-
-支持
-
-支持
-
-不支持
-
-API Key 管理
-
-支持
-
-支持
-
-不支持
-
-访问/使用被授权的空间、页面、资源
-
-支持
-
-支持
-
-支持
-
-[OpenAPI 接口权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#4adcb2854f9rv)
-
-不支持
-
-不支持
-
-不支持
+<a id="982297bd47p3i"></a>
 
 ### 超级管理员
 
@@ -92,7 +39,7 @@ API Key 管理
     
     单击头像图标展开账号下拉面板，带有**主账号**标识的条目即为超级管理员账号。
     
--   拥有[AliyunBailianFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailianfullaccess) （百炼管理员）系统策略的 [RAM 用户](https://ram.console.aliyun.com/users)（账号）。可在百炼控制台右上角单击头像图标展开账号下拉面板，查看当前登录的RAM用户账号信息。该 RAM 用户可以通过百炼的全局管理菜单（[北京](https://bailian.console.aliyun.com/settings/workspace) | [新加坡](https://bailian.console.aliyun.com/settings/workspace) | [弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/settings/workspace) | [法兰克福](https://bailian.console.aliyun.com/eu-central-1/settings/workspace)），为任意 RAM 用户（包括自己）授权任意**地域**、任意**空间**的几乎所有权限。（仅 [OpenAPI 接口权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#4adcb2854f9rv) | [中国香港](https://bailian.console.aliyun.com/cn-hongkong/settings/workspace) 需要阿里云主账号可以添加）
+-   拥有[AliyunBailianFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailianfullaccess) （百炼管理员）系统策略的 [RAM 用户](https://ram.console.aliyun.com/users)（账号）。可在百炼控制台右上角单击头像图标展开账号下拉面板，查看当前登录的RAM用户账号信息。该 RAM 用户可以通过百炼的全局管理菜单（[北京](https://bailian.console.aliyun.com/settings/workspace) | [新加坡](https://bailian.console.aliyun.com/settings/workspace) | [弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/settings/workspace) | [法兰克福](https://bailian.console.aliyun.com/eu-central-1/settings/workspace)），为任意 RAM 用户（包括自己）授权任意**地域**、任意**空间**的几乎所有权限。（仅 [OpenAPI 接口权限](permission-management-overview.md#4adcb2854f9rv) | [中国香港](https://bailian.console.aliyun.com/cn-hongkong/settings/workspace) 需要阿里云主账号可以添加）
     
     > [RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)是阿里云主账号创建的子账号，用于安全地向团队内成员分配云资源和权限。
     
@@ -100,13 +47,19 @@ API Key 管理
 超级管理员可以使用百炼的全局管理菜单（[北京](https://bailian.console.aliyun.com/settings/workspace) | [新加坡](https://bailian.console.aliyun.com/settings/workspace) | [弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/settings/workspace) | [法兰克福](https://bailian.console.aliyun.com/eu-central-1/settings/workspace) | [中国香港](https://bailian.console.aliyun.com/cn-hongkong/settings/workspace)），进行多业务空间管理。功能包含：
 
 1.  新建业务空间，管理业务空间名称。
-2.  对所有[业务空间](https://help.aliyun.com/zh/model-studio/permission-management-overview#dac6676deelh2)进行模型管理、模型限流。
+2.  对所有[业务空间](permission-management-overview.md#dac6676deelh2)进行模型管理、模型限流。
 3.  对所有业务空间进行账号（用户）管理。
 4.  管理所有的 API Key。
-5.  在业务空间管理中为业务空间开启 [AI 安全护栏](https://help.aliyun.com/zh/model-studio/content-security#h2-workspace-switch)的输入检测/输出检测开关（仅北京地域）。
+5.  在业务空间管理中为业务空间开启 [AI 安全护栏](content-security.md#h2-workspace-switch)的输入检测/输出检测开关（仅北京地域）。
 6.  通过[ModelStudio OpenAPI](https://next.api.aliyun.com/api/ModelStudio/2026-02-10)管理业务空间（创建、查询、删除业务空间，以及配置模型授权与限流）。
 
-**说明**如需开通 [AI 安全护栏服务](raw/model-user-guide/security-and-compliance/content-security.md)（仅北京地域可用）、[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)、[应用观测](https://help.aliyun.com/zh/model-studio/agenteval-observation#h-agenteval-obs-start)等功能，建议使用**阿里云主账号**在控制台进行一次性授权和开通。
+> **说明**
+>
+> 如需开通 [AI 安全护栏服务](content-security.md)（仅北京地域可用）、[模型监控](../model-monitoring/model-telemetry.md)、[应用观测](../../application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-observation.md#h-agenteval-obs-start)等功能，建议使用**阿里云主账号**在控制台进行一次性授权和开通。
+
+<a id="业务空间管理员"></a>
+
+<a id="c82f37c2033vw"></a>
 
 ### 业务空间管理员
 
@@ -116,83 +69,26 @@ API Key 管理
 
 在**编辑权限**弹窗中，选择**其他**页签，在权限名称列表中勾选**管理员**，然后单击**确定**。
 
+<a id="业务空间权限管理"></a>
+
+<a id="dac6676deelh2"></a>
+
 ## 业务空间权限管理
 
 百炼按地理区域划分资源和业务空间，**单个业务空间不能跨地域存在。即使各个地域的默认业务空间，也是不同的空间**。单击前往全局管理菜单（[北京](https://bailian.console.aliyun.com/settings/workspace) | [新加坡](https://bailian.console.aliyun.com/settings/workspace) | [弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/settings/workspace) | [法兰克福](https://bailian.console.aliyun.com/eu-central-1/settings/workspace) | [中国香港](https://bailian.console.aliyun.com/cn-hongkong/settings/workspace)）。
 
 同时百炼的业务空间是进行**精细化权限管理**的**最小**管理单元，它可管理：
 
-**业务空间权限**
-
-**超级管理员**（拥有[AliyunBailianFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailianfullaccess)系统策略**）**
-
-**业务空间管理员**
-
-普通用户
-
-允许特定模型调用 & 限流
-
-支持
-
-不支持
-
-不支持
-
-允许特定模型调优
-
-支持
-
-不支持
-
-不支持
-
-允许特定模型部署
-
-支持
-
-不支持
-
-不支持
-
-用户管理
-
-支持
-
-支持
-
-不支持
-
-用户可用页面管理
-
-支持
-
-支持
-
-不支持
-
-API Key 管理
-
-支持
-
-支持
-
-不支持
-
-访问/使用被授权的空间、页面、资源
-
-支持
-
-支持
-
-支持
-
-[OpenAPI 接口权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#4adcb2854f9rv)
-
-不支持
-
-不支持
-
-不支持
+| 业务空间权限 | 超级管理员**（拥有[AliyunBailianFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailianfullaccess)系统策略**） | 业务空间管理员 | 普通用户 |
+| --- | --- | --- | --- |
+| 允许特定模型调用 & 限流 | 支持 | 不支持 | 不支持 |
+| 允许特定模型调优 | 支持 | 不支持 | 不支持 |
+| 允许特定模型部署 | 支持 | 不支持 | 不支持 |
+| 用户管理 | 支持 | 支持 | 不支持 |
+| 用户可用页面管理 | 支持 | 支持 | 不支持 |
+| API Key 管理 | 支持 | 支持 | 不支持 |
+| 访问/使用被授权的空间、页面、资源 | 支持 | 支持 | 支持 |
+| [OpenAPI 接口权限](permission-management-overview.md#4adcb2854f9rv) | 不支持 | 不支持 | 不支持 |
 
 -   **限制模型调用**：管理某个模型可否在该业务空间**调用**（控制台& API）并设置该模型的**请求数限流**和 **Token限流**。
     
@@ -219,64 +115,44 @@ API Key 管理
     在**编辑权限**弹窗中，选择**模型**页签，在权限列表中找到并勾选**模型体验-操作**权限项。左侧导航菜单中的**体验中心**与权限列表中的**模型体验-操作**相对应。
     
 
+<a id="api-key-权限"></a>
+
+<a id="f2704153a055r"></a>
+
 ### API Key 权限
 
 单个 API Key 只能归属一个地域内的一个业务空间和一个用户，且不能转移给其他业务空间或其他用户。API Key 的可调用的功能和模型限流与**归属业务空间**的权限保持一致**，**不受**用户（账号）控制台权限管理**的影响，也无需为不同模型（如文生文、文生图、语音合成）创建不同的API Key。
 
 API Key 的状态随归属用户（账号）操作的变化如下。主账号和具备该业务空间 API Key 权限的 RAM 用户均可删除 API Key。
 
-**说明**
+> **说明**
+>
+> -   自 2026年3月25日开始，**华北2（北京）**地域的所有新创建的 API Key 均归属主账号。
+> -   2026年3月25日前由 RAM 用户创建的 API Key 与 RAM 用户绑定。在 RAM 控制台删除该 RAM 用户时，百炼会同步删除这些 API Key，且不可恢复。删除 RAM 用户前，请确认其名下 API Key 的使用情况；如需保留调用能力，请使用主账号或其他账号重新创建 API Key，并更新业务配置。
+> -   2026年3月25日及之后创建的 API Key 不与 RAM 用户级联。删除 RAM 用户后，这些 API Key 仍然保留并可继续使用。
 
--   自 2026年3月25日开始，**华北2（北京）**地域的所有新创建的 API Key 均归属主账号。
--   2026年3月25日前由 RAM 用户创建的 API Key 与 RAM 用户绑定。在 RAM 控制台删除该 RAM 用户时，百炼会同步删除这些 API Key，且不可恢复。删除 RAM 用户前，请确认其名下 API Key 的使用情况；如需保留调用能力，请使用主账号或其他账号重新创建 API Key，并更新业务配置。
--   2026年3月25日及之后创建的 API Key 不与 RAM 用户级联。删除 RAM 用户后，这些 API Key 仍然保留并可继续使用。
-
-**触发操作**
-
-**主账号的 API Key**
-
-**RAM 账号的 API Key**
-
-**主动删除 API Key**
-
-支持（主账号默认具备权限；RAM 用户需具备所属业务空间的 API Key 管理权限）。删除后立即失效，不可恢复。
-
-支持（主账号默认具备权限；RAM 用户需具备所属业务空间的 API Key 管理权限）。删除后立即失效，不可恢复。
-
-**将账号移出业务空间**
-
-—
-
-API Key 失效
-
-> 重新加入业务空间后 API Key 恢复生效
-
-**在**[RAM 控制台](https://ram.console.aliyun.com/roles)**删除账号/角色**
-
-—
-
-2026年3月25日前创建的 API Key：同步删除，不可恢复。
-
-2026年3月25日及之后创建的 API Key：不受影响，继续有效。
-
-**为 API Key 设置 IP 访问白名单**
-
-全部地域的 API Key 均支持设置。
-
-全部地域的 API Key 均支持设置。
+<table><thead><tr><th><strong>触发操作</strong></th><th><strong>主账号的 API Key</strong></th><th><strong>RAM 账号的 API Key</strong></th></tr></thead><tbody><tr><td><strong>主动删除 API Key</strong></td><td><p>支持（主账号默认具备权限；RAM 用户需具备所属业务空间的 API Key 管理权限）。删除后立即失效，不可恢复。</p></td><td><p>支持（主账号默认具备权限；RAM 用户需具备所属业务空间的 API Key 管理权限）。删除后立即失效，不可恢复。</p></td></tr><tr><td><strong>将账号移出业务空间</strong></td><td><p>—</p></td><td><p>API Key 失效</p><blockquote><p>重新加入业务空间后 API Key 恢复生效</p></blockquote></td></tr><tr><td><p><strong>在</strong><a href="https://ram.console.aliyun.com/roles">RAM 控制台</a><strong>删除账号/角色</strong></p></td><td><p>—</p></td><td><p>2026年3月25日前创建的 API Key：同步删除，不可恢复。</p><p>2026年3月25日及之后创建的 API Key：不受影响，继续有效。</p></td></tr><tr><td><strong>为 API Key 设置 IP 访问白名单</strong></td><td><p>全部地域的 API Key 均支持设置。</p></td><td><p>全部地域的 API Key 均支持设置。</p></td></tr></tbody></table>
 
 **管理 API Key**：在百炼控制台左侧导航栏中选择**账号管理**，找到目标 RAM 用户并单击**权限管理**，为该用户添加 API Key 权限。赋予对应 RAM 用户**创建、删除、查看该空间下所有 API Key**的权限。
 
 在**编辑权限**弹窗中，切换到**其他**页签，勾选**API Key**即可。
 
+<a id="openapi-接口权限"></a>
+
+<a id="4adcb2854f9rv"></a>
+
 ### OpenAPI 接口权限
 
-RAM 用户默认无权调用百炼**应用**的数据、知识库、Prompt工程及长期记忆等功能的[Open API](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)。
+RAM 用户默认无权调用百炼**应用**的数据、知识库、Prompt工程及长期记忆等功能的[Open API](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir)。
 
 若需调用，需要**阿里云主账号**在 [RAM 控制台](https://ram.console.aliyun.com/users)为 RAM 用户添加以下**权限之一**：
 
--   [AliyunBailianDataFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatafullaccess)：可调用百炼应用 [API目录](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)下的所有API。
--   [AliyunBailianDataReadOnlyAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatareadonlyaccess)：可调用百炼应用 [API目录](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)下的**只读类**API，例如[查询文件状态](raw/_short/api-bailian-2023-12-29-describefile-020886c28a208bf2.md)、[查询知识库创建任务状态](raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)等。
+-   [AliyunBailianDataFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatafullaccess)：可调用百炼应用 [API目录](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir)下的所有API。
+-   [AliyunBailianDataReadOnlyAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatareadonlyaccess)：可调用百炼应用 [API目录](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir)下的**只读类**API，例如[查询文件状态](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-describefile)、[查询知识库创建任务状态](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexjobstatus)等。
+
+<a id="应用于生产环境"></a>
+
+<a id="71f9018eafvb0"></a>
 
 ### 应用于生产环境
 
@@ -300,330 +176,78 @@ RAM 用户默认无权调用百炼**应用**的数据、知识库、Prompt工程
         -   `project-dev-workspace`: 100 QPM (10%)
         -   预留缓冲：100 QPM (10%)
 
+<a id="账单查看与预付费权限管理"></a>
+
+<a id="23e1b216deked"></a>
+
 ## 账单查看与预付费权限管理
 
 RAM 用户默认无权查看阿里云账单和购买阿里云预付费产品，如需为 RAM 用户开通相关权限，需要在 [RAM 控制台](https://ram.console.aliyun.com/users)为 RAM 用户添加**特定权限。**
 
-**说明**以下权限将授予 RAM 用户**查看**阿里云**所有产品**的账单或**购买**阿里云**所有预付费产品**的权限，请谨慎授权。
+> **说明**
+>
+> 以下权限将授予 RAM 用户**查看**阿里云**所有产品**的账单或**购买**阿里云**所有预付费产品**的权限，请谨慎授权。
 
 1.  查看阿里云账单需要为 RAM 用户添加 [AliyunBSSReadOnlyAccess 权限](https://help.aliyun.com/zh/user-center/ram-policies-for-billing-management#li-lj9-l6a-in1)。
 2.  购买阿里云预付费产品需要为 RAM 用户添加[AliyunBSSOrderAccess 权限](https://help.aliyun.com/zh/user-center/ram-policies-for-billing-management#li-q7v-rt1-xvi) 。
 
+<a id="accordion-细粒度页面权限"></a>
+
 细粒度页面权限
 
-菜单
-
-子菜单
-
-AliyunBSSReadOnlyAccess
-
-AliyunBSSOrderAccess
-
-账户总览
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-账户总览
-
-充值
-
-页面可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-账户总览
-
-提现
-
-页面可查看，可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-账户总览
-
-退款
-
-页面可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-账户总览
-
-申请网商贷
-
-页面可查看，可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-账户总览
-
-申请支付宝首付款工具
-
-页面可查看，可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-账户总览
-
-查看详情
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-账户总览
-
-代金券管理
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-账户总览
-
-资源包管理
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-账户总览
-
-索取发票
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-账户总览
-
-申请合同
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-收支明细
-
-页面可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-消费记录
-
-消费总览
-
-页面可查看，可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-消费记录
-
-消费明细
-
-页面可查看，可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-消费记录
-
-使用记录
-
-页面可查看，可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-消费记录
-
-实例消费明细
-
-页面可查看，可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-消费记录
-
-月度成本消耗
-
-页面可查看，可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-消费记录
-
-导出记录
-
-页面可查看，可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-消费记录
-
-存储到OSS
-
-页面可查看，可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-账单分析
-
-产品账单分析
-
-页面可查看，可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-保证金管理
-
-页面可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-订单管理
-
-页面可查看，不可发起业务操作
-
-页面可查看，可发起业务操作
-
-代金券管理
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-优惠券管理
-
-页面不可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-储值卡管理
-
-页面不可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-提货券管理
-
-页面不可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-采购单
-
-页面不可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-资源包管理
-
-资源包概览
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-资源包管理
-
-使用明细
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-发票管理
-
-发票索取
-
-页面可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-发票管理
-
-发票列表
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-发票管理
-
-发票信息管理
-
-页面可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-发票管理
-
-发票寄送地址管理
-
-页面可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-汇款底单管理
-
-页面可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-退订管理
-
-五天无理由退款
-
-页面可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-退订管理
-
-退订记录
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-合同管理
-
-合同申请
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-合同管理
-
-合同管理
-
-页面可查看，无业务操作
-
-页面不可查看，不可发起业务操作
-
-可用性中心
-
-页面不可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-续费管理
-
-页面不可查看，不可发起业务操作
-
-页面不可查看，不可发起业务操作
-
-购买页
-
-各产品购买页
-
-页面可查看，不可发起业务操作
-
-页面可查看，不可发起业务操作
+| 菜单 | 子菜单 | AliyunBSSReadOnlyAccess | AliyunBSSOrderAccess |
+| --- | --- | --- | --- |
+| 账户总览 |  | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 账户总览 | 充值 | 页面可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 账户总览 | 提现 | 页面可查看，可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 账户总览 | 退款 | 页面可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 账户总览 | 申请网商贷 | 页面可查看，可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 账户总览 | 申请支付宝首付款工具 | 页面可查看，可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 账户总览 | 查看详情 | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 账户总览 | 代金券管理 | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 账户总览 | 资源包管理 | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 账户总览 | 索取发票 | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 账户总览 | 申请合同 | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 收支明细 |  | 页面可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 消费记录 | 消费总览 | 页面可查看，可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 消费记录 | 消费明细 | 页面可查看，可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 消费记录 | 使用记录 | 页面可查看，可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 消费记录 | 实例消费明细 | 页面可查看，可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 消费记录 | 月度成本消耗 | 页面可查看，可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 消费记录 | 导出记录 | 页面可查看，可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 消费记录 | 存储到OSS | 页面可查看，可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 账单分析 | 产品账单分析 | 页面可查看，可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 保证金管理 |  | 页面可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 订单管理 |  | 页面可查看，不可发起业务操作 | 页面可查看，可发起业务操作 |
+| 代金券管理 |  | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 优惠券管理 |  | 页面不可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 储值卡管理 |  | 页面不可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 提货券管理 |  | 页面不可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 采购单 |  | 页面不可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 资源包管理 | 资源包概览 | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 资源包管理 | 使用明细 | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 发票管理 | 发票索取 | 页面可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 发票管理 | 发票列表 | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 发票管理 | 发票信息管理 | 页面可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 发票管理 | 发票寄送地址管理 | 页面可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 汇款底单管理 |  | 页面可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 退订管理 | 五天无理由退款 | 页面可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 退订管理 | 退订记录 | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 合同管理 | 合同申请 | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 合同管理 | 合同管理 | 页面可查看，无业务操作 | 页面不可查看，不可发起业务操作 |
+| 可用性中心 |  | 页面不可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 续费管理 |  | 页面不可查看，不可发起业务操作 | 页面不可查看，不可发起业务操作 |
+| 购买页 | 各产品购买页 | 页面可查看，不可发起业务操作 | 页面可查看，不可发起业务操作 |
+
+<a id="常用设置"></a>
+
+<a id="9bb20e1217r4f"></a>
 
 ## 常用设置
+
+<a id="设置超级管理员"></a>
+
+<a id="6f98e93909xdj"></a>
 
 ### 设置超级管理员
 
@@ -631,6 +255,10 @@ AliyunBSSOrderAccess
 
 1.  前往 [RAM 控制台](https://ram.console.aliyun.com/users)，为 RAM 用户添加 [AliyunBailianFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailianfullaccess) （百炼管理员）权限和 [AliyunBSSOrderAccess](https://help.aliyun.com/zh/user-center/ram-policies-for-billing-management#h3-jp4-73a-2wi)（购买阿里云预付费产品）权限。
 2.  设置完成后即可通过百炼的全局管理菜单（[北京](https://bailian.console.aliyun.com/settings/workspace) | [新加坡](https://bailian.console.aliyun.com/settings/workspace) | [弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/settings/workspace) | [法兰克福](https://bailian.console.aliyun.com/eu-central-1/settings/workspace) | [中国香港](https://bailian.console.aliyun.com/cn-hongkong/settings/workspace)），为任意 RAM 用户（包括自己）授权任意**地域**、任意**空间**的任意权限，并购买百炼的预付费产品。
+
+<a id="设置业务空间管理员"></a>
+
+<a id="6a1e5856a8xht"></a>
 
 ### 设置业务空间管理员
 
@@ -641,21 +269,29 @@ AliyunBSSOrderAccess
     在**编辑权限**弹窗中，切换到**其他**页签，勾选**管理员**。
     
 
+<a id="设置模型调用权限"></a>
+
+<a id="f642213a1f38l"></a>
+
 ### 设置模型调用权限
 
-1.  若不使用**默认业务空间**，需保证业务空间已经为特定模型开通了[模型调用](raw/model-user-guide/security-and-compliance/permission-management-overview.md)权限。（需要超级管理员操作）
+1.  若不使用**默认业务空间**，需保证业务空间已经为特定模型开通了[模型调用](permission-management-overview.md)权限。（需要超级管理员操作）
     
 2.  **若需要通过百炼的控制台调用**，需要在百炼控制台左侧导航栏中选择**账号管理**，找到目标 RAM 用户并单击**权限管理**，为该用户添加：（需要超级管理员或业务空间管理员操作）
     
     1.  **模型体验-操作** 权限，用于在控制台上调用模型。
-    2.  **批量推理-操作** 权限，用于支持 [批量推理](raw/model-user-guide/model-high-speed-inference/batch-inference.md)功能。
+    2.  **批量推理-操作** 权限，用于支持 [批量推理](../model-high-speed-inference/batch-inference.md)功能。
     3.  **模型监控-操作** 权限，用于查看模型调用、评测的 Token 消耗量。
-3.  **若需要通过百炼的 API 调用，**需要为 RAM 用户在对应业务空间创建或分配 API Key，更多细节请参考本文的：[API Key 权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#f2704153a055r)。（需要超级管理员或业务空间管理员操作）
+3.  **若需要通过百炼的 API 调用，**需要为 RAM 用户在对应业务空间创建或分配 API Key，更多细节请参考本文的：[API Key 权限](permission-management-overview.md#f2704153a055r)。（需要超级管理员或业务空间管理员操作）
     
+
+<a id="设置控制台模型调优权限"></a>
+
+<a id="f2ca016a5ckjy"></a>
 
 ### 设置控制台模型调优权限
 
-1.  若不使用**默认业务空间**，需保证业务空间已经为特定模型开通了[模型调优（训练）](raw/model-user-guide/security-and-compliance/permission-management-overview.md)权限。（需要超级管理员操作）
+1.  若不使用**默认业务空间**，需保证业务空间已经为特定模型开通了[模型调优（训练）](permission-management-overview.md)权限。（需要超级管理员操作）
     
 2.  在百炼控制台左侧导航栏中选择**账号管理**，找到目标 RAM 用户并单击**权限管理**，为该用户添加几乎所有的模型权限：（需要超级管理员或业务空间管理员操作）
     
@@ -667,24 +303,48 @@ AliyunBSSOrderAccess
     6.  **数据管理-操作** 权限，用于管理调优数据集。
     7.  **模型监控-操作** 权限，用于查看模型调用、评测的 Token 消耗量。
 
+<a id="设置-api-模型调优权限"></a>
+
+<a id="3572aec7e24te"></a>
+
 ### 设置 API 模型调优权限
 
-1.  若不使用**默认业务空间**，需保证业务空间为特定模型开通了[模型调优（训练）](raw/model-user-guide/security-and-compliance/permission-management-overview.md)权限。（需要超级管理员操作）
-2.  为 RAM 用户在对应业务空间创建或分配 API Key，更多细节请参考本文的：[API Key 权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#f2704153a055r)。（需要超级管理员或业务空间管理员操作）
+1.  若不使用**默认业务空间**，需保证业务空间为特定模型开通了[模型调优（训练）](permission-management-overview.md)权限。（需要超级管理员操作）
+2.  为 RAM 用户在对应业务空间创建或分配 API Key，更多细节请参考本文的：[API Key 权限](permission-management-overview.md#f2704153a055r)。（需要超级管理员或业务空间管理员操作）
+
+<a id="常见问题"></a>
+
+<a id="e4fe0900fb8lr"></a>
 
 ## 常见问题
+
+<a id="1-如何获取业务空间-id-呢"></a>
+
+<a id="aac5b9bef24yb"></a>
 
 ### 1\. 如何获取业务空间 ID 呢？
 
 请参考应用开发的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
+<a id="2-如何使用子业务空间调用模型"></a>
+
+<a id="1ae3588d0ba5r"></a>
+
 ### 2\. 如何使用子业务空间调用模型？
 
 无需特殊设置，使用子业务空间的 API Key 即可。
 
+<a id="3-如何使用特定业务空间的应用"></a>
+
+<a id="7628d0d0df8vv"></a>
+
 ### 3\. 如何使用特定业务空间的应用？
 
-使用 API 管理、调用特定业务空间的应用需要同时设置 [APP ID 和 Workspace ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。
+使用 API 管理、调用特定业务空间的应用需要同时设置 [APP ID 和 Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。
+
+<a id="4-已配置-aliyunbailianfullaccess-但仍无法管理业务空间怎么办"></a>
+
+<a id="f3a7b2c1d4e5k"></a>
 
 ### 4\. 已配置 AliyunBailianFullAccess 但仍无法管理业务空间怎么办？
 
@@ -696,6 +356,10 @@ RAM 权限（如 AliyunBailianFullAccess）与百炼平台内部的业务空间�
 2.  单击右上角设置图标，在左侧导航栏中选择**账号管理**。
 3.  找到需要授权的子账号，单击**权限管理**。
 4.  为该子账号添加对应业务空间的管理权限。
+
+<a id="5-如何删除业务空间"></a>
+
+<a id="89eb760f64x25"></a>
 
 ### 5\. 如何删除业务空间？
 
@@ -710,43 +374,22 @@ RAM 权限（如 AliyunBailianFullAccess）与百炼平台内部的业务空间�
 
 **清理依赖：**删除前需先清理该业务空间下各子产品的资源：
 
-**子产品**
-
-**清理内容**
-
-CCAI 对话分析 AIO
-
-删除空间下所有应用，确认无数据和 API Key
-
-多模交互套件
-
-删除所有应用
-
-听悟
-
-在工作台搜索"听悟"，删除对应空间
-
-RAG 知识库
-
-知识管理、知识检索、知识问答下的服务全部删除
-
-数据连接 / RAG 数据集 / Connector
-
-连接器、上传文件、表格、Connector 连接全部删除
-
-模型训练 && 推理
-
-数据集、训练任务、我的模型、部署全部删除
-
-观测资源
-
-关闭模型监控、审计日志、推理日志数据投递与应用观测
-
-评测资源
-
-终止或删除未完成的模型评测、应用评测任务
+| 子产品 | 清理内容 |
+| --- | --- |
+| CCAI 对话分析 AIO | 删除空间下所有应用，确认无数据和 API Key |
+| 多模交互套件 | 删除所有应用 |
+| 听悟 | 在工作台搜索"听悟"，删除对应空间 |
+| RAG 知识库 | 知识管理、知识检索、知识问答下的服务全部删除 |
+| 数据连接 / RAG 数据集 / Connector | 连接器、上传文件、表格、Connector 连接全部删除 |
+| 模型训练 && 推理 | 数据集、训练任务、我的模型、部署全部删除 |
+| 观测资源 | 关闭模型监控、审计日志、推理日志数据投递与应用观测 |
+| 评测资源 | 终止或删除未完成的模型评测、应用评测任务 |
 
 若删除失败返回 `failReasons`，按提示清理对应资源后重试。
+
+<a id="6-如何对知识库和记忆库实现更细粒度的权限控制"></a>
+
+<a id="faq-custom-policy"></a>
 
 ### 6\. 如何对知识库和记忆库实现更细粒度的权限控制？
 
@@ -756,7 +399,9 @@ RAG 知识库
 
 自定义策略示例：
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "Version": "1",
   "Statement": [

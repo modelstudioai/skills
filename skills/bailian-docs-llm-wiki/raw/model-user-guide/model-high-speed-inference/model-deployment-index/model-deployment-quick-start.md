@@ -2,12 +2,22 @@
 
 本文档以千问模型的部署为例，使用 API（HTTP）调用方式帮助您完成阿里云百炼模型部署的全流程操作，包括部署、查询、推理、删除及权限排查。
 
-**重要**本文档仅适用于华北2（北京）地域。
+> **重要**
+>
+> 本文档仅适用于华北2（北京）地域。
+
+<a id="前提条件"></a>
+
+<a id="19b999d0581cj"></a>
 
 ## 前提条件
 
--   您已经完整阅读了[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)，熟悉阿里云百炼平台模型部署支持的模型和基本步骤。
--   您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。示例代码中的 `DASHSCOPE_API_KEY` 请替换为您自己的百炼 API Key；若使用 dashscope CLI，还需将 `DASHSCOPE_HTTP_BASE_URL` 替换为您获取的 API Host。
+-   您已经完整阅读了[模型部署](model-deployment-introduction.md)，熟悉阿里云百炼平台模型部署支持的模型和基本步骤。
+-   您需要已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。示例代码中的 `DASHSCOPE_API_KEY` 请替换为您自己的百炼 API Key；若使用 dashscope CLI，还需将 `DASHSCOPE_HTTP_BASE_URL` 替换为您获取的 API Host。
+
+<a id="1-部署模型"></a>
+
+<a id="ff83be0058xlz"></a>
 
 ## 1\. 部署模型
 
@@ -17,16 +27,24 @@
 
 使用**模型 ID**作为输入的`model_name`参数，即可使用 API 部署该模型。
 
+<a id="sec-tabs"></a>
+
+<a id="按模型单元的使用时长计费"></a>
+
+<a id="按模型单元的使用时长计费-h4"></a>
+
 #### 按模型单元的使用时长计费
 
-**说明**
-
--   执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
--   模型单元-后付费方式的算力资源先买到先得。如购买不成功会全额退款。
+> **说明**
+>
+> -   执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
+> -   模型单元-后付费方式的算力资源先买到先得。如购买不成功会全额退款。
 
 选择**按模型单元计费**计费方式，计费模式为按模型单元的使用时长收费，适用场景为模型调优后的大规模推理业务，资源专属，性能和成本灵活可调；吞吐/并发和生成速度均为客户自定义。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -45,58 +63,21 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 
 模型单元部署模式还支持以下更多设置：
 
-**配置内容**
+<table><thead><tr><th><p><strong>配置内容</strong></p></th><th><p><strong>配置详情</strong></p></th></tr></thead><tbody><tr><td><p>服务名称</p></td><td><p>自定义部署服务的名称。</p></td></tr><tr><td><p>选择模型</p></td><td><p>选择要部署的模型，包括平台预置模型和已调优的模型。</p></td></tr><tr><td><p>模型单元类型</p></td><td><p>选择部署规格，不同规格对应不同的算力和性能。</p></td></tr><tr><td><p>单副本模型单元</p></td><td><p>单副本所需的模型单元数量，由部署模版和模型单元类型共同决定，不可修改。例如 qwen3-32b 单副本模型单元数量为 16。总模型单元数 = 部署副本数 × 单副本模型单元，决定了部署服务使用多少资源。部署副本数扩大会使用更多模型单元，提供更好的模型性能。</p></td></tr><tr><td><p>部署副本数</p></td><td><p>设置初始部署副本数量，影响服务的并发处理能力。</p></td></tr><tr><td><p>部署模版</p></td><td><p>选择部署模版（如&quot;单机部署&quot;），不同模版对应不同的资源配置方案。仅在模型单元计费模式下可用。</p></td></tr><tr><td><p>配置模型推理模式</p></td><td><p>部分模型在以<strong>模型单元</strong>方式部署时，可配置推理模式、最长上下文等。</p><ul><li><p>Instruct - 模型部署后以<strong>非思考模式</strong>进行推理。</p></li><li><p>Thinking - 模型部署后以思考模式进行推理。</p></li></ul></td></tr><tr><td><p>最长上下文</p></td><td><p>部分模型的<strong>模型单元</strong>部署模式支持该设置。最长上下文长度基于模型类型。</p></td></tr><tr><td><p>服务限流</p></td><td><p>部分模型的<strong>模型单元</strong>部署模式支持该设置，可限制模型调用的 RPM、TPM。</p></td></tr></tbody></table>
 
-**配置详情**
+如何在 API 设置上述内容，请参考：[使用 API 创建部署](../../../model-api-reference/model-production/deployments-api/model-deployment-text-generation-api/create-deployment-api.md)。
 
-服务名称
+<a id="按模型-token-使用量计费"></a>
 
-自定义部署服务的名称。
-
-选择模型
-
-选择要部署的模型，包括平台预置模型和已调优的模型。
-
-模型单元类型
-
-选择部署规格，不同规格对应不同的算力和性能。
-
-单副本模型单元
-
-单副本所需的模型单元数量，由部署模版和模型单元类型共同决定，不可修改。例如 qwen3-32b 单副本模型单元数量为 16。总模型单元数 = 部署副本数 × 单副本模型单元，决定了部署服务使用多少资源。部署副本数扩大会使用更多模型单元，提供更好的模型性能。
-
-部署副本数
-
-设置初始部署副本数量，影响服务的并发处理能力。
-
-部署模版
-
-选择部署模版（如"单机部署"），不同模版对应不同的资源配置方案。仅在模型单元计费模式下可用。
-
-配置模型推理模式
-
-部分模型在以**模型单元**方式部署时，可配置推理模式、最长上下文等。
-
--   Instruct - 模型部署后以**非思考模式**进行推理。
-    
--   Thinking - 模型部署后以思考模式进行推理。
-    
-
-最长上下文
-
-部分模型的**模型单元**部署模式支持该设置。最长上下文长度基于模型类型。
-
-服务限流
-
-部分模型的**模型单元**部署模式支持该设置，可限制模型调用的 RPM、TPM。
-
-如何在 API 设置上述内容，请参考：[使用 API 创建部署](raw/model-api-reference/model-production/deployments-api/model-deployment-text-generation-api/create-deployment-api.md)。
+<a id="按模型-token-使用量计费-h4"></a>
 
 #### 按模型 Token 使用量计费
 
 选择计费方式为**按Token计费**，计费模式为按Token用量收费，适用于高性价比诉求且对并发和延迟要求不高的场景。该模式价格优势最高，吞吐/并发和生成速度均由平台预置，用户不可调。
 
-```
+<a id="code-block-2"></a>
+
+```bash
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -110,9 +91,15 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 
 > capacity 参数设置无效，但必须填写。如需扩缩容，请前往专属部署[控制台](https://bailian.console.aliyun.com/cn-beijing/model/deploy)填写表单申请。
 
+<a id="dashscope-cli"></a>
+
+<a id="dashscope-cli-h4"></a>
+
 #### dashscope CLI
 
-```
+<a id="code-block-3"></a>
+
+```bash
 export DASHSCOPE_API_KEY="your-api-key"
 # 将 {WorkspaceId} 替换为业务空间ID，cn-beijing 替换为对应地域（新加坡: ap-southeast-1, 美东: us-east-1）
 export DASHSCOPE_HTTP_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
@@ -126,15 +113,19 @@ dashscope deployments create -m qwen2.5-7b-instruct -s tst -c 1 --plan mu
 
 > `-m` 指定模型名称，`-s` 指定服务后缀，`-c` 指定部署容量。
 
-**重要**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+> **重要**
+>
+> SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+>
+> [DashScope SDK Expert](../../../model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-[DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
-
-完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
+完整地域表见 [Base URL 总览](../../../model-api-reference/preparations/base-url.md)。
 
 命令执行成功后，返回如下结果：（以模型单元部署为例）
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "request_id": "83b173ab-2b2f-41aa-8c57-b173e8be934e",
     "output":
@@ -157,11 +148,17 @@ dashscope deployments create -m qwen2.5-7b-instruct -s tst -c 1 --plan mu
 
 其中`deployed_model`为专属服务的唯一ID，后续查询、删除等接口 path 中的标识请使用该`deployed_model`值（非请求参数中的`name`）。
 
+<a id="2-查询服务状态"></a>
+
+<a id="7ce6489058608"></a>
+
 ## 2\. 查询服务状态
 
 通过以下命令查询指定专属服务的详细信息：
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl "https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8b-ft-202511132025-0260" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header 'Content-Type: application/json'
@@ -169,7 +166,9 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8b-ft-202511132025
 
 命令执行成功后，返回如下结果：
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "request_id": "ca36952d-9136-426e-ab08-68a97ad72719",
     "output":
@@ -195,17 +194,29 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8b-ft-202511132025
 
 当服务状态为`RUNNING`时，服务部署完成。
 
+<a id="3-执行推理请求"></a>
+
+<a id="d0d6521058h0t"></a>
+
 ## 3\. 执行推理请求
 
-**说明**若首次使用DashScope SDK，请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
-
-请确保 API Key 所在的业务空间与模型部署所在的业务空间相同。
+> **说明**
+>
+> 若首次使用DashScope SDK，请参考[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
+>
+> 请确保 API Key 所在的业务空间与模型部署所在的业务空间相同。
 
 调用已部署的专属服务时，`model` 参数取值应为模型部署成功后的模型 `code`，请前往[专属部署控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/model/deploy)获取。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-dashscope-tab"></a>
+
 DashScope
 
-```
+<a id="code-code-group-dashscope"></a>
+
+```python
 import os
 import dashscope
 
@@ -224,9 +235,13 @@ response = client.chat.completions.create(
 print(response)
 ```
 
+<a id="fig-code-group-openai兼容接口-tab"></a>
+
 OpenAI兼容接口
 
-```
+<a id="code-code-group-openai兼容接口"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -247,44 +262,40 @@ completion = client.chat.completions.create(
 print(completion)
 ```
 
+<a id="推理参数对齐"></a>
+
+<a id="inference-param-alignment"></a>
+
 ### 推理参数对齐
 
 百炼推理引擎的参数默认值可能与本地推理框架不同。为对齐 vLLM 默认值，建议调用时参考下表设置参数；使用 SGLang 等其他框架请参考对应文档调整。
 
-**参数名称**
+| 参数名称 | 推荐值（对应 vLLM 默认值） |
+| --- | --- |
+| temperature | 取值范围 \[0, 2)，设置为 1.0 等同于 vLLM 引擎默认值。 |
+| top\_p | 取值范围 (0, 1.0\]，设置为 1.0 等同于 vLLM 引擎默认值。 |
+| top\_k | 取值为 None 或大于 100 时不启用 top\_k 策略，仅 top\_p 生效；设置为 99 不支持全采样，接近 vLLM 默认值 0（全采样）。 |
+| presence\_penalty | 取值范围 \[-2.0, 2.0\]，设置为 0 等同于 vLLM 引擎默认值。 |
+| repetition\_penalty（DashScope 协议） | 提高可降低生成重复度，1.0 表示不惩罚；取值范围大于 0，设置为 1.0 等同于 vLLM 引擎默认值。 |
 
-**推荐值（对应 vLLM 默认值）**
+<a id="4-删除专属服务"></a>
 
-temperature
-
-取值范围 \[0, 2)，设置为 1.0 等同于 vLLM 引擎默认值。
-
-top\_p
-
-取值范围 (0, 1.0\]，设置为 1.0 等同于 vLLM 引擎默认值。
-
-top\_k
-
-取值为 None 或大于 100 时不启用 top\_k 策略，仅 top\_p 生效；设置为 99 不支持全采样，接近 vLLM 默认值 0（全采样）。
-
-presence\_penalty
-
-取值范围 \[-2.0, 2.0\]，设置为 0 等同于 vLLM 引擎默认值。
-
-repetition\_penalty（DashScope 协议）
-
-提高可降低生成重复度，1.0 表示不惩罚；取值范围大于 0，设置为 1.0 等同于 vLLM 引擎默认值。
+<a id="2d6c416058kh2"></a>
 
 ## 4\. 删除专属服务
 
-**警告**执行以下删除命令后，模型部署服务将立即开始下线，且不可恢复。您将：
-
-1.  无法调用该模型。
-2.  部署服务停止计费。
+> **警告**
+>
+> 执行以下删除命令后，模型部署服务将立即开始下线，且不可恢复。您将：
+>
+> 1.  无法调用该模型。
+> 2.  部署服务停止计费。
 
 不再使用的专属服务，可以通过下面的命令删除：
 
-```
+<a id="code-block-7"></a>
+
+```bash
 curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8b-ft-202511132025-0260' \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header 'Content-Type: application/json'
@@ -292,7 +303,9 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8
 
 命令执行成功后，返回以下结果：
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "request_id": "8f726017-6042-420e-a465-0d366a3aba59",
     "output":
@@ -316,11 +329,19 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8
 }
 ```
 
-删除成功后，再使用[2\. 查询服务状态](https://help.aliyun.com/zh/model-studio/model-deployment-quick-start#7ce6489058608)接口将无法查询到部署模型的状态。
+删除成功后，再使用[2\. 查询服务状态](model-deployment-quick-start.md#7ce6489058608)接口将无法查询到部署模型的状态。
+
+<a id="权限不足排查"></a>
+
+<a id="e9a463ddc0y2x"></a>
 
 ## 权限不足排查
 
 模型部署过程中如遇权限不足报错，根据部署方式分两种排查路径：
+
+<a id="控制台部署"></a>
+
+<a id="console-deployment"></a>
 
 ### 控制台部署
 
@@ -336,6 +357,10 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8
     
     如果提示权限不足，请联系您的组织或 IT 管理员添加相关权限或代为操作。
     
+
+<a id="api-部署"></a>
+
+<a id="api-deployment"></a>
 
 ### API 部署
 
@@ -360,6 +385,10 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8
     如果提示权限不足，请联系您的组织或 IT 管理员添加相关权限或代为操作。
     
 
+<a id="api参考"></a>
+
+<a id="2adbd71412eqs"></a>
+
 ## API参考
 
-详细API调用请参考[API 详情](raw/model-api-reference/model-production/deployments-api/model-deployment-text-generation-api/create-deployment-api.md)及[部署 API 全集](raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。
+详细API调用请参考[API 详情](../../../model-api-reference/model-production/deployments-api/model-deployment-text-generation-api/create-deployment-api.md)及[部署 API 全集](../../../model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。

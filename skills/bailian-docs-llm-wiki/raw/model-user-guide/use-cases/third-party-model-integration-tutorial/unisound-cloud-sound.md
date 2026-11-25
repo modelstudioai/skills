@@ -2,21 +2,35 @@
 
 本文档介绍如何在阿里云百炼平台调用云知声直供的 U2 系列模型推理服务。
 
-**重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+> **重要**
+>
+> 本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。
+
+<a id="快速开始"></a>
 
 ## 快速开始
 
 unisound/unisound-u2 是云知声直供的推理模型，默认开启思考模式。通过 `thinking` 参数控制是否开启思考模式：传入 `{"type": "enabled"}` 开启，传入 `{"type": "disabled"}` 关闭；通过 `reasoning_effort` 控制思考强度。运行以下代码快速调用思考模式的 unisound/unisound-u2 模型。
 
-需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+需要已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。如果通过SDK调用，需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
 
-**说明**`thinking` 非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body` 传入，Node.js SDK 作为顶层参数传入。`reasoning_effort` 是 OpenAI 标准参数，使用 OpenAI Python SDK 时直接传入，例如 `reasoning_effort="xhigh"`。
+> **说明**
+>
+> `thinking` 非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body` 传入，Node.js SDK 作为顶层参数传入。`reasoning_effort` 是 OpenAI 标准参数，使用 OpenAI Python SDK 时直接传入，例如 `reasoning_effort="xhigh"`。
+
+<a id="sec-tabs"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
 ### 示例代码
 
-```
+<a id="code-block"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -73,7 +87,9 @@ for chunk in completion:
 
 ### 返回结果
 
-```
+<a id="code-block-2"></a>
+
+```text
 ====================思考过程====================
 
 用户想比较 9.9 和 9.11 的大小。
@@ -89,11 +105,17 @@ for chunk in completion:
 CompletionUsage(completion_tokens=96, prompt_tokens=10, total_tokens=106, prompt_tokens_details={'cached_tokens': 0})
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
 ### 示例代码
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -164,7 +186,9 @@ main();
 
 ### 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```text
 ====================思考过程====================
 
 用户想比较 9.9 和 9.11 的大小。
@@ -180,13 +204,25 @@ main();
 { prompt_tokens: 10, completion_tokens: 96, total_tokens: 106, prompt_tokens_details: { cached_tokens: 0 } }
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
 
 ### 示例代码
 
+<a id="sec-tabs-2"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-5"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -210,71 +246,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="其它功能"></a>
+
 ## 其它功能
 
-**功能**
-
-**支持情况**
-
-**备注**
-
-[多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
-
-支持
-
-—
-
-[Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)
-
-支持
-
-不支持通过 `tool_stream` 以流式方式返回工具入参
-
-[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)
-
-支持
-
-`response_format` 仅支持 `{"type": "text"}` 和 `{"type": "json_object"}`，不支持 json\_schema
-
-[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
-
-不支持
-
-—
-
-多模态输入
-
-不支持
-
-仅支持文本输入
+| 功能 | 支持情况 | 备注 |
+| --- | --- | --- |
+| [多轮对话](../../model-experience/text-generation-model/multi-round-conversation.md) | 支持 | — |
+| [Function Calling](../../model-experience/text-generation-model/tool-calls/qwen-function-calling.md) | 支持 | 不支持通过 `tool_stream` 以流式方式返回工具入参 |
+| [结构化输出](../../model-experience/text-generation-model/qwen-structured-output.md) | 支持 | `response_format` 仅支持 `{"type": "text"}` 和 `{"type": "json_object"}`，不支持 json\_schema |
+| [联网搜索](../../model-experience/text-generation-model/tool-calls/web-search.md) | 不支持 | — |
+| 多模态输入 | 不支持 | 仅支持文本输入 |
 
 unisound/unisound-u2 不支持以下参数：`n`、`stop`、`preserve_thinking`、`thinking_budget`、`tool_stream`、`enable_code_interpreter`、`enable_search`、`search_options`、`skill`。
 
 支持的参数中，部分参数取值范围与功能与百炼不一致：
 
-**参数**
+| 参数 | 百炼 | U2 |
+| --- | --- | --- |
+| `temperature` | 取值范围 \[0, 2) | 取值范围 \[0, 2)，默认 1.0 |
+| `top_k` | 取值为大于或等于 0 的整数；设为 null 或大于 100 时禁用 top\_k 策略 | 取值必须为大于或等于 1 的整数，默认 40 |
+| `thinking` | 通过 `enable_thinking` 控制是否开启思考模式 | 默认开启思考模式；通过 `thinking`（取值 `{"type": "enabled"}` 或 `{"type": "disabled"}`）控制是否开启思考模式，并通过 `reasoning_effort` 控制思考强度 |
 
-**百炼**
-
-**U2**
-
-`temperature`
-
-取值范围 \[0, 2)
-
-取值范围 \[0, 2)，默认 1.0
-
-`top_k`
-
-取值为大于或等于 0 的整数；设为 null 或大于 100 时禁用 top\_k 策略
-
-取值必须为大于或等于 1 的整数，默认 40
-
-`thinking`
-
-通过 `enable_thinking` 控制是否开启思考模式
-
-默认开启思考模式；通过 `thinking`（取值 `{"type": "enabled"}` 或 `{"type": "disabled"}`）控制是否开启思考模式，并通过 `reasoning_effort` 控制思考强度
+<a id="模型列表与计费"></a>
 
 ## 模型列表与计费
 
@@ -286,6 +280,8 @@ U2 系列模型是云知声直供的推理模型，默认开启思考模式。
 
 > 思考模式下，思维链按照输出 Token 计费。
 
+<a id="错误码"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。

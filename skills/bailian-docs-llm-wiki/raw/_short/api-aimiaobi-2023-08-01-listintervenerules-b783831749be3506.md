@@ -2,11 +2,19 @@
 
 获得干预规则列表。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListInterveneRules)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,280 +33,31 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:ListInterveneRules</td><td>list</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:ListInterveneRules
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| AgentKey | string | 是 | 业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey) | c160c841c8e54295bf2f441432785944\_p\_efm |
+| PageIndex | integer | 否 | 页号 | 1 |
+| PageSize | integer | 否 | 页面尺寸 | 10 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-AgentKey
-
-string
-
-是
-
-业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
-
-c160c841c8e54295bf2f441432785944\_p\_efm
-
-PageIndex
-
-integer
-
-否
-
-页号
-
-1
-
-PageSize
-
-integer
-
-否
-
-页面尺寸
-
-10
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+<table><thead><tr><th>名称</th><th>类型</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td></td><td>object</td><td><div><p>PlainResult</p></div></td><td></td></tr><tr><td>Code</td><td>string</td><td><div><p>状态码</p></div></td><td>success</td></tr><tr><td>Data</td><td>object</td><td><div><p>业务数据</p></div></td><td></td></tr><tr><td>Count</td><td>long</td><td><div><p>数量</p></div></td><td>1</td></tr><tr><td>InterveneRuleList</td><td>array&lt;object&gt;</td><td><div><p>规则列表</p></div></td><td></td></tr><tr><td>InterveneRuleList</td><td>object</td><td><div><p>规则描述</p></div></td><td></td></tr><tr><td>AnswerConfig</td><td>array&lt;object&gt;</td><td><div><p>答案配置</p></div></td><td></td></tr><tr><td>AnswerConfig</td><td>object</td><td><div><p>答案配置项</p></div></td><td></td></tr><tr><td>AnswerType</td><td>integer</td><td><div><p>答案类型</p></div><div><div>枚举值：</div><ul><li>0-统一回复：0-统一回复。</li><li>1-定向回复 ：1-定向回复 。</li></ul></div></td><td>0</td></tr><tr><td>Message</td><td>string</td><td><div><p>答案内容</p></div></td><td>抱歉我无法回答</td></tr><tr><td>Namespace</td><td>string</td><td><div><p>命名空间</p></div></td><td>namespace_qa_query</td></tr><tr><td>CreateTime</td><td>string</td><td><div><p>创建时间</p></div></td><td>2023-06-05 15:17:01</td></tr><tr><td>EffectTime</td><td>string</td><td><div><p>生效时间</p></div></td><td>2023-04-03 02:42:01</td></tr><tr><td>InterveneType</td><td>integer</td><td><div><p>干预类型</p></div><div><div>枚举值：</div><ul><li>0-永久生效：0-永久生效。</li><li>1-按时间生效：1-按时间生效。</li></ul></div></td><td>0</td></tr><tr><td>NamespaceList</td><td>array</td><td><div><p>命名空间列表</p></div></td><td></td></tr><tr><td>NamespaceList</td><td>string</td><td><div><p>干预范围</p></div><div><div>枚举值：</div><ul><li>namespace_qa_query （问答输入干预）：namespace_qa_query （问答输入干预）。</li><li>namespace_qa_result （问答结果干预）：namespace_qa_result （问答结果干预）。</li><li>namespace_writing_result （写作结果干预）：namespace_writing_result （写作结果干预）。</li><li>namespace_writing_query （写作输入干预）：namespace_writing_query （写作输入干预）。</li></ul></div></td><td>namespace_qa_query</td></tr><tr><td>RuleId</td><td>long</td><td><div><p>规则 id</p></div></td><td>mr-iuo9pi9w555phfbb</td></tr><tr><td>RuleName</td><td>string</td><td><div><p>规则名字</p></div></td><td>ruletest</td></tr><tr><td>PageIndex</td><td>integer</td><td><div><p>页号</p></div></td><td>1</td></tr><tr><td>PageSize</td><td>integer</td><td><div><p>页尺寸</p></div></td><td>10</td></tr><tr><td>Code</td><td>integer</td><td><div><p>干预服务返回的状态码</p></div></td><td>200</td></tr><tr><td>HttpStatusCode</td><td>integer</td><td><div><p>http 状态码</p></div></td><td>200</td></tr><tr><td>Message</td><td>string</td><td><div><p>错误说明</p></div></td><td>success</td></tr><tr><td>RequestId</td><td>string</td><td><div><p>请求唯一标识</p></div></td><td>DA021073-17CE-5CCF-9FEB-93226C766887</td></tr><tr><td>Success</td><td>boolean</td><td><div><p>是否成功：true 成功，false 失败</p></div></td><td>true</td></tr></tbody></table>
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-PlainResult
-
-Code
-
-string
-
-状态码
-
-success
-
-Data
-
-object
-
-业务数据
-
-Count
-
-long
-
-数量
-
-1
-
-InterveneRuleList
-
-array<object>
-
-规则列表
-
-InterveneRuleList
-
-object
-
-规则描述
-
-AnswerConfig
-
-array<object>
-
-答案配置
-
-AnswerConfig
-
-object
-
-答案配置项
-
-AnswerType
-
-integer
-
-答案类型
-
-枚举值：
-
--   0-统一回复：0-统一回复。
--   1-定向回复 ：1-定向回复 。
-
-0
-
-Message
-
-string
-
-答案内容
-
-抱歉我无法回答
-
-Namespace
-
-string
-
-命名空间
-
-namespace\_qa\_query
-
-CreateTime
-
-string
-
-创建时间
-
-2023-06-05 15:17:01
-
-EffectTime
-
-string
-
-生效时间
-
-2023-04-03 02:42:01
-
-InterveneType
-
-integer
-
-干预类型
-
-枚举值：
-
--   0-永久生效：0-永久生效。
--   1-按时间生效：1-按时间生效。
-
-0
-
-NamespaceList
-
-array
-
-命名空间列表
-
-NamespaceList
-
-string
-
-干预范围
-
-枚举值：
-
--   namespace\_qa\_query （问答输入干预）：namespace\_qa\_query （问答输入干预）。
--   namespace\_qa\_result （问答结果干预）：namespace\_qa\_result （问答结果干预）。
--   namespace\_writing\_result （写作结果干预）：namespace\_writing\_result （写作结果干预）。
--   namespace\_writing\_query （写作输入干预）：namespace\_writing\_query （写作输入干预）。
-
-namespace\_qa\_query
-
-RuleId
-
-long
-
-规则 id
-
-mr-iuo9pi9w555phfbb
-
-RuleName
-
-string
-
-规则名字
-
-ruletest
-
-PageIndex
-
-integer
-
-页号
-
-1
-
-PageSize
-
-integer
-
-页尺寸
-
-10
-
-Code
-
-integer
-
-干预服务返回的状态码
-
-200
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-DA021073-17CE-5CCF-9FEB-93226C766887
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -306,7 +65,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Code": "success",
   "Data": {
@@ -340,6 +101,10 @@ true
   "Success": true
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

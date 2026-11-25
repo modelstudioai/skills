@@ -8,4 +8,4 @@
 
 与之前的价格相比，伶鹊对话大模型-Turbo单次调用成本由0.01元/次降低至0.001元/次，单次调用成本下降**10倍**，降价比例达90%；伶鹊对话大模型-Plus单次调用成本由0.033元/次降低至0.01元/次，单次调用成本下降**3倍多**，降价比例达到70%。
 
-如需了解详细价格信息，请参见产品计费。详细调价公告内容参见：[计费说明（伶鹊-CCAI对话分析AIO）](raw/_short/billing-description-magpie-ccai-dialogue-analysi-2cd68a31f38aafd0.md)。
+如需了解详细价格信息，请参见产品计费。详细调价公告内容参见：[计费说明（伶鹊-CCAI对话分析AIO）](billing-description-magpie-ccai-dialogue-analysi-2cd68a31f38aafd0.md)。

@@ -4,11 +4,17 @@
 
 本文为您介绍_大模型服务平台百炼_为 RAM 权限策略定义的操作（Action）、资源（Resource）和条件（Condition）。_大模型服务平台百炼_的 RAM 代码（RamCode）为_anytrans_，支持的授权粒度为_操作级_。
 
+<a id="权限策略通用结构"></a>
+
+<a id="auth-detail-51"></a>
+
 ## 权限策略通用结构
 
 权限策略支持 JSON 格式，其通用结构如下：
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "Version": "1",
   "Statement": [
@@ -32,15 +38,19 @@
 
 -   Effect：权限策略效果。取值：Allow（允许）、Deny（拒绝）。
     
--   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-ram#title-auth-detail-2)。
+-   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](api-anytrans-2025-07-07-ram-a3d4eaf3867b8979.md#title-auth-detail-2)。
     
--   Resource：受操作影响的具体对象，您可以使用资源 ARN 来描述指定资源。具体信息，请参见[资源（Resource）](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-ram#title-auth-detail-3)。
+-   Resource：受操作影响的具体对象，您可以使用资源 ARN 来描述指定资源。具体信息，请参见[资源（Resource）](api-anytrans-2025-07-07-ram-a3d4eaf3867b8979.md#title-auth-detail-3)。
     
--   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-ram#title-auth-detail-4)。
+-   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](api-anytrans-2025-07-07-ram-a3d4eaf3867b8979.md#title-auth-detail-4)。
     
     -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见[权限策略基本元素](https://help.aliyun.com/zh/ram/policy-elements)。
     -   Condition\_key：条件关键字。
     -   Condition\_value：条件关键字对应的值。
+
+<a id="操作-action"></a>
+
+<a id="title-auth-detail-2"></a>
 
 ## 操作（Action）
 
@@ -61,199 +71,25 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
-
-**API**
-
-**访问级别**
-
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-anytrans:BatchTranslate
-
-[BatchTranslate](raw/_short/api-anytrans-2025-07-07-batchtranslate-03c43974e055a8f8.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:SubmitHtmlTranslateTask
-
-[SubmitHtmlTranslateTask](raw/_short/api-anytrans-2025-07-07-submithtmltranslatetask-bb68adf11840baff.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:TermQuery
-
-[TermQuery](raw/_short/api-anytrans-2025-07-07-termquery-31434acdcc11b5ec.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:GetImageTranslateTask
-
-[GetImageTranslateTask](raw/_short/api-anytrans-2025-07-07-getimagetranslatetask-bc96c532ed8dd316.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:BatchTranslateForHtml
-
-BatchTranslateForHtml
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:SubmitDocTranslateTask
-
-[SubmitDocTranslateTask](raw/_short/api-anytrans-2025-07-07-submitdoctranslatetask-5bae9cea9c11fbac.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:TermEdit
-
-[TermEdit](raw/_short/api-anytrans-2025-07-07-termedit-f58215262b3fcb7e.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:GetLongTextTranslateTask
-
-[GetLongTextTranslateTask](raw/_short/api-anytrans-2025-07-07-getlongtexttranslatetask-8e14e37a1ab68111.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:SubmitLongTextTranslateTask
-
-[SubmitLongTextTranslateTask](raw/_short/api-anytrans-2025-07-07-submitlongtexttranslatet-795a585074f441ae.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:GetDocTranslateTask
-
-[GetDocTranslateTask](raw/_short/api-anytrans-2025-07-07-getdoctranslatetask-6304223b6828fd12.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:TextTranslate
-
-[TextTranslate](raw/_short/api-anytrans-2025-07-07-texttranslate-fa6808fa890d9f74.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:SubmitImageTranslateTask
-
-[SubmitImageTranslateTask](raw/_short/api-anytrans-2025-07-07-submitimagetranslatetask-1c449f349196ab98.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-anytrans:GetHtmlTranslateTask
-
-[GetHtmlTranslateTask](raw/_short/api-anytrans-2025-07-07-gethtmltranslatetask-b9a09e71d9742b5d.md)
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+| 操作 | API | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- | --- |
+| anytrans:BatchTranslate | [BatchTranslate](api-anytrans-2025-07-07-batchtranslate-03c43974e055a8f8.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:SubmitHtmlTranslateTask | [SubmitHtmlTranslateTask](api-anytrans-2025-07-07-submithtmltranslatetask-bb68adf11840baff.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:TermQuery | [TermQuery](api-anytrans-2025-07-07-termquery-31434acdcc11b5ec.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:GetImageTranslateTask | [GetImageTranslateTask](api-anytrans-2025-07-07-getimagetranslatetask-bc96c532ed8dd316.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:BatchTranslateForHtml | BatchTranslateForHtml | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:SubmitDocTranslateTask | [SubmitDocTranslateTask](api-anytrans-2025-07-07-submitdoctranslatetask-5bae9cea9c11fbac.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:TermEdit | [TermEdit](api-anytrans-2025-07-07-termedit-f58215262b3fcb7e.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:GetLongTextTranslateTask | [GetLongTextTranslateTask](api-anytrans-2025-07-07-getlongtexttranslatetask-8e14e37a1ab68111.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:SubmitLongTextTranslateTask | [SubmitLongTextTranslateTask](api-anytrans-2025-07-07-submitlongtexttranslatet-795a585074f441ae.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:GetDocTranslateTask | [GetDocTranslateTask](api-anytrans-2025-07-07-getdoctranslatetask-6304223b6828fd12.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:TextTranslate | [TextTranslate](api-anytrans-2025-07-07-texttranslate-fa6808fa890d9f74.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:SubmitImageTranslateTask | [SubmitImageTranslateTask](api-anytrans-2025-07-07-submitimagetranslatetask-1c449f349196ab98.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+| anytrans:GetHtmlTranslateTask | [GetHtmlTranslateTask](api-anytrans-2025-07-07-gethtmltranslatetask-b9a09e71d9742b5d.md) | none | \*全部资源<br><br>`*` | 无 | 无 |
+
+<a id="资源-resource"></a>
+
+<a id="title-auth-detail-3"></a>
 
 ## 资源（Resource）
 
@@ -267,13 +103,20 @@ none
     -   `{#regionId}`为`*`时：表示全部地域。
     -   `{#accountId}`为`*`时：表示全部阿里云账号。
 
-资源类型
+| 资源类型 | 资源 ARN |
+| --- | --- |
 
-资源 ARN
+<a id="条件-condition"></a>
+
+<a id="title-auth-detail-4"></a>
 
 ## 条件（Condition）
 
 _大模型服务平台百炼_未定义产品级别的条件关键字。如需查看适用于所有云产品的通用条件关键字，请参见[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
+
+<a id="相关操作"></a>
+
+<a id="auth-detail-71"></a>
 
 ## 相关操作
 

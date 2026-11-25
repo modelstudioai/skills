@@ -2,9 +2,17 @@
 
 按版本号倒序返回技能的全部版本。status=rejected 的版本会附带 additional\_properties.error\_info，按文件路径列出安全审查问题。仅 active 可挂载。
 
+<a id="前提"></a>
+
+<a id="h-sklv-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
+已完成 Endpoint 与鉴权配置，详见[API 总览与认证](../managed-agents-api-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-sklv-endpoint"></a>
 
 ## 接口
 
@@ -12,43 +20,24 @@
 
 按版本号倒序返回。每项含 `version`、`status`、`created_at`。
 
-## Query 参数
-
-**limit** `int` 默认 20
-
-每页数量，最大 100
-
-**page** `string` 默认 —
-
-首次不传，后续传上一次响应的 `next_page`
-
-## 请求示例
-
-curl
-
-```
-curl "$AGENTSTUDIO_URL/skills/skill_xxx/versions?limit=20" \
-  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
-```
-
-Python
-
-```
-for sv in client.skills.versions.list("skill_xxx", limit=20):
+<table><tbody><tr><td><a id="h-sklv-q"></a><h2>Query 参数</h2><p><strong>limit</strong> <code>int</code> 默认 20</p><p>每页数量，最大 100</p><p><strong>page</strong> <code>string</code> 默认 —</p><p>首次不传，后续传上一次响应的 <code>next_page</code></p></td><td><a id="h-sklv-eg"></a><h2>请求示例</h2><a id="fig-code-group"></a><div><a id="fig-code-group-curl-tab"></a>curl<div><a id="code-code-group-curl"></a><pre class="language-bash"><code>curl &quot;$AGENTSTUDIO_URL/skills/skill_xxx/versions?limit=20&quot; \
+  -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot;
+</code></pre></div><a id="fig-code-group-python-tab"></a>Python<div><a id="code-code-group-python"></a><pre class="language-python"><code>for sv in client.skills.versions.list(&quot;skill_xxx&quot;, limit=20):
     print(sv.version, sv.created_at)
-```
+</code></pre></div><a id="fig-code-group-java-tab"></a>Java<div><a id="code-code-group-java"></a><pre class="language-java"><code>CursorPage&lt;SkillVersion&gt; versions = client.skills().listVersions(
+    &quot;skill_xxx&quot;, SkillListParam.builder().limit(20).build());
+for (SkillVersion sv : versions.getData()) System.out.println(sv.getVersion() + &quot; &quot; + sv.getCreatedAt());
+</code></pre></div></div></td></tr></tbody></table>
 
-Java
+<a id="响应示例"></a>
 
-```
-CursorPage<SkillVersion> versions = client.skills().listVersions(
-    "skill_xxx", SkillListParam.builder().limit(20).build());
-for (SkillVersion sv : versions.getData()) System.out.println(sv.getVersion() + " " + sv.getCreatedAt());
-```
+<a id="h-sklv-resp"></a>
 
 ## 响应示例
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "data": [
     {
@@ -86,6 +75,10 @@ for (SkillVersion sv : versions.getData()) System.out.println(sv.getVersion() + 
 ```
 
 响应包含 `data`（Skill Version 对象数组）与 `next_page`。Skill Version 对象字段如下：
+
+<a id="skill-version-对象字段"></a>
+
+<a id="h-sklv-dto"></a>
 
 ### Skill Version 对象字段
 

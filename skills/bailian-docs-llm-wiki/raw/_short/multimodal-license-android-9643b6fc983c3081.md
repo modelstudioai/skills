@@ -2,11 +2,23 @@
 
 本文档指导开发者通过License模式集成Android SDK，实现设备管控和鉴权。License计费模式接入需参考该文档集成，支持半托管和全托管两种接入模式。
 
+<a id="1-模式说明"></a>
+
+<a id="173db21dc9hc4"></a>
+
+<a id="e85708eddd5z2"></a>
+
 ## 1\. 模式说明
 
 使用 License 计费模式需要在多模态交互开发套件基础上集成 License SDK，请参考本文第 4 节集成 SDK。
 
 **环境要求**：SDK 最低支持 Android 7.0（API 24），请在工程中配置 minSdkVersion 24 及以上。
+
+<a id="1-1-半托管模式"></a>
+
+<a id="b48bff0c0a8t5"></a>
+
+<a id="415c01937f7w4"></a>
 
 ### 1.1. 半托管模式
 
@@ -26,6 +38,12 @@
     -   拿到访问令牌信息的数据签名后调用接入方自有云端服务获取token，接入方云端需集成POP SDK。
     -   调用本SDK的getToken获取解签后业务交互令牌信息，之后可使用令牌信息进行业务交互。
 
+<a id="1-2-全托管模式"></a>
+
+<a id="ARBnP"></a>
+
+<a id="afb633ee75an2"></a>
+
 ### 1.2. 全托管模式
 
 适用场景：客户没有云服务，无法对设备进行管理，由阿里云进行设备管理和鉴权
@@ -38,12 +56,26 @@
     -   调用本SDK的deviceRegister接口执行设备注册。
     -   调用本SDK的getToken接口获取业务交互令牌，之后可使用令牌信息进行业务交互。
 
+<a id="2-使用前注意事项"></a>
+
+<a id="g4Kjt"></a>
+
+<a id="4824ee1bc89ey"></a>
+
 ## 2\. 使用前注意事项
 
 -   使用 License 模式前在百炼控制台创建了应用，并购买了 License。
 -   SDK 中封装了设备唯一标识生成逻辑并持久化数据到设备，避免同 1 设备重复注册，通过 `DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId()` 获取，请务必使用 SDK 中获取 deviceName 接口逻辑或者接入方自行保证 deviceName 唯一性。
 
-**警告**⚠️ **deviceName 统一获取方式**：凡涉及设备注册、注册状态查询、获取 Token 的场景，deviceName 统一通过 `DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId()` 获取。该接口已内置历史兼容逻辑，存量设备会自动返回旧 ID 原值，无需额外处理。
+> **警告**
+>
+> ⚠️ **deviceName 统一获取方式**：凡涉及设备注册、注册状态查询、获取 Token 的场景，deviceName 统一通过 `DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId()` 获取。该接口已内置历史兼容逻辑，存量设备会自动返回旧 ID 原值，无需额外处理。
+
+<a id="2-1-设备标识生成策略说明"></a>
+
+<a id="d44cf16d1aro6"></a>
+
+<a id="1f099323d3gk6"></a>
 
 ### 2.1. 设备标识生成策略说明
 
@@ -54,14 +86,28 @@
 3.  **ANDROID\_ID**：MediaDrm 不可用时使用 `Settings.Secure.ANDROID_ID` 派生为应用级标识。
 4.  **FALLBACK\_UUID**：以上均不可用时，生成随机 UUID 并持久化到 SharedPreferences，再派生为应用级标识。
 
-**警告****FALLBACK\_UUID 仅适用于测试环境，不可用于生产。** 该模式下设备标识在应用卸载重装后会发生变化，无法保证设备唯一性，卸载后将导致重复注册、Token 链路失效等问题。生产环境中如检测到 source 为 FALLBACK\_UUID，应通过 `setCustomIdentity()` 注入稳定标识或提示用户设备不兼容。
+> **警告**
+>
+> **FALLBACK\_UUID 仅适用于测试环境，不可用于生产。** 该模式下设备标识在应用卸载重装后会发生变化，无法保证设备唯一性，卸载后将导致重复注册、Token 链路失效等问题。生产环境中如检测到 source 为 FALLBACK\_UUID，应通过 `setCustomIdentity()` 注入稳定标识或提示用户设备不兼容。
 
 兼容性说明：
 
 -   `DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId()` 已内置历史兼容逻辑，存量设备自动返回旧 ID 原值，新设备走多级降级策略。`DeviceUUIDUtil.getAndroidId(context)` 仍可使用（内部委托给 DeviceIdentityManager），但已标记为弃用。
 -   各来源标识的格式、长度与稳定性对比见第 7 节。
 
+<a id="3-接口说明"></a>
+
+<a id="F116m"></a>
+
+<a id="c4e28851f458u"></a>
+
 ## 3\. 接口说明
+
+<a id="3-1-sdk初始化-initialize"></a>
+
+<a id="eoaWW"></a>
+
+<a id="7b8af964ae4e7"></a>
 
 ### 3.1. SDK初始化 initialize
 
@@ -69,100 +115,40 @@
 
 **入参：**
 
-**字段**
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| appSecret | String | 是 | 应用密钥，在百炼控制台创建应用之后会生成该密钥 |
+| deviceName | String | 是 | 设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取 |
+| callBack | InitCallBack | 是 | SDK初始化回调，参考InitCallBack对象 |
 
-**类型**
-
-**必填**
-
-**说明**
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-appSecret
-
-String
-
-是
-
-应用密钥，在百炼控制台创建应用之后会生成该密钥
-
-deviceName
-
-String
-
-是
-
-设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取
-
-callBack
-
-InitCallBack
-
-是
-
-SDK初始化回调，参考InitCallBack对象
-
-**重要**安全提示：`appSecret` 为敏感凭证，请勿硬编码在客户端代码中（避免随 APK 反编译泄露），建议由接入方服务端在运行时安全下发。
+> **重要**
+>
+> 安全提示：`appSecret` 为敏感凭证，请勿硬编码在客户端代码中（避免随 APK 反编译泄露），建议由接入方服务端在运行时安全下发。
 
 **InitCallBack对象**
 
-**返回值**
-
-**方法名**
-
-**说明**
-
-void
-
-success()
-
-初始化成功
-
-void
-
-fail(ResultError error)
-
-初始化失败
+| 返回值 | 方法名 | 说明 |
+| --- | --- | --- |
+| void | success() | 初始化成功 |
+| void | fail(ResultError error) | 初始化失败 |
 
 **ResultError对象**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-code
-
-int
-
-否
-
-返回错误码
-
-message
-
-String
-
-否
-
-返回错误码说明
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| code | int | 否 | 返回错误码 |
+| message | String | 否 | 返回错误码说明 |
 
 **出参：**
 
 无
 
 **调用示例**
-```
+
+<a id="code-block"></a>
+
+```java
 DeviceAuthClient.getInstance().initialize(new InitParams(YOUY_APP_ID, YOUR_APP_SECRET, YOUR_DEVICE_NAME), new InitCallBack() {
     @Override
     public void success() {
@@ -175,108 +161,55 @@ DeviceAuthClient.getInstance().initialize(new InitParams(YOUY_APP_ID, YOUR_APP_S
     }
 });
 ```
+
   
+
+<a id="3-2-半托管模式"></a>
+
+<a id="nHCaf"></a>
+
+<a id="201531feeb147"></a>
 
 ### 3.2. 半托管模式
 
+<a id="3-2-1-设备注册相关接口"></a>
+
+<a id="DDtOj"></a>
+
+<a id="d2d441651aws2"></a>
+
 #### 3.2.1. 设备注册相关接口
+
+<a id="tW9dr"></a>
+
+<a id="441bb9a1a1xte"></a>
 
 ##### 3.2.1.1. 生成设备注册信息 genRegisterReq
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-deviceName
-
-String
-
-是
-
-设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取
-
-payMode
-
-String
-
-是
-
-计费方式：PAYG（后付费）、LICENSE（license计费）
-
-reqNonce
-
-String
-
-是
-
-请求随机串，26位随机hex字符串
-
-requestTime
-
-String
-
-是
-
-请求时间戳
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| deviceName | String | 是 | 设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取 |
+| payMode | String | 是 | 计费方式：PAYG（后付费）、LICENSE（license计费） |
+| reqNonce | String | 是 | 请求随机串，26位随机hex字符串 |
+| requestTime | String | 是 | 请求时间戳 |
 
 **出参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-success
-
-boolean
-
-是
-
-请求处理是否成功
-
-code
-
-int
-
-否
-
-请求失败code
-
-message
-
-String
-
-否
-
-请求失败描述
-
-data
-
-String
-
-否
-
-设备注册调用POP接口所需的签名参数
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| success | boolean | 是 | 请求处理是否成功 |
+| code | int | 否 | 请求失败code |
+| message | String | 否 | 请求失败描述 |
+| data | String | 否 | 设备注册调用POP接口所需的签名参数 |
 
 **调用示例：**
-```
+
+<a id="code-block-2"></a>
+
+```java
 DeviceRegisterInfo deviceRegisterInfo = new DeviceRegisterInfo();
 deviceRegisterInfo.setAppId(YOUR_APP_ID);
 deviceRegisterInfo.setDeviceName(YOUR_DEVICE_NAME);
@@ -289,112 +222,39 @@ if (result.isSuccess()) {
 }
 ```
 
+<a id="lyqNi"></a>
+
+<a id="d54b27d0a0ijw"></a>
+
 ##### 3.2.1.2. 写入设备注册信息 writeDeviceInfo
 
 调用云端设备注册的pop接口得到的响应，需要将注册信息写入到设备进行保存
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-deviceName
-
-String
-
-是
-
-设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取
-
-reqNonce
-
-String
-
-是
-
-请求发起随机串，26位随机hex字符串
-
-rspNonce
-
-String
-
-是
-
-返回数据的随机串，26位随机hex字符串
-
-responseTime
-
-String
-
-是
-
-返回数据的时间戳
-
-signature
-
-String
-
-是
-
-YOUR\_SIGNATURE
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| deviceName | String | 是 | 设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取 |
+| reqNonce | String | 是 | 请求发起随机串，26位随机hex字符串 |
+| rspNonce | String | 是 | 返回数据的随机串，26位随机hex字符串 |
+| responseTime | String | 是 | 返回数据的时间戳 |
+| signature | String | 是 | YOUR\_SIGNATURE |
 
 **出参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-success
-
-boolean
-
-是
-
-请求处理是否成功
-
-code
-
-int
-
-否
-
-请求失败code
-
-message
-
-String
-
-否
-
-请求失败描述
-
-data
-
-String
-
-否
-
-设备注册调用POP接口所需的签名参数
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| success | boolean | 是 | 请求处理是否成功 |
+| code | int | 否 | 请求失败code |
+| message | String | 否 | 请求失败描述 |
+| data | String | 否 | 设备注册调用POP接口所需的签名参数 |
 
 **调用示例：**
-```
+
+<a id="code-block-3"></a>
+
+```java
 DeviceRegisterRsp params = new DeviceRegisterRsp();
 params.setAppId(YOUR_APP_ID);
 params.setDeviceName(YOUR_DEVICE_NAME);
@@ -410,120 +270,54 @@ if (result.isSuccess()) {
 }
 ```
 
+<a id="3-2-2-获取业务交互令牌相关接口"></a>
+
+<a id="uYL0q"></a>
+
+<a id="707464dc057we"></a>
+
 #### 3.2.2. 获取业务交互令牌相关接口
+
+<a id="W2Gcg"></a>
+
+<a id="108637c5e5d7z"></a>
 
 ##### 3.2.2.1. 生成获取访问令牌信息 genGetTokenReq
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-nonce
-
-String
-
-是
-
-请求随机串，26位随机hex字符串
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-deviceName
-
-String
-
-是
-
-设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取
-
-payMode
-
-String
-
-是
-
-计费方式：PAYG（后付费）、LICENSE（license计费）
-
-tokenType
-
-String
-
-是
-
-请求令牌的类型（当前仅支持MMI类型）
-
-MMI：多模态交互令牌
-
-requestTime
-
-String
-
-是
-
-请求时间戳,单位ms
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| nonce | String | 是 | 请求随机串，26位随机hex字符串 |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| deviceName | String | 是 | 设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取 |
+| payMode | String | 是 | 计费方式：PAYG（后付费）、LICENSE（license计费） |
+| tokenType | String | 是 | 请求令牌的类型（当前仅支持MMI类型）<br><br>MMI：多模态交互令牌 |
+| requestTime | String | 是 | 请求时间戳,单位ms |
 
 **出参：**
 
-**字段**
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| success | boolean | 是 | 请求处理是否成功 |
+| code | int | 否 | 请求失败code |
+| message | String | 否 | 请求失败描述 |
+| data | String | 否 | 设备注册调用POP接口所需的签名参数 |
 
-**类型**
+<a id="code-block-4"></a>
 
-**必填**
-
-**说明**
-
-success
-
-boolean
-
-是
-
-请求处理是否成功
-
-code
-
-int
-
-否
-
-请求失败code
-
-message
-
-String
-
-否
-
-请求失败描述
-
-data
-
-String
-
-否
-
-设备注册调用POP接口所需的签名参数
-
-```
+```java
 {
     "success": true,
     "data": "84uoRCyy6AG/sss/xxxxx/Qj4ZvK6vrM7QC5yxtMl3TQLHdAGSsqQLb0bP6zKOiDzoNFwqs61+GMQ7guTPjbE9Fqaf7"
 }
 ```
+
 **调用示例：**
-```
+
+<a id="code-block-5"></a>
+
+```text
 GenGetTokenParams params = new GenGetTokenParams();
 params.setNonce(RandomUtil.generateRandomHexString(26));
 params.setAppId(YOUR_APP_ID);
@@ -537,110 +331,37 @@ if (result.isSuccess()) {
 }
 ```
 
+<a id="g8Fc8"></a>
+
+<a id="7d6a0de7be38v"></a>
+
 ##### 3.2.2.2. 解签POP接口返回的token数据 getToken
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-deviceName
-
-String
-
-是
-
-设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取
-
-reqNonce
-
-String
-
-是
-
-请求随机串，26位随机hex字符串
-
-rspNonce
-
-String
-
-是
-
-返回数据的随机串，26位随机hex字符串
-
-responseTime
-
-String
-
-是
-
-返回数据的时间戳
-
-signature
-
-String
-
-是
-
-YOUR\_SIGNATURE
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| deviceName | String | 是 | 设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取 |
+| reqNonce | String | 是 | 请求随机串，26位随机hex字符串 |
+| rspNonce | String | 是 | 返回数据的随机串，26位随机hex字符串 |
+| responseTime | String | 是 | 返回数据的时间戳 |
+| signature | String | 是 | YOUR\_SIGNATURE |
 
 **出参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-success
-
-boolean
-
-是
-
-请求处理是否成功
-
-code
-
-int
-
-否
-
-请求失败code
-
-message
-
-String
-
-否
-
-请求失败描述
-
-data
-
-String
-
-否
-
-返回解签后的数据
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| success | boolean | 是 | 请求处理是否成功 |
+| code | int | 否 | 请求失败code |
+| message | String | 否 | 请求失败描述 |
+| data | String | 否 | 返回解签后的数据 |
 
 **调用示例：**
-```
+
+<a id="code-block-6"></a>
+
+```java
 AnalyzeTokenSignRsp tokenSignRsp = new AnalyzeTokenSignRsp();
 tokenSignRsp.setAppId(YOUR_APP_ID);
 tokenSignRsp.setDeviceName(YOUR_DEVICE_NAME);
@@ -654,7 +375,19 @@ if (result.isSuccess()) {
 }
 ```
 
+<a id="3-3-全托管模式"></a>
+
+<a id="2607e108e7tv1"></a>
+
+<a id="dbef33dd9aptx"></a>
+
 ### 3.3. 全托管模式
+
+<a id="3-3-1-检查设备是否注册-deviceisregistered"></a>
+
+<a id="gFZ4l"></a>
+
+<a id="48f3f06429t3t"></a>
 
 #### 3.3.1. 检查设备是否注册 deviceIsRegistered
 
@@ -663,102 +396,48 @@ if (result.isSuccess()) {
 设备是否注册
 
 **调用示例：**
-```
+
+<a id="code-block-7"></a>
+
+```text
 boolean deviceIsRegistered = DeviceAuthClient.getInstance().deviceIsRegistered();
 ```
+
+<a id="3-3-2-设备注册-deviceregister"></a>
+
+<a id="fyeys"></a>
+
+<a id="5621526c59n78"></a>
 
 #### 3.3.2. 设备注册 deviceRegister
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-params
-
-DeviceRegisterParams
-
-是
-
-设备注册入参对象，参考DeviceRegisterParams对象
-
-callBack
-
-DeviceRegisterCallBack
-
-是
-
-设备注册回调
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| params | DeviceRegisterParams | 是 | 设备注册入参对象，参考DeviceRegisterParams对象 |
+| callBack | DeviceRegisterCallBack | 是 | 设备注册回调 |
 
 **DeviceRegisterParams对象**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-nonce
-
-String
-
-是
-
-请求随机串，26位随机hex字符串
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-workspaceId
-
-String
-
-否
-
-工作空间ID,使用工作空间额度注册方式才需要
-
-deviceName
-
-String
-
-是
-
-设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取
-
-requestTime
-
-String
-
-是
-
-请求时间戳
-
-payMode
-
-String
-
-是
-
-计费方式：PAYG（后付费）、LICENSE（license计费）
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| nonce | String | 是 | 请求随机串，26位随机hex字符串 |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| workspaceId | String | 否 | 工作空间ID,使用工作空间额度注册方式才需要 |
+| deviceName | String | 是 | 设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取 |
+| requestTime | String | 是 | 请求时间戳 |
+| payMode | String | 是 | 计费方式：PAYG（后付费）、LICENSE（license计费） |
 
 **出参：**
 
 无
 
 **调用示例：**
-```
+
+<a id="code-block-8"></a>
+
+```text
 DeviceRegisterParams params = new DeviceRegisterParams();
 params.setNonce(RandomUtil.generateRandomHexString(26));
 params.setAppId(YOUR_APP_ID);
@@ -779,132 +458,42 @@ DeviceAuthClient.getInstance().deviceRegister(params, new DeviceRegisterCallBack
 });
 ```
 
+<a id="3-3-3-获取业务交互令牌-gettoken"></a>
+
+<a id="L1U9e"></a>
+
+<a id="d22a26b9e78k1"></a>
+
 #### 3.3.3. 获取业务交互令牌 getToken
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**默认值**
-
-**必填**
-
-**说明**
-
-params
-
-GenGetTokenParams
-
-\-
-
-是
-
-设备认证所需参数对象，参考GenGetTokenParams对象
-
-callBack
-
-GetTokenCallBack
-
-\-
-
-是
-
-获取token回调，参考GetTokenCallBack
-
-对象
+| 字段 | 类型 | 默认值 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| params | GenGetTokenParams | \- | 是 | 设备认证所需参数对象，参考GenGetTokenParams对象 |
+| callBack | GetTokenCallBack | \- | 是 | 获取token回调，参考GetTokenCallBack<br><br>对象 |
 
 **GenGetTokenParams对象**
 
-**字段**
-
-**类型**
-
-**默认值**
-
-**必填**
-
-**说明**
-
-nonce
-
-String
-
-\-
-
-是
-
-请求随机串，26位随机hex字符串
-
-appId
-
-String
-
-\-
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-apiKey
-
-String
-
-\-
-
-是
-
-应用密钥，在百炼控制台密钥管理创建
-
-deviceName
-
-String
-
-\-
-
-是
-
-设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取
-
-requestTime
-
-String
-
-\-
-
-是
-
-请求时间戳
-
-payMode
-
-String
-
-\-
-
-是
-
-计费方式：PAYG（后付费）、LICENSE（license计费）
-
-tokenType
-
-String
-
-\-
-
-是
-
-请求令牌的类型（当前仅支持MMI类型）
-
-MMI：多模态交互令牌
+| 字段 | 类型 | 默认值 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| nonce | String | \- | 是 | 请求随机串，26位随机hex字符串 |
+| appId | String | \- | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| apiKey | String | \- | 是 | 应用密钥，在百炼控制台密钥管理创建 |
+| deviceName | String | \- | 是 | 设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取 |
+| requestTime | String | \- | 是 | 请求时间戳 |
+| payMode | String | \- | 是 | 计费方式：PAYG（后付费）、LICENSE（license计费） |
+| tokenType | String | \- | 是 | 请求令牌的类型（当前仅支持MMI类型）<br><br>MMI：多模态交互令牌 |
 
 **出参：**
 
 无
 
 **调用示例：**
-```
+
+<a id="code-block-9"></a>
+
+```java
 GenGetTokenParams params = new GenGetTokenParams();
 params.setNonce(RandomUtil.generateRandomHexString(26));
 params.setAppId(YOUR_APP_ID);
@@ -926,114 +515,53 @@ DeviceAuthClient.getInstance().getToken(params, new GetTokenCallBack() {
 });
 ```
 
+<a id="3-4-获取license标识签名"></a>
+
+<a id="lsTYf"></a>
+
+<a id="7b0b561619c88"></a>
+
 ### 3.4. 获取License标识签名
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**默认值**
-
-**必填**
-
-**说明**
-
-params
-
-LicenseSignatureParams
-
-\-
-
-是
-
-设备认证所需参数对象，参考LicenseSignatureParams对象
+| 字段 | 类型 | 默认值 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| params | LicenseSignatureParams | \- | 是 | 设备认证所需参数对象，参考LicenseSignatureParams对象 |
 
 **LicenseSignatureParams对象**
 
-**字段**
-
-**类型**
-
-**默认值**
-
-**必填**
-
-**说明**
-
-appId
-
-String
-
-\-
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-deviceName
-
-String
-
-\-
-
-是
-
-设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取
-
-taskId
-
-String
-
-\-
-
-是
-
-本次连接唯一标识，用于在工程链路上跟踪任务执行。由客户端生成，格式建议为36位uuid字符串，格式示例："f894c16f-f20e-4c1d-837e-89e0fbc63a43"
+| 字段 | 类型 | 默认值 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| appId | String | \- | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| deviceName | String | \- | 是 | 设备唯一标识，通过 DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId() 获取 |
+| taskId | String | \- | 是 | 本次连接唯一标识，用于在工程链路上跟踪任务执行。由客户端生成，格式建议为36位uuid字符串，格式示例："f894c16f-f20e-4c1d-837e-89e0fbc63a43" |
 
 **出参：**
 
-**字段**
-
-**类型**
-
-**默认值**
-
-**说明**
-
-timestamp
-
-String
-
-\-
-
-当前时间戳ms
-
-license\_info
-
-String
-
-\-
-
-license\_info签名信息
-
-device\_info
-
-String
-
-\-
-
-device\_info签名信息
+| 字段 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| timestamp | String | \- | 当前时间戳ms |
+| license\_info | String | \- | license\_info签名信息 |
+| device\_info | String | \- | device\_info签名信息 |
 
 **调用示例：**
-```
+
+<a id="code-block-10"></a>
+
+```text
 /// 获取license标识签名
 String taskId = UUID.randomUUID().toString().replace("-", "");
 LicenseSignatureParams params = new LicenseSignatureParams(authParams.getAppid(), YOUR_DEVICE_NAME, taskId);
 JSONObject licenseInfoSignature = DeviceAuthClient.getInstance().getLicenseSignature(params);
 // 返回包含timestamp和license_info、device_info的JSON字符串
 ```
+
+<a id="3-5-设备重置-devicereset"></a>
+
+<a id="AiGwL"></a>
+
+<a id="bfa36d7afc5wl"></a>
 
 ### 3.5. 设备重置 deviceReset
 
@@ -1048,7 +576,10 @@ tips: 在百炼控制台重置设备后，需要调用SDK deviceReset接口重�
 Boolean 是否重置成功
 
 **调用示例：**
-```
+
+<a id="code-block-11"></a>
+
+```java
 boolean result = DeviceAuthClient.getInstance().deviceReset();
  if (!result) {
      showToast("设备重置失败");
@@ -1057,87 +588,79 @@ boolean result = DeviceAuthClient.getInstance().deviceReset();
  }
 ```
 
+<a id="3-6-设备标识管理-deviceidentitymanager"></a>
+
+<a id="Mqknd"></a>
+
+<a id="412305ce82fm3"></a>
+
 ### 3.6. 设备标识管理 DeviceIdentityManager
 
 `DeviceIdentityManager` 是 SDK 设备标识的唯一推荐 API（单例），提供多级降级策略、历史兼容读取、自定义 namespace、自定义标识注入等能力。已内置旧版 SDK 的全部兼容逻辑，存量设备调用时自动返回旧 ID 原值。
 
-**重要**`DeviceUUIDUtil.getAndroidId(context)` 已标记为弃用（since 1.0.7），内部完全委托给 `DeviceIdentityManager`，现有代码无需立即修改但建议逐步迁移至 `DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId()`。
+> **重要**
+>
+> `DeviceUUIDUtil.getAndroidId(context)` 已标记为弃用（since 1.0.7），内部完全委托给 `DeviceIdentityManager`，现有代码无需立即修改但建议逐步迁移至 `DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId()`。
+
+<a id="3-6-1-api-列表"></a>
+
+<a id="rdPAW"></a>
+
+<a id="2302c974f0fi0"></a>
 
 #### 3.6.1. API 列表
 
-方法
+|  |  |
+| --- | --- |
+| 方法 | 说明 |
+| `DeviceIdentityManager.getInstance()` | 获取单例实例 |
+| `DeviceIdentity getDeviceIdentity(Context context)` | 获取设备标识，namespace 默认为应用包名 |
+| `DeviceIdentity getDeviceIdentity(Context context, String namespace)` | 获取设备标识，使用自定义 namespace 覆盖默认包名盐（传 null 使用默认包名） |
+| `void setCustomIdentity(String identity)` | 注入自定义设备标识，作为最高优先级标识按原值使用（不做派生）；传 null 清除；超过 40 字符将抛出 `IllegalArgumentException` |
+| `void setOnIdentityResolvedListener(OnIdentityResolvedListener listener)` | 设置标识解析完成回调，每次解析出设备标识后（包括缓存命中）触发；传 null 移除回调 |
+| `void clearCache(Context context)` | 清除内存缓存及 MediaDrm ID 的磁盘缓存，下次获取时重新从设备获取并派生。注意：Fallback UUID 不会被此方法清除 |
 
-说明
+<a id="3-6-2-deviceidentity-返回值说明"></a>
 
-`DeviceIdentityManager.getInstance()`
+<a id="MAkbM"></a>
 
-获取单例实例
-
-`DeviceIdentity getDeviceIdentity(Context context)`
-
-获取设备标识，namespace 默认为应用包名
-
-`DeviceIdentity getDeviceIdentity(Context context, String namespace)`
-
-获取设备标识，使用自定义 namespace 覆盖默认包名盐（传 null 使用默认包名）
-
-`void setCustomIdentity(String identity)`
-
-注入自定义设备标识，作为最高优先级标识按原值使用（不做派生）；传 null 清除；超过 40 字符将抛出 `IllegalArgumentException`
-
-`void setOnIdentityResolvedListener(OnIdentityResolvedListener listener)`
-
-设置标识解析完成回调，每次解析出设备标识后（包括缓存命中）触发；传 null 移除回调
-
-`void clearCache(Context context)`
-
-清除内存缓存及 MediaDrm ID 的磁盘缓存，下次获取时重新从设备获取并派生。注意：Fallback UUID 不会被此方法清除
+<a id="0a6bbe49fd8u8"></a>
 
 #### 3.6.2. DeviceIdentity 返回值说明
 
-方法
+|  |  |  |
+| --- | --- | --- |
+| 方法 | 返回值 | 说明 |
+| `getId()` | String | 最终选定的设备标识（派生后的应用级标识，CUSTOM 来源时为注入的原值），最大长度 40 字符 |
+| `getSource()` | IdentitySource | 标识来源枚举，见下表 |
 
-返回值
+<a id="3-6-3-identitysource-枚举说明"></a>
 
-说明
+<a id="Z2cLN"></a>
 
-`getId()`
-
-String
-
-最终选定的设备标识（派生后的应用级标识，CUSTOM 来源时为注入的原值），最大长度 40 字符
-
-`getSource()`
-
-IdentitySource
-
-标识来源枚举，见下表
+<a id="3d7f659377yc1"></a>
 
 #### 3.6.3. IdentitySource 枚举说明
 
-枚举值
+|  |  |
+| --- | --- |
+| 枚举值 | 说明 |
+| CUSTOM | 自定义标识（外部注入），按原值使用 |
+| MEDIA\_DRM | MediaDrm ID（设备唯一，重装不变，出厂重置后变化） |
+| ANDROID\_ID | Android ID（设备唯一，重装不变，出厂重置后变化） |
+| FALLBACK\_UUID | 随机UUID（卸载后变化）——⚠️ **仅限测试环境使用** |
 
-说明
+<a id="3-6-4-调用示例"></a>
 
-CUSTOM
+<a id="XJBbK"></a>
 
-自定义标识（外部注入），按原值使用
-
-MEDIA\_DRM
-
-MediaDrm ID（设备唯一，重装不变，出厂重置后变化）
-
-ANDROID\_ID
-
-Android ID（设备唯一，重装不变，出厂重置后变化）
-
-FALLBACK\_UUID
-
-随机UUID（卸载后变化）——⚠️ **仅限测试环境使用**
+<a id="3f39c97f93io1"></a>
 
 #### 3.6.4. 调用示例
 
-```
+<a id="code-block-12"></a>
+
+```text
 // 1. 默认 namespace（应用包名）获取设备标识（推荐用于 deviceName）
 DeviceIdentity identity = DeviceIdentityManager.getInstance().getDeviceIdentity(context);
 String deviceId = identity.getId();                 // 40 字符固定长度哈希（CUSTOM 时为原值）
@@ -1161,6 +684,12 @@ DeviceIdentityManager.getInstance().setOnIdentityResolvedListener(new OnIdentity
 DeviceIdentityManager.getInstance().clearCache(context);
 ```
 
+<a id="4-集成sdk及依赖库"></a>
+
+<a id="OT6Jh"></a>
+
+<a id="411c78bbd1z1h"></a>
+
 ## 4\. 集成SDK及依赖库
 
 使用最新版本 Android SDK，引用其中的 `multimodal_dialog_tongyimetathings-<版本号>.aar`
@@ -1169,12 +698,20 @@ DeviceIdentityManager.getInstance().clearCache(context);
 
 各版本的变更内容与升级影响请查阅 10 节“版本发布记录”。
 
+<a id="4-1-gradle-集成步骤"></a>
+
+<a id="SZ1lD"></a>
+
+<a id="1fbd13e68a0us"></a>
+
 ### 4.1. Gradle 集成步骤
 
 1.  将 `multimodal_dialog_tongyimetathings-<版本号>.aar` 放入 app 模块的 `libs/` 目录。
 2.  在 app 模块的 `build.gradle` 中添加依赖：
 
-```
+<a id="code-block-13"></a>
+
+```text
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar'])
     // 或显式引用：
@@ -1187,7 +724,9 @@ dependencies {
 
 1.  确认 `minSdkVersion` 不低于 24（Android 7.0）：
 
-```
+<a id="code-block-14"></a>
+
+```text
 android {
     defaultConfig {
         minSdkVersion 24
@@ -1199,25 +738,26 @@ android {
 
 **关于第三方依赖（必读）**：AAR 格式不内联依赖，SDK 产物 `classes.jar` 中**只包含 SDK 自身类**，不含 okhttp 的任何类。因此上述依赖必须在 app 模块中显式声明，否则 SDK 在发起设备注册、获取 Token 等网络请求时会抛出 `NoClassDefFoundError`。
 
-依赖
-
-依赖版本
-
-版本要求
-
-`com.squareup.okhttp3:okhttp`
-
-4.12.0
-
-**必须为 4.x**，okhttp 3.x 与 4.x API 不兼容，使用 3.x 会导致运行期异常
+|  |  |  |
+| --- | --- | --- |
+| 依赖 | 依赖版本 | 版本要求 |
+| `com.squareup.okhttp3:okhttp` | 4.12.0 | **必须为 4.x**，okhttp 3.x 与 4.x API 不兼容，使用 3.x 会导致运行期异常 |
 
 若您的工程已引入上述依赖，无需重复声明，但请确认 okhttp 大版本为 4.x。
+
+<a id="4-2-混淆规则"></a>
+
+<a id="ykFDv"></a>
+
+<a id="0f8bcffdcft1z"></a>
 
 ### 4.2. 混淆规则
 
 若工程开启了代码混淆（ProGuard/R8），请在混淆配置文件中添加以下 keep 规则，避免设备标识相关类被混淆或裁剪：
 
-```
+<a id="code-block-15"></a>
+
+```text
 -keep class com.aliyun.bailian.billingsignature.identity.DeviceIdentityManager { *; }
 -keep class com.aliyun.bailian.billingsignature.identity.DeviceIdentity { *; }
 -keep class com.aliyun.bailian.billingsignature.identity.IdentitySource { *; }
@@ -1225,18 +765,28 @@ android {
 -keep class com.aliyun.bailian.billingsignature.utils.DeviceUUIDUtil { *; }
 ```
 
+<a id="5-涉及多模态sdk接入修改"></a>
+
+<a id="QeSnr"></a>
+
+<a id="37f7acb602n42"></a>
+
 ## 5\. 涉及多模态SDK接入修改
 
 1.  在启动会话前完成tongyimetathings SDK的初始化和检测设备是否注册，未注册执行设备注册，具体参考接入示例工程。
 2.  初始化该 SDK，设备注册完成后获取多模态会话 token：全托管模式参考上述 3.3.3 节（getToken）接口，半托管模式参考上述 3.2.2 节接口，将 getToken 接口返回的 dashToken 数据设置为 apiKey，具体参考示例工程。
 
-```
+<a id="code-block-16"></a>
+
+```java
 multimodalParams.setApiKey(jsonObject.getString("dashToken"));
 ```
 
 1.  创建会话时传入license计费标识,参考接入示例：
 
-```
+<a id="code-block-17"></a>
+
+```java
 private MultiModalRequestParam buildRequestParams() {
 
     MultiModalRequestParam.UpStream.ReplaceWord replaceWord = new MultiModalRequestParam.UpStream.ReplaceWord();
@@ -1271,42 +821,29 @@ private MultiModalRequestParam buildRequestParams() {
 }
 ```
 
+<a id="6-权限说明"></a>
+
+<a id="LK6mL"></a>
+
+<a id="26038a270ck4m"></a>
+
 ## 6\. 权限说明
 
 SDK 运行所需权限：
 
-权限
-
-用途
-
-必需性
-
-`android.permission.INTERNET`
-
-设备注册、获取 Token 等网络请求
-
-必需
-
-`android.permission.WRITE_EXTERNAL_STORAGE`
-
-writeDeviceInfo 持久化设备注册信息到外部公共目录
-
-Android 10 以下必需
-
-`android.permission.READ_EXTERNAL_STORAGE`
-
-读取已持久化的设备注册信息（deviceIsRegistered 判断）
-
-Android 10 以下必需
-
-`android.permission.MANAGE_EXTERNAL_STORAGE`
-
-存量设备卸载重装后读取外部存储中的旧设备标识和注册信息
-
-Android 11+ 必需
+|  |  |  |
+| --- | --- | --- |
+| 权限 | 用途 | 必需性 |
+| `android.permission.INTERNET` | 设备注册、获取 Token 等网络请求 | 必需 |
+| `android.permission.WRITE_EXTERNAL_STORAGE` | writeDeviceInfo 持久化设备注册信息到外部公共目录 | Android 10 以下必需 |
+| `android.permission.READ_EXTERNAL_STORAGE` | 读取已持久化的设备注册信息（deviceIsRegistered 判断） | Android 10 以下必需 |
+| `android.permission.MANAGE_EXTERNAL_STORAGE` | 存量设备卸载重装后读取外部存储中的旧设备标识和注册信息 | Android 11+ 必需 |
 
 **AndroidManifest.xml 声明示例：**
-```
+
+<a id="code-block-18"></a>
+
+```text
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
     android:maxSdkVersion="28" />
@@ -1315,61 +852,31 @@ Android 11+ 必需
 <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 ```
 
+<a id="7-设备-id-格式与稳定性说明"></a>
+
+<a id="UotJJ"></a>
+
+<a id="946753c92acnc"></a>
+
 ## 7\. 设备 ID 格式与稳定性说明
 
-来源
-
-格式
-
-长度
-
-卸载重装
-
-恢复出厂
-
-CUSTOM
-
-原值
-
-≤40
-
-取决于接入方
-
-取决于接入方
-
-MEDIA\_DRM
-
-SHA-256派生
-
-40
-
-不变
-
-可能变化
-
-ANDROID\_ID
-
-SHA-256派生
-
-40
-
-不变
-
-变化
-
-FALLBACK\_UUID
-
-SHA-256派生
-
-40
-
-⚠️ 变化（仅限测试）
-
-变化
+|  |  |  |  |  |
+| --- | --- | --- | --- | --- |
+| 来源 | 格式 | 长度 | 卸载重装 | 恢复出厂 |
+| CUSTOM | 原值 | ≤40 | 取决于接入方 | 取决于接入方 |
+| MEDIA\_DRM | SHA-256派生 | 40 | 不变 | 可能变化 |
+| ANDROID\_ID | SHA-256派生 | 40 | 不变 | 变化 |
+| FALLBACK\_UUID | SHA-256派生 | 40 | ⚠️ 变化（仅限测试） | 变化 |
 
 说明：
 
 -   旧版 SDK 已注册设备的历史 ID 按原值保留（不做派生），不会因升级 SDK 而变化。
+
+<a id="8-多应用共享设备标识"></a>
+
+<a id="eWGpk"></a>
+
+<a id="6f2e8a83a88ai"></a>
 
 ## 8\. 多应用共享设备标识
 
@@ -1382,11 +889,29 @@ SHA-256派生
 
 **Android 8.0+ ANDROID\_ID 签名隔离机制说明**：自 Android 8.0（API 26）起，`Settings.Secure.ANDROID_ID` 的取值与“设备 + 应用签名密钥 + 用户”绑定，同一设备上不同签名的应用获取到的 ANDROID\_ID 不同。因此跨应用共享标识时，要么保证签名一致，要么采用服务端下发（`setCustomIdentity`）方案。
 
+<a id="9-常见问题-faq"></a>
+
+<a id="T78u1"></a>
+
+<a id="010b06858e2ic"></a>
+
 ## 9\. 常见问题 FAQ
+
+<a id="q-deviceuuidutil-和-deviceidentitymanager-什么区别"></a>
+
+<a id="WAcJO"></a>
+
+<a id="698773c01a8fl"></a>
 
 ### Q: DeviceUUIDUtil 和 DeviceIdentityManager 什么区别？
 
 **A:** `DeviceIdentityManager` 是唯一推荐的设备标识 API，已内置历史兼容逻辑。`DeviceUUIDUtil` 已标记为弃用，内部完全委托给 `DeviceIdentityManager`，现有代码无需立即修改但建议逐步迁移。迁移方式：将 `DeviceUUIDUtil.getAndroidId(context)` 替换为 `DeviceIdentityManager.getInstance().getDeviceIdentity(context).getId()` 即可，存量设备 ID 不会变化。
+
+<a id="q-fallback-uuid-可以用于生产环境吗"></a>
+
+<a id="tkyiy"></a>
+
+<a id="a78541ecaa0j4"></a>
 
 ### Q: FALLBACK\_UUID 可以用于生产环境吗？
 
@@ -1401,78 +926,23 @@ SHA-256派生
 1.  通过 `DeviceIdentityManager.getInstance().setCustomIdentity(stableId)` 注入稳定标识（如服务端下发的设备 ID 或 OAID）；
 2.  或向用户提示设备不兼容，引导联系支持。
 
+<a id="10-版本发布记录"></a>
+
+<a id="vko3Y"></a>
+
+<a id="ad8d2abbda548"></a>
+
 ## 10\. 版本发布记录
 
 本栏目记录各版本对接入方可见的变更。
 
-版本号
-
-versionCode
-
-主要变更
-
-升级影响
-
-1.0.7
-
-202608012
-
-1\. 新增设备标识管理接口 `DeviceIdentityManager`，支持自定义标识注入、命名空间派生（详见 3.6 节）  
-2\. 设备标识持久化改为应用私有存储（SharedPreferences），设备标识获取不再需要外部存储权限；设备注册信息持久化仍使用外部公共目录（详见 6 节）  
-3\. 设备 ID 采用多级降级策略（MEDIA\_DRM → ANDROID\_ID → FALLBACK\_UUID）并统一为 40 字符派生值（详见 7 节）  
-4\. `DeviceUUIDUtil` 标记为弃用，推荐直接使用 `DeviceIdentityManager`
-
-**兼容升级**。存量已注册设备的历史 ID 按原值自动兼容读取，`deviceName` 保持不变，无需重新注册；
-
-1.0.6
-
-20260724
-
-优化 IPv6 优先连接逻辑，提升双栈网络环境下的连接建立效率
-
-无接口变更，直接替换 AAR
-
-1.0.5
-
-20260610
-
-优化 OkHttpClient 连接配置，支持 IPv6 优先连接
-
-无接口变更，直接替换 AAR
-
-1.0.4
-
-20260602
-
-`DeviceRegisterParams` 新增 `workspaceId` 字段，支持按工作空间额度注册设备（详见 3.3 节）
-
-新增可选字段，不影响存量调用
-
-1.0.3
-
-20260413
-
-1\. 支持自定义存储路径存储设备相关信息  
-2\. SDK 版本号动态关联至 `BuildConfig.SDK_VERSION`
-
-无接口变更，直接替换 AAR
-
-1.0.2
-
-20260326
-
-so 库同时支持 `armeabi-v7a` 与 `arm64-v8a` 两种 CPU 架构
-
-无接口变更，直接替换 AAR
-
-1.0.1
-
-20250808
-
-初始版本发布：  
-1\. 半托管模式：设备注册签名（`genRegisterReq`）、设备信息写入（`writeDeviceInfo`）、Token 请求签名（`genGetTokenReq`）、Token 响应解签（`getToken`）  
-2\. 全托管模式：设备注册（`deviceRegister`）、获取 Token（`getToken`）  
-3\. License 标识签名（`getLicenseSignature`）、设备重置（`deviceReset`）、注册状态查询（`deviceIsRegistered`）  
-4\. 基于 Native so 库的通信安全保障
-
-—
+|  |  |  |  |
+| --- | --- | --- | --- |
+| 版本号 | versionCode | 主要变更 | 升级影响 |
+| 1.0.7 | 202608012 | 1\. 新增设备标识管理接口 `DeviceIdentityManager`，支持自定义标识注入、命名空间派生（详见 3.6 节）<br>2\. 设备标识持久化改为应用私有存储（SharedPreferences），设备标识获取不再需要外部存储权限；设备注册信息持久化仍使用外部公共目录（详见 6 节）<br>3\. 设备 ID 采用多级降级策略（MEDIA\_DRM → ANDROID\_ID → FALLBACK\_UUID）并统一为 40 字符派生值（详见 7 节）<br>4\. `DeviceUUIDUtil` 标记为弃用，推荐直接使用 `DeviceIdentityManager` | **兼容升级**。存量已注册设备的历史 ID 按原值自动兼容读取，`deviceName` 保持不变，无需重新注册； |
+| 1.0.6 | 20260724 | 优化 IPv6 优先连接逻辑，提升双栈网络环境下的连接建立效率 | 无接口变更，直接替换 AAR |
+| 1.0.5 | 20260610 | 优化 OkHttpClient 连接配置，支持 IPv6 优先连接 | 无接口变更，直接替换 AAR |
+| 1.0.4 | 20260602 | `DeviceRegisterParams` 新增 `workspaceId` 字段，支持按工作空间额度注册设备（详见 3.3 节） | 新增可选字段，不影响存量调用 |
+| 1.0.3 | 20260413 | 1\. 支持自定义存储路径存储设备相关信息<br>2\. SDK 版本号动态关联至 `BuildConfig.SDK_VERSION` | 无接口变更，直接替换 AAR |
+| 1.0.2 | 20260326 | so 库同时支持 `armeabi-v7a` 与 `arm64-v8a` 两种 CPU 架构 | 无接口变更，直接替换 AAR |
+| 1.0.1 | 20250808 | 初始版本发布：<br>1\. 半托管模式：设备注册签名（`genRegisterReq`）、设备信息写入（`writeDeviceInfo`）、Token 请求签名（`genGetTokenReq`）、Token 响应解签（`getToken`）<br>2\. 全托管模式：设备注册（`deviceRegister`）、获取 Token（`getToken`）<br>3\. License 标识签名（`getLicenseSignature`）、设备重置（`deviceReset`）、注册状态查询（`deviceIsRegistered`）<br>4\. 基于 Native so 库的通信安全保障 | — |

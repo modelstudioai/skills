@@ -2,13 +2,21 @@
 
 本文档用于指导开发者如何加载并使用多模态交互套件中的 技能-指令 模块，用以控制设备。
 
+<a id="1-开发准备"></a>
+
+<a id="3a06e12436dhh"></a>
+
 ## 1\. 开发准备
 
-⚠️注意：先参考[SDK安装](raw/application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-sdk.md)完成应用创建及SDK对接。
+⚠️注意：先参考[SDK安装](../application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-sdk.md)完成应用创建及SDK对接。
+
+<a id="1-1-多模态应用创建和配置"></a>
+
+<a id="d225394c7383d"></a>
 
 ### 1.1. 多模态应用创建和配置
 
-根据[应用配置](raw/_short/multimodal-app-configuration-8919f99b339e17da.md)的文档完成应用的配置，指令模块配置见下：
+根据[应用配置](multimodal-app-configuration-8919f99b339e17da.md)的文档完成应用的配置，指令模块配置见下：
 
 -   **指令模块应用配置**
 
@@ -20,13 +28,25 @@
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1597593571/p990047.png) **注意，红框部分不可更改，否则会导致模块无法解析** ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1597593571/p990049.png)
 
+<a id="1-2-端侧sdk开发和对接"></a>
+
+<a id="4a3496763ao1g"></a>
+
 ### 1.2. 端侧SDK开发和对接
 
 在启用指令模块功能前，要求设备已完成SDK接入，不同类型的硬件设备需要根据不同的SDK接入方式进行开发和对接。
 
+<a id="2-使用官方设备端c-sdk-支持rtos-linux-实现设备控制能力"></a>
+
+<a id="82905d5382pfr"></a>
+
 ## 2\. 使用官方设备端C SDK（支持RTOS/Linux）实现设备控制能力
 
-参考[设备端C SDK](raw/_short/mmi-rtos-sdk-dbfd414713bc31c9.md)。
+参考[设备端C SDK](mmi-rtos-sdk-dbfd414713bc31c9.md)。
+
+<a id="2-1-加载模块说明"></a>
+
+<a id="e3b46bbcb51yw"></a>
 
 ### 2.1. 加载模块说明
 
@@ -34,7 +54,9 @@
 
 加载组件库示例代码如下（ESP32平台）：
 
-```
+<a id="code-block"></a>
+
+```cmake
 //加载预编译库
 add_prebuilt_library(volume_command ${LIBS_DIR}/libc_mmi_cmd_volume.a)
 
@@ -43,15 +65,25 @@ target_link_libraries(${COMPONENT_TARGET} INTERFACE
 )
 ```
 
+<a id="2-2-引用头文件说明"></a>
+
+<a id="23cd21be66ax7"></a>
+
 ### 2.2. 引用头文件说明
 
 在加载组件库后，源码中需要引用对应指令模块的头文件，位于 SDK 包 `qwen_sdk/include/c_mmi_cmd/` 目录下，如音量控制组件引用 `c_mmi_cmd_volume.h`；回调类型 `c_mmi_cmd_event_callback` 定义在 `c_mmi_cmd.h`。
+
+<a id="2-3-注册事件回调"></a>
+
+<a id="4a60e6f009a0j"></a>
 
 ### 2.3. 注册事件回调
 
 每个指令模块提供独立的注册接口 `c_mmi_cmd_<module>_register`，回调类型统一为 `c_mmi_cmd_event_callback`，在 `c_mmi_cmd.h` 中定义如下：
 
-```
+<a id="code-block-2"></a>
+
+```c
 /**
  * @brief command 事件回调函数类型
  *
@@ -77,7 +109,9 @@ int32_t c_mmi_cmd_volume_register(c_mmi_cmd_event_callback cb);
 
 如音量设置组件示例代码如下：
 
-```
+<a id="code-block-3"></a>
+
+```c
 #include "c_mmi_cmd_volume.h"
 
 static int32_t _cmd_vol_callback(uint32_t event, char *req_id, void *p)
@@ -95,13 +129,19 @@ int main(void)
 }
 ```
 
+<a id="2-4-实现指令响应函数"></a>
+
+<a id="e10b6d5ccewef"></a>
+
 ### 2.4. 实现指令响应函数
 
 指令响应函数相关事件及参数在对应模块头文件（如 `c_mmi_cmd_volume.h`）中均有说明：
 
 如音量设置组件相关说明下：
 
-```
+<a id="code-block-4"></a>
+
+```c
 #define C_MMI_CMD_VALUE_UNDEFINED       0x7FFFFFFF
 
 //type 音量类型枚举定义
@@ -133,7 +173,9 @@ typedef struct {
 
 示例代码如下：
 
-```
+<a id="code-block-5"></a>
+
+```c
 #include "c_mmi_cmd_volume.h"
 
 static int32_t _cmd_vol_callback(uint32_t event, char *req_id, void *p)
@@ -172,7 +214,9 @@ static int32_t _cmd_vol_callback(uint32_t event, char *req_id, void *p)
 
 -   场景一：音量调大一点
 
-```
+<a id="code-block-6"></a>
+
+```c
 uint32_t event = C_MMI_CMD_VOLUME_INCREASE;
 
 c_mm_volume_param_t param =
@@ -184,7 +228,9 @@ c_mm_volume_param_t param =
 
 -   场景二：通话音量调低10
 
-```
+<a id="code-block-7"></a>
+
+```c
 uint32_t event = C_MMI_CMD_VOLUME_DECREASE;
 
 c_mm_volume_param_t param =
@@ -196,7 +242,9 @@ c_mm_volume_param_t param =
 
 -   场景三：通话音量调低/调高/设置到10
 
-```
+<a id="code-block-8"></a>
+
+```c
 uint32_t event = C_MMI_CMD_VOLUME_SET;
 
 c_mm_volume_param_t param =
@@ -206,13 +254,19 @@ c_mm_volume_param_t param =
 };
 ```
 
+<a id="3-使用官方android-ios-sdk-实现设备控制能力"></a>
+
+<a id="dcf638e0a4880"></a>
+
 ## 3.使用官方Android/iOS SDK 实现设备控制能力
 
-在 Android 和 iOS SDK 中，服务端下发的结果会透传给客户端，客户端解析下发结果`payload.output.extra_info.commands`中的指令名称，执行对应的指令操作。系统指令和对应的说明请参考：[应用配置](raw/_short/multimodal-app-configuration-8919f99b339e17da.md)。
+在 Android 和 iOS SDK 中，服务端下发的结果会透传给客户端，客户端解析下发结果`payload.output.extra_info.commands`中的指令名称，执行对应的指令操作。系统指令和对应的说明请参考：[应用配置](multimodal-app-configuration-8919f99b339e17da.md)。
 
 服务端下发指令格式示例：
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "commands": [
         {
@@ -238,7 +292,9 @@ c_mm_volume_param_t param =
 
 -   Android
 
-```
+<a id="code-block-10"></a>
+
+```java
 private void executeCommand(String command) {
         Log.d(TAG, "执行命令: " + command);
 
@@ -272,7 +328,9 @@ private void executeCommand(String command) {
 
 -   iOS
 
-```
+<a id="code-block-11"></a>
+
+```swift
 //handle command
 private func handleCommand(output: [String: Any]?) -> [[String: Any]]?{
     guard let output = output,

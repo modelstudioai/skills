@@ -2,11 +2,19 @@
 
 获得干预项列表。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListIntervenes)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,217 +33,42 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:ListIntervenes</td><td>list</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:ListIntervenes
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>AgentKey</td><td>string</td><td>是</td><td><div><p>业务空间唯一标识： <a href="https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey">AgentKey</a></p></div></td><td>33a2658aaabf4c24b45d50e575125311_p_beebot_public</td></tr><tr><td>RuleId</td><td>long</td><td>否</td><td><div><p>规则 id</p></div></td><td>mqtt_outRule_1679019634514</td></tr><tr><td>Query</td><td>string</td><td>否</td><td><div><p>问题</p></div></td><td>小猫</td></tr><tr><td>InterveneType</td><td>integer</td><td>否</td><td><div><p>干预类型</p></div><div><div>枚举值：</div><ul><li>0-相似问干预项目：0-相似问干预项目。</li><li>2-正则表达式干预项 ：2-正则表达式干预项 。</li><li>1-关键词表达式干预项 ： 1-关键词表达式干预项 。</li><li>3-关键词库干预项：3-关键词库干预项。</li><li>4-URL干预： 4-URL干预。</li></ul></div></td><td>干预类型</td></tr><tr><td>PageIndex</td><td>integer</td><td>否</td><td><div><p>页号</p></div></td><td>1</td></tr><tr><td>PageSize</td><td>integer</td><td>否</td><td><div><p>页面尺寸</p></div></td><td>10</td></tr></tbody></table>
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-AgentKey
-
-string
-
-是
-
-业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
-
-33a2658aaabf4c24b45d50e575125311\_p\_beebot\_public
-
-RuleId
-
-long
-
-否
-
-规则 id
-
-mqtt\_outRule\_1679019634514
-
-Query
-
-string
-
-否
-
-问题
-
-小猫
-
-InterveneType
-
-integer
-
-否
-
-干预类型
-
-枚举值：
-
--   0-相似问干预项目：0-相似问干预项目。
--   2-正则表达式干预项 ：2-正则表达式干预项 。
--   1-关键词表达式干预项 ： 1-关键词表达式干预项 。
--   3-关键词库干预项：3-关键词库干预项。
--   4-URL干预： 4-URL干预。
-
-干预类型
-
-PageIndex
-
-integer
-
-否
-
-页号
-
-1
-
-PageSize
-
-integer
-
-否
-
-页面尺寸
-
-10
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PlainResult |  |
+| Code | string | 状态码 | 0 |
+| Data | object | 业务数据 |  |
+| InterveneList | array<object> | 干预项列表 |  |
+| InterveneList | object |  |  |
+| Id | string | id | 36559 |
+| Query | string | 干预 query | 伊家楼 |
+| PageIndex | integer | 页号 | 1 |
+| PageSize | integer | 页尺寸 | 10 |
+| TotalSize | long | 总页书 | 1 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| RequestId | string | 请求唯一标识 | 428DCC0D-3C63-5306-BD1B-124396AB97BE |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-PlainResult
-
-Code
-
-string
-
-状态码
-
-0
-
-Data
-
-object
-
-业务数据
-
-InterveneList
-
-array<object>
-
-干预项列表
-
-InterveneList
-
-object
-
-Id
-
-string
-
-id
-
-36559
-
-Query
-
-string
-
-干预 query
-
-伊家楼
-
-PageIndex
-
-integer
-
-页号
-
-1
-
-PageSize
-
-integer
-
-页尺寸
-
-10
-
-TotalSize
-
-long
-
-总页书
-
-1
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-428DCC0D-3C63-5306-BD1B-124396AB97BE
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -243,7 +76,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Code": 0,
   "Data": {
@@ -264,6 +99,10 @@ true
   "Success": true
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

@@ -2,55 +2,39 @@
 
 描述平台向回调地址投递事件时的入站 HTTP 请求契约：请求方法与请求头、验签算法、事件信封字段，以及幂等、重试与投递保证。事件正文仅携带资源标识，需按 data.id 查询资源最新状态。
 
+<a id="概述"></a>
+
+<a id="h-callback-overview"></a>
+
 ## 概述
 
-创建 [Webhook](raw/application-api-reference/managed-agents-api/webhook-api/webhook-create.md) 并订阅具名事件后，平台在事件发生时向配置的回调地址投递通知。本页说明平台发出的入站请求契约：接收端只需按此契约验证签名、解析事件信封，并按 `data.id` 查询资源最新状态。
+创建 [Webhook](webhook-create.md) 并订阅具名事件后，平台在事件发生时向配置的回调地址投递通知。本页说明平台发出的入站请求契约：接收端只需按此契约验证签名、解析事件信封，并按 `data.id` 查询资源最新状态。
 
 事件正文不携带资源完整内容，仅含事件类型、资源标识和必要上下文。接收方根据 `data.id` 调用对应资源的 GET 接口查询最新状态。
+
+<a id="支持的事件"></a>
+
+<a id="h-callback-events"></a>
 
 ## 支持的事件
 
 `events` 支持以下 32 个具名事件，不支持 `*` 或其他通配订阅。
 
-**分类**
+| 分类 | 事件 |
+| --- | --- |
+| Session 管控面 | `session.created`、`session.updated`、`session.archived`、`session.deleted` |
+| Session 运行状态 | `session.status_run_started`、`session.status_idled`、`session.status_terminated` |
+| Session Thread | `session.thread_created`、`session.thread_run_started`、`session.thread_idled`、`session.thread_terminated` |
+| Agent | `agent.created`、`agent.updated`、`agent.archived` |
+| Deployment | `deployment.created`、`deployment.updated`、`deployment.archived`、`deployment.paused`、`deployment.unpaused` |
+| Deployment Run | `deployment_run.started`、`deployment_run.failed`、`deployment_run.succeeded` |
+| Environment | `environment.created`、`environment.updated`、`environment.archived`、`environment.deleted` |
+| Vault | `vault.created`、`vault.archived`、`vault.deleted` |
+| Vault Credential | `vault_credential.created`、`vault_credential.archived`、`vault_credential.deleted` |
 
-**事件**
+<a id="回调请求"></a>
 
-Session 管控面
-
-`session.created`、`session.updated`、`session.archived`、`session.deleted`
-
-Session 运行状态
-
-`session.status_run_started`、`session.status_idled`、`session.status_terminated`
-
-Session Thread
-
-`session.thread_created`、`session.thread_run_started`、`session.thread_idled`、`session.thread_terminated`
-
-Agent
-
-`agent.created`、`agent.updated`、`agent.archived`
-
-Deployment
-
-`deployment.created`、`deployment.updated`、`deployment.archived`、`deployment.paused`、`deployment.unpaused`
-
-Deployment Run
-
-`deployment_run.started`、`deployment_run.failed`、`deployment_run.succeeded`
-
-Environment
-
-`environment.created`、`environment.updated`、`environment.archived`、`environment.deleted`
-
-Vault
-
-`vault.created`、`vault.archived`、`vault.deleted`
-
-Vault Credential
-
-`vault_credential.created`、`vault_credential.archived`、`vault_credential.deleted`
+<a id="h-callback-request"></a>
 
 ## 回调请求
 
@@ -60,7 +44,9 @@ Vault Credential
 
 请求头示例：
 
-```
+<a id="code-block"></a>
+
+```http
 POST /managedagent/webhooks HTTP/1.1
 Host: example.com
 Content-Type: application/json
@@ -70,35 +56,25 @@ webhook-timestamp: 1785810621
 webhook-signature: v1,BASE64_HMAC_SHA256
 ```
 
-**请求头**
+| 请求头 | 说明 |
+| --- | --- |
+| `Content-Type` | 固定为 `application&#47;json` |
+| `User-Agent` | 固定为 `Bailian-ManagedAgent-Webhook&#47;1.0` |
+| `webhook-id` | 外层 `event.id`，格式 whe\_<ULID>；用于幂等去重，也是验签原文的组成部分 |
+| `webhook-timestamp` | 本次投递生成的 Unix 秒级时间戳；每次投递重新生成 |
+| `webhook-signature` | 签名，格式 `v1,` 加 Base64 编码的 HMAC-SHA256 结果 |
 
-**说明**
+<a id="签名验证"></a>
 
-`Content-Type`
-
-固定为 `application&#47;json`
-
-`User-Agent`
-
-固定为 `Bailian-ManagedAgent-Webhook&#47;1.0`
-
-`webhook-id`
-
-外层 `event.id`，格式 whe\_<ULID>；用于幂等去重，也是验签原文的组成部分
-
-`webhook-timestamp`
-
-本次投递生成的 Unix 秒级时间戳；每次投递重新生成
-
-`webhook-signature`
-
-签名，格式 `v1,` 加 Base64 编码的 HMAC-SHA256 结果
+<a id="h-callback-signature"></a>
 
 ## 签名验证
 
 签名原文和算法：
 
-```
+<a id="code-block-2"></a>
+
+```text
 signed_content = webhook-id + "." + webhook-timestamp + "." + raw_body
 secret_bytes = Base64Decode(RemovePrefix(signing_secret, "whsec_"))
 signature = Base64(HMAC-SHA256(secret_bytes, UTF8(signed_content)))
@@ -109,15 +85,25 @@ signature = Base64(HMAC-SHA256(secret_bytes, UTF8(signed_content)))
 -   先读取未经修改的原始请求体完成验签，再进行 JSON 反序列化。
 -   校验时间戳与当前时间相差不超过 5 分钟，并使用恒定时间比较验证签名。
 
-**警告**必须对未经解析的原始请求体（raw body）验签，再做 JSON 反序列化。任何在验签前对正文的重编码或解析都会导致签名不匹配。
+> **警告**
+>
+> 必须对未经解析的原始请求体（raw body）验签，再做 JSON 反序列化。任何在验签前对正文的重编码或解析都会导致签名不匹配。
 
-**说明**Signing Secret 仅在 [创建](raw/application-api-reference/managed-agents-api/webhook-api/webhook-create.md) 和重置成功响应中返回，后续查询不再返回。请妥善保存。
+> **说明**
+>
+> Signing Secret 仅在 [创建](webhook-create.md) 和重置成功响应中返回，后续查询不再返回。请妥善保存。
+
+<a id="事件信封字段"></a>
+
+<a id="h-callback-envelope"></a>
 
 ## 事件信封字段
 
 普通事件正文：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "type": "event",
   "id": "whe_01JXX8JY9BBM4BK4C2P7K3M3ZR",
@@ -132,7 +118,9 @@ signature = Base64(HMAC-SHA256(secret_bytes, UTF8(signed_content)))
 
 Thread 事件额外携带 `session_thread_id`，`data.id` 为 Session 标识，`data.session_thread_id` 为具体 Thread 标识。`session.thread_created`、`session.thread_run_started`、`session.thread_idled` 和 `session.thread_terminated` 都使用该结构：
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "type": "event",
   "id": "whe_01JXX8JY9BBM4BK4C2P7K3M3ZR",
@@ -146,105 +134,36 @@ Thread 事件额外携带 `session_thread_id`，`data.id` 为 Session 标识，`
 }
 ```
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `type` | string | 固定为 `event` |
+| `id` | string | 事件 ID，格式 whe\_<ULID>；同一事件的所有投递尝试使用相同外层 id，与 `webhook-id` 请求头一致 |
+| `created_at` | string | 事件创建时间，ISO 8601 |
+| `data` | object | 事件载荷 |
+| `data.id` | string | 资源标识；Thread 事件中为 Session 标识 |
+| `data.type` | string | 事件类型 |
+| `data.workspace_id` | string | 工作空间 ID |
+| `data.session_thread_id` | string | Thread 事件中为具体 Thread 标识 |
+| `data.vault_id` | string | Vault Credential 事件中携带 |
 
-**类型**
+<a id="幂等-重试与投递保证"></a>
 
-**说明**
-
-`type`
-
-string
-
-固定为 `event`
-
-`id`
-
-string
-
-事件 ID，格式 whe\_<ULID>；同一事件的所有投递尝试使用相同外层 id，与 `webhook-id` 请求头一致
-
-`created_at`
-
-string
-
-事件创建时间，ISO 8601
-
-`data`
-
-object
-
-事件载荷
-
-`data.id`
-
-string
-
-资源标识；Thread 事件中为 Session 标识
-
-`data.type`
-
-string
-
-事件类型
-
-`data.workspace_id`
-
-string
-
-工作空间 ID
-
-`data.session_thread_id`
-
-string
-
-Thread 事件中为具体 Thread 标识
-
-`data.vault_id`
-
-string
-
-Vault Credential 事件中携带
+<a id="h-callback-delivery"></a>
 
 ## 幂等、重试与投递保证
 
 接收端不需要返回响应体，应在 5 秒内返回状态码。平台按接收端响应或错误决定后续行为：
 
-**接收端响应或错误**
-
-**平台行为**
-
-200～299
-
-投递成功，不再重试
-
-300～399
-
-不跟随重定向，不重试，立即禁用当前 Webhook
-
-408、425、429
-
-当前请求失败，进入重试
-
-400～499 其他状态
-
-当前投递最终失败，不重试
-
-500～599
-
-当前请求失败，进入重试
-
-域名解析、连接、写入或读取超时
-
-当前请求失败，进入重试
-
-HTTPS 证书校验或主机名校验失败
-
-不重试，立即禁用当前 Webhook
-
-域名解析到私网或保留地址
-
-禁止建立连接，立即禁用当前 Webhook
+| 接收端响应或错误 | 平台行为 |
+| --- | --- |
+| 200～299 | 投递成功，不再重试 |
+| 300～399 | 不跟随重定向，不重试，立即禁用当前 Webhook |
+| 408、425、429 | 当前请求失败，进入重试 |
+| 400～499 其他状态 | 当前投递最终失败，不重试 |
+| 500～599 | 当前请求失败，进入重试 |
+| 域名解析、连接、写入或读取超时 | 当前请求失败，进入重试 |
+| HTTPS 证书校验或主机名校验失败 | 不重试，立即禁用当前 Webhook |
+| 域名解析到私网或保留地址 | 禁止建立连接，立即禁用当前 Webhook |
 
 业务事件首次请求失败后最多再重试 3 次，重试等待时间依次为 10 秒、30 秒、1 分钟，共最多 4 次真实网络请求。第 4 次仍失败时记录最终失败。默认连续 20 个业务事件最终失败后自动禁用 Webhook。`webhook.test` 仅同步请求一次，不重试，不影响连续失败计数。
 
@@ -254,11 +173,21 @@ HTTPS 证书校验或主机名校验失败
 -   **不保证顺序**：事件可能乱序到达；需要排序时使用 `created_at`，最终状态以资源查询结果为准。
 -   **查询期限**：投递事件保留 7 天，超过后无法查询。
 
+<a id="验签示例"></a>
+
+<a id="h-callback-example"></a>
+
 ## 验签示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import base64
 import hashlib
 import hmac
@@ -286,9 +215,13 @@ def verify_webhook(raw_body: bytes, webhook_id: str, timestamp: str, signature_h
         return False
 ```
 
+<a id="fig-code-group-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-node-js"></a>
+
+```javascript
 import crypto from "node:crypto"
 import express from "express"
 

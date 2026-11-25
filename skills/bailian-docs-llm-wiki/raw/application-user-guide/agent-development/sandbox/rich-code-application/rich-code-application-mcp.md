@@ -2,6 +2,10 @@
 
 高代码应用通过 MCP（Model Context Protocol） 协议接入各类工具，为 AI Agent 扩展知识检索、外部服务调用、应用编排和数据访问能力。
 
+<a id="概述"></a>
+
+<a id="tools_overview"></a>
+
 ## 概述
 
 在高代码应用详情页的**工具**页面中，您可以添加和管理 Agent 使用的工具。添加的工具用于展示调用方式，开发者需要在代码中以 MCP 协议实际接入。
@@ -10,41 +14,24 @@
 
 高代码应用支持以下四种工具类型：
 
-**工具类型**
+| 工具类型 | 说明 | 适用场景 |
+| --- | --- | --- |
+| **知识库** | 配置好的知识库可发布为 MCP 服务接入，为智能体提供补充知识以增强回复准确性。 | 产品文档问答、企业知识检索、FAQ 自动回复等需要特定领域知识的场景。 |
+| **MCP 服务** | 通过插件转换或开通广场中的 MCP 服务，为智能体提供可使用的技能。 | 联网搜索、天气查询、金融数据分析、企业工商查询等外部服务调用场景。 |
+| **应用组件** | 将已创建的智能体或工作流作为组件接入，为当前智能体提供更强大的能力。 | 多 Agent 协作、复杂任务编排、将已有的工作流复用到高代码应用中。 |
+| **数据连接器** | 百炼平台上访问外部数据的桥梁，提供企业级的稳定、安全的数据服务。 | 读取表格数据、文件处理、企业数据库对接等外部数据访问场景。 |
 
-**说明**
+<a id="推荐项目结构"></a>
 
-**适用场景**
-
-**知识库**
-
-配置好的知识库可发布为 MCP 服务接入，为智能体提供补充知识以增强回复准确性。
-
-产品文档问答、企业知识检索、FAQ 自动回复等需要特定领域知识的场景。
-
-**MCP 服务**
-
-通过插件转换或开通广场中的 MCP 服务，为智能体提供可使用的技能。
-
-联网搜索、天气查询、金融数据分析、企业工商查询等外部服务调用场景。
-
-**应用组件**
-
-将已创建的智能体或工作流作为组件接入，为当前智能体提供更强大的能力。
-
-多 Agent 协作、复杂任务编排、将已有的工作流复用到高代码应用中。
-
-**数据连接器**
-
-百炼平台上访问外部数据的桥梁，提供企业级的稳定、安全的数据服务。
-
-读取表格数据、文件处理、企业数据库对接等外部数据访问场景。
+<a id="bp011"></a>
 
 ## 推荐项目结构
 
 一个规范的高代码应用项目推荐使用该项目结构：[tool\_use\_demo.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260422/bfethg/tool_use_demo.zip)。
 
-```
+<a id="code-block"></a>
+
+```text
 my-agent-app/
 ├── main.py              # 入口文件（必须，程序启动入口）
 ├── requirements.txt     # Python 依赖声明
@@ -60,6 +47,10 @@ my-agent-app/
 
 其中 `requirements.txt` 建议使用 `==` 固定所有依赖的版本号，避免使用 `>=` 等范围约束符。固定版本可确保每次构建的依赖环境一致，防止因上游依赖更新导致构建失败或运行异常。
 
+<a id="接入流程"></a>
+
+<a id="tools_flow"></a>
+
 ## 接入流程
 
 工具接入高代码应用分为以下三个步骤：
@@ -73,7 +64,9 @@ my-agent-app/
     添加工具后，系统会自动配置相关环境变量。在代码中通过 `fastmcp.Client` 连接 MCP 服务并调用工具。示例：
     
 
-```
+<a id="code-block-2"></a>
+
+```python
 import os
 from agentscope.message import TextBlock
 from agentscope.tool import ToolResponse
@@ -110,6 +103,10 @@ async def web_search(query: str) -> ToolResponse:
     重新部署应用使工具生效，然后在右侧的**API 测试**或**文本对话体验**中验证工具调用是否正常。
     
 
+<a id="知识库"></a>
+
+<a id="tools_kb_section"></a>
+
 ## 知识库
 
 知识库为 Agent 提供特定领域的补充知识，增强回复准确性。配置好的知识库需先发布为 MCP 服务，才能被高代码应用调用。
@@ -121,7 +118,10 @@ async def web_search(query: str) -> ToolResponse:
 3.  添加完成后，知识库会显示在工具列表中，切换到**已添加** Tab 可查看当前已关联的知识库。
 
 **代码接入示例**
-```
+
+<a id="code-block-3"></a>
+
+```python
 import os
 from agentscope.message import TextBlock
 from agentscope.tool import ToolResponse
@@ -158,6 +158,10 @@ async def search_knowledge(query: str, top_k: int = 5) -> ToolResponse:
     return ToolResponse(content=[TextBlock(type="text", text=text)])
 ```
 
+<a id="mcp-服务"></a>
+
+<a id="tools_mcp_section"></a>
+
 ## MCP 服务
 
 MCP 服务为 Agent 提供外部技能调用能力。您可以从 MCP 广场开通现成的服务，也可以创建自定义 MCP 服务或从已有插件转换。
@@ -174,7 +178,10 @@ MCP 服务为 Agent 提供外部技能调用能力。您可以从 MCP 广场开�
     
 
 **代码接入示例**
-```
+
+<a id="code-block-4"></a>
+
+```python
 import os
 from agentscope.message import TextBlock
 from agentscope.tool import ToolResponse
@@ -207,6 +214,10 @@ async def web_search(query: str) -> ToolResponse:
     return ToolResponse(content=[TextBlock(type="text", text=text)])
 ```
 
+<a id="应用组件"></a>
+
+<a id="tools_comp_section"></a>
+
 ## 应用组件
 
 应用组件允许您将已创建的智能体或工作流作为子组件接入当前高代码应用，实现多 Agent 协作和复杂任务编排。
@@ -218,7 +229,10 @@ async def web_search(query: str) -> ToolResponse:
 3.  添加完成后，可在**已添加** Tab 中查看当前已关联的应用组件。
 
 **代码接入示例**
-```
+
+<a id="code-block-5"></a>
+
+```python
 import os
 from agentscope.message import TextBlock
 from agentscope.tool import ToolResponse
@@ -255,6 +269,10 @@ async def call_translation_agent(text: str, target_lang: str = "en") -> ToolResp
     return ToolResponse(content=[TextBlock(type="text", text=translated)])
 ```
 
+<a id="数据连接器"></a>
+
+<a id="tools_dc_section"></a>
+
 ## 数据连接器
 
 数据连接器是百炼平台上 Agent、工作流、知识库等访问外部数据的桥梁，提供企业级的稳定、安全的数据服务。
@@ -273,7 +291,10 @@ async def call_translation_agent(text: str, target_lang: str = "en") -> ToolResp
     
 
 **代码接入示例**
-```
+
+<a id="code-block-6"></a>
+
+```python
 import os
 from agentscope.message import TextBlock
 from agentscope.tool import ToolResponse
@@ -310,15 +331,25 @@ async def query_sales_data(start_date: str, end_date: str) -> ToolResponse:
     return ToolResponse(content=[TextBlock(type="text", text=text)])
 ```
 
+<a id="mcp-协议开发要点"></a>
+
+<a id="tools_mcp_dev"></a>
+
 ## MCP 协议开发要点
 
 所有工具都通过 MCP（Model Context Protocol）协议接入。以下是开发 MCP 工具时的关键要点。
+
+<a id="工具命名与描述"></a>
+
+<a id="tools_mcp_naming"></a>
 
 ### 工具命名与描述
 
 工具函数的名称和文档字符串直接影响大模型判断何时调用该工具，应准确描述工具的功能和适用场景。
 
-```
+<a id="code-block-7"></a>
+
+```python
 # 好的命名 — 函数名和文档字符串清晰描述工具用途
 async def search_product_docs(query: str, top_k: int = 5) -> ToolResponse:
     """在产品文档知识库中搜索与用户问题相关的技术文档和操作指南，
@@ -331,11 +362,17 @@ async def search(q: str) -> ToolResponse:
     ...
 ```
 
+<a id="参数定义"></a>
+
+<a id="tools_mcp_params"></a>
+
 ### 参数定义
 
 为每个参数提供清晰的类型标注和文档说明，帮助大模型正确提取和传递参数值。
 
-```
+<a id="code-block-8"></a>
+
+```python
 async def get_weather(city: str, unit: str = "celsius") -> ToolResponse:
     """查询指定城市的当前天气信息。
 
@@ -346,11 +383,17 @@ async def get_weather(city: str, unit: str = "celsius") -> ToolResponse:
     ...
 ```
 
+<a id="错误处理"></a>
+
+<a id="tools_mcp_error"></a>
+
 ### 错误处理
 
 工具函数应当妥善处理异常情况，返回有意义的错误信息，而不是让异常直接抛出导致对话中断。
 
-```
+<a id="code-block-9"></a>
+
+```python
 async def query_database(sql: str) -> ToolResponse:
     """查询业务数据库。"""
     try:
@@ -375,35 +418,27 @@ async def query_database(sql: str) -> ToolResponse:
         ])
 ```
 
+<a id="环境变量"></a>
+
+<a id="tools_env_vars"></a>
+
 ## 环境变量
 
 添加工具后，系统会自动将相关的连接信息通过环境变量注入到运行环境中。以下是常用的系统环境变量：
 
-**环境变量**
-
-**说明**
-
-`DASHSCOPE_API_KEY`
-
-百炼平台 API Key，用于调用模型服务和工具 API。
-
-`DASHSCOPE_API_HEADERS`
-
-API 请求附加的 Header 信息。
-
-`PATH`
-
-系统路径变量，包含 Python 运行环境路径。
-
-`PYTHONPATH`
-
-Python 模块搜索路径。
-
-`TZ`
-
-时区设置。
+| 环境变量 | 说明 |
+| --- | --- |
+| `DASHSCOPE_API_KEY` | 百炼平台 API Key，用于调用模型服务和工具 API。 |
+| `DASHSCOPE_API_HEADERS` | API 请求附加的 Header 信息。 |
+| `PATH` | 系统路径变量，包含 Python 运行环境路径。 |
+| `PYTHONPATH` | Python 模块搜索路径。 |
+| `TZ` | 时区设置。 |
 
 > 您可以在**部署**页面的**环境变量**区域查看和编辑所有环境变量。添加工具后自动注入的环境变量也可在此处确认。
+
+<a id="常见问题"></a>
+
+<a id="tools_faq"></a>
 
 ## 常见问题
 

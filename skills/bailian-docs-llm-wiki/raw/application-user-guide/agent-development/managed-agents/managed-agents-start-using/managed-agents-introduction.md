@@ -2,11 +2,15 @@
 
 Managed Agents 是阿里云百炼的智能体托管运行时，托管会话状态、沙箱环境和工具执行。
 
+<a id="适用场景"></a>
+
+<a id="h2-scenarios"></a>
+
 ## 适用场景
 
 智能体在独立沙箱中自主执行命令、读写文件、安装依赖并处理数据，事件历史在服务端持久化。
 
-沙箱默认在会话空闲后回收；如需跨运行保留工作文件和环境修改，可在创建会话时开启[沙箱持久化](https://help.aliyun.com/zh/model-studio/managed-agents-session-operations#h-sandbox-persistence)。
+沙箱默认在会话空闲后回收；如需跨运行保留工作文件和环境修改，可在创建会话时开启[沙箱持久化](../managed-agents-session/managed-agents-session-operations.md#h-sandbox-persistence)。
 
 **长时运行与有状态会话**
 
@@ -20,67 +24,37 @@ Managed Agents 是阿里云百炼的智能体托管运行时，托管会话状�
 
 专注于 Agent 逻辑，而非从零开始构建和维护代理循环、沙箱编排或工具执行基础设施。
 
+<a id="与智能体应用的区别"></a>
+
+<a id="702ab4dc4cpy2"></a>
+
 ## 与智能体应用的区别
 
-**维度**
+| 维度 | 智能体应用 | Managed Agents |
+| --- | --- | --- |
+| 运行模式 | 无状态调用，应用侧维护上下文 | 服务端维护会话状态，支持中断与续接 |
+| 执行环境 | 共享运行时 | 独立沙箱，云端容器 |
+| 事件模型 | 响应级流式输出 | 会话级 SSE 事件流，事件历史持久化 |
+| 典型场景 | 问答、对话、轻量任务 | 多步工具调用、代码执行、文件处理等长时运行任务 |
 
-**智能体应用**
+<a id="核心概念"></a>
 
-**Managed Agents**
-
-运行模式
-
-无状态调用，应用侧维护上下文
-
-服务端维护会话状态，支持中断与续接
-
-执行环境
-
-共享运行时
-
-独立沙箱，云端容器
-
-事件模型
-
-响应级流式输出
-
-会话级 SSE 事件流，事件历史持久化
-
-典型场景
-
-问答、对话、轻量任务
-
-多步工具调用、代码执行、文件处理等长时运行任务
+<a id="6fee184df2uxo"></a>
 
 ## 核心概念
 
-**概念**
+| 概念 | 说明 |
+| --- | --- |
+| 智能体（Agent） | 模型、系统提示词、工具、MCP 服务和 Skill 的组合配置。创建后通过 ID 引用，可在多个会话中复用。 |
+| 运行环境（Environment） | 会话运行的沙箱配置，由阿里云百炼托管的云端容器。 |
+| 会话（Session） | 智能体在指定环境中的一次运行实例，执行任务并生成输出。 |
+| 事件（Event） | 应用与智能体之间交换的消息，包括用户消息、工具调用结果和状态变更。 |
+| 记忆库（Memory Store） | 跨会话持久化的挂载资源，智能体通过文件工具读写，内容跨会话保留。 |
+| 定时任务（Scheduled Task） | 绑定智能体并配置触发方式的资源，定时或手动触发运行，每次触发产生一条运行记录。 |
 
-**说明**
+<a id="支持的工具"></a>
 
-智能体（Agent）
-
-模型、系统提示词、工具、MCP 服务和 Skill 的组合配置。创建后通过 ID 引用，可在多个会话中复用。
-
-运行环境（Environment）
-
-会话运行的沙箱配置，由阿里云百炼托管的云端容器。
-
-会话（Session）
-
-智能体在指定环境中的一次运行实例，执行任务并生成输出。
-
-事件（Event）
-
-应用与智能体之间交换的消息，包括用户消息、工具调用结果和状态变更。
-
-记忆库（Memory Store）
-
-跨会话持久化的挂载资源，智能体通过文件工具读写，内容跨会话保留。
-
-定时任务（Scheduled Task）
-
-绑定智能体并配置触发方式的资源，定时或手动触发运行，每次触发产生一条运行记录。
+<a id="h2-tools"></a>
 
 ## 支持的工具
 
@@ -92,6 +66,10 @@ Managed Agents 是阿里云百炼的智能体托管运行时，托管会话状�
 -   **MCP 服务**：接入外部工具服务
 -   **Skill**：挂载预置的工具组合，封装端到端任务流程
 
+<a id="工作流程"></a>
+
+<a id="h2-workflow"></a>
+
 ## 工作流程
 
 1.  **创建智能体**：配置模型、系统提示词、工具和 MCP 服务。创建后通过 ID 引用。
@@ -99,6 +77,8 @@ Managed Agents 是阿里云百炼的智能体托管运行时，托管会话状�
 3.  **发起会话**：创建引用智能体和环境配置的会话实例。
 4.  **发送事件，接收响应**：发送用户消息，智能体自主执行工具调用，通过 SSE 事件流推送结果。事件历史在服务端持久化。
 5.  **干预或中断**：在执行过程中发送新事件引导方向，或中断当前任务。
+
+<a id="下一步"></a>
 
 ## 下一步
 
@@ -108,24 +88,38 @@ Managed Agents 是阿里云百炼的智能体托管运行时，托管会话状�
 
 创建第一个智能体、配置环境并发起会话。
 
-](raw/application-user-guide/agent-development/managed-agents/managed-agents-start-using/managed-agents-quick-start.md)[
+
+
+
+
+](managed-agents-quick-start.md)[
 
 **API 快速开始**
 
 创建 Agent 与 Environment、开启 Session、提交任务并流式接收结果。
 
-](raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)[
+
+
+
+
+](../../../../application-api-reference/managed-agents-api/managed-agents-quickstart.md)[
 
 **管理会话与事件**
 
 创建会话、发送消息并接收事件流。
 
-](raw/application-user-guide/agent-development/managed-agents/managed-agents-session.md)
+
+
+
+
+](../managed-agents-session.md)
+
+<a id="配置与-api-参考"></a>
 
 ### 配置与 API 参考
 
--   [配置智能体](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent.md)：配置模型、提示词与工具
--   [API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)：接口总览、认证与可用 API
--   [管理记忆库](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-memory-store.md)：跨会话保留智能体的工作笔记
--   [配置定时任务](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-deployment.md)：定时或手动触发智能体运行
--   [通过 CLI 管理 Agent 与会话](raw/application-user-guide/agent-development/managed-agents/managed-agents-start-using/managed-agents-cli.md)：以基础设施即代码方式在终端管理 Agent 与会话
+-   [配置智能体](../managed-agents-agent.md)：配置模型、提示词与工具
+-   [API 总览与认证](../../../../application-api-reference/managed-agents-api/managed-agents-api-overview.md)：接口总览、认证与可用 API
+-   [管理记忆库](../managed-agents-context/managed-agents-memory-store.md)：跨会话保留智能体的工作笔记
+-   [配置定时任务](../managed-agents-session/managed-agents-deployment.md)：定时或手动触发智能体运行
+-   [通过 CLI 管理 Agent 与会话](managed-agents-cli.md)：以基础设施即代码方式在终端管理 Agent 与会话

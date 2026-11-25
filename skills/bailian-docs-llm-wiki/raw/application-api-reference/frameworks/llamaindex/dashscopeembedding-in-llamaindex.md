@@ -2,66 +2,48 @@
 
 本文档介绍使用DashScopeEmbedding服务来在LlamaIndex中构建向量索引服务的使用方法。
 
+<a id="前提条件"></a>
+
+<a id="c5bad0170eh01"></a>
+
 ## 前提条件
 
--   您已开通百炼服务并获得API-KEY， 请参考[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+-   您已开通百炼服务并获得API-KEY， 请参考[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。
 -   已导入 API-KEY，请参考[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 -   安装 LlamaIndex 核心组件、DashScopeEmbedding 以及相关依赖。
 
-```
+<a id="code-block"></a>
+
+```bash
 pip install llama-index-core
 pip install llama-index-embeddings-dashscope
 pip install llama-index-readers-file
 pip install docx2txt
 ```
 
+<a id="支持的模型"></a>
+
+<a id="8dde9a2a902qv"></a>
+
 ## 支持的模型
 
 > **MTEB、CMTEB**是 Embedding模型的通用评估指标，数值越大，模型效果越好。
 
-**模型**
+| 模型 | MTEB | MTEB（Retrieval task） | CMTEB | CMTEB (Retrieval task) |
+| --- | --- | --- | --- | --- |
+| text-embedding-v1 | 58.30 | 45.47 | 59.84 | 56.59 |
+| text-embedding-v2 | 60.13 | 49.49 | 62.17 | 62.78 |
+| text-embedding-v3 | 63.39 | 55.41 | 68.92 | 73.23 |
 
-**MTEB**
+<a id="修改全局设置-可选"></a>
 
-**MTEB（Retrieval task）**
-
-**CMTEB**
-
-**CMTEB (Retrieval task)**
-
-text-embedding-v1
-
-58.30
-
-45.47
-
-59.84
-
-56.59
-
-text-embedding-v2
-
-60.13
-
-49.49
-
-62.17
-
-62.78
-
-text-embedding-v3
-
-63.39
-
-55.41
-
-68.92
-
-73.23
+<a id="b5631e462csyy"></a>
 
 ## 修改全局设置（可选）
 
-```
+<a id="code-block-2"></a>
+
+```python
 from llama_index.core import Settings
 from llama_index.embeddings.dashscope import DashScopeEmbedding
 
@@ -71,9 +53,15 @@ Settings.embed_model = DashScopeEmbedding(
 )
 ```
 
+<a id="模型调用示例"></a>
+
+<a id="c39f371ef8h3f"></a>
+
 ## 模型调用示例
 
-```
+<a id="code-block-3"></a>
+
+```python
 from llama_index.embeddings.dashscope import DashScopeEmbedding
 
 # 初始化 Embedding 模型
@@ -91,8 +79,12 @@ for index, embedding in enumerate(result_embeddings):
         % (text_to_embedding[index], embedding[:5])
     )
 ```
+
 **示例代码输出**
-```
+
+<a id="code-block-4"></a>
+
+```text
 Dimension of embeddings: 1536
 Input: 风急天高猿啸哀, embedding is: [-0.0016666285653348784, 0.008690492014557004, 0.02894828715284365, -0.01774133615134858, 0.03627544697161321]
 Dimension of embeddings: 1536
@@ -103,11 +95,17 @@ Dimension of embeddings: 1536
 Input: 不尽长江滚滚来, embedding is: [0.003449439128962428, 0.02667092110022496, -0.0010223853088419568, -0.00971414215183749, 0.0035561228133633277]
 ```
 
+<a id="构建文档的向量化索引"></a>
+
+<a id="ecbb49f8f7wi6"></a>
+
 ## 构建文档的向量化索引
 
 示例中使用的被解析文件：[百炼系列产品介绍（虚构）.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241129/idkzqh/%E7%99%BE%E7%82%BC%E7%B3%BB%E5%88%97%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%88%E8%99%9A%E6%9E%84%EF%BC%89.zip)
 
-```
+<a id="code-block-5"></a>
+
+```python
 # 导入依赖
 from llama_index.embeddings.dashscope import DashScopeEmbedding
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
@@ -137,11 +135,14 @@ for i, uuid in enumerate(index.vector_store.data.metadata_dict.keys()):
     if i > 3:
         break
 ```
+
 **示例代码输出**
 
 > 在构建向量化索引的过程中，原始文件会被拆分成多个部分，每个部分随后被转换成一个向量。
 
-```
+<a id="code-block-6"></a>
+
+```text
 已读取文件目录的文件
 已使用DashScopeEmbedding模型构建了多个文档的向量化索引
 输出向量化示例：

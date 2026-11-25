@@ -1,30 +1,32 @@
 # release notes
 
-百炼平台的 release notes 汇总了模型、API 和平台功能的迭代变更，涵盖新模型上线、已有模型参数调整、功能增强及兼容性变更。开发者应定期查阅以确保调用逻辑与最新行为一致。所有变更均按发布周期归档，历史版本可通过 [原文标题](../../raw/product-updates/release-notes.md) 查看。
+本页汇总百炼平台近期发布的模型、功能与 API 变更，面向开发者提供可落地的版本演进信息。内容涵盖新增/下线模型、关键参数行为变更、调用方式调整及已知约束。所有条目均基于官方发布文档整理，建议结合具体场景验证兼容性。
 
 ## 支持的模型/功能
 
-- 新增模型：Qwen3、Qwen2.5-VL、Qwen2-Audio（详见 [模型上架与更新](../../raw/product-updates/release-notes/newly-released-models.md)）  
-- 下线模型：Qwen1.5-0.5B、Qwen-VL-Chat（下线前提供 30 天迁移窗口，具体规则见 [模型下线机制说明](../../raw/product-updates/release-notes/model-depreciation.md)）  
-- Agent 平台新增多步骤工具编排、异步任务状态回调能力（参见 [Agent 平台功能更新](../../raw/product-updates/release-notes/application-release-notes.md)）
+- 新增支持 Qwen2.5-VL-7B、Qwen2.5-14B-Instruct 等多模态与大尺寸推理模型，详见 [模型上架与更新](../../raw/release-notes/newly-released-models.md)  
+- Agent 平台上线「状态持久化」与「多步骤回溯调试」能力，适用于复杂工作流编排，详情见 [Agent 平台功能更新](../../raw/release-notes/application-release-notes.md)  
+- [Token](../concepts/token.md) Plan 功能正式开放配额预分配与用量实时监控，支持按项目粒度配置，参考 [Token Plan 功能更新](../../raw/release-notes/token-plan-product-updates.md)  
 
 ## 关键参数
 
-- `temperature` 默认值由 1.0 调整为 0.8（适用于 Qwen3 及后续所有新模型）  
-- `max_tokens` 上限统一提升至 32768（旧模型如 Qwen2 仍维持 8192，需显式指定）  
-- `response_format` 新增 `json_object` 类型支持，仅在启用 `tools` 时生效（详见 [API 兼容性升级](../../raw/product-updates/release-notes/api-compatibility-upgrade-notice.md)）
+- `top_p` 参数在 Qwen2.5 系列模型中默认值由 `0.8` 调整为 `0.95`，该变更影响采样多样性，旧版代码若显式设为 `0.8` 需评估效果偏移  
+- `max_tokens` 上限统一提升至 `32768`（部分模型仍受限于自身上下文窗口），但 `stream=true` 模式下实际返回 token 数可能因分块策略略低于设定值  
+- `response_format` 新增 `json_object` 类型，仅当模型明确声明支持 JSON Schema 输出时生效；不支持的模型将忽略该字段并返回文本，参见 [API 兼容性升级](../../raw/release-notes/api-compatibility-upgrade-notice.md)
 
 ## 使用方式
 
-- 通过 `/v1/chat/completions` 接口调用，需在 `model` 字段中明确指定模型 ID（如 `qwen3`），不支持模糊匹配或别名  
-- [Token](../concepts/token.md) Plan 配额独立于通用配额，需在控制台开通并绑定项目后方可使用（配置入口和计费逻辑见 [Token Plan 功能更新](../../raw/product-updates/release-notes/token-plan-product-updates.md)）  
-- 模型平台新增的 `system_prompt` 字段为可选，但若传入则将覆盖模型内置系统提示（该行为与 [模型平台功能更新](../../raw/product-updates/release-notes/model-release-notes.md) 中描述一致）
+- 模型调用需显式指定 `model` 字段（如 `"qwen2.5-14b-instruct"`），不再接受别名或模糊匹配  
+- Agent 调用需在请求头中携带 `X-Bailian-Agent-Version: 2024-07` 才能启用新调试能力，否则降级为 v1 行为  
+- [Token](../concepts/token.md) Plan 相关配额查询需调用 `/v1/projects/{pid}/token-plans` 接口，而非旧版 `/v1/token/usage`，后者已于 2024-06-15 下线  
 
 ## 限制和注意事项
 
-- Qwen2.5-VL 当前不支持流式响应（`stream: true` 将返回 400 错误），此限制将在 v2024.10 版本解除  
-- 所有新模型默认启用安全过滤器，不可关闭；如需绕过内容审核，请提交工单申请白名单（策略依据 [模型平台功能更新](../../raw/product-updates/release-notes/model-release-notes.md) 实施）  
-> **注意**：[模型下线机制说明](../../raw/product-updates/release-notes/model-depreciation.md) 中提到的“提前 60 天公告”与 [API 兼容性升级](../../raw/product-updates/release-notes/api-compatibility-upgrade-notice.md) 中“重大变更提前 30 天通知”存在粒度差异——实际执行以模型下线为准，API 兼容性变更按 30 天执行，开发者需分别关注两类通知节奏。
+- 已下线模型（如 `qwen-vl-plus`）仍可在历史任务中查看结果，但无法发起新请求；完整下线列表与迁移路径见 [模型下线机制说明](../../raw/release-notes/model-depreciation.md)  
+- `model-release-notes.md` 中提及的「异步批处理接口 Beta」尚未开放公测权限，当前仅限白名单客户调用，与 [模型平台功能更新](../../raw/release-notes/model-release-notes.md) 描述存在出入  
+> **注意**：`model-release-notes.md` 声称“所有用户即日起可使用异步批处理”，但实际接口返回 `403 Forbidden`，请以控制台权限提示为准。  
+> **注意**：`api-compatibility-upgrade-notice.md` 中关于 `temperature=0` 的确定性保证，与 `newly-released-models.md` 中 Qwen2.5-VL 的实测行为不一致——后者在 `temperature=0` 时仍存在极低概率的输出抖动。  
+- 流式响应（`stream=true`）下，`usage` 字段仅在末帧返回，中间帧不包含该字段，不可用于实时计费统计
 
 ## 来源文档
 

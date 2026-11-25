@@ -2,9 +2,17 @@
 
 本文档指导开发者通过License模式集成iOS SDK，实现设备管控和鉴权。多模态SDK需支持License计费模式，支持半托管和全托管两种接入模式。
 
+<a id="1-模式说明"></a>
+
+<a id="173db21dc9hc4"></a>
+
 ## 1\. 模式说明
 
 使用 License 计费模式访问多模态交互开发套件需要集成 License SDK，请参考本文第 4 节集成 SDK。
+
+<a id="1-1-半托管模式"></a>
+
+<a id="b48bff0c0a8t5"></a>
 
 ### 1.1. 半托管模式
 
@@ -12,7 +20,7 @@
 
 -   服务端开发：
     
-    -   参考[云端接口开发说明](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#557a524795xam) 完成云端接口对接，设备计量管理服务提供设备注册和获取Token两个接口
+    -   参考[云端接口开发说明](mmi-rtos-sdk-dbfd414713bc31c9.md#557a524795xam) 完成云端接口对接，设备计量管理服务提供设备注册和获取Token两个接口
 -   设备端开发：
     
     -   接入方通过本SDK的genRegisterReq接口获取设备注册签名。
@@ -20,6 +28,10 @@
     -   设备注册返回后调用本SDK的writeDeviceInfo接口写入设备信息。
     -   调用本SDK的genGetTokenReq接口获取访问令牌信息的数据签名。
     -   调用本SDK的getToken获取解签后业务交互令牌信息，之后可使用令牌信息进行业务交互。
+
+<a id="1-2-全托管模式"></a>
+
+<a id="ARBnP"></a>
 
 ### 1.2. 全托管模式
 
@@ -33,12 +45,24 @@
     -   调用本SDK的deviceRegister接口执行设备注册。
     -   调用本SDK的getToken接口获取业务交互令牌，之后可使用令牌信息进行业务交互。
 
+<a id="2-使用前注意需了解事项"></a>
+
+<a id="g4Kjt"></a>
+
 ## 2\. 使用前注意需了解事项
 
 -   使用License模式前在百炼控制台创建了应用，并购买了License。
 -   SDK中封装了设备唯一标识生成逻辑并存储到keychain，避免同1设备重复注册，通过DeviceInfoUtils.shared.getDeviceId()调用，请务必使用SDK中获取deviceName接口逻辑或者接入方自行保证deviceName唯一性。
 
+<a id="3-接口说明"></a>
+
+<a id="F116m"></a>
+
 ## 3\. 接口说明
+
+<a id="3-1-sdk初始化-initialize"></a>
+
+<a id="eoaWW"></a>
 
 ### 3.1. SDK初始化 initialize
 
@@ -46,98 +70,36 @@
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-appSecret
-
-String
-
-是
-
-应用密钥，在百炼控制台创建应用之后会生成该密钥
-
-deviceName
-
-String
-
-是
-
-设备名称：（使用设备WIFI MAC或唯一序列号）
-
-callBack
-
-InitCallBack
-
-是
-
-SDK初始化回调，参考InitCallBack对象
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| appSecret | String | 是 | 应用密钥，在百炼控制台创建应用之后会生成该密钥 |
+| deviceName | String | 是 | 设备名称：（使用设备WIFI MAC或唯一序列号） |
+| callBack | InitCallBack | 是 | SDK初始化回调，参考InitCallBack对象 |
 
 **InitCallBack对象**
 
-**返回值**
-
-**方法名**
-
-**说明**
-
-void
-
-success()
-
-初始化成功
-
-void
-
-fail(ResultError error)
-
-初始化失败
+| 返回值 | 方法名 | 说明 |
+| --- | --- | --- |
+| void | success() | 初始化成功 |
+| void | fail(ResultError error) | 初始化失败 |
 
 **ResultError对象**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-code
-
-int
-
-否
-
-返回错误码
-
-message
-
-String
-
-否
-
-返回错误码说明
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| code | int | 否 | 返回错误码 |
+| message | String | 否 | 返回错误码说明 |
 
 **出参：**
 
 无
 
 **调用示例**
-```
+
+<a id="code-block"></a>
+
+```swift
 /// 初始化SDK，写入产品信息
 func initializeExample() {
     let params = InitParams(
@@ -162,106 +124,46 @@ func initializeExample() {
 }
 ```
 
+<a id="3-2-半托管模式"></a>
+
+<a id="nHCaf"></a>
+
 ### 3.2. 半托管模式
 
+<a id="3-2-1-设备注册相关接口"></a>
+
+<a id="DDtOj"></a>
+
 #### 3.2.1. 设备注册相关接口
+
+<a id="tW9dr"></a>
 
 ##### 3.2.1.1. 生成设备注册信息 genRegisterReq
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-deviceName
-
-String
-
-是
-
-设备名称：（使用设备WIFI MAC或唯一序列号）
-
-payMode
-
-String
-
-是
-
-计费方式：PAYG（后付费）、LICENSE（license计费）
-
-reqNonce
-
-String
-
-是
-
-请求随机串，长度26位
-
-requestTime
-
-String
-
-是
-
-请求时间
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| deviceName | String | 是 | 设备名称：（使用设备WIFI MAC或唯一序列号） |
+| payMode | String | 是 | 计费方式：PAYG（后付费）、LICENSE（license计费） |
+| reqNonce | String | 是 | 请求随机串，长度26位 |
+| requestTime | String | 是 | 请求时间 |
 
 **出参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-success
-
-boolean
-
-是
-
-请求处理是否成功
-
-code
-
-int
-
-否
-
-请求失败code
-
-message
-
-String
-
-否
-
-请求失败描述
-
-data
-
-String
-
-否
-
-设备注册调用POP接口所需的签名参数
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| success | boolean | 是 | 请求处理是否成功 |
+| code | int | 否 | 请求失败code |
+| message | String | 否 | 请求失败描述 |
+| data | String | 否 | 设备注册调用POP接口所需的签名参数 |
 
 **调用示例：**
-```
+
+<a id="code-block-2"></a>
+
+```swift
 /// 半托管模式：生成设备注册请求签名
 func genRegisterReqExample() {
         let registerInfo = DeviceRegisterInfo(
@@ -284,112 +186,37 @@ func genRegisterReqExample() {
     }
 ```
 
+<a id="lyqNi"></a>
+
 ##### 3.2.1.2. 写入设备注册信息 writeDeviceInfo
 
 调用云端设备注册的pop接口得到的响应，需要再次传回设备端SDK，进行信息写入
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-deviceName
-
-String
-
-是
-
-设备名称：（使用设备WIFI MAC或唯一序列号）
-
-reqNonce
-
-String
-
-是
-
-请求发起随机串，长度26位
-
-rspNonce
-
-String
-
-是
-
-返回数据的随机串，长度26位
-
-responseTime
-
-String
-
-是
-
-返回数据的时间戳
-
-signature
-
-String
-
-是
-
-YOUR\_SIGNATURE
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| deviceName | String | 是 | 设备名称：（使用设备WIFI MAC或唯一序列号） |
+| reqNonce | String | 是 | 请求发起随机串，长度26位 |
+| rspNonce | String | 是 | 返回数据的随机串，长度26位 |
+| responseTime | String | 是 | 返回数据的时间戳 |
+| signature | String | 是 | YOUR\_SIGNATURE |
 
 **出参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-success
-
-boolean
-
-是
-
-请求处理是否成功
-
-code
-
-int
-
-否
-
-请求失败code
-
-message
-
-String
-
-否
-
-请求失败描述
-
-data
-
-String
-
-否
-
-设备注册调用POP接口所需的签名参数
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| success | boolean | 是 | 请求处理是否成功 |
+| code | int | 否 | 请求失败code |
+| message | String | 否 | 请求失败描述 |
+| data | String | 否 | 设备注册调用POP接口所需的签名参数 |
 
 **调用示例：**
-```
+
+<a id="code-block-3"></a>
+
+```swift
 /// 半托管模式：写入设备注册成功的信息
 func writeDeviceInfoExample() {
     let deviceInfo = DeviceRegisterRsp(
@@ -411,120 +238,50 @@ func writeDeviceInfoExample() {
 }
 ```
 
+<a id="3-2-2-获取业务交互令牌相关接口"></a>
+
+<a id="uYL0q"></a>
+
 #### 3.2.2. 获取业务交互令牌相关接口
+
+<a id="W2Gcg"></a>
 
 ##### 3.2.2.1. 生成获取访问令牌信息 genGetTokenReq
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-nonce
-
-String
-
-是
-
-请求随机串，长度26位
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-deviceName
-
-String
-
-是
-
-设备名称：（使用设备WIFI MAC或唯一序列号）
-
-payMode
-
-String
-
-是
-
-计费方式：PAYG（后付费）、LICENSE（license计费）
-
-tokenType
-
-String
-
-是
-
-请求令牌的类型（当前仅支持MMI类型）
-
-MMI：多模态交互令牌
-
-requestTime
-
-String
-
-是
-
-请求时间戳,单位ms
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| nonce | String | 是 | 请求随机串，长度26位 |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| deviceName | String | 是 | 设备名称：（使用设备WIFI MAC或唯一序列号） |
+| payMode | String | 是 | 计费方式：PAYG（后付费）、LICENSE（license计费） |
+| tokenType | String | 是 | 请求令牌的类型（当前仅支持MMI类型）<br><br>MMI：多模态交互令牌 |
+| requestTime | String | 是 | 请求时间戳,单位ms |
 
 **出参：**
 
-**字段**
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| success | boolean | 是 | 请求处理是否成功 |
+| code | int | 否 | 请求失败code |
+| message | String | 否 | 请求失败描述 |
+| data | String | 否 | 设备注册调用POP接口所需的签名参数 |
 
-**类型**
+<a id="code-block-4"></a>
 
-**必填**
-
-**说明**
-
-success
-
-boolean
-
-是
-
-请求处理是否成功
-
-code
-
-int
-
-否
-
-请求失败code
-
-message
-
-String
-
-否
-
-请求失败描述
-
-data
-
-String
-
-否
-
-设备注册调用POP接口所需的签名参数
-
-```
+```java
 {
     "success": true,
     "data": "84uoRCyy6AG/SH7LrHjJW0D7lsBp/H4RReS7gJY5L0oC517xJWAmwtmghLjYkW/Qj4ZvK6vrM7QC5yxtMl3TQLHdAGSsqQLb0bP6zKOiDzoNFwqs61+GMQ7guTPjbE9Fqaf7"
 }
 ```
+
 **调用示例：**
-```
+
+<a id="code-block-5"></a>
+
+```swift
 /// 半托管模式：生成获取token请求的签名
 func genGetTokenReqExample() {
      let getTokenParams = GenGetTokenParams(
@@ -549,110 +306,35 @@ func genGetTokenReqExample() {
  }
 ```
 
+<a id="g8Fc8"></a>
+
 ##### 3.2.2.2. 解签POP接口返回的token数据 getToken
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-deviceName
-
-String
-
-是
-
-设备名称：（使用设备WIFI MAC或唯一序列号）
-
-reqNonce
-
-String
-
-是
-
-请求随机串，长度26位
-
-rspNonce
-
-String
-
-是
-
-返回数据的随机串，长度26位
-
-responseTime
-
-String
-
-是
-
-返回数据的时间戳
-
-signature
-
-String
-
-是
-
-YOUR\_SIGNATURE
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| deviceName | String | 是 | 设备名称：（使用设备WIFI MAC或唯一序列号） |
+| reqNonce | String | 是 | 请求随机串，长度26位 |
+| rspNonce | String | 是 | 返回数据的随机串，长度26位 |
+| responseTime | String | 是 | 返回数据的时间戳 |
+| signature | String | 是 | YOUR\_SIGNATURE |
 
 **出参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-success
-
-boolean
-
-是
-
-请求处理是否成功
-
-code
-
-int
-
-否
-
-请求失败code
-
-message
-
-String
-
-否
-
-请求失败描述
-
-data
-
-String
-
-否
-
-返回解签后的数据
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| success | boolean | 是 | 请求处理是否成功 |
+| code | int | 否 | 请求失败code |
+| message | String | 否 | 请求失败描述 |
+| data | String | 否 | 返回解签后的数据 |
 
 **调用示例：**
-```
+
+<a id="code-block-6"></a>
+
+```swift
 /// 半托管模式：获取token后进行解签
 func getTokenWithSignatureExample() {
     let tokenRsp = AnalyzeTokenSignRsp(
@@ -676,7 +358,15 @@ func getTokenWithSignatureExample() {
 }
 ```
 
+<a id="3-3-全托管模式"></a>
+
+<a id="2607e108e7tv1"></a>
+
 ### 3.3. 全托管模式
+
+<a id="3-3-1-检查设备是否注册-deviceisregistered"></a>
+
+<a id="gFZ4l"></a>
 
 #### 3.3.1. 检查设备是否注册 deviceIsRegistered
 
@@ -685,7 +375,10 @@ func getTokenWithSignatureExample() {
 设备是否注册
 
 **调用示例：**
-```
+
+<a id="code-block-7"></a>
+
+```swift
 /// 检查设备是否完成注册
 func checkDeviceRegisteredExample() {
     let isRegistered = DeviceAuthClient.companion.instance.deviceIsRegistered()
@@ -698,98 +391,39 @@ func checkDeviceRegisteredExample() {
 }
 ```
 
+<a id="3-3-2-设备注册-deviceregister"></a>
+
+<a id="fyeys"></a>
+
 #### 3.3.2. 设备注册 deviceRegister
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-params
-
-Object
-
-是
-
-设备注册入参对象，参考DeviceRegisterParams对象
-
-callBack
-
-DeviceRegisterCallBack
-
-是
-
-设备注册回调
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| params | Object | 是 | 设备注册入参对象，参考DeviceRegisterParams对象 |
+| callBack | DeviceRegisterCallBack | 是 | 设备注册回调 |
 
 **DeviceRegisterParams对象**
 
-**字段**
-
-**类型**
-
-**必填**
-
-**说明**
-
-nonce
-
-String
-
-是
-
-请求随机串，长度26位
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-workspaceId
-
-String
-
-否
-
-工作空间ID,使用工作空间额度注册才需要
-
-deviceName
-
-String
-
-是
-
-设备名称：（使用设备WIFI MAC或唯一序列号）
-
-requestTime
-
-String
-
-是
-
-请求时间
-
-payMode
-
-String
-
-是
-
-计费方式：PAYG（后付费）、LICENSE（license计费）
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| nonce | String | 是 | 请求随机串，长度26位 |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| workspaceId | String | 否 | 工作空间ID,使用工作空间额度注册才需要 |
+| deviceName | String | 是 | 设备名称：（使用设备WIFI MAC或唯一序列号） |
+| requestTime | String | 是 | 请求时间 |
+| payMode | String | 是 | 计费方式：PAYG（后付费）、LICENSE（license计费） |
 
 **出参：**
 
 无
 
 **调用示例：**
-```
+
+<a id="code-block-8"></a>
+
+```swift
 /// 全托管模式：设备注册
 func deviceRegisterExample() {
     let params = DeviceRegisterParams(
@@ -822,132 +456,40 @@ func deviceRegisterExample() {
 }
 ```
 
+<a id="3-3-3-获取业务交互令牌-gettoken"></a>
+
+<a id="L1U9e"></a>
+
 #### 3.3.3. 获取业务交互令牌 getToken
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**默认值**
-
-**必填**
-
-**说明**
-
-params
-
-Object
-
-\-
-
-是
-
-设备认证所需参数对象，参考GenGetTokenParams对象
-
-callBack
-
-GetTokenCallBack
-
-\-
-
-是
-
-获取token回调，参考GetTokenCallBack
-
-对象
+| 字段 | 类型 | 默认值 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| params | Object | \- | 是 | 设备认证所需参数对象，参考GenGetTokenParams对象 |
+| callBack | GetTokenCallBack | \- | 是 | 获取token回调，参考GetTokenCallBack<br><br>对象 |
 
 **GenGetTokenParams对象**
 
-**字段**
-
-**类型**
-
-**默认值**
-
-**必填**
-
-**说明**
-
-nonce
-
-String
-
-\-
-
-是
-
-16字节随机数（26字符)
-
-appId
-
-String
-
-\-
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-apiKey
-
-String
-
-\-
-
-是
-
-应用密钥，在百炼控制台密钥管理创建
-
-deviceName
-
-String
-
-\-
-
-是
-
-设备唯一标识
-
-requestTime
-
-String
-
-\-
-
-是
-
-请求时间戳（ms）
-
-payMode
-
-String
-
-\-
-
-是
-
-计费方式：PAYG（后付费）、LICENSE（license计费）
-
-tokenType
-
-String
-
-\-
-
-是
-
-请求令牌的类型（当前仅支持MMI类型）
-
-MMI：多模态交互令牌
+| 字段 | 类型 | 默认值 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| nonce | String | \- | 是 | 16字节随机数（26字符) |
+| appId | String | \- | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| apiKey | String | \- | 是 | 应用密钥，在百炼控制台密钥管理创建 |
+| deviceName | String | \- | 是 | 设备唯一标识 |
+| requestTime | String | \- | 是 | 请求时间戳（ms） |
+| payMode | String | \- | 是 | 计费方式：PAYG（后付费）、LICENSE（license计费） |
+| tokenType | String | \- | 是 | 请求令牌的类型（当前仅支持MMI类型）<br><br>MMI：多模态交互令牌 |
 
 **出参：**
 
 无
 
 **调用示例：**
-```
+
+<a id="code-block-9"></a>
+
+```swift
 /// 全托管模式：获取token
 func getTokenFullManagedExample() {
     let params = GenGetTokenParams(
@@ -980,108 +522,39 @@ func getTokenFullManagedExample() {
 }
 ```
 
+<a id="3-4-获取license标识签名"></a>
+
+<a id="lsTYf"></a>
+
 ### 3.4. 获取License标识签名
 
 **入参：**
 
-**字段**
-
-**类型**
-
-**默认值**
-
-**必填**
-
-**说明**
-
-params
-
-Object
-
-\-
-
-是
-
-设备认证所需参数对象，参考LicenseSignatureParams对象
+| 字段 | 类型 | 默认值 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| params | Object | \- | 是 | 设备认证所需参数对象，参考LicenseSignatureParams对象 |
 
 **LicenseSignatureParams对象**
 
-**字段**
-
-**类型**
-
-**默认值**
-
-**必填**
-
-**说明**
-
-appId
-
-String
-
-\-
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-deviceName
-
-String
-
-\-
-
-是
-
-设备唯一标识
-
-taskId
-
-String
-
-\-
-
-是
-
-本次连接唯一标识，用于在工程链路上跟踪任务执行。由客户端生成，格式建议为36位uuid字符串，格式示例："f894c16f-f20e-4c1d-837e-89e0fbc63a43"
+| 字段 | 类型 | 默认值 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| appId | String | \- | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| deviceName | String | \- | 是 | 设备唯一标识 |
+| taskId | String | \- | 是 | 本次连接唯一标识，用于在工程链路上跟踪任务执行。由客户端生成，格式建议为36位uuid字符串，格式示例："f894c16f-f20e-4c1d-837e-89e0fbc63a43" |
 
 **出参：**
 
-**字段**
-
-**类型**
-
-**默认值**
-
-**说明**
-
-timestamp
-
-String
-
-\-
-
-当前时间戳ms
-
-license\_info
-
-String
-
-\-
-
-license\_info签名信息
-
-device\_info
-
-String
-
-\-
-
-device\_info签名信息
+| 字段 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| timestamp | String | \- | 当前时间戳ms |
+| license\_info | String | \- | license\_info签名信息 |
+| device\_info | String | \- | device\_info签名信息 |
 
 **调用示例：**
-```
+
+<a id="code-block-10"></a>
+
+```swift
 /// 获取license签名
 func getLicenseSignatureExample() {
     let params = LicenseSignatureParams(
@@ -1096,6 +569,10 @@ func getLicenseSignatureExample() {
 }
 ```
 
+<a id="3-5-设备重置-devicereset"></a>
+
+<a id="AiGwL"></a>
+
 ### 3.5. 设备重置 deviceReset
 
 tips: 在百炼控制台重置设备后，需要调用SDK deviceReset接口重置设备，方可进行重新注册。
@@ -1109,8 +586,11 @@ tips: 在百炼控制台重置设备后，需要调用SDK deviceReset接口重�
 Boolean 是否重置成功
 
 **调用示例：**
-```
-let result = DeviceAuthClient.companion.instance.deviceReset()
+
+<a id="code-block-11"></a>
+
+```swift
+ let result = DeviceAuthClient.companion.instance.deviceReset()
  if(result){
      print("设备重置成功")
  }else{
@@ -1118,22 +598,34 @@ let result = DeviceAuthClient.companion.instance.deviceReset()
  }
 ```
 
+<a id="4-集成依赖库"></a>
+
+<a id="cBYYe"></a>
+
 ## 4\. 集成依赖库
 
 使用最新版本 iOS SDK，引用其中的MultimodalDialogTongyiMetathings.framework
+
+<a id="5-涉及多模态sdk接入修改"></a>
+
+<a id="QeSnr"></a>
 
 ## 5\. 涉及多模态SDK接入修改
 
 1.  在启动会话前完成tongyimetathings SDK的初始化和检测设备是否注册，未注册执行设备注册，具体参考接入示例工程。
 2.  初始化该SDK，设备注册完成后获取多模态会话token，参考上述2.1，2.3接口，将getToken接口返回的dashToken数据设置为apiKey，具体参考示例工程。
 
-```
+<a id="code-block-12"></a>
+
+```swift
 chatView.updateParam(url: host, apiKey: dashToken, workSpaceId: workSpaceId, appId: appId, chain: chainMode, image_url: img, payType: self.mPayMode, voice: voice)
 ```
 
 1.  创建会话时传入license计费标识,参考接入示例：
 
-```
+<a id="code-block-13"></a>
+
+```swift
 func connect(){
     self.conversation?.stop()
     isInDialog = false

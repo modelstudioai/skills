@@ -2,13 +2,17 @@
 
 输入一句场景创意，wan3.0-video 一次生成 30 秒、1080P、16:9 的电影级空镜，运镜、光影与配乐原生同步生成。
 
-**说明**
-
-**免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
+> **说明**
+>
+> **免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
 
 宣传片、发布会开场需要高质感空镜，却没有航拍与实拍条件。输入一句场景创意，让 `wan3.0-video` 一次生成 30 秒、1080P 的电影级长镜头，运镜、光影推移、配乐与环境音都由模型原生产出，不用后期剪辑合成。本篇以“仙山云海”为例，方法同样适用于山河、城市、季节质感与品牌氛围开场。
 
 调用链：`qwen3.8-flash`（可选，把主题创意扩写成电影感提示词）→ `wan3.0-video`（纯文本输入，一次生成 30 秒 / 1080P / 16:9，原生音画同步）。
+
+<a id="实测产出"></a>
+
+<a id="tp-pb-cinematic-broll-result"></a>
 
 ## 实测产出
 
@@ -20,25 +24,16 @@
 
 本次实测参数：
 
-项目
+| 项目 | 实测值 |
+| --- | --- |
+| 模型与形态 | `wan3.0-video` · 文生视频（纯文本输入，无首帧图、无参考素材） |
+| 生成参数 | duration 30 · resolution 1080P · ratio 16:9 · `--watermark false` |
+| 成片规格 | 1920×1080 / 30fps / 30.0 秒，H.264 视频 + AAC 立体声 |
+| 产出 | 1 条 30 秒成片，含模型原生配乐与环境音 |
 
-实测值
+<a id="步骤-一句创意到-30-秒成片"></a>
 
-模型与形态
-
-`wan3.0-video` · 文生视频（纯文本输入，无首帧图、无参考素材）
-
-生成参数
-
-duration 30 · resolution 1080P · ratio 16:9 · `--watermark false`
-
-成片规格
-
-1920×1080 / 30fps / 30.0 秒，H.264 视频 + AAC 立体声
-
-产出
-
-1 条 30 秒成片，含模型原生配乐与环境音
+<a id="tp-pb-cinematic-broll-step1"></a>
 
 ## 步骤：一句创意到 30 秒成片
 
@@ -46,14 +41,20 @@ duration 30 · resolution 1080P · ratio 16:9 · `--watermark false`
 
 设置 Token Plan 的 Base URL 和 API Key。Token Plan 的 Key 以 `sk-sp-` 开头，需与 Token Plan Base URL 配套使用：
 
-```
+<a id="code-block"></a>
+
+```bash
 export BASE_URL="https://token-plan.cn-beijing.maas.aliyuncs.com"
 export API_KEY="sk-sp-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
+<a id="①-可选-把主题创意扩写成电影感提示词"></a>
+
 ### ①（可选）把主题创意扩写成电影感提示词
 
-```
+<a id="code-block-2"></a>
+
+```bash
 # 按「场景与光线 → 主体与事件 → 镜头运动 → 收尾画面 → 风格质感 → 负面约束」的顺序扩写成一段连续文字，直接用于文生视频。
 # 把 message 中的主题替换为自己的题材（山河航拍、城市天际线、季节质感、品牌氛围开场等），结构不变。
 bl text chat --api-key "$API_KEY" --base-url "$BASE_URL" --model qwen3.8-flash --message \
@@ -62,13 +63,19 @@ bl text chat --api-key "$API_KEY" --base-url "$BASE_URL" --model qwen3.8-flash -
 
 本次扩写示例（可直接作为 ② 的输入参考；按需替换题材与风格词）：
 
-```
+<a id="code-block-3"></a>
+
+```text
 晨光斜照云海仙山，金蓝薄雾在群峰间流动，崖顶仙宫飞檐悬铃，瑶台长案摆设琼浆玉盏，灵鹤盘旋，花瓣与轻纱随风飘起。镜头从山脚缓缓推进，穿过翻涌云浪进入宫门，掠过宴席与回廊，随后拉远升高，将宫阙、松石、飞鸟与云霞逐层纳入视野。画面最终铺展为辽阔的青绿山水远景，仙山云海在晨光中若隐若现。整体国风仙侠，30 秒长镜头，电影级光影，工笔细节，体积光，云雾流动，胶片颗粒，1080P，16:9。无对白，无字幕，无人物特写。
 ```
 
+<a id="②-一次生成-30-秒-1080p-成片"></a>
+
 ### ② 一次生成 30 秒 1080P 成片
 
-```
+<a id="code-block-4"></a>
+
+```bash
 # 纯文本输入（不传 --image 即为文生视频）；--duration 30 为单次生成上限，--resolution 1080P，--ratio 16:9。
 # 场景描述替换为自己的题材，保留同一条提示词内的运镜时序与末尾负面约束。
 # --async 先取 task_id：30 秒长片生成约十分钟量级，默认同步等待会触发客户端轮询超时。
@@ -82,6 +89,10 @@ curl -s -H "Authorization: Bearer $API_KEY" "$BASE_URL/api/v1/tasks/<任务ID>"
 # SUCCEEDED 后从返回的 output.video_url 下载成片（链接有效期 24 小时，及时落盘）：
 curl -s -L "<output.video_url>" -o xianshan_30s.mp4
 ```
+
+<a id="说明"></a>
+
+<a id="tp-pb-cinematic-broll-notes"></a>
 
 ## 说明
 

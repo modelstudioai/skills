@@ -4,13 +4,21 @@
 
 听悟Agent任务创建接口为异步接口。您可通过两种方式获取结果：
 
-1.  主动轮询查询接口（参见[汽车销售服务洞察API参考](raw/_short/tingwu-automotive-service-insights-api-86d5370ec77024c9.md)或[购车客户画像API参考](raw/_short/tingwu-automotive-customer-profile-api-9e1f3b05a5915147.md)）
+1.  主动轮询查询接口（参见[汽车销售服务洞察API参考](tingwu-automotive-service-insights-api-86d5370ec77024c9.md)或[购车客户画像API参考](tingwu-automotive-customer-profile-api-9e1f3b05a5915147.md)）
 2.  配置回调通知（本文档核心内容）
+
+<a id="前提条件"></a>
+
+<a id="23ff0ce5f8zlx"></a>
 
 ## 前提条件
 
 -   [开通](https://common-buy.aliyun.com/?commodityCode=sfm_TingWuAgent_public_cn)通义听悟 Agent 服务。
 -   若使用阿里云事件总线，需[开通事件总线EventBridge并授权](https://help.aliyun.com/zh/eventbridge/getting-started/activate-eventbridge-and-grant-permissions-to-a-ram-user)。
+
+<a id="注意事项"></a>
+
+<a id="112f68f765ito"></a>
 
 ## 注意事项
 
@@ -18,13 +26,23 @@
 2.  HTTP回调与EventBridge回调的`data`字段一致
 3.  两种回调方式的通知节奏相同
 
+<a id="基于http进行回调"></a>
+
+<a id="8eda1f517enia"></a>
+
 ## 基于HTTP进行回调
+
+<a id="步骤1-构建回调接收服务"></a>
+
+<a id="e2b020648e8f4"></a>
 
 ### 步骤1：构建回调接收服务
 
 构建HTTP服务接收回调消息：
 
-```
+<a id="code-block"></a>
+
+```java
 package com.alibaba.langpower;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -47,11 +65,17 @@ public class TingwuAgentCallbackDemoApplication {
 }
 ```
 
+<a id="步骤2-测试回调服务"></a>
+
+<a id="75cb7fc875kt8"></a>
+
 ### 步骤2：测试回调服务
 
 使用curl验证服务可用性：
 
-```
+<a id="code-block-2"></a>
+
+```bash
 # 将 {your-external-service-url} 替换为实际的URL
 curl --request POST 'http://{your-external-service-url}/tingwu-agent/callback' \
 --header 'Content-Type: application/json' \
@@ -63,11 +87,19 @@ curl --request POST 'http://{your-external-service-url}/tingwu-agent/callback' \
 }'
 ```
 
+<a id="步骤3-配置回调参数"></a>
+
+<a id="cc0ccc0138ih3"></a>
+
 ### 步骤3：配置回调参数
 
 进入[阿里云百炼控制台](https://bailian.console.aliyun.com/?tab=app#/app/app-market/tingwu/tingwu-automotive-service-insights)，创建或选择已创建的应用，单击调试配置，进入配置界面。回调方式选择**HTTP post协议**，填写真实回调地址并发布应用。
 
 配置回调地址后，服务端需返回 200 状态码，项目才能创建成功。回调消息的 JSON 格式示例包含 `output` 对象（含 `test` 字段）和 `requestId` 字段。
+
+<a id="步骤4-验证回调结果"></a>
+
+<a id="b4b1244654lyq"></a>
 
 ### 步骤4：验证回调结果
 
@@ -75,7 +107,9 @@ curl --request POST 'http://{your-external-service-url}/tingwu-agent/callback' \
 
 1.  阶段1：接收转写任务信息
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "output": {
         "transcriptionPath": "https://***.oss-cn-hangzhou.aliyuncs.com/agentic/prepub/CommonDataField/transcription/1627865****/llm-3cx2a3o4n8y****/2025/07/24/5c6117f77a274cf8b795c8749c28b****?Expires=175341****&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
@@ -94,7 +128,9 @@ curl --request POST 'http://{your-external-service-url}/tingwu-agent/callback' \
 
 2.  阶段2：接收任务结果
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "output": {
         "transcriptionPath": "https://***.oss-cn-hangzhou.aliyuncs.com/agentic/prepub/CommonDataField/transcription/1627865****/llm-3cx2a3o4n8y****/2025/07/24/5c6117f77a274cf8b795c8749c28b****?Expires=175341****&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
@@ -117,6 +153,10 @@ curl --request POST 'http://{your-external-service-url}/tingwu-agent/callback' \
 
 同时为HTTP设计了指数退避的重试策略，在失败后会进行6次重试，重试间隔为：1秒，2秒，5秒，10秒，30秒，60秒。
 
+<a id="任务失败后通过回调状态重新发起任务"></a>
+
+<a id="4zhx15aubd7m"></a>
+
 ### 任务失败后通过回调状态重新发起任务
 
 当回调返回的 `status` 字段值不为 `0`（成功）时，表示任务执行失败。您可以在回调接收服务中根据任务状态实现自动重试逻辑。
@@ -129,7 +169,15 @@ curl --request POST 'http://{your-external-service-url}/tingwu-agent/callback' \
 
 如使用 EventBridge 回调方式，对应的失败事件类型为 `tingwuagent:TaskStateUpdated:AgentTaskFailed`，处理逻辑相同。
 
+<a id="基于阿里云事件总线进行回调"></a>
+
+<a id="de73e37818drk"></a>
+
 ## 基于阿里云[事件总线](https://help.aliyun.com/zh/eventbridge/product-overview/what-is-eventbridge)进行回调
+
+<a id="步骤1-创建事件规则"></a>
+
+<a id="7f0fd70819xcb"></a>
 
 ### 步骤1：创建事件规则
 
@@ -157,11 +205,19 @@ curl --request POST 'http://{your-external-service-url}/tingwu-agent/callback' \
 6.  单击**创建**按钮
     
 
+<a id="步骤2-配置回调方式"></a>
+
+<a id="d3bd2d5552zf4"></a>
+
 ### 步骤2：配置回调方式
 
 进入阿里云百炼控制台，创建或选择已创建的应用，单击调试配置，进入配置界面。回调方式选择**事件总线**并发布应用。
 
 处理结果将按事件总线北京Region的default配置发送到您的服务，需提前开通阿里云事件总线。
+
+<a id="步骤3-验证回调结果"></a>
+
+<a id="db636ab26cq8v"></a>
 
 ### 步骤3：验证回调结果
 
@@ -174,53 +230,37 @@ curl --request POST 'http://{your-external-service-url}/tingwu-agent/callback' \
     在**消息队列 RocketMQ 版**控制台，依次进入**实例列表** > **Topic 管理** > **Topic 详情**页面，选择**消息查询** Tab。将查询方式设置为**按 Topic 查询**，时间范围设置为**最近1小时**，单击**查询**。若结果表格中出现消息记录，则表示 EventBridge 回调成功。
     
 
+<a id="事件类型以及回调事件协议"></a>
+
+<a id="e146933dcfjpv"></a>
+
 ### 事件类型以及回调事件协议
+
+<a id="汽车销售服务洞察-购车客户画像-通用服务洞察agent的回调协议"></a>
+
+<a id="2f19444263k3t"></a>
 
 #### 汽车销售服务洞察、购车客户画像、通用服务洞察Agent的回调协议
 
-**事件类型**
+<table><thead><tr><th><p><strong>事件类型</strong></p></th><th><p><strong>事件描述</strong></p></th><th><p><strong>事件协议参考</strong></p></th></tr></thead><tbody><tr><td><p>tingwuagent:TaskStateUpdated:AgentSubTaskCompleted</p></td><td><p>子任务完成后的回调消息。</p></td><td rowspan="3"><p><a href="https://eventbridge.console.aliyun.com/cn-beijing/event-bus/default/event-source/acs.tingwuagent/detail">汽车销售服务质检、购车客户画像、通用服务洞察Agent</a></p></td></tr><tr><td><p>tingwuagent:TaskStateUpdated:AgentTaskFailed</p></td><td><p>任务失败的回调消息。</p></td></tr><tr><td><p>tingwuagent:TaskStateUpdated:AgentWholeTaskCompleted</p></td><td><p>整个任务完成后的回调消息。</p></td></tr></tbody></table>
 
-**事件描述**
+<a id="会议纪要agent的回调协议"></a>
 
-**事件协议参考**
-
-tingwuagent:TaskStateUpdated:AgentSubTaskCompleted
-
-子任务完成后的回调消息。
-
-[汽车销售服务质检、购车客户画像、通用服务洞察Agent](https://eventbridge.console.aliyun.com/cn-beijing/event-bus/default/event-source/acs.tingwuagent/detail)
-
-tingwuagent:TaskStateUpdated:AgentTaskFailed
-
-任务失败的回调消息。
-
-tingwuagent:TaskStateUpdated:AgentWholeTaskCompleted
-
-整个任务完成后的回调消息。
+<a id="c9679d1737ry9"></a>
 
 #### 会议纪要Agent的回调协议
 
-**事件类型**
+<table><thead><tr><th><p><strong>事件类型</strong></p></th><th><p><strong>事件描述</strong></p></th><th><p><strong>事件协议参考</strong></p></th></tr></thead><tbody><tr><td><p>tingwuagent:TaskStateUpdated:MeetingAgentSubTaskCompleted</p></td><td><p>子任务完成后的回调消息。</p></td><td rowspan="3"><p><a href="https://eventbridge.console.aliyun.com/cn-beijing/event-bus/default/event-source/acs.tingwuagent/detail">会议纪要Agent</a></p></td></tr><tr><td><p>tingwuagent:TaskStateUpdated:MeetingAgentTaskFailed</p></td><td><p>任务失败的回调消息。</p></td></tr><tr><td><p>tingwuagent:TaskStateUpdated:MeetingAgentWholeTaskCompleted</p></td><td><p>整个任务完成后的回调消息。</p></td></tr></tbody></table>
 
-**事件描述**
+<a id="事件总线通知节奏"></a>
 
-**事件协议参考**
-
-tingwuagent:TaskStateUpdated:MeetingAgentSubTaskCompleted
-
-子任务完成后的回调消息。
-
-[会议纪要Agent](https://eventbridge.console.aliyun.com/cn-beijing/event-bus/default/event-source/acs.tingwuagent/detail)
-
-tingwuagent:TaskStateUpdated:MeetingAgentTaskFailed
-
-任务失败的回调消息。
-
-tingwuagent:TaskStateUpdated:MeetingAgentWholeTaskCompleted
-
-整个任务完成后的回调消息。
+<a id="2035b05167xgn"></a>
 
 ### 事件总线通知节奏
+
+<a id="汽车销售服务洞察-购车客户画像-通用服务洞察agent"></a>
+
+<a id="2761f90f2au7v"></a>
 
 #### 汽车销售服务洞察、购车客户画像、通用服务洞察Agent
 
@@ -232,6 +272,10 @@ Agent的结果会分为几个阶段进行返回，下面是各Agent的通知节�
     -   tingwuagent:TaskStateUpdated:AgentWholeTaskCompleted：所有任务完成
 -   任务失败：收到tingwuagent:TaskStateUpdated:AgentTaskFailed回调通知
     
+
+<a id="会议纪要agent"></a>
+
+<a id="322748a3aexvr"></a>
 
 #### 会议纪要Agent
 

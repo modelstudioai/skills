@@ -2,11 +2,19 @@
 
 轻应用-视频拆条异步任务 使用视频拆条需先开通影视传媒视频理解（免费开通）https://bailian.console.aliyun.com/?tab=app#/app/app-market/quanmiao/video-comprehend 目前拆条提供三种场景视频的处理： 1、节目场景 2、新闻场景 3、其他场景 详细使用建议及参考prompt请查看下方补充说明。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/SubmitVideoDetectShotTask)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,295 +33,48 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>quanmiaolightapp:SubmitVideoDetectShotTask</td><td>create</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-quanmiaolightapp:SubmitVideoDetectShotTask
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/quanmiao/lightapp/submitVideoDetectShotTask HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>workspaceId</td><td>string</td><td>是</td><td><div><p>百炼业务空间唯一标识：<a href="https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id">获取 workspaceId</a></p></div></td><td>llm-xxx</td></tr><tr><td>videoUrl</td><td>string</td><td>是</td><td><div><p>视频的地址</p></div></td><td><a href="https://xxx.mp4">https://xxx.mp4</a></td></tr><tr><td>modelId</td><td>string</td><td>否</td><td><div><p>llm 的模型，可选项：</p><ul><li>quanmiao-llm-max</li><li>quanmiao-llm-max-thinking</li><li>quanmiao-llm-plus</li><li>quanmiao-llm-turbo</li></ul></div></td><td></td></tr><tr><td>options</td><td>array</td><td>否</td><td><div><p>用户选择使用什么方式进行分镜，可选项：ASR</p></div></td><td></td></tr><tr><td></td><td>string</td><td>否</td><td><div><p>ASR</p></div></td><td>ASR</td></tr><tr><td>deduplicationId</td><td>string</td><td>否</td><td><div><p>排重字段：可以根据业务需要和业务场景定义自己的业务唯一标识，当前字段重复的数据，系统会保证至少 72h 内不允许重复提交</p></div></td><td>1</td></tr><tr><td>prompt</td><td>string</td><td>否</td><td><div><p>llm 用户自定义 prompt</p></div></td><td>xxx</td></tr><tr><td>taskId</td><td>string</td><td>否</td><td><div><p>任务唯一标识</p></div></td><td>a3d1c2ac-f086-4a21-9069-f5631542f5a2</td></tr><tr><td>originalSessionId</td><td>string</td><td>否</td><td><div><p>源任务唯一标识：如果要基于历史任务重跑某个子任务（generateOptions 字段指定的），可以传入历史任务 taskId+originalSessionId，后台会加载历史任务已生成数据，跳过前置步骤，提升生成效率，如果后台数据过久，比如超过 7 天，查询失败，会默认重跑前置依赖子任务。</p></div></td><td>a3d1c2ac-f086-4a21-9069-f5631542f5ax</td></tr><tr><td>modelCustomPromptTemplateId</td><td>string</td><td>否</td><td><div><p>llm 生成拆条结果 prompt 的 ID</p></div></td><td>videoDetectShotShowPrompt</td></tr><tr><td>modelVlCustomPromptTemplateId</td><td>string</td><td>否</td><td><div><p>vl 识别 prompt 的 ID</p></div></td><td>videoDetectShotVlShowPrompt</td></tr><tr><td>recognitionOptions</td><td>array</td><td>否</td><td><div><p>用户选择使用什么方式对每个分镜进行内容识别，可选项：ASR，OCR，VL，可多选</p></div></td><td></td></tr><tr><td></td><td>string</td><td>否</td><td><div><p>ASR</p></div></td><td>ASR</td></tr><tr><td>intelliSimpPromptTemplateId</td><td>string</td><td>否</td><td><div><p>大语言模型前置简化 promptId</p></div></td><td>intelliSimpShowPrompt</td></tr><tr><td>preModelId</td><td>string</td><td>否</td><td><div><p>执行 intelliSimpPrompt 的模型，推荐选择 quanmiao-llm-max 可选项：</p><ul><li>quanmiao-llm-max</li><li>quanmiao-llm-max-thinking</li><li>quanmiao-llm-plus</li><li>quanmiao-llm-turbo</li></ul></div></td><td>quanmiao-llm-max</td></tr><tr><td>intelliSimpPrompt</td><td>string</td><td>否</td><td><div><p>简化输入给 llm 的数据的 prompt（用户自定义）</p></div></td><td>xxx</td></tr><tr><td>vlPrompt</td><td>string</td><td>否</td><td><div><p>vl 模型用户自定义 prompt</p></div></td><td>xxx</td></tr><tr><td>language</td><td>string</td><td>否</td><td><div><p>语音识别语言：</p><p>chinese：中文（默认） french：法语 english：英语 japanese：日语 chineseEnglishFreely：中英文自由说 arabic：阿拉伯语 korean：韩语 malay：马来语 thai：泰语 portuguese：葡萄牙语 spanish：西班牙语 indonesian：印尼语 vietnamese：越南语</p></div></td><td>chinese</td></tr></tbody></table>
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-百炼业务空间唯一标识：[获取 workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xxx
-
-videoUrl
-
-string
-
-是
-
-视频的地址
-
-[https://xxx.mp4](https://xxx.mp4)
-
-modelId
-
-string
-
-否
-
-llm 的模型，可选项：
-
--   quanmiao-llm-max
--   quanmiao-llm-max-thinking
--   quanmiao-llm-plus
--   quanmiao-llm-turbo
-
-options
-
-array
-
-否
-
-用户选择使用什么方式进行分镜，可选项：ASR
-
-string
-
-否
-
-ASR
-
-ASR
-
-deduplicationId
-
-string
-
-否
-
-排重字段：可以根据业务需要和业务场景定义自己的业务唯一标识，当前字段重复的数据，系统会保证至少 72h 内不允许重复提交
-
-1
-
-prompt
-
-string
-
-否
-
-llm 用户自定义 prompt
-
-xxx
-
-taskId
-
-string
-
-否
-
-任务唯一标识
-
-a3d1c2ac-f086-4a21-9069-f5631542f5a2
-
-originalSessionId
-
-string
-
-否
-
-源任务唯一标识：如果要基于历史任务重跑某个子任务（generateOptions 字段指定的），可以传入历史任务 taskId+originalSessionId，后台会加载历史任务已生成数据，跳过前置步骤，提升生成效率，如果后台数据过久，比如超过 7 天，查询失败，会默认重跑前置依赖子任务。
-
-a3d1c2ac-f086-4a21-9069-f5631542f5ax
-
-modelCustomPromptTemplateId
-
-string
-
-否
-
-llm 生成拆条结果 prompt 的 ID
-
-videoDetectShotShowPrompt
-
-modelVlCustomPromptTemplateId
-
-string
-
-否
-
-vl 识别 prompt 的 ID
-
-videoDetectShotVlShowPrompt
-
-recognitionOptions
-
-array
-
-否
-
-用户选择使用什么方式对每个分镜进行内容识别，可选项：ASR，OCR，VL，可多选
-
-string
-
-否
-
-ASR
-
-ASR
-
-intelliSimpPromptTemplateId
-
-string
-
-否
-
-大语言模型前置简化 promptId
-
-intelliSimpShowPrompt
-
-preModelId
-
-string
-
-否
-
-执行 intelliSimpPrompt 的模型，推荐选择 quanmiao-llm-max 可选项：
-
--   quanmiao-llm-max
--   quanmiao-llm-max-thinking
--   quanmiao-llm-plus
--   quanmiao-llm-turbo
-
-quanmiao-llm-max
-
-intelliSimpPrompt
-
-string
-
-否
-
-简化输入给 llm 的数据的 prompt（用户自定义）
-
-xxx
-
-vlPrompt
-
-string
-
-否
-
-vl 模型用户自定义 prompt
-
-xxx
-
-language
-
-string
-
-否
-
-语音识别语言：
-
-chinese：中文（默认） french：法语 english：英语 japanese：日语 chineseEnglishFreely：中英文自由说 arabic：阿拉伯语 korean：韩语 malay：马来语 thai：泰语 portuguese：葡萄牙语 spanish：西班牙语 indonesian：印尼语 vietnamese：越南语
-
-chinese
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| requestId | string | Id of the request | 117F5ABE-CF02-5502-9A3F-E56BC9081A64 |
+| success | boolean | 是否成功：true 成功，false 失败 | True |
+| code | string | 状态码 | xx |
+| message | string | 错误说明 | success |
+| httpStatusCode | integer | http 状态码 | 200 |
+| data | object | 结果 |  |
+| taskId | string | 任务唯一标识 | 22ec888712de45b39b97983f8d166831 |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-requestId
-
-string
-
-Id of the request
-
-117F5ABE-CF02-5502-9A3F-E56BC9081A64
-
-success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-True
-
-code
-
-string
-
-状态码
-
-xx
-
-message
-
-string
-
-错误说明
-
-success
-
-httpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-data
-
-object
-
-结果
-
-taskId
-
-string
-
-任务唯一标识
-
-22ec888712de45b39b97983f8d166831
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -321,7 +82,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "requestId": "117F5ABE-CF02-5502-9A3F-E56BC9081A64",
   "success": true,
@@ -334,39 +97,27 @@ string
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-403
-
-NoPermission
-
-You are not authorized to perform this action , Please check the assignment of the workspaceId.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action , Please check the assignment of the workspaceId. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/errorCode)查看更多错误码。
 
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
+
 ## 变更历史
 
-变更时间
-
-变更内容概要
-
-操作
-
-2025-10-20
-
-新增 OpenAPI
-
-[查看变更详情](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/SubmitVideoDetectShotTask?updateTime=2025-10-20#workbench-doc-change-demo)
+| 变更时间 | 变更内容概要 | 操作 |
+| --- | --- | --- |
+| 2025-10-20 | 新增 OpenAPI | [查看变更详情](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/SubmitVideoDetectShotTask?updateTime=2025-10-20#workbench-doc-change-demo) |
 
 目前拆条提供三种场景视频的处理： 1、节目场景 2、新闻场景 3、其他场景
 
@@ -378,7 +129,9 @@ You are not authorized to perform this action , Please check the assignment of t
 
 如果希望自定义 prompt 可以参考如下示例模版：
 
-```
+<a id="code-block-3"></a>
+
+````text
 - name: videoDetectShotNewsPrompt
     # 角色
     你是一个专业的新闻合并助手，请根据以下要求处理给定的多个有序新闻片段的合并任务
@@ -732,4 +485,4 @@ You are not authorized to perform this action , Please check the assignment of t
     6、必须保证时间的准确性。
 
     请严格按照上述规则处理文本。
-```
+````

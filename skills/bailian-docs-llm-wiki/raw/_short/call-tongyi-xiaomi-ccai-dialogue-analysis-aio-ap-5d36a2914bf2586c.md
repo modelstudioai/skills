@@ -3,15 +3,27 @@
 本文向您介绍伶鹊CCAI-对话分析AIO应用Java SDK的安装、使用及注意事项。
 
 -   关于Java SDK的更多说明，请参见[开始使用](https://help.aliyun.com/zh/sdk/developer-reference/get-started-with-alibaba-cloud-classic-sdk-for-java)。
--   关于各API的详细出入参说明，请参见[API目录](raw/_short/api-contactcenterai-2024-06-03-dir-f5fdcb398b72451f.md)。
--   关于任务类型，请参见[通过任务类型调用伶鹊CCAI-对话分析AIO应用](raw/_short/api-contactcenterai-2024-06-03-analyzeconversati-7fdbf0156794c01f.md)中resultTypes字段的描述。
+-   关于各API的详细出入参说明，请参见[API目录](api-contactcenterai-2024-06-03-dir-f5fdcb398b72451f.md)。
+-   关于任务类型，请参见[通过任务类型调用伶鹊CCAI-对话分析AIO应用](api-contactcenterai-2024-06-03-analyzeconversati-7fdbf0156794c01f.md)中resultTypes字段的描述。
+
+<a id="前提条件"></a>
+
+<a id="dde42f7d2b2u4"></a>
 
 ## 前提条件
 
 -   如果您还未创建AccessKeyID和AccessKeySecret，请参考[获取 AccessKey 与 AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
--   如果您使用子账号调用接口，请参考[伶鹊CCAI-对话分析RAM子账号使用方式和授权操作](raw/_short/use-and-authorize-ram-users-for-ccai-dialogue-an-e83b0ec9dc63d2ff.md)。
+-   如果您使用子账号调用接口，请参考[伶鹊CCAI-对话分析RAM子账号使用方式和授权操作](use-and-authorize-ram-users-for-ccai-dialogue-an-e83b0ec9dc63d2ff.md)。
+
+<a id="获取workspaceid和appid"></a>
+
+<a id="63e895af2e8ux"></a>
 
 ## 获取workspaceId和appId
+
+<a id="workspaceid"></a>
+
+<a id="2f31b33e5flgz"></a>
 
 ### workspaceId
 
@@ -19,6 +31,10 @@
 
 1.  访问[**业务空间管理**](https://bailian.console.aliyun.com/?admin=1#/efm/business_management)页面。
 2.  业务空间管理列表中Workspace ID为入参中workspaceId。
+
+<a id="appid"></a>
+
+<a id="47b6d769670rm"></a>
 
 ### appId
 
@@ -28,7 +44,17 @@
 2.  点击上方**我的应用**，展示应用卡片列表。
 3.  每个卡片上的应用ID即为接口参数中appId。
 
+<a id="安装sdk"></a>
+
+<a id="acd7931e70w6n"></a>
+
 ## 安装SDK
+
+<a id="sec-tabs"></a>
+
+<a id="同步java"></a>
+
+<a id="同步java-h4"></a>
 
 #### 同步Java
 
@@ -42,6 +68,10 @@
 
 </dependency>
 
+<a id="异步java"></a>
+
+<a id="异步java-h4"></a>
+
 #### 异步Java
 
 <dependency>
@@ -54,13 +84,27 @@
 
 </dependency>
 
+<a id="代码示例"></a>
+
+<a id="33bc2083e24y0"></a>
+
 ## 代码示例
 
-**说明**请用workspaceId替换示例中的YOUR\_WORKSPACEID，AccessKeyID替换示例中的YOUR\_ACCESS\_KEY\_ID，AccessKeySecret替换示例中的YOUR\_ACCESS\_KEY\_SECRET，appId替换示例中的YOUR\_APPID，代码才能正常运行。为防止密钥泄露，建议将AccessKeyID和AccessKeySecret设置为环境变量。
+> **说明**
+>
+> 请用workspaceId替换示例中的YOUR\_WORKSPACEID，AccessKeyID替换示例中的YOUR\_ACCESS\_KEY\_ID，AccessKeySecret替换示例中的YOUR\_ACCESS\_KEY\_SECRET，appId替换示例中的YOUR\_APPID，代码才能正常运行。为防止密钥泄露，建议将AccessKeyID和AccessKeySecret设置为环境变量。
+
+<a id="sec-tabs-2"></a>
+
+<a id="异步流式调用"></a>
+
+<a id="异步流式调用-h4"></a>
 
 #### 异步流式调用
 
-```
+<a id="code-block"></a>
+
+```java
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -148,11 +192,21 @@ public class CcaiPaasTest {
 }
 ```
 
+<a id="同步非流式调用"></a>
+
+<a id="同步非流式调用-h4"></a>
+
 #### 同步非流式调用
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-java-tab"></a>
 
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.contactcenterai20240603.Client;
@@ -202,9 +256,13 @@ public class CcaiPaasTest {
 }
 ```
 
+<a id="fig-code-group-go-tab"></a>
+
 go
 
-```
+<a id="code-code-group-go"></a>
+
+```go
 // 示例代码，其中阿里云AK、SK，CCAI的业务空间ID（workspaceId）和应用ID（appId），替换为用户当前的。
 // tea-utils使用这个版本，go get github.com/alibabacloud-go/tea-utils/v2@v2.0.5-0.20240708091240-f3d7eca052de
 
@@ -330,9 +388,15 @@ func main() {
 }
 ```
 
+<a id="异步非流式调用"></a>
+
+<a id="异步非流式调用-h4"></a>
+
 #### 异步非流式调用
 
-```
+<a id="code-block-2"></a>
+
+```java
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -411,9 +475,15 @@ public class CcaiPaasTest {
 }
 ```
 
+<a id="同步流式调用"></a>
+
+<a id="同步流式调用-h4"></a>
+
 #### 同步流式调用
 
-```
+<a id="code-block-3"></a>
+
+```go
 // 示例代码，其中阿里云AK、SK，CCAI的业务空间ID（workspaceId）和应用ID（appId），替换为用户当前的。
 // tea-utils使用这个版本，go get github.com/alibabacloud-go/tea-utils/v2@v2.0.5-0.20240708091240-f3d7eca052de
 

@@ -1,8 +1,16 @@
 # 2025年2月18日更新-视频理解调用降价公告
 
+<a id="生效时间"></a>
+
+<a id="9b6baa8bfft20"></a>
+
 ## 生效时间
 
 北京时间 2025-02-18 00:00:00
+
+<a id="变更内容"></a>
+
+<a id="65f822a0670bu"></a>
 
 ## 变更内容
 
@@ -16,4 +24,4 @@
 
 在**第3步：文本加工**中，从**选择大语言模型**下拉列表中选择**通义千问-Max**。
 
-详情可参考《[影视传媒视频理解计费](raw/_short/film-and-television-media-video-understanding-bi-3c33978b6baa2e4f.md)》。
+详情可参考《[影视传媒视频理解计费](film-and-television-media-video-understanding-bi-3c33978b6baa2e4f.md)》。

@@ -5,13 +5,29 @@
 -   集成至第三方应用：支持将 MCP 服务安装到 Qoder、Codex、Claude Code 和 Cursor，也可手动添加到其他 MCP 客户端。
 -   集成至个人项目：通过 MCP SDK 调用，实现灵活编码和深度定制。
 
-**重要**也可通过阿里云百炼 CLI 外部调用 MCP 服务：`bl mcp list` 查看已开通服务，`bl mcp call --target <名称>.<工具>` 直接调用。详见[使用 CLI](raw/cli/capabilities/agent-infrastructure/mcp-skill.md)。
+> **重要**
+>
+> 也可通过阿里云百炼 CLI 外部调用 MCP 服务：`bl mcp list` 查看已开通服务，`bl mcp call --target <名称>.<工具>` 直接调用。详见[使用 CLI](../../../cli/capabilities/agent-infrastructure/mcp-skill.md)。
 
-**重要**需要通过 API 管理 MCP 服务时，可使用 [MCP API](raw/application-api-reference/overview-1e06e5e20b81f10d.md) 查询、创建、开通、启停服务和调用工具。
+> **重要**
+>
+> 需要通过 API 管理 MCP 服务时，可使用 [MCP API](../../../application-api-reference/overview-1e06e5e20b81f10d.md) 查询、创建、开通、启停服务和调用工具。
+
+<a id="开通-mcp-服务"></a>
+
+<a id="17e41c39a9fnf"></a>
 
 ## 开通 MCP 服务
 
-**说明**阿里云百炼 MCP 服务已从旧版 SSE 协议升级为新版 Streamable HTTP 协议。请根据实际情况选择对应的操作步骤。
+> **说明**
+>
+> 阿里云百炼 MCP 服务已从旧版 SSE 协议升级为新版 Streamable HTTP 协议。请根据实际情况选择对应的操作步骤。
+
+<a id="sec-tabs"></a>
+
+<a id="首次开通"></a>
+
+<a id="首次开通-h4"></a>
 
 #### 首次开通
 
@@ -19,21 +35,41 @@
     
 2.  点击**立即开通**，点击**确认开通**后即可开通 Amap Maps MCP 服务。
     
-    **说明**阿里云百炼已部署云端的 Amap Maps MCP 服务，开通试用服务无需填写**AMAP\_MAPS\_API\_KEY**。如需商业化服务定制，也支持使用个人**AMAP\_MAPS\_API\_KEY**。
+    > **说明**
+    >
+    > 阿里云百炼已部署云端的 Amap Maps MCP 服务，开通试用服务无需填写**AMAP\_MAPS\_API\_KEY**。如需商业化服务定制，也支持使用个人**AMAP\_MAPS\_API\_KEY**。
     
     如果涉及输入敏感信息，需通过创建 KMS 凭据进行加密。
     
+
+<a id="升级协议-已开通"></a>
+
+<a id="升级协议-已开通-h4"></a>
 
 #### 升级协议（已开通）
 
 1.  前往[阿里云百炼 MCP 广场](https://bailian.console.aliyun.com/cn-beijing/store/mcp)选择 MCP 服务。以 Amap Maps 服务为例，点击卡片。
 2.  点击右侧**取消开通**，再点击**立即开通**，**确认开通**后即可更新 Amap Maps MCP 服务。
 
+<a id="外部调用-mcp-服务"></a>
+
+<a id="d2191f2d44yj5"></a>
+
 ## 外部调用 MCP 服务
+
+<a id="集成至第三方应用"></a>
+
+<a id="cb801800aeyz3"></a>
 
 ### 集成至第三方应用
 
 阿里云百炼支持将 MCP 服务安装到 Qoder、Codex、Claude Code 和 Cursor。以 Amap Maps 服务为例。
+
+<a id="sec-tabs-2"></a>
+
+<a id="qoder"></a>
+
+<a id="qoder-h4"></a>
 
 #### Qoder
 
@@ -42,12 +78,20 @@
 3.  将命令中的 `${DASHSCOPE_API_KEY}` 替换为实际 API Key，或先设置同名环境变量，再执行命令。
 4.  在 Qoder 中确认 MCP 服务已添加并启用。
 
+<a id="codex"></a>
+
+<a id="codex-h4"></a>
+
 #### Codex
 
 1.  前往 [Amap Maps MCP](https://bailian.console.aliyun.com/cn-beijing/store/mcp/detail/amap-maps) 服务详情页，在**安装**区域选择**客户端**。
 2.  点击 **Codex** 图标，复制安装命令。
 3.  将命令中的 `${DASHSCOPE_API_KEY}` 替换为实际 API Key，或先设置同名环境变量，再执行命令。
 4.  在 Codex 中确认 MCP 服务已添加并启用。
+
+<a id="claude-code"></a>
+
+<a id="claude-code-h4"></a>
 
 #### Claude Code
 
@@ -56,6 +100,10 @@
 3.  将命令中的 `${DASHSCOPE_API_KEY}` 替换为实际 API Key，或先设置同名环境变量，再执行命令。
 4.  在 Claude Code 中确认 MCP 服务已添加并启用。
 
+<a id="cursor"></a>
+
+<a id="cursor-h4"></a>
+
 #### Cursor
 
 1.  安装 [Cursor](https://cursor.com/)。
@@ -63,9 +111,15 @@
 3.  点击 **Cursor** 图标，在打开的 Cursor 界面中确认 MCP Server 配置，按提示完成安装。
 4.  若配置中的 API Key 为 `${DASHSCOPE_API_KEY}` 占位符，替换为实际 API Key。
 
-**说明**Cherry Studio、Cline 等客户端暂不支持一键安装。安装对应客户端后，在**安装**区域复制 MCP 服务地址，在客户端中手动添加 MCP 服务（类型选择 Streamable HTTP，地址以 `/sse` 结尾时选择 SSE），并在请求头中添加 `Authorization: Bearer ${DASHSCOPE_API_KEY}`。
+> **说明**
+>
+> Cherry Studio、Cline 等客户端暂不支持一键安装。安装对应客户端后，在**安装**区域复制 MCP 服务地址，在客户端中手动添加 MCP 服务（类型选择 Streamable HTTP，地址以 `/sse` 结尾时选择 SSE），并在请求头中添加 `Authorization: Bearer ${DASHSCOPE_API_KEY}`。
 
-> 若模型无法调用 MCP，请参考[常见问题](https://help.aliyun.com/zh/model-studio/mcp-external-calls#71be503ed7ucy)。
+> 若模型无法调用 MCP，请参考[常见问题](mcp-external-calls.md#71be503ed7ucy)。
+
+<a id="通过-sdk-进行开发集成"></a>
+
+<a id="99a0ff9464u4l"></a>
 
 ### 通过 SDK 进行开发集成
 
@@ -75,17 +129,27 @@
 
 1.  安装依赖。
 
-```
+<a id="code-block"></a>
+
+```bash
 pip install openai mcp
 ```
 
-2.  [配置阿里云百炼 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)。
+2.  [配置阿里云百炼 API Key 到环境变量](../../../model-api-reference/preparations/get-api-key.md#20b17d4430qvt)。
     
 3.  代码示例如下：
     
+    <a id="sec-tabs-3"></a>
+    
+    <a id="python"></a>
+    
+    <a id="python-h4"></a>
+    
     #### Python
     
-    ```
+    <a id="code-block-2"></a>
+    
+    ```python
     # -*- coding: utf-8 -*-
     # 使用 OpenAI SDK + MCP SDK 调用阿里云百炼联网搜索（WebSearch）MCP 服务
     import os
@@ -159,7 +223,9 @@ pip install openai mcp
 4.  运行代码，结果如下：
     
 
-```
+<a id="code-block-3"></a>
+
+```text
 正在联网搜索...
 ==================================================
 阿里云百炼 MCP（Model Context Protocol）是一项新推出的服务，允许开发者在百炼平台上统一接入和管理 MCP 服务。最新进展包括：
@@ -169,15 +235,27 @@ pip install openai mcp
 4. 开发者可通过 MCP SDK 灵活编码集成至自有项目。
 ```
 
+<a id="常见问题"></a>
+
+<a id="71be503ed7ucy"></a>
+
 ## 常见问题
+
+<a id="无法连接-mcp-服务怎么办"></a>
+
+<a id="dd149b8c18yil"></a>
 
 ### 无法连接 MCP 服务怎么办？
 
-1.  **未开通或者未升级 MCP 服务**：请确认已在阿里云百炼 MCP 广场开通或升级 MCP 服务，详情参见[开通 MCP 服务](https://help.aliyun.com/zh/model-studio/mcp-external-calls#17e41c39a9fnf)。
+1.  **未开通或者未升级 MCP 服务**：请确认已在阿里云百炼 MCP 广场开通或升级 MCP 服务，详情参见[开通 MCP 服务](mcp-external-calls.md#17e41c39a9fnf)。
 2.  **API Key 错误**：请确认使用了有效的阿里云百炼通用 API Key。
 3.  **额度用尽**：部分 MCP （如联网搜索）存在每月额度限制，额度用尽后自动停止。
 
-其他报错及常见问题请参考[常见问题](raw/application-user-guide/agent-store/model-context-protocol/mcp-faq.md)。
+其他报错及常见问题请参考[常见问题](mcp-faq.md)。
+
+<a id="模型正常对话且-mcp-无报错-但无法成功地调用-mcp-怎么办"></a>
+
+<a id="adbea1c7aaair"></a>
 
 ### 模型正常对话且 MCP 无报错，但无法成功地调用 MCP 怎么办？
 

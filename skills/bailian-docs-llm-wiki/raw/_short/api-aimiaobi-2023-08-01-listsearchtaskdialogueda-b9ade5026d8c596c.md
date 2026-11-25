@@ -2,11 +2,19 @@
 
 查询搜索生成任务对话详情中数据列表。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListSearchTaskDialogueDatas)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,505 +33,86 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:ListSearchTaskDialogueDatas</td><td>list</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:ListSearchTaskDialogueDatas
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| Query | string | 否 | 查询条件 | xx |
+| TaskId | string | 否 | 任务唯一标识<br><br>**说明** TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。 | xxx |
+| OriginalSessionId | string | 否 | 历史对话唯一标识：全量原始素材来源 | xx |
+| SessionId | string | 是 | 历史对话唯一标识：参考素材来源 | xx |
+| MultimodalSearchType | string | 否 | 搜索数据类型 | text |
+| SearchModel | string | 否 | 搜索 agent 类型 | ClusterGenerate |
+| SearchModelDataValue | string | 否 | 搜索 agent 分类下的数据 | xxx |
+| IncludeContent | boolean | 否 | 是否包含正文 | true |
+| PageNumber | integer | 否 | 当前页码 | 1 |
+| PageSize | integer | 否 | 每页条数：默认 10 | 10 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：[获取 workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-xxxx
-
-Query
-
-string
-
-否
-
-查询条件
-
-xx
-
-TaskId
-
-string
-
-否
-
-任务唯一标识
-
-**说明** TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。
-
-xxx
-
-OriginalSessionId
-
-string
-
-否
-
-历史对话唯一标识：全量原始素材来源
-
-xx
-
-SessionId
-
-string
-
-是
-
-历史对话唯一标识：参考素材来源
-
-xx
-
-MultimodalSearchType
-
-string
-
-否
-
-搜索数据类型
-
-text
-
-SearchModel
-
-string
-
-否
-
-搜索 agent 类型
-
-ClusterGenerate
-
-SearchModelDataValue
-
-string
-
-否
-
-搜索 agent 分类下的数据
-
-xxx
-
-IncludeContent
-
-boolean
-
-否
-
-是否包含正文
-
-true
-
-PageNumber
-
-integer
-
-否
-
-当前页码
-
-1
-
-PageSize
-
-integer
-
-否
-
-每页条数：默认 10
-
-10
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-响应结果
-
-RealtimeSearch
-
-boolean
-
-是否实时搜索
-
-true
-
-SearchType
-
-string
-
-搜索类型
-
-realtime
-
-Articles
-
-array<object>
-
-文章列表
-
-Article
-
-object
-
-文章
-
-PubTime
-
-string
-
-发布时间
-
-2024-11-25 14:25:59
-
-Source
-
-string
-
-来源
-
-新华社
-
-Title
-
-string
-
-标题
-
-文章标题
-
-Content
-
-string
-
-内容
-
-文章内容
-
-Author
-
-string
-
-作者
-
-作者
-
-Url
-
-string
-
-文章 URL
-
-[https://www.example.com/aaa.docx](https://www.example.com/aaa.docx)
-
-Summary
-
-string
-
-文章摘要
-
-文章摘要
-
-DocUuid
-
-string
-
-内部文档唯一标识
-
-xxx
-
-DocId
-
-string
-
-文档-自定义的唯一 ID
-
-文档-自定义的唯一ID
-
-MultimodalMedias
-
-array<object>
-
-多模态信息
-
-MultimodalMedia
-
-object
-
-多模态信息
-
-MediaId
-
-string
-
-多模态数据唯一标识
-
-多模态数据唯一标识
-
-MediaType
-
-string
-
-多模态数据类型
-
-多模态数据类型
-
-FileUrl
-
-string
-
-图片或视频文件地址
-
-图片或视频文件地址
-
-DocType
-
-string
-
-文档类型
-
-text
-
-CategoryUuid
-
-string
-
-类目唯一标识
-
-xx
-
-Extend1
-
-string
-
-扩展字段 1
-
-xx
-
-Extend2
-
-string
-
-扩展字段 2
-
-xx
-
-Extend3
-
-string
-
-扩展字段 3
-
-xx
-
-Images
-
-array<object>
-
-图片列表
-
-Image
-
-object
-
-图片对象
-
-MediaId
-
-string
-
-多模态数据唯一标识
-
-多模态数据唯一标识
-
-MediaType
-
-string
-
-多模态数据类型
-
-多模态数据类型
-
-FileUrl
-
-string
-
-图片或视频文件地址
-
-图片或视频文件地址
-
-Videos
-
-array<object>
-
-视频列表
-
-Video
-
-object
-
-视频信息列表
-
-MediaId
-
-string
-
-多模态数据唯一标识
-
-多模态数据唯一标识
-
-MediaType
-
-string
-
-多模态数据类型
-
-多模态数据类型
-
-FileUrl
-
-string
-
-图片或视频文件地址
-
-图片或视频文件地址
-
-PageNumber
-
-integer
-
-当前页码
-
-1
-
-PageSize
-
-integer
-
-每页记录条数
-
-10
-
-TotalCount
-
-integer
-
-总记录条数
-
-100
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Message
-
-string
-
-错误说明
-
-success
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Audios
-
-array<object>
-
-语音列表
-
-Audio
-
-object
-
-语音信息
-
-MediaId
-
-string
-
-多模态数据唯一标识
-
-xxxx
-
-FileUrl
-
-string
-
-图片或视频文件地址
-
-http://xxx
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | 响应结果 |  |
+| RealtimeSearch | boolean | 是否实时搜索 | true |
+| SearchType | string | 搜索类型 | realtime |
+| Articles | array<object> | 文章列表 |  |
+| Article | object | 文章 |  |
+| PubTime | string | 发布时间 | 2024-11-25 14:25:59 |
+| Source | string | 来源 | 新华社 |
+| Title | string | 标题 | 文章标题 |
+| Content | string | 内容 | 文章内容 |
+| Author | string | 作者 | 作者 |
+| Url | string | 文章 URL | [https://www.example.com/aaa.docx](https://www.example.com/aaa.docx) |
+| Summary | string | 文章摘要 | 文章摘要 |
+| DocUuid | string | 内部文档唯一标识 | xxx |
+| DocId | string | 文档-自定义的唯一 ID | 文档-自定义的唯一ID |
+| MultimodalMedias | array<object> | 多模态信息 |  |
+| MultimodalMedia | object | 多模态信息 |  |
+| MediaId | string | 多模态数据唯一标识 | 多模态数据唯一标识 |
+| MediaType | string | 多模态数据类型 | 多模态数据类型 |
+| FileUrl | string | 图片或视频文件地址 | 图片或视频文件地址 |
+| DocType | string | 文档类型 | text |
+| CategoryUuid | string | 类目唯一标识 | xx |
+| Extend1 | string | 扩展字段 1 | xx |
+| Extend2 | string | 扩展字段 2 | xx |
+| Extend3 | string | 扩展字段 3 | xx |
+| Images | array<object> | 图片列表 |  |
+| Image | object | 图片对象 |  |
+| MediaId | string | 多模态数据唯一标识 | 多模态数据唯一标识 |
+| MediaType | string | 多模态数据类型 | 多模态数据类型 |
+| FileUrl | string | 图片或视频文件地址 | 图片或视频文件地址 |
+| Videos | array<object> | 视频列表 |  |
+| Video | object | 视频信息列表 |  |
+| MediaId | string | 多模态数据唯一标识 | 多模态数据唯一标识 |
+| MediaType | string | 多模态数据类型 | 多模态数据类型 |
+| FileUrl | string | 图片或视频文件地址 | 图片或视频文件地址 |
+| PageNumber | integer | 当前页码 | 1 |
+| PageSize | integer | 每页记录条数 | 10 |
+| TotalCount | integer | 总记录条数 | 100 |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+| Code | string | 状态码 | NoData |
+| Message | string | 错误说明 | success |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Audios | array<object> | 语音列表 |  |
+| Audio | object | 语音信息 |  |
+| MediaId | string | 多模态数据唯一标识 | xxxx |
+| FileUrl | string | 图片或视频文件地址 | http://xxx |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -531,7 +120,9 @@ http://xxx
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "RealtimeSearch": true,
   "SearchType": "realtime",
@@ -590,6 +181,10 @@ http://xxx
   ]
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

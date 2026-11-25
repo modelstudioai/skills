@@ -4,17 +4,35 @@
 
 **在线体验：**访问[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，在页面右上角选择目标地域，进入[视觉模型](https://bailian.console.aliyun.com/model/experience/vision)页面进行体验。
 
+<a id="快速开始"></a>
+
+<a id="239ad42477toq"></a>
+
 ## 快速开始
 
-您需要先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。若通过OpenAI SDK进行调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+您需要先[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。若通过OpenAI SDK进行调用，需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
 
-以下示例演示了如何调用模型描述图像内容。关于本地文件和图像限制的说明，请参见[如何传入本地文件](https://help.aliyun.com/zh/model-studio/vision#d987f8de5395x)、[图像限制](raw/model-user-guide/model-experience/text-generation-model/vision.md)章节。
+以下示例演示了如何调用模型描述图像内容。关于本地文件和图像限制的说明，请参见[如何传入本地文件](vision.md#d987f8de5395x)、[图像限制](vision.md)章节。
+
+<a id="sec-tabs"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
+<a id="code-block"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -46,15 +64,25 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="49a7e3a52dvfc"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-2"></a>
+
+```text
 这是一张在海滩上拍摄的照片。照片中，一个人和一只狗坐在沙滩上，背景是大海和天空。人和狗似乎在互动，狗的前爪搭在人的手上。阳光从画面的右侧照射过来，给整个场景增添了一种温暖的氛围。
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -90,15 +118,25 @@ async function main() {
 main()
 ```
 
+<a id="658f477d492r6"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```text
 这是一张在海滩上拍摄的照片。照片中，一个人和一只狗坐在沙滩上，背景是大海和天空。人和狗似乎在互动，狗的前爪搭在人的手上。阳光从画面的右侧照射过来，给整个场景增添了一种温暖的氛围。
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-5"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.core.http.StreamResponse;
@@ -156,15 +194,25 @@ public class Main {
 }
 ```
 
+<a id="j8ares0vl0h3"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-6"></a>
+
+```text
 这是一张在海滩上拍摄的照片。照片中，一个人和一只狗坐在沙滩上，背景是大海和天空。人和狗似乎在互动，狗的前爪搭在人的手上。阳光从画面的右侧照射过来，给整个场景增添了一种温暖的氛围。
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-7"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -186,11 +234,15 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="5ca6d0eb82hou"></a>
+
 ### 返回结果
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
   "choices": [
     {
@@ -216,11 +268,23 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-3"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-9"></a>
+
+```python
 import os
 import dashscope
 
@@ -247,15 +311,25 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="cf2d99de90omv"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-10"></a>
+
+```text
 是一张在海滩上拍摄的照片。照片中有一位女士和一只狗。女士坐在沙滩上，微笑着与狗互动。狗戴着项圈，似乎在与女士握手。背景是大海和天空，阳光洒在她们身上，营造出温馨的氛围。
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-11"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
@@ -302,15 +376,25 @@ public class Main {
 }
 ```
 
+<a id="4558f285c9lfa"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-12"></a>
+
+```text
 这是一张在海滩上拍摄的照片。照片中有一个穿着格子衬衫的人和一只戴着项圈的狗。人和狗面对面坐着，似乎在互动。背景是大海和天空，阳光洒在他们身上，营造出温暖的氛围。
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-13"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -335,9 +419,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="2440df919afj4"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
   "output": {
     "choices": [
@@ -363,102 +451,95 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="dashscope-cli"></a>
+
+<a id="dashscope-cli-h4"></a>
+
 #### dashscope CLI
 
-```
+<a id="code-block-15"></a>
+
+```bash
 export DASHSCOPE_API_KEY="your-api-key"
 # 将 {WorkspaceId} 替换为业务空间ID，cn-beijing 替换为对应地域（新加坡: ap-southeast-1, 美东: us-east-1）
 export DASHSCOPE_HTTP_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 dashscope multimodal-conversation create -m qwen3-vl-plus -t "你好"
 ```
 
-**重要**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+> **重要**
+>
+> SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+>
+> [DashScope SDK Expert](../../../model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-[DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
+完整地域表见 [Base URL 总览](../../../model-api-reference/preparations/base-url.md)。
 
-完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
+<a id="模型效果"></a>
+
+<a id="80adce42ceyce"></a>
 
 ## 模型效果
+
+<a id="图像问答"></a>
+
+<a id="eaa3213775aft"></a>
 
 ### 图像问答
 
 描述图像中的内容或者对其进行分类打标，如识别人物、地点、动植物等。
 
-![p1021359](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025117.webp)
+| ![p1021359](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025117.webp)<br><br>如果太阳很刺眼，我应该用这张图中的什么物品？ | 当太阳很刺眼时，你应该使用图中的粉色太阳镜。太阳镜可以有效阻挡强光、减少紫外线对眼睛的伤害，帮助你在阳光强烈时保护视力并提升视觉舒适度。 |
+| --- | --- |
 
-如果太阳很刺眼，我应该用这张图中的什么物品？
+<a id="创意写作"></a>
 
-当太阳很刺眼时，你应该使用图中的粉色太阳镜。太阳镜可以有效阻挡强光、减少紫外线对眼睛的伤害，帮助你在阳光强烈时保护视力并提升视觉舒适度。
+<a id="b4804b8fd0vzw"></a>
 
 ### 创意写作
 
 根据图片或视频内容生成生动的文字描述，适用于故事创作、文案撰写、短视频脚本等创意场景。
 
-![vl-问答](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025118.webp)
+|  |  |
+| --- | --- |
+| ![vl-问答](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025118.webp)<br><br>请根据图片内容，帮我写一段有意思的朋友圈文案。 | 好的，这张图片充满了浓郁的中秋节日氛围，古典与现代元素结合得非常巧妙。根据图片中的主要元素，我为你准备了几个不同风格的朋友圈文案，你可以根据自己的喜好选择。<br><br>**诗意唯美风**<br><br>今夜月明人尽望，不知秋思落谁家。嫦娥奔月，玉兔捣药，古人的浪漫在今夜被点亮。愿这轮明月，能照亮你回家的路，也能寄去我最深的思念。中秋节快乐！<br><br>**温馨祝福风**<br><br>月圆人团圆，中秋夜最温柔。看烟花绽放，赏圆月当空，吃一口月饼，道一声安康。愿你我心中所念，皆能如愿以偿。祝大家中秋快乐，阖家幸福！ |
 
-请根据图片内容，帮我写一段有意思的朋友圈文案。
+<a id="文字识别与信息抽取"></a>
 
-好的，这张图片充满了浓郁的中秋节日氛围，古典与现代元素结合得非常巧妙。根据图片中的主要元素，我为你准备了几个不同风格的朋友圈文案，你可以根据自己的喜好选择。
-
-**诗意唯美风**
-
-今夜月明人尽望，不知秋思落谁家。嫦娥奔月，玉兔捣药，古人的浪漫在今夜被点亮。愿这轮明月，能照亮你回家的路，也能寄去我最深的思念。中秋节快乐！
-
-**温馨祝福风**
-
-月圆人团圆，中秋夜最温柔。看烟花绽放，赏圆月当空，吃一口月饼，道一声安康。愿你我心中所念，皆能如愿以偿。祝大家中秋快乐，阖家幸福！
+<a id="e05d272df05ya"></a>
 
 ### 文字识别与信息抽取
 
 识别图像中的文字、公式或抽取票据、证件、表单中的信息，支持格式化输出文本。
 
-![\-q2cdz6jy89b6m3kp](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025119.webp)
+|  |  |
+| --- | --- |
+| ![\-q2cdz6jy89b6m3kp](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025119.webp)<br><br>提取图中的：\['发票代码','发票号码','到站','燃油费','票价','乘车日期','开车时间','车次','座号'\]，请你以JSON格式输出。 | {<br><br>"发票代码": "221021325353",<br><br>"发票号码": "10283819",<br><br>"到站": "开发区",<br><br>"燃油费": "2.0",<br><br>"票价": "8.00<全>",<br><br>"乘车日期": "2013-06-29",<br><br>"开车时间": "流水",<br><br>"车次": "040",<br><br>"座号": "371"<br><br>} |
 
-提取图中的：\['发票代码','发票号码','到站','燃油费','票价','乘车日期','开车时间','车次','座号'\]，请你以JSON格式输出。
+<a id="多学科题目解答"></a>
 
-{
-
-"发票代码": "221021325353",
-
-"发票号码": "10283819",
-
-"到站": "开发区",
-
-"燃油费": "2.0",
-
-"票价": "8.00<全>",
-
-"乘车日期": "2013-06-29",
-
-"开车时间": "流水",
-
-"车次": "040",
-
-"座号": "371"
-
-}
+<a id="a61d0880cadlh"></a>
 
 ### 多学科题目解答
 
 解答图像中的数学、物理、化学等问题，适用于中小学、大学以及成人教育阶段。
 
-![\-5jwcstcvmdpqghaj](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025120.webp)
+| ![\-5jwcstcvmdpqghaj](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025120.webp)<br><br>请你分步骤解答图中的数学题。 | ![\-答案](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025121.webp) |
+| --- | --- |
 
-请你分步骤解答图中的数学题。
+<a id="视觉编程"></a>
 
-![\-答案](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025121.webp)
+<a id="2c9ebdd43foc6"></a>
 
 ### 视觉编程
 
 可通过图像或视频生成代码，可用于将设计图、网站截图等生成HTML、CSS、JS 代码。
 
-![code](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025123.webp)
+| ![code](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025123.webp)<br><br>根据我的草图设计使用HTML、CSS创建网页，主色调为黑色。 | ![code-预览](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025124.png)<br><br>**网页预览效果** |
+| --- | --- |
 
-根据我的草图设计使用HTML、CSS创建网页，主色调为黑色。
+<a id="物体定位"></a>
 
-![code-预览](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025124.png)
-
-**网页预览效果**
+<a id="9bc20a10d7lig"></a>
 
 ### 物体定位
 
@@ -466,22 +547,13 @@ dashscope multimodal-conversation create -m qwen3-vl-plus -t "你好"
 
 > Qwen2.5-VL模型 480_480_～\* 2560\*2560 分辨率范围内，物体定位效果较为鲁棒，在此范围之外检测精度可能会下降（偶发检测框漂移现象）。
 
-> 如需将定位结果绘制到原图可参见 [常见问题](raw/model-user-guide/model-experience/text-generation-model/vision.md) 。
+> 如需将定位结果绘制到原图可参见 [常见问题](vision.md) 。
 
-**二维定位**![\-530xdcos1lqkcfuy](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025125.webp)
+<table><tbody><tr><td><strong>二维定位</strong><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025125.webp" alt="-530xdcos1lqkcfuy"><ul><li>返回 Box（边界框）坐标 ：检测图中所有食物并以JSON格式输出其bbox的坐标。</li><li>返回 Point（中心点）坐标：以点的形式定位图中所有食物并以XML格式输出其point坐标。</li></ul></td><td><strong>可视化展示二维定位效果</strong><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025126.webp" alt="-mu9podu1eyvph1zd"></td></tr><tr><td><a id="accordion-三维定位"></a><section><p>三维定位</p><div><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025127.webp" alt="3d"><p>检测图像中的汽车并预测3D位置。输出JSON：<code>[{&quot;bbox_3d&quot;: [x_center, y_center, z_center, x_size, y_size, z_size, roll, pitch, yaw], &quot;label&quot;: &quot;category&quot;}]</code>。</p></div></section></td><td><a id="accordion-可视化展示三维定位效果"></a><section><p>可视化展示三维定位效果</p><div><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025128.webp" alt="3d-结果"></div></section></td></tr></tbody></table>
 
--   返回 Box（边界框）坐标 ：检测图中所有食物并以JSON格式输出其bbox的坐标。
--   返回 Point（中心点）坐标：以点的形式定位图中所有食物并以XML格式输出其point坐标。
+<a id="文档解析"></a>
 
-**可视化展示二维定位效果**![\-mu9podu1eyvph1zd](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025126.webp)
-
-三维定位
-
-![3d](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025127.webp)
-
-检测图像中的汽车并预测3D位置。输出JSON：`[{"bbox_3d": [x_center, y_center, z_center, x_size, y_size, z_size, roll, pitch, yaw], "label": "category"}]`。
-
-可视化展示三维定位效果
+<a id="f8b915bc4fr3c"></a>
 
 ### 文档解析
 
@@ -489,55 +561,30 @@ dashscope multimodal-conversation create -m qwen3-vl-plus -t "你好"
 
 > 推荐提示词如下： `qwenvl html` （解析为HTML格式）或 `qwenvl markdown` （解析为Markdown格式）
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025129.png)
+| ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025129.png)<br><br>qwenvl markdown。 | ![\-结果](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025130.webp)<br><br>**可视化展示效果** |
+| --- | --- |
 
-qwenvl markdown。
+<a id="视频理解"></a>
 
-![\-结果](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7372672671/p1025130.webp)
-
-**可视化展示效果**
+<a id="a470b3db9ecq6"></a>
 
 ### 视频理解
 
 分析视频内容，如对具体事件进行定位并获取时间戳、生成关键时间段的摘要等。
 
-请你描述下视频中的人物的一系列动作，以JSON格式输出开始时间（start\_time）、结束时间（end\_time）、事件（event），请使用HH:mm:ss表示时间戳。
+|  |  |
+| --- | --- |
+| 请你描述下视频中的人物的一系列动作，以JSON格式输出开始时间（start\_time）、结束时间（end\_time）、事件（event），请使用HH:mm:ss表示时间戳。 | {<br><br>"events": \[<br><br>{<br><br>"start\_time": "00:00:00",<br><br>"end\_time": "00:00:05",<br><br>"event": "人物手持一个纸箱走向桌子，并将纸箱放在桌上。"<br><br>},<br><br>{<br><br>"start\_time": "00:00:05",<br><br>"end\_time": "00:00:15",<br><br>"event": "人物拿起扫描枪，对准纸箱上的标签进行扫描。"<br><br>},<br><br>{<br><br>"start\_time": "00:00:15",<br><br>"end\_time": "00:00:21",<br><br>"event": "人物将扫描枪放回原位，然后拿起笔在笔记本上记录信息。"}\]<br><br>} |
 
-{
+<a id="核心能力"></a>
 
-"events": \[
-
-{
-
-"start\_time": "00:00:00",
-
-"end\_time": "00:00:05",
-
-"event": "人物手持一个纸箱走向桌子，并将纸箱放在桌上。"
-
-},
-
-{
-
-"start\_time": "00:00:05",
-
-"end\_time": "00:00:15",
-
-"event": "人物拿起扫描枪，对准纸箱上的标签进行扫描。"
-
-},
-
-{
-
-"start\_time": "00:00:15",
-
-"end\_time": "00:00:21",
-
-"event": "人物将扫描枪放回原位，然后拿起笔在笔记本上记录信息。"}\]
-
-}
+<a id="cf8d3e346ck1a"></a>
 
 ## 核心能力
+
+<a id="开启-关闭思考模式"></a>
+
+<a id="bc67a9a2bd2of"></a>
 
 ### 开启/关闭思考模式
 
@@ -548,19 +595,31 @@ qwenvl markdown。
 -   带`thinking`后缀的属于仅思考模型，模型总会在回复前进行思考，且无法关闭。
     
 
-**重要**
+> **重要**
+>
+> -   **模型配置：**在非 Agent 工具调用的通用对话场景下，为保持最佳效果，建议不设置`System Message`，可将模型角色设定、输出格式要求等指令通过`User Message` 传入。
+> -   **优先使用流式输出：** 开启思考模式时，支持**流式和非流式**两种输出方式。为避免因响应内容过长导致超时，建议优先使用流式输出方式。
+> -   **限制思考长度：**深度思考模型有时会输出冗长的推理过程，可使用 `thinking_budget` 参数限制思考过程的长度。若模型思考过程生成的 Token 数超过`thinking_budget`，推理内容会进行截断并立刻开始生成最终回复内容。`thinking_budget` 默认值为模型的最大思维链长度，请参见模型列表。
 
--   **模型配置：**在非 Agent 工具调用的通用对话场景下，为保持最佳效果，建议不设置`System Message`，可将模型角色设定、输出格式要求等指令通过`User Message` 传入。
--   **优先使用流式输出：** 开启思考模式时，支持**流式和非流式**两种输出方式。为避免因响应内容过长导致超时，建议优先使用流式输出方式。
--   **限制思考长度：**深度思考模型有时会输出冗长的推理过程，可使用 `thinking_budget` 参数限制思考过程的长度。若模型思考过程生成的 Token 数超过`thinking_budget`，推理内容会进行截断并立刻开始生成最终回复内容。`thinking_budget` 默认值为模型的最大思维链长度，请参见模型列表。
+<a id="sec-tabs-4"></a>
+
+<a id="openai-兼容"></a>
+
+<a id="openai-兼容-h4"></a>
 
 #### OpenAI 兼容
 
 `enable_thinking`非 OpenAI 标准参数，若使用 OpenAI Python SDK请通过 `extra_body`传入。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -636,9 +695,13 @@ for chunk in completion:
 # print(answer_content)
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 
 // 初始化 openai 客户端
@@ -710,9 +773,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -747,11 +814,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -821,9 +898,13 @@ for chunk in stream:
 # print(f"{answer_content}")
 ```
 
+<a id="fig-code-group-2-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 // dashscope SDK的版本 >= 2.21.10
 import java.util.*;
 
@@ -921,9 +1002,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-2-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-2-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -954,17 +1039,37 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="多图像输入"></a>
+
+<a id="52fbb68d50xfi"></a>
+
 ### 多图像输入
 
 视觉理解模型支持在单次请求中传入多张图片，可用于**商品对比、多页文档处理**等任务。实现时只需在`user message` 的`content`数组中包含多个图片对象即可。
 
-**重要**图片数量受模型图文总 Token 上限的限制，所有图片和文本的总 Token 数必须小于模型的最大输入。
+> **重要**
+>
+> 图片数量受模型图文总 Token 上限的限制，所有图片和文本的总 Token 数必须小于模型的最大输入。
+
+<a id="sec-tabs-5"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-6"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-16"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -989,17 +1094,27 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="d392962384w58"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-17"></a>
+
+```text
 图1中是一位女士和一只拉布拉多犬在海滩上互动的场景。女士穿着格子衬衫，坐在沙滩上，与狗进行握手的动作，背景是海浪和天空，整个画面充满了温馨和愉快的氛围。
 
 图2中是一只老虎在森林中行走的场景。老虎的毛色是橙色和黑色条纹相间，它正向前迈步，周围是茂密的树木和植被，地面上覆盖着落叶，整个画面给人一种野生自然的感觉。
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-18"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI(
@@ -1028,17 +1143,27 @@ async function main() {
 main()
 ```
 
+<a id="c6fd075d77k7j"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-19"></a>
+
+```text
 第一张图片中，一个人和一只狗在海滩上互动。人穿着格子衬衫，狗戴着项圈，他们似乎在握手或击掌。
 
 第二张图片中，一只老虎在森林中行走。老虎的毛色是橙色和黑色条纹，背景是绿色的树木和植被。
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-20"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -1075,11 +1200,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="fa10af0058saz"></a>
+
 ### 返回结果
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-21"></a>
+
+```json
 {
   "choices": [
     {
@@ -1105,11 +1234,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-7"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-22"></a>
+
+```python
 import os
 import dashscope
 
@@ -1141,15 +1282,25 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="dfe8edf8fb33d"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-23"></a>
+
+```text
 这些图片展示了一些动物和自然场景。第一张图片中，一个人和一只狗在海滩上互动。第二张图片是一只老虎在森林中行走
 ```
 
+<a id="java-3"></a>
+
+<a id="java-3-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-24"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
@@ -1196,18 +1347,28 @@ public class Main {
 }
 ```
 
+<a id="987558943doya"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-25"></a>
+
+```text
 这些图片展示了一些动物和自然场景。
 
 1. 第一张图片：一个女人和一只狗在海滩上互动。女人穿着格子衬衫，坐在沙滩上，狗戴着项圈，伸出爪子与女人握手。
 2. 第二张图片：一只老虎在森林中行走。老虎的毛色是橙色和黑色条纹，背景是树木和树叶。
 ```
 
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-26"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -1233,9 +1394,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="4ec743ca3f43d"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-27"></a>
+
+```json
 {
   "output": {
     "choices": [
@@ -1261,11 +1426,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="视频理解-2"></a>
+
+<a id="80dbf6ca8fh6s"></a>
+
 ### 视频理解
 
-视觉理解模型支持对视频内容进行理解，文件形式包括图像列表（视频帧）或视频文件。以下是理解在线视频或图像列表（通过URL指定）的示例代码。关于视频限制或可传入的图像列表数量限制，请参见[视频限制](raw/model-user-guide/model-experience/text-generation-model/vision.md)章节。
+视觉理解模型支持对视频内容进行理解，文件形式包括图像列表（视频帧）或视频文件。以下是理解在线视频或图像列表（通过URL指定）的示例代码。关于视频限制或可传入的图像列表数量限制，请参见[视频限制](vision.md)章节。
 
 > 建议使用性能较优的最新版或近期快照版模型理解视频文件。
+
+<a id="sec-tabs-8"></a>
+
+<a id="视频文件"></a>
+
+<a id="视频文件-h4"></a>
 
 #### 视频文件
 
@@ -1278,13 +1453,25 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 -   **max\_frames**：限制视频抽取帧的上限。当按 fps 计算的总帧数超过此限制时，系统将自动在 max\_frames 内均匀抽帧。**此参数仅在使用 DashScope SDK时可用。**
     
 
+<a id="sec-tabs-9"></a>
+
+<a id="openai兼容-3"></a>
+
+<a id="openai兼容-3-h4"></a>
+
 #### OpenAI兼容
 
 > 使用OpenAI SDK或HTTP方式向视觉理解模型直接输入视频文件时，需要将用户消息中的 `"type"` 参数设为 `"video_url"` 。
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1322,9 +1509,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-3-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-3-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -1365,9 +1556,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-3-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-3-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -1399,11 +1594,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   }'
 ```
 
+<a id="dashscope-4"></a>
+
+<a id="dashscope-4-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 import dashscope
 import os
 
@@ -1433,9 +1638,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-4-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-4-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -1488,9 +1697,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-4-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-4-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -1508,17 +1721,33 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="图像列表"></a>
+
+<a id="图像列表-h4"></a>
+
 #### 图像列表
 
 当视频以图像列表（即预先抽取的视频帧）传入时，可通过`fps`参数告知模型视频帧之间的时间间隔，这能帮助模型更准确地理解事件的顺序、持续时间和动态变化。模型支持通过 `fps` 参数指定原始视频的抽帧率，表示视频帧是每隔 1/fps 秒从原始视频中抽取的。该参数支持**Qwen3.6**、**Qwen3-VL、Qwen2.5-VL**模型。
+
+<a id="sec-tabs-10"></a>
+
+<a id="openai兼容-4"></a>
+
+<a id="openai兼容-4-h4"></a>
 
 #### OpenAI兼容
 
 > 使用OpenAI SDK或HTTP方式向视觉理解模型输入图片列表形式的视频时，需要将用户消息中的 `"type"` 参数设为 `"video"` 。
 
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-5-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1547,9 +1776,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-5-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-5-node-js"></a>
+
+```javascript
 // 确保之前在 package.json 中指定了 "type": "module"
 import OpenAI from "openai";
 
@@ -1590,9 +1823,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-5-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-5-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -1613,11 +1850,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-5"></a>
+
+<a id="dashscope-5-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-6-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1645,9 +1892,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-6-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-6-java"></a>
+
+```java
 // DashScope SDK版本需要不低于2.21.10
 import java.util.Arrays;
 import java.util.Collections;
@@ -1705,9 +1956,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-6-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-6-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -1743,21 +1998,37 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="传入本地文件-base64-编码或文件路径"></a>
+
+<a id="d987f8de5395x"></a>
+
 ### 传入本地文件（Base64 编码或文件路径）
 
-视觉理解模型提供两种本地文件上传方式：Base64 编码上传和文件路径直接上传。可根据文件大小、SDK类型选择上传方式，具体建议请参见[如何选择文件上传方式](raw/model-user-guide/model-experience/text-generation-model/vision.md)；两种方式均需满足[图像限制](raw/model-user-guide/model-experience/text-generation-model/vision.md)中对文件的要求。
+视觉理解模型提供两种本地文件上传方式：Base64 编码上传和文件路径直接上传。可根据文件大小、SDK类型选择上传方式，具体建议请参见[如何选择文件上传方式](vision.md)；两种方式均需满足[图像限制](vision.md)中对文件的要求。
+
+<a id="sec-tabs-11"></a>
+
+<a id="base64-编码上传"></a>
+
+<a id="base64-编码上传-h4"></a>
 
 #### Base64 编码上传
 
 将文件转换为 Base64 编码字符串，再传入模型。适用于 OpenAI 和 DashScope SDK及HTTP方式
 
+<a id="accordion-传入-base64-编码字符串的步骤-以图像为例"></a>
+
 传入 Base64 编码字符串的步骤（以图像为例）
 
 1.  文件编码：将本地图像转换为 Base64 编码；
     
+    <a id="accordion-图像转换为-base64-编码的示例代码"></a>
+    
     图像转换为 Base64 编码的示例代码
     
-    ```
+    <a id="code-block-28"></a>
+    
+    ```python
     #  编码函数： 将本地文件转换为 Base64 编码的字符串
     import base64
     def encode_image(image_path):
@@ -1770,10 +2041,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     
 2.  构建 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)：格式如下：`data:[MIME_type];base64,{base64_image}`；
     
-    1.  `MIME_type`需替换为实际的媒体类型，确保与[支持的图像格式](raw/model-user-guide/model-experience/text-generation-model/vision.md)表格中`MIME Type` 的值匹配（如`image/jpeg`、`image/png`）；
+    1.  `MIME_type`需替换为实际的媒体类型，确保与[支持的图像格式](vision.md)表格中`MIME Type` 的值匹配（如`image/jpeg`、`image/png`）；
     2.  `base64_image`为上一步生成的 Base64 字符串；
 3.  调用模型：通过`image`或`image_url`参数传递`Data URL`并调用模型。
     
+
+<a id="文件路径上传"></a>
+
+<a id="文件路径上传-h4"></a>
 
 #### 文件路径上传
 
@@ -1781,47 +2056,37 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 请您参考下表，结合您的编程语言与操作系统指定文件的路径。
 
+<a id="accordion-指定文件路径-以图像为例"></a>
+
 指定文件路径（以图像为例）
 
-**系统**
+<table><thead><tr><th><p><strong>系统</strong></p></th><th><p><strong>SDK</strong></p></th><th><p><strong>传入的文件路径</strong></p></th><th><p><strong>示例</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>Linux或macOS系统</p></td><td><p>Python SDK</p></td><td rowspan="2"><p>file://{文件的绝对路径}</p></td><td rowspan="2"><p>file:///home/images/test.png</p></td></tr><tr><td><p>Java SDK</p></td></tr><tr><td rowspan="2"><p>Windows系统</p></td><td><p>Python SDK</p></td><td><p>file://{文件的绝对路径}</p></td><td><p>file://D:/images/test.png</p></td></tr><tr><td><p>Java SDK</p></td><td><p>file:///{文件的绝对路径}</p></td><td><p>file:///D:/images/test.png</p></td></tr></tbody></table>
 
-**SDK**
+<a id="sec-tabs-12"></a>
 
-**传入的文件路径**
+<a id="图像"></a>
 
-**示例**
-
-Linux或macOS系统
-
-Python SDK
-
-file://{文件的绝对路径}
-
-file:///home/images/test.png
-
-Java SDK
-
-Windows系统
-
-Python SDK
-
-file://{文件的绝对路径}
-
-file://D:/images/test.png
-
-Java SDK
-
-file:///{文件的绝对路径}
-
-file:///D:/images/test.png
+<a id="图像-h4"></a>
 
 #### 图像
 
+<a id="sec-tabs-13"></a>
+
+<a id="文件路径传入"></a>
+
+<a id="文件路径传入-h4"></a>
+
 #### 文件路径传入
+
+<a id="fig-code-group-7"></a>
+
+<a id="fig-code-group-7-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-7-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1847,9 +2112,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-7-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-7-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -1896,13 +2165,31 @@ public class Main {
 }
 ```
 
+<a id="base64-编码传入"></a>
+
+<a id="base64-编码传入-h4"></a>
+
 #### Base64 编码传入
+
+<a id="sec-tabs-14"></a>
+
+<a id="openai兼容-5"></a>
+
+<a id="openai兼容-5-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-15"></a>
+
+<a id="python-5"></a>
+
+<a id="python-5-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-29"></a>
+
+```python
 from openai import OpenAI
 import os
 import base64
@@ -1944,9 +2231,15 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="node-js-3"></a>
+
+<a id="node-js-3-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-30"></a>
+
+```javascript
 import OpenAI from "openai";
 import { readFileSync } from 'fs';
 
@@ -1985,12 +2278,18 @@ async function main() {
 main();
 ```
 
+<a id="curl-5"></a>
+
+<a id="curl-5-h4"></a>
+
 #### curl
 
--   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](raw/model-user-guide/model-experience/text-generation-model/vision.md)；
+-   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](vision.md)；
 -   为了便于展示，代码中的`"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..."` ，该Base64 编码字符串是截断的。在实际使用中，请务必传入完整的编码字符串。
 
-```
+<a id="code-block-31"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -2012,11 +2311,23 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="dashscope-6"></a>
+
+<a id="dashscope-6-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-16"></a>
+
+<a id="python-6"></a>
+
+<a id="python-6-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-32"></a>
+
+```python
 import base64
 import os
 import dashscope
@@ -2057,9 +2368,15 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="java-4"></a>
+
+<a id="java-4-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-33"></a>
+
+```java
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -2122,12 +2439,18 @@ public class Main {
 }
 ```
 
+<a id="curl-6"></a>
+
+<a id="curl-6-h4"></a>
+
 #### curl
 
--   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](raw/model-user-guide/model-experience/text-generation-model/vision.md)；
+-   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](vision.md)；
 -   为了便于展示，代码中的`"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..."` ，该Base64 编码字符串是截断的。在实际使用中，请务必传入完整的编码字符串。
 
-```
+<a id="code-block-34"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -2152,15 +2475,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="视频文件-2"></a>
+
+<a id="视频文件-2-h4"></a>
+
 #### 视频文件
 
 以保存在本地的[test.mp4](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250118/hcgaks/test.mp4)为例。
 
+<a id="sec-tabs-17"></a>
+
+<a id="文件路径传入-2"></a>
+
+<a id="文件路径传入-2-h4"></a>
+
 #### 文件路径传入
+
+<a id="fig-code-group-8"></a>
+
+<a id="fig-code-group-8-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-8-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -2186,9 +2525,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-8-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-8-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -2239,13 +2582,31 @@ public class Main {
 }
 ```
 
+<a id="base64-编码传入-2"></a>
+
+<a id="base64-编码传入-2-h4"></a>
+
 #### Base64 编码传入
+
+<a id="sec-tabs-18"></a>
+
+<a id="openai兼容-6"></a>
+
+<a id="openai兼容-6-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-19"></a>
+
+<a id="python-7"></a>
+
+<a id="python-7-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-35"></a>
+
+```python
 from openai import OpenAI
 import os
 import base64
@@ -2284,9 +2645,15 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="node-js-4"></a>
+
+<a id="node-js-4-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-36"></a>
+
+```javascript
 import OpenAI from "openai";
 import { readFileSync } from 'fs';
 
@@ -2324,12 +2691,18 @@ async function main() {
 main();
 ```
 
+<a id="curl-7"></a>
+
+<a id="curl-7-h4"></a>
+
 #### curl
 
--   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](raw/model-user-guide/model-experience/text-generation-model/vision.md)；
+-   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](vision.md)；
 -   为了便于展示，代码中的`"data:video/mp4;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..."` ，该Base64 编码字符串是截断的。在实际使用中，请务必传入完整的编码字符串。
 
-```
+<a id="code-block-37"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -2351,11 +2724,23 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="dashscope-7"></a>
+
+<a id="dashscope-7-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-20"></a>
+
+<a id="python-8"></a>
+
+<a id="python-8-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-38"></a>
+
+```python
 import base64
 import os
 import dashscope
@@ -2388,9 +2773,15 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="java-5"></a>
+
+<a id="java-5-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-39"></a>
+
+```java
 import java.io.IOException;
 import java.util.*;
 import java.nio.file.Files;
@@ -2453,12 +2844,18 @@ public class Main {
 }
 ```
 
+<a id="curl-8"></a>
+
+<a id="curl-8-h4"></a>
+
 #### curl
 
--   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](raw/model-user-guide/model-experience/text-generation-model/vision.md)；
+-   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](vision.md)；
 -   为了便于展示，代码中的`"f"data:video/mp4;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..."` ，该Base64 编码字符串是截断的。在实际使用中，请务必传入完整的编码字符串。
 
-```
+<a id="code-block-40"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -2483,15 +2880,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="图像列表-2"></a>
+
+<a id="图像列表-2-h4"></a>
+
 #### 图像列表
 
 以保存在本地的[football1.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250319/vzfwkh/football1.jpg)、[football2.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250319/vgkgqy/football2.jpg)、[football3.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250319/mgvhvh/football3.jpg)、[football4.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250319/bydzjh/football4.jpg)为例。
 
+<a id="sec-tabs-21"></a>
+
+<a id="文件路径传入-3"></a>
+
+<a id="文件路径传入-3-h4"></a>
+
 #### 文件路径传入
+
+<a id="fig-code-group-9"></a>
+
+<a id="fig-code-group-9-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-9-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -2524,9 +2937,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-9-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-9-java"></a>
+
+```java
 // DashScope SDK版本需要不低于2.21.10
 import java.util.Arrays;
 import java.util.Map;
@@ -2587,13 +3004,31 @@ public class Main {
 }
 ```
 
+<a id="base64-编码传入-3"></a>
+
+<a id="base64-编码传入-3-h4"></a>
+
 #### Base64 编码传入
+
+<a id="sec-tabs-22"></a>
+
+<a id="openai兼容-7"></a>
+
+<a id="openai兼容-7-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-23"></a>
+
+<a id="python-9"></a>
+
+<a id="python-9-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-41"></a>
+
+```python
 import os
 from openai import OpenAI
 import base64
@@ -2629,9 +3064,15 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="node-js-5"></a>
+
+<a id="node-js-5-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-42"></a>
+
+```javascript
 import OpenAI from "openai";
 import { readFileSync } from 'fs';
 
@@ -2673,12 +3114,18 @@ async function main() {
 main();
 ```
 
+<a id="curl-9"></a>
+
+<a id="curl-9-h4"></a>
+
 #### curl
 
--   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](raw/model-user-guide/model-experience/text-generation-model/vision.md)；
+-   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](vision.md)；
 -   为了便于展示，代码中的`"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..."` ，该Base64 编码字符串是截断的。在实际使用中，请务必传入完整的编码字符串。
 
-```
+<a id="code-block-43"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -2702,11 +3149,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-8"></a>
+
+<a id="dashscope-8-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-24"></a>
+
+<a id="python-10"></a>
+
+<a id="python-10-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-44"></a>
+
+```python
 import base64
 import os
 import dashscope
@@ -2746,9 +3205,15 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="java-6"></a>
+
+<a id="java-6-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-45"></a>
+
+```java
 import java.io.IOException;
 import java.util.*;
 import java.nio.file.Files;
@@ -2825,12 +3290,18 @@ public class Main {
 }
 ```
 
+<a id="curl-10"></a>
+
+<a id="curl-10-h4"></a>
+
 #### curl
 
--   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](raw/model-user-guide/model-experience/text-generation-model/vision.md)；
+-   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](vision.md)；
 -   为了便于展示，代码中的`"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..."` ，该Base64 编码字符串是截断的。在实际使用中，请务必传入完整的编码字符串。
 
-```
+<a id="code-block-46"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -2865,67 +3336,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="处理高分辨率图像"></a>
+
+<a id="dc43c93a03vv6"></a>
+
 ### 处理高分辨率图像
 
 视觉理解模型API对单张图像编码后的视觉 Token 数量设有限制，默认配置下，高分辨率图像会被压缩，可能丢失细节，影响理解准确性。启用 `vl_high_resolution_images` 或调整 `max_pixels` 可增加视觉 Token 数量，从而保留更多图像细节，提升理解效果。
 
-也可通过 `detail` 控制图片处理精度。支持的模型、取值及参数优先级请参见 [OpenAI Chat Completions](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)或 [DashScope](raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)。
+也可通过 `detail` 控制图片处理精度。支持的模型、取值及参数优先级请参见 [OpenAI Chat Completions](../../../model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)或 [DashScope](../../../model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)。
+
+<a id="accordion-查看每个模型视觉-token-对应的像素-token-上限和像素上限"></a>
 
 查看每个模型视觉 Token 对应的像素、Token 上限和像素上限
 
 > 当输入图像像素大于模型的像素上限时，会将图像进行缩小至像素上限内。
 
-**模型**
-
-**每Token 对应像素**
-
-**vl\_high\_resolution\_images**
-
-**max\_pixels**
-
-**Token 上限**
-
-**像素上限**
-
-`Qwen3.8`、`Qwen3.7`、`Qwen3.6`、`Qwen3.5`、`Qwen3-VL`系列模型
-
-`32*32`
-
-`true`
-
-`max_pixels` 无效
-
-`16384 Token`
-
-`16777216`（即`16384*32*32`）
-
-`false`（默认）
-
-可自定义，默认为 `2621440`，最大值是`16777216`
-
-由 `max_pixels` 决定，即`max_pixels/32/32`
-
-`max_pixels`
-
-`QVQ`系列模型
-
-`28*28`
-
-`true`
-
-`max_pixels` 无效
-
-`16384 Token`
-
-`12845056`（即`16384*28*28`）
-
-`false`（默认）
-
-可自定义，默认为`1003520`，最大值是`12845056`
-
-由 `max_pixels` 决定，即`max_pixels/28/28`
-
-`max_pixels`
+<table><tbody><tr><td><p><strong>模型</strong></p></td><td><p><strong>每Token 对应像素</strong></p></td><td><p><strong>vl_high_resolution_images</strong></p></td><td><p><strong>max_pixels</strong></p></td><td><p><strong>Token 上限</strong></p></td><td><p><strong>像素上限</strong></p></td></tr><tr><td rowspan="2"><p><code>Qwen3.8</code>、<code>Qwen3.7</code>、<code>Qwen3.6</code>、<code>Qwen3.5</code>、<code>Qwen3-VL</code>系列模型</p></td><td rowspan="2"><p><code>32*32</code></p></td><td><p><code>true</code></p></td><td><p><code>max_pixels</code> 无效</p></td><td><p><code>16384 Token</code></p></td><td><p><code>16777216</code>（即<code>16384*32*32</code>）</p></td></tr><tr><td><p><code>false</code>（默认）</p></td><td><p>可自定义，默认为 <code>2621440</code>，最大值是<code>16777216</code></p></td><td><p>由 <code>max_pixels</code> 决定，即<code>max_pixels/32/32</code></p></td><td><p><code>max_pixels</code></p></td></tr><tr><td rowspan="2"><p><code>QVQ</code>系列模型</p></td><td rowspan="2"><p><code>28*28</code></p></td><td><p><code>true</code></p></td><td><p><code>max_pixels</code> 无效</p></td><td><p><code>16384 Token</code></p></td><td><p><code>12845056</code>（即<code>16384*28*28</code>）</p></td></tr><tr><td><p><code>false</code>（默认）</p></td><td><p>可自定义，默认为<code>1003520</code>，最大值是<code>12845056</code></p></td><td><p>由 <code>max_pixels</code> 决定，即<code>max_pixels/28/28</code></p></td><td><p><code>max_pixels</code></p></td></tr></tbody></table>
 
 -   当`vl_high_resolution_images=true`时，API 使用固定分辨率策略，忽略`max_pixels`设置。适合用于识别图像中的精细文本、微小物体或丰富细节。
     
@@ -2934,6 +3361,12 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     -   对成本敏感（希望减少视觉 Token 消耗）：使用`max_pixels`的默认值或设置为更小的值。
     -   需要关注一定的细节，可接受较低的处理速度：适当提高`max_pixels`的值
 
+<a id="sec-tabs-25"></a>
+
+<a id="openai-兼容-2"></a>
+
+<a id="openai-兼容-2-h4"></a>
+
 #### OpenAI 兼容
 
 `vl_high_resolution_images`非 OpenAI 标准参数，在不同语言的SDK中传递方式存在差异：
@@ -2941,9 +3374,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   **Python SDK:**必须通过 `extra_body` 字典传递
 -   **Node.js SDK:**可作为顶层参数直接传递
 
+<a id="fig-code-group-10"></a>
+
+<a id="fig-code-group-10-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-10-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -2973,9 +3412,13 @@ print(f"模型输出结果: {completion.choices[0].message.content}")
 print(f"输入总Tokens: {completion.usage.prompt_tokens}")
 ```
 
+<a id="fig-code-group-10-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-10-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI(
@@ -3005,9 +3448,13 @@ console.log("模型输出结果：",response.choices[0].message.content);
 console.log("输入总Tokens",response.usage.prompt_tokens);
 ```
 
+<a id="fig-code-group-10-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-10-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -3039,11 +3486,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-9"></a>
+
+<a id="dashscope-9-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-11"></a>
+
+<a id="fig-code-group-11-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-11-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -3079,9 +3536,13 @@ print("模型输出", response.output_text)
 print("输入总Tokens：", response.usage.input_tokens)
 ```
 
+<a id="fig-code-group-11-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-11-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -3135,9 +3596,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-11-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-11-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -3166,14 +3631,32 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="更多用法"></a>
+
+<a id="db2fd7cf70nq5"></a>
+
 ### 更多用法
 
--   [多轮对话](https://help.aliyun.com/zh/model-studio/multi-round-conversation#36eaa79f55dz7)
--   [流式输出](https://help.aliyun.com/zh/model-studio/stream#e98db795e87q9)
+-   [多轮对话](multi-round-conversation.md#36eaa79f55dz7)
+-   [流式输出](stream.md#e98db795e87q9)
+
+<a id="使用限制"></a>
+
+<a id="792af192e91mr"></a>
 
 ## 使用限制
 
+<a id="输入文件限制"></a>
+
+<a id="8211ccbe85avh"></a>
+
 ### 输入文件限制
+
+<a id="sec-tabs-26"></a>
+
+<a id="图像限制"></a>
+
+<a id="图像限制-h4"></a>
 
 #### 图像限制
 
@@ -3182,7 +3665,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
         
     -   宽高比：原图及缩放后的图像，长边与短边的比值不得超过 `200:1`。
         
-        > 图像缩放逻辑请参见 [计算图像的Token](raw/model-user-guide/model-experience/text-generation-model/vision.md) 中 `smart_resize` 函数。
+        > 图像缩放逻辑请参见 [计算图像的Token](vision.md) 中 `smart_resize` 函数。
         
     -   像素上限：
         
@@ -3191,47 +3674,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   **支持的图像格式**
     -   分辨率在4K `(3840x2160)`以下，支持的图像格式如下：
         
-        **图像格式**
-        
-        **常见扩展名**
-        
-        **MIME Type**
-        
-        BMP
-        
-        .bmp
-        
-        image/bmp
-        
-        JPEG
-        
-        .jpe, .jpeg, .jpg
-        
-        image/jpeg
-        
-        PNG
-        
-        .png
-        
-        image/png
-        
-        TIFF
-        
-        .tif, .tiff
-        
-        image/tiff
-        
-        WEBP
-        
-        .webp
-        
-        image/webp
-        
-        HEIC
-        
-        .heic
-        
-        image/heic
+        | 图像格式 | 常见扩展名 | MIME Type |
+        | --- | --- | --- |
+        | BMP | .bmp | image/bmp |
+        | JPEG | .jpe, .jpeg, .jpg | image/jpeg |
+        | PNG | .png | image/png |
+        | TIFF | .tif, .tiff | image/tiff |
+        | WEBP | .webp | image/webp |
+        | HEIC | .heic | image/heic |
         
     -   分辨率处于`4K(3840x2160)`到`8K(7680x4320)`范围，仅支持 JPEG、JPG 、PNG 格式
         
@@ -3244,7 +3694,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     
     上述限制取决于所选模型，不支持通过购买高级套餐或升级模型版本提升。
     
-    > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](raw/model-user-guide/model-experience/text-generation-model/vision.md) 。
+    > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](vision.md) 。
     
 -   **图片数量限制：**多图输入时根据传入方式不同，支持的图片数量上限有所区别：
     
@@ -3255,10 +3705,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     -   以 Base64 编码传入时：最多 250 张
         
     
-    Qwen-Omni系列模型请参考[全模态](raw/model-user-guide/model-experience/omni-modal/omni.md)。
+    Qwen-Omni系列模型请参考[全模态](../omni-modal/omni.md)。
     
 
 > 同时受模型图文总 Token 上限（即最大输入）的限制，所有图片的总 Token 数必须小于模型的最大输入。
+
+<a id="视频限制"></a>
+
+<a id="视频限制-h4"></a>
 
 #### 视频限制
 
@@ -3284,7 +3738,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
         -   以本地文件路径传入时：视频本身不超过 100MB。
             
         
-        > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](raw/model-user-guide/model-experience/text-generation-model/vision.md) 。
+        > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](vision.md) 。
         
     -   **视频时长：**
         -   `qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列：2秒至2小时；
@@ -3301,34 +3755,46 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     -   **音频理解：**不支持对视频文件的音频进行理解。
         
 
+<a id="文件传入方式"></a>
+
+<a id="531707ed76i06"></a>
+
 ### 文件传入方式
 
--   **公网URL**：提供一个公网可访问的文件地址，支持HTTP或HTTPS协议。为获得最佳稳定性和性能，可将文件[上传至OSS](https://help.aliyun.com/zh/oss/user-guide/console-quick-start)或[上传文件获取临时URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)，获取公网 URL。**百炼**服务无法访问 OSS 内网地址（endpoint 中带 `-internal`，如 `https://<bucket>.oss-cn-hangzhou-internal.aliyuncs.com/image.jpg`），传入内网地址会导致文件下载失败，返回 `InvalidParameter`，message 为 `Failed to download multimodal content`。请改用 OSS 公网域名（如 `https://<bucket>.oss-cn-hangzhou.aliyuncs.com/image.jpg`）或 OSS 临时签名 URL 传入文件。
+-   **公网URL**：提供一个公网可访问的文件地址，支持HTTP或HTTPS协议。为获得最佳稳定性和性能，可将文件[上传至OSS](https://help.aliyun.com/zh/oss/user-guide/console-quick-start)或[上传文件获取临时URL](../../../model-api-reference/more-about-models/get-temporary-file-url.md)，获取公网 URL。**百炼**服务无法访问 OSS 内网地址（endpoint 中带 `-internal`，如 `https://<bucket>.oss-cn-hangzhou-internal.aliyuncs.com/image.jpg`），传入内网地址会导致文件下载失败，返回 `InvalidParameter`，message 为 `Failed to download multimodal content`。请改用 OSS 公网域名（如 `https://<bucket>.oss-cn-hangzhou.aliyuncs.com/image.jpg`）或 OSS 临时签名 URL 传入文件。
     
-    **重要**为确保模型能成功下载文件，提供的公网URL的响应头中**必须**包含 Content-Length（文件大小）和 Content-Type（媒体类型，如 image/jpeg）。任一字段缺失或者错误将会导致文件下载失败。
+    > **重要**
+    >
+    > 为确保模型能成功下载文件，提供的公网URL的响应头中**必须**包含 Content-Length（文件大小）和 Content-Type（媒体类型，如 image/jpeg）。任一字段缺失或者错误将会导致文件下载失败。
     
 -   **Base64编码传入：**将文件转换为 Base64 编码字符串再传入。
     
 -   **本地文件路径传入（仅限 DashScope SDK）：**传入本地文件的路径。
     
 
-> 关于文件传入方式的建议，请参见 [如何选择文件上传方式？](raw/model-user-guide/model-experience/text-generation-model/vision.md)
+> 关于文件传入方式的建议，请参见 [如何选择文件上传方式？](vision.md)
+
+<a id="应用于生产环境"></a>
+
+<a id="8661ece8d79lj"></a>
 
 ## 应用于生产环境
 
--   **图像/视频预处理：**视觉理解模型对输入的文件有大小限制，如需压缩文件请参见[图像或视频压缩方法](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
+-   **图像/视频预处理：**视觉理解模型对输入的文件有大小限制，如需压缩文件请参见[图像或视频压缩方法](vision.md)。
     
 -   **处理文本文件：**视觉理解模型仅支持输入文本、图像和视频，不支持直接处理 TXT、Word（.doc/.docx）、PDF 等文本文件。如需处理文本文件，可使用以下替代方案：
     
-    -   将文本文件转换为图片格式，建议使用图像处理库（如Python的pdf2image）将文件按页转换为多张高质量的图片，再使用[多图像输入](raw/model-user-guide/model-experience/text-generation-model/vision.md)方式传入模型。
-    -   使用[Qwen-Long](raw/model-user-guide/model-experience/text-generation-model/specialized-models/long-context-qwen-long.md)模型，该模型支持上传文档并通过文件ID传入信息并对话。
--   **异步与批量处理：**对于大规模、非实时的图像或视频处理任务，推荐使用[OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)的方式（仅支持部分模型）。此方式以异步方式处理任务，并提供50%的成本折扣。
+    -   将文本文件转换为图片格式，建议使用图像处理库（如Python的pdf2image）将文件按页转换为多张高质量的图片，再使用[多图像输入](vision.md)方式传入模型。
+    -   使用[Qwen-Long](specialized-models/long-context-qwen-long.md)模型，该模型支持上传文档并通过文件ID传入信息并对话。
+-   **异步与批量处理：**对于大规模、非实时的图像或视频处理任务，推荐使用[OpenAI兼容-Batch（文件输入）](../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)的方式（仅支持部分模型）。此方式以异步方式处理任务，并提供50%的成本折扣。
     
 -   **容错与稳定性**
-    -   超时处理：非流式调用的最大超时时间不少于300秒，实际时长因部署区域与选用模型存在差异。为了提升用户体验，超时后响应体中会将已生成的内容返回。如果响应头包含`x-dashscope-partialresponse：true`，表示本次响应触发了超时。您可以使用[前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)功能（支持部分模型），将已生成的内容添加到 messages 数组并再次发出请求，使大模型继续生成内容。详情请参见：[基于不完整输出进行续写](https://help.aliyun.com/zh/model-studio/partial-mode#8cc28acfd7a91)。
+    -   超时处理：非流式调用的最大超时时间不少于300秒，实际时长因部署区域与选用模型存在差异。为了提升用户体验，超时后响应体中会将已生成的内容返回。如果响应头包含`x-dashscope-partialresponse：true`，表示本次响应触发了超时。您可以使用[前缀续写](partial-mode.md)功能（支持部分模型），将已生成的内容添加到 messages 数组并再次发出请求，使大模型继续生成内容。详情请参见：[基于不完整输出进行续写](partial-mode.md#8cc28acfd7a91)。
     -   客户端超时配置：上文的超时是**服务端**限制，SDK 客户端本身也有默认超时时间。处理大尺寸图片（如 4000x4000 像素）时，请求耗时可能超过客户端默认超时时间，从而抛出 `APITimeoutError`。客户端超时与服务端超时是两个独立的限制，需要分别处理。使用 OpenAI Python SDK 时，可通过 `with_options` 延长客户端超时时间：
 
-```
+<a id="code-block-47"></a>
+
+```python
 client = client.with_options(timeout=1800.0)
 response = client.chat.completions.create(
     model="qwen3-vl-plus",
@@ -3338,7 +3804,9 @@ response = client.chat.completions.create(
 
 -   使用流式输出：将 `stream` 参数设置为 `True` 后，内容会逐步返回，避免长时间等待单个完整响应而触发客户端超时：
 
-```
+<a id="code-block-48"></a>
+
+```python
 stream = client.chat.completions.create(
     model="qwen3-vl-plus",
     messages=[...],
@@ -3350,6 +3818,10 @@ for chunk in stream:
 
 -   重试机制：设计合理的API调用重试逻辑（如指数退避），以应对网络波动或服务瞬时不可用的情况。
 
+<a id="计费与限流"></a>
+
+<a id="dabab9c6413c9"></a>
+
 ## 计费与限流
 
 -   **计费 ：**总费用根据输入和输出的总 Token 数计算；输入和输出价格可参见百炼控制台。
@@ -3358,13 +3830,21 @@ for chunk in stream:
         
     -   **计算图像与视频的Token：**可通过以下代码计算图像或视频的 Token 消耗。估算结果仅供参考，实际用量以API响应为准。
         
+        <a id="accordion-计算图像与视频的token"></a>
+        
         计算图像与视频的Token
+        
+        <a id="sec-tabs-27"></a>
+        
+        <a id="图像-2"></a>
+        
+        <a id="图像-2-h4"></a>
         
         #### 图像
         
         计算公式：`图像 Token = h_bar * w_bar / token_pixels + 2`
         
-        -   `h_bar、w_bar`：缩放后的图像长宽，模型在处理图像前会进行预处理，会将图像缩小至特定像素上限内，像素上限与`max_pixels`和`vl_high_resolution_images`参数的取值有关，相关章节：[处理高分辨率图像](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
+        -   `h_bar、w_bar`：缩放后的图像长宽，模型在处理图像前会进行预处理，会将图像缩小至特定像素上限内，像素上限与`max_pixels`和`vl_high_resolution_images`参数的取值有关，相关章节：[处理高分辨率图像](vision.md)。
             
         -   `token_pixels`：每视觉`Token`对应的像素值，不同模型情况不同：
             
@@ -3373,9 +3853,11 @@ for chunk in stream:
         
         以下代码演示了模型内部对图像的大致缩放逻辑，可用于估算一张图像的Token，实际计费请以API响应为准。
         
-        以下代码以 `qwen4-max` 为例估算图像 Token。`detail`、像素限制及参数优先级请参见 [OpenAI Chat Completions](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)、[DashScope](raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)。
+        以下代码以 `qwen4-max` 为例估算图像 Token。`detail`、像素限制及参数优先级请参见 [OpenAI Chat Completions](../../../model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)、[DashScope](../../../model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)。
         
-        ```
+        <a id="code-block-49"></a>
+        
+        ```python
         import math
         from PIL import Image  # pip install Pillow
         
@@ -3422,6 +3904,10 @@ for chunk in stream:
             print(f"图像的 Token 数：{token}")
         ```
         
+        <a id="视频"></a>
+        
+        <a id="视频-h4"></a>
+        
         #### 视频
         
         -   **视频文件：**
@@ -3431,7 +3917,9 @@ for chunk in stream:
         
         以下视频 Token 估算示例使用 Qwen3-VL-Plus 的参数配置。
         
-        ```
+        <a id="code-block-50"></a>
+        
+        ```python
         # 使用前安装：pip install opencv-python
         import math
         import os
@@ -3592,7 +4080,9 @@ for chunk in stream:
         
         以下视频 Token 估算示例使用 Qwen3-VL-Plus 的参数配置。
         
-        ```
+        <a id="code-block-51"></a>
+        
+        ```python
         # 使用前安装：pip install Pillow
         import math
         import os
@@ -3737,70 +4227,44 @@ for chunk in stream:
         
 -   **查看账单：**您可以在阿里云控制台的[费用与成本](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页面查看账单或进行充值。
     
--   **限流：**视觉理解模型的限流条件参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+-   **限流：**视觉理解模型的限流条件参见[限流](../../get-started-with-models/rate-limit.md)。
     
 -   **免费额度（仅北京地域）（仅新加坡地域）**：从开通百炼或模型申请通过之日起计算有效期，有效期 90 天内，视觉理解模型提供 100 万 Token 的免费额度。
     
 
+<a id="api参考"></a>
+
+<a id="bd096d877f19f"></a>
+
 ## API参考
 
-关于视觉理解模型的输入输出参数，请参见[文本生成](raw/model-api-reference/qwen-api-reference.md)。
+关于视觉理解模型的输入输出参数，请参见[文本生成](../../../model-api-reference/qwen-api-reference.md)。
+
+<a id="常见问题"></a>
+
+<a id="95d7e9d177vuh"></a>
 
 ## 常见问题
+
+<a id="accordion-如何选择文件上传方式"></a>
 
 如何选择文件上传方式？
 
 推荐综合考虑SDK类型、文件大小以及网络稳定性来选择最合适的上传方式。
 
-**文件类型**
-
-**文件规格**
-
-**DashScope SDK（Python、Java）**
-
-**OpenAI 兼容 / DashScope HTTP**
-
-图像
-
-不超过 10MB
-
-传入本地路径
-
-公网 URL 或 Base64 编码，遵守上述大小限制。公网 URL 可使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)。
-
-超过 10MB
-
-使用公网 URL
-
-公网 URL 或 Base64 编码，遵守上述大小限制。公网 URL 可使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)。
-
-视频
-
-大于 100 MB
-
-仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
-
-仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
-
-大于 7MB 小于 100 MB
-
-传入本地路径
-
-仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
-
-小于 7MB
-
-传入本地路径
-
-Base64 编码
+<table><thead><tr><th><p><strong>文件类型</strong></p></th><th><p><strong>文件规格</strong></p></th><th><p><strong>DashScope SDK（Python、Java）</strong></p></th><th><p><strong>OpenAI 兼容 / DashScope HTTP</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>图像</p></td><td><p>不超过 10MB</p></td><td><p>传入本地路径</p></td><td><p>公网 URL 或 Base64 编码，遵守上述大小限制。公网 URL 可使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a>。</p></td></tr><tr><td><p>超过 10MB</p></td><td><p>使用公网 URL</p></td><td><p>公网 URL 或 Base64 编码，遵守上述大小限制。公网 URL 可使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a>。</p></td></tr><tr><td rowspan="3"><p>视频</p></td><td><p>大于 100 MB</p></td><td><p>仅支持公网 URL，建议使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a></p></td><td><p>仅支持公网 URL，建议使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a></p></td></tr><tr><td><p>大于 7MB 小于 100 MB</p></td><td><p>传入本地路径</p></td><td><p>仅支持公网 URL，建议使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a></p></td></tr><tr><td><p>小于 7MB</p></td><td><p>传入本地路径</p></td><td><p>Base64 编码</p></td></tr></tbody></table>
 
 > Base64 编码会增大数据体积，请遵守上述单项编码字符串和请求体整体大小限制。
 
 > 使用 Base64 或本地路径可避免服务端下载超时，提升稳定性。
 
+<a id="accordion-如何将图像或视频压缩到满足要求的大小"></a>
+
 如何将图像或视频压缩到满足要求的大小？
 
 视觉理解模型对输入的文件有大小限制，可通过以下方法压缩。
+
+<a id="accordion-图像压缩方法"></a>
 
 图像压缩方法
 
@@ -3808,7 +4272,9 @@ Base64 编码
 -   本地软件：使用 Photoshop 等软件，在导出时调整质量。
 -   代码实现：
 
-```
+<a id="code-block-52"></a>
+
+```python
 # pip install pillow
 
 from PIL import Image
@@ -3839,13 +4305,17 @@ def batch_compress(input_dir, output_dir, quality=85):
 batch_compress("/xxx/input_dir", "/xxx/output_dir")
 ```
 
+<a id="accordion-视频压缩方法"></a>
+
 视频压缩方法
 
 -   在线工具：使用 [FreeConvert](https://www.freeconvert.com/) 等在线工具进行压缩。
 -   本地软件：使用 [HandBrake](https://handbrake.fr/) 等软件。
 -   代码实现：使用FFmpeg工具，更多用法请参见[FFmpeg官网](https://ffmpeg.org/download.html)。
 
-```
+<a id="code-block-53"></a>
+
+```bash
 # 基础转换命令
 # -i，作用：输入文件路径，常用值示例：input.mp4
 # -vcodec，作用 视频编码器 ，一般取值有libx264（通用推荐）、libx265（压缩率更高）、
@@ -3857,6 +4327,8 @@ batch_compress("/xxx/input_dir", "/xxx/output_dir")
 ffmpeg -i input.mp4 -vcodec libx264 -crf 28 -preset slow output.mp4
 ```
 
+<a id="accordion-模型输出物体定位的结果后-如何将检测框绘制到原图上"></a>
+
 模型输出物体定位的结果后，如何将检测框绘制到原图上？
 
 视觉理解模型输出物体定位效果后，可参照以下代码将检测框及其标签信息绘制到原图上。
@@ -3864,6 +4336,10 @@ ffmpeg -i input.mp4 -vcodec libx264 -crf 28 -preset slow output.mp4
 -   Qwen2.5-VL：返回的坐标相对于缩放后的图像左上角的绝对值，单位为像素。可参见[qwen2\_5\_vl\_2d.py](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251031/xldjey/qwen2_5-vl-2d.py)代码绘制检测框。
 -   Qwen3-VL、Qwen3.5、Qwen3.6、Qwen3.7、Qwen3.8系列（如 qwen3.5-plus、qwen3.6-plus、qwen3.7-plus 等）：返回的坐标为相对坐标，坐标值会归一化到`[0, 999]`。可参见[qwen3\_vl\_2d.py](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251031/eamyrc/qwen3-vl-2d.py)（二维定位）或[qwen3\_vl\_3d.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251031/uukdlq/qwen3_vl_3d.zip)（三维定位）中的代码绘制检测框。
 
+<a id="错误码"></a>
+
+<a id="efc117f59a2gm"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。

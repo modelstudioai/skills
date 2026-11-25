@@ -2,9 +2,17 @@
 
 生成选题视角。
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,145 +31,44 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:GenerateViewPoint | list | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求参数"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:GenerateViewPoint
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| AgentKey | string | 是 | 业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey) | c160c841c8e54295bf2f441432785944\_p\_efm |
+| ReferenceData | object | 否 | 引用的上下文数据 |  |
+| MiniDoc | array | 否 | 传入的文章片段。 |  |
+|  | string | 否 | 文章片段 | 文章片段 |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-AgentKey
-
-string
-
-是
-
-业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
-
-c160c841c8e54295bf2f441432785944\_p\_efm
-
-ReferenceData
-
-object
-
-否
-
-引用的上下文数据
-
-MiniDoc
-
-array
-
-否
-
-传入的文章片段。
-
-string
-
-否
-
-文章片段
-
-文章片段
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PlainResult |  |
+| Code | string | 状态码 | 200 |
+| Data | array<object> | 业务数据 |  |
+|  | object | 生成的视角 |  |
+| Point | string | 生成的视角 | 视角 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | successful |
+| RequestId | string | 请求唯一标识 | 94512A33-8EC1-5452-A793-5C91F18ED2F0 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-**示例值**
-
-object
-
-PlainResult
-
-Code
-
-string
-
-状态码
-
-200
-
-Data
-
-array<object>
-
-业务数据
-
-object
-
-生成的视角
-
-Point
-
-string
-
-生成的视角
-
-视角
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-successful
-
-RequestId
-
-string
-
-请求唯一标识
-
-94512A33-8EC1-5452-A793-5C91F18ED2F0
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -169,7 +76,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "Code": "200",
   "Data": [
@@ -184,9 +93,17 @@ true
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

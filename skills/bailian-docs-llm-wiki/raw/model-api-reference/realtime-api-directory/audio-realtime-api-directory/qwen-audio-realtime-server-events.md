@@ -2,11 +2,17 @@
 
 Qwen-Audio-Realtime API 的服务端事件参考。所有服务端事件均包含 event\_id （服务端自动生成）和 type （事件类型）公共字段。
 
-**用户指南**：[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)。如需了解事件交互时序，请参见[WebSocket 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)。
+**用户指南**：[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)。如需了解事件交互时序，请参见[WebSocket 接入](audio-realtime-websocket-access.md)。
 
-**说明**本页为 Qwen-Audio-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)、[WebRTC 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)或[AOQ 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)。
+> **说明**
+>
+> 本页为 Qwen-Audio-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](audio-realtime-websocket-access.md)、[WebRTC 接入](audio-realtime-webrtc-access.md)或[AOQ 接入](audio-realtime-aoq-access.md)。
 
-WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-realtime-service-fbe978d80b5ee150.md)、[iOS SDK](raw/_short/ios-sdk-for-qwen-audio-realtime-service-11c3579f6cded913.md)和 [HarmonyOS SDK](raw/_short/harmonyos-sdk-for-qwen-audio-realtime-service-c258297df757a167.md)。型号与协议选择参见[概述](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
+WebSocket SDK 用法参见 [Android SDK](../../../_short/android-sdk-for-qwen-audio-realtime-service-fbe978d80b5ee150.md)、[iOS SDK](../../../_short/ios-sdk-for-qwen-audio-realtime-service-11c3579f6cded913.md)和 [HarmonyOS SDK](../../../_short/harmonyos-sdk-for-qwen-audio-realtime-service-c258297df757a167.md)。型号与协议选择参见[概述](voice-conversation-api-references.md)。
+
+<a id="error"></a>
+
+<a id="fs66a1b1c1d2f"></a>
 
 ## error
 
@@ -23,6 +29,8 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 `error`object
 
 错误的详细信息。
+
+<a id="accordion-属性"></a>
 
 属性
 
@@ -42,7 +50,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 与错误相关的参数。
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "error",
@@ -54,6 +64,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     }
 }
 ```
+
+<a id="session-created"></a>
+
+<a id="fs66b1c1d1e2g"></a>
 
 ## session.created
 
@@ -70,6 +84,8 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 `session`object
 
 会话的配置信息。
+
+<a id="accordion-属性-2"></a>
 
 属性
 
@@ -93,6 +109,8 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 语音转录的配置。
 
+<a id="accordion-属性-3"></a>
+
 属性
 
 `model`string
@@ -107,7 +125,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 会话唯一标识符。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "event_id": "event_KiKZC2zrhNsKFPZ5cTpyA",
     "type": "session.created",
@@ -129,6 +149,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 }
 ```
 
+<a id="session-updated"></a>
+
+<a id="fs66b2c2d2e3g"></a>
+
 ## session.updated
 
 **说明**：收到 `session.update` 请求后，若处理成功，则返回此事件，携带更新后的完整会话配置；若出错，则返回 `error` 事件。
@@ -145,7 +169,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 更新后的完整会话配置信息。结构与 `session.created` 中的 session 对象一致。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "event_id": "event_FMG6kiHbILCGiqXFPA98e",
     "type": "session.updated",
@@ -167,6 +193,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 }
 ```
 
+<a id="input-audio-buffer-speech-started"></a>
+
+<a id="fs66c1d1e1f2h"></a>
+
 ## input\_audio\_buffer.speech\_started
 
 **说明**：VAD 检测到语音开始（server\_vad / smart\_turn / smart\_turn\_v2 模式）。
@@ -187,7 +217,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 该段语音最终提交时将创建的 item 的 ID。
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.speech_started",
@@ -195,6 +227,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     "item_id": "item_xxx"
 }
 ```
+
+<a id="input-audio-buffer-speech-stopped"></a>
+
+<a id="fs66c2d2e2f3h"></a>
 
 ## input\_audio\_buffer.speech\_stopped
 
@@ -220,7 +256,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 仅 smart\_turn / smart\_turn\_v2 模式返回此字段。取值为 `turn_invalid` 时表示当前 turn 被判定为无效轮（无语义内容），不会触发推理。有效轮次时不返回此字段。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.speech_stopped",
@@ -229,6 +267,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     "reason": "turn_invalid"
 }
 ```
+
+<a id="input-audio-buffer-committed"></a>
+
+<a id="fs66c3d3e3f4h"></a>
 
 ## input\_audio\_buffer.committed
 
@@ -250,7 +292,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 创建的用户消息项的 ID。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.committed",
@@ -258,6 +302,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     "item_id": "item_xxx"
 }
 ```
+
+<a id="input-audio-buffer-cleared"></a>
+
+<a id="fs66c4d4e4f5h"></a>
 
 ## input\_audio\_buffer.cleared
 
@@ -271,12 +319,18 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 事件类型，固定为 `input_audio_buffer.cleared`。
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.cleared"
 }
 ```
+
+<a id="conversation-item-created"></a>
+
+<a id="fs66d1e1f1g2i"></a>
 
 ## conversation.item.created
 
@@ -297,6 +351,8 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 `item`object
 
 创建的对话项。
+
+<a id="accordion-属性-4"></a>
 
 属性
 
@@ -324,7 +380,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 消息内容列表。仅 `message` 类型包含。
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.created",
@@ -339,6 +397,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     }
 }
 ```
+
+<a id="conversation-item-deleted"></a>
+
+<a id="fs66d2e2f2g3i"></a>
 
 ## conversation.item.deleted
 
@@ -356,13 +418,19 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 已删除的对话项 ID。
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.deleted",
     "item_id": "item_xxx"
 }
 ```
+
+<a id="conversation-item-retrieved"></a>
+
+<a id="fs66d3e3f3g4i"></a>
 
 ## conversation.item.retrieved
 
@@ -379,6 +447,8 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 `item`object
 
 查询到的对话项完整信息。
+
+<a id="accordion-属性-5"></a>
 
 属性
 
@@ -402,7 +472,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 消息内容列表。音频类型 content 仅包含转写文本，不返回原始音频数据。
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.retrieved",
@@ -420,6 +492,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     }
 }
 ```
+
+<a id="conversation-item-input-audio-transcription-delta"></a>
+
+<a id="fs66e1f1g1h2j"></a>
 
 ## conversation.item.input\_audio\_transcription.delta
 
@@ -449,7 +525,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 尚未确定的暂存文本。
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.input_audio_transcription.delta",
@@ -459,6 +537,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     "stash": "世界"
 }
 ```
+
+<a id="conversation-item-input-audio-transcription-completed"></a>
+
+<a id="fs66e2f2g2h3j"></a>
 
 ## conversation.item.input\_audio\_transcription.completed
 
@@ -484,7 +566,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 完整的转写文本。
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.input_audio_transcription.completed",
@@ -493,6 +577,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     "transcript": "你好世界"
 }
 ```
+
+<a id="conversation-item-input-audio-transcription-failed"></a>
+
+<a id="fs66e3f3g3h4j"></a>
 
 ## conversation.item.input\_audio\_transcription.failed
 
@@ -518,6 +606,8 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 错误的详细信息。
 
+<a id="accordion-属性-6"></a>
+
 属性
 
 `type`string
@@ -532,7 +622,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 错误信息。
 
-```
+<a id="code-block-13"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.input_audio_transcription.failed",
@@ -545,6 +637,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     }
 }
 ```
+
+<a id="conversation-item-ambient-audio-transcription-delta"></a>
+
+<a id="fs66e4f4g4h5j"></a>
 
 ## conversation.item.ambient\_audio\_transcription.delta
 
@@ -574,7 +670,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 尚未确定的暂存文本。
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.ambient_audio_transcription.delta",
@@ -584,6 +682,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     "stash": ""
 }
 ```
+
+<a id="conversation-item-ambient-audio-transcription-completed"></a>
+
+<a id="fs66e5f5g5h6j"></a>
 
 ## conversation.item.ambient\_audio\_transcription.completed
 
@@ -609,7 +711,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 完整的转写文本。
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.ambient_audio_transcription.completed",
@@ -618,6 +722,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     "transcript": "嗯",
 }
 ```
+
+<a id="response-created"></a>
+
+<a id="fs66f1g1h1i2k"></a>
 
 ## response.created
 
@@ -634,6 +742,8 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 `response`object
 
 响应对象。
+
+<a id="accordion-属性-7"></a>
 
 属性
 
@@ -661,7 +771,9 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 响应的输出项列表，初始为空数组。
 
-```
+<a id="code-block-16"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.created",
@@ -675,6 +787,10 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
     }
 }
 ```
+
+<a id="response-output-item-added"></a>
+
+<a id="fs66f2g2h2i3k"></a>
 
 ## response.output\_item.added
 
@@ -699,6 +815,8 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 `item`object
 
 新增的输出项。
+
+<a id="accordion-属性-8"></a>
 
 属性
 
@@ -726,9 +844,17 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 消息内容列表。仅 `message` 类型包含。
 
+<a id="sec-tabs"></a>
+
+<a id="普通消息事件"></a>
+
+<a id="普通消息事件-h4"></a>
+
 #### 普通消息事件
 
-```
+<a id="code-block-17"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.output_item.added",
@@ -745,13 +871,19 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 }
 ```
 
+<a id="function-call-item-片段"></a>
+
+<a id="function-call-item-片段-h4"></a>
+
 #### Function Call item 片段
 
 Function Call 输出项示例：
 
 当输出项为函数调用时，`response.output_item.added` / `conversation.item.created` / `response.output_item.done` 中的 `item` 结构如下：
 
-```
+<a id="code-block-18"></a>
+
+```json
 {
     "id": "item_xxx",
     "object": "realtime.item",
@@ -763,7 +895,13 @@ Function Call 输出项示例：
 }
 ```
 
-**说明**一轮响应可包含多个 `function_call`，也可能同时包含普通 `message` 输出和 `function_call` 输出。Function Call 部分不会送入 TTS 播报。
+> **说明**
+>
+> 一轮响应可包含多个 `function_call`，也可能同时包含普通 `message` 输出和 `function_call` 输出。Function Call 部分不会送入 TTS 播报。
+
+<a id="response-content-part-added"></a>
+
+<a id="fs66f3g3h3i4k"></a>
 
 ## response.content\_part.added
 
@@ -797,6 +935,8 @@ Function Call 输出项示例：
 
 新增的内容部分。
 
+<a id="accordion-属性-9"></a>
+
 属性
 
 `type`string
@@ -807,7 +947,9 @@ Function Call 输出项示例：
 
 文本内容，初始为空字符串。
 
-```
+<a id="code-block-19"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.content_part.added",
@@ -821,6 +963,10 @@ Function Call 输出项示例：
     }
 }
 ```
+
+<a id="response-text-delta"></a>
+
+<a id="fs66g1h1i1j2l"></a>
 
 ## response.text.delta
 
@@ -854,7 +1000,9 @@ Function Call 输出项示例：
 
 文本增量片段。
 
-```
+<a id="code-block-20"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.text.delta",
@@ -865,6 +1013,10 @@ Function Call 输出项示例：
     "delta": "你好"
 }
 ```
+
+<a id="response-text-done"></a>
+
+<a id="fs66sp02a1b2d"></a>
 
 ## response.text.done
 
@@ -898,7 +1050,9 @@ Function Call 输出项示例：
 
 完整的文本输出。
 
-```
+<a id="code-block-21"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.text.done",
@@ -909,6 +1063,10 @@ Function Call 输出项示例：
     "text": "你好，有什么可以帮助你的吗？"
 }
 ```
+
+<a id="response-audio-transcript-delta"></a>
+
+<a id="fs66g2h2i2j3l"></a>
 
 ## response.audio\_transcript.delta
 
@@ -942,7 +1100,9 @@ Function Call 输出项示例：
 
 字幕增量片段。
 
-```
+<a id="code-block-22"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.audio_transcript.delta",
@@ -953,6 +1113,10 @@ Function Call 输出项示例：
     "delta": "你好"
 }
 ```
+
+<a id="response-audio-transcript-done"></a>
+
+<a id="fs66sp04a1b2d"></a>
 
 ## response.audio\_transcript.done
 
@@ -986,7 +1150,9 @@ Function Call 输出项示例：
 
 完整的字幕文本。
 
-```
+<a id="code-block-23"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.audio_transcript.done",
@@ -997,6 +1163,10 @@ Function Call 输出项示例：
     "transcript": "你好，有什么可以帮助你的吗？"
 }
 ```
+
+<a id="response-audio-delta"></a>
+
+<a id="fs66g3h3i3j4l"></a>
 
 ## response.audio.delta
 
@@ -1030,7 +1200,9 @@ Function Call 输出项示例：
 
 Base64 编码的 PCM 音频数据片段。
 
-```
+<a id="code-block-24"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.audio.delta",
@@ -1041,6 +1213,10 @@ Base64 编码的 PCM 音频数据片段。
     "delta": "<base64 编码的音频数据>"
 }
 ```
+
+<a id="response-audio-done"></a>
+
+<a id="fs66sp06a1b2d"></a>
 
 ## response.audio.done
 
@@ -1070,7 +1246,9 @@ Base64 编码的 PCM 音频数据片段。
 
 内容部分在输出项中的索引。
 
-```
+<a id="code-block-25"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.audio.done",
@@ -1080,6 +1258,10 @@ Base64 编码的 PCM 音频数据片段。
     "content_index": 0
 }
 ```
+
+<a id="response-content-part-done"></a>
+
+<a id="fs66h1i1j1k2m"></a>
 
 ## response.content\_part.done
 
@@ -1113,6 +1295,8 @@ Base64 编码的 PCM 音频数据片段。
 
 完成的内容部分。
 
+<a id="accordion-属性-10"></a>
+
 属性
 
 `type`string
@@ -1123,7 +1307,9 @@ Base64 编码的 PCM 音频数据片段。
 
 文本内容或音频字幕文本。
 
-```
+<a id="code-block-26"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.content_part.done",
@@ -1137,6 +1323,10 @@ Base64 编码的 PCM 音频数据片段。
     }
 }
 ```
+
+<a id="response-output-item-done"></a>
+
+<a id="fs66h2i2j2k3m"></a>
 
 ## response.output\_item.done
 
@@ -1161,6 +1351,8 @@ Base64 编码的 PCM 音频数据片段。
 `item`object
 
 完成的输出项完整信息。
+
+<a id="accordion-属性-11"></a>
 
 属性
 
@@ -1188,7 +1380,9 @@ Base64 编码的 PCM 音频数据片段。
 
 消息内容列表。仅 `message` 类型包含。
 
-```
+<a id="code-block-27"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.output_item.done",
@@ -1209,6 +1403,10 @@ Base64 编码的 PCM 音频数据片段。
     }
 }
 ```
+
+<a id="response-function-call-arguments-delta"></a>
+
+<a id="fs66i1j1k1l2n"></a>
 
 ## response.function\_call\_arguments.delta
 
@@ -1242,7 +1440,9 @@ Base64 编码的 PCM 音频数据片段。
 
 函数调用参数的增量片段（JSON 字符串片段）。
 
-```
+<a id="code-block-28"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.function_call_arguments.delta",
@@ -1253,6 +1453,10 @@ Base64 编码的 PCM 音频数据片段。
     "delta": "{\"city"
 }
 ```
+
+<a id="response-function-call-arguments-done"></a>
+
+<a id="fs66i2j2k2l3n"></a>
 
 ## response.function\_call\_arguments.done
 
@@ -1290,7 +1494,9 @@ Base64 编码的 PCM 音频数据片段。
 
 完整的函数调用参数（JSON 字符串）。
 
-```
+<a id="code-block-29"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.function_call_arguments.done",
@@ -1302,6 +1508,10 @@ Base64 编码的 PCM 音频数据片段。
     "arguments": "{\"city\":\"杭州\"}"
 }
 ```
+
+<a id="response-done"></a>
+
+<a id="fs66j1k1l1m2o"></a>
 
 ## response.done
 
@@ -1318,6 +1528,8 @@ Base64 编码的 PCM 音频数据片段。
 `response`object
 
 完整的响应对象。
+
+<a id="accordion-属性-12"></a>
 
 属性
 
@@ -1340,6 +1552,8 @@ Base64 编码的 PCM 音频数据片段。
 `status_details`object
 
 状态详情，仅在 `cancelled` 或 `failed` 时存在。
+
+<a id="accordion-属性-13"></a>
 
 属性
 
@@ -1367,6 +1581,8 @@ Base64 编码的 PCM 音频数据片段。
 
 本次响应的 Token 消耗信息。仅在 `status` 为 `completed` 时返回。
 
+<a id="accordion-属性-14"></a>
+
 属性
 
 `total_tokens`integer
@@ -1393,11 +1609,15 @@ Base64 编码的 PCM 音频数据片段。
 
 插件使用计量信息。启用联网搜索（`enable_search`）时返回。
 
+<a id="accordion-属性-15"></a>
+
 属性
 
 `search`object
 
 联网搜索计量信息。
+
+<a id="accordion-属性-16"></a>
 
 属性
 
@@ -1409,9 +1629,17 @@ Base64 编码的 PCM 音频数据片段。
 
 搜索策略。
 
+<a id="sec-tabs-2"></a>
+
+<a id="正常完成"></a>
+
+<a id="正常完成-h4"></a>
+
 #### 正常完成
 
-```
+<a id="code-block-30"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.done",
@@ -1453,9 +1681,15 @@ Base64 编码的 PCM 音频数据片段。
 }
 ```
 
+<a id="被打断取消"></a>
+
+<a id="被打断取消-h4"></a>
+
 #### 被打断取消
 
-```
+<a id="code-block-31"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "response.done",
@@ -1469,6 +1703,10 @@ Base64 编码的 PCM 音频数据片段。
     }
 }
 ```
+
+<a id="voiceprint-audio-list-in-progress"></a>
+
+<a id="fs66vp1a1b2d"></a>
 
 ## voiceprint\_audio\_list.in\_progress
 
@@ -1486,13 +1724,19 @@ Base64 编码的 PCM 音频数据片段。
 
 声纹注册任务的唯一标识符。
 
-```
+<a id="code-block-32"></a>
+
+```json
 {
     "event_id": "event_PaEcN7CCrlhE8q4MM2yND",
     "type": "voiceprint_audio_list.in_progress",
     "item_id": "vp_Y12cA986j1KZ9O9YmAXOA"
 }
 ```
+
+<a id="voiceprint-audio-list-completed"></a>
+
+<a id="fs66vp2a1b2d"></a>
 
 ## voiceprint\_audio\_list.completed
 
@@ -1510,13 +1754,19 @@ Base64 编码的 PCM 音频数据片段。
 
 声纹注册任务的唯一标识符。
 
-```
+<a id="code-block-33"></a>
+
+```json
 {
     "event_id": "event_PaEcN7CCrlhE8q4MM2yND",
     "type": "voiceprint_audio_list.completed",
     "item_id": "vp_Y12cA986j1KZ9O9YmAXOA"
 }
 ```
+
+<a id="voiceprint-audio-list-failed"></a>
+
+<a id="fs66vp3a1b2d"></a>
 
 ## voiceprint\_audio\_list.failed
 
@@ -1538,7 +1788,9 @@ Base64 编码的 PCM 音频数据片段。
 
 失败原因描述。
 
-```
+<a id="code-block-34"></a>
+
+```json
 {
     "event_id": "event_PaEcN7CCrlhE8q4MM2yND",
     "type": "voiceprint_audio_list.failed",

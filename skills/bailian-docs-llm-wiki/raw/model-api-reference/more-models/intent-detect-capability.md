@@ -2,62 +2,48 @@
 
 千问的意图理解模型能够在百毫秒级时间内快速、准确地解析用户意图，并选择合适的工具来解决用户的问题。
 
-**重要**阿里云百炼为华北2（北京）、新加坡、中国香港地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡、中国香港地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+>
+> 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
--   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+<a id="支持的模型"></a>
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+<a id="ae5345ebfbj0z"></a>
 
 ## 支持的模型
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th><p><strong>上下文长度</strong></p></th><th><p><strong>最大输入</strong></p></th><th><p><strong>最大输出</strong></p></th><th><p><strong>输入成本</strong></p></th><th><p><strong>输出成本</strong></p></th><th rowspan="2"><p><strong>免费额度</strong></p><p><a href="../../model-user-guide/test-1/new-free-quota.md#977b13081ab56">（注）</a></p></th></tr><tr><th colspan="3"><p><strong>（Token数）</strong></p></th><th colspan="2"><p><strong>（每百万Token）</strong></p></th></tr></thead><tbody><tr><td><p>tongyi-intent-detect-v3</p></td><td><p>8,192</p></td><td><p>8,192</p></td><td><p>1,024</p></td><td><p>0.4元</p></td><td><p>1元</p></td><td><p>100万Token</p><p>有效期：百炼开通后90天内</p></td></tr></tbody></table>
 
-**上下文长度**
+<a id="使用方法"></a>
 
-**最大输入**
-
-**最大输出**
-
-**输入成本**
-
-**输出成本**
-
-**免费额度**
-
-[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-**（Token数）**
-
-**（每百万Token）**
-
-tongyi-intent-detect-v3
-
-8,192
-
-8,192
-
-1,024
-
-0.4元
-
-1元
-
-100万Token
-
-有效期：百炼开通后90天内
+<a id="3bdf07a4fazr8"></a>
 
 ## 使用方法
 
+<a id="前提条件"></a>
+
+<a id="78be117a7bjxg"></a>
+
 ### 前提条件
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+您需要已[获取与配置 API Key](../preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](../preparations/install-sdk.md)。
+
+<a id="同时输出意图与函数调用信息"></a>
+
+<a id="b1da224bc8g6r"></a>
 
 ### 同时输出意图与函数调用信息
 
 为了使意图理解模型可以同时输出意图与函数调用信息，您需要按照以下方式设置System Message：
 
-```
+<a id="code-block"></a>
+
+```text
 You are Qwen, created by Alibaba Cloud. You are a helpful assistant. You may call one or more tools to assist with the user query. The tools you can use are as follows:
 {工具信息}
 Response in INTENT_MODE.
@@ -65,7 +51,9 @@ Response in INTENT_MODE.
 
 您需要在System Message中说明`Response in INTENT_MODE.`并且放入可能使用到的工具信息。工具信息的格式为：
 
-```
+<a id="code-block-2"></a>
+
+```json
 [{
     "name": "工具1的名称",
     "description": "工具1的描述",
@@ -121,7 +109,9 @@ Response in INTENT_MODE.
 
 假设您的业务场景需要使用时间查询与天气查询两个工具，工具信息为：
 
-```
+<a id="code-block-3"></a>
+
+```json
 [
     {
         "name": "get_current_time",
@@ -145,11 +135,21 @@ Response in INTENT_MODE.
 ]
 ```
 
+<a id="请求示例"></a>
+
+<a id="bfc1fbb3fcnea"></a>
+
 #### 请求示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-openai兼容-tab"></a>
 
 OpenAI兼容
 
-```
+<a id="code-code-group-openai兼容"></a>
+
+```python
 import os
 import json
 from openai import OpenAI
@@ -198,9 +198,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-dashscope-tab"></a>
+
 DashScope
 
-```
+<a id="code-code-group-dashscope"></a>
+
+```python
 import os
 import json
 import dashscope
@@ -254,20 +258,32 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-**说明**dashscope CLI 暂不支持 understanding 子命令，请使用 Python SDK：
+> **说明**
+>
+> dashscope CLI 暂不支持 understanding 子命令，请使用 Python SDK：
+>
+> <a id="code-block-4"></a>
+>
+> ```python
+> from dashscope import Understanding
+> Understanding.call(model='opennlu-v1', sentence='今天天气真好', labels='天气，情感')
+> ```
 
-```
-from dashscope import Understanding
-Understanding.call(model='opennlu-v1', sentence='今天天气真好', labels='天气，情感')
-```
+> **重要**
+>
+> SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+>
+> [DashScope SDK Expert](../preparations/dashscope-sdk-expert.md)。
 
-**重要**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+<a id="响应示例"></a>
 
-[DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
+<a id="19dd4c3c9a0a1"></a>
 
 #### 响应示例
 
-```
+<a id="code-block-5"></a>
+
+```text
 <tags>
 [function call, json response]
 </tags><tool_call>
@@ -279,7 +295,9 @@ Understanding.call(model='opennlu-v1', sentence='今天天气真好', labels='�
 
 在得到响应后，您需要使用`parse_text`函数解析出返回的工具与参数信息：
 
-```
+<a id="code-block-6"></a>
+
+```python
 import re
 import json
 
@@ -317,7 +335,9 @@ print(parse_text(response))
 
 得到输出为：
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
     "tags": "[function call, json response]",
     "tool_call": [
@@ -332,17 +352,25 @@ print(parse_text(response))
 }
 ```
 
+<a id="只输出意图信息"></a>
+
+<a id="c737e9d306g7p"></a>
+
 ### 只输出意图信息
 
 为了使意图理解模型只输出意图信息，您需要按照以下方式设置System Message：
 
-```
+<a id="code-block-8"></a>
+
+```text
 You are Qwen, created by Alibaba Cloud. You are a helpful assistant. \nYou should choose one tag from the tag list:\n{意图信息}\njust reply with the chosen tag.
 ```
 
 意图信息的格式为：
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "意图1": "意图1的描述",
     "意图2": "意图2的描述",
@@ -351,11 +379,21 @@ You are Qwen, created by Alibaba Cloud. You are a helpful assistant. \nYou shoul
 }
 ```
 
+<a id="请求示例-2"></a>
+
+<a id="151a183929htr"></a>
+
 #### 请求示例
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-openai兼容-tab"></a>
 
 OpenAI兼容
 
-```
+<a id="code-code-group-2-openai兼容"></a>
+
+```python
 import os
 import json
 from openai import OpenAI
@@ -402,9 +440,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-2-dashscope-tab"></a>
+
 DashScope
 
-```
+<a id="code-code-group-2-dashscope"></a>
+
+```python
 import os
 import json
 import dashscope
@@ -455,19 +497,35 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="响应示例-2"></a>
+
+<a id="91ae1892a9qis"></a>
+
 #### 响应示例
 
-```
+<a id="code-block-10"></a>
+
+```text
 alarm_set
 ```
+
+<a id="提升意图识别的响应速度"></a>
+
+<a id="dc13b1d5d8wgk"></a>
 
 #### 提升意图识别的响应速度
 
 为了提升意图识别的响应速度，您可以将意图的分类种类用一个简单的大写字母进行指代，意图识别响应结果将始终为一个 Token，这可以优化模型调用的响应时间。
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-openai兼容-tab"></a>
+
 OpenAI兼容
 
-```
+<a id="code-code-group-3-openai兼容"></a>
+
+```python
 import os
 import json
 from openai import OpenAI
@@ -513,9 +571,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-3-dashscope-tab"></a>
+
 DashScope
 
-```
+<a id="code-code-group-3-dashscope"></a>
+
+```python
 import os
 import json
 import dashscope
@@ -568,25 +630,43 @@ print(response.choices[0].message.content)
 
 运行代码后可以得到一个 Token 的意图分类结果。
 
-```
+<a id="code-block-11"></a>
+
+```text
 M
 ```
+
+<a id="只输出函数调用信息"></a>
+
+<a id="9ad8433299t2i"></a>
 
 ### 只输出函数调用信息
 
 为了使意图理解模型只输出函数调用信息，您需要按照以下方式设置System Message：
 
-```
+<a id="code-block-12"></a>
+
+```text
 You are Qwen, created by Alibaba Cloud. You are a helpful assistant. You may call one or more tools to assist with the user query. The tools you can use are as follows:\n{工具信息}\nResponse in NORMAL_MODE.
 ```
 
-其中工具信息与[同时输出意图与函数调用信息](https://help.aliyun.com/zh/model-studio/intent-detect-capability#b1da224bc8g6r)中的工具信息格式相同。
+其中工具信息与[同时输出意图与函数调用信息](intent-detect-capability.md#b1da224bc8g6r)中的工具信息格式相同。
+
+<a id="请求示例-3"></a>
+
+<a id="386bb5a8420m7"></a>
 
 #### 请求示例
 
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-openai兼容-tab"></a>
+
 OpenAI兼容
 
-```
+<a id="code-code-group-4-openai兼容"></a>
+
+```python
 import os
 import json
 from openai import OpenAI
@@ -635,9 +715,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-4-dashscope-tab"></a>
+
 DashScope
 
-```
+<a id="code-code-group-4-dashscope"></a>
+
+```python
 import os
 import json
 import dashscope
@@ -691,9 +775,15 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="响应示例-3"></a>
+
+<a id="68fdd12a024ek"></a>
+
 #### 响应示例
 
-```
+<a id="code-block-13"></a>
+
+```text
 <tool_call>
 {"name": "get_current_weather", "arguments": {"location": "杭州市"}}
 </tool_call>
@@ -701,7 +791,9 @@ print(response.choices[0].message.content)
 
 在得到响应后，您需要使用`parse_text`函数解析出返回的工具与参数信息：
 
-```
+<a id="code-block-14"></a>
+
+```python
 import re
 
 def parse_text(text):
@@ -720,21 +812,41 @@ print(parse_text(response))
 
 得到输出为：
 
-```
+<a id="code-block-15"></a>
+
+```json
 {"name": "get_current_weather", "arguments": {"location": "杭州市"}}
 ```
+
+<a id="多轮对话"></a>
+
+<a id="060f9865fcsu7"></a>
 
 ### 多轮对话
 
 如果用户在提问时未提供充足的信息，意图理解模型会进行反问，通过多轮对话采集到必要的参数后，再输出函数调用的信息。
 
+<a id="sec-tabs"></a>
+
+<a id="同时输出意图与函数调用信息-2"></a>
+
+<a id="同时输出意图与函数调用信息-2-h4"></a>
+
 #### 同时输出意图与函数调用信息
+
+<a id="9c7eb415fb0h3"></a>
 
 ##### 请求示例
 
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-openai-兼容-tab"></a>
+
 OpenAI 兼容
 
-```
+<a id="code-code-group-5-openai-兼容"></a>
+
+```python
 import os
 import json
 from openai import OpenAI
@@ -794,9 +906,13 @@ print("第二轮输出：\n")
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-5-dashscope-tab"></a>
+
 DashScope
 
-```
+<a id="code-code-group-5-dashscope"></a>
+
+```python
 import os
 import json
 import dashscope
@@ -866,9 +982,13 @@ print("第二轮输出：\n")
 print(response.choices[0].message.content)
 ```
 
+<a id="b7e4fab876lif"></a>
+
 ##### 响应示例
 
-```
+<a id="code-block-16"></a>
+
+```text
 查询问题：我想查天气
 第一轮输出：
 
@@ -892,13 +1012,25 @@ print(response.choices[0].message.content)
 </content>
 ```
 
+<a id="只输出函数调用信息-2"></a>
+
+<a id="只输出函数调用信息-2-h4"></a>
+
 #### 只输出函数调用信息
+
+<a id="925030c814ijt"></a>
 
 ##### 请求示例
 
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-openai兼容-tab"></a>
+
 OpenAI兼容
 
-```
+<a id="code-code-group-6-openai兼容"></a>
+
+```python
 import os
 import json
 from openai import OpenAI
@@ -956,9 +1088,13 @@ print("第二轮输出：\n")
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-6-dashscope-tab"></a>
+
 DashScope
 
-```
+<a id="code-code-group-6-dashscope"></a>
+
+```python
 import os
 import json
 import dashscope
@@ -1024,9 +1160,13 @@ print("第二轮输出：\n")
 print(response.choices[0].message.content)
 ```
 
+<a id="86d54964b9oah"></a>
+
 ##### 响应示例
 
-```
+<a id="code-block-17"></a>
+
+```text
 查询问题：我想查天气
 第一轮输出：
 
@@ -1040,7 +1180,15 @@ print(response.choices[0].message.content)
 </tool_call>
 ```
 
+<a id="常见问题"></a>
+
+<a id="40b9b15ab75he"></a>
+
 ## 常见问题
+
+<a id="q-最多传入几个工具"></a>
+
+<a id="59775ce0e8b3h"></a>
 
 ### Q：最多传入几个工具？
 

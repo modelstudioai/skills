@@ -2,14 +2,24 @@
 
 本文档说明如何在浏览器端通过 WebRTC + JavaScript 接入百炼 Realtime API，实现与 qwen3.8-omni-flash-realtime 模型的实时音视频通话。
 
-**说明**WebRTC 适合浏览器端、低延迟语音场景，音频通过 UDP 直接传输，内置回声消除和降噪。WebRTC 仅支持服务端 VAD 模式（`server_vad` 或 `semantic_vad`），不支持手动模式。
+> **说明**
+>
+> WebRTC 适合浏览器端、低延迟语音场景，音频通过 UDP 直接传输，内置回声消除和降噪。WebRTC 仅支持服务端 VAD 模式（`server_vad` 或 `semantic_vad`），不支持手动模式。
+
+<a id="前提条件及注意事项"></a>
+
+<a id="bpwrtcomni-s01h2"></a>
 
 ## 前提条件及注意事项
 
-1.  已[配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[设置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+1.  已[配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并将其[设置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 2.  使用支持 WebRTC 的现代浏览器（Chrome、Edge、Firefox、Safari 等）。
 3.  浏览器需要麦克风权限；如需视频通话，还需摄像头权限。
 4.  浏览器无法直接向服务端发起 SDP 交换请求（受 CORS 限制），Demo 中通过终端执行 curl 命令完成连接建立；正式使用时由业务 AppServer 代理完成，无此限制。
+
+<a id="实现-ai-音视频通话"></a>
+
+<a id="bpwrtcomni-s02h2"></a>
 
 ## 实现 AI 音视频通话
 
@@ -19,17 +29,25 @@ WebRTC 音视频通话流程时序图
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5665914871/p1088079.png)
 
+<a id="创建-rtcpeerconnection"></a>
+
+<a id="bpwrtcomni-s02ah2"></a>
+
 ### 创建 RTCPeerConnection
 
 调用浏览器原生 `RTCPeerConnection` 创建连接实例，无需配置 ICE 服务器（服务端会处理 NAT 穿透）。
 
-```
+<a id="code-block"></a>
+
+```javascript
 pc = new RTCPeerConnection({ iceServers: [ ] });
 ```
 
 注册关键回调：
 
-```
+<a id="code-block-2"></a>
+
+```javascript
 // 连接状态监听
 pc.onconnectionstatechange = () => {
   if (!pc) return;
@@ -50,11 +68,17 @@ pc.ontrack = async (e) => {
 };
 ```
 
+<a id="获取本地媒体流"></a>
+
+<a id="bpwrtcomni-s02bh2"></a>
+
 ### 获取本地媒体流
 
 通过一次 `getUserMedia` 调用获取所需的音频（必须）和视频（可选）。是否开启视频由用户勾选"开启视频"复选框决定。
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 const wantVideo = !!sendVideoCheckbox.checked;
 
 const constraints = wantVideo
@@ -72,24 +96,36 @@ const constraints = wantVideo
 localStream = await navigator.mediaDevices.getUserMedia(constraints);
 ```
 
-**说明**音频和视频通过**同一次** `getUserMedia` 调用获取，而非分开请求。视频预览帧率为 30fps（本地流畅预览），发送帧率会通过 Canvas 降至 2fps。
+> **说明**
+>
+> 音频和视频通过**同一次** `getUserMedia` 调用获取，而非分开请求。视频预览帧率为 30fps（本地流畅预览），发送帧率会通过 Canvas 降至 2fps。
+
+<a id="添加媒体轨道到-peerconnection"></a>
+
+<a id="bpwrtcomni-s02ch2"></a>
 
 ### 添加媒体轨道到 PeerConnection
 
 **添加音频轨道：**
-```
+
+<a id="code-block-4"></a>
+
+```javascript
 localStream.getAudioTracks().forEach(t => {
   pc.addTrack(t, localStream);
   gatedAudioTracks.push(t);
 });
 ```
+
 **添加视频轨道（可选，通过 Canvas 降帧至 2fps）：**
 
 开始发送视频前，应先发送音频。如果音频尚未发送，先发送视频帧会触发 `Error append image before append audio.`。
 
 Canvas 尺寸从摄像头实际分辨率动态获取，而非硬编码：
 
-```
+<a id="code-block-5"></a>
+
+```javascript
 const sendFps = 2;
 const settings = localStream.getVideoTracks()[0].getSettings();
 sendCanvas = document.createElement("canvas");
@@ -110,11 +146,14 @@ const pump = () => {
 };
 sendRafId = requestAnimationFrame(pump);
 ```
+
 **媒体门控（关键）：**
 
 添加轨道后立即禁止发送，确保在收到 `session.created` 之前不推送媒体数据：
 
-```
+<a id="code-block-6"></a>
+
+```javascript
 // 1. 禁用所有轨道的 enabled
 gateMedia(false);  // track.enabled = false
 
@@ -127,13 +166,21 @@ await audioSender?.replaceTrack(null);
 await videoSender?.replaceTrack(videoTrack ? null : undefined);
 ```
 
-**说明**等价于其他 SDK 中的 `enableSendMediaStream(false)`，必须在收到 `session.created` 后才恢复发送。
+> **说明**
+>
+> 等价于其他 SDK 中的 `enableSendMediaStream(false)`，必须在收到 `session.created` 后才恢复发送。
+
+<a id="创建-datachannel"></a>
+
+<a id="bpwrtcomni-s02dh2"></a>
 
 ### 创建 DataChannel
 
 创建名为 `oai-events` 的 DataChannel，用于与 AI 服务端交换会话控制事件。
 
-```
+<a id="code-block-7"></a>
+
+```javascript
 const dc = pc.createDataChannel('oai-events');
 
 dc.onopen = () => console.log("DC open");
@@ -150,11 +197,17 @@ pc.ondatachannel = (event) => {
 };
 ```
 
+<a id="生成-offer-sdp"></a>
+
+<a id="bpwrtcomni-s02eh2"></a>
+
 ### 生成 Offer SDP
 
 调用 `createOffer()` 并设置本地描述，等待 ICE 候选收集完成后获取完整的 Offer SDP。
 
-```
+<a id="code-block-8"></a>
+
+```javascript
 pc.onicegatheringstatechange = () => {
   if (!pc) return;
   if (pc.iceGatheringState === "complete" && pc.localDescription?.sdp) {
@@ -168,26 +221,42 @@ const offer = await pc.createOffer();
 await pc.setLocalDescription(offer);
 ```
 
-**说明**必须等待 `iceGatheringState === "complete"` 后再使用 SDP，此时 SDP 中包含所有 ICE 候选信息。
+> **说明**
+>
+> 必须等待 `iceGatheringState === "complete"` 后再使用 SDP，此时 SDP 中包含所有 ICE 候选信息。
+
+<a id="交换-sdp-通过-curl-命令或业务-appserver"></a>
+
+<a id="bpwrtcomni-s02fh2"></a>
 
 ### 交换 SDP（通过 curl 命令或业务 AppServer）
 
 将 Offer SDP 发送到百炼服务端，获取 Answer SDP。Demo 中通过 curl 命令完成：
 
-```
+<a id="code-block-9"></a>
+
+```bash
 curl -X POST 'https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime' \
   -H 'Content-Type: application/sdp' \
   -H 'Authorization: Bearer $DASHSCOPE_API_KEY' \
   --data-binary '<Offer SDP 内容>'
 ```
 
-**说明**生产环境中，此步骤应由业务 AppServer 代理完成，避免前端暴露 API Key。`{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
+> **说明**
+>
+> 生产环境中，此步骤应由业务 AppServer 代理完成，避免前端暴露 API Key。`{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
+
+<a id="设置-answer-sdp-建立连接"></a>
+
+<a id="bpwrtcomni-s02gh2"></a>
 
 ### 设置 Answer SDP 建立连接
 
 将服务端返回的 Answer SDP 设置为远端描述，WebRTC 连接即开始建立。注意 SDP 格式需要规范化处理：
 
-```
+<a id="code-block-10"></a>
+
+```javascript
 function normalizeSdpForSetRemote(sdp) {
   sdp = String(sdp).trim().replace(/\r?\n/g, "\r\n");
   if (!sdp.endsWith("\r\n")) sdp += "\r\n";
@@ -198,7 +267,13 @@ const answerSdp = normalizeSdpForSetRemote(txt);
 await pc.setRemoteDescription({ type: 'answer', sdp: answerSdp });
 ```
 
-**说明**SDP 规范要求行尾为 `\r\n`，`normalizeSdpForSetRemote` 负责处理不同来源的换行符兼容问题。
+> **说明**
+>
+> SDP 规范要求行尾为 `\r\n`，`normalizeSdpForSetRemote` 负责处理不同来源的换行符兼容问题。
+
+<a id="配置-ai-会话-session-update"></a>
+
+<a id="bpwrtcomni-s02hh2"></a>
 
 ### 配置 AI 会话（session.update）
 
@@ -208,7 +283,10 @@ await pc.setRemoteDescription({ type: 'answer', sdp: answerSdp });
 2.  发送 `session.update` 配置会话参数
 
 **解除门控并恢复媒体：**
-```
+
+<a id="code-block-11"></a>
+
+```javascript
 function handleDcMessage(data, channel) {
   let obj;
   try { obj = JSON.parse(data); } catch (err) { return; }
@@ -224,8 +302,12 @@ function handleDcMessage(data, channel) {
   }
 }
 ```
+
 **session.update 消息体：**
-```
+
+<a id="code-block-12"></a>
+
+```javascript
 const update = {
   event_id: `event_${Date.now()}`,
   type: "session.update",
@@ -247,14 +329,23 @@ const update = {
 if (channel && channel.readyState === "open") channel.send(JSON.stringify(update));
 ```
 
-**说明**`turn_detection.type` 可设为 `server_vad`（基于音量检测）或 `semantic_vad`（基于语义检测）。WebRTC 模式不支持手动 VAD。
+> **说明**
+>
+> `turn_detection.type` 可设为 `server_vad`（基于音量检测）或 `semantic_vad`（基于语义检测）。WebRTC 模式不支持手动 VAD。
+
+<a id="实时对话"></a>
+
+<a id="bpwrtcomni-s02ih2"></a>
 
 ### 实时对话
 
 连接建立后，音视频通过 RTP 实时传输。远端 AI 语音通过 `ontrack` 回调接收并播放，同时使用 MediaRecorder 录制以便下载。
 
 **接收远端音频并录制：**
-```
+
+<a id="code-block-13"></a>
+
+```javascript
 pc.ontrack = async (e) => {
   const stream = e.streams[0];
   ensureHiddenAudioEl();
@@ -281,11 +372,14 @@ function startRecordingRemoteStream(remoteStream) {
   mediaRecorder.start();
 }
 ```
+
 **DataChannel 事件统一展示：**
 
 所有通过 DataChannel 收发的事件（包括 `session.created`、`response.audio_transcript.done` 等）统一通过事件面板展示，支持展开查看完整 JSON：
 
-```
+<a id="code-block-14"></a>
+
+```javascript
 function pushEventFromDataChannel(eventObj) {
   const ts = eventObj.timestamp || nowTs();
   events.unshift({ event: eventObj, timestamp: ts });
@@ -293,11 +387,17 @@ function pushEventFromDataChannel(eventObj) {
 }
 ```
 
+<a id="结束会话与资源清理"></a>
+
+<a id="bpwrtcomni-s02jh2"></a>
+
 ### 结束会话与资源清理
 
 结束通话时需依次清理所有资源，顺序很重要：
 
-```
+<a id="code-block-15"></a>
+
+```javascript
 function endSession(silent = false) {
   // 1. 停止 Canvas 降帧循环
   if (sendRafId) cancelAnimationFrame(sendRafId);
@@ -328,7 +428,13 @@ function endSession(silent = false) {
 }
 ```
 
-**说明**结束后可通过"下载远端音频"按钮下载 AI 回复的录音（WebM 格式）。
+> **说明**
+>
+> 结束后可通过"下载远端音频"按钮下载 AI 回复的录音（WebM 格式）。
+
+<a id="注意事项"></a>
+
+<a id="bpwrtcomni-s03h2"></a>
 
 ## 注意事项
 
@@ -339,14 +445,22 @@ function endSession(silent = false) {
 5.  **远端音频自动录制**：通过 MediaRecorder 录制 AI 回复的音频流，会话结束后可下载 WebM 格式文件。
 6.  **WebRTC 仅支持服务端 VAD**：不支持 `manual` 模式，可选 `server_vad`（音量检测）或 `semantic_vad`（语义检测）。
 
+<a id="完整-demo-下载"></a>
+
+<a id="bpwrtcomni-s04h2"></a>
+
 ## 完整 demo 下载
 
 完整示例代码请下载：[webrtc\_demo.html](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260715/ychtmj/webrtc_demo.html)。
+
+<a id="相关文档"></a>
+
+<a id="bpwrtcomni-s05h2"></a>
 
 ## 相关文档
 
 -   [WebRTC API (MDN)](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API)
 -   [RTCPeerConnection (MDN)](https://developer.mozilla.org/zh-CN/docs/Web/API/RTCPeerConnection)
--   qwen3.8-omni-flash-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
--   qwen3.8-omni-flash-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
--   [WebRTC 接入模型/应用](https://help.aliyun.com/zh/model-studio/realtime-api-overview#conn-rtc-title)
+-   qwen3.8-omni-flash-realtime 模型客户端事件：[客户端事件](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
+-   qwen3.8-omni-flash-realtime 模型服务端事件：[服务端事件](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
+-   [WebRTC 接入模型/应用](../../../model-api-reference/realtime-api-directory/realtime-api-overview.md#conn-rtc-title)

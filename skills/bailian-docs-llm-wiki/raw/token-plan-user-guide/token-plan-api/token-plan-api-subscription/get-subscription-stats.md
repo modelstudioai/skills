@@ -2,9 +2,17 @@
 
 查询订阅席位与额度统计，包含订阅周期、各类型席位数量、已分配席位数与剩余 Credits。
 
+<a id="前提条件"></a>
+
+<a id="tpf546fc0f4e"></a>
+
 ## 前提条件
 
 已获取阿里云账号或 RAM 用户的 AccessKey，并已为其授予调用本接口所需的 RAM 权限。建议将 AccessKey 配置为环境变量 `ALIBABA_CLOUD_ACCESS_KEY_ID` 和 `ALIBABA_CLOUD_ACCESS_KEY_SECRET`，避免明文写入代码。
+
+<a id="请求说明"></a>
+
+<a id="tp1bb47deadc"></a>
 
 ## 请求说明
 
@@ -12,13 +20,9 @@
     
 -   **请求地址**
     
-    **地域**
-    
-    **Endpoint**
-    
-    华北2（北京）
-    
-    `GET [https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/subscription/stats](https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/subscription/stats)`
+    | 地域 | Endpoint |
+    | --- | --- |
+    | 华北2（北京） | `GET https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/subscription/stats` |
     
 -   **认证方式**
     
@@ -27,110 +31,48 @@
     推荐使用阿里云 SDK 或 [OpenAPI Explorer](https://api.aliyun.com/api/ModelStudio/2026-02-10/GetSubscriptionStats) 发起调用，可免去自行计算签名。
     
 
+<a id="请求参数"></a>
+
+<a id="tp7448744f47"></a>
+
 ## 请求参数
 
 该接口无请求参数。
 
+<a id="返回参数"></a>
+
+<a id="tp83612d1380"></a>
+
 ## 返回参数
 
-**参数**
+| 参数 | 类型 | 描述 |
+| --- | --- | --- |
+| Success | boolean | 调用接口是否成功：<br>true：成功<br>false：失败 |
+| Code | string | 响应状态码。 |
+| Message | string | 响应信息。 |
+| Data | object | 业务数据 |
+| SubscriptionStartTime | integer | 订阅开始时间,毫秒 |
+| SubscriptionEndTime | integer | 订阅结束时间，毫秒 |
+| Items | Array\[Object\] | 席位信息列表（按 specType 分组） |
+|  | object | 列表数据 |
+| SeatType | string | 席位类型（specType）<br>standard - 标准席位<br>pro - 高级席位<br>max - 尊享席位 |
+| SeatRefreshTime | integer | 本周期刷新时间，毫秒 |
+| TotalSeats | integer | 总席位数 |
+| AssignedSeats | integer | 已分配席位数 |
+| SeatCredits | number | 席位总 Credits 额度 |
+| SeatRemainingCredits | number | 本周期剩余 Credits |
 
-**类型**
+<a id="请求示例"></a>
 
-**描述**
-
-Success
-
-boolean
-
-调用接口是否成功：  
-true：成功  
-false：失败
-
-Code
-
-string
-
-响应状态码。
-
-Message
-
-string
-
-响应信息。
-
-Data
-
-object
-
-业务数据
-
-SubscriptionStartTime
-
-integer
-
-订阅开始时间,毫秒
-
-SubscriptionEndTime
-
-integer
-
-订阅结束时间，毫秒
-
-Items
-
-Array\[Object\]
-
-席位信息列表（按 specType 分组）
-
-object
-
-列表数据
-
-SeatType
-
-string
-
-席位类型（specType）  
-standard - 标准席位  
-pro - 高级席位  
-max - 尊享席位
-
-SeatRefreshTime
-
-integer
-
-本周期刷新时间，毫秒
-
-TotalSeats
-
-integer
-
-总席位数
-
-AssignedSeats
-
-integer
-
-已分配席位数
-
-SeatCredits
-
-number
-
-席位总 Credits 额度
-
-SeatRemainingCredits
-
-number
-
-本周期剩余 Credits
+<a id="tp96c97993b3"></a>
 
 ## 请求示例
 
 本接口使用阿里云 OpenAPI 签名，下例中 `${SIGNATURE}` 需按 `ACS3-HMAC-SHA256` 算法计算得出，`x-acs-date`、`x-acs-signature-nonce` 需替换为实际值。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/subscription/stats" \
     --header "x-acs-action: GetSubscriptionStats" \
     --header "x-acs-version: 2026-02-10" \
@@ -140,9 +82,15 @@ curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/subscription/
     --header "Authorization: ACS3-HMAC-SHA256 Credential=${ALIBABA_CLOUD_ACCESS_KEY_ID},SignedHeaders=host;x-acs-action;x-acs-content-sha256;x-acs-date;x-acs-signature-nonce;x-acs-version,Signature=${SIGNATURE}"
 ```
 
+<a id="返回示例"></a>
+
+<a id="tp1813294040"></a>
+
 ## 返回示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Success": true,
   "Data": {
@@ -162,6 +110,10 @@ curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/subscription/
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="tpfe19ee0400"></a>
+
 ## 错误码
 
-如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](raw/model-api-reference/preparations/error-code.md)。
+如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](../../../model-api-reference/preparations/error-code.md)。

@@ -2,9 +2,19 @@
 
 调用模型时启用内置的 Python 代码解释器，可使模型在沙箱环境里编写与运行 Python 代码，以解决数学计算、数据分析等复杂问题。
 
+<a id="使用方式"></a>
+
+<a id="529c63eb16f2d"></a>
+
 ## 使用方式
 
 代码解释器功能支持三种调用方式，启用参数有所不同：
+
+<a id="sec-tabs"></a>
+
+<a id="openai-兼容-responses-api"></a>
+
+<a id="openai-兼容-responses-api-h4"></a>
 
 #### OpenAI 兼容-Responses API
 
@@ -12,7 +22,9 @@
 
 > 为了获得最佳回复效果，建议同时开启 `code_interpreter`、`web_search` 和 `web_extractor` 工具。
 
-```
+<a id="code-block"></a>
+
+```python
 # 导入依赖与创建客户端...
 response = client.responses.create(
     model="qwen4-max",
@@ -30,11 +42,17 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="openai-兼容-chat-completions-api"></a>
+
+<a id="openai-兼容-chat-completions-api-h4"></a>
+
 #### OpenAI 兼容-Chat Completions API
 
 在 API 请求中传入 `enable_code_interpreter: true` 即可启用代码解释器。
 
-```
+<a id="code-block-2"></a>
+
+```python
 # 导入依赖与创建客户端...
 completion = client.chat.completions.create(
     # 需使用支持代码解释器的模型
@@ -53,11 +71,17 @@ completion = client.chat.completions.create(
 
 > Chat Completions API 无法获取代码解释器运行的代码信息，如需获取请使用 Responses API 或 DashScope 协议。
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
 
 在 API 请求中设置 `enable_code_interpreter` 为`true`即可启用代码解释器。
 
-```
+<a id="code-block-3"></a>
+
+```python
 import os
 import dashscope
 
@@ -97,13 +121,27 @@ response = client.multimodal.chat.create(
 -   Responses API：思考内容通过 output 中 type="reasoning" 的对象返回，代码执行通过 type="code\_interpreter\_call" 返回，回复通过 type="message" 返回。
 -   Chat Completions API / DashScope：思考内容通过 reasoning\_content 字段返回，回复通过 content 字段返回。DashScope 额外支持 tool\_info 字段返回代码内容。
 
+<a id="适用范围"></a>
+
+<a id="980e4e9787miv"></a>
+
 ## 适用范围
 
-`deepseek-v4.1-flash-1017` 支持 Responses API 内置 `code_interpreter`，适用于[模型页面](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/deepseek-v4-1-flash.md)所列的全部六个地域及对应部署范围。
+`deepseek-v4.1-flash-1017` 支持 Responses API 内置 `code_interpreter`，适用于[模型页面](../../../get-started-with-models/model-studio-model-list/model-list-text-generation/deepseek-v4-1-flash.md)所列的全部六个地域及对应部署范围。
 
 `kimi-k3.1-pro`（阿里云百炼部署）支持 Responses API 内置 `code_interpreter`，适用于北京、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港。
 
+<a id="推荐模型"></a>
+
+<a id="ci_rec_title"></a>
+
 ### 推荐模型
+
+<a id="sec-tabs-2"></a>
+
+<a id="responses-api"></a>
+
+<a id="responses-api-h4"></a>
 
 #### Responses API
 
@@ -115,10 +153,18 @@ DeepSeek：deepseek-v4-flash-0731
 
 Qwen3.8开源系列
 
+<a id="chat-completions-api-dashscope"></a>
+
+<a id="chat-completions-api-dashscope-h4"></a>
+
 #### Chat Completions API / DashScope
 
 -   千问Max（思考模式）：Qwen3-Max系列
 -   千问Plus：Qwen3.5-Plus系列
+
+<a id="其他模型"></a>
+
+<a id="ci_other_title"></a>
 
 ### 其他模型
 
@@ -128,17 +174,33 @@ Qwen3.8开源系列
 -   Qwen3.6开源系列（qwen3.6-27b除外）
 -   Qwen3.5开源系列
 
+<a id="快速开始"></a>
+
+<a id="744bf8e1c66p3"></a>
+
 ## 快速开始
 
 以下示例演示代码解释器如何高效解决数学计算问题。
+
+<a id="sec-tabs-3"></a>
+
+<a id="openai-兼容-responses-api-2"></a>
+
+<a id="openai-兼容-responses-api-2-h4"></a>
 
 #### OpenAI 兼容-Responses API
 
 > 为获得最佳回复效果，建议同时开启 `code_interpreter`、`web_search` 和 `web_extractor` 工具。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -175,9 +237,13 @@ print("="*20+"Token 消耗与工具调用"+"="*20)
 print(response.usage)
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -215,9 +281,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -234,9 +304,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="36fa335a3df1z"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-4"></a>
+
+```text
 ====================回复内容====================
 12的3次方等于 **1728**。
 
@@ -246,11 +320,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ResponseUsage(input_tokens=1160, input_tokens_details=InputTokensDetails(cached_tokens=0), output_tokens=195, output_tokens_details=OutputTokensDetails(reasoning_tokens=105), total_tokens=1355, x_tools={'code_interpreter': {'count': 1}})
 ```
 
+<a id="openai-兼容-chat-completions-api-2"></a>
+
+<a id="openai-兼容-chat-completions-api-2-h4"></a>
+
 #### OpenAI 兼容-Chat Completions API
+
+<a id="sec-tabs-4"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-5"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -302,9 +388,13 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
+<a id="ef2b8c7994vlk"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-6"></a>
+
+```text
 ====================思考过程====================
 
 用户问的是123的21次方是多少。这是一个数学计算问题，我需要计算123^21。
@@ -320,9 +410,15 @@ Usage:
 CompletionUsage(completion_tokens=245, prompt_tokens=719, total_tokens=964, completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=None, audio_tokens=None, reasoning_tokens=153, rejected_prediction_tokens=None), prompt_tokens_details=None)
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-7"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -384,9 +480,13 @@ async function main() {
 main();
 ```
 
+<a id="ae812ef175byt"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-8"></a>
+
+```text
 ====================思考过程====================
 
   The user is asking for the value of 123 raised to the power of 21. This is a mathematical calculation that I can perform using Python's code interpreter. I'll use the exponentiation operator ** to calculate this.
@@ -400,9 +500,15 @@ main();
   123的21次方是：77269364466549865653073473388030061522211723
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-9"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -421,9 +527,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="225a70ba95hp3"></a>
+
 #### 响应示例
 
-```
+<a id="code-block-10"></a>
+
+```json
 data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
 
 data: {"choices":[{"finish_reason":null,"logprobs":null,"delta":{"content":null,"reasoning_content":"用户"},"index":0}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
@@ -445,13 +555,25 @@ data: {"choices":[{"finish_reason":"stop","delta":{"content":"","reasoning_conte
 data: [DONE]
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
 
 > 不支持 Java SDK。
 
+<a id="sec-tabs-5"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-11"></a>
+
+```python
 import os
 import dashscope
 
@@ -482,9 +604,13 @@ for chunk in response:
     print(chunk)
 ```
 
+<a id="c6a805a2b249n"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-12"></a>
+
+```json
 {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": "", "reasoning_content": "The"}}]}
 {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": "", "reasoning_content": " user is asking"}}]}
 {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": "", "reasoning_content": " me"}}]}
@@ -517,9 +643,15 @@ for chunk in response:
 {"text": null, "finish_reason": null, "choices": [{"finish_reason": "stop", "message": {"role": "assistant", "content": "", "reasoning_content": ""}}], "tool_info": [{"code_interpreter": {"code": "123**21"}, "type": "code_interpreter"}]}
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-13"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -542,11 +674,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="3b98a47700182"></a>
+
 #### 响应示例
 
 > <...文字内容...>为说明性注释，非实际 API 响应，用于标识处理阶段。
 
-```
+<a id="code-block-14"></a>
+
+```json
 id:1
 event:result
 :HTTP_STATUS/200
@@ -610,13 +746,25 @@ event:result
 data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role":"assistant"},"finish_reason":"stop"}],"tool_info":[{"code_interpreter":{"code":"123**21"},"type":"code_interpreter"}]},"usage":{"total_tokens":997,"output_tokens":263,"input_tokens":734,"output_tokens_details":{"reasoning_tokens":171},"plugins":{"code_interpreter":{"count":1}}},"request_id":"a1959ad1-2637-4672-a21f-4d351371d254"}
 ```
 
+<a id="响应解析"></a>
+
+<a id="95fd5ba526qza"></a>
+
 ## 响应解析
+
+<a id="sec-tabs-6"></a>
+
+<a id="openai-兼容-responses-api-3"></a>
+
+<a id="openai-兼容-responses-api-3-h4"></a>
 
 #### OpenAI 兼容-Responses API
 
 以下示例使用 OpenAI Python SDK，演示如何在流式响应中解析 API 返回的数据。
 
-```
+<a id="code-block-15"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -685,13 +833,19 @@ if final_response and final_response.usage:
         print("代码解释器调用次数: 0")
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
 
 以下 DashScope Python SDK 示例演示：在单次请求中执行两次计算，并返回代码及总调用次数。
 
-> 由于 OpenAI Chat Completions API 在**代码执行**阶段不返回数据，**思考**与**结果整合**阶段之间会出现响应空窗。又因两个阶段均通过 `reasoning_content`返回内容，可统一视为**思考**阶段处理。响应解析示例请参见[快速开始](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-code-interpreter.md)代码。
+> 由于 OpenAI Chat Completions API 在**代码执行**阶段不返回数据，**思考**与**结果整合**阶段之间会出现响应空窗。又因两个阶段均通过 `reasoning_content`返回内容，可统一视为**思考**阶段处理。响应解析示例请参见[快速开始](qwen-code-interpreter.md)代码。
 
-```
+<a id="code-block-16"></a>
+
+```python
 import os
 import dashscope
 
@@ -767,9 +921,13 @@ if chunk.usage is not None:
     print(chunk.usage.plugins)
 ```
 
+<a id="fce98d8460mhn"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-17"></a>
+
+```text
 ====================思考过程====================
 用户要求运行两次代码解释器：
 1. 第一次运行：计算123的23次方的值
@@ -806,9 +964,13 @@ if chunk.usage is not None:
 {'code_interpreter': {'count': 2}}
 ```
 
+<a id="注意事项"></a>
+
+<a id="8c21a1ed873gp"></a>
+
 ## 注意事项
 
--   代码解释器与 [Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md) 互斥，不可同时启用。
+-   代码解释器与 [Function Calling](qwen-function-calling.md) 互斥，不可同时启用。
     
     > 同时启用会报错。
     
@@ -816,6 +978,10 @@ if chunk.usage is not None:
     
 -   大模型在进行精确数值计算（如时间戳转换、日期格式化、复杂数学运算等）时可能产生偏差。建议在涉及精确计算的场景下启用代码解释器，由 Python 代码完成计算，以确保结果准确。
     
+
+<a id="计费说明"></a>
+
+<a id="13a18236ef2en"></a>
 
 ## 计费说明
 

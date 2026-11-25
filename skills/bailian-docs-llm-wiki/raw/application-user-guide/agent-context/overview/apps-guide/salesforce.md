@@ -2,6 +2,8 @@
 
 通过阿里云百炼 Connector 连接 Salesforce on Alibaba Cloud MCP 服务，将 MCP 工具接入千问办公、Qoder 等 Agent 客户端。
 
+<a id="功能介绍"></a>
+
 ## 功能介绍
 
 Salesforce on Alibaba Cloud 现支持通过阿里云百炼 Connector 连接 Salesforce on Alibaba Cloud MCP 服务，将该 MCP 服务提供的 MCP 工具接入千问办公/Qoder 等 Agent 客户端。
@@ -12,33 +14,51 @@ Salesforce on Alibaba Cloud MCP 服务不会预先复制、切片或索引 Sales
 
 整体接入关系如下：
 
+<a id="功能特色"></a>
+
 ## 功能特色
+
+<a id="标准-mcp-接入"></a>
 
 ### 标准 MCP 接入
 
 阿里云百炼 Connector 通过连接 Salesforce on Alibaba Cloud MCP 服务获取 MCP 工具，并向 Agent 客户端提供统一接入方式。Agent 无需逐一对接 Salesforce 接口，即可发现和调用当前业务空间中已连接的工具。
 
+<a id="oauth-2-0-安全授权"></a>
+
 ### OAuth 2.0 安全授权
 
 阿里云百炼 Connector 通过 External Client App 完成访问 Salesforce on Alibaba Cloud 所需的 OAuth 2.0 授权，Salesforce on Alibaba Cloud MCP 服务基于该授权提供 MCP 工具能力。用户在 Salesforce 登录并确认授权，无需向 Agent 客户端提供 Salesforce 用户名和密码。
+
+<a id="权限随授权用户继承"></a>
 
 ### 权限随授权用户继承
 
 MCP 工具调用遵循 Salesforce 原有权限体系。Agent 能够访问哪些对象、字段和记录，由授权用户在 Salesforce 中拥有的权限决定，便于企业沿用现有的数据访问控制策略。
 
+<a id="实时访问业务数据"></a>
+
 ### 实时访问业务数据
 
 Salesforce on Alibaba Cloud MCP 服务在 MCP 工具被调用时实时访问 Salesforce，而不是定期同步数据副本。Agent 可基于组织中的最新客户、联系人、商机等业务信息完成分析和响应。
+
+<a id="身份验证配置可复用"></a>
 
 ### 身份验证配置可复用
 
 同一套身份验证配置可供多个连接复用。管理员只需统一维护 External Client App 的 Client ID 和 Client Secret，不同用户可分别完成 OAuth 授权，形成相互独立的连接。
 
+<a id="支持多环境和多账号"></a>
+
 ### 支持多环境和多账号
 
 生产组织与沙箱组织可分别创建身份验证配置和连接；同一组织也可使用不同权限的账号分别授权。建议在名称中标明环境和账号用途，避免生产与测试连接混用。
 
+<a id="操作说明"></a>
+
 ## 操作说明
+
+<a id="准备工作"></a>
 
 ### 准备工作
 
@@ -50,6 +70,8 @@ Salesforce on Alibaba Cloud MCP 服务在 MCP 工具被调用时实时访问 Sal
 4.  属于该业务空间的 DashScope API Key。
 5.  千问办公/Qoder 等 Agent 客户端。
 
+<a id="第一步-创建-external-client-app"></a>
+
 ### 第一步：创建 External Client App
 
 1.  登录 Salesforce on Alibaba Cloud 组织。
@@ -60,7 +82,9 @@ Salesforce on Alibaba Cloud MCP 服务在 MCP 工具被调用时实时访问 Sal
     
 4.  启用 OAuth 设置，并将 **Callback URL** 配置为：
     
-    ```
+    <a id="code-block"></a>
+    
+    ```text
     https://connector.aliyuncs.com/api/v1/bailian/connector/runtime/oauth/callback
     ```
     
@@ -68,32 +92,16 @@ Salesforce on Alibaba Cloud MCP 服务在 MCP 工具被调用时实时访问 Sal
     
 5.  在 **OAuth Scopes** 中至少选择以下三项：
     
-    OAuth Scope
-    
-    Scope 值
-    
-    用途
-    
-    Manage user data via APIs
-    
-    `api`
-    
-    允许 Connector 通过 API 访问授权用户可访问的 Salesforce 数据
-    
-    Manage user data via Web browsers
-    
-    `web`
-    
-    支持基于 Web 的 OAuth 授权流程
-    
-    Perform requests at any time
-    
-    `refresh_token, offline_access`
-    
-    允许 Connector 在授权有效期内刷新访问令牌
+    | OAuth Scope | Scope 值 | 用途 |
+    | --- | --- | --- |
+    | Manage user data via APIs | `api` | 允许 Connector 通过 API 访问授权用户可访问的 Salesforce 数据 |
+    | Manage user data via Web browsers | `web` | 支持基于 Web 的 OAuth 授权流程 |
+    | Perform requests at any time | `refresh_token, offline_access` | 允许 Connector 在授权有效期内刷新访问令牌 |
     
 6.  保存 External Client App。
     
+
+<a id="第二步-获取-consumer-key-和-consumer-secret"></a>
 
 ### 第二步：获取 Consumer Key 和 Consumer Secret
 
@@ -106,6 +114,8 @@ Salesforce on Alibaba Cloud MCP 服务在 MCP 工具被调用时实时访问 Sal
 7.  复制 **Consumer Key**。Consumer Key 对应阿里云百炼 Connector 中的 **Client ID**。
 8.  复制 **Consumer Secret**。Consumer Secret 对应阿里云百炼 Connector 中的 **Client Secret**。
 
+<a id="第三步-创建阿里云百炼身份验证配置"></a>
+
 ### 第三步：创建阿里云百炼身份验证配置
 
 1.  进入[阿里云百炼 Connector 控制台](https://bailian.console.aliyun.com/cn-beijing/connector/home)。
@@ -116,30 +126,19 @@ Salesforce on Alibaba Cloud MCP 服务在 MCP 工具被调用时实时访问 Sal
     
 4.  单击 **下一步**，填写以下信息：
     
-    字段
-    
-    填写说明
-    
-    配置名称
-    
-    用于区分组织和环境，建议采用“组织简称-环境”格式，例如 `CXG-生产环境`
-    
-    组织域名
-    
-    Salesforce on Alibaba Cloud 组织域名，例如 `xxx.my.salesforce.com`；不要填写 `login.salesforce.com`
-    
-    Client ID
-    
-    External Client App 的 Consumer Key
-    
-    Client Secret
-    
-    External Client App 的 Consumer Secret
+    | 字段 | 填写说明 |
+    | --- | --- |
+    | 配置名称 | 用于区分组织和环境，建议采用“组织简称-环境”格式，例如 `CXG-生产环境` |
+    | 组织域名 | Salesforce on Alibaba Cloud 组织域名，例如 `xxx.my.salesforce.com`；不要填写 `login.salesforce.com` |
+    | Client ID | External Client App 的 Consumer Key |
+    | Client Secret | External Client App 的 Consumer Secret |
     
 5.  单击 **完成**。保存后，该配置将显示在身份验证配置列表中。
     
 
 生产组织和沙箱组织的域名不同。请分别创建身份验证配置，不要使用同一配置连接两个环境。
+
+<a id="第四步-连接-salesforce-on-alibaba-cloud"></a>
 
 ### 第四步：连接 Salesforce on Alibaba Cloud
 
@@ -153,9 +152,13 @@ Salesforce on Alibaba Cloud MCP 服务在 MCP 工具被调用时实时访问 Sal
 
 同一个身份验证配置可以创建多个用户连接。不同连接继承各自授权用户的 Salesforce 权限。
 
+<a id="第五步-连接千问办公-qoder-等-agent-客户端"></a>
+
 ### 第五步：连接千问办公/Qoder 等 Agent 客户端
 
 进入阿里云百炼控制台的 **支持的客户端** 页面，选择需要连接的 Agent 客户端，并按照页面展示的接入说明完成配置。不同 Agent 客户端的配置方式可能不同，请以所选客户端页面中的说明为准。
+
+<a id="第六步-验证连接"></a>
 
 ### 第六步：验证连接
 
@@ -163,7 +166,9 @@ Salesforce on Alibaba Cloud MCP 服务在 MCP 工具被调用时实时访问 Sal
 
 Agent 将根据请求选择阿里云百炼 Connector 从 Salesforce on Alibaba Cloud MCP 服务获取的 MCP 工具。最终可访问的数据和可执行的操作，由当前工具能力以及授权用户的 Salesforce 权限共同决定。
 
+<a id="相关文档"></a>
+
 ## 相关文档
 
--   [Connector 概述](raw/application-user-guide/agent-context/overview.md)
+-   [Connector 概述](../../overview.md)
 -   [Salesforce：Create an External Client App](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_eca.htm)

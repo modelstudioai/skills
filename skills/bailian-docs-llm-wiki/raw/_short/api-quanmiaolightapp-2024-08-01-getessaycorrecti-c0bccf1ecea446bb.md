@@ -2,9 +2,17 @@
 
 获取作文批改结果
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,265 +31,79 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| quanmiaolightapp:GetEssayCorrectionTask | get | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-quanmiaolightapp:GetEssayCorrectionTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 GET /{workspaceId}/quanmiao/lightapp/getEssayCorrectionTask HTTP/1.1
 ```
 
+<a id="路径参数"></a>
+
+<a id="api-doc-request-path-parameters"></a>
+
 ## 路径参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 否 | [百炼业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
 
-**类型**
+<a id="请求参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-workspaceId
-
-string
-
-否
-
-[百炼业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xxx
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| taskId | string | 否 | 任务唯一标识 | a3d1c2ac-f086-4a21-9069-f5631542f5a2 |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-taskId
-
-string
-
-否
-
-任务唯一标识
-
-a3d1c2ac-f086-4a21-9069-f5631542f5a2
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-requestId
-
-string
-
-Id of the request
-
-117F5ABE-CF02-5502-9A3F-E56BC9081A64
-
-code
-
-string
-
-错误码
-
-successful
-
-httpStatusCode
-
-integer
-
-Http 状态码
-
-200
-
-message
-
-string
-
-响应失败时的消息
-
-successful
-
-success
-
-boolean
-
-true:此次接口响应成功,false:响应失败
-
-false
-
-data
-
-object
-
-结果对象
-
-status
-
-string
-
-任务状态(PENDING:待执行,RUNNING:执行中,SUCCESSED:成功,FAILED:失败,CANCELED:已取消)
-
-PENDING
-
-errorMessage
-
-string
-
-错误信息
-
-任务错误消息
-
-results
-
-array<object>
-
-结果列表
-
-array<object>
-
-结果对象
-
-customId
-
-string
-
-xxx
-
-1
-
-errorMessage
-
-string
-
-报错信息（当报错时，此字段会有值）
-
-触发模型限流
-
-errorCode
-
-string
-
-错误码（当报错时，此字段会有值）
-
-RateLimit
-
-result
-
-string
-
-评阅结果
-
-评阅结果
-
-score
-
-integer
-
-作文审阅得分
-
-58
-
-dimensionResults
-
-array<object>
-
-各维度评分结果（自定义维度模式）
-
-object
-
-维度评分结果
-
-name
-
-string
-
-维度名称
-
-内容完整度
-
-analysis
-
-string
-
-优劣势分析
-
-文章内容较为完整，涵盖了题目的核心要求，但部分论述略显简略。
-
-score
-
-number
-
-得分
-
-25.5
-
-maxScore
-
-number
-
-满分
-
-30
-
-overallComment
-
-string
-
-总评
-
-整体表现良好，建议在论述深度上进一步加强。
-
-usage
-
-[ModelUsage](raw/_short/api-quanmiaolightapp-2024-08-01-struct-modelusag-73089b60fee1eef4.md)
-
-单个任务的 token 消耗数
-
-totalUsage
-
-[ModelUsage](raw/_short/api-quanmiaolightapp-2024-08-01-struct-modelusag-73089b60fee1eef4.md)
-
-所有任务总模型 token 消耗数
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| requestId | string | Id of the request | 117F5ABE-CF02-5502-9A3F-E56BC9081A64 |
+| code | string | 错误码 | successful |
+| httpStatusCode | integer | Http 状态码 | 200 |
+| message | string | 响应失败时的消息 | successful |
+| success | boolean | true:此次接口响应成功,false:响应失败 | false |
+| data | object | 结果对象 |  |
+| status | string | 任务状态(PENDING:待执行,RUNNING:执行中,SUCCESSED:成功,FAILED:失败,CANCELED:已取消) | PENDING |
+| errorMessage | string | 错误信息 | 任务错误消息 |
+| results | array<object> | 结果列表 |  |
+|  | array<object> | 结果对象 |  |
+| customId | string | xxx | 1 |
+| errorMessage | string | 报错信息（当报错时，此字段会有值） | 触发模型限流 |
+| errorCode | string | 错误码（当报错时，此字段会有值） | RateLimit |
+| result | string | 评阅结果 | 评阅结果 |
+| score | integer | 作文审阅得分 | 58 |
+| dimensionResults | array<object> | 各维度评分结果（自定义维度模式） |  |
+|  | object | 维度评分结果 |  |
+| name | string | 维度名称 | 内容完整度 |
+| analysis | string | 优劣势分析 | 文章内容较为完整，涵盖了题目的核心要求，但部分论述略显简略。 |
+| score | number | 得分 | 25.5 |
+| maxScore | number | 满分 | 30 |
+| overallComment | string | 总评 | 整体表现良好，建议在论述深度上进一步加强。 |
+| usage | [ModelUsage](api-quanmiaolightapp-2024-08-01-struct-modelusag-73089b60fee1eef4.md) | 单个任务的 token 消耗数 |  |
+| totalUsage | [ModelUsage](api-quanmiaolightapp-2024-08-01-struct-modelusag-73089b60fee1eef4.md) | 所有任务总模型 token 消耗数 |  |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -289,7 +111,9 @@ totalUsage
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "requestId": "117F5ABE-CF02-5502-9A3F-E56BC9081A64",
   "code": "successful",
@@ -331,25 +155,21 @@ totalUsage
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-**HTTP status code**
-
-**错误码**
-
-**错误信息**
-
-**描述**
-
-403
-
-NoPermission
-
-You are not authorized to perform this action , Please check the assignment of the workspaceId.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action , Please check the assignment of the workspaceId. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

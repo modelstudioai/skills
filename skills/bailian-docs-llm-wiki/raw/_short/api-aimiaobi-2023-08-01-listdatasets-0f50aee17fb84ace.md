@@ -2,9 +2,17 @@
 
 数据源管理-查询。
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,399 +31,86 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:ListDatasets | list | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:ListDatasets
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| StartTime | string | 否 | 创建时间-开始 | 创建时间-开始 |
+| EndTime | string | 否 | 创建时间-结束 | 创建时间-结束 |
+| DatasetName | string | 否 | 数据集名称，全局唯一 | businessDataset |
+| DatasetId | integer | 否 | 数据集 id | 1 |
+| PageSize | string | 否 | 每页条数 | 10 |
+| PageNumber | integer | 否 | 当前页：默认 1 | 1 |
+| DatasetType | string | 否 | 数据集类型 | CustomSemanticSearch |
+| SearchDatasetEnable | integer | 否 | 数据集搜索开关 | 3 |
+| IncludeConfig | boolean | 否 | 是否返回配置和用量信息，默认不返回 |  |
+| DatasetDescription | string | 否 | 数据集描述 | xx |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：[获取 workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xxx
-
-StartTime
-
-string
-
-否
-
-创建时间-开始
-
-创建时间-开始
-
-EndTime
-
-string
-
-否
-
-创建时间-结束
-
-创建时间-结束
-
-DatasetName
-
-string
-
-否
-
-数据集名称，全局唯一
-
-businessDataset
-
-DatasetId
-
-integer
-
-否
-
-数据集 id
-
-1
-
-PageSize
-
-string
-
-否
-
-每页条数
-
-10
-
-PageNumber
-
-integer
-
-否
-
-当前页：默认 1
-
-1
-
-DatasetType
-
-string
-
-否
-
-数据集类型
-
-CustomSemanticSearch
-
-SearchDatasetEnable
-
-integer
-
-否
-
-数据集搜索开关
-
-3
-
-IncludeConfig
-
-boolean
-
-否
-
-是否返回配置和用量信息，默认不返回
-
-DatasetDescription
-
-string
-
-否
-
-数据集描述
-
-xx
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-响应结果
-
-Data
-
-array<object>
-
-业务数据
-
-array<object>
-
-业务数据
-
-DatasetId
-
-integer
-
-数据集 ID
-
-1
-
-CreateUser
-
-string
-
-创建者
-
-xxx
-
-CreateTime
-
-string
-
-创建时间
-
-2024-11-12 21:46:24
-
-DatasetType
-
-string
-
-数据集类型
-
-CustomSemanticSearch
-
-DatasetName
-
-string
-
-数据集名称
-
-xxx
-
-DatasetDescription
-
-string
-
-数据集显示名称
-
-xxx
-
-SearchDatasetEnable
-
-integer
-
-数据集搜索开关
-
-1
-
-DocUsedQuota
-
-integer
-
-当前数据集已上传文档总数
-
-1
-
-AccessLevel
-
-string
-
-开放级别
-
-private
-
-Administrators
-
-array<object>
-
-管理员
-
-object
-
-管理员
-
-Username
-
-string
-
-用户名
-
-xx
-
-UserId
-
-string
-
-用户 id
-
-xx
-
-PageNumber
-
-integer
-
-当前页码
-
-1
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Message
-
-string
-
-错误说明
-
-success
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-TotalCount
-
-integer
-
-总条数
-
-100
-
-PageSize
-
-integer
-
-每页条数
-
-10
-
-CustomSemanticSearchConfig
-
-object
-
-"上传文件用作数据源"场景索引配置和用量信息
-
-DocQuota
-
-integer
-
-总文档配额
-
-1000
-
-DocUsedQuota
-
-integer
-
-总文档已使用配额
-
-1
-
-DatasetQuota
-
-integer
-
-数据集数量配额
-
-3
-
-DatasetUsedQuota
-
-integer
-
-数据集数量已使用配额
-
-1
-
-ThirdSearchConfig
-
-object
-
-"通过 API 引入数据源"场景配置和用量信息
-
-DatasetQuota
-
-integer
-
-数据集数量配额
-
-2
-
-DatasetUsedQuota
-
-integer
-
-数据集数量已使用配额
-
-1
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | 响应结果 |  |
+| Data | array<object> | 业务数据 |  |
+|  | array<object> | 业务数据 |  |
+| DatasetId | integer | 数据集 ID | 1 |
+| CreateUser | string | 创建者 | xxx |
+| CreateTime | string | 创建时间 | 2024-11-12 21:46:24 |
+| DatasetType | string | 数据集类型 | CustomSemanticSearch |
+| DatasetName | string | 数据集名称 | xxx |
+| DatasetDescription | string | 数据集显示名称 | xxx |
+| SearchDatasetEnable | integer | 数据集搜索开关 | 1 |
+| DocUsedQuota | integer | 当前数据集已上传文档总数 | 1 |
+| AccessLevel | string | 开放级别 | private |
+| Administrators | array<object> | 管理员 |  |
+|  | object | 管理员 |  |
+| Username | string | 用户名 | xx |
+| UserId | string | 用户 id | xx |
+| PageNumber | integer | 当前页码 | 1 |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+| Code | string | 状态码 | NoData |
+| Message | string | 错误说明 | success |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| TotalCount | integer | 总条数 | 100 |
+| PageSize | integer | 每页条数 | 10 |
+| CustomSemanticSearchConfig | object | "上传文件用作数据源"场景索引配置和用量信息 |  |
+| DocQuota | integer | 总文档配额 | 1000 |
+| DocUsedQuota | integer | 总文档已使用配额 | 1 |
+| DatasetQuota | integer | 数据集数量配额 | 3 |
+| DatasetUsedQuota | integer | 数据集数量已使用配额 | 1 |
+| ThirdSearchConfig | object | "通过 API 引入数据源"场景配置和用量信息 |  |
+| DatasetQuota | integer | 数据集数量配额 | 2 |
+| DatasetUsedQuota | integer | 数据集数量已使用配额 | 1 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -423,7 +118,9 @@ integer
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Data": [
     {
@@ -465,9 +162,17 @@ integer
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

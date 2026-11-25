@@ -1,46 +1,49 @@
 # flow agent api
 
-Flow Agent API 是百炼平台提供的用于调用流程化智能体（Flow Agent）的核心接口，支持将预定义的多步骤工作流（含条件分支、工具调用、记忆管理等）以 HTTP 方式集成到业务系统中。该 API 采用 RESTful 设计，兼容标准 OAuth2 认证与结构化请求/响应格式。适用于需要可控执行逻辑、可审计调用链路及与企业已有系统深度集成的场景。
+Flow Agent API 是百炼平台提供的用于构建和调用流程化智能体（Flow-based Agent）的核心接口，支持将多个模型调用、工具执行与条件分支编排为可复用的业务流程。该 API 适用于需要复杂决策链、多步骤推理或人机协同的场景，如客服工单分派、多源信息聚合分析等。详细设计原则与能力边界请参见 [Flow Agent API](../../raw/application-api-reference/flow-agent-api.md)。
 
 ## 支持的模型与功能
 
-- 当前仅支持百炼平台托管的 Flow Agent 实例（即通过控制台「智能体编排」创建并发布的流程），不支持直接调用基础大模型或自定义 LLM 接口。
-- 支持的功能包括：同步执行（`/v1/flow_agent/run`）、异步执行与结果轮询（`/v1/flow_agent/run_async`）、输入变量注入、运行时上下文覆盖、以及基于 [Prompt 模板](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-prompt-engineering.md) 的动态提示工程。
-- [长期记忆](../concepts/long-term-memory.md)能力已迁移至统一向量知识库接口，原 [长期记忆（旧）](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-long-term-memory.md) 文档中的 `/memory/*` 路由已废弃，实际应使用 `knowledge_base_id` 参数关联知识库实例。
+- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 等 Qwen 系列大模型作为节点执行引擎；不支持第三方模型或自定义模型接入。
+- **核心功能**：
+  - 可视化流程图定义（JSON Schema 描述）
+  - 多类型节点：LLM 调用、HTTP [工具调用](../concepts/tool-calling.md)、条件判断（if-else）、并行执行（fork/join）、人工审核节点
+  - 输入/输出 Schema 显式声明，支持类型校验与自动转换
+  - 流程版本管理与灰度发布能力  
+  更多节点类型与语义说明见 [Flow Agent API](../../raw/application-api-reference/flow-agent-api.md) 中的“应用调用”章节。
 
 ## 关键参数
 
+请求需通过 `POST /v1/flows/{flow_id}/run` 发起，关键参数包括：
+
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `agent_id` | string | 是 | Flow Agent 的唯一标识（非应用 ID），可在控制台「智能体详情」页获取。注意该字段与 [概览](../../raw/application-api-reference/flow-agent-api/flow-agent-api-overview.md) 中描述的 `application_id` 不同，勿混淆。 |
-| `inputs` | object | 否 | JSON 对象，键为流程中定义的输入变量名，值为对应字符串或结构化数据（如 `{"query": "北京天气", "user_id": "u123"}`）。 |
-| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时启用 Server-Sent Events (SSE) 流式响应，适用于长流程实时反馈。 |
-| `timeout` | integer | 否 | 单位秒，最大值 300；超时后服务终止执行并返回 `504 Gateway Timeout`。 |
+| `inputs` | object | 是 | 符合流程定义中 `input_schema` 的 JSON 对象，字段名与类型须严格匹配 |
+| `trace_id` | string | 否 | 用于全链路追踪的唯一标识，建议由调用方生成（格式：`^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$`） |
+| `timeout` | integer | 否 | 全局超时（秒），默认 300，最大 600；单节点超时由流程定义内 `node_timeout` 控制 |
+| `enable_tracing` | boolean | 否 | 是否启用详细执行轨迹记录（含各节点输入/输出），默认 `false`；开启后影响性能，仅调试阶段建议启用 |
 
-> **注意**：`agent_id` 字段在 [认证](../../raw/application-api-reference/flow-agent-api/flow-agent-api-authentication.md) 文档中曾被误标为 `app_id`，该表述已过时，请以控制台实际展示和本节为准。
+> **注意**：`input_schema` 的校验逻辑在 v2.3.0 后已从服务端前置校验改为运行时动态校验，若字段缺失或类型不符，将在首个依赖该字段的节点抛出 `INVALID_INPUT` 错误，而非初始请求即拒绝——此行为变更未在 [Flow Agent API](../../raw/application-api-reference/flow-agent-api.md) 的错误码文档中同步更新，请以实际响应为准。
 
 ## 使用方式
 
-1. **认证**：使用 `Authorization: Bearer <access_token>` 请求头，`access_token` 需通过百炼平台 OAuth2 接口获取（参见 [认证](../../raw/application-api-reference/flow-agent-api/flow-agent-api-authentication.md)）；
-2. **发起调用**：
+1. **准备流程**：在百炼控制台创建 Flow 应用，导出其 JSON 定义（含 `nodes`、`edges`、`input_schema`、`output_schema`）；
+2. **获取凭证**：使用 [认证](../../raw/application-api-reference/flow-agent-api.md) 文档所述方式获取 `Authorization` Bearer [Token](../concepts/token.md)；
+3. **发起调用**：
    ```bash
-   curl -X POST https://dashscope.aliyuncs.com/api/v1/flow_agent/run \
-     -H "Authorization: Bearer $TOKEN" \
+   curl -X POST "https://dashscope.aliyuncs.com/api/v1/flows/abc123/run" \
+     -H "Authorization: Bearer $API_KEY" \
      -H "Content-Type: application/json" \
-     -d '{
-           "agent_id": "agt-xxx",
-           "inputs": {"query": "总结会议纪要"},
-           "stream": false
-         }'
+     -d '{"inputs": {"query": "北京天气如何？"}, "timeout": 120}'
    ```
-3. **错误处理**：所有错误均遵循统一错误码规范，详见 [错误码](../../raw/application-api-reference/flow-agent-api/flow-agent-api-errors.md)。
+4. **处理响应**：成功返回 `200 OK`，`output` 字段为符合 `output_schema` 的结构化结果；失败则按 [错误码](../../raw/application-api-reference/flow-agent-api.md) 文档解析 `code` 与 `message`。
 
 ## 限制和注意事项
 
-- 单次请求 `inputs` 总大小上限为 1MB；单个输入字段值长度建议不超过 10KB，避免触发内部截断。
-- 同步接口（`/run`）最大执行时长为 120 秒；超出需改用 `/run_async` 并配合轮询机制。
-- Flow Agent 内部若调用外部工具（如 HTTP 工具节点），其超时与重试策略由 Agent 配置决定，API 层不可覆盖。
-- 所有调用日志默认保留 7 天，如需长期审计，请自行记录 `request_id` 并关联 [应用调用](../../raw/application-api-reference/flow-agent-api/application-call.md) 文档中定义的回调或日志导出路径。
+- 单次执行最大耗时 600 秒，总 token 消耗上限为 32768（含所有节点输入+输出）；
+- 流程图中节点总数 ≤ 50，循环/递归结构不被支持（会触发 `CYCLIC_DEPENDENCY` 错误）；
+- 长期记忆功能已迁移至统一的 `memory` 模块，原 [长期记忆（旧）](../../raw/application-api-reference/flow-agent-api.md) 文档所述接口已废弃，新流程应通过 `memory_node` 类型接入；
+- 所有 HTTP 工具节点必须使用 HTTPS 协议，且目标域名需提前在控制台白名单中备案。
 
 ## 来源文档
 

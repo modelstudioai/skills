@@ -2,19 +2,27 @@
 
 CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完成和任务失败的字段及对应请求。
 
+<a id="事件交互流程"></a>
+
 ## 事件交互流程
 
-1.  发送 [run-task](https://help.aliyun.com/zh/model-studio/cosyvoice-client-events#run-task) 启动并配置任务，等待 [task-started](https://help.aliyun.com/zh/model-studio/cosyvoice-server-events#task-started)。
-2.  收到 `task-started` 后，通过 [continue-task](https://help.aliyun.com/zh/model-studio/cosyvoice-client-events#continue-task) 发送文本，同时接收 [result-generated](https://help.aliyun.com/zh/model-studio/cosyvoice-server-events#result-generated) 和合成音频。
-3.  文本全部发送完毕后，发送 [finish-task](https://help.aliyun.com/zh/model-studio/cosyvoice-client-events#finish-task)，继续接收剩余结果和音频，直到收到 [task-finished](https://help.aliyun.com/zh/model-studio/cosyvoice-server-events#task-finished)；任务失败时返回 [task-failed](https://help.aliyun.com/zh/model-studio/cosyvoice-server-events#task-failed)。
+1.  发送 [run-task](cosyvoice-client-events-480a8821d2d60e18.md#run-task) 启动并配置任务，等待 [task-started](cosyvoice-server-events-81793da4414e2646.md#task-started)。
+2.  收到 `task-started` 后，通过 [continue-task](cosyvoice-client-events-480a8821d2d60e18.md#continue-task) 发送文本，同时接收 [result-generated](cosyvoice-server-events-81793da4414e2646.md#result-generated) 和合成音频。
+3.  文本全部发送完毕后，发送 [finish-task](cosyvoice-client-events-480a8821d2d60e18.md#finish-task)，继续接收剩余结果和音频，直到收到 [task-finished](cosyvoice-server-events-81793da4414e2646.md#task-finished)；任务失败时返回 [task-failed](cosyvoice-server-events-81793da4414e2646.md#task-failed)。
 
-`result-generated` 返回句子元信息，音频数据通过独立通道传输：WebSocket 使用二进制帧，AOQ 使用 Audio Track。连接、鉴权和音频传输方式请参见 [WebSocket API](raw/_short/cosyvoice-websocket-api-5929268331632771.md) 或 [AOQ 接入](raw/_short/cosyvoice-aoq-access-c0e8e4035486f433.md)。
+`result-generated` 返回句子元信息，音频数据通过独立通道传输：WebSocket 使用二进制帧，AOQ 使用 Audio Track。连接、鉴权和音频传输方式请参见 [WebSocket API](cosyvoice-websocket-api-5929268331632771.md) 或 [AOQ 接入](cosyvoice-aoq-access-c0e8e4035486f433.md)。
+
+<a id="task-started"></a>
+
+<a id="h3e7k9n3q5"></a>
 
 ## task-started
 
 任务启动成功，是客户端开始发送待合成文本的信号。
 
-**重要****收到 `task-started` 后才能发送 `continue-task`。** `run-task` 只用于启动和配置任务，待合成文本通过 `continue-task` 发送。
+> **重要**
+>
+> **收到 `task-started` 后才能发送 `continue-task`。** `run-task` 只用于启动和配置任务，待合成文本通过 `continue-task` 发送。
 
 `header`object
 
@@ -30,7 +38,9 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
 
 无内容，为空对象。
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -52,7 +62,10 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
   }
 }
 ```
-```
+
+<a id="code-block-2"></a>
+
+```json
 {
   "header": {
     "task_id": "24a2157d-7eb1-4e8e-958f-5af8acfa8929",
@@ -64,11 +77,17 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
 }
 ```
 
+<a id="result-generated"></a>
+
+<a id="h4r9t7v9x3"></a>
+
 ## result-generated
 
 返回句子元信息，包括句子开始、音频数据块标记和句子结束。
 
-**重要****`sentence-end` 只表示当前句子合成结束，不表示整个任务结束。** 任务结束以 `task-finished` 为准。音频通过 WebSocket 二进制帧或 AOQ Audio Track 返回。
+> **重要**
+>
+> **`sentence-end` 只表示当前句子合成结束，不表示整个任务结束。** 任务结束以 `task-finished` 为准。音频通过 WebSocket 二进制帧或 AOQ Audio Track 返回。
 
 `header`object
 
@@ -132,7 +151,9 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
 
 计费信息，在 `sentence-end` 事件中返回。
 
-**说明**`usage` 表示当前任务的累计用量，**不要将各事件中的 `usage` 相加**。任务完成后，以 `task-finished` 中的最终累计用量为准。
+> **说明**
+>
+> `usage` 表示当前任务的累计用量，**不要将各事件中的 `usage` 相加**。任务完成后，以 `task-finished` 中的最终累计用量为准。
 
 `characters`integer
 
@@ -140,9 +161,17 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
 
 以下示例在启动任务时已设置 `word_timestamp_enabled=true`。
 
+<a id="sec-tabs"></a>
+
+<a id="sentence-begin"></a>
+
+<a id="sentence-begin-h4"></a>
+
 #### sentence-begin
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "header": {
     "action": "continue-task",
@@ -156,7 +185,10 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
   }
 }
 ```
-```
+
+<a id="code-block-4"></a>
+
+```json
 {
   "header": {
     "task_id": "23ff08d9-5c49-4ce8-88b8-d3c6b60591ea",
@@ -208,9 +240,15 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
 }
 ```
 
+<a id="sentence-synthesis"></a>
+
+<a id="sentence-synthesis-h4"></a>
+
 #### sentence-synthesis
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
   "header": {
     "action": "continue-task",
@@ -224,7 +262,10 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
   }
 }
 ```
-```
+
+<a id="code-block-6"></a>
+
+```json
 {
   "header": {
     "task_id": "23ff08d9-5c49-4ce8-88b8-d3c6b60591ea",
@@ -274,9 +315,15 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
 }
 ```
 
+<a id="sentence-end"></a>
+
+<a id="sentence-end-h4"></a>
+
 #### sentence-end
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
   "header": {
     "action": "continue-task",
@@ -290,7 +337,10 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
   }
 }
 ```
-```
+
+<a id="code-block-8"></a>
+
+```json
 {
   "header": {
     "task_id": "23ff08d9-5c49-4ce8-88b8-d3c6b60591ea",
@@ -401,6 +451,10 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
 }
 ```
 
+<a id="task-finished"></a>
+
+<a id="h8d9f5h7j9"></a>
+
 ## task-finished
 
 服务端返回 `task-finished` 事件，标志任务已结束。客户端可以关闭 WebSocket 连接或复用连接开启新任务。
@@ -423,7 +477,9 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
 
 截止当前累计的计费字符数。
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
   "header": {
     "action": "finish-task",
@@ -435,7 +491,10 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
   }
 }
 ```
-```
+
+<a id="code-block-10"></a>
+
+```json
 {
   "header": {
     "task_id": "24a2157d-7eb1-4e8e-958f-5af8acfa8929",
@@ -452,6 +511,10 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
   }
 }
 ```
+
+<a id="task-failed"></a>
+
+<a id="h4h9j5m7p9"></a>
 
 ## task-failed
 
@@ -477,7 +540,9 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
 
 以下示例使用不支持的音频格式；任务启动后发送文本，服务端随后返回错误。错误码和错误信息随失败原因而变化。
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -499,7 +564,10 @@ CosyVoice 服务端事件参考，介绍任务启动、句子合成、任务完�
   }
 }
 ```
-```
+
+<a id="code-block-12"></a>
+
+```json
 {
   "header": {
     "task_id": "27928f57-cf3b-4f3d-a245-aef64895a3c9",

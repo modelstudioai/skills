@@ -2,31 +2,51 @@
 
 使用 DashScope Java SDK 创建和管理 Qwen-Audio 与 CosyVoice 复刻音色。
 
+<a id="接口地址"></a>
+
+<a id="h2-vj8k5l1m"></a>
+
 ## 接口地址
 
 SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。如需切换到其他地域，请修改 `Constants.baseHttpApiUrl`为对应地域的URL。
 
-**说明**
+> **说明**
+>
+> -   不同地域的 API Key 不同，调用时需使用对应地域的 API Key。
+> -   地域配置为全局设置，影响所有 DashScope SDK API 调用。
 
--   不同地域的 API Key 不同，调用时需使用对应地域的 API Key。
--   地域配置为全局设置，影响所有 DashScope SDK API 调用。
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+<a id="voiceenrollmentservice-类"></a>
+
+<a id="h3-vj8o5p1q"></a>
 
 ## VoiceEnrollmentService 类
 
@@ -34,218 +54,141 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 
 **功能**：管理 Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 复刻音色的生命周期（创建、查询、更新、删除）。
 
+<a id="构造方法"></a>
+
+<a id="h4-vj4d1e6f"></a>
+
 ### 构造方法
 
-```
+<a id="code-block"></a>
+
+```java
 public VoiceEnrollmentService(String apiKey)
 ```
 
 **参数说明**：
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| apiKey | String | API Key |
 
-**类型**
+<a id="createvoice-创建音色"></a>
 
-**说明**
-
-apiKey
-
-String
-
-API Key
+<a id="h4-vj5i2j7k"></a>
 
 ### createVoice() - 创建音色
 
 **方法签名**：
 
-```
+<a id="code-block-2"></a>
+
+```java
 public Voice createVoice(String targetModel, String prefix, String url, VoiceEnrollmentParam customParam) throws NoApiKeyException, InputRequiredException
 ```
 
 **参数说明**：
 
-**参数**
-
-**类型**
-
-**必填**
-
-**说明**
-
-targetModel
-
-String
-
-是
-
-驱动音色的目标模型。必须与后续使用该音色的模型一致，否则调用失败。
-
-prefix
-
-String
-
-是
-
-音色名称前缀，仅允许数字和英文字母，不超过10个字符。生成的音色名格式：`{target_model}-{prefix}-{唯一标识}`。
-
-url
-
-String
-
-是
-
-用于复刻音色的参考音频，支持公网可访问的 URL 或 Base64 Data URI，例如 `data:audio/wav;base64,...`。
-
-customParam
-
-[VoiceEnrollmentParam](https://help.aliyun.com/zh/model-studio/voice-clone-java-sdk#h3-vj1s7t3u)
-
-否
-
-自定义参数，可通过 parameter() 方法指定 language\_hints、max\_prompt\_audio\_length 等参数。
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| targetModel | String | 是 | 驱动音色的目标模型。必须与后续使用该音色的模型一致，否则调用失败。 |
+| prefix | String | 是 | 音色名称前缀，仅允许数字和英文字母，不超过10个字符。生成的音色名格式：`{target_model}-{prefix}-{唯一标识}`。 |
+| url | String | 是 | 用于复刻音色的参考音频，支持公网可访问的 URL 或 Base64 Data URI，例如 `data:audio/wav;base64,...`。 |
+| customParam | [VoiceEnrollmentParam](voice-clone-java-sdk-d83b31cde2e2050b.md#h3-vj1s7t3u) | 否 | 自定义参数，可通过 parameter() 方法指定 language\_hints、max\_prompt\_audio\_length 等参数。 |
 
 **返回值**：`Voice` 对象，通过 `getVoiceId()` 方法获取音色ID。
+
+<a id="listvoice-查询音色列表"></a>
+
+<a id="h4-vj7u4v9w"></a>
 
 ### listVoice() - 查询音色列表
 
 **方法签名**：
 
-```
+<a id="code-block-3"></a>
+
+```java
 public Voice[] listVoice(String prefix, int pageIndex, int pageSize) throws NoApiKeyException, InputRequiredException
 ```
 
 **参数说明**：
 
-**参数**
-
-**类型**
-
-**必填**
-
-**说明**
-
-prefix
-
-String
-
-否
-
-按音色名称前缀筛选。
-
-pageIndex
-
-int
-
-否
-
-页码索引，从0开始。
-
-pageSize
-
-int
-
-否
-
-每页数据条数。
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| prefix | String | 否 | 按音色名称前缀筛选。 |
+| pageIndex | int | 否 | 页码索引，从0开始。 |
+| pageSize | int | 否 | 每页数据条数。 |
 
 **返回值**：`Voice[]` 音色数组。如果列表项的 `getTargetModel()` 返回 `null`，可通过 `voice.getData().get("target_model")` 读取目标模型 ID。
+
+<a id="queryvoice-查询音色详情"></a>
+
+<a id="h4-vj8c5d1e"></a>
 
 ### queryVoice() - 查询音色详情
 
 **方法签名**：
 
-```
+<a id="code-block-4"></a>
+
+```java
 public Voice queryVoice(String voiceId) throws NoApiKeyException, InputRequiredException
 ```
 
 **参数说明**：
 
-**参数**
-
-**类型**
-
-**必填**
-
-**说明**
-
-voiceId
-
-String
-
-是
-
-要查询的音色ID。
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| voiceId | String | 是 | 要查询的音色ID。 |
 
 **返回值**：`Voice` 对象。通过 `getTargetModel()` 获取目标模型 ID。
+
+<a id="updatevoice-更新音色"></a>
+
+<a id="h4-vj7c4d9e"></a>
 
 ### updateVoice() - 更新音色
 
 **方法签名**：
 
-```
+<a id="code-block-5"></a>
+
+```java
 public void updateVoice(String voiceId, String url) throws NoApiKeyException, InputRequiredException
 public void updateVoice(String voiceId, String url, VoiceEnrollmentParam customParam) throws NoApiKeyException, InputRequiredException
 ```
 
 **参数说明**：
 
-**参数**
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| voiceId | String | 是 | 要更新的音色ID。 |
+| url | String | 是 | 新的参考音频，支持公网可访问的 URL 或 Base64 Data URI，例如 `data:audio/wav;base64,...`。 |
+| customParam | VoiceEnrollmentParam | 否 | 自定义参数。 |
 
-**类型**
+<a id="deletevoice-删除音色"></a>
 
-**必填**
-
-**说明**
-
-voiceId
-
-String
-
-是
-
-要更新的音色ID。
-
-url
-
-String
-
-是
-
-新的参考音频，支持公网可访问的 URL 或 Base64 Data URI，例如 `data:audio/wav;base64,...`。
-
-customParam
-
-VoiceEnrollmentParam
-
-否
-
-自定义参数。
+<a id="h4-vj4y1z6a"></a>
 
 ### deleteVoice() - 删除音色
 
 **方法签名**：
 
-```
+<a id="code-block-6"></a>
+
+```java
 public void deleteVoice(String voiceId) throws NoApiKeyException, InputRequiredException
 ```
 
 **参数说明**：
 
-**参数**
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| voiceId | String | 是 | 要删除的音色ID。 |
 
-**类型**
+<a id="voiceenrollmentparam-类"></a>
 
-**必填**
-
-**说明**
-
-voiceId
-
-String
-
-是
-
-要删除的音色ID。
+<a id="h3-vj1s7t3u"></a>
 
 ## VoiceEnrollmentParam 类
 
@@ -253,61 +196,37 @@ String
 
 通过Builder模式构建参数对象。
 
-**方法**
+| 方法 | 类型 | 说明 |
+| --- | --- | --- |
+| model(String) | String | 声音复刻模型，固定为"voice-enrollment"。 |
+| parameter(String, Object) | Object | 设置自定义参数，如 parameter("language\_hints", Arrays.asList("zh"))、parameter("max\_prompt\_audio\_length", 10.0f)、parameter("enable\_preprocess", false)、parameter("enable\_volume\_normalization", "false")。<br><br>> **说明**<br>><br>> `language_hints` 数组的长度必须为 1。可选参数及其支持模型请参见[HTTP API 参考](voice-clone-design-http-api-b6a5abbe2d5d2730.md#h2-create)。 |
 
-**类型**
+<a id="扩展参数"></a>
 
-**说明**
-
-model(String)
-
-String
-
-声音复刻模型，固定为"voice-enrollment"。
-
-parameter(String, Object)
-
-Object
-
-设置自定义参数，如 parameter("language\_hints", Arrays.asList("zh"))、parameter("max\_prompt\_audio\_length", 10.0f)、parameter("enable\_preprocess", false)、parameter("enable\_volume\_normalization", "false")。
-
-**说明**`language_hints` 数组的长度必须为 1。可选参数及其支持模型请参见[HTTP API 参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
+<a id="a18b66cba924j"></a>
 
 ### 扩展参数
 
-**参数名**
+| 参数名 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| enable\_preprocess | boolean | 否 | 是否开启音频预处理（降噪、音频增强、音量规整）。有背景噪音时建议开启；安静环境建议关闭以最大程度还原音色。<br><br>默认值：false。<br><br>> **说明**<br>><br>> 适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。 |
+| enable\_volume\_normalization | String | 否 | 是否对用于声音复刻的样本音频进行音量归一化。取值为`"true"`或`"false"`。开启后，使用所创建音色合成的音频，其音量可能与关闭该参数时创建的音色不同。默认值：`"false"`。 |
 
-**类型**
+<a id="示例代码"></a>
 
-**必填**
-
-**说明**
-
-enable\_preprocess
-
-boolean
-
-否
-
-是否开启音频预处理（降噪、音频增强、音量规整）。有背景噪音时建议开启；安静环境建议关闭以最大程度还原音色。
-
-默认值：false。
-
-**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
-
-enable\_volume\_normalization
-
-String
-
-否
-
-是否对用于声音复刻的样本音频进行音量归一化。取值为`"true"`或`"false"`。开启后，使用所创建音色合成的音频，其音量可能与关闭该参数时创建的音色不同。默认值：`"false"`。
+<a id="h2-jv2d4e5f"></a>
 
 ## 示例代码
 
+<a id="创建音色"></a>
+
+<a id="h3-jv4j8k9l"></a>
+
 ### 创建音色
 
-```
+<a id="code-block-7"></a>
+
+```java
 import com.alibaba.dashscope.audio.ttsv2.enrollment.Voice;
 import com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentParam;
 import com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentService;
@@ -354,16 +273,24 @@ public class Main {
 
 使用本地 WAV 音频时，在上述 `try` 代码块内、调用 `createVoice` 前添加以下赋值。更新音色时，也通过 `updateVoice` 的 `url` 参数传入 Data URI。将 `sample.wav` 替换为本地音频路径。
 
-```
+<a id="code-block-8"></a>
+
+```java
 fileUrl = "data:audio/wav;base64," + java.util.Base64.getEncoder().encodeToString(
         java.nio.file.Files.readAllBytes(java.nio.file.Paths.get("sample.wav")));
 ```
+
+<a id="查询音色列表"></a>
+
+<a id="h3-jv7s5t6u"></a>
 
 ### 查询音色列表
 
 需要引入第三方库`com.google.gson.Gson`。
 
-```
+<a id="code-block-9"></a>
+
+```java
 import com.alibaba.dashscope.audio.ttsv2.enrollment.Voice;
 import com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentService;
 import com.alibaba.dashscope.exception.InputRequiredException;
@@ -394,11 +321,17 @@ public class Main {
 }
 ```
 
+<a id="查询特定音色"></a>
+
+<a id="h3-jv3h7i8j"></a>
+
 ### 查询特定音色
 
 需要引入第三方库`com.google.gson.Gson`。
 
-```
+<a id="code-block-10"></a>
+
+```java
 import com.alibaba.dashscope.audio.ttsv2.enrollment.Voice;
 import com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentService;
 import com.alibaba.dashscope.exception.InputRequiredException;
@@ -427,9 +360,15 @@ public class Main {
 }
 ```
 
+<a id="更新音色"></a>
+
+<a id="h3-jv8w8x9y"></a>
+
 ### 更新音色
 
-```
+<a id="code-block-11"></a>
+
+```java
 import com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentService;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
@@ -455,9 +394,15 @@ public class Main {
 }
 ```
 
+<a id="删除音色"></a>
+
+<a id="h3-jv2f5g6h"></a>
+
 ### 删除音色
 
-```
+<a id="code-block-12"></a>
+
+```java
 import com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentService;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;

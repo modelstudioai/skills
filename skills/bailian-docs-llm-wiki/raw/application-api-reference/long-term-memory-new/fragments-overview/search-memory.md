@@ -4,247 +4,75 @@
 
 根据对话消息进行相似度检索，返回与查询相关的记忆节点。
 
+<a id="请求方法与路径"></a>
+
 ## 请求方法与路径
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/search`
 
-调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="请求参数"></a>
 
 ## 请求参数
 
-参数
-
-类型
-
-必填
-
-说明
-
-`messages`
-
-array
-
-是
-
-查询所使用的对话消息列表
-
-`messages[].role`
-
-string
-
-否
-
-消息角色
-
-`messages[].content`
-
-string / array
-
-否
-
-消息内容，支持文本字符串或多模态内容数组
-
-`messages[].content[].type`
-
-string
-
-否
-
-内容类型：`text` 或 `image_url`。仅支持多模态能力的项目会解析图片
-
-`messages[].content[].text`
-
-string
-
-条件必填
-
-文本内容。`type` 为 `text` 时传入
-
-`messages[].content[].image_url`
-
-object
-
-条件必填
-
-图片信息。`type` 为 `image_url` 时传入
-
-`messages[].content[].image_url.url`
-
-string
-
-条件必填
-
-图片 URL
-
-`user_id`
-
-string
-
-是
-
-子用户 ID，用于隔离记忆
-
-`memory_library_id`
-
-string
-
-否
-
-记忆库 ID
-
-`project_id`
-
-string
-
-否
-
-项目 ID，用于二级隔离，与 `project_ids` 互斥
-
-`project_ids`
-
-array\[string\]
-
-否
-
-多个项目 ID，与 `project_id` 互斥
-
-`top_k`
-
-integer
-
-否
-
-最大召回数量，默认值为 `10`
-
-`min_score`
-
-number
-
-否
-
-最小分数阈值，低于该分数的结果会被过滤。默认值为 `0.3`，仅 `plan_version` 为 `pro` 时生效
-
-`memory_types`
-
-array\[string\]
-
-否
-
-记忆类型筛选。可选值为 `observation`、`skill`，默认值为 `["observation"]`
-
-`plan_version`
-
-string
-
-否
-
-收费计划：`pro` 或 `lite`，默认值为 `pro`。不区分大小写，传入其他值会报错
-
-**说明**`pro` 计划支持按 `min_score` 过滤结果；`lite` 计划不使用该参数。计费信息请参见[计费说明](raw/application-user-guide/agent-billing/billing-f23f20af1adb6c6b.md)。
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `messages` | array | 是 | 查询所使用的对话消息列表 |
+| `messages[].role` | string | 否 | 消息角色 |
+| `messages[].content` | string / array | 否 | 消息内容，支持文本字符串或多模态内容数组 |
+| `messages[].content[].type` | string | 否 | 内容类型：`text` 或 `image_url`。仅支持多模态能力的项目会解析图片 |
+| `messages[].content[].text` | string | 条件必填 | 文本内容。`type` 为 `text` 时传入 |
+| `messages[].content[].image_url` | object | 条件必填 | 图片信息。`type` 为 `image_url` 时传入 |
+| `messages[].content[].image_url.url` | string | 条件必填 | 图片 URL |
+| `user_id` | string | 是 | 子用户 ID，用于隔离记忆 |
+| `memory_library_id` | string | 否 | 记忆库 ID |
+| `project_id` | string | 否 | 项目 ID，用于二级隔离，与 `project_ids` 互斥 |
+| `project_ids` | array\[string\] | 否 | 多个项目 ID，与 `project_id` 互斥 |
+| `top_k` | integer | 否 | 最大召回数量，默认值为 `10` |
+| `min_score` | number | 否 | 最小分数阈值，低于该分数的结果会被过滤。默认值为 `0.3`，仅 `plan_version` 为 `pro` 时生效 |
+| `memory_types` | array\[string\] | 否 | 记忆类型筛选。可选值为 `observation`、`skill`，默认值为 `["observation"]` |
+| `plan_version` | string | 否 | 收费计划：`pro` 或 `lite`，默认值为 `pro`。不区分大小写，传入其他值会报错 |
+
+> **说明**
+>
+> `pro` 计划支持按 `min_score` 过滤结果；`lite` 计划不使用该参数。计费信息请参见[计费说明](../../../application-user-guide/agent-billing/billing-f23f20af1adb6c6b.md)。
+
+<a id="返回结果"></a>
 
 ## 返回结果
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `request_id` | string | 请求 ID |
+| `plan_version` | string | 本次搜索生效的收费计划：`pro` 或 `lite` |
+| `memory_nodes` | array | 记忆节点列表 |
+| `memory_nodes[].memory_node_id` | string | 记忆节点 ID |
+| `memory_nodes[].content` | string | 记忆内容 |
+| `memory_nodes[].timestamp` | integer | 记忆相关时间 |
+| `memory_nodes[].created_at` | integer | 创建时间 |
+| `memory_nodes[].updated_at` | integer | 更新时间 |
+| `memory_nodes[].media_desc` | string | 多模态信息描述 |
+| `memory_nodes[].meta_data` | object | 自定义元信息 |
+| `memory_nodes[].memory_type` | string | 记忆类型 |
+| `memory_nodes[].status` | string | 记忆状态 |
+| `memory_nodes[].score` | number | 搜索分数 |
+| `memory_nodes[].project_id` | string | 项目 ID，存在时返回 |
+| `memory_nodes[].multimodal_medias` | array | 多模态资源，存在时返回 |
 
-类型
-
-说明
-
-`request_id`
-
-string
-
-请求 ID
-
-`plan_version`
-
-string
-
-本次搜索生效的收费计划：`pro` 或 `lite`
-
-`memory_nodes`
-
-array
-
-记忆节点列表
-
-`memory_nodes[].memory_node_id`
-
-string
-
-记忆节点 ID
-
-`memory_nodes[].content`
-
-string
-
-记忆内容
-
-`memory_nodes[].timestamp`
-
-integer
-
-记忆相关时间
-
-`memory_nodes[].created_at`
-
-integer
-
-创建时间
-
-`memory_nodes[].updated_at`
-
-integer
-
-更新时间
-
-`memory_nodes[].media_desc`
-
-string
-
-多模态信息描述
-
-`memory_nodes[].meta_data`
-
-object
-
-自定义元信息
-
-`memory_nodes[].memory_type`
-
-string
-
-记忆类型
-
-`memory_nodes[].status`
-
-string
-
-记忆状态
-
-`memory_nodes[].score`
-
-number
-
-搜索分数
-
-`memory_nodes[].project_id`
-
-string
-
-项目 ID，存在时返回
-
-`memory_nodes[].multimodal_medias`
-
-array
-
-多模态资源，存在时返回
+<a id="请求示例"></a>
 
 ## 请求示例
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-curl-tab"></a>
+
 cURL
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/search' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header 'Content-Type: application/json' \
@@ -262,9 +90,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/
   }'
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 from agentscope_runtime.tools.modelstudio_memory import (
     SearchMemory, SearchMemoryInput, Message,
 )
@@ -287,9 +119,13 @@ async def main():
 asyncio.run(main())
 ```
 
+<a id="响应示例"></a>
+
 ## 响应示例
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "request_id": "416f3d78-2bba-9852-ac15-4b3bcee6c7e4",
   "plan_version": "pro",
@@ -312,4 +148,6 @@ asyncio.run(main())
 }
 ```
 
-**重要**查看分页记忆列表使用 [ListMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/list-memory.md)。
+> **重要**
+>
+> 查看分页记忆列表使用 [ListMemory](list-memory.md)。

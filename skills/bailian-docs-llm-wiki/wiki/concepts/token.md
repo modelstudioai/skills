@@ -1,44 +1,36 @@
 # Token
 
-Token 是百炼平台对模型输入与输出内容进行标准化计量的基本单位，用于精确计费、配额控制与资源调度。一个 Token 通常对应一个子词（subword）或字符级单元，其具体切分逻辑由底层模型的 tokenizer 决定；平台统一按实际 tokenized 后的长度计量，不依赖用户原始文本字数。
+Token 是百炼平台中用于计量大模型输入与输出文本单元的最小语义单位，是模型推理、计费、监控与评测等核心能力的基础度量标准。一个 Token 通常对应一个词、子词（subword）或标点符号，其实际切分由模型自身的 tokenizer 决定；开发者无需手动分词，但需理解其数量直接影响成本、延迟与资源配额消耗。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **计费计量**：所有模型调用（含文本、图像、语音、视频、决策等多模态）均以 `input_tokens` 和 `output_tokens` 分别计费。例如调用 `qwen4-max` 时，Prompt 经 tokenizer 处理后为 1280 个 token，生成响应为 320 个 token，则本次调用消耗 1600 Token（输入/输出单价可能不同）。
-- **Token Plan 资源包抵扣**：购买的 Token Plan（基础版/个人版/团队版）额度以 Token 为单位扣减。系统按请求头中指定的 `x-acs-token-plan-id` 或专属 API Key（如 `sk-sp-xxx`）自动匹配并消耗对应包内额度，支持跨模型通用（除明确标注“不支持”的微调/私有模型）。
-- **吞吐预留（TPM）容量换算**：1 kTPM = 1,000 Tokens/分钟，用于定义模型服务的稳定并发能力。输入/输出流量分别按 token 速率折算为 TPM，长上下文或缓存命中会应用阶梯系数（如 3×、0.125×）动态调整等效 TPM 占用。
-- **监控与告警**：模型监控中的 `TotalToken 数` 指标按分钟聚合各模型实际消耗的 token 总量，可配置告警（如“单模型每分钟 Token 消耗环比增长 >50%”），用于异常用量识别与成本风控。
-- **免费额度与预算管理**：新人免费额度（90天/100万 Token）、月度预算上限均以 Token 为计量基准；当额度耗尽且开启“用完即停”时，请求将直接返回 HTTP 403 错误，而非降级或限流。
-- **Batch 与异步任务**：Batch 调用按输入+输出 token 总量计费（单价为实时调用的 50%）；异步任务（如生图、生视频）虽不直接暴露 token 数，但后台仍基于 prompt 长度、分辨率、时长等参数折算为等效 token 进行结算。
+- **模型调用与计费**：所有 SaaS 模型（如 Qwen 系列、Qwen-VL、Qwen-Audio）及自定义部署模型的推理费用，均按 `(input_tokens + output_tokens)` 精确计量，单位为「千 Token」（即每 1000 Token 计为 1 千 Token）。知识库检索中的 Rerank 阶段也按召回切片的总 Token 数计费，而非最终返回结果数。
+- **Token Plan 套餐**：Token 本身**不直接计费**，而是作为 Credits 消耗的底层依据。一次调用消耗的 Credits 由输入 Token、输出 Token、缓存命中率、模型单价及[工具调用](tool-calling.md)次数共同加权计算，例如 `qwen3.6-plus` 单次请求可能消耗约 3.18 Credits，但对应的实际 Token 数需通过响应头或用量 API 查看。
+- **模型监控**：控制台「模型监控」页面提供 `模型消耗 TotalToken 数` 指标（支持告警），用于追踪成本趋势与异常突增；审计日志中记录每次调用的精确 `input_tokens` 和 `output_tokens`，但不含原始 Prompt/Response 内容。
+- **智能体（Agent）与工作流**：Managed Agents、Flow Agent 中的模型节点、知识库问答、ParseX 解析等环节，均独立按 Token 消耗计费；其中知识库 Rerank 费用取决于「初步召回总切片数 × 平均切片 Token 数」，易被低估。
+- **模型评测**：评测任务执行时，裁判模型（如 Qwen-Max）对样本的自动评分过程本身也产生 Token 消耗，计入评测总成本；单样本多次推理（Pass@K）会线性增加 Token 开销。
 
 ## 关键参数和配置
 
-- **无显式传参**：Token 是平台后端自动计算的隐式指标，开发者无需在请求体中传递 `input_tokens` 或 `output_tokens`。
-- **必需鉴权标识**（决定 token 归属与扣减路径）：
-  - Token Plan 基础版：HTTP Header 中必须携带 `x-acs-token-plan-id: tp-xxxxxx` 和 `x-acs-trace-id: trace-xxxxxx`；
-  - Token Plan 个人版/团队版：使用专属 API Key（`sk-sp-xxx`）+ 正确 `base_url`，平台自动关联订阅与用量；
-  - 免费额度/节省计划：使用百炼通用 API Key（`sk-xxx`），系统按预设优先级（免费额度 → 节省计划 → 按量付费）自动抵扣。
-- **影响 token 计数的关键请求参数**：
-  - `max_tokens`：限制输出长度，直接影响 `output_tokens` 上限；
-  - `temperature` / `top_p` 等采样参数：不改变 token 数，但影响实际生成长度；
-  - 多模态输入（如图片 Base64、音频 data URL）：经模型专用 encoder 处理后转换为等效 token 序列，计入 `input_tokens`；
-  - `tool_choice` 或内置工具调用：工具执行过程产生的中间 token（如搜索结果摘要、代码执行输出）全部计入总消耗。
+- **`input_tokens` / `output_tokens`**：API 响应头（如 `x-dashscope-input-tokens`、`x-dashscope-output-tokens`）及用量接口（`/v1/usage`）中返回的整数字段，精度为 1 Token，是计费与监控的唯一权威依据。
+- **Token 缓存影响**：启用上下文缓存后，重复输入可提升缓存命中率，降低有效 `input_tokens` 消耗；监控中 `缓存命中率` = `缓存命中 Token 数 / 输入 Token 数`，该指标不可告警，仅用于性能分析。
+- **多模态 Token 计算**：Qwen-VL、Qwen-Audio 等多模态模型的 Token 数包含图像 patch、音频帧等编码后 token，非纯文本长度；文生图/视频类模型暂不返回结构化 Token 字段，其用量以 Credits 或调用次数计量。
+- **无显式配置项**：Token 切分由模型 tokenizer 自动完成，开发者不可干预；但可通过精简 Prompt、限制 `max_output_tokens`、启用流式响应（减少首 Token 延迟感知）等方式主动优化 Token 效率。
 
 ## 面向开发者，简洁实用
 
-- ✅ **务必校验实际 token 数**：使用 [tokenizer 工具](https://help.aliyun.com/zh/model-studio/token-calculator) 或 SDK 的 `count_tokens()` 方法预估开销，避免因 prompt 过长导致意外超支。
-- ✅ **优先复用 Token Plan**：对稳定业务流量，购买 Token Plan 比按量付费低 30–50%；个人/团队版还附带 Harness 工具权益，进一步摊薄单次调用成本。
-- ⚠️ **注意 token 计费边界**：流式响应中若启用 `stream_options.include_usage=true`，会触发额外一次用量上报，导致重复扣减——生产环境请禁用该参数。
-- ⚠️ **地域强约束**：Token Plan 个人版与团队版仅支持华北2（北京），跨地域调用将失败；免费额度也仅在北京地域生效。
-- 📊 **监控必看指标**：在「模型监控」中重点关注 `模型消耗 TotalToken 数`（按模型聚合）与 `审计日志` 中的 `input_token_count` / `output_token_count` 字段，精准归因费用来源。
+- ✅ **必查响应头**：调试时优先检查 `x-dashscope-input-tokens` 和 `x-dashscope-output-tokens`，而非估算字符数或词数。
+- ✅ **用量溯源**：在控制台「用量分析」或调用 `/v1/usage/summary` API，按模型、API Key、时间范围下钻查看 Token 消耗明细。
+- ✅ **成本预估公式**：`费用 ≈ (input_tokens + output_tokens) / 1000 × 单价（元/千 Token）`；单价见[模型定价页](https://help.aliyun.com/zh/dashscope/developer-reference/pricing)，注意区分地域与模型版本。
+- ⚠️ **避免误区**：Token ≠ 字符 ≠ 词；中文平均约 1.5–2 字符/Token，英文约 0.75 词/Token；切勿用 `len(prompt)` 代替 `input_tokens`。
+- ⚠️ **Token Plan 注意**：`sk-sp-` Key 调用只抵扣 Credits，不暴露原始 Token 数；如需精确 Token 分析，请改用 `sk-` Key 调用同一模型并开启监控。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
-- [token plan personal](../guides/token-plan-personal.md)
-- [token plan team edition](../guides/token-plan-team-edition.md)
-- [token plan best practice](../guides/token-plan-best-practice.md)
+- [agent billing](../guides/agent-billing.md)
 - [model monitoring](../guides/model-monitoring.md)
 - [test 1](../guides/test-1.md)
+- [model evaluation introduction](../guides/model-evaluation-introduction.md)
 
 

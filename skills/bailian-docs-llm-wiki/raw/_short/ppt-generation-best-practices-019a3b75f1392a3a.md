@@ -2,24 +2,38 @@
 
 本文提供 PPT生成 链路API的最佳实践，帮助您快速入门并开发您自己的业务应用。
 
-**重要**
+> **重要**
+>
+> **调用前须知：**
+>
+> 请通过本地环境直接调用 PPT 流式接口，避免使用阿里云 OpenAPI。
 
-**调用前须知：**
+<a id="1-环境准备"></a>
 
-请通过本地环境直接调用 PPT 流式接口，避免使用阿里云 OpenAPI。
+<a id="bce201e249a2c"></a>
 
 ## 1 环境准备
+
+<a id="后端"></a>
+
+<a id="b8086d37bdgh0"></a>
 
 ### 后端
 
 -   点击[PPT生成下单地址](https://common-buy.aliyun.com/?spm=a2c4g.11186623.0.0.24c66c00ZsOBpm&commodityCode=sfm_pptgeneration_public_cn)开通服务；
 -   [获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)；
--   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)；
+-   [获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)；
 -   引入妙笔SDK [注意获取最新SDK版本](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc)。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-java-tab"></a>
 
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 <dependency>
   <groupId>com.aliyun</groupId>
   <artifactId>alibabacloud-aimiaobi20230801</artifactId>
@@ -27,32 +41,58 @@ java
 </dependency>
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 alibabacloud-tea-openapi-sse==1.0.2
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 "@alicloud/openapi-core": "^1.0.2",
 "@alicloud/tea-typescript": "^1.7.1",
 "@alicloud/openapi-client": "^0.4.12",
 ```
+
+<a id="前端"></a>
+
+<a id="a9597c663359v"></a>
 
 ### 前端
 
 -   资源地址：[](https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.1/index.js)[https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.1/index.js](https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.1/index.js)；
 -   特殊配置：接口请求需要支持refer属性；
 
+<a id="分步骤调用操作步骤"></a>
+
+<a id="3ef450497fqm6"></a>
+
 ## 分步骤调用操作步骤
+
+<a id="step1-生成ppt大纲"></a>
+
+<a id="79d8764b44jr7"></a>
 
 ### step1：生成PPT大纲
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 public static AsyncClient getClient() {
     if (client == null) {
         synchronized (ClientHelper.class) {
@@ -90,9 +130,13 @@ while (iterator.hasNext()) {
 }
 ```
 
+<a id="fig-code-group-2-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 # 前置要求：
 # 1、python版本：3.7+；
 # 2、安装依赖：pip3 install alibabacloud-tea-openapi-sse==1.0.2
@@ -180,9 +224,13 @@ if __name__ == '__main__':
     asyncio.run(run())
 ```
 
+<a id="fig-code-group-2-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-2-javascript"></a>
+
+```javascript
 'use strict';
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -272,11 +320,21 @@ exports.Client = Client;
 Client.main(process.argv.slice(2));
 ```
 
+<a id="step2-生成ppt内容"></a>
+
+<a id="aaac779ee14y4"></a>
+
 ### step2：生成PPT内容
 
-#### [获取PPT组件配置](raw/_short/api-aimiaobi-2023-08-01-getpptconfig-f664f98d565e54f9.md) -- 获取编辑PPT作品所需的code信息
+<a id="获取ppt组件配置-获取编辑ppt作品所需的code信息"></a>
 
-```
+<a id="223e848a26f0x"></a>
+
+#### [获取PPT组件配置](api-aimiaobi-2023-08-01-getpptconfig-f664f98d565e54f9.md) -- 获取编辑PPT作品所需的code信息
+
+<a id="code-block"></a>
+
+```java
 AsyncClient client = ClientHelper.getClient();
 GetPptConfigRequest request = GetPptConfigRequest.builder()
       .workspaceId(workspaceId)
@@ -292,7 +350,11 @@ try {
 }
 ```
 
-#### [初始化PPT创建操作](raw/_short/api-aimiaobi-2023-08-01-initiatepptcreationv2-89f1190e9dc82ba3.md)\-- 获取生成PPT过程中所需参数
+<a id="初始化ppt创建操作-获取生成ppt过程中所需参数"></a>
+
+<a id="b3bcddf2832nm"></a>
+
+#### [初始化PPT创建操作](api-aimiaobi-2023-08-01-initiatepptcreationv2-89f1190e9dc82ba3.md)\-- 获取生成PPT过程中所需参数
 
 -   **温馨提示：**这个接口涉及到扣费，请注意费用
     
@@ -300,19 +362,35 @@ try {
     1.  下发用于初始化“PPT生成”的前端组件的signature；
     2.  针对不同场景下发需要的其他参数（如PPT流程ID、作品ID、任务ID）。
 
+<a id="3-创作场景说明"></a>
+
+<a id="ba722e3b44pzf"></a>
+
 ## 3 创作场景说明
+
+<a id="场景一-全链路创建生成ppt"></a>
+
+<a id="dbcbb0f8022np"></a>
 
 ### 场景一：全链路创建生成PPT
 
 一站式SaaS解决方案，最接近控制台的SaaS全量功能，可全部交由前端SDK完成。
 
+<a id="step1-初始化创建ppt的会话"></a>
+
+<a id="71e54228e8q4b"></a>
+
 #### step1：初始化创建PPT的会话
+
+<a id="b84e1a86a7pfq"></a>
 
 ##### 后端：
 
-通过[初始化PPT创建操作](raw/_short/api-aimiaobi-2023-08-01-initiatepptcreationv2-89f1190e9dc82ba3.md)接口初始化创建PPT的会话，如下为示例代码：
+通过[初始化PPT创建操作](api-aimiaobi-2023-08-01-initiatepptcreationv2-89f1190e9dc82ba3.md)接口初始化创建PPT的会话，如下为示例代码：
 
-```
+<a id="code-block-2"></a>
+
+```java
 taskId = "xxxx";
 AsyncClient client = ClientHelper.getClient();
 InitiatePptCreationV2Request request = InitiatePptCreationV2Request.builder()
@@ -332,11 +410,15 @@ try {
 }
 ```
 
+<a id="7cfeac91fe635"></a>
+
 ##### 前端：
 
 全局加载初始化quanmiao-sdk，如下为示例代码：
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 const SDK_URL = "https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.1/index.js";
 const script = document.createElement('script');
 script.src = SDK_URL;
@@ -346,7 +428,9 @@ document.body.appendChild(script);
 
 业务链路中调用创建API（后续编辑 / 查看链路参考【场景三】），如下为示例代码：
 
-```
+<a id="code-block-4"></a>
+
+```javascript
 // 确保SDK已经加载完
 await window.Quanmiao.createPPT({
     appkey: 'your appkey', // 必填，由服务端API获取
@@ -376,9 +460,15 @@ await window.Quanmiao.createPPT({
 }
 ```
 
+<a id="step2-绑定ppt作品数据-基于step1中前端sdk获取到的作品id"></a>
+
+<a id="3918dbf20e2yw"></a>
+
 #### step2：绑定PPT作品数据 -- 基于step1中前端SDK获取到的作品id
 
-```
+<a id="code-block-5"></a>
+
+```java
 taskId = "6831f55d-fa3b-4592-b3fd-bdf47ca2ab96";
 AsyncClient client = ClientHelper.getClient();
 BindPptArtifactRequest request = BindPptArtifactRequest.builder()
@@ -397,13 +487,27 @@ try {
 }
 ```
 
+<a id="场景二-基于客户定制模板-开始生成ppt"></a>
+
+<a id="056f4c78305pc"></a>
+
 ### 场景二：基于客户定制模板，开始生成PPT
+
+<a id="step1-定制模板-通过全妙官方渠道联系我们"></a>
+
+<a id="2ec9842381ce5"></a>
 
 #### step1：定制模板 -- 通过全妙官方渠道联系我们
 
-可以通过[查询企业专属PPT模板列表](raw/_short/api-aimiaobi-2023-08-01-listenterpriseppttemplat-0f6af38d590d2725.md)获取测试模板，试用当前场景效果
+可以通过[查询企业专属PPT模板列表](api-aimiaobi-2023-08-01-listenterpriseppttemplat-0f6af38d590d2725.md)获取测试模板，试用当前场景效果
+
+<a id="step2-基于已有模板生成ppt内容"></a>
+
+<a id="a46ead2d23a5x"></a>
 
 #### step2：基于已有模板生成PPT内容
+
+<a id="618ea002eeu55"></a>
 
 ##### 后端：
 
@@ -412,7 +516,9 @@ try {
 -   pptProcessId -- 对应前端SDK入参aipptTaskId；
 -   signature；
 
-```
+<a id="code-block-6"></a>
+
+```java
 AsyncClient client = ClientHelper.getClient();
 InitiatePptCreationV2Request request = InitiatePptCreationV2Request.builder()
         .workspaceId(workspaceId)
@@ -432,11 +538,15 @@ try {
 }
 ```
 
+<a id="0764fb9faeq9d"></a>
+
 ##### 前端：
 
 业务链路中调用创建API（后续编辑 / 查看链路参考【场景三】），如下为示例代码：
 
-```
+<a id="code-block-7"></a>
+
+```javascript
 // 确保SDK已经加载完
 await window.Quanmiao.createPPT({
     appkey: 'your appkey', // 必填，由服务端API获取
@@ -469,7 +579,15 @@ await window.Quanmiao.createPPT({
 }
 ```
 
+<a id="场景三-云端完成ppt作品的创建-跳转前端界面编辑-查看作品"></a>
+
+<a id="f67f048037hw5"></a>
+
 ### 场景三：云端完成PPT作品的创建，跳转前端界面编辑 / 查看作品
+
+<a id="step1-后端-完成ppt作品的创建"></a>
+
+<a id="017120b6eewbe"></a>
 
 #### step1：（后端）完成PPT作品的创建
 
@@ -482,7 +600,9 @@ await window.Quanmiao.createPPT({
 
 1.  初始化，如下为代码示例。
 
-```
+<a id="code-block-8"></a>
+
+```java
 AsyncClient client = ClientHelper.getClient();
 InitiatePptCreationV2Request request = InitiatePptCreationV2Request.builder()
         .workspaceId(workspaceId)
@@ -503,7 +623,9 @@ try {
 
 1.  轮询pptArtifactId，如下为代码示例。
 
-```
+<a id="code-block-9"></a>
+
+```java
 AsyncClient client = ClientHelper.getClient();
 GetPptInfoRequest request = GetPptInfoRequest.builder()
         .workspaceId(PublicConfig.get("workspace-id"))
@@ -530,9 +652,15 @@ try {
 return null;
 ```
 
+<a id="step2-前端-界面编辑-查看作品"></a>
+
+<a id="6f34c58f46kmo"></a>
+
 #### step2：（前端）界面编辑 / 查看作品
 
-```
+<a id="code-block-10"></a>
+
+```tsx
 // 确保SDK已经加载完
 await window.Quanmiao.editPPT({
   appkey: 'your appkey', // 必填，由服务端API获取
@@ -544,17 +672,23 @@ await window.Quanmiao.editPPT({
 });
 ```
 
+<a id="场景四-全云端完成ppt作品的创建-轮询任务过程-及-最终作品下载链接"></a>
+
+<a id="45711ad1812xr"></a>
+
 ### 场景四：全云端完成PPT作品的创建 -- 轮询任务过程 及 最终作品下载链接
 
 由云端完成PPT作品的创建和导出，下发exportTaskId（导出任务ID）。
 
-用户根据exportTaskId调用 [查询PPT导出任务的结果](raw/_short/api-aimiaobi-2023-08-01-getpptartifactexportresu-16475c338abc9043.md)进行轮询，获取PPT文件的下载地址。
+用户根据exportTaskId调用 [查询PPT导出任务的结果](api-aimiaobi-2023-08-01-getpptartifactexportresu-16475c338abc9043.md)进行轮询，获取PPT文件的下载地址。
 
 异步设计，同【场景三】。
 
 1.  获取导出任务的ID，如下为代码示例。
 
-```
+<a id="code-block-11"></a>
+
+```java
 AsyncClient client = ClientHelper.getClient();
 InitiatePptCreationV2Request request = InitiatePptCreationV2Request.builder()
         .workspaceId(workspaceId)
@@ -575,7 +709,9 @@ try {
 
 1.  轮询exportTaskId，如下为代码示例。
 
-```
+<a id="code-block-12"></a>
+
+```java
 AsyncClient client = ClientHelper.getClient();
 GetPptInfoRequest request = GetPptInfoRequest.builder()
         .workspaceId(PublicConfig.get("workspace-id"))
@@ -604,7 +740,9 @@ return null;
 
 1.  轮询任务结果，如下为示例代码。
 
-```
+<a id="code-block-13"></a>
+
+```java
 AsyncClient client = MyClientHelper.getClient();
 GetPptArtifactExportResultRequest request = GetPptArtifactExportResultRequest.builder()
         .workspaceId(workspaceId)
@@ -628,6 +766,10 @@ for(int i = 0; i < 30; i++) {
 }
 ```
 
+<a id="场景五-全云端完成ppt作品的创建-只轮询最终作品下载链接"></a>
+
+<a id="40dd30033ba17"></a>
+
 ### 场景五：全云端完成PPT作品的创建 -- 只轮询最终作品下载链接
 
 由云端完成PPT作品的创建和导出，下发文件链接。
@@ -636,7 +778,9 @@ for(int i = 0; i < 30; i++) {
 
 1.  获取导出任务的ID，如下为示例代码。
 
-```
+<a id="code-block-14"></a>
+
+```java
 AsyncClient client = ClientHelper.getClient();
 InitiatePptCreationV2Request request = InitiatePptCreationV2Request.builder()
         .workspaceId(workspaceId)
@@ -657,7 +801,9 @@ try {
 
 1.  轮询exportFileLink，如下为示例代码。
 
-```
+<a id="code-block-15"></a>
+
+```java
 AsyncClient client = ClientHelper.getClient();
 GetPptInfoRequest request = GetPptInfoRequest.builder()
         .workspaceId(PublicConfig.get("workspace-id"))
@@ -684,9 +830,15 @@ try {
 return null;
 ```
 
+<a id="4-一键调用示例"></a>
+
+<a id="971a3fc05fnef"></a>
+
 ## 4 一键调用示例
 
 为提升开发效率和使用体验，我们已提供完整的Demo示例代码，支持用户一键调用，便于快速集成与调试，
+
+<a id="8b031c9afe33o"></a>
 
 ##### 后端：
 
@@ -703,6 +855,8 @@ Demo示例可下载如下文档：
 
 打开本地网页后，在**选择场景，生成PPT**区域提供四种集成场景按钮：**一站式SaaS，全部流程通过JS SDK来进行**、**先由服务端创建作品，然后通过JS SDK编辑作品**、**不集成JS SDK，完全由后端完成，并返回导出任务ID，然后轮询作品结果**、**完全由后端完成，直接轮询获取导出文件链接**。单击任一场景按钮即可生成PPT，完成后页面显示**导出完成!**提示及**点击下载 PPT 文件**链接，单击即可下载生成的PPT文件。
 
+<a id="00c5706f85epi"></a>
+
 ##### 前端示例：
 
 以下是前端配置参考示例代码，填入相关接口参数后，本地服务启动界面即可快速查看效果，Demo示例可下载如下文档：
@@ -713,12 +867,20 @@ Demo示例可下载如下文档：
 
 启动本地服务后，界面左侧显示**SDK 调试**面板，包含**基于内置模板生成PPT**、**基于自定义模板生成PPT**、**编辑PPT作品**（当前高亮选中）、**预览PPT作品**、**销毁PPT**五个功能按钮。主编辑区域展示AI生成的PPT封面幻灯片，顶部工具栏提供文本、形状、图片、素材、表格、图表、公式、LOGO等编辑工具，右侧提供设计、模板、美化、合成、背景、大纲、备注等辅助面板，底部标注"\*AI生成内容，仅供参考"。
 
+<a id="5-其他"></a>
+
+<a id="867732bc09z8n"></a>
+
 ## 5 其他
 
 前端SDK销毁：
 
-**重要**业务处理过程中谨慎调用，一般离开界面处理即可
+> **重要**
+>
+> 业务处理过程中谨慎调用，一般离开界面处理即可
 
-```
+<a id="code-block-16"></a>
+
+```text
 windows.Quanmiao.deleteIframe();
 ```

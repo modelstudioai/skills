@@ -6,6 +6,10 @@ Code Interpreter Sandbox 面向需要运行 Python/Node 脚本、处理文件、
 
 Sandbox 可作为 Code Interpreter Sandbox 使用：业务系统负责上传数据、生成或选择分析脚本、校验输入输出；沙箱负责运行脚本、处理临时文件、返回结构化结果。适合智能问答、运营分析、报表生成、客服数据诊断等场景。
 
+<a id="业务场景"></a>
+
+<a id="h-sandbox-bp-ci-scenarios"></a>
+
 ## 业务场景
 
 -   上传 CSV，自动计算指标并给出摘要。
@@ -13,20 +17,30 @@ Sandbox 可作为 Code Interpreter Sandbox 使用：业务系统负责上传数�
 -   报表系统把中间计算放到沙箱执行，结果文件再回传给业务系统。
 -   多租户场景下，每次分析使用独立沙箱，降低数据串扰风险。
 
+<a id="推荐流程"></a>
+
+<a id="h-sandbox-bp-ci-flow"></a>
+
 ## 推荐流程
 
-先基于代码解释器镜像（`code-interpreter-v1`）创建模版并获取 `templateCode`，详见[模版管理](raw/application-user-guide/agent-development/sandbox/sandbox-templates.md)。然后把分析任务拆成四步：
+先基于代码解释器镜像（`code-interpreter-v1`）创建模版并获取 `templateCode`，详见[模版管理](sandbox-templates.md)。然后把分析任务拆成四步：
 
 1.  写入输入数据和分析脚本。
 2.  使用固定入口执行脚本，例如 `python3 analyze.py`。
 3.  要求脚本输出 JSON 摘要，必要时生成文件产物。
 4.  读取结果并销毁沙箱。
 
+<a id="交互式代码执行"></a>
+
+<a id="h-sandbox-bp-ci-interactive"></a>
+
 ## 交互式代码执行
 
 需要 Notebook 类 `run_code` 体验时，使用 `e2b-code-interpreter` SDK 直接创建实例并调用 `run_code`：
 
-```
+<a id="code-block"></a>
+
+```python
 from e2b_code_interpreter import Sandbox
 
 ALIYUN_UID = "your aliyunUid"
@@ -67,13 +81,21 @@ finally:
 
 `run_code` 更适合模型逐步生成和修正代码的交互式任务；固定脚本入口更适合生产链路，因为脚本版本、输入目录、超时时间和输出格式都更容易固化。
 
+<a id="示例代码"></a>
+
+<a id="h-sandbox-bp-ci-example"></a>
+
 ## 示例代码
 
 以下示例在沙箱中分析分客群收入，返回总收入、贡献最高客群和摘要：
 
-**说明**Node.js 侧固定 SDK 版本：`npm install e2b@2.31.0`，更高版本创建实例时返回 405。
+> **说明**
+>
+> Node.js 侧固定 SDK 版本：`npm install e2b@2.31.0`，更高版本创建实例时返回 405。
 
-```
+<a id="code-block-2"></a>
+
+```javascript
 import { Sandbox } from "e2b";
 
 const ALIYUN_UID = "your aliyunUid";
@@ -135,6 +157,10 @@ print(json.dumps({
 }
 ```
 
+<a id="上线建议"></a>
+
+<a id="h-sandbox-bp-ci-production"></a>
+
 ## 上线建议
 
 -   输入文件限制大小、类型和路径，避免一次任务占用过多内存或磁盘。
@@ -144,8 +170,12 @@ print(json.dumps({
 -   常用依赖如 `pandas`、`openpyxl`、绘图库和业务 SDK 建议固化到模版。
 -   对外输出结果与排障日志分开处理，避免把完整堆栈或敏感数据直接返回。
 
+<a id="下一步"></a>
+
+<a id="h-sandbox-bp-ci-next"></a>
+
 ## 下一步
 
--   [实例管理与使用](raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)：执行命令、运行代码与读写文件
--   [模版管理](raw/application-user-guide/agent-development/sandbox/sandbox-templates.md)：基于代码解释器镜像创建模版
--   [使用 Browser Use Sandbox](raw/application-user-guide/agent-development/sandbox/sandbox-best-practice-browser-use.md)：网页自动化类任务的最佳实践
+-   [实例管理与使用](sandbox-sdk.md)：执行命令、运行代码与读写文件
+-   [模版管理](sandbox-templates.md)：基于代码解释器镜像创建模版
+-   [使用 Browser Use Sandbox](sandbox-best-practice-browser-use.md)：网页自动化类任务的最佳实践

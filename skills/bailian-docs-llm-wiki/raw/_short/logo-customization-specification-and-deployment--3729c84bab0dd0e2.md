@@ -2,6 +2,10 @@
 
 本文档是关于全妙SaaS产品Logo定制规范和部署方式的介绍。
 
+<a id="logo可定制范围"></a>
+
+<a id="aad0db44e63mo"></a>
+
 ## Logo可定制范围
 
 在登录页、菜单栏支持定制您企业内部统一Logo。
@@ -22,16 +26,28 @@
     
     ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2512283771/p1059698.png)
 
+<a id="设计规范"></a>
+
+<a id="fdcb757addsn8"></a>
+
 ## 设计规范
 
 1.  内容规范：背景透明，图文一体；
 2.  尺寸规范：您可综合考虑区域尺寸及示例效果，设计您的logo尺寸（宽高比参考logo容器元素，2倍图最优）。
+
+<a id="示例"></a>
+
+<a id="7a9750d02cequ"></a>
 
 ### 示例
 
 -   示例1：宽高比是140:32（上下无留白），效果如下：![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4326577671/p1041370.png)![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4326577671/p1041369.png)
 -   示例2（妙笔原logo）：宽高比134×32（图片内上下各有留白6px，图片内非空白内容高度是20px），效果如下： ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4326577671/p1041368.png)![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4326577671/p1041367.png)
 
+<a id="部署方式"></a>
+
+<a id="f156364384tpi"></a>
+
 ## 部署方式
 
-您可自主设计 Logo，并通过 [iframe嵌入方案](raw/_short/iframe-embedding-scheme-6f73b86f9f7bdf41.md)完成部署。系统将为您生成专属的公有云 iframe 访问链接，通过iframe嵌入方案进行定制。
+您可自主设计 Logo，并通过 [iframe嵌入方案](iframe-embedding-scheme-6f73b86f9f7bdf41.md)完成部署。系统将为您生成专属的公有云 iframe 访问链接，通过iframe嵌入方案进行定制。

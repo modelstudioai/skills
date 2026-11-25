@@ -1,56 +1,59 @@
 # 通过Spring AI Alibaba检索阿里云百炼知识库
 
+<a id="适用范围"></a>
+
+<a id="48a4bafd73wfc"></a>
+
 ## 适用范围
 
 -   **JDK 版本：**JDK 17 或更高版本
 -   **Spring Boot版本：**Spring Boot 3 GA或更高版本
 -   **Spring AI Alibaba版本：**本文的嵌套 SearchFilters 示例已在 1.1.2.3 版本验证
 
+<a id="选择调用方式"></a>
+
+<a id="saa-retrieval-methods"></a>
+
 ## 选择调用方式
 
 在 Spring AI Alibaba 应用中，可以使用 SDK 检索器，也可以通过 Spring HTTP 客户端直接调用 RAG API。两种方式都支持 `_operator` 与嵌套 `_conditions`，但调用入口和参数不同：
 
-方式
-
-检索入口
-
-知识库参数
-
-适用场景
-
-SAA DashScope SDK
-
-`/api/v1/indices/pipeline/{pipeline_id}/retrieve`
-
-在 `DashScopeDocumentRetrieverOptions` 中设置 `indexName`，由 SDK 查询知识库并解析检索路径
-
-使用现成的检索器接入 Advisor 问答流程
-
-RAG API（HTTP 直调）
-
-`https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/rag/index/retrieve`
-
-请求体传入知识库 ID `index_id`
-
-自行控制 HTTP 请求、检索参数和结果处理
+| 方式 | 检索入口 | 知识库参数 | 适用场景 |
+| --- | --- | --- | --- |
+| SAA DashScope SDK | `/api/v1/indices/pipeline/{pipeline_id}/retrieve` | 在 `DashScopeDocumentRetrieverOptions` 中设置 `indexName`，由 SDK 查询知识库并解析检索路径 | 使用现成的检索器接入 Advisor 问答流程 |
+| RAG API（HTTP 直调） | `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/rag/index/retrieve` | 请求体传入知识库 ID `index_id` | 自行控制 HTTP 请求、检索参数和结果处理 |
 
 HTTP 直调仍可使用 SAA 的 `ChatClient` 生成回答，不需要更换框架。不要将 RAG API 的完整检索 URL 配置为 `DashScopeApi` 的 `baseUrl`：SDK 会自行拼接 Pipeline 路径，两者不是可直接互换的地址。
+
+<a id="操作步骤"></a>
+
+<a id="cce2df8a4dv78"></a>
 
 ## 操作步骤
 
 以下步骤使用 SAA DashScope SDK。HTTP 直调示例见[通过 HTTP 直接调用 RAG API](#saa-rag-api-http)。
 
+<a id="1-获取项目代码"></a>
+
+<a id="c342e0bb0bev9"></a>
+
 ### 1\. 获取项目代码
 
 完整的示例代码请参见[Spring AI Alibaba项目示例](https://github.com/spring-ai-alibaba/examples/tree/main)下的**bailian-rag-knowledge**。请将整个[examples](https://github.com/spring-ai-alibaba/examples/tree/main)目录下载到本地，以确保项目结构和依赖完整。
 
+<a id="2-环境配置"></a>
+
+<a id="5d62688059rcf"></a>
+
 ### 2\. 环境配置
 
-[获取阿里云百炼的API Key](raw/model-api-reference/preparations/get-api-key.md)并配置到环境变量，环境变量名使用`AI_DASHSCOPE_API_KEY`。使用环境变量可避免硬编码带来的安全风险。
+[获取阿里云百炼的API Key](../../../model-api-reference/preparations/get-api-key.md)并配置到环境变量，环境变量名使用`AI_DASHSCOPE_API_KEY`。使用环境变量可避免硬编码带来的安全风险。
 
 > 如需操作[子业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)的知识库，还需要获取[业务空间 ID](https://help.aliyun.com/zh/model-studio/use-workspace)，并配置到环境变量，环境变量名使用`AI_DASHSCOPE_WORKSPACE_ID`。
 
-```
+<a id="code-block"></a>
+
+```yaml
 # bailian-rag-knowledge的配置文件路径：bailian-rag-knowledge/src/main/resources/application.yml
 spring:
   ai:
@@ -59,19 +62,29 @@ spring:
       # workspace-id: ${AI_DASHSCOPE_WORKSPACE_ID} # 业务空间 ID（可选），检索默认业务空间的知识库时无需配置
 ```
 
+<a id="3-示例代码"></a>
+
+<a id="f5d5b01550n2u"></a>
+
 ### 3\. 示例代码
 
 通过 `DashScopeApi` 检索阿里云百炼知识库。Spring AI Alibaba DashScope SDK 通过以下路径发送检索请求：
 
-```
+<a id="code-block-2"></a>
+
+```text
 /api/v1/indices/pipeline/{pipeline_id}/retrieve
 ```
 
-该路径与 [RAG API](raw/application-api-reference/rag-api/rag-api-overview.md) 的 `/api/v1/indices/rag/index/retrieve` 是不同的调用入口，但均支持通过 `_operator` 和嵌套 `_conditions` 表达同一字段的多个 OR 条件。
+该路径与 [RAG API](../../rag-api/rag-api-overview.md) 的 `/api/v1/indices/rag/index/retrieve` 是不同的调用入口，但均支持通过 `_operator` 和嵌套 `_conditions` 表达同一字段的多个 OR 条件。
+
+<a id="accordion-controller示例代码"></a>
 
 Controller示例代码
 
-```
+<a id="code-block-3"></a>
+
+```java
 import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.cloud.ai.example.rag.knowledge.service.RagService;
@@ -98,9 +111,13 @@ public class CloudRagController {
 
 当用户提问时，`DashScopeDocumentRetriever`会检索与问题最相关的文本切片，并将这些上下文与原始问题一并提交给大模型（默认为`qwen-max`）生成回答。
 
+<a id="accordion-service示例代码"></a>
+
 Service示例代码
 
-```
+<a id="code-block-4"></a>
+
+```java
 import com.alibaba.cloud.ai.advisor.DocumentRetrievalAdvisor;
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
 import com.alibaba.cloud.ai.dashscope.rag.*;
@@ -179,7 +196,11 @@ public class CloudRagService implements RagService {
 }
 ```
 
-示例中的 `searchFilters` 表示“部门等于 `Corporate`，或部门名称包含 `Research`，或文档类型包含 `Policy`”。如不需要过滤，可省略 `searchFilters` 配置。完整语法和不同调用方式的差异请参见[知识库 SearchFilters](raw/application-api-reference/more/how-to-use-search-filters.md)。
+示例中的 `searchFilters` 表示“部门等于 `Corporate`，或部门名称包含 `Research`，或文档类型包含 `Policy`”。如不需要过滤，可省略 `searchFilters` 配置。完整语法和不同调用方式的差异请参见[知识库 SearchFilters](https://help.aliyun.com/zh/model-studio/how-to-use-search-filters)。
+
+<a id="最佳实践-通过-http-直接调用-rag-api"></a>
+
+<a id="saa-rag-api-http"></a>
 
 ## 最佳实践：通过 HTTP 直接调用 RAG API
 
@@ -188,14 +209,18 @@ public class CloudRagService implements RagService {
 运行前确认：
 
 -   项目包含 Spring Web 和 Jackson（例如使用 `spring-boot-starter-web`）。`RestClient` 需要 Spring Framework 6.1 或更高版本，对应 Spring Boot 3.2 或更高版本；同时满足所用 SAA 版本的依赖要求。
--   配置 `AI_DASHSCOPE_API_KEY`、`AI_DASHSCOPE_WORKSPACE_ID` 和 `BAILIAN_INDEX_ID` 环境变量，分别为 API Key、目标业务空间 ID 和知识库 ID。HTTP 直调必须指定业务空间 ID，即使使用默认业务空间。鉴权与权限要求见 [RAG API 认证](raw/application-api-reference/rag-api/rag-api-authentication.md)。
+-   配置 `AI_DASHSCOPE_API_KEY`、`AI_DASHSCOPE_WORKSPACE_ID` 和 `BAILIAN_INDEX_ID` 环境变量，分别为 API Key、目标业务空间 ID 和知识库 ID。HTTP 直调必须指定业务空间 ID，即使使用默认业务空间。鉴权与权限要求见 [RAG API 认证](../../rag-api/rag-api-authentication.md)。
 -   知识库已完成数据导入。复用前文的 `orGroup`，并将其中的示例字段和值替换为知识库中实际可检索的字段和值。HTTP 请求体使用 `index_id`、`search_filters`，不是 OpenAPI 的 `IndexId`、`SearchFilters`。
 
 **1\. 实现 HTTP 检索器。** 将以下 `RagApiDocumentRetriever.java` 放在 `CloudRagService` 所在的包中，文件顶部的 `package` 声明与该服务保持一致。
 
+<a id="accordion-ragapidocumentretriever-java"></a>
+
 RagApiDocumentRetriever.java
 
-```
+<a id="code-block-5"></a>
+
+```java
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.ai.document.Document;
@@ -261,7 +286,9 @@ public class RagApiDocumentRetriever implements DocumentRetriever {
 
 **2\. 接入现有问答流程。** 在前文 `CloudRagService` 中，将以下 `import` 添加到文件顶部；在构造方法中，将 `retrieverOptions` 和 `DashScopeDocumentRetriever` 的初始化代码替换为其余代码。保留 `orGroup`、提示词模板和 `ChatClient` 的初始化代码，不重复注册另一个 Service：
 
-```
+<a id="code-block-6"></a>
+
+```java
 import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 import java.net.http.HttpClient;
@@ -290,7 +317,11 @@ HTTP 客户端在服务初始化时创建并复用。示例的连接超时为 10
 
 **响应式应用：** `RestClient` 是同步客户端，上述流程包含阻塞检索。需要端到端非阻塞处理时，使用 `WebClient` 调用同一 RAG API，保持相同的鉴权和 JSON 请求体，通过 `Mono`/`Flux` 组合检索与模型调用；不要在响应式事件循环线程中调用 `.block()`。`WebClient` 并不会将 RAG Retrieve 接口变为 SSE 接口，检索响应仍是一次性 JSON。
 
+<a id="了解更多"></a>
+
+<a id="39372403d7k3x"></a>
+
 ## 了解更多
 
 -   [Spring AI Alibaba](https://java2ai.com/?spm=4347728f.638c0b20.0.0.23f87982NTcSMy)：提供文档教程、实战博客和开发者社区，帮助您快速开发 Java 生成式 AI 应用。
--   [创建和使用知识库](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)：深入了解阿里云百炼知识库的核心功能与最佳实践。
+-   [创建和使用知识库](../../../application-user-guide/knowledge-base/rag-knowledge-base.md)：深入了解阿里云百炼知识库的核心功能与最佳实践。

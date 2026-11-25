@@ -4,16 +4,24 @@
 
 根据用户输入的原始图片、局部涂抹图和任意的文本描述，使用万相模型（wanx-x-painting），即可快速完成图像的二次创作。
 
-**重要**
+> **重要**
+>
+> -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> -   wanx-x-painting 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](../../../model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](wanx-image-edit.md)获取替代方案。
 
--   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
--   wanx-x-painting 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
+<a id="基本介绍"></a>
+
+<a id="e4b6e0df6d2vm"></a>
 
 ## 基本介绍
 
 万相-图像局部重绘是基于自研的Composer组合生成框架的AI绘画创作大模型后置处理链路，能够根据用户输入的原始图片和局部涂抹图、prompt提示词文字内容，生成符合语义描述的多样化风格的局部重绘图像。通过知识重组与可变维度扩散模型，加速收敛并提升最终生成图片的效果, 布局自然、细节丰富、画面细腻、结果逼真。
 
 客户提供原始图片任意涂抹图中区域，结合输入修改初始提示文字，在涂抹区域内生成与新提示文字匹配的内容，涂抹区域外没有变化。
+
+<a id="使用场景"></a>
+
+<a id="5745bcbe728r4"></a>
 
 ## 使用场景
 
@@ -23,6 +31,10 @@
 -   影视与游戏制作：在后期制作中，图像局部重绘技术能帮助快速修改场景细节，如调整角色服饰、道具样式，或是优化视觉特效，减少图像海报等物料制作时间和成本。
 -   个性化礼物定制：图像局部重绘使得个性化定制变得简单快捷，比如在纪念品、T恤或杯子上添加个人照片时，可以轻松调整背景、融合风格或加入定制文字，确保最终产品既符合个人喜好又具有专业品质。
 
+<a id="特色优势"></a>
+
+<a id="sjUBW"></a>
+
 ## 特色优势
 
 -   知识重组&可变维扩散模型：基于自研的Composer组合生成框架的AI局部绘画创作大模型，通过知识重组与可变维度扩散模型，生成符合语义描述的多样化风格的图像。
@@ -30,31 +42,17 @@
 -   高语意精准可控：用户能够精确指定修改区域，确保生成的内容仅限于所选范围，保持图像其余部分不变，实现高度的可控性和精确度。
 -   易于集成使用：用户无需具备高级图像编辑技能，只需简单提示词描述修改意图，即可通过万相系列生成大模型实现复杂图像处理，降低了技术门槛。
 
+<a id="模型概览"></a>
+
+<a id="a0c22dbf96vss"></a>
+
 ### 模型概览
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>计费单价</strong></th><th colspan="2"><strong>限流（主账号与RAM子账号共用）</strong></th><th rowspan="2"><p><strong>免费额度</strong><a href="../../../test-1/new-free-quota.md">（查看）</a></p></th></tr><tr><th><strong>任务下发接口QPS限制</strong></th><th><strong>同时处理中任务数量</strong></th></tr></thead><tbody><tr><td><p>wanx-x-painting</p></td><td><p>目前仅供免费体验。</p><blockquote><p>免费额度用完后不可调用，推荐参考<a href="../../../model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md">图像编辑-千问</a>或<a href="wanx-image-edit.md">图像编辑-万相2.1</a>获取替代方案。</p></blockquote></td><td><p>2</p></td><td><p>1</p></td><td><p>500张</p></td></tr></tbody></table>
 
-**计费单价**
+<a id="快速开始"></a>
 
-**限流（主账号与RAM子账号共用）**
-
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
-
-**任务下发接口QPS限制**
-
-**同时处理中任务数量**
-
-wanx-x-painting
-
-目前仅供免费体验。
-
-> 免费额度用完后不可调用，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
-
-2
-
-1
-
-500张
+<a id="46758eeb89xcr"></a>
 
 ## 快速开始
 
@@ -63,27 +61,22 @@ wanx-x-painting
 -   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
 -   图像大小：不超过10MB。
 -   图像分辨率：大于256×256像素，小于4096×4096像素。
--   URL地址中不能包含中文字符（请在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)）。
+-   URL地址中不能包含中文字符（请在此[获取临时公网URL](../../../../model-api-reference/more-about-models/get-temporary-file-url.md)）。
 
-**输入图像（重绘前）**
-
-**mask涂抹图**
-
-**提示词示例**
-
-**输出图像（重绘后）**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8649386271/p848790.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8649386271/p848791.png)
-
-一只狗戴着红色眼镜
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8649386271/p848792.png)
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **输入图像（重绘前）** | **mask涂抹图** | **提示词示例** | **输出图像（重绘后）** |
+| ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8649386271/p848790.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8649386271/p848791.png) | 一只狗戴着红色眼镜 | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8649386271/p848792.png) |
 
 由于模型计算耗时较长，示例代码均展示异步处理的调用方式，以避免请求超时。
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+您需要已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](../../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="sec-tabs"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
 
 #### curl
 
@@ -91,7 +84,9 @@ wanx-x-painting
 
 由于模型计算耗时较长，HTTP使用异步调用。创建好的任务会进入任务池，等待调度执行。因此，这个接口会返回一个任务ID（task\_id），后续根据任务ID进行状态和结果的查询。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -109,18 +104,32 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
   }
 }'
 ```
+
 **2、根据任务ID查询文生图的结果**
-```
+
+<a id="code-block-2"></a>
+
+```bash
 curl -X GET \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 https://dashscope.aliyuncs.com/api/v1/tasks/{your_task_id}
 ```
 
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-同步调用-tab"></a>
 
 同步调用
 
-```
+<a id="code-code-group-同步调用"></a>
+
+```python
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import requests
@@ -163,9 +172,13 @@ except DashScopeError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="fig-code-group-异步调用-tab"></a>
+
 异步调用
 
-```
+<a id="code-code-group-异步调用"></a>
+
+```python
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import requests
@@ -226,11 +239,21 @@ if __name__ == '__main__':
         print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-同步调用-tab"></a>
 
 同步调用
 
-```
+<a id="code-code-group-2-同步调用"></a>
+
+```java
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesis;
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisParam;
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisResult;
@@ -279,9 +302,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-2-异步调用-tab"></a>
+
 异步调用
 
-```
+<a id="code-code-group-2-异步调用"></a>
+
+```java
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesis;
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisParam;
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisResult;
@@ -361,6 +388,10 @@ public class Main {
 }
 ```
 
+<a id="api参考"></a>
+
+<a id="8db33ec4b87vm"></a>
+
 ## API参考
 
-API的输入输出参数，请参见[万相-图像局部重绘](raw/model-api-reference/image-generation/wan-image-api-reference/vary-region-api-reference.md)。
+API的输入输出参数，请参见[万相-图像局部重绘](../../../../model-api-reference/image-generation/wan-image-api-reference/vary-region-api-reference.md)。

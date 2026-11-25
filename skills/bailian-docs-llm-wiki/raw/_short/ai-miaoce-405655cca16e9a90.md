@@ -1,12 +1,24 @@
 # AI妙策
 
+<a id="功能概述"></a>
+
+<a id="d149de776cmcx"></a>
+
 ## 功能概述
 
 在文章创作过程中，用户可以借助AI妙策来辅助创作。AI妙策主要集中在聚合热点话题榜和平台话题榜两个方面。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5148919071/p771423.png)
 
+<a id="具体功能"></a>
+
+<a id="e4ae07603d3xn"></a>
+
 ## 具体功能
+
+<a id="话题分析"></a>
+
+<a id="c9ef149e4adh0"></a>
 
 ### 话题分析
 
@@ -37,6 +49,10 @@ AI妙策中的话题分析可以作为创作的灵感来源，通过网页视角
 是指目前在该选题下，尚无媒体用过的切入点视角，比较新颖的视角。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6148919071/p771431.png)
+
+<a id="选题策划"></a>
+
+<a id="6e2fec44e1b10"></a>
 
 ### 选题策划
 

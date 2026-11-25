@@ -1,40 +1,42 @@
 # application [support](support.md)
 
-`application support` 是百炼平台为应用层调用提供的基础服务支持能力，涵盖模型接入、功能扩展、参数配置与生命周期管理等核心环节。它面向开发者提供统一的 API 接口和 SDK 封装，用于构建生产级 AI 应用。该能力依赖平台底层模型服务与资源调度系统，需配合具体模型实例使用。
+`application support` 指百炼平台为开发者构建和运行 AI 应用（如 Agent、RAG 增强应用、插件集成应用等）所提供的能力支撑与服务边界。它涵盖模型调用、插件管理、知识库检索、[流式输出](../concepts/streaming-output.md)控制等核心功能，同时也明确定义了技术支持范围、参数约束及合规要求。开发者需结合具体场景，在平台能力边界内进行集成与优化。
 
 ## 支持的模型/功能
 
-- 支持调用百炼平台托管的全部大语言模型（如 Qwen 系列、Qwen-VL、Qwen-Audio）及部分第三方模型（需通过 [应用接入协议](../../raw/application-user-guide/application-support/application-related-agreements.md) 授权）；
-- 提供 Prompt 工程支持（含变量注入、模板版本管理）、[函数调用](../concepts/function-calling.md)（Function Calling）、流式响应、多轮会话上下文维护；
-- 支持异步任务提交（如长文本摘要、批量推理），结果通过回调或轮询获取；  
-- 所有功能均以 `application` 为作用域进行权限隔离与配额控制，详情见 [售后说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)。
+- **Agent 能力**：支持通过官方插件（Python 解释器、计算器、图片生成、夸克搜索、二维码生成、GitHub 搜索）扩展智能体行为；自定义插件可接入，但仅支持 `authorization` header 透传，[不支持其他自定义 header](../../raw/application-user-guide/application-support/application-faq.md)。
+- **RAG 检索增强**：支持多知识库并行检索，按配置策略打分后选取 topN 结果；适用于问答系统、客服对话、教育内容生成等场景，详见 [Agent 应用与知识库常见问题](../../raw/application-user-guide/application-support/application-faq.md)。
+- **流式与增量输出**：可通过 `stream=True` 启用流式响应；进一步设置 `incremental_output=True` 实现增量式[流式输出](../concepts/streaming-output.md)（即每次返回新生成 token，而非全量重发），避免前端重复渲染。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model_id` | string | 是 | 模型唯一标识，须在控制台「模型管理」中启用后方可使用；不支持直接传入模型名称（如 `"qwen-max"`），必须使用平台分配的 ID |
-| `input` | object | 是 | 输入结构体，包含 `messages`（标准 ChatML 格式）或 `prompt`（单 prompt 字符串），详见 [常见问题](../../raw/application-user-guide/application-support/application-faq.md) 中的格式示例 |
-| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时返回 Server-Sent Events 流，注意客户端需处理 chunk 解析 |
-| `max_tokens` | integer | 否 | 最大生成 token 数，硬上限受模型自身限制（如 Qwen2-72B 最高支持 8192） |
+| 参数名 | 类型 | 说明 | 是否必需 |
+|--------|------|------|----------|
+| `stream` | bool | 启用流式响应（SSE 格式） | 否（默认 `False`） |
+| `incremental_output` | bool | 在 `stream=True` 下启用增量式输出（仅返回新增内容） | 否（默认 `False`） |
+| `MD5` | string | 文件上传接口必填，用于校验文件完整性 | 是（见 [数据管理](../../raw/application-user-guide/application-support/application-faq.md)） |
+
+> **注意**：文档 1 中第 8 条明确 `incremental_output=True` 为增量式[流式输出](../concepts/streaming-output.md)开关，但该参数未在官方 OpenAPI 文档中统一标注为标准字段；实际使用前请以最新 SDK 或 `/v1/chat/completions` 接口文档为准。
 
 ## 使用方式
 
-1. 在百炼控制台创建应用，获取 `app_id` 和 `app_secret`；
-2. 使用 SDK（推荐 Python/Java）或直接调用 HTTPS endpoint：`POST https://dashscope.aliyuncs.com/api/v1/applications/{app_id}/chat/completions`；
-3. 请求头携带 `Authorization: Bearer {app_secret}`，Body 按上述参数格式组织 JSON；
-4. 错误响应遵循 RFC 7807 标准，`error.code` 包含 `InvalidParameter`、`QuotaExceeded` 等可编程识别码。
+- **插件调用**：自定义插件需按协议定义函数签名（含 name、description、parameters），由大模型理解并调用；参数信息将透传至模型上下文供推理使用。
+- **RAG 应用调试**：若检索结果不准确，可通过界面“问题反馈”按钮提交，或复制 `RequestId` 提交阿里云工单（参考 [Agent 应用与知识库常见问题](../../raw/application-user-guide/application-support/application-faq.md)）。
+- **文件上传**：仅支持 `.pdf`（小写后缀）、`.doc`、`.docx`；结构化数据导入时需避免空行，否则后续行将被忽略。
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 总长度（含 system/user/assistant 角色标记）不得超过模型 context 长度的 95%，否则触发 `ContextLengthExceeded` 错误；
-- 异步任务最长保留结果 7 天，超期自动清理，不可恢复；
-- > **注意**：原始文档中 [常见问题](../../raw/application-user-guide/application-support/application-faq.md) 提到“支持传入 `model_name` 字段”，但该字段已于 v2.3.0 版本废弃，实际仅接受 `model_id`，请以控制台模型列表页显示的 ID 为准；
-- > **注意**：[售后说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md) 中标注的“免费调用量包含 10 万 tokens/月”，该额度自 2024 年 6 月起已调整为按应用维度独立计算，不再与账号级额度合并；
-- 调用失败时优先检查 `app_secret` 是否过期（默认 12 个月有效期），而非重试网络请求。
+- **插件限制**：部分官方插件（如夸克搜索、GitHub 搜索）需申请开通；自定义插件本身免费，但涉及 [prompt](prompt.md) 优化、应用调用测试等操作将产生计费。
+- **文件与容量限制**：单业务空间最多上传 10 万个文档；超限时需提交工单申请扩容。
+- **售后支持边界**：  
+  - ✅ 支持范围包括：API/SDK 故障诊断、控制台问题、账号与计费咨询、连通性基础测试（如 curl 验证服务可达性）。  
+  - ❌ 不支持范围包括：第三方工具（如 Cursor、Windsurf）的部署/配置/排障、用户本地网络/代理/防火墙问题、业务代码编写指导、非阿里云侧服务的运维——详见 [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)。  
+- **合规要求**：上架应用或小程序前，必须完成[应用合规备案](../../model-user-guide/security-and-compliance/compliance-and-launch-filing-guide-for-ai-apps-powered-by-the-tongyi-model.md)，并申请通义千问合作协议（参见 [应用/小程序备案](../../raw/application-user-guide/application-support/application-faq.md)）。
 
 ## 来源文档
 
-- [服务支持](../../raw/application-user-guide/application-support.md)
+- [Agent 应用与知识库常见问题](../../raw/application-user-guide/application-support/application-faq.md)
+- [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)
+- [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)
 
 

@@ -2,193 +2,78 @@
 
 深度搜索应用支持按 session\_id 维护对话文件目录树：可基于临时文件ID和文件/目录元信息更新目录树，也可删除文件并获取目录树信息，该能力仅适用于法律阅卷场景。
 
+<a id="更新session文件"></a>
+
+<a id="24a789ab3b1d4"></a>
+
 ## 更新session文件
 
 支持创建 session\_id 维度文件目录树信息，增强模型在特定场景下对文件的理解能力，需要基于已解析成功的临时动态文件 ID、目录及文件元信息自行构建。
 
+<a id="请求语法"></a>
+
+<a id="fb3725f2a6g14"></a>
+
 ### 请求语法
 
-```
+<a id="code-block"></a>
+
+```http
 POST /deep-search-agent/session/files/upsert HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="764bba3785jy4"></a>
+
 ### 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| input | object | 是 | 请求参数 |
+| input.request\_id | str | 否 | 请求ID（业务） |
+| input.chat\_id | str | 否 | 对话ID |
+| input.session\_id | str | 是 | 会话ID |
+| input.files | array\[object\] | 是 | 已完成解析的文件信息集合 |
+| input.files.file\_id | str | 是 | 文件ID |
+| input.files.file\_name | str | 是 | 文件名 |
+| input.files.file\_path | str | 是 | 完整文件路径 |
+| input.files.type | str | 是 | 类型（取值：file/dir） |
+| input.files.index\_order | int | 是 | 排序 |
+| parameters | object | 是 | 配置参数，该接口下留空 {} |
 
-**类型**
+<a id="返回参数"></a>
 
-**是否必须**
-
-**说明**
-
-input
-
-object
-
-是
-
-请求参数
-
-input.request\_id
-
-str
-
-否
-
-请求ID（业务）
-
-input.chat\_id
-
-str
-
-否
-
-对话ID
-
-input.session\_id
-
-str
-
-是
-
-会话ID
-
-input.files
-
-array\[object\]
-
-是
-
-已完成解析的文件信息集合
-
-input.files.file\_id
-
-str
-
-是
-
-文件ID
-
-input.files.file\_name
-
-str
-
-是
-
-文件名
-
-input.files.file\_path
-
-str
-
-是
-
-完整文件路径
-
-input.files.type
-
-str
-
-是
-
-类型（取值：file/dir）
-
-input.files.index\_order
-
-int
-
-是
-
-排序
-
-parameters
-
-object
-
-是
-
-配置参数，该接口下留空 {}
+<a id="b2221587ffxt1"></a>
 
 ### 返回参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| code | str | 是 | 状态码（成功：200） |
+| message | str | 是 | 状态信息 |
+| output | object | 是 | 输出参数 |
+| output.request\_id | str | 否 | 请求ID |
+| output.chat\_id | str | 否 | 对话ID |
+| output.session\_id | str | 否 | 会话ID |
+| output.result | array\[object\] | 是 | 更新处理结果 |
+| output.result.\[0\].status | bool | 是 | 更新处理状态 |
 
-**类型**
+<a id="示例"></a>
 
-**是否必须**
-
-**说明**
-
-code
-
-str
-
-是
-
-状态码（成功：200）
-
-message
-
-str
-
-是
-
-状态信息
-
-output
-
-object
-
-是
-
-输出参数
-
-output.request\_id
-
-str
-
-否
-
-请求ID
-
-output.chat\_id
-
-str
-
-否
-
-对话ID
-
-output.session\_id
-
-str
-
-否
-
-会话ID
-
-output.result
-
-array\[object\]
-
-是
-
-更新处理结果
-
-output.result.\[0\].status
-
-bool
-
-是
-
-更新处理状态
+<a id="9658186abfu20"></a>
 
 ### 示例
 
+<a id="请求示例"></a>
+
+<a id="f842698af5y13"></a>
+
 #### 请求示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "input": {
         "session_id": "18220***66b3",
@@ -207,9 +92,15 @@ bool
 }
 ```
 
+<a id="返回示例"></a>
+
+<a id="33cd52baa8krp"></a>
+
 #### 返回示例
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "code": "200",
     "message": "Success"
@@ -222,165 +113,82 @@ bool
 }
 ```
 
+<a id="删除session文件"></a>
+
+<a id="3e1a0e1baecq7"></a>
+
 ## 删除session文件
 
 支持删除 session\_id 维度文件目录树中的文件信息
+
+<a id="服务接口"></a>
+
+<a id="RQaTU"></a>
 
 ### 服务接口
 
 支持删除 session\_id 维度文件目录树信息。
 
+<a id="请求语法-2"></a>
+
+<a id="0f8e418f22xod"></a>
+
 ### 请求语法
 
-```
+<a id="code-block-4"></a>
+
+```http
 POST /deep-search-agent/session/files/delete HTTP/1.1
 ```
 
+<a id="请求参数-2"></a>
+
+<a id="cc988e6d8c538"></a>
+
 ### 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| 字段 | 类型 | 是否必须 | 说明 |
+| input | object | 是 | 请求参数 |
+| input.request\_id | str | 否 | 请求ID（业务） |
+| input.chat\_id | str | 否 | 对话ID |
+| input.session\_id | str | 是 | 会话ID |
+| input.file\_ids | array\[str\] | 是 | 文件ID集合 |
+| parameters | object | 是 | 配置参数，该接口下留空 {} |
 
-**类型**
+<a id="返回参数-2"></a>
 
-**是否必须**
-
-**说明**
-
-字段
-
-类型
-
-是否必须
-
-说明
-
-input
-
-object
-
-是
-
-请求参数
-
-input.request\_id
-
-str
-
-否
-
-请求ID（业务）
-
-input.chat\_id
-
-str
-
-否
-
-对话ID
-
-input.session\_id
-
-str
-
-是
-
-会话ID
-
-input.file\_ids
-
-array\[str\]
-
-是
-
-文件ID集合
-
-parameters
-
-object
-
-是
-
-配置参数，该接口下留空 {}
+<a id="cf516632fer8j"></a>
 
 ### 返回参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| code | str | 是 | 状态码（成功：200） |
+| message | str | 是 | 状态信息 |
+| output | object | 是 | 输出参数 |
+| output.request\_id | str | 否 | 请求ID |
+| output.chat\_id | str | 否 | 对话ID |
+| output.session\_id | str | 否 | 会话ID |
+| output.result | array\[object\] | 是 | 更新处理结果 |
+| output.result.\[0\].status | bool | 是 | 更新处理状态 |
 
-**类型**
+<a id="示例-2"></a>
 
-**是否必须**
-
-**说明**
-
-code
-
-str
-
-是
-
-状态码（成功：200）
-
-message
-
-str
-
-是
-
-状态信息
-
-output
-
-object
-
-是
-
-输出参数
-
-output.request\_id
-
-str
-
-否
-
-请求ID
-
-output.chat\_id
-
-str
-
-否
-
-对话ID
-
-output.session\_id
-
-str
-
-否
-
-会话ID
-
-output.result
-
-array\[object\]
-
-是
-
-更新处理结果
-
-output.result.\[0\].status
-
-bool
-
-是
-
-更新处理状态
+<a id="3a0e2c8ef6snn"></a>
 
 ### 示例
 
+<a id="请求示例-2"></a>
+
+<a id="cb0112f469573"></a>
+
 #### 请求示例
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "input": {
         "session_id": "18220***66b3",
@@ -393,9 +201,15 @@ bool
 }
 ```
 
+<a id="返回示例-2"></a>
+
+<a id="964268f259wjw"></a>
+
 #### 返回示例
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "code": "200",
     "message": "Success"
@@ -408,209 +222,80 @@ bool
 }
 ```
 
+<a id="获取session文件"></a>
+
+<a id="c5ed6a23d9yd6"></a>
+
 ## 获取session文件
 
 支持获取 session\_id 维度文件目录树信息。
 
+<a id="请求语法-3"></a>
+
+<a id="040534d8c1z7g"></a>
+
 ### 请求语法
 
-```
+<a id="code-block-7"></a>
+
+```http
 POST /deep-search-agent/session/files/list HTTP/1.1
 ```
 
+<a id="请求参数-3"></a>
+
+<a id="b6b67a48f90zd"></a>
+
 ### 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| input | object | 是 | 请求参数 |
+| input.request\_id | str | 否 | 请求ID（业务） |
+| input.chat\_id | str | 否 | 对话ID |
+| input.session\_id | str | 是 | 会话ID |
+| input.page\_number | int | 否 | 分页参数，页码 |
+| input.page\_size | int | 否 | 分页参数，每页数量 |
+| parameters | object | 是 | 配置参数，该接口下留空 {} |
 
-**类型**
+<a id="返回参数-3"></a>
 
-**是否必须**
-
-**说明**
-
-input
-
-object
-
-是
-
-请求参数
-
-input.request\_id
-
-str
-
-否
-
-请求ID（业务）
-
-input.chat\_id
-
-str
-
-否
-
-对话ID
-
-input.session\_id
-
-str
-
-是
-
-会话ID
-
-input.page\_number
-
-int
-
-否
-
-分页参数，页码
-
-input.page\_size
-
-int
-
-否
-
-分页参数，每页数量
-
-parameters
-
-object
-
-是
-
-配置参数，该接口下留空 {}
+<a id="55b51fb6c81aw"></a>
 
 ### 返回参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| code | str | 是 | 状态码（成功：200） |
+| message | str | 是 | 状态信息 |
+| output | object | 是 | 输出参数 |
+| output.request\_id | str | 否 | 请求ID |
+| output.chat\_id | str | 否 | 对话ID |
+| output.session\_id | str | 否 | 会话ID |
+| output.result | object | 是 | 更新处理结果 |
+| output.result.total | int | 是 | 命中总数 |
+| output.result.files | array\[object\] | 是 | 文件列表信息 |
+| output.result.files.\[0\].file\_id | str | 是 | 文件ID |
+| output.result.files.\[0\].file\_name | str | 是 | 文件名 |
+| output.result.files.\[0\].file\_path | str | 是 | 文件路径 |
+| output.result.files.\[0\].type | str | 是 | 类型（取值：file/dir） |
+| output.result.files.\[0\].index\_order | int | 是 | 排序 |
 
-**类型**
+<a id="示例-3"></a>
 
-**是否必须**
-
-**说明**
-
-code
-
-str
-
-是
-
-状态码（成功：200）
-
-message
-
-str
-
-是
-
-状态信息
-
-output
-
-object
-
-是
-
-输出参数
-
-output.request\_id
-
-str
-
-否
-
-请求ID
-
-output.chat\_id
-
-str
-
-否
-
-对话ID
-
-output.session\_id
-
-str
-
-否
-
-会话ID
-
-output.result
-
-object
-
-是
-
-更新处理结果
-
-output.result.total
-
-int
-
-是
-
-命中总数
-
-output.result.files
-
-array\[object\]
-
-是
-
-文件列表信息
-
-output.result.files.\[0\].file\_id
-
-str
-
-是
-
-文件ID
-
-output.result.files.\[0\].file\_name
-
-str
-
-是
-
-文件名
-
-output.result.files.\[0\].file\_path
-
-str
-
-是
-
-文件路径
-
-output.result.files.\[0\].type
-
-str
-
-是
-
-类型（取值：file/dir）
-
-output.result.files.\[0\].index\_order
-
-int
-
-是
-
-排序
+<a id="497e1a3fd3uk2"></a>
 
 ### 示例
 
+<a id="请求示例-3"></a>
+
+<a id="93402a92f4lat"></a>
+
 #### 请求示例
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "input": {
         "session_id": "18220***66b3",
@@ -622,9 +307,15 @@ int
 }
 ```
 
+<a id="返回示例-3"></a>
+
+<a id="452c4b230ez1x"></a>
+
 #### 返回示例
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "code": "200",
     "message": "Success"
@@ -638,11 +329,21 @@ int
 }
 ```
 
+<a id="调用示例"></a>
+
+<a id="ab0dc25cccefs"></a>
+
 ## 调用示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import sys
 import uuid
@@ -737,9 +438,13 @@ if __name__ == "__main__":
         exit(1)
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

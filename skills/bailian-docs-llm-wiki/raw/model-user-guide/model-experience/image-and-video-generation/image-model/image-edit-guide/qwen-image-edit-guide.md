@@ -2,15 +2,27 @@
 
 千问-图像编辑模型支持多图输入和多图输出，可精确修改图内文字、增删或移动物体、改变主体动作、迁移图片风格及增强画面细节。
 
+<a id="快速开始"></a>
+
+<a id="61747164c4o6o"></a>
+
 ## 快速开始
 
-在调用前，您需要[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+在调用前，您需要[获取与配置 API Key](../../../../../model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。目前，该SDK已支持Python和Java。
+如需通过SDK进行调用，请[安装DashScope SDK](../../../../../model-api-reference/preparations/install-sdk.md)。目前，该SDK已支持Python和Java。
+
+<a id="sec-tabs"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
-```
+<a id="code-block"></a>
+
+```python
 import os
 import base64
 import mimetypes
@@ -58,9 +70,15 @@ for part in (message.content_parts or []):
         print(f"Generated image URL: {part['image']}")
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-2"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
@@ -133,11 +151,17 @@ public class ImageEditExample {
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
 以下为华北2（北京）地域的URL，各地域的URL不同。如果使用新加坡地域的模型，需将URL替换为：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-```
+<a id="code-block-3"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -164,9 +188,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="accordion-响应示例"></a>
+
 响应示例
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -195,11 +223,19 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="accordion-通过url下载图像到本地"></a>
+
 通过URL下载图像到本地
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-code-1-tab"></a>
 
 Code 1
 
-```
+<a id="code-code-group-code-1"></a>
+
+```text
 # 需要安装requests以下载图像: pip install requests
 import requests
 
@@ -219,9 +255,13 @@ image_url = "https://dashscope-result-sz.oss-cn-shenzhen.aliyuncs.com/xxx.png?Ex
 download_image(image_url, save_path='output.png')
 ```
 
+<a id="fig-code-group-code-2-tab"></a>
+
 Code 2
 
-```
+<a id="code-code-group-code-2"></a>
+
+```text
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -259,6 +299,10 @@ public class ImageDownloader {
 }
 ```
 
+<a id="模型选型建议"></a>
+
+<a id="435d878036n1t"></a>
+
 ## 模型选型建议
 
 -   `qwen-image-3.0-pro`**（旗舰效果）：**千问图像3.0旗舰版，图像生成与编辑能力全面升级，文字渲染、真实质感、语义遵循能力更强。
@@ -268,7 +312,15 @@ public class ImageDownloader {
 
 各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)模型列表。
 
+<a id="输入说明"></a>
+
+<a id="96633cdad4avs"></a>
+
 ## 输入说明
+
+<a id="输入图像-messages"></a>
+
+<a id="7995070a9ep8i"></a>
 
 ### 输入图像（messages）
 
@@ -285,7 +337,9 @@ public class ImageDownloader {
 -   文件大小：单张图片文件大小不得超过 10MB。
     
 
-```
+<a id="code-block-5"></a>
+
+```json
 "messages": [
     {
         "role": "user",
@@ -299,11 +353,17 @@ public class ImageDownloader {
 ]
 ```
 
+<a id="图像输入顺序"></a>
+
+<a id="87e8051f646bi"></a>
+
 ### 图像输入顺序
 
 多图输入时，按照数组中的顺序定义图像顺序。因此，提示词引用的图像编号需要**与图像数组中的顺序一一对应**，例如：数组中的第一张图片为"图1"，第二张为"图2"，或者使用标记形式如"\[图1\]"、"\[图2\]"。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "content": [
         {"text": "编辑指令，如：将图1中的闹钟放置到图2的餐桌的花瓶旁边位置"},
@@ -313,31 +373,17 @@ public class ImageDownloader {
 }
 ```
 
-**输入图像**
+<table><thead><tr><th colspan="2"><p><strong>输入图像</strong></p></th><th colspan="2"><p><strong>输出图像</strong></p></th></tr></thead><tbody><tr><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1025838.webp" alt="image (19)-转换自-png"></p><p>图1</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7142593671/p1025839.webp" alt="image (20)-转换自-png"></p><p>图2</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1021092.webp" alt="04e0fc39-7ad6-41e0-9df9-1f69ac3ce825-转换自-png"></p><p>提示词：把图1移动到图2上</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1021093.webp" alt="36ed450d-bd54-4169-b13f-3d0f26d9d360-转换自-png"></p><p>提示词：把图2移动到图1上</p></td></tr></tbody></table>
 
-**输出图像**
+<a id="图像传入方式"></a>
 
-![image (19)-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1025838.webp)
-
-图1
-
-![image (20)-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7142593671/p1025839.webp)
-
-图2
-
-![04e0fc39-7ad6-41e0-9df9-1f69ac3ce825-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1021092.webp)
-
-提示词：把图1移动到图2上
-
-![36ed450d-bd54-4169-b13f-3d0f26d9d360-转换自-png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8142593671/p1021093.webp)
-
-提示词：把图2移动到图1上
+<a id="f3dddcc9cc2w0"></a>
 
 ### 图像传入方式
 
 **公网URL**
 
--   提供一个公网可访问的图像地址，支持 HTTP 或 HTTPS 协议。本地文件请参见[上传文件获取临时URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+-   提供一个公网可访问的图像地址，支持 HTTP 或 HTTPS 协议。本地文件请参见[上传文件获取临时URL](../../../../../model-api-reference/more-about-models/get-temporary-file-url.md)。
 -   示例值：`https://xxxx/img.png`。
 
 **Base64编码**
@@ -348,7 +394,11 @@ public class ImageDownloader {
 -   `{base64_data}`：文件经过 Base64 编码后的字符串。
 -   示例值：`data:image/jpeg;base64,GDU7MtCZz...`（示例已截断，仅做演示）
 
-完整示例代码请参见[Python SDK调用](https://help.aliyun.com/zh/model-studio/qwen-image-edit-api#a3ad9a3b6d9if)、[Java SDK调用](https://help.aliyun.com/zh/model-studio/qwen-image-edit-api#589b80853e6rn)。
+完整示例代码请参见[Python SDK调用](../../../../../model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md#a3ad9a3b6d9if)、[Java SDK调用](../../../../../model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md#589b80853e6rn)。
+
+<a id="更多参数"></a>
+
+<a id="ca14ce5cee6m7"></a>
 
 ### 更多参数
 
@@ -361,309 +411,147 @@ public class ImageDownloader {
 -   **seed**：随机数种子，使用相同值可使生成结果保持相对稳定。
 -   **watermark**：是否添加水印（默认关闭）。
 
-完整参数列表请参考[千问-图像编辑API](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+完整参数列表请参考[千问-图像编辑API](../../../../../model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+
+<a id="效果概览"></a>
+
+<a id="9cae04c1813pz"></a>
 
 ## 效果概览
 
+<a id="多图融合"></a>
+
+<a id="bf15c676fb8di"></a>
+
 ### 多图融合
 
-**输入图像1**
+| 输入图像1 | 输入图像2 | 输入图像3 | 输出图像 |
+| --- | --- | --- | --- |
+| ![image83](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1082029571/p1011712.webp) | ![image103](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1082029571/p1011753.webp) | ![1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3105461671/p1012002.webp) | ![2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3105461671/p1012004.webp)<br><br>图1中的女生戴着图2中的项链，左肩挎着图3中的包 |
 
-**输入图像2**
+<a id="主体一致性保持"></a>
 
-**输入图像3**
-
-**输出图像**
-
-![image83](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1082029571/p1011712.webp)
-
-![image103](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1082029571/p1011753.webp)
-
-![1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3105461671/p1012002.webp)
-
-![2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3105461671/p1012004.webp)
-
-图1中的女生戴着图2中的项链，左肩挎着图3中的包
+<a id="ec1bc82f88x04"></a>
 
 ### 主体一致性保持
 
-**输入图像**
+<table><thead><tr><th><p><strong>输入图像</strong></p></th><th><p><strong>输出图像1</strong></p></th><th><p><strong>输出图像2</strong></p></th><th><p><strong>输出图像3</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011789.webp" alt="image5"></p></td><td rowspan="2"><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011790.webp" alt="image4"></p><p>修改为蓝底证件照，人物穿上白色衬衫，黑色西装，打着条纹领带</p></td><td rowspan="2"><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011791.webp" alt="image6"></p><p>人物穿上白色衬衫，灰色西装，打着条纹领带，一只手摸着领带，浅色背景</p></td><td rowspan="2"><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011792.webp" alt="image7"></p><p>人物穿着粗笔刷字体的“千问图像”的黑色卫衣，依靠在护栏边，阳光照在发丝上，身后是大桥和海</p></td></tr><tr><td rowspan="2"><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1012037.webp" alt="image12"></p></td><td rowspan="2"><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1012038.webp" alt="image13"></p><p>把这个空调放在客厅，沙发旁边</p></td><td rowspan="2"><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1012039.webp" alt="image14"></p><p>在空调出风口增加雾气，一直到沙发上，并且增加绿叶。</p></td><td rowspan="2"><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1012040.webp" alt="image15"></p><p>在上方增加白色的手写体&quot;自然新风 畅享呼吸&quot;</p></td></tr></tbody></table>
 
-**输出图像1**
+<a id="草图创作"></a>
 
-**输出图像2**
-
-**输出图像3**
-
-![image5](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011789.webp)
-
-![image4](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011790.webp)
-
-修改为蓝底证件照，人物穿上白色衬衫，黑色西装，打着条纹领带
-
-![image6](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011791.webp)
-
-人物穿上白色衬衫，灰色西装，打着条纹领带，一只手摸着领带，浅色背景
-
-![image7](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011792.webp)
-
-人物穿着粗笔刷字体的“千问图像”的黑色卫衣，依靠在护栏边，阳光照在发丝上，身后是大桥和海
-
-![image12](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1012037.webp)
-
-![image13](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1012038.webp)
-
-把这个空调放在客厅，沙发旁边
-
-![image14](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1012039.webp)
-
-在空调出风口增加雾气，一直到沙发上，并且增加绿叶。
-
-![image15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1012040.webp)
-
-在上方增加白色的手写体"自然新风 畅享呼吸"
+<a id="801542a01agqh"></a>
 
 ### 草图创作
 
-**输入图像**
+<table><thead><tr><th><p><strong>输入图像</strong></p></th><th colspan="2"><p><strong>输出图像</strong></p></th></tr></thead><tbody><tr><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011821.webp" alt="image42"></p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011822.webp" alt="image43"></p><p>生成一张图像，符合图1所勾勒出的精致形状，并遵循以下描述：一位年轻的女子在阳光明媚的日子里微笑着，她戴着一副棕色的圆形太阳镜，镜框上有豹纹图案。她的头发被整齐地盘起，耳朵上佩戴着珍珠耳环，脖子上围着一条带有紫色星星图案的深蓝色围巾，穿着一件黑色皮夹克。</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011824.webp" alt="image44"></p><p>生成一张图像，符合图1所勾勒出的精致形状，并遵循以下描述：一位年老的老人朝着镜头微笑，他的脸上布满皱纹，头发在风中凌乱，戴着一副圆框的老花镜。脖子上戴着一条破旧的红色围巾，上面有星星图案。穿着一件棉衣。</p></td></tr></tbody></table>
 
-**输出图像**
+<a id="文创生成"></a>
 
-![image42](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011821.webp)
-
-![image43](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011822.webp)
-
-生成一张图像，符合图1所勾勒出的精致形状，并遵循以下描述：一位年轻的女子在阳光明媚的日子里微笑着，她戴着一副棕色的圆形太阳镜，镜框上有豹纹图案。她的头发被整齐地盘起，耳朵上佩戴着珍珠耳环，脖子上围着一条带有紫色星星图案的深蓝色围巾，穿着一件黑色皮夹克。
-
-![image44](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011824.webp)
-
-生成一张图像，符合图1所勾勒出的精致形状，并遵循以下描述：一位年老的老人朝着镜头微笑，他的脸上布满皱纹，头发在风中凌乱，戴着一副圆框的老花镜。脖子上戴着一条破旧的红色围巾，上面有星星图案。穿着一件棉衣。
+<a id="8fadfa0717t1o"></a>
 
 ### 文创生成
 
-**输入图像**
+<table><thead><tr><th><p><strong>输入图像</strong></p></th><th colspan="3"><p><strong>输出图像</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999719.png" alt="图片 1"></p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011685.webp" alt="image23"></p><p>让这只熊坐在月亮下（用白色背景上的浅灰弯月轮廓表示），抱着吉他，周围漂浮着小星星和诗句气泡，如“Be Kind”。</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011686.webp" alt="image22"></p><p>将这个图案印在一件T恤和一个手提纸袋上。一个女模特正在展示这些物品。这个女生还戴着一顶鸭舌帽，帽子上写着&quot;Be kind”。</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011687.webp" alt="image21"></p><p>一个超逼真的1/7比例角色模型，设计为商业产品成品，放置在一台带有白色键盘的iMac电脑桌上。模型站在一个干净、圆形的透明亚克力底座上，没有标签或文字。专业的摄影棚灯光凸显了雕刻细节。在背景的iMac屏幕上，展示同一模型的ZBrush建模过程。在模型旁边，放置一个包装盒，前面带有透明窗户，仅显示内部透明塑料壳，其高度略高于模型，尺寸合理以容纳模型。</p></td></tr><tr><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999632.png" alt="image"></p><p>这只熊穿着宇航服，伸出手指向远方</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999633.png" alt="image"></p><p>这只熊穿着华丽的舞裙，双臂展开，做出优雅的舞蹈动作</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999630.png" alt="image"></p><p>这只熊穿着运动服，手里拿着篮球，单腿弯曲</p></td></tr></tbody></table>
 
-**输出图像**
+<a id="根据深度图生成图像"></a>
 
-![图片 1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999719.png)
-
-![image23](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011685.webp)
-
-让这只熊坐在月亮下（用白色背景上的浅灰弯月轮廓表示），抱着吉他，周围漂浮着小星星和诗句气泡，如“Be Kind”。
-
-![image22](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011686.webp)
-
-将这个图案印在一件T恤和一个手提纸袋上。一个女模特正在展示这些物品。这个女生还戴着一顶鸭舌帽，帽子上写着"Be kind”。
-
-![image21](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011687.webp)
-
-一个超逼真的1/7比例角色模型，设计为商业产品成品，放置在一台带有白色键盘的iMac电脑桌上。模型站在一个干净、圆形的透明亚克力底座上，没有标签或文字。专业的摄影棚灯光凸显了雕刻细节。在背景的iMac屏幕上，展示同一模型的ZBrush建模过程。在模型旁边，放置一个包装盒，前面带有透明窗户，仅显示内部透明塑料壳，其高度略高于模型，尺寸合理以容纳模型。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999632.png)
-
-这只熊穿着宇航服，伸出手指向远方
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999633.png)
-
-这只熊穿着华丽的舞裙，双臂展开，做出优雅的舞蹈动作
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999630.png)
-
-这只熊穿着运动服，手里拿着篮球，单腿弯曲
+<a id="98ef7c1efc1ge"></a>
 
 ### 根据深度图生成图像
 
-**输入图像**
+<table><thead><tr><th><p><strong>输入图像</strong></p></th><th colspan="2"><p><strong>输出图像</strong></p></th></tr></thead><tbody><tr><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011810.webp" alt="image36"></p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011811.webp" alt="image37"></p><p>生成一张图像，符合图1所勾勒出的深度图，并遵循以下描述：在一条街边的小巷中停放着一辆蓝色的自行车，背景中有几株从石缝中长出来的杂草</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011812.webp" alt="image38"></p><p>生成一张图像，符合图1所勾勒出的深度图，并遵循以下描述：一辆红色的破旧的自行车停在一条泥泞的小路上，背景是茂密的原始森林</p></td></tr></tbody></table>
 
-**输出图像**
+<a id="根据关键点生成图像"></a>
 
-![image36](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011810.webp)
-
-![image37](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011811.webp)
-
-生成一张图像，符合图1所勾勒出的深度图，并遵循以下描述：在一条街边的小巷中停放着一辆蓝色的自行车，背景中有几株从石缝中长出来的杂草
-
-![image38](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011812.webp)
-
-生成一张图像，符合图1所勾勒出的深度图，并遵循以下描述：一辆红色的破旧的自行车停在一条泥泞的小路上，背景是茂密的原始森林
+<a id="ecb13d474al4f"></a>
 
 ### 根据关键点生成图像
 
-**输入图像**
+<table><thead><tr><th><p><strong>输入图像</strong></p></th><th colspan="2"><p><strong>输出图像</strong></p></th></tr></thead><tbody><tr><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011817.webp" alt="image40"></p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011818.webp" alt="image41"></p><p>生成一张图像，符合图1所勾勒出的人体姿态，并遵循以下描述：一位身穿着汉服的中国美女，在雨中撑着油纸伞，背景是苏州园林。</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011819.webp" alt="image39"></p><p>生成一张图像，符合图1所勾勒出的人体姿态，并遵循以下描述：一位男生，站在地铁站台上，他头上戴着一顶棒球帽，穿着T恤和牛仔裤。背后是飞驰而过的列车。</p></td></tr></tbody></table>
 
-**输出图像**
+<a id="文字编辑"></a>
 
-![image40](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011817.webp)
-
-![image41](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011818.webp)
-
-生成一张图像，符合图1所勾勒出的人体姿态，并遵循以下描述：一位身穿着汉服的中国美女，在雨中撑着油纸伞，背景是苏州园林。
-
-![image39](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011819.webp)
-
-生成一张图像，符合图1所勾勒出的人体姿态，并遵循以下描述：一位男生，站在地铁站台上，他头上戴着一顶棒球帽，穿着T恤和牛仔裤。背后是飞驰而过的列车。
+<a id="4b444a1ae43hz"></a>
 
 ### 文字编辑
 
-**输入图像**
+| 输入图像 | 输出图像 | 输入图像 | 输出图像 |
+| --- | --- | --- | --- |
+| ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999641.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999642.png)<br><br>将拼字游戏方块上'HEALTH INSURANCE’ **替换为'明天会更好'** | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p1000039.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p1000062.png)<br><br>将便条上的短语“Take a Breather”**更改为“Relax and Recharge”** |
 
-**输出图像**
+<table><thead><tr><th><p><strong>输入图像</strong></p></th><th colspan="3"><p><strong>输出图像</strong></p></th></tr></thead><tbody><tr><td rowspan="3"><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011772.webp" alt="image53"></p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011774.webp" alt="image45"></p><p>将“Qwen-Image”换成黑色的滴墨字体</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011775.webp" alt="image46"></p><p>将“Qwen-Image”换成黑色的手写字体</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011776.webp" alt="image49"></p><p>将“Qwen-Image”换成黑色的像素字体</p></td></tr><tr><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011777.jpeg" alt="image54"></p><p>将“Qwen-Image”换成红色</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011779.jpeg" alt="image57"></p><p>将“Qwen-Image”换成蓝紫渐变色</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011780.jpeg" alt="image59"></p><p>将“Qwen-Image”换成糖果色</p></td></tr><tr><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011783.webp" alt="image63"></p><p>将“Qwen-Image”材质换成金属</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011784.webp" alt="image64"></p><p>将“Qwen-Image”材质换成云朵</p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011786.webp" alt="image67"></p><p>将“Qwen-Image”材质换成玻璃</p></td></tr></tbody></table>
 
-**输入图像**
+<a id="增删改"></a>
 
-**输出图像**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999641.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999642.png)
-
-将拼字游戏方块上'HEALTH INSURANCE’ **替换为'明天会更好'**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p1000039.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p1000062.png)
-
-将便条上的短语“Take a Breather”**更改为“Relax and Recharge”**
-
-**输入图像**
-
-**输出图像**
-
-![image53](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011772.webp)
-
-![image45](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011774.webp)
-
-将“Qwen-Image”换成黑色的滴墨字体
-
-![image46](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011775.webp)
-
-将“Qwen-Image”换成黑色的手写字体
-
-![image49](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011776.webp)
-
-将“Qwen-Image”换成黑色的像素字体
-
-![image54](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3892029571/p1011777.jpeg)
-
-将“Qwen-Image”换成红色
-
-![image57](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011779.jpeg)
-
-将“Qwen-Image”换成蓝紫渐变色
-
-![image59](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011780.jpeg)
-
-将“Qwen-Image”换成糖果色
-
-![image63](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011783.webp)
-
-将“Qwen-Image”材质换成金属
-
-![image64](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011784.webp)
-
-将“Qwen-Image”材质换成云朵
-
-![image67](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011786.webp)
-
-将“Qwen-Image”材质换成玻璃
+<a id="283abbf15eygg"></a>
 
 ### 增删改
 
-**能力**
+| 能力 | 输入图像 | 输出图像 |
+| --- | --- | --- |
+| **新增元素** | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999647.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999648.png)<br><br>在企鹅前方添加一个小型木制标牌，上面写着“Welcome to Penguin Beach”。 |
+| **删除元素** | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999649.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999650.png)<br><br>删除餐盘上的头发 |
 
-**输入图像**
+<a id="视角转换"></a>
 
-**输出图像**
-
-**新增元素**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999647.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999648.png)
-
-在企鹅前方添加一个小型木制标牌，上面写着“Welcome to Penguin Beach”。
-
-**删除元素**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999649.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999650.png)
-
-删除餐盘上的头发
+<a id="f2dc87f477869"></a>
 
 ### 视角转换
 
-**输入图像**
+| 输入图像 | 输出图像 | 输入图像 | 输出图像 |
+| --- | --- | --- | --- |
+| ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999964.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999968.png)<br><br>获得正视视角 | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999969.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999970.png)<br><br>朝向左侧 |
+| ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999974.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999975.png)<br><br>获得后侧视角 | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999971.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999972.png)<br><br>朝向右侧 |
 
-**输出图像**
+<a id="老照片处理"></a>
 
-**输入图像**
-
-**输出图像**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999964.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999968.png)
-
-获得正视视角
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999969.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999970.png)
-
-朝向左侧
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999974.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999975.png)
-
-获得后侧视角
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999971.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999972.png)
-
-朝向右侧
+<a id="6ffb9cd9568z7"></a>
 
 ### 老照片处理
 
-**能力**
+<table><thead><tr><th><p><strong>能力</strong></p></th><th><p><strong>输入图像</strong></p></th><th><p><strong>输出图像</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p><strong>老照片修复及上色</strong></p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999552.png" alt="image"></p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999554.png" alt="image"></p><p>修复老照片，去除划痕，降低噪点，增强细节，高分辨率，画面真实，肤色自然，面部特征清晰，无变形。</p></td></tr><tr><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011757.webp" alt="image31"></p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011759.webp" alt="image32"></p><p>根据内容智能上色，使图像更生动</p></td></tr></tbody></table>
 
-**输入图像**
+<a id="api参考"></a>
 
-**输出图像**
-
-**老照片修复及上色**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999552.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4766809571/p999554.png)
-
-修复老照片，去除划痕，降低噪点，增强细节，高分辨率，画面真实，肤色自然，面部特征清晰，无变形。
-
-![image31](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011757.webp)
-
-![image32](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4892029571/p1011759.webp)
-
-根据内容智能上色，使图像更生动
+<a id="5e47636b7ekb5"></a>
 
 ## API参考
 
-API的输入输出参数，请参见[千问-图像编辑](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+API的输入输出参数，请参见[千问-图像编辑](../../../../../model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+
+<a id="错误码"></a>
+
+<a id="OajFO"></a>
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../../../model-api-reference/preparations/error-code.md)进行解决。
+
+<a id="常见问题"></a>
+
+<a id="fe491e0f39tfz"></a>
 
 ## 常见问题
+
+<a id="q-千问图像编辑模型支持哪些语言"></a>
+
+<a id="e70c6f863ecyc"></a>
 
 #### Q：千问图像编辑模型支持哪些语言？
 
 A：目前正式支持**简体中文和英文**；其他语言可自行尝试，但效果存在不确定性。
 
+<a id="q-如何查看模型调用量"></a>
+
+<a id="ae11776b04p4u"></a>
+
 #### Q：如何查看模型调用量？
 
-A：模型调用完一小时后，请在[**模型监控**（北京）](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[**模型监控**（新加坡）](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry) 页面，查看模型的调用次数、成功率等指标。详情请参见[账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
+A：模型调用完一小时后，请在[**模型监控**（北京）](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[**模型监控**（新加坡）](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry) 页面，查看模型的调用次数、成功率等指标。详情请参见[账单查询与成本管理](../../../../test-1/bill-query-and-cost-management.md)。
+
+<a id="q-如何获取图像存储的访问域名白名单"></a>
+
+<a id="5fb153423ct8z"></a>
 
 #### Q：如何获取图像存储的访问域名白名单？
 

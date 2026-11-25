@@ -1,10 +1,18 @@
 # GetVideoDetectShotTask - 智能拆条-获取异步任务状态和结果
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/GetVideoDetectShotTask)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,363 +31,83 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>quanmiaolightapp:GetVideoDetectShotTask</td><td>get</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-quanmiaolightapp:GetVideoDetectShotTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 GET /{workspaceId}/quanmiao/lightapp/getVideoDetectShotTask HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| taskId | string | 是 | 任务唯一标识 | a3d1c2ac-f086-4a21-9069-f5631542f5a2 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-百炼业务空间唯一标识：[获取 workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xxx
-
-taskId
-
-string
-
-是
-
-任务唯一标识
-
-a3d1c2ac-f086-4a21-9069-f5631542f5a2
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-requestId
-
-string
-
-Id of the request
-
-117F5ABE-CF02-5502-9A3F-E56BC9081A64
-
-code
-
-string
-
-状态码
-
-successful
-
-message
-
-string
-
-错误说明
-
-successful
-
-httpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-True
-
-data
-
-object
-
-结果
-
-header
-
-object
-
-event 名称
-
-errorCode
-
-string
-
-异常错误码
-
-success
-
-errorMessage
-
-string
-
-异常错误信息
-
-Deduct task already success,Please do not resubmit.token '369e8f2c-d283-424a-96c4-c83efe08c89e'
-
-event
-
-string
-
-事件类型
-
-TIMEOUT\_CLOSE\_ORDER
-
-eventInfo
-
-string
-
-事件描述
-
-xxx
-
-sessionId
-
-string
-
-会话唯一标识
-
-d5c38cf6-a4bf-4a57-a697-9f449926f0c9
-
-taskId
-
-string
-
-生成唯一标识
-
-6e223291-729b-4e84-9271-c13ada1a776b
-
-traceId
-
-string
-
-全量路 ID
-
-215045f817272303448235204efdef
-
-payload
-
-object
-
-结果
-
-output
-
-object
-
-结果
-
-videoSplitResult
-
-object
-
-结果
-
-text
-
-string
-
-拆条结果
-
-xxx
-
-reasonText
-
-string
-
-深度思考结果
-
-xxx
-
-videoParts
-
-array<object>
-
-拆条结果结构化，如果结构化失败则参数不存在，请根据 text 的返回结果进行解析；参数可通过 prompt 进行自定义调整，可参考 modelCustomPromptTemplateId（通过/getLightAppGeneralConfig 接口获取）进行改写
-
-视频拆条结构化数组
-
-object
-
-string
-
-xxx
-
-xxx
-
-videoRecognitionResult
-
-array<object>
-
-视频识别结果列表，根据入参的 recognitionOptions 选项进行视频内容识别后的结果
-
-识别结果
-
-object
-
-startTime
-
-long
-
-当前识别结果的开始时间
-
-1758108425000
-
-endTime
-
-long
-
-当前识别结果的结束时间
-
-1748483740000
-
-asr
-
-string
-
-音频转文字的结果
-
-xxx
-
-ocr
-
-string
-
-画面中的文字内容识别结果
-
-xxx
-
-vl
-
-string
-
-画面内容识别结果
-
-xxx
-
-usage
-
-object
-
-token 数量
-
-inputTokens
-
-long
-
-输入 Token 数量
-
-36
-
-outputTokens
-
-long
-
-输出 Token 数量
-
-13
-
-totalTokens
-
-long
-
-总 Token 数量
-
-49
-
-taskRunInfo
-
-object
-
-运行信息
-
-concurrentChargeEnable
-
-boolean
-
-是否使用付给并发：true 时，按照实际运行时长计量
-
-true
-
-responseTime
-
-long
-
-运行时长：rt
-
-1000
-
-taskStatus
-
-string
-
-任务状态
-
-SUCCESSED
-
-taskId
-
-string
-
-任务 ID
-
-3feb69ed02d9b1a17d0f1a942675d300
-
-errorMessage
-
-string
-
-异常错误信息
-
-Failed to proxy flink ui request, message: An error occurred: Invalid UUID string: jobsn.
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| requestId | string | Id of the request | 117F5ABE-CF02-5502-9A3F-E56BC9081A64 |
+| code | string | 状态码 | successful |
+| message | string | 错误说明 | successful |
+| httpStatusCode | integer | http 状态码 | 200 |
+| success | boolean | 是否成功：true 成功，false 失败 | True |
+| data | object | 结果 |  |
+| header | object | event 名称 |  |
+| errorCode | string | 异常错误码 | success |
+| errorMessage | string | 异常错误信息 | Deduct task already success,Please do not resubmit.token '369e8f2c-d283-424a-96c4-c83efe08c89e' |
+| event | string | 事件类型 | TIMEOUT\_CLOSE\_ORDER |
+| eventInfo | string | 事件描述 | xxx |
+| sessionId | string | 会话唯一标识 | d5c38cf6-a4bf-4a57-a697-9f449926f0c9 |
+| taskId | string | 生成唯一标识 | 6e223291-729b-4e84-9271-c13ada1a776b |
+| traceId | string | 全量路 ID | 215045f817272303448235204efdef |
+| payload | object | 结果 |  |
+| output | object | 结果 |  |
+| videoSplitResult | object | 结果 |  |
+| text | string | 拆条结果 | xxx |
+| reasonText | string | 深度思考结果 | xxx |
+| videoParts | array<object> | 拆条结果结构化，如果结构化失败则参数不存在，请根据 text 的返回结果进行解析；参数可通过 prompt 进行自定义调整，可参考 modelCustomPromptTemplateId（通过/getLightAppGeneralConfig 接口获取）进行改写 |  |
+| 视频拆条结构化数组 | object |  |  |
+|  | string | xxx | xxx |
+| videoRecognitionResult | array<object> | 视频识别结果列表，根据入参的 recognitionOptions 选项进行视频内容识别后的结果 |  |
+| 识别结果 | object |  |  |
+| startTime | long | 当前识别结果的开始时间 | 1758108425000 |
+| endTime | long | 当前识别结果的结束时间 | 1748483740000 |
+| asr | string | 音频转文字的结果 | xxx |
+| ocr | string | 画面中的文字内容识别结果 | xxx |
+| vl | string | 画面内容识别结果 | xxx |
+| usage | object | token 数量 |  |
+| inputTokens | long | 输入 Token 数量 | 36 |
+| outputTokens | long | 输出 Token 数量 | 13 |
+| totalTokens | long | 总 Token 数量 | 49 |
+| taskRunInfo | object | 运行信息 |  |
+| concurrentChargeEnable | boolean | 是否使用付给并发：true 时，按照实际运行时长计量 | true |
+| responseTime | long | 运行时长：rt | 1000 |
+| taskStatus | string | 任务状态 | SUCCESSED |
+| taskId | string | 任务 ID | 3feb69ed02d9b1a17d0f1a942675d300 |
+| errorMessage | string | 异常错误信息 | Failed to proxy flink ui request, message: An error occurred: Invalid UUID string: jobsn. |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -387,7 +115,9 @@ Failed to proxy flink ui request, message: An error occurred: Invalid UUID strin
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "requestId": "117F5ABE-CF02-5502-9A3F-E56BC9081A64",
   "code": "successful",
@@ -442,36 +172,24 @@ Failed to proxy flink ui request, message: An error occurred: Invalid UUID strin
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-403
-
-NoPermission
-
-You are not authorized to perform this action , Please check the assignment of the workspaceId.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action , Please check the assignment of the workspaceId. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/errorCode)查看更多错误码。
 
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
+
 ## 变更历史
 
-变更时间
-
-变更内容概要
-
-操作
-
-2025-10-20
-
-新增 OpenAPI
-
-[查看变更详情](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/GetVideoDetectShotTask?updateTime=2025-10-20#workbench-doc-change-demo)
+| 变更时间 | 变更内容概要 | 操作 |
+| --- | --- | --- |
+| 2025-10-20 | 新增 OpenAPI | [查看变更详情](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/GetVideoDetectShotTask?updateTime=2025-10-20#workbench-doc-change-demo) |

@@ -2,56 +2,76 @@
 
 本文介绍Paraformer非实时语音识别Java SDK的参数和接口细节。
 
-**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+> **重要**
+>
+> 阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+>
+> `{WorkspaceId}`需要替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。现有域名仍可正常使用。
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
+**用户指南：**[非实时语音识别](../model-user-guide/model-experience/speech-and-audio/speech-recognition/non-realtime-speech-recognition-user-guide.md)
 
-**用户指南：**[非实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/non-realtime-speech-recognition-user-guide.md)
+<a id="前提条件"></a>
+
+<a id="8c73014707u4b"></a>
 
 ## 前提条件
 
-已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+已开通服务并[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
 
-**说明**当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
+> **说明**
+>
+> 当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](../model-api-reference/more-about-models/generate-temporary-api-key.md)。
+>
+> 与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
+>
+> 使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
 
-与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
+-   [安装最新版DashScope SDK](../model-api-reference/preparations/install-sdk.md)。
 
-使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
+<a id="快速开始"></a>
 
--   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+<a id="e4705e474eiyi"></a>
 
 ## 快速开始
 
-[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)提供了异步提交任务、同步等待任务结束和异步查询任务执行结果的接口。可通过如下两种调用方式进行非实时语音识别：
+[核心类（Transcription）](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#adcb5e9bddbyq)提供了异步提交任务、同步等待任务结束和异步查询任务执行结果的接口。可通过如下两种调用方式进行非实时语音识别：
 
 -   异步提交任务+同步等待任务结束：提交任务后，阻塞当前线程直到任务结束并获取识别结果。
 -   异步提交任务+异步查询任务执行结果：提交任务后，在需要的时候通过调用查询任务接口获取任务的执行结果。
+
+<a id="异步提交任务-同步等待任务结束"></a>
+
+<a id="3f0e8beb6ccng"></a>
 
 ### 异步提交任务+同步等待任务结束
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0509074871/CAEQURiBgMCO2_fRpxkiIDBlNzI4YmMyNTU3ODRlM2Y4NjUxZWU4YmUxNjliMmFl4709861_20241015153444.149.svg)
 
-1.  配置[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#48ea212b1d08r)。
+1.  配置[请求参数](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#48ea212b1d08r)。
     
-2.  实例化[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)。
+2.  实例化[核心类（Transcription）](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#adcb5e9bddbyq)。
     
-3.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)的`asyncCall`方法异步提交任务。
+3.  调用[核心类（Transcription）](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#adcb5e9bddbyq)的`asyncCall`方法异步提交任务。
     
-    **说明**
+    > **说明**
+    >
+    > -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
+    > -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
     
-    -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
-    -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
-    
-4.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)的`wait`方法同步等待任务结束。
+4.  调用[核心类（Transcription）](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#adcb5e9bddbyq)的`wait`方法同步等待任务结束。
     
     任务的状态包括`PENDING`、`RUNNING`、`SUCCEEDED`和`FAILED`。当任务处于`PENDING`或`RUNNING`状态时，`wait`接口将被阻塞。当任务处于`SUCCEEDED`或`FAILED`状态时，`wait`接口不再阻塞并返回任务的执行结果。
     
-    `wait`返回[任务执行结果（TranscriptionResult）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#11a082e1d9ijq)。
+    `wait`返回[任务执行结果（TranscriptionResult）](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#11a082e1d9ijq)。
     
+
+<a id="accordion-点击查看完整示例"></a>
 
 点击查看完整示例
 
-```
+<a id="code-block"></a>
+
+```java
 import com.alibaba.dashscope.audio.asr.transcription.*;
 import com.google.gson.*;
 
@@ -91,31 +111,39 @@ public class Main {
 }
 ```
 
+<a id="异步提交任务-异步查询任务执行结果"></a>
+
+<a id="909738567dq8d"></a>
+
 ### 异步提交任务+异步查询任务执行结果
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0509074871/CAEQURiBgIDnxvjRpxkiIGI1NjJjOTgyNTVhMTRiMjM4OWVjYzFmZTExNGZjYzE14709861_20241015153444.149.svg)
 
-1.  配置[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#48ea212b1d08r)。
+1.  配置[请求参数](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#48ea212b1d08r)。
     
-2.  实例化[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)。
+2.  实例化[核心类（Transcription）](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#adcb5e9bddbyq)。
     
-3.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)的`asyncCall`方法异步提交任务。
+3.  调用[核心类（Transcription）](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#adcb5e9bddbyq)的`asyncCall`方法异步提交任务。
     
-    **说明**
+    > **说明**
+    >
+    > -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
+    > -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
     
-    -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
-    -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
-    
-4.  循环调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)的`fetch`方法直到获取最终的任务结果。
+4.  循环调用[核心类（Transcription）](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#adcb5e9bddbyq)的`fetch`方法直到获取最终的任务结果。
     
     当任务状态为`SUCCEEDED`或`FAILED`时，停止轮询并处理结果。
     
-    `fetch`返回[任务执行结果（TranscriptionResult）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#11a082e1d9ijq)。
+    `fetch`返回[任务执行结果（TranscriptionResult）](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#11a082e1d9ijq)。
     
+
+<a id="accordion-点击查看完整示例-2"></a>
 
 点击查看完整示例
 
-```
+<a id="code-block-2"></a>
+
+```java
 import com.alibaba.dashscope.audio.asr.transcription.*;
 import com.alibaba.dashscope.common.TaskStatus;
 import com.google.gson.*;
@@ -161,13 +189,21 @@ public class Main {
 }
 ```
 
+<a id="请求参数"></a>
+
+<a id="48ea212b1d08r"></a>
+
 ## 请求参数
 
 请求参数通过`TranscriptionParam`的链式方法进行配置。
 
+<a id="accordion-点击查看示例"></a>
+
 点击查看示例
 
-```
+<a id="code-block-3"></a>
+
+```java
 TranscriptionParam param = TranscriptionParam.builder()
   .model("paraformer-v2")
   // “language_hints”只支持paraformer-v2模型
@@ -178,411 +214,116 @@ TranscriptionParam param = TranscriptionParam.builder()
   .build();
 ```
 
-**参数**
-
-**类型**
-
-**默认值**
-
-**是否必须**
-
-**说明**
-
-model
-
-String
-
-是
-
-指定用于音视频文件转写的Paraformer模型名。参见[支持的模型](https://help.aliyun.com/zh/model-studio/recording-file-recognition)。
-
-fileUrls
-
-List<String>
-
-是
-
-音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。
-
-若录音文件存储在阿里云OSS，使用SDK方式不支持使用以 oss://为前缀的临时 URL。
-
-vocabularyId
-
-String
-
-否
-
-最新热词ID，支持最新v2系列模型并配置语种信息，此次语音识别中生效此热词ID对应的热词信息。默认不启用。使用方法请参考[定制热词](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/custom-hot-words.md)。
-
-channelId
-
-List<Integer>
-
-\[0\]
-
-否
-
-指定在多音轨音频文件中需要识别的音轨索引，索引从 0 开始。例如，\[0\] 表示识别第一个音轨，\[0, 1\] 表示同时识别第一和第二个音轨。如果省略此参数，则默认处理第一个音轨。
-
-**重要**指定的每一个音轨都将独立计费。例如，为单个文件请求 \[0, 1\] 会产生两笔独立的费用。
-
-disfluencyRemovalEnabled
-
-Boolean
-
-false
-
-否
-
-过滤语气词，默认关闭。
-
-timestampAlignmentEnabled
-
-Boolean
-
-false
-
-否
-
-是否启用时间戳校准功能，默认关闭。
-
-specialWordFilter
-
-String
-
-否
-
-指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。
-
-若未传入该参数，系统将启用系统内置的敏感词过滤逻辑，识别结果中与[阿里云百炼敏感词表](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/%E7%99%BE%E7%82%BC%E6%95%8F%E6%84%9F%E8%AF%8D%E5%88%97%E8%A1%A8_20230716.words.txt)匹配的词语将被替换为等长的`*`。
-
-若传入该参数，则可实现以下敏感词处理策略：
-
--   替换为 `*`：将匹配的敏感词替换为等长的 `*`；
--   直接过滤：将匹配的敏感词从识别结果中完全移除。
-
-该参数的值应为一个 JSON 字符串，其结构如下所示：
-
-```
-{
-  "filter_with_signed": {
-    "word_list": ["测试"]
+<table><thead><tr><th><strong>参数</strong></th><th><strong>类型</strong></th><th><strong>默认值</strong></th><th><strong>是否必须</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><p>model</p></td><td><p>String</p></td><td><ul><li></li></ul></td><td><p>是</p></td><td><p>指定用于音视频文件转写的Paraformer模型名。参见<a href="https://help.aliyun.com/zh/model-studio/recording-file-recognition">支持的模型</a>。</p></td></tr><tr><td><p>fileUrls</p></td><td><p>List&lt;String&gt;</p></td><td><ul><li></li></ul></td><td><p>是</p></td><td><p>音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。</p><p>若录音文件存储在阿里云OSS，使用SDK方式不支持使用以 oss://为前缀的临时 URL。</p></td></tr><tr><td><p>vocabularyId</p></td><td><p>String</p></td><td><ul><li></li></ul></td><td><p>否</p></td><td><p>最新热词ID，支持最新v2系列模型并配置语种信息，此次语音识别中生效此热词ID对应的热词信息。默认不启用。使用方法请参考<a href="../model-api-reference/audio-api-directory/speech-recognition-api-reference/custom-hot-words.md">定制热词</a>。</p></td></tr><tr><td><p>channelId</p></td><td><p>List&lt;Integer&gt;</p></td><td><p>[0]</p></td><td><p>否</p></td><td><p>指定在多音轨音频文件中需要识别的音轨索引，索引从 0 开始。例如，[0] 表示识别第一个音轨，[0, 1] 表示同时识别第一和第二个音轨。如果省略此参数，则默认处理第一个音轨。</p><div><div><p><strong>重要</strong>指定的每一个音轨都将独立计费。例如，为单个文件请求 [0, 1] 会产生两笔独立的费用。</p></div></div></td></tr><tr><td><p>disfluencyRemovalEnabled</p></td><td><p>Boolean</p></td><td><p>false</p></td><td><p>否</p></td><td><p>过滤语气词，默认关闭。</p></td></tr><tr><td><p>timestampAlignmentEnabled</p></td><td><p>Boolean</p></td><td><p>false</p></td><td><p>否</p></td><td><p>是否启用时间戳校准功能，默认关闭。</p></td></tr><tr><td><p>specialWordFilter</p></td><td><p>String</p></td><td><ul><li></li></ul></td><td><p>否</p></td><td><p>指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。</p><p>若未传入该参数，系统将启用系统内置的敏感词过滤逻辑，识别结果中与<a href="https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/%E7%99%BE%E7%82%BC%E6%95%8F%E6%84%9F%E8%AF%8D%E5%88%97%E8%A1%A8_20230716.words.txt">阿里云百炼敏感词表</a>匹配的词语将被替换为等长的<code>*</code>。</p><p>若传入该参数，则可实现以下敏感词处理策略：</p><ul><li>替换为 <code>*</code>：将匹配的敏感词替换为等长的 <code>*</code>；</li><li>直接过滤：将匹配的敏感词从识别结果中完全移除。</li></ul><p>该参数的值应为一个 JSON 字符串，其结构如下所示：</p><a id="code-block-4"></a><pre class="language-json"><code>{
+  &quot;filter_with_signed&quot;: {
+    &quot;word_list&quot;: [&quot;测试&quot;]
   },
-  "filter_with_empty": {
-    "word_list": ["开始", "发生"]
+  &quot;filter_with_empty&quot;: {
+    &quot;word_list&quot;: [&quot;开始&quot;, &quot;发生&quot;]
   },
-  "system_reserved_filter": true
+  &quot;system_reserved_filter&quot;: true
 }
-```
-
-JSON字段说明：
-
--   `filter_with_signed`
-    
-    -   类型：对象。
-        
-    -   是否必填：否。
-        
-    -   描述：配置需替换为`*`的敏感词列表。识别结果中匹配的词语将被等长的 `*` 替代。
-        
-    -   示例：以上述JSON为例，“帮我测试一下这段代码”的语音识别结果将会是“帮我\*\*一下这段代码”。
-        
-    -   内部字段：
-        
-        -   `word_list`: 字符串数组，列出需被替换的敏感词。
--   `filter_with_empty`
-    
-    -   类型：对象。
-        
-    -   是否必填：否。
-        
-    -   描述：配置需从识别结果中移除（过滤）的敏感词列表。识别结果中匹配的词语将被完全删除。
-        
-    -   示例：以上述JSON为例，“比赛这就要开始了吗？”的语音识别结果将会是“比赛这就要了吗”。
-        
-    -   内部字段：
-        
-        -   `word_list`: 字符串数组，列出需被完全移除（过滤）的敏感词。
--   `system_reserved_filter`
-    
-    -   类型：布尔值。
-    -   是否必填：否。
-    -   默认值：true。
-    -   描述：是否启用系统预置的敏感词规则。设为`true`时，将同时启用系统内置的敏感词过滤逻辑，识别结果中与[阿里云百炼敏感词表](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/%E7%99%BE%E7%82%BC%E6%95%8F%E6%84%9F%E8%AF%8D%E5%88%97%E8%A1%A8_20230716.words.txt)匹配的词语将被替换为等长的`*`。
-
-language\_hints
-
-String\[\]
-
-\["zh", "en"\]
-
-否
-
-指定待识别语音的语言代码。
-
-该参数仅适用于paraformer-v2模型。
-
-支持的语言代码：
-
--   zh: 中文
--   en: 英文
--   ja: 日语
--   yue: 粤语
--   ko: 韩语
--   de：德语
--   fr：法语
--   ru：俄语
-
-**说明**`language_hints`需要通过`TranscriptionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-通过parameter设置
-
-```
-TranscriptionParam param = TranscriptionParam.builder()
+</code></pre><p>JSON字段说明：</p><ul><li><p><code>filter_with_signed</code></p><ul><li><p>类型：对象。</p></li><li><p>是否必填：否。</p></li><li><p>描述：配置需替换为<code>*</code>的敏感词列表。识别结果中匹配的词语将被等长的 <code>*</code> 替代。</p></li><li><p>示例：以上述JSON为例，“帮我测试一下这段代码”的语音识别结果将会是“帮我**一下这段代码”。</p></li><li><p>内部字段：</p><ul><li><code>word_list</code>: 字符串数组，列出需被替换的敏感词。</li></ul></li></ul></li><li><p><code>filter_with_empty</code></p><ul><li><p>类型：对象。</p></li><li><p>是否必填：否。</p></li><li><p>描述：配置需从识别结果中移除（过滤）的敏感词列表。识别结果中匹配的词语将被完全删除。</p></li><li><p>示例：以上述JSON为例，“比赛这就要开始了吗？”的语音识别结果将会是“比赛这就要了吗”。</p></li><li><p>内部字段：</p><ul><li><code>word_list</code>: 字符串数组，列出需被完全移除（过滤）的敏感词。</li></ul></li></ul></li><li><p><code>system_reserved_filter</code></p><ul><li>类型：布尔值。</li><li>是否必填：否。</li><li>默认值：true。</li><li>描述：是否启用系统预置的敏感词规则。设为<code>true</code>时，将同时启用系统内置的敏感词过滤逻辑，识别结果中与<a href="https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/%E7%99%BE%E7%82%BC%E6%95%8F%E6%84%9F%E8%AF%8D%E5%88%97%E8%A1%A8_20230716.words.txt">阿里云百炼敏感词表</a>匹配的词语将被替换为等长的<code>*</code>。</li></ul></li></ul></td></tr><tr><td><p>language_hints</p></td><td><p>String[]</p></td><td><p>[&quot;zh&quot;, &quot;en&quot;]</p></td><td><p>否</p></td><td><p>指定待识别语音的语言代码。</p><p>该参数仅适用于paraformer-v2模型。</p><p>支持的语言代码：</p><ul><li>zh: 中文</li><li>en: 英文</li><li>ja: 日语</li><li>yue: 粤语</li><li>ko: 韩语</li><li>de：德语</li><li>fr：法语</li><li>ru：俄语</li></ul><div><div><p><strong>说明</strong><code>language_hints</code>需要通过<code>TranscriptionParam</code>实例的<code>parameter</code>方法或者<code>parameters</code>方法进行设置：</p><a id="fig-code-group"></a><div><a id="fig-code-group-通过parameter设置-tab"></a>通过parameter设置<div><a id="code-code-group-通过parameter设置"></a><pre class="language-java"><code>TranscriptionParam param = TranscriptionParam.builder()
   // “language_hints”只支持paraformer-v2模型
-  .model("paraformer-v2")
-  .parameter("language_hints", new String[]{"zh", "en"})
+  .model(&quot;paraformer-v2&quot;)
+  .parameter(&quot;language_hints&quot;, new String[]{&quot;zh&quot;, &quot;en&quot;})
   .build();
-```
-
-通过parameters设置
-
-```
-TranscriptionParam param = TranscriptionParam.builder()
+</code></pre></div><a id="fig-code-group-通过parameters设置-tab"></a>通过parameters设置<div><a id="code-code-group-通过parameters设置"></a><pre class="language-java"><code>TranscriptionParam param = TranscriptionParam.builder()
   // “language_hints”只支持paraformer-v2模型
-  .model("paraformer-v2")
-  .parameters(Collections.singletonMap("language_hints", new String[]{"zh", "en"}))
+  .model(&quot;paraformer-v2&quot;)
+  .parameters(Collections.singletonMap(&quot;language_hints&quot;, new String[]{&quot;zh&quot;, &quot;en&quot;}))
   .build();
-```
+</code></pre></div></div></div></div></td></tr><tr><td><p>diarizationEnabled</p></td><td><p>Boolean</p></td><td><p>false</p></td><td><p>否</p></td><td><p>自动说话人分离，默认关闭。</p><p>仅适用于单声道音频，多声道音频不支持说话人分离。</p><p>启用该功能后，识别结果中将显示<code>speaker_id</code>字段，用于区分不同说话人。</p><div><div><p><strong>说明</strong>如果启用说话人分离功能，建议音频时长不超过2小时，否则可能导致识别失败或超时。</p></div></div><p>有关<code>speaker_id</code>的示例，请参见<a href="paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#a9021178ccl7s">识别结果说明</a>。</p></td></tr><tr><td><p>speakerCount</p></td><td><p>Integer</p></td><td><ul><li></li></ul></td><td><p>否</p></td><td><p>说话人数量参考值。取值范围为2至100的整数（包含2和100）。</p><p>开启说话人分离功能后（<code>diarizationEnabled</code>设置为true）生效。</p><p>默认自动判断说话人数量，如果配置此项，只能辅助算法尽量输出指定人数，无法保证一定会输出此人数。</p></td></tr><tr><td><p>apiKey</p></td><td><p>String</p></td><td><ul><li></li></ul></td><td><p>否</p></td><td><p>用户API Key。如已将API Key配置到环境变量，则无须在代码中设置。否则一定要在代码中进行设置。</p></td></tr></tbody></table>
 
-diarizationEnabled
+<a id="响应结果"></a>
 
-Boolean
-
-false
-
-否
-
-自动说话人分离，默认关闭。
-
-仅适用于单声道音频，多声道音频不支持说话人分离。
-
-启用该功能后，识别结果中将显示`speaker_id`字段，用于区分不同说话人。
-
-**说明**如果启用说话人分离功能，建议音频时长不超过2小时，否则可能导致识别失败或超时。
-
-有关`speaker_id`的示例，请参见[识别结果说明](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#a9021178ccl7s)。
-
-speakerCount
-
-Integer
-
-否
-
-说话人数量参考值。取值范围为2至100的整数（包含2和100）。
-
-开启说话人分离功能后（`diarizationEnabled`设置为true）生效。
-
-默认自动判断说话人数量，如果配置此项，只能辅助算法尽量输出指定人数，无法保证一定会输出此人数。
-
-apiKey
-
-String
-
-否
-
-用户API Key。如已将API Key配置到环境变量，则无须在代码中设置。否则一定要在代码中进行设置。
+<a id="deebdc73cawgt"></a>
 
 ## 响应结果
+
+<a id="任务执行结果-transcriptionresult"></a>
+
+<a id="11a082e1d9ijq"></a>
 
 ### 任务执行结果（`TranscriptionResult`）
 
 `TranscriptionResult`封装了当前任务执行结果。
 
-**接口/方法**
-
-**参数**
-
-**返回值**
-
-**描述**
-
-```
-public String getRequestId()
-```
-
-无
-
-requestId
-
-获取requestId。
-
-```
-public String getTaskId()
-```
-
-无
-
-taskId
-
-获取taskId。
-
-```
-public TaskStatus getTaskStatus()
-```
-
-无
-
-`TaskStatus`，任务状态
-
-获取任务状态。
-
-`TaskStatus`为枚举类，只需关注`PENDING`、`RUNNING`、`SUCCEEDED`和`FAILED`这四个状态即可。
-
-**说明**当任务包含多个子任务时，只要存在任一子任务成功，整个任务状态将标记为`SUCCEEDED`，需通过`subtask_status`字段判断具体子任务结果。
-
-```
-public List<TranscriptionTaskResult> getResults()
-```
-
-无
-
-[子任务执行结果（TranscriptionTaskResult）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#86b568aa3asuj)
-
-获取[子任务执行结果（TranscriptionTaskResult）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#86b568aa3asuj)。
-
-每个任务对一个或多个音频文件进行识别，不同音频文件在不同的子任务中处理，因此每个任务对应一到多个子任务。
-
-```
-public JsonObject getOutput()
-```
-
-无
-
-任务执行结果，为JSON格式的数据
-
-获取任务执行结果。
-
-该结果是一个JSON格式的数据，如果您想通过`getOutput`接口获取任务执行结果，请您在获取结果后自行解析。
-
-点击查看JSON示例
-
-**正常示例**
-```
-{
-    "task_id":"0795ff8c-b666-4e91-bb8b-xxx",
-    "task_status":"SUCCEEDED",
-    "submit_time":"2025-02-13 16:12:09.109",
-    "scheduled_time":"2025-02-13 16:12:09.128",
-    "end_time":"2025-02-13 16:12:10.189",
-    "results":[
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-5"></a><pre class="language-java"><code>public String getRequestId()
+</code></pre></td><td><p>无</p></td><td><p>requestId</p></td><td><p>获取requestId。</p></td></tr><tr><td><a id="code-block-6"></a><pre class="language-java"><code>public String getTaskId()
+</code></pre></td><td><p>无</p></td><td><p>taskId</p></td><td><p>获取taskId。</p></td></tr><tr><td><a id="code-block-7"></a><pre class="language-java"><code>public TaskStatus getTaskStatus()
+</code></pre></td><td><p>无</p></td><td><p><code>TaskStatus</code>，任务状态</p></td><td><p>获取任务状态。</p><p><code>TaskStatus</code>为枚举类，只需关注<code>PENDING</code>、<code>RUNNING</code>、<code>SUCCEEDED</code>和<code>FAILED</code>这四个状态即可。</p><div><div><p><strong>说明</strong>当任务包含多个子任务时，只要存在任一子任务成功，整个任务状态将标记为<code>SUCCEEDED</code>，需通过<code>subtask_status</code>字段判断具体子任务结果。</p></div></div></td></tr><tr><td><a id="code-block-8"></a><pre class="language-java"><code>public List&lt;TranscriptionTaskResult&gt; getResults()
+</code></pre></td><td><p>无</p></td><td><p><a href="paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#86b568aa3asuj">子任务执行结果（TranscriptionTaskResult）</a></p></td><td><p>获取<a href="paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#86b568aa3asuj">子任务执行结果（TranscriptionTaskResult）</a>。</p><p>每个任务对一个或多个音频文件进行识别，不同音频文件在不同的子任务中处理，因此每个任务对应一到多个子任务。</p></td></tr><tr><td><a id="code-block-9"></a><pre class="language-java"><code>public JsonObject getOutput()
+</code></pre></td><td><p>无</p></td><td><p>任务执行结果，为JSON格式的数据</p></td><td><p>获取任务执行结果。</p><p>该结果是一个JSON格式的数据，如果您想通过<code>getOutput</code>接口获取任务执行结果，请您在获取结果后自行解析。</p><a id="accordion-点击查看json示例"></a><section><p>点击查看JSON示例</p><div><strong>正常示例</strong><a id="code-block-10"></a><pre class="language-json"><code>{
+    &quot;task_id&quot;:&quot;0795ff8c-b666-4e91-bb8b-xxx&quot;,
+    &quot;task_status&quot;:&quot;SUCCEEDED&quot;,
+    &quot;submit_time&quot;:&quot;2025-02-13 16:12:09.109&quot;,
+    &quot;scheduled_time&quot;:&quot;2025-02-13 16:12:09.128&quot;,
+    &quot;end_time&quot;:&quot;2025-02-13 16:12:10.189&quot;,
+    &quot;results&quot;:[
         {
-            "file_url":"{YOUR_AUDIO_URL}",
-            "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/16%3A12/3baafe5f-d09d-46c6-8b01-724927670edb-1.json?Expires=1739520730&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
-            "subtask_status":"SUCCEEDED"
+            &quot;file_url&quot;:&quot;{YOUR_AUDIO_URL}&quot;,
+            &quot;transcription_url&quot;:&quot;https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/16%3A12/3baafe5f-d09d-46c6-8b01-724927670edb-1.json?Expires=1739520730&amp;OSSAccessKeyId=YOUR_ACCESS_KEY_ID&amp;Signature=YOUR_SIGNATURE&quot;,
+            &quot;subtask_status&quot;:&quot;SUCCEEDED&quot;
         }
     ],
-    "task_metrics":{
-        "TOTAL":1,
-        "SUCCEEDED":1,
-        "FAILED":0
+    &quot;task_metrics&quot;:{
+        &quot;TOTAL&quot;:1,
+        &quot;SUCCEEDED&quot;:1,
+        &quot;FAILED&quot;:0
     }
 }
-```
-**异常示例**
-
-“`code`”为错误码，“`message`”为错误信息，只有异常情况才有这两个字段，您可以通过这两个字段，对照[错误码](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#a370386972oa4)排查问题。
-
-```
-{
-    "task_id": "7bac899c-06ec-4a79-8875-xxxxxxxxxxxx",
-    "task_status": "SUCCEEDED",
-    "submit_time": "2024-12-16 16:30:59.170",
-    "scheduled_time": "2024-12-16 16:30:59.204",
-    "end_time": "2024-12-16 16:31:02.375",
-    "results": [
+</code></pre><strong>异常示例</strong><p>“<code>code</code>”为错误码，“<code>message</code>”为错误信息，只有异常情况才有这两个字段，您可以通过这两个字段，对照<a href="paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#a370386972oa4">错误码</a>排查问题。</p><a id="code-block-11"></a><pre class="language-json"><code>{
+    &quot;task_id&quot;: &quot;7bac899c-06ec-4a79-8875-xxxxxxxxxxxx&quot;,
+    &quot;task_status&quot;: &quot;SUCCEEDED&quot;,
+    &quot;submit_time&quot;: &quot;2024-12-16 16:30:59.170&quot;,
+    &quot;scheduled_time&quot;: &quot;2024-12-16 16:30:59.204&quot;,
+    &quot;end_time&quot;: &quot;2024-12-16 16:31:02.375&quot;,
+    &quot;results&quot;: [
         {
-            "file_url": "{YOUR_AUDIO_URL}",
-            "code": "InvalidFile.DownloadFailed",
-            "message": "The audio file cannot be downloaded.",
-            "subtask_status": "FAILED"
+            &quot;file_url&quot;: &quot;{YOUR_AUDIO_URL}&quot;,
+            &quot;code&quot;: &quot;InvalidFile.DownloadFailed&quot;,
+            &quot;message&quot;: &quot;The audio file cannot be downloaded.&quot;,
+            &quot;subtask_status&quot;: &quot;FAILED&quot;
         }
     ],
-    "task_metrics": {
-        "TOTAL": 1,
-        "SUCCEEDED": 0,
-        "FAILED": 1
+    &quot;task_metrics&quot;: {
+        &quot;TOTAL&quot;: 1,
+        &quot;SUCCEEDED&quot;: 0,
+        &quot;FAILED&quot;: 1
     }
 }
-```
+</code></pre></div></section></td></tr></tbody></table>
+
+<a id="子任务执行结果-transcriptiontaskresult"></a>
+
+<a id="86b568aa3asuj"></a>
 
 ### 子任务执行结果（`TranscriptionTaskResult`）
 
 `TranscriptionTaskResult`封装了子任务执行结果。子任务对单个音频文件进行识别。
 
-**接口/方法**
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-12"></a><pre class="language-java"><code>public String getFileUrl()
+</code></pre></td><td><p>无</p></td><td><p>被识别的音频文件的链接</p></td><td><p>获取被识别音频文件的链接。</p></td></tr><tr><td><a id="code-block-13"></a><pre class="language-java"><code>public String getTranscriptionUrl()
+</code></pre></td><td><p>无</p></td><td><p>识别结果对应的链接</p></td><td><p>获取识别结果对应的链接。该链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。</p><p>识别结果保存为JSON文件，您可以通过上述链接下载该文件或直接通过HTTP请求读取该文件中的内容。</p><p>JSON数据中各字段含义请参见<a href="paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#a9021178ccl7s">识别结果说明</a>。</p></td></tr><tr><td><a id="code-block-14"></a><pre class="language-java"><code>public TaskStatus getSubTaskStatus()
+</code></pre></td><td><p>无</p></td><td><p><code>TaskStatus</code>，子任务状态</p></td><td><p>获取子任务状态。</p><p><code>TaskStatus</code>为枚举类，只需关注<code>PENDING</code>、<code>RUNNING</code>、<code>SUCCEEDED</code>和<code>FAILED</code>这四个状态即可。</p></td></tr><tr><td><a id="code-block-15"></a><pre class="language-java"><code>public String getMessage()
+</code></pre></td><td><p>无</p></td><td><p>任务执行过程中关键信息，可能为空</p></td><td><p>获取任务执行过程中的关键信息。</p><p>当任务失败时，可查看该内容分析原因。</p></td></tr></tbody></table>
 
-**参数**
+<a id="识别结果说明"></a>
 
-**返回值**
-
-**描述**
-
-```
-public String getFileUrl()
-```
-
-无
-
-被识别的音频文件的链接
-
-获取被识别音频文件的链接。
-
-```
-public String getTranscriptionUrl()
-```
-
-无
-
-识别结果对应的链接
-
-获取识别结果对应的链接。该链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
-
-识别结果保存为JSON文件，您可以通过上述链接下载该文件或直接通过HTTP请求读取该文件中的内容。
-
-JSON数据中各字段含义请参见[识别结果说明](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#a9021178ccl7s)。
-
-```
-public TaskStatus getSubTaskStatus()
-```
-
-无
-
-`TaskStatus`，子任务状态
-
-获取子任务状态。
-
-`TaskStatus`为枚举类，只需关注`PENDING`、`RUNNING`、`SUCCEEDED`和`FAILED`这四个状态即可。
-
-```
-public String getMessage()
-```
-
-无
-
-任务执行过程中关键信息，可能为空
-
-获取任务执行过程中的关键信息。
-
-当任务失败时，可查看该内容分析原因。
+<a id="a9021178ccl7s"></a>
 
 ### 识别结果说明
 
 识别结果保存为JSON文件。
 
+<a id="accordion-点击查看识别结果示例"></a>
+
 点击查看识别结果示例
 
-```
+<a id="code-block-16"></a>
+
+```json
 {
     "file_url":"{YOUR_AUDIO_URL}",
     "properties":{
@@ -629,101 +370,32 @@ public String getMessage()
 
 需要关注的参数如下：
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| audio\_format | string | 源文件中音频的格式。 |
+| channels | array\[integer\] | 源文件中音频的音轨索引信息，对单轨音频返回\[0\]，对双轨音频返回\[0, 1\]，以此类推。 |
+| original\_sampling\_rate | integer | 源文件中音频的采样率（Hz）。 |
+| original\_duration | integer | 源文件中的原始音频时长（ms）。 |
+| channel\_id | integer | 转写结果的音轨索引，以0为起始。 |
+| content\_duration | integer | 音轨中被判定为语音内容的时长（ms）。<br><br>Paraformer语音识别模型服务仅对音轨中被判定为语音内容的时长进行语音转写，并据此进行计量计费，非语音内容不计量、不计费。通常情况下语音内容时长会短于原始音频时长。由于对是否存在语音内容的判定是由AI模型给出的，可能与实际情况存在一定误差。 |
+| transcript | string | 段落级别的语音转写结果。 |
+| sentences | array | 句子级别的语音转写结果。 |
+| words | array | 词级别的语音转写结果。 |
+| begin\_time | integer | 开始时间戳（ms）。 |
+| end\_time | integer | 结束时间戳（ms）。 |
+| text | string | 语音转写结果。 |
+| speaker\_id | integer | 当前说话人的索引，以0为起始，用于区分不同的说话人。<br><br>仅在启用说话人分离功能时，该字段才会显示于识别结果中。 |
+| punctuation | string | 预测出的词之后的标点符号（如有）。 |
 
-**类型**
+<a id="关键接口"></a>
 
-**说明**
-
-audio\_format
-
-string
-
-源文件中音频的格式。
-
-channels
-
-array\[integer\]
-
-源文件中音频的音轨索引信息，对单轨音频返回\[0\]，对双轨音频返回\[0, 1\]，以此类推。
-
-original\_sampling\_rate
-
-integer
-
-源文件中音频的采样率（Hz）。
-
-original\_duration
-
-integer
-
-源文件中的原始音频时长（ms）。
-
-channel\_id
-
-integer
-
-转写结果的音轨索引，以0为起始。
-
-content\_duration
-
-integer
-
-音轨中被判定为语音内容的时长（ms）。
-
-Paraformer语音识别模型服务仅对音轨中被判定为语音内容的时长进行语音转写，并据此进行计量计费，非语音内容不计量、不计费。通常情况下语音内容时长会短于原始音频时长。由于对是否存在语音内容的判定是由AI模型给出的，可能与实际情况存在一定误差。
-
-transcript
-
-string
-
-段落级别的语音转写结果。
-
-sentences
-
-array
-
-句子级别的语音转写结果。
-
-words
-
-array
-
-词级别的语音转写结果。
-
-begin\_time
-
-integer
-
-开始时间戳（ms）。
-
-end\_time
-
-integer
-
-结束时间戳（ms）。
-
-text
-
-string
-
-语音转写结果。
-
-speaker\_id
-
-integer
-
-当前说话人的索引，以0为起始，用于区分不同的说话人。
-
-仅在启用说话人分离功能时，该字段才会显示于识别结果中。
-
-punctuation
-
-string
-
-预测出的词之后的标点符号（如有）。
+<a id="60280ef1ec77f"></a>
 
 ## 关键接口
+
+<a id="任务查询参数配置类-transcriptionqueryparam"></a>
+
+<a id="3639e1cb40mxi"></a>
 
 ### 任务查询参数配置类（`TranscriptionQueryParam`）
 
@@ -731,9 +403,13 @@ string
 
 通过静态方法`FromTranscriptionParam`创建`TranscriptionQueryParam`实例。
 
+<a id="accordion-点击查看示例-2"></a>
+
 点击查看示例
 
-```
+<a id="code-block-17"></a>
+
+```java
 // 创建转写请求参数
 TranscriptionParam param =
         TranscriptionParam.builder()
@@ -758,74 +434,37 @@ try {
 }
 ```
 
-**接口/方法**
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-18"></a><pre class="language-java"><code>public static TranscriptionQueryParam FromTranscriptionParam(TranscriptionParam param, String taskId)
+</code></pre></td><td><ul><li><code>param</code>：<code>TranscriptionParam</code>实例</li><li><code>taskId</code>：任务ID</li></ul></td><td><p><code>TranscriptionQueryParam</code>实例</p></td><td><p>创建<code>TranscriptionQueryParam</code>实例。</p></td></tr></tbody></table>
 
-**参数**
+<a id="核心类-transcription"></a>
 
-**返回值**
-
-**描述**
-
-```
-public static TranscriptionQueryParam FromTranscriptionParam(TranscriptionParam param, String taskId)
-```
-
--   `param`：`TranscriptionParam`实例
--   `taskId`：任务ID
-
-`TranscriptionQueryParam`实例
-
-创建`TranscriptionQueryParam`实例。
+<a id="adcb5e9bddbyq"></a>
 
 ### 核心类（`Transcription`）
 
 `Transcription`可以通过“`import com.alibaba.dashscope.audio.asr.transcription.*;`”方式引入。它的关键接口如下：
 
-**接口/方法**
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-19"></a><pre class="language-java"><code>public TranscriptionResult asyncCall(TranscriptionParam param)
+</code></pre></td><td><p><code>param</code>：语音识别相关参数，<code>TranscriptionParam</code>实例</p></td><td><p><a href="paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#11a082e1d9ijq">任务执行结果（TranscriptionResult）</a></p></td><td><p>异步提交语音识别任务。</p></td></tr><tr><td><a id="code-block-20"></a><pre class="language-java"><code>public TranscriptionResult wait(TranscriptionQueryParam queryParam)
+</code></pre></td><td><p><code>queryParam</code>：<code>TranscriptionQueryParam</code>实例</p></td><td><p><a href="paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#11a082e1d9ijq">任务执行结果（TranscriptionResult）</a></p></td><td><p>阻塞当前线程直到异步任务结束（任务状态为<code>SUCCEEDED</code>或<code>FAILED</code>）。</p></td></tr><tr><td><a id="code-block-21"></a><pre class="language-java"><code>public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
+</code></pre></td><td><p><code>queryParam</code>：<code>TranscriptionQueryParam</code>实例</p></td><td><p><a href="paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#11a082e1d9ijq">任务执行结果（TranscriptionResult）</a></p></td><td><p>异步查询当前任务执行结果。</p></td></tr></tbody></table>
 
-**参数**
+<a id="其他接口-批量查询任务状态-取消任务"></a>
 
-**返回值**
-
-**描述**
-
-```
-public TranscriptionResult asyncCall(TranscriptionParam param)
-```
-
-`param`：语音识别相关参数，`TranscriptionParam`实例
-
-[任务执行结果（TranscriptionResult）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#11a082e1d9ijq)
-
-异步提交语音识别任务。
-
-```
-public TranscriptionResult wait(TranscriptionQueryParam queryParam)
-```
-
-`queryParam`：`TranscriptionQueryParam`实例
-
-[任务执行结果（TranscriptionResult）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#11a082e1d9ijq)
-
-阻塞当前线程直到异步任务结束（任务状态为`SUCCEEDED`或`FAILED`）。
-
-```
-public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
-```
-
-`queryParam`：`TranscriptionQueryParam`实例
-
-[任务执行结果（TranscriptionResult）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#11a082e1d9ijq)
-
-异步查询当前任务执行结果。
+<a id="afbd594d9a7hx"></a>
 
 ## 其他接口：批量查询任务状态/取消任务
 
-详情请参见[管理异步任务](raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md)：支持批量查询24小时内提交的非实时语音识别任务，同时支持取消`PENDING`（排队）状态的任务。
+详情请参见[管理异步任务](../model-api-reference/more-about-models/manage-asynchronous-tasks.md)：支持批量查询24小时内提交的非实时语音识别任务，同时支持取消`PENDING`（排队）状态的任务。
+
+<a id="错误码"></a>
+
+<a id="a370386972oa4"></a>
 
 ## 错误码
 
-如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
+如遇报错问题，请参见[错误码](../model-api-reference/preparations/error-code.md)进行排查。
 
 若问题仍未解决，请加入[开发者群](https://github.com/aliyun/alibabacloud-bailian-speech-demo)反馈遇到的问题，并提供Request ID，以便进一步排查问题。
 
@@ -833,7 +472,9 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
 
 错误返回示例：
 
-```
+<a id="code-block-22"></a>
+
+```json
 {
     "task_id": "7bac899c-06ec-4a79-8875-xxxxxxxxxxxx",
     "task_status": "SUCCEEDED",
@@ -856,21 +497,43 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
 }
 ```
 
+<a id="更多示例"></a>
+
+<a id="4c2fd163e80k0"></a>
+
 ## 更多示例
 
 更多示例，请参见[GitHub](https://github.com/aliyun/alibabacloud-bailian-speech-demo)。
 
+<a id="常见问题"></a>
+
+<a id="7640d5d455ayp"></a>
+
 ## 常见问题
 
+<a id="功能特性"></a>
+
+<a id="ef653d0bb7ol9"></a>
+
 ### 功能特性
+
+<a id="q-是否支持base64编码方式的音频"></a>
+
+<a id="326a5e31a2p0m"></a>
 
 #### Q：是否支持Base64编码方式的音频？
 
 不支持Base64编码方式的音频。仅支持可通过公网访问的 URL 所指向的音频的识别，不支持识别二进制流，也不支持直接识别本地文件。
 
+<a id="q-如何将音频文件以公网可访问的url形式提供"></a>
+
+<a id="01d5f797c8ksz"></a>
+
 #### Q：如何将音频文件以公网可访问的URL形式提供？
 
 通常遵循以下几个步骤（这里为您提供一种思路，具体情况因不同存储产品而异，推荐将音频[上传至阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)）：
+
+<a id="accordion-1-选择存储和托管方式"></a>
 
 1、选择存储和托管方式
 
@@ -889,6 +552,8 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
     -   将音频文件托管在 CDN 上，通过 CDN 提供的 URL 访问。
     -   优点：加速文件传输，适合高并发场景。
 
+<a id="accordion-2-上传音频文件"></a>
+
 2、上传音频文件
 
 根据选择的存储/托管方式，将音频上传，如：
@@ -901,6 +566,8 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
     
     -   将音频文件放置在服务器指定目录下（如 `/var/www/html/audio/`）。
     -   确保文件可以通过 HTTP/HTTPS 访问。
+
+<a id="accordion-3-生成公网可访问的url"></a>
 
 3、生成公网可访问的URL
 
@@ -917,6 +584,8 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
     
     -   配置 CDN 加速后，使用 CDN 提供的 URL（如 `https://cdn.your-domain.com/audio/file.mp3`）。
 
+<a id="accordion-4-验证url的可用性"></a>
+
 4、验证URL的可用性
 
 公网环境下，确保生成的 URL 可以正常访问，例如：
@@ -928,33 +597,57 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
 
 使用RESTful API时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，支持使用以 `oss://`为前缀的临时 URL：
 
-**重要**
+> **重要**
+>
+> -   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
+> -   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
+> -   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
 
--   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
--   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
--   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
+<a id="q-多久能获取识别结果"></a>
+
+<a id="33c69cf322xkf"></a>
 
 #### Q：多久能获取识别结果？
 
 任务提交后将进入排队（PENDING）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内，请耐心等待。并且音频时长越长，所需时间越久。
 
+<a id="故障排查"></a>
+
+<a id="abe43b2c2a8sq"></a>
+
 ### 故障排查
 
-如遇代码报错问题，请根据[错误码](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#a370386972oa4)中的信息进行排查。
+如遇代码报错问题，请根据[错误码](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#a370386972oa4)中的信息进行排查。
+
+<a id="q-识别结果和语音播放不同步怎么办"></a>
+
+<a id="2cecceb3af4uc"></a>
 
 #### Q：识别结果和语音播放不同步怎么办？
 
-将[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk#48ea212b1d08r)`timestampAlignmentEnabled`设为`true`将启用时间戳校准功能，能够让识别结果和语音播放同步。
+将[请求参数](paraformer-recorded-speech-recognition-java-sdk-915d733e99a3db9b.md#48ea212b1d08r)`timestampAlignmentEnabled`设为`true`将启用时间戳校准功能，能够让识别结果和语音播放同步。
+
+<a id="q-一直轮询不到结果"></a>
+
+<a id="ed3d52b907dbl"></a>
 
 #### Q：一直轮询不到结果？
 
 可能是限流原因，请耐心等待。若需扩容，请加入[开发者群](https://github.com/aliyun/alibabacloud-bailian-speech-demo)进行申请。
+
+<a id="q-无法识别语音-无识别结果-是什么原因"></a>
+
+<a id="88d8b9a4b6xv7"></a>
 
 #### Q：无法识别语音（无识别结果）是什么原因？
 
 -   请检查音频是否符合要求（格式、采样率）。
 -   若是使用了`paraformer-v2`模型，检查`language_hints`的设置是否正确。
 -   以上都没问题，可通过定制热词，提升对特定词语的识别效果。
+
+<a id="更多问题"></a>
+
+<a id="6c1d546e27vq0"></a>
 
 ### 更多问题
 

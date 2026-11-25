@@ -2,25 +2,37 @@
 
 本文档介绍将用户的请求直接透传给您在百炼平台自己创建的应用（包括Agent、工作流、智能体编排）以及三方Agent（通过A2A协议对接）的方法。
 
+<a id="直连agent配置方法"></a>
+
+<a id="9e6a79b8a9jnj"></a>
+
 ## 直连Agent配置方法
 
 您可以关闭“文本模型”，开启“直连Agent”开关，通过直连Agent方式调用其它百炼应用或第三方Agent。
 
 在**理解和生成**配置面板中，开启**意图识别**开关，关闭**文本模型**开关，并开启**直连 Agent**开关。开启直连 Agent 后，用户请求将直接透传给百炼平台创建的应用（包括 Agent、工作流、智能体编排）以及三方 Agent（通过 A2A 协议对接）。
 
-**说明**
+> **说明**
+>
+> 1.  目前该功能仅多模态应用支持，语音应用暂不支持。
+> 2.  关闭文本模型后，只下发意图识别结果，欢迎语、提示词、对话承接语、知识库、长期记忆暂不可用，开启后即可恢复。
 
-1.  目前该功能仅多模态应用支持，语音应用暂不支持。
-2.  关闭文本模型后，只下发意图识别结果，欢迎语、提示词、对话承接语、知识库、长期记忆暂不可用，开启后即可恢复。
+<a id="通过管控台集成百炼agent和三方agent"></a>
+
+<a id="J2opP"></a>
 
 ## 通过管控台集成百炼Agent和三方Agent
 
 当前您可以在多模态应用中使用该方式。套件提供两种方式接入您的业务Agent。
 
-1.  百炼Agent：参见[接入百炼智能体应用](raw/_short/multimodal-call-app-d2c20dc3e66f7d6c.md)创建和配置说明。
-2.  三方Agent：您完成 A2A 服务部署后在管控台集成，参见 [AgentCard](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#854b8c0b10ozm)。
+1.  百炼Agent：参见[接入百炼智能体应用](multimodal-call-app-d2c20dc3e66f7d6c.md)创建和配置说明。
+2.  三方Agent：您完成 A2A 服务部署后在管控台集成，参见 [AgentCard](multimodal-integration-a2a-9862d72fb0298480.md#854b8c0b10ozm)。
 
 在 Agent 配置面板中，单击**百炼应用**区域右上角的**+**按钮添加百炼平台应用，单击**三方应用**区域右上角的**+**按钮添加 A2A 应用。
+
+<a id="建联传参"></a>
+
+<a id="ZdwYj"></a>
 
 ## 建联传参
 
@@ -28,54 +40,22 @@
 
 关键参数，parameters.bizParams.commands\[\]
 
-bizParams
-
-参数
-
-一级参数
-
-类型
-
-说明
-
-commands\[\]
-
-name
-
-String
-
-固定为“agent\_command”
-
-exec\_params
-
-Object
-
-app\_id
-
-String
-
-管控台应用列表中的 agentId
-
-intent
-
-String
-
-固定为"open\_"+ agentId
-
-user\_defined\_params
-
-Object
-
-配置给 Agent 的参数
-
-agentId
-
-Object
-
-以 agentId为 key的对象，对象中的参数会传递给 Agent
+|  |  |  |  |  |
+| --- | --- | --- | --- | --- |
+| bizParams | 参数 | 一级参数 | 类型 | 说明 |
+| commands\[\] |  |  |  |  |
+|  | name |  | String | 固定为“agent\_command” |
+|  | exec\_params |  | Object |  |
+|  |  | app\_id | String | 管控台应用列表中的 agentId |
+|  |  | intent | String | 固定为"open\_"+ agentId |
+| user\_defined\_params |  |  | Object | 配置给 Agent 的参数 |
+|  | agentId |  | Object | 以 agentId为 key的对象，对象中的参数会传递给 Agent |
 
 **parameters.bizParams.commands\[\]**
-```
+
+<a id="code-block"></a>
+
+```text
 [{
   "name":"agent_command",
   "exec_params":{
@@ -84,8 +64,12 @@ Object
   }
 }]
 ```
+
 **以 Android SDK 设置参数为例**
-```
+
+<a id="code-block-2"></a>
+
+```text
 private MultiModalRequestParam buildRequestParams() {
 
     JSONArray commands = new JSONArray();
@@ -124,42 +108,28 @@ private MultiModalRequestParam buildRequestParams() {
 }
 ```
 
+<a id="通过updateinfo更新参数"></a>
+
+<a id="AY2pr"></a>
+
 ## 通过UpdateInfo更新参数
 
 在对话过程中如需携带参数给您的Agent。可通过此方式将参数透传，透传参数会在下一次请求Agent服务时带入。
 
 通过该方式设置的参数每次请求Agent都会携带。您可以通过UpdateInfo更新同名参数。
 
-parameters.bizParams
-
-参数
-
-一级参数
-
-类型
-
-说明
-
-user\_defined\_params
-
-Object
-
-配置给 Agent 的参数
-
-agentId
-
-Object
-
-以 agentId为 key的对象，对象中的参数会传递给 Agent
-
-user\_prompt\_params
-
-Object
-
-当您使用百炼**智能体应用**时，通过此结构传递智能体提示词中定义的参数。
+|  |  |  |  |  |
+| --- | --- | --- | --- | --- |
+| parameters.bizParams | 参数 | 一级参数 | 类型 | 说明 |
+| user\_defined\_params |  |  | Object | 配置给 Agent 的参数 |
+|  | agentId |  | Object | 以 agentId为 key的对象，对象中的参数会传递给 Agent |
+|  |  | user\_prompt\_params | Object | 当您使用百炼**智能体应用**时，通过此结构传递智能体提示词中定义的参数。 |
 
 **parameters.bizParams.user\_defined\_params**
-```
+
+<a id="code-block-3"></a>
+
+```text
 "user_defined_params":{
     "xxxxx":{
         "user_prompt_params":{
@@ -169,8 +139,12 @@ Object
     }
 }
 ```
+
 **以 Android SDK 设置参数为例**
-```
+
+<a id="code-block-4"></a>
+
+```text
 private void updateParams(){
         try {
             JSONObject userAgentPromptParams = new JSONObject();
@@ -197,33 +171,25 @@ private void updateParams(){
     }
 ```
 
+<a id="通过updateinfo透传图片"></a>
+
+<a id="HsDJ1"></a>
+
 ## 通过UpdateInfo透传图片
 
 如果您的 Agent 支持图像模态的交互，您也可以将图片以链接或者 base64 数据的方式透传给 Agent。
 
 关键参数：parameters.images\[\]
 
-images\[\]
+|  |  |  |  |
+| --- | --- | --- | --- |
+| images\[\] | 参数 | 类型 | 说明 |
+|  | type | String | 图片类型，支持"url"/"base64" |
+|  | value | String | 图片连接或者 base64 编码数据。注意以 base64 提交数据原始图片大小不应超过 180KB。 |
 
-参数
+<a id="code-block-5"></a>
 
-类型
-
-说明
-
-type
-
-String
-
-图片类型，支持"url"/"base64"
-
-value
-
-String
-
-图片连接或者 base64 编码数据。注意以 base64 提交数据原始图片大小不应超过 180KB。
-
-```
+```text
 {
   "images": [{
     "type": "base64",
@@ -231,8 +197,12 @@ String
   }]
 }
 ```
+
 **以 Android SDK 设置参数为例**
-```
+
+<a id="code-block-6"></a>
+
+```text
 MultiModalRequestParam updateParams = null;
 try {
     updateParams = MultiModalRequestParam

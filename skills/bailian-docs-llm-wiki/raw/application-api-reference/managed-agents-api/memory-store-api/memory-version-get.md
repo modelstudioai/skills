@@ -2,52 +2,61 @@
 
 读取指定历史版本。
 
+<a id="前提"></a>
+
+<a id="h-get-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
+已完成 Endpoint 与鉴权配置，详见[API 总览与认证](../managed-agents-api-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-get-endpoint"></a>
 
 ## 接口
 
 **GET** `/memory_stores/{memory_store_id}/memory_versions/{memory_version_id}`
 
+<a id="路径参数"></a>
+
+<a id="h-get-path"></a>
+
 ## 路径参数
 
-**参数**
+| 参数 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `memory_store_id` | 是 | string | 记忆库 ID |
+| `memory_version_id` | 是 | string | 版本 ID |
 
-**必填**
+<a id="请求示例"></a>
 
-**类型**
-
-**说明**
-
-`memory_store_id`
-
-是
-
-string
-
-记忆库 ID
-
-`memory_version_id`
-
-是
-
-string
-
-版本 ID
+<a id="h-get-eg"></a>
 
 ## 请求示例
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl "$AGENTSTUDIO_URL/memory_stores/memstore_xxx/memory_versions/memver_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="响应"></a>
+
+<a id="h-get-resp"></a>
+
 ## 响应
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "id": "memver_xxx",
   "type": "memory_version",
@@ -62,102 +71,34 @@ curl "$AGENTSTUDIO_URL/memory_stores/memstore_xxx/memory_versions/memver_xxx" \
 }
 ```
 
+<a id="响应字段"></a>
+
+<a id="h-get-dto"></a>
+
 ### 响应字段
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `id` | string | 版本 ID，格式 memver\_xxx |
+| `type` | string | 固定为 memory\_version |
+| `memory_store_id` | string | 所属记忆库 ID |
+| `memory_id` | string | 对应的记忆 ID |
+| `operation` | `created` / `modified` / `deleted` | 产生该版本的操作类型 |
+| `path` | string | 该版本快照中的路径 |
+| `content` | string | 该版本正文；已擦除时不含此字段 |
+| `content_sha256` | string | 该版本正文的 SHA256 哈希 |
+| `content_size_bytes` | integer | 该版本正文的 UTF-8 字节数 |
+| `redacted_at` | string \| null | 正文被擦除的时间；未擦除时省略或为 null |
+| `created_at` | string | 版本产生时间，ISO 8601 UTC |
 
-**类型**
+<a id="错误码"></a>
 
-**说明**
-
-`id`
-
-string
-
-版本 ID，格式 memver\_xxx
-
-`type`
-
-string
-
-固定为 memory\_version
-
-`memory_store_id`
-
-string
-
-所属记忆库 ID
-
-`memory_id`
-
-string
-
-对应的记忆 ID
-
-`operation`
-
-`created` / `modified` / `deleted`
-
-产生该版本的操作类型
-
-`path`
-
-string
-
-该版本快照中的路径
-
-`content`
-
-string
-
-该版本正文；已擦除时不含此字段
-
-`content_sha256`
-
-string
-
-该版本正文的 SHA256 哈希
-
-`content_size_bytes`
-
-integer
-
-该版本正文的 UTF-8 字节数
-
-`redacted_at`
-
-string | null
-
-正文被擦除的时间；未擦除时省略或为 null
-
-`created_at`
-
-string
-
-版本产生时间，ISO 8601 UTC
+<a id="h-get-err"></a>
 
 ## 错误码
 
-**状态码**
-
-**错误码**
-
-**说明**
-
-401
-
-`InvalidApiKey`
-
-API Key 缺失、错误或失效
-
-403
-
-`permission_error`
-
-身份或资源访问权限不足
-
-404
-
-`not_found_error`
-
-资源不存在或不属于当前工作空间
+| 状态码 | 错误码 | 说明 |
+| --- | --- | --- |
+| 401 | `InvalidApiKey` | API Key 缺失、错误或失效 |
+| 403 | `permission_error` | 身份或资源访问权限不足 |
+| 404 | `not_found_error` | 资源不存在或不属于当前工作空间 |

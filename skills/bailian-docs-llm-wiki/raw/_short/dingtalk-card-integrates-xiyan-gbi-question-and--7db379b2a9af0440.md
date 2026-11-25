@@ -2,14 +2,22 @@
 
 本文基于析言GBI的API实现了在钉钉客户端的智能数据问答功能。旨在帮助您熟悉析言GBI的API的使用，以便在实际项目中将析言GBI的API灵活运用到一些常见的终端上。
 
+<a id="前提条件"></a>
+
+<a id="83068ed6e1vgu"></a>
+
 ## 前提条件
 
 -   已开通阿里云百炼服务。
 -   已[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 -   已[获取AccessKey ID和AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
--   已在析言GBI的**[数据表管理](https://bailian.console.aliyun.com/xiyan#/dataManagement/dataSourceM)**中授权连接了数据库。具体操作，请参见[数据库连接](https://help.aliyun.com/zh/model-studio/xiyan-gbi-user-guide#8e5d17697392b)。
+-   已在析言GBI的**[数据表管理](https://bailian.console.aliyun.com/xiyan#/dataManagement/dataSourceM)**中授权连接了数据库。具体操作，请参见[数据库连接](../application-user-guide/agent-development/application-gallery/xiyan-gbi/xiyan-gbi-user-guide.md#8e5d17697392b)。
 -   已注册钉钉企业。
 -   已注册钉钉开发者。
+
+<a id="步骤1-创建钉钉应用"></a>
+
+<a id="d7bc17d524afv"></a>
 
 ## 步骤1：创建钉钉应用
 
@@ -33,6 +41,10 @@
     
     ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8662085371/p894942.png)
 
+<a id="步骤2-创建卡片模板"></a>
+
+<a id="yxMzC"></a>
+
 ## 步骤2：创建卡片模板
 
 1.  登录[钉钉卡片平台](https://open-dev.dingtalk.com/fe/card)。
@@ -43,6 +55,10 @@
 3.  单击**导入模板**，导入[模板文件](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241226/mkighb/card_template.json)并保存。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8662085371/p894948.png) ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8662085371/p894949.png)
+
+<a id="步骤3-开发钉钉机器人后端应用"></a>
+
+<a id="qV1GY"></a>
 
 ## 步骤3：开发钉钉机器人后端应用
 
@@ -55,7 +71,9 @@
 2.  如果您使用析言提供的测试文件，您需要替换`Properties`中的关键参数，`client-id`和`client-secret`，以及代码中的`templateId`。
     
 
-```
+<a id="code-block"></a>
+
+```java
 xiyan.access-key-id=xx
 xiyan.access-key-secret=xx
 xiyan.workspace-id=xxx
@@ -69,7 +87,9 @@ openApiHost=https://api.dingtalk.com
 
 3.  运行Java项目，检查应用初始化和网络连接是否正常。
 
-```
+<a id="code-block-2"></a>
+
+```java
 2024-12-26 15:30:04.004  INFO 48685 --- [ection-pool-2-1] .d.o.a.s.n.w.WebsocketTransportConnector : [DingTalk] start websocket connection, uri=wss://wss-open-connection.dingtalk.com:443/connect
 2024-12-26 15:30:04.472  INFO 48685 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
 2024-12-26 15:30:04.556  INFO 48685 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
@@ -77,19 +97,29 @@ openApiHost=https://api.dingtalk.com
 2024-12-26 15:30:04.984  INFO 48685 --- [ection-pool-2-1] c.d.o.a.s.n.core.DefaultSessionPool      : [DingTalk] connection is established, connectionId=xxxx-xxx-xxx-xxx-xxx
 ```
 
+<a id="步骤4-效果验证"></a>
+
+<a id="vrvQk"></a>
+
 ## 步骤4：效果验证
 
 1.  登录钉钉App，在消息框中`@机器人`进行问答。在Java应用日志中确认，是否有收到事件通知。
 
-```
+<a id="code-block-3"></a>
+
+```java
 2024-12-26 15:31:32.758  INFO 48685 --- [lk-Consumer-1-1] com.aliyun.xiyan.demo.ChatBotHandler     : received message: 每月访客人数趋势
 ```
 
 2.  您可以在钉钉App聊天窗，查看卡片渲染情况。
     
 
+<a id="相关文档"></a>
+
+<a id="048c9edd13xns"></a>
+
 ## 相关文档
 
-如果您想参考析言GBI使用，请参见[使用指南](raw/application-user-guide/agent-development/application-gallery/xiyan-gbi/xiyan-gbi-user-guide.md)。
+如果您想参考析言GBI使用，请参见[使用指南](../application-user-guide/agent-development/application-gallery/xiyan-gbi/xiyan-gbi-user-guide.md)。
 
-如果您想应用析言GBI，请参见[析言GBI关于云服务访问数据库最佳实践](raw/application-user-guide/agent-development/application-gallery/xiyan-gbi/gbi-best-practices.md)。
+如果您想应用析言GBI，请参见[析言GBI关于云服务访问数据库最佳实践](../application-user-guide/agent-development/application-gallery/xiyan-gbi/gbi-best-practices.md)。

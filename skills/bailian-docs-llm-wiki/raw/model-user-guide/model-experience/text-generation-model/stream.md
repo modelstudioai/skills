@@ -2,13 +2,23 @@
 
 在实时聊天或长文本生成应用中，长时间的等待会损害用户体验并可能导致触发服务端超时，导致任务失败。流式输出通过持续返回模型生成的文本片段，解决了这两个核心问题。
 
+<a id="工作原理"></a>
+
+<a id="4880e0d360hlk"></a>
+
 ## 工作原理
 
 流式输出基于 Server-Sent Events (SSE) 协议。发起流式请求后，服务端与客户端建立持久化 HTTP 连接。模型每生成一个文本块（称为 chunk），立即通过连接推送。全部内容生成后，服务端发送结束信号。
 
 客户端监听事件流，实时接收并处理文本块，例如逐字渲染界面。这与非流式调用（一次性返回所有内容）形成对比。
 
-**说明**流式与非流式的响应结构不同：非流式返回单个 JSON 对象，正文位于 `choices[0].message.content`；流式通过 SSE 逐块返回，正文位于 `choices[0].delta.content`，需客户端拼接，以 `data: [DONE]` 结束。
+> **说明**
+>
+> 流式与非流式的响应结构不同：非流式返回单个 JSON 对象，正文位于 `choices[0].message.content`；流式通过 SSE 逐块返回，正文位于 `choices[0].delta.content`，需客户端拼接，以 `data: [DONE]` 结束。
+
+<a id="计费说明"></a>
+
+<a id="602f9a76a45wc"></a>
 
 ## 计费说明
 
@@ -16,17 +26,37 @@
 
 请求中断时，输出 Token 仅计算服务端收到终止请求前已生成的部分。
 
+<a id="如何使用"></a>
+
+<a id="c494533e4cot6"></a>
+
 ## 如何使用
 
-**重要**Qwen3 开源版、QwQ 商业版与开源版、QVQ，以及 Qwen3.5-Omni、Qwen3-Omni-Flash 仅支持流式输出方式调用。
+> **重要**
+>
+> Qwen3 开源版、QwQ 商业版与开源版、QVQ，以及 Qwen3.5-Omni、Qwen3-Omni-Flash 仅支持流式输出方式调用。
+
+<a id="步骤一-配置-api-key-并选择地域"></a>
+
+<a id="c9d7f901b4l4q"></a>
 
 ### 步骤一：配置 API Key 并选择地域
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+您需要已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。
 
 > 将API Key配置为环境变量（`DASHSCOPE_API_KEY`）比在代码中硬编码更安全。
 
+<a id="步骤二-发起流式请求"></a>
+
+<a id="e265f9c0b3e82"></a>
+
 ### 步骤二：发起流式请求
+
+<a id="sec-tabs"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
 
@@ -39,9 +69,17 @@
     OpenAI 协议默认不返回 Token 消耗量，需设置`stream_options={"include_usage": true}`，使**最后一个返回的数据块**包含Token消耗信息。
     
 
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
+<a id="code-block"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -84,9 +122,13 @@ full_response = "".join(content_parts)
 # print(f"\n--- 完整回复 ---\n{full_response}")
 ```
 
+<a id="4f654e5617rk4"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-2"></a>
+
+```text
 AI: 你好！我是Qwen，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我能够回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。我支持多种语言，包括但不限于中文、英文、德语、法语、西班牙语等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 --- 请求用量 ---
 输入 Tokens: 26
@@ -94,9 +136,15 @@ AI: 你好！我是Qwen，是阿里巴巴集团旗下的通义实验室自主研
 总计 Tokens: 113
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 
 async function main() {
@@ -156,9 +204,13 @@ async function main() {
 main();
 ```
 
+<a id="87c3604546cju"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```text
 AI: 你好！我是Qwen，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我能够回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。我支持多种语言，包括但不限于中文、英文、德语、法语、西班牙语等。如果你有任何问题或需要帮助，欢迎随时向我提问！
 --- 请求用量 ---
 输入 Tokens: 26
@@ -166,11 +218,19 @@ AI: 你好！我是Qwen，是阿里巴巴集团旗下的通义实验室自主研
 总计 Tokens: 115
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
+
+<a id="a041ab55bem9e"></a>
 
 ### 请求
 
-```
+<a id="code-block-5"></a>
+
+```bash
 # ======= 重要提示 =======
 # 确保已设置环境变量 DASHSCOPE_API_KEY
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -190,11 +250,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="ea5bf1cf2e473"></a>
+
 ### 响应
 
 返回数据为符合 SSE 协议的流式响应。每一行 `data:` 都代表一个数据块。
 
-```
+<a id="code-block-6"></a>
+
+```json
 data: {"choices":[{"delta":{"content":"","role":"assistant"},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1726132850,"system_fingerprint":null,"model":"qwen-plus","id":"chatcmpl-428b414f-fdd4-94c6-b179-8f576ad653a8"}
 
 data: {"choices":[{"finish_reason":null,"delta":{"content":"我是"},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1726132850,"system_fingerprint":null,"model":"qwen-plus","id":"chatcmpl-428b414f-fdd4-94c6-b179-8f576ad653a8"}
@@ -218,6 +282,10 @@ data: [DONE]
 
 -   `data:`: 消息的数据负载，通常是一个JSON字符串。
 -   `[DONE]`: 表示整个流式响应已结束。
+
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
 
 #### DashScope
 
@@ -245,9 +313,17 @@ data: [DONE]
     每个数据块都包含实时的 Token 消耗信息。
     
 
+<a id="sec-tabs-3"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-7"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -303,8 +379,12 @@ except DashScopeError as e:
         f"\n请求失败: request_id={e.request_id}, code={e.code}, message={e.message}"
     )
 ```
+
 **返回结果**
-```
+
+<a id="code-block-8"></a>
+
+```text
 AI: 你好！我是Qwen，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我能够帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。我支持多种语言，包括但不限于中文、英文、德语、法语、西班牙语等。如果你有任何问题或需要帮助，欢迎随时向我提问！
 --- 请求用量 ---
 输入 Tokens: 26
@@ -312,9 +392,15 @@ AI: 你好！我是Qwen，是阿里巴巴集团旗下的通义实验室自主研
 总计 Tokens: 117
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-9"></a>
+
+```java
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
@@ -405,9 +491,13 @@ public class Main {
 }
 ```
 
+<a id="5bf7669c0esuw"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-10"></a>
+
+```text
 AI: 你好！我是Qwen，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我能够帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。我支持多种语言，包括但不限于中文、英文、德语、法语、西班牙语等。如果你有任何问题或需要帮助，欢迎随时向我提问！
 --- 请求用量 ---
 输入 Tokens: 26
@@ -415,11 +505,19 @@ AI: 你好！我是Qwen，是阿里巴巴集团旗下的通义实验室自主研
 总计 Tokens: 117
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
+
+<a id="a76aa6f5d4pzb"></a>
 
 ### 请求
 
-```
+<a id="code-block-11"></a>
+
+```bash
 # ======= 重要提示 =======
 # 确保已设置环境变量 DASHSCOPE_API_KEY
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -450,6 +548,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="ddd53209dbzc3"></a>
+
 ### 响应
 
 响应遵循 Server-Sent Events (SSE) 格式，每条消息包含：
@@ -459,7 +559,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   HTTP 状态码信息；
 -   data：JSON 数据部分。
 
-```
+<a id="code-block-12"></a>
+
+```json
 id:1
 event:result
 :HTTP_STATUS/200
@@ -493,6 +595,10 @@ event:result
 data:{"output":{"choices":[{"message":{"content":"","role":"assistant"},"finish_reason":"stop"}]},"usage":{"total_tokens":92,"output_tokens":66,"input_tokens":26,"prompt_tokens_details":{"cached_tokens":0}},"request_id":"d30a9914-ac97-9102-b746-ce0cb35e3fa2"}
 ```
 
+<a id="多模态模型的流式输出"></a>
+
+<a id="e98db795e87q9"></a>
+
 ## 多模态模型的流式输出
 
 多模态模型支持在对话中加入图片、音频等内容，其流式输出的实现方式与文本模型主要有以下不同：
@@ -500,13 +606,25 @@ data:{"output":{"choices":[{"message":{"content":"","role":"assistant"},"finish_
 -   **用户消息（user message）的构造方式**：多模态模型的输入不仅包括文本，还包含图片、音频等多模态信息。
 -   **DashScope SDK接口：**使用 DashScope Python SDK 2.0 时，需调用 `client.multimodal.chat.create` 接口；使用DashScope Java SDK 时，则调用 MultiModalConversation 类。
 
-> 多模态模型请参见：[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)、[文字提取](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)、[界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)、[音频理解-Qwen3-Omni-Captioner](https://help.aliyun.com/zh/model-studio/qwen3-omni-captioner)、[Kimi](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)等，Qwen3.5-Omni、Qwen3-Omni-Flash **仅支持流式输出**，因其输出可包含**文本**或**音频**等多模态内容，结果解析方式与其他模型不同，具体请参见[全模态](https://help.aliyun.com/zh/model-studio/qwen-omni#b6a6667a65zvt)。
+> 多模态模型请参见：[图像与视频理解](vision.md)、[文字提取](specialized-models/qwen-vl-ocr.md)、[界面交互](specialized-models/gui-automation.md)、[音频理解-Qwen3-Omni-Captioner](https://help.aliyun.com/zh/model-studio/qwen3-omni-captioner)、[Kimi](../../use-cases/third-party-model-integration-tutorial/kimi-api.md)等，Qwen3.5-Omni、Qwen3-Omni-Flash **仅支持流式输出**，因其输出可包含**文本**或**音频**等多模态内容，结果解析方式与其他模型不同，具体请参见[全模态](../omni-modal/qwen-omni.md#b6a6667a65zvt)。
+
+<a id="sec-tabs-4"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
 
 #### OpenAI兼容
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -539,9 +657,13 @@ for chunk in completion:
 print(f"完整内容为：{full_content}")
 ```
 
+<a id="fig-code-group-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI(
@@ -578,9 +700,13 @@ for await (const chunk of completion) {
 console.log(`完整输出内容为：${fullContent}`)
 ```
 
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -613,11 +739,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -656,9 +792,13 @@ for chunk in stream:
 print(f"完整内容为：{full_content}")
 ```
 
+<a id="fig-code-group-2-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -719,9 +859,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-2-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -750,19 +894,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="思考模型的流式输出"></a>
+
+<a id="ae5fd8099d208"></a>
+
 ## 思考模型的流式输出
 
 思考模型会先返回`reasoning_content`（思考过程），再返回`content`（回复内容）。可根据数据包状态判断当前为思考或是回复阶段。
 
-> 思考模型详情参见：[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)、[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
+> 思考模型详情参见：[深度思考](deep-thinking.md)、[图像与视频理解](vision.md)。
 
-> Qwen3-Omni-Flash（思考模式）实现流式输出请参见[全模态](https://help.aliyun.com/zh/model-studio/qwen-omni#bc67a9a2bd2of)。
+> Qwen3-Omni-Flash（思考模式）实现流式输出请参见[全模态](../omni-modal/qwen-omni.md#bc67a9a2bd2of)。
+
+<a id="sec-tabs-5"></a>
+
+<a id="openai兼容-3"></a>
+
+<a id="openai兼容-3-h4"></a>
 
 #### OpenAI兼容
 
 以下是使用 OpenAI Python SDK 以流式方式调用思考模式 qwen-plus 模型时返回的数据格式：
 
-```
+<a id="code-block-13"></a>
+
+```text
 # 思考阶段
 ...
 ChoiceDelta(content=None, function_call=None, refusal=None, role=None, tool_calls=None, reasoning_content='覆盖所有要点，同时')
@@ -777,11 +933,21 @@ ChoiceDelta(content='义千问**（', function_call=None, refusal=None, role=Non
 -   若`reasoning_content`为 None，`content` 不为 `None`，则当前处于回复阶段；
 -   若两者均为 `None`，则阶段与前一包一致。
 
+<a id="sec-tabs-6"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
+
 #### Python
+
+<a id="476b0d8764uct"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-14"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -835,9 +1001,13 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
+<a id="0a46d1b6d1jwu"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-15"></a>
+
+```text
 ====================思考过程====================
 
 好的，用户问“你是谁”，我需要给出一个准确且友好的回答。首先，我要确认自己的身份，即通义千问，由阿里巴巴集团旗下的通义实验室研发。接下来，应该说明我的主要功能，比如回答问题、创作文字、逻辑推理等。同时，要保持语气亲切，避免过于技术化，让用户感觉轻松。还要注意不要使用复杂术语，确保回答简洁明了。另外，可能需要加入一些互动元素，邀请用户提问，促进进一步交流。最后，检查是否有遗漏的重要信息，比如我的中文名称“通义千问”和英文名称“Qwen”，以及所属公司和实验室。确保回答全面且符合用户期望。
@@ -846,11 +1016,19 @@ for chunk in completion:
 你好！我是通义千问，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以回答问题、创作文字、进行逻辑推理、编程等，旨在为用户提供高质量的信息和服务。你可以叫我Qwen，或者直接叫我通义千问。有什么我可以帮你的吗？
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
+
+<a id="aa3379a8a8m8l"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-16"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -914,9 +1092,13 @@ async function main() {
 main();
 ```
 
+<a id="ea1e31951foc2"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-17"></a>
+
+```text
 ====================思考过程====================
 
 好的，用户问“你是谁”，我需要回答我的身份。首先，我应该明确说明我是通义千问，由阿里云开发的超大规模语言模型。接下来，可以提到我的主要功能，比如回答问题、创作文字、逻辑推理等。还要强调我的多语言支持，包括中文和英文，这样用户知道我可以处理不同语言的请求。另外，可能需要解释一下我的应用场景，比如学习、工作和生活中的帮助。不过用户的问题比较直接，可能不需要太详细的信息，保持简洁明了。同时，要确保语气友好，邀请用户进一步提问。检查有没有遗漏的重要信息，比如我的版本或最新更新，但可能用户不需要那么详细。最后，确认回答准确无误，没有错误信息。
@@ -925,15 +1107,29 @@ main();
 我是通义千问，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我能够回答问题、创作文字、逻辑推理、编程等多种任务，支持中英文等多种语言。如果你有任何问题或需要帮，欢迎随时告诉我！
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
 
+<a id="8a6ac5c012uov"></a>
+
 ### 示例代码
+
+<a id="sec-tabs-7"></a>
+
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
 
 #### curl
 
 Qwen3 开源版模型需要设置`enable_thinking`为`true`来开启思考模式；`enable_thinking`对 QwQ 与 DeepSeek-R1 模型无效。
 
-```
+<a id="code-block-18"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -957,9 +1153,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="3434f14720siq"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-19"></a>
+
+```json
 data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1745485391,"system_fingerprint":null,"model":"qwen-plus","id":"chatcmpl-e2edaf2c-8aaf-9e54-90e2-b21dd5045503"}
 
 .....
@@ -971,11 +1171,17 @@ data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":10
 data: [DONE]
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
 
 以下为 DashScope Python SDK 调用思考模式的 qwen-plus 模型时，流式返回的数据包格式：
 
-```
+<a id="code-block-20"></a>
+
+```text
 # 思考阶段
 ...
 {"role": "assistant", "content": "", "reasoning_content": "信息量大，"}
@@ -990,11 +1196,21 @@ data: [DONE]
 -   若`reasoning_content`为 ""，`content` 不为 ""，则当前处于回复阶段；
 -   若两者均为 ""，则阶段与前一包一致。
 
+<a id="sec-tabs-8"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
+
 #### Python
+
+<a id="ed8257af27xad"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-21"></a>
+
+```python
 import os
 import dashscope
 
@@ -1055,9 +1271,13 @@ for chunk in stream:
 # print(f"{answer_content}")
 ```
 
+<a id="ba3b8246a48qv"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-22"></a>
+
+```text
 ====================思考过程====================
 好的，用户问：“你是谁？”我需要回答这个问题。首先，我要明确自己的身份，即通义千问，由阿里云开发的超大规模语言模型。接下来，要说明我的功能和用途，比如回答问题、创作文字、逻辑推理等。同时，要强调我的目标是成为用户的得力助手，提供帮助和支持。
 
@@ -1070,11 +1290,19 @@ for chunk in stream:
 你好呀～我是通义千问，是阿里云开发的一款超大规模语言模型。我能够回答问题、创作文字、进行逻辑推理、编程等等，旨在为用户提供帮助和支持。无论是日常生活的疑问还是专业领域的问题，我都能尽力提供帮助。有什么我可以帮你的吗？
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
+
+<a id="4ac031f0676c1"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-23"></a>
+
+```java
 // dashscope SDK的版本 >= 2.19.4
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
@@ -1159,9 +1387,13 @@ public class Main {
 }
 ```
 
+<a id="24452535a8371"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-24"></a>
+
+```text
 ====================思考过程====================
 好的，用户问“你是谁？”，我需要根据之前的设定来回答。首先，我的角色是通义千问，阿里巴巴集团旗下的超大规模语言模型。要保持口语化，简洁易懂。
 
@@ -1174,15 +1406,29 @@ public class Main {
 你好！我是通义千问，阿里巴巴集团旗下的超大规模语言模型。我能够回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。我熟练掌握多种语言，包括但不限于中文、英文、德语、法语、西班牙语等。有什么需要我帮忙的吗？
 ```
 
+<a id="http-2"></a>
+
+<a id="http-2-h4"></a>
+
 #### HTTP
 
+<a id="e93608c894qfe"></a>
+
 ### 示例代码
+
+<a id="sec-tabs-9"></a>
+
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
 
 #### curl
 
 混合思考模型需要设置`enable_thinking`为`true`来开启思考模式；`enable_thinking`对QwQ 与 DeepSeek-R1 模型无效。
 
-```
+<a id="code-block-25"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -1209,9 +1455,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="1e0bfae0c9vk1"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-26"></a>
+
+```text
 id:1
 event:result
 :HTTP_STATUS/200
@@ -1274,32 +1524,56 @@ event:result
 data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role":"assistant"},"finish_reason":"stop"}]},"usage":{"total_tokens":378,"input_tokens":11,"output_tokens":367},"request_id":"25d58c29-c47b-9e8d-a0f1-d6c309ec58b1"}
 ```
 
+<a id="应用于生产环境"></a>
+
+<a id="c2968a93bfqzh"></a>
+
 ## 应用于生产环境
 
 -   **性能与资源管理**：在后端服务中，为每个流式请求维持一个HTTP长连接会消耗资源。确保您的服务配置了合理的连接池大小和超时时间。在高并发场景下，监控服务的文件描述符（file descriptors）使用情况，防止耗尽。
     
 -   **客户端渲染**：在Web前端，使用 `ReadableStream` 和 `TextDecoderStream` API 可以平滑地处理和渲染SSE事件流，提供最佳的用户体验。
     
--   [模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)：
+-   [模型监控](../../model-monitoring/model-telemetry.md)：
     
     -   **关键指标**：监控**首Token延迟（Time to First Token, TTFT）**，该指标是衡量流式体验的核心。同时监控请求错误率和平均响应时长。
     -   **告警设置**：为API错误率（特别是4xx和5xx错误）的异常设置告警。
 -   **Nginx代理配置**：若使用 Nginx 作为反向代理，其默认的输出缓冲（proxy\_buffering）会破坏流式响应的实时性。为确保数据能被即时推送到客户端，务必在Nginx配置文件中设置`proxy_buffering off`以关闭此功能。
     
 
+<a id="错误码"></a>
+
+<a id="efc117f59a2gm"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。
+
+<a id="常见问题"></a>
+
+<a id="5a8695c365uu1"></a>
 
 ## 常见问题
+
+<a id="q-为什么返回数据中没有-usage-信息"></a>
+
+<a id="cd86a6b989bf2"></a>
 
 ### Q：为什么返回数据中没有 usage 信息？
 
 A：OpenAI 协议默认不返回 usage 信息，设置`stream_options`参数使得最后返回的包中包含 usage 信息。
 
+<a id="q-开启流式输出对模型的回复效果是否有影响"></a>
+
+<a id="f2185a957fff8"></a>
+
 ### Q：开启流式输出对模型的回复效果是否有影响？
 
 A：无影响，但部分模型仅支持流式输出，且非流式输出可能引发超时错误。建议优先使用流式输出。
+
+<a id="q-非流式调用和流式调用有什么区别"></a>
+
+<a id="b8d4a1f567rt4"></a>
 
 ### Q：非流式调用和流式调用有什么区别？
 
@@ -1310,6 +1584,10 @@ A：主要区别如下：
 -   **功能兼容**：两者均支持JSON Mode、Function Call等功能特性，功能上没有差异。
 
 建议优先使用流式输出，可以避免超时问题并获得更好的用户体验。
+
+<a id="q-流式输出是否支持json-mode-结构化输出"></a>
+
+<a id="m9o5l2q678xi5"></a>
 
 ### Q：流式输出是否支持JSON Mode（结构化输出）？
 

@@ -2,9 +2,17 @@
 
 导出-自定义数据源-选题视角分析任务结果
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,673 +31,256 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:ExportCustomSourceAnalysisTask | get | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求参数"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:ExportCustomSourceAnalysisTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 业务空间唯一标识：AgentKey | xxxxx\_p\_efm |
+| TaskId | string | 是 | 任务唯一 ID | c9f226b02cca4f42a84c5e955c39dfd2 |
+| ExportType | string | 否 | 导出格式类型，默认 jsonLine jsonline: 导出为 jsonLine 格式 excel：导出为 excel 格式 | jsonLine |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-WorkspaceId
-
-string
-
-是
-
-业务空间唯一标识：AgentKey
-
-xxxxx\_p\_efm
-
-TaskId
-
-string
-
-是
-
-任务唯一 ID
-
-c9f226b02cca4f42a84c5e955c39dfd2
-
-ExportType
-
-string
-
-否
-
-导出格式类型，默认 jsonLine jsonline: 导出为 jsonLine 格式 excel：导出为 excel 格式
-
-jsonLine
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-PlainResult
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Data
-
-string
-
-可公网访问的 URL
-
-[http://www.example.com/xxx.jsonLine](http://www.example.com/xxx.jsonLine)
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PlainResult |  |
+| Code | string | 状态码 | NoData |
+| Data | string | 可公网访问的 URL | [http://www.example.com/xxx.jsonLine](http://www.example.com/xxx.jsonLine) |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
 
 文件返回格式为 jsonLine，每行为一个 json 对象。json 对象格式如下：
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| topic | string | 话题名称 |
+| topicSummaryResult | array<TopicSummaryResult> | 话题摘要列表 |
+| hotViewPointsResult | HotViewPointsResult | 热门视角分析结果 |
+| timedViewPointsResult | TimedViewPointsResult | 时效性视角分析结果 |
+| webReviewPointsResult | WebReviewPointsResult | 网友视角分析结果 |
+| freshViewPointsResult | FreshViewPointsResult | 新颖视角分析结果 |
 
-字段类型
+<a id="topicsummaryresult-话题摘要"></a>
 
-字段描述
-
-topic
-
-string
-
-话题名称
-
-topicSummaryResult
-
-array<TopicSummaryResult>
-
-话题摘要列表
-
-hotViewPointsResult
-
-HotViewPointsResult
-
-热门视角分析结果
-
-timedViewPointsResult
-
-TimedViewPointsResult
-
-时效性视角分析结果
-
-webReviewPointsResult
-
-WebReviewPointsResult
-
-网友视角分析结果
-
-freshViewPointsResult
-
-FreshViewPointsResult
-
-新颖视角分析结果
+<a id="api-detail-responseParamsDescription"></a>
 
 ## TopicSummaryResult（话题摘要）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| summaries | array<SummaryItem> | 话题摘要列表 |
 
-字段类型
-
-字段描述
-
-summaries
-
-array<SummaryItem>
-
-话题摘要列表
+<a id="summaryitem-话题摘要"></a>
 
 ### SummaryItem（话题摘要）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| title | string | 话题摘要标题 |
+| summary | string | 话题摘要内容 |
+| docList | array<DocItem> | 摘要引用的文档列表 |
 
-字段类型
-
-字段描述
-
-title
-
-string
-
-话题摘要标题
-
-summary
-
-string
-
-话题摘要内容
-
-docList
-
-array<DocItem>
-
-摘要引用的文档列表
+<a id="docitem-引用的文档"></a>
 
 ### DocItem（引用的文档）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| title | string | 文档标题 |
+| url | string | 文档链接 |
+| source | string | 文档来源 |
 
-字段类型
-
-字段描述
-
-title
-
-string
-
-文档标题
-
-url
-
-string
-
-文档链接
-
-source
-
-string
-
-文档来源
+<a id="hotviewpointsresult-热门视角分析结果"></a>
 
 ## HotViewPointsResult（热门视角分析结果）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| attitudes | array<HotAttitudeItem> | 热门视角列表 |
 
-字段类型
-
-字段描述
-
-attitudes
-
-array<HotAttitudeItem>
-
-热门视角列表
+<a id="hotattitudeitem-热门视角"></a>
 
 ### HotAttitudeItem（热门视角）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| attitude | string | 热门视角 |
+| attitudeType | string | 热门视角类型 |
+| news | array<HotNewsItem> | 热门视角引用的文章列表 |
+| ratio | string | 该热门视角在整个话题中的占比 |
+| viewPoints | array<HotViewPointItem> | 热门视角的策划提案列表 |
 
-字段类型
-
-字段描述
-
-attitude
-
-string
-
-热门视角
-
-attitudeType
-
-string
-
-热门视角类型
-
-news
-
-array<HotNewsItem>
-
-热门视角引用的文章列表
-
-ratio
-
-string
-
-该热门视角在整个话题中的占比
-
-viewPoints
-
-array<HotViewPointItem>
-
-热门视角的策划提案列表
+<a id="hotnewsitem-热门视角引用的文章"></a>
 
 ### HotNewsItem（热门视角引用的文章）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| title | string | 文章标题 |
+| url | string | 文章链接 |
+| source | string | 文章来源 |
 
-字段类型
-
-字段描述
-
-title
-
-string
-
-文章标题
-
-url
-
-string
-
-文章链接
-
-source
-
-string
-
-文章来源
+<a id="hotviewpointitem-热门视角选题"></a>
 
 ### HotViewPointItem（热门视角选题）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| point | string | 选题策划方向 |
+| summary | string | 选题策划方向的概要 |
+| outlines | array<OutlineItem> | 选题策划方向的提纲 |
 
-字段类型
-
-字段描述
-
-point
-
-string
-
-选题策划方向
-
-summary
-
-string
-
-选题策划方向的概要
-
-outlines
-
-array<OutlineItem>
-
-选题策划方向的提纲
+<a id="outlineitem"></a>
 
 ### OutlineItem
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| outline | string | 提纲标题 |
+| summary | string | 提纲概要 |
 
-字段类型
-
-字段描述
-
-outline
-
-string
-
-提纲标题
-
-summary
-
-string
-
-提纲概要
+<a id="timedviewpointsresult-时效性视角分析结果"></a>
 
 ## TimedViewPointsResult（时效性视角分析结果）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| attitudes | array<TimedAttitudeItem> | 时效性视角列表 |
 
-字段类型
-
-字段描述
-
-attitudes
-
-array<TimedAttitudeItem>
-
-时效性视角列表
+<a id="timedattitudeitem-时效性视角"></a>
 
 ### TimedAttitudeItem（时效性视角）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| docUuid | string | 新闻唯一标识 |
+| title | string | 新闻标题 |
+| url | string | 新闻链接 |
+| source | string | 新闻来源 |
+| pubTime | string | 新闻发布时间 |
+| viewPoints | array<TimedViewPointItem> | 时效性视角的策划提案列表 |
 
-字段类型
-
-字段描述
-
-docUuid
-
-string
-
-新闻唯一标识
-
-title
-
-string
-
-新闻标题
-
-url
-
-string
-
-新闻链接
-
-source
-
-string
-
-新闻来源
-
-pubTime
-
-string
-
-新闻发布时间
-
-viewPoints
-
-array<TimedViewPointItem>
-
-时效性视角的策划提案列表
+<a id="timedviewpointitem-时效性视角选题"></a>
 
 ### TimedViewPointItem（时效性视角选题）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| point | string | 选题策划方向 |
+| summary | string | 选题策划方向的概要 |
+| outlines | array<OutlineItem> | 选题策划方向的提纲 |
 
-字段类型
-
-字段描述
-
-point
-
-string
-
-选题策划方向
-
-summary
-
-string
-
-选题策划方向的概要
-
-outlines
-
-array<OutlineItem>
-
-选题策划方向的提纲
+<a id="outlineitem-2"></a>
 
 ### OutlineItem
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| outline | string | 提纲标题 |
+| summary | string | 提纲概要 |
 
-字段类型
-
-字段描述
-
-outline
-
-string
-
-提纲标题
-
-summary
-
-string
-
-提纲概要
+<a id="webreviewpointsresult-网友视角分析结果"></a>
 
 ## WebReviewPointsResult（网友视角分析结果）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| attitudes | array<WebReviewAttitudeItem> | 网友视角列表 |
 
-字段类型
-
-字段描述
-
-attitudes
-
-array<WebReviewAttitudeItem>
-
-网友视角列表
+<a id="webreviewattitudeitem-网友视角"></a>
 
 ### WebReviewAttitudeItem（网友视角）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| attitude | string | 网友视角 |
+| attitudeType | string | 网友视角类型 |
+| ratio | string | 该网友视角在整个话题中的占比 |
+| comments | array<WebReviewCommentItem> | 网友评论列表 |
+| viewPoints | array<WebReviewViewPointItem> | 网友视角的策划提案列表 |
 
-字段类型
-
-字段描述
-
-attitude
-
-string
-
-网友视角
-
-attitudeType
-
-string
-
-网友视角类型
-
-ratio
-
-string
-
-该网友视角在整个话题中的占比
-
-comments
-
-array<WebReviewCommentItem>
-
-网友评论列表
-
-viewPoints
-
-array<WebReviewViewPointItem>
-
-网友视角的策划提案列表
+<a id="webreviewcommentitem-网友评论"></a>
 
 ### WebReviewCommentItem（网友评论）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| text | string | 网友评论 |
+| source | string | 网友评论来源 |
+| url | string | 网友评论来源新闻链接 |
+| title | string | 网友评论来源新闻标题 |
 
-字段类型
-
-字段描述
-
-text
-
-string
-
-网友评论
-
-source
-
-string
-
-网友评论来源
-
-url
-
-string
-
-网友评论来源新闻链接
-
-title
-
-string
-
-网友评论来源新闻标题
+<a id="webreviewviewpointitem-网友视角选题"></a>
 
 ### WebReviewViewPointItem（网友视角选题）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| point | string | 选题策划方向 |
+| summary | string | 选题策划方向的概要 |
+| outlines | array<OutlineItem> | 选题策划方向的提纲 |
 
-字段类型
-
-字段描述
-
-point
-
-string
-
-选题策划方向
-
-summary
-
-string
-
-选题策划方向的概要
-
-outlines
-
-array<OutlineItem>
-
-选题策划方向的提纲
+<a id="outlineitem-3"></a>
 
 ### OutlineItem
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| outline | string | 提纲标题 |
+| summary | string | 提纲概要 |
 
-字段类型
-
-字段描述
-
-outline
-
-string
-
-提纲标题
-
-summary
-
-string
-
-提纲概要
+<a id="freshviewpointsresult"></a>
 
 ## FreshViewPointsResult（）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| attitudes | array<FreshAttitudeItem> | 新颖视角列表 |
 
-字段类型
-
-字段描述
-
-attitudes
-
-array<FreshAttitudeItem>
-
-新颖视角列表
+<a id="freshattitudeitem-新颖视角"></a>
 
 ### FreshAttitudeItem（新颖视角）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| viewPoints | array<FreshViewPointItem> | 新颖视角的策划提案列表 |
 
-字段类型
-
-字段描述
-
-viewPoints
-
-array<FreshViewPointItem>
-
-新颖视角的策划提案列表
+<a id="freshviewpointitem-新颖视角选题"></a>
 
 ### FreshViewPointItem（新颖视角选题）
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| point | string | 选题策划方向 |
+| summary | string | 选题策划方向的概要 |
+| outlines | array<OutlineItem> | 选题策划方向的提纲 |
 
-字段类型
-
-字段描述
-
-point
-
-string
-
-选题策划方向
-
-summary
-
-string
-
-选题策划方向的概要
-
-outlines
-
-array<OutlineItem>
-
-选题策划方向的提纲
+<a id="outlineitem-4"></a>
 
 ### OutlineItem
 
-字段名称
+| 字段名称 | 字段类型 | 字段描述 |
+| --- | --- | --- |
+| outline | string | 提纲标题 |
+| summary | string | 提纲概要 |
 
-字段类型
+<a id="示例"></a>
 
-字段描述
-
-outline
-
-string
-
-提纲标题
-
-summary
-
-string
-
-提纲概要
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -697,7 +288,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "Code": "NoData",
   "Data": "http://www.example.com/xxx.jsonLine\n",
@@ -708,25 +301,21 @@ string
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-**HTTP status code**
-
-**错误码**
-
-**错误信息**
-
-**描述**
-
-403
-
-NoPermission
-
-You are not authorized to perform this action.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

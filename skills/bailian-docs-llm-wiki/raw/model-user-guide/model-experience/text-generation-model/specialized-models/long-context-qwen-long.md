@@ -2,14 +2,20 @@
 
 处理超长文本文档时，标准大型语言模型会因上下文窗口限制而失败。Qwen-Long 模型提供 1000 万 Token 的上下文长度，通过文件上传和引用机制处理大规模数据。
 
-**说明**本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> **说明**
+>
+> 本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+
+<a id="使用方式"></a>
+
+<a id="be65bccf62aa4"></a>
 
 ## 使用方式
 
 Qwen-Long 处理长文档分为以下两个步骤：文件上传与 API 调用。
 
 1.  **文件上传与解析：**
-    -   通过 API 上传文件，文件格式与大小限制请参考[支持格式](raw/model-user-guide/model-experience/text-generation-model/specialized-models/long-context-qwen-long.md)。
+    -   通过 API 上传文件，文件格式与大小限制请参考[支持格式](long-context-qwen-long.md)。
     -   上传并成功后，系统返回一个当前账号下的**唯一** `file-id`并开始解析。文件上传、存储以及解析本身不产生费用。
 2.  **API 调用与计费：**
     -   在调用模型时，通过在 `system` 消息中引用一个或多个 `file-id`。
@@ -18,20 +24,38 @@ Qwen-Long 处理长文档分为以下两个步骤：文件上传与 API 调用�
 
 此机制避免了在每次请求中传输庞大的文件内容，但需留意其计费方式。
 
+<a id="快速开始"></a>
+
+<a id="cdf6cfc2fe61o"></a>
+
 ## 快速开始
+
+<a id="前提条件"></a>
+
+<a id="2d555a4dd61ev"></a>
 
 ### 前提条件
 
--   已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   如果通过SDK调用，还需要安装[OpenAI SDK](raw/model-api-reference/preparations/install-sdk.md)。
+-   已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)，并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   如果通过SDK调用，还需要安装[OpenAI SDK](../../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="文档上传"></a>
+
+<a id="887e6378b8mb6"></a>
 
 ### 文档上传
 
-以[阿里云百炼系列手机产品介绍.docx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20240911/hilxdt/%E7%99%BE%E7%82%BC%E7%B3%BB%E5%88%97%E6%89%8B%E6%9C%BA%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D.docx)为例，通过OpenAI兼容接口上传到阿里云百炼平台的安全存储空间，获取返回的`file-id`。有关文档上传接口的详细参数解释及调用方式，请参考[API文档](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)页面进行了解。
+以[阿里云百炼系列手机产品介绍.docx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20240911/hilxdt/%E7%99%BE%E7%82%BC%E7%B3%BB%E5%88%97%E6%89%8B%E6%9C%BA%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D.docx)为例，通过OpenAI兼容接口上传到阿里云百炼平台的安全存储空间，获取返回的`file-id`。有关文档上传接口的详细参数解释及调用方式，请参考[API文档](../../../../model-api-reference/toolkits-and-frameworks/openai-file-interface.md)页面进行了解。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from pathlib import Path
 from openai import OpenAI
@@ -46,9 +70,13 @@ file_object = client.files.create(file=Path("阿里云百炼系列手机产品�
 print(file_object.id)
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.files.*;
@@ -80,9 +108,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl --location --request POST 'https://dashscope.aliyuncs.com/compatible-mode/v1/files' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --form 'file=@"阿里云百炼系列手机产品介绍.docx"' \
@@ -91,15 +123,25 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/compatible-mode/v
 
 运行以上代码，您可以得到本次上传文件对应的`file-id`。
 
+<a id="通过文件id传入信息并对话"></a>
+
+<a id="7a45f527766p5"></a>
+
 ### 通过文件ID传入信息并对话
 
 将获取的 `file-id` 嵌入到System Message 中。第一条System Message用于设定角色向模型提问，后续的System Message用于传入 `file-id`，User Message包含针对文档的具体问题。
 
 > 较长的文档可能会需要相对更长的时间完成解析，请耐心等待解析完成后进行调用。
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 from openai import OpenAI, BadRequestError
 
@@ -144,9 +186,13 @@ except BadRequestError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="fig-code-group-2-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.core.http.StreamResponse;
@@ -195,9 +241,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-2-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -215,15 +265,31 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="传入多个文档"></a>
+
+<a id="7d4038fa1405o"></a>
+
 ### 传入多个文档
 
 您可以在一条System Message中传入多个`file-id`，以便在一次请求中处理多个文档；也可以在`messages`中添加新的System Message以补充新的文档信息。
 
+<a id="sec-tabs"></a>
+
+<a id="传入多文档"></a>
+
+<a id="传入多文档-h4"></a>
+
 #### 传入多文档
+
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import os
 from openai import OpenAI, BadRequestError
 
@@ -265,9 +331,13 @@ except BadRequestError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="fig-code-group-3-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-3-java"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.core.http.StreamResponse;
@@ -313,9 +383,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-3-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-3-curl"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -334,11 +408,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="追加文档"></a>
+
+<a id="追加文档-h4"></a>
+
 #### 追加文档
+
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 import os
 from openai import OpenAI, BadRequestError
 
@@ -402,9 +486,13 @@ for chunk in completion_2:
     print(chunk.model_dump())
 ```
 
+<a id="fig-code-group-4-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-4-java"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.chat.completions.*;
@@ -504,9 +592,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-4-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-4-curl"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -526,19 +618,35 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="通过纯文本传入信息"></a>
+
+<a id="5e5ece4be56s3"></a>
+
 ## 通过纯文本传入信息
 
 除了通过 `file-id` 传入文档信息外，您还可以直接使用字符串传入文档内容。在此方法下，为避免模型混淆角色设定与文档内容，请确保在 `messages` 的第一条消息中添加用于角色设定的信息。
 
 > 受限于API调用请求体大小，如果您的文本内容长度超过100万Token，请通过文件ID传入信息对话。
 
+<a id="sec-tabs-2"></a>
+
+<a id="简单示例"></a>
+
+<a id="简单示例-h4"></a>
+
 #### 简单示例
 
 您可以直接将文档内容输入System Message中。
 
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-5-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -570,9 +678,13 @@ for chunk in completion:
 print(full_content)
 ```
 
+<a id="fig-code-group-5-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-5-java"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.core.http.StreamResponse;
@@ -616,9 +728,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-5-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-5-curl"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -636,13 +752,23 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="传入多文档-2"></a>
+
+<a id="传入多文档-2-h4"></a>
+
 #### 传入多文档
 
 当您在本轮对话需要传入多个文档时，可以将文档内容放在不同的System Message中。
 
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-6-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -674,9 +800,13 @@ for chunk in completion:
 print(full_content)
 ```
 
+<a id="fig-code-group-6-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-6-java"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.core.http.StreamResponse;
@@ -722,9 +852,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-6-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-6-curl"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -743,13 +877,23 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="追加文档-2"></a>
+
+<a id="追加文档-2-h4"></a>
+
 #### 追加文档
 
 在您与模型的交互过程中，可能需要补充新的文档信息。您可以在Messages 数组中添加新的文档内容到System Message中来实现这一效果。
 
+<a id="fig-code-group-7"></a>
+
+<a id="fig-code-group-7-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-7-python"></a>
+
+```python
 import os
 from openai import OpenAI, BadRequestError
 
@@ -814,9 +958,13 @@ for chunk in completion_2:
     print(chunk.model_dump())
 ```
 
+<a id="fig-code-group-7-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-7-java"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.chat.completions.*;
@@ -915,9 +1063,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-7-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-7-curl"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -937,74 +1089,62 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="模型定价"></a>
+
+<a id="eb5a1ae09ec37"></a>
+
 ## 模型定价
+
+<a id="sec-tabs-3"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
-
-**版本**
-
-**上下文长度**
-
-**最大输入**
-
-**最大输出**
-
-**输入成本**
-
-**输出成本**
-
-**免费额度**
-
-[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-**（Token数）**
-
-**（每百万Token）**
-
-**qwen-long**
-
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
-
-稳定版
-
-10,000,000
-
-10,000,000
-
-32,768
-
-0.5元
-
-2元
-
-无免费额度
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>版本</strong></th><th><strong>上下文长度</strong></th><th><strong>最大输入</strong></th><th><strong>最大输出</strong></th><th><strong>输入成本</strong></th><th><strong>输出成本</strong></th><th rowspan="2"><strong>免费额度</strong><p><a href="../../../test-1/new-free-quota.md#977b13081ab56">（注）</a></p></th></tr><tr><th colspan="3"><strong>（Token数）</strong></th><th colspan="2"><strong>（每百万Token）</strong></th></tr></thead><tbody><tr><td><strong>qwen-long</strong><blockquote><p><a href="../../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch调用</a>半价</p></blockquote></td><td><p>稳定版</p></td><td><p>10,000,000</p></td><td><p>10,000,000</p></td><td><p>32,768</p></td><td><p>0.5元</p></td><td><p>2元</p></td><td><p>无免费额度</p></td></tr></tbody></table>
 
 在[体验中心](https://bailian.console.aliyun.com/model/experience/text?modelId=qwen-long)页面，您可以上传文档，在线提问。
+
+<a id="常见问题"></a>
+
+<a id="43e63b66b2i5s"></a>
 
 ## 常见问题
 
 1.  Qwen-Long模型是否支持批量提交任务？
     
-    是的，Qwen-Long兼容 [OpenAI Batch 接口](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)并按照实时调用费用的 50% 来进行计费出账。该接口支持以文件方式批量提交任务，任务会以**异步**形式执行，并在完成或达到最长等待时间时返回结果。
+    是的，Qwen-Long兼容 [OpenAI Batch 接口](../../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)并按照实时调用费用的 50% 来进行计费出账。该接口支持以文件方式批量提交任务，任务会以**异步**形式执行，并在完成或达到最长等待时间时返回结果。
     
 2.  通过OpenAI文件兼容接口上传文件后，文件将被保存在何处？
     
-    所有通过OpenAI文件兼容接口上传的文件均将被保存在当前阿里云账号下的阿里云百炼存储空间且不会产生任何费用，关于所上传文件的信息查询与管理请参考[OpenAI文件接口](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)。
+    所有通过OpenAI文件兼容接口上传的文件均将被保存在当前阿里云账号下的阿里云百炼存储空间且不会产生任何费用，关于所上传文件的信息查询与管理请参考[OpenAI文件接口](../../../../model-api-reference/toolkits-and-frameworks/openai-file-interface.md)。
     
 3.  如何确保模型输出标准格式的 JSON 字符串？
     
-    `qwen-long`及其所有快照版本均支持[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)功能。可以通过指定一个JSON Schema，使模型按照定义的结构以合法的JSON格式返回。
+    `qwen-long`及其所有快照版本均支持[结构化输出](../qwen-structured-output.md)功能。可以通过指定一个JSON Schema，使模型按照定义的结构以合法的JSON格式返回。
     
+
+<a id="api参考"></a>
+
+<a id="a059c25c159a5"></a>
 
 ## API参考
 
-关于Qwen-Long模型的输入与输出参数，请参考[通义千问API详情](raw/model-api-reference/qwen-api-reference.md)。
+关于Qwen-Long模型的输入与输出参数，请参考[通义千问API详情](../../../../model-api-reference/qwen-api-reference.md)。
+
+<a id="错误码"></a>
+
+<a id="1c0fa4611a1h1"></a>
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../../model-api-reference/preparations/error-code.md)进行解决。
+
+<a id="限制"></a>
+
+<a id="4798ba361eox3"></a>
 
 ## 限制
 
@@ -1014,7 +1154,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 -   **文件上传：**
     -   支持格式：TXT, DOCX, PDF, XLSX, EPUB, MOBI, MD, CSV, JSON, BMP, PNG, JPG/JPEG, GIF。
     -   文件大小：图片格式文件上限 20MB，其他格式文件上限 150MB。
-    -   账户配额：单个账户最多上传 1 万个文件，总大小不超过 100GB。当文件数量或总大小达到任一上限时，新的文件上传请求将会失败。请先参考[OpenAI兼容-File](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)，删除不再需要的文件以释放配额，然后才能继续上传。
+    -   账户配额：单个账户最多上传 1 万个文件，总大小不超过 100GB。当文件数量或总大小达到任一上限时，新的文件上传请求将会失败。请先参考[OpenAI兼容-File](../../../../model-api-reference/toolkits-and-frameworks/openai-file-interface.md)，删除不再需要的文件以释放配额，然后才能继续上传。
     -   存储有效期：当前暂无有效期限制。
 -   **API 输入：**
     -   第 1 条 `system` 消息用于角色定义，第 2 条 `system` 消息用于传入文档内容或 `fileid://xxx`，`user` 消息用于用户提问。
@@ -1025,4 +1165,4 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
     -   最大输出长度为 32,768 Token。
 -   **文件共享：**
     -   `file-id` 仅在生成它的阿里云主账号内有效，不支持跨账号或通过 RAM 用户 API Key 调用。
--   **限流**：关于模型的限流条件，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+-   **限流**：关于模型的限流条件，请参见[限流](../../../get-started-with-models/rate-limit.md)。

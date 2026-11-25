@@ -2,19 +2,29 @@
 
 当您首次开通阿里云百炼时，平台会自动为您发放各模型的新人专属免费额度。
 
-**说明**
+> **说明**
+>
+> -   仅华北2（北京）地域模型享有免费额度，其他地域无免费额度。
+> -   开通阿里云百炼需先完成[实名认证](https://myaccount.console.aliyun.com/cert-info)，未完成实名认证不发放免费额度。
+> -   免费额度用完后自动转为按量付费。如需避免意外扣费，可提前开启[免费额度用完即停](new-free-quota.md#d1cb80ac11i92)，额度耗尽时服务自动停止。
 
--   仅华北2（北京）地域模型享有免费额度，其他地域无免费额度。
--   开通阿里云百炼需先完成[实名认证](https://myaccount.console.aliyun.com/cert-info)，未完成实名认证不发放免费额度。
--   免费额度用完后自动转为按量付费。如需避免意外扣费，可提前开启[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)，额度耗尽时服务自动停止。
+<a id="规则说明"></a>
+
+<a id="977b13081ab56"></a>
 
 ## 规则说明
+
+<a id="有效期"></a>
+
+<a id="9fd9e7ccb3hm1"></a>
 
 ### 有效期
 
 免费额度的有效期为 90 天，从开通阿里云百炼、模型发布或模型申请通过之日起计算（以较晚者为准）。额度到期或耗尽后，继续调用模型推理服务将[产生计费](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
 
-**重要****2025年9月8日11点**前已开通阿里云百炼的用户，免费额度有效期可能不足90天；在此之后开通的用户有效期为90天。详情参考[阿里云百炼新人免费额度有效期调整通知](https://help.aliyun.com/zh/model-studio/new-free-quota-validity-adjustment)。
+> **重要**
+>
+> **2025年9月8日11点**前已开通阿里云百炼的用户，免费额度有效期可能不足90天；在此之后开通的用户有效期为90天。详情参考[阿里云百炼新人免费额度有效期调整通知](https://help.aliyun.com/zh/model-studio/new-free-quota-validity-adjustment)。
 
 免费额度过期后自动失效，不支持补发、延期或重置：
 
@@ -22,11 +32,21 @@
 -   额度过期后，剩余部分自动作废，不会重新发放或延长；
 -   同一实名认证主体下重新注册账号，无法再次领取新人免费额度。
 
+<a id="适用范围"></a>
+
+<a id="15210d61442oc"></a>
+
 ### 适用范围
 
 免费额度仅抵扣模型**实时推理**（调用）产生的费用。
 
-**警告**[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)、[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)、[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)、自定义模型（调优后模型、已部署模型）、PAI-DSW、OSS 存储及请求费用不支持用免费额度抵扣。
+> **警告**
+>
+> [Batch调用](../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)、[模型调优](../fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[模型部署](../model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)、自定义模型（调优后模型、已部署模型）、PAI-DSW、OSS 存储及请求费用不支持用免费额度抵扣。
+
+<a id="注意事项"></a>
+
+<a id="c2af7ac546b8b"></a>
 
 ### 注意事项
 
@@ -40,6 +60,10 @@
 -   带日期后缀的快照版本（如 `qwen-max-2026-05-17`）与不带日期的最新版本（如 `qwen-max`）视为两个独立模型，各自拥有独立额度。
 -   当某个模型额度用完后，系统不会自动切换到其他有额度的模型。如需使用其他模型的免费额度，需在代码或工具配置中手动修改 `model` 参数。
 
+<a id="获取免费额度"></a>
+
+<a id="f41b60d706itj"></a>
+
 ## 获取免费额度
 
 首次使用时，先完成[实名认证](https://myaccount.console.aliyun.com/cert-info)，再使用阿里云主账号或拥有 `AliyunBailianFullAccess` 权限的 RAM 账号登录[百炼控制台](https://bailian.console.aliyun.com/)。系统会自动开通百炼服务，无需单独手动确认。
@@ -52,17 +76,29 @@
 
 ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用并消耗免费额度。
 
+<a id="查看剩余额度"></a>
+
+<a id="a1473492d2jwj"></a>
+
 ## 查看剩余额度
 
 可通过以下三种方式查看模型的免费额度。
 
 免费额度剩余量为输入 Token 和输出 Token 共用的总额度，不单独区分输入或输出计算。调用时产生的输入 Token 和输出 Token 会共同扣减该总额度，控制台显示的剩余量即为扣除后的总剩余 Token 数。
 
+<a id="方式一-通过免费额度页面查看"></a>
+
+<a id="7cdbac2dd9ev6"></a>
+
 #### 方式一：通过免费额度页面查看
 
 在控制台的[免费额度](https://bailian.console.aliyun.com/cn-beijing/costing-balance/free-quota)页面，查看所有模型的免费额度余量及过期时间。页面顶部提供**购买节省计划**按钮入口，可快捷前往节省计划购买页。下方以四张指标卡片汇总免费额度整体情况：**有额度模型总数**、**使用率超50%模型**、**使用率超80%模型**、**额度用尽或过期模型**，便于快速定位需关注的模型。可按模型类型筛选或搜索模型。
 
 页面下方表格列出各模型的**模型 Code**、**模型类型**、**剩余额度**、**到期时间**、**状态**及**用完即停**开关。
+
+<a id="方式二-通过模型广场查看"></a>
+
+<a id="469a42924fhul"></a>
 
 #### 方式二：通过模型广场查看
 
@@ -75,13 +111,25 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
     > 控制台显示的免费额度为分钟级更新（需手动刷新页面）。
     
 
+<a id="方式三-通过模型用量页面查看"></a>
+
+<a id="h4-view-quota-method3"></a>
+
 #### 方式三：通过模型用量页面查看
 
 -   在控制台的[**模型用量**](https://bailian.console.aliyun.com/cn-beijing/costing-balance/usage-statistics)页面，查看各模型的免费额度使用与剩余情况。
 
+<a id="使用免费额度"></a>
+
+<a id="98c385d3dbkh1"></a>
+
 ## 使用免费额度
 
-实时调用大模型将自动扣除免费额度，请参考[开始使用阿里云百炼](raw/model-user-guide/get-started-with-models/what-is-model-studio.md)。
+实时调用大模型将自动扣除免费额度，请参考[开始使用阿里云百炼](../get-started-with-models/what-is-model-studio.md)。
+
+<a id="免费额度用完即停"></a>
+
+<a id="d1cb80ac11i92"></a>
 
 ### 免费额度用完即停
 
@@ -89,7 +137,13 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
 
 该功能默认关闭。如需在免费额度耗尽时自动停止服务以避免意外扣费，可在控制台自行开启。
 
+<a id="如何开启"></a>
+
+<a id="08c25de00ail7"></a>
+
 #### 如何开启
+
+<a id="c3a71fafce5fp"></a>
 
 ##### 方式一：在免费额度页面开启
 
@@ -106,11 +160,17 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
 3.  勾选目标模型，点击**批量开启**。如需为所有支持且未开启的模型启用，可点击**一键开启所有模型**。
 4.  在确认弹窗中点击**开启免费额度用完即停**。
 
+<a id="8cf930d935d0r"></a>
+
 ##### 方式二：在模型广场页面开启
 
 以 qwen3.8-max 为例。前往[qwen3.8-max 模型详情页](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-max?serviceSite=asia-pacific-china&ref=suggest)，开启**免费额度用完即停**开关。
 
 若模型未显示开关，说明该模型免费额度已耗尽或过期，或模型本身不提供免费额度。
+
+<a id="如何关闭"></a>
+
+<a id="3428a6cc6f5tp"></a>
 
 #### 如何关闭
 
@@ -122,13 +182,25 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
 
 控制台显示的**未启用**或**不支持开启**状态，是“免费额度用完即停”的保护状态提示，并非功能故障，无需额外手动启用服务。关闭该开关后状态同步存在延迟，需等待约半小时后重试方可恢复按量付费调用。生产环境不建议开启此功能，以免额度耗尽导致服务不可用。
 
+<a id="已下架的免费额度"></a>
+
+<a id="free-quota-removal"></a>
+
 ## 已下架的免费额度
 
 部分模型的免费额度由平台下架。下架后，新用户不再获得该模型的免费额度；已发放给老用户的额度仍可继续使用，直至到期或耗尽。
 
 后续新模型上线时，平台依然会发放新模型的免费额度。
 
+<a id="accordion-已下架免费额度的模型列表"></a>
+
 已下架免费额度的模型列表
+
+<a id="sec-tabs"></a>
+
+<a id="2026-11-15"></a>
+
+<a id="2026-11-15-h4"></a>
 
 #### 2026-11-15
 
@@ -137,9 +209,17 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
 -   deepseek-v4-pro
 -   kimi-k3
 
+<a id="2026-11-13"></a>
+
+<a id="2026-11-13-h4"></a>
+
 #### 2026-11-13
 
 -   wan3.0-video
+
+<a id="2026-10-29"></a>
+
+<a id="2026-10-29-h4"></a>
 
 #### 2026-10-29
 
@@ -523,7 +603,15 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
 -   qwen-image-max
 -   qwen-image-plus
 
+<a id="常见问题"></a>
+
+<a id="66c0ef047779x"></a>
+
 ## 常见问题
+
+<a id="免费额度即将用完或已用完-是否有通知"></a>
+
+<a id="edec7e0b88gle"></a>
 
 ### 免费额度即将用完或已用完，是否有通知？
 
@@ -531,26 +619,42 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
 
 如需开启或关闭预警、修改预警比例，请前往[我的试用](https://billing-cost.console.aliyun.com/home/myfreetier)进行设置。找到试用规格描述为**百炼大模型推理免费试用**，单击**查看试用详情**，再配置余量到期预警规则即可修改。
 
+<a id="免费额度耗尽是否表示我没有购买过该模型"></a>
+
+<a id="h3-quota-exhausted-not-purchase"></a>
+
 ### 免费额度耗尽是否表示我没有购买过该模型？
 
 不是。免费额度是您首次开通阿里云百炼时由系统自动发放的新人专属福利，无需手动领取，也无需购买任何产品，与是否购买过该模型无关。每个模型（含同一模型的不同快照版本）拥有各自独立的免费额度，因此某个模型的额度耗尽仅表示该模型的赠送 Token 已用完，并不代表您没有该模型的调用权限。
 
 额度耗尽后能否继续调用，取决于是否开启了**免费额度用完即停**，详情请参见本文“免费额度用完会有什么影响？”。
 
+<a id="免费额度用完会有什么影响"></a>
+
+<a id="a5d9ace2a1040"></a>
+
 ### 免费额度用完会有什么影响？
 
 -   若已开启[免费额度用完即停](https://bailian.console.aliyun.com/cn-beijing/costing-balance/free-quota)，免费额度用完后无法继续调用，需要关闭[免费额度用完即停](https://bailian.console.aliyun.com/cn-beijing/costing-balance/free-quota)方可继续按量付费。
 -   若未开启[免费额度用完即停](https://bailian.console.aliyun.com/cn-beijing/costing-balance/free-quota)，正在进行的调用不会中断，超出额度的Token将按控制台中的输入/输出价格计费，费用以按量后付费方式从阿里云账户扣除，可能导致账户欠费。
 
-欠费限制按商品 Code 隔离。某个商品 Code 产生欠费时，该商品 Code 对应的服务不可用，即使模型仍有免费额度也无法调用，结清欠费后恢复；其他商品 Code 对应的服务不受影响。您可以在账单中[查询商品 Code](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#query-overdue-commodity-code)。
+欠费限制按商品 Code 隔离。某个商品 Code 产生欠费时，该商品 Code 对应的服务不可用，即使模型仍有免费额度也无法调用，结清欠费后恢复；其他商品 Code 对应的服务不受影响。您可以在账单中[查询商品 Code](bill-query-and-cost-management.md#query-overdue-commodity-code)。
 
 调用前建议查询该模型剩余额度，并配置[预算管理](https://help.aliyun.com/zh/user-center/how-to-manage-a-budget)或[账号余额预警](https://help.aliyun.com/zh/user-center/monitor-account-balances)，确保账户有充足[余额](https://billing-cost.console.aliyun.com/home)，未使用的余额支持[余额提现](https://help.aliyun.com/zh/user-center/balance-withdrawal)。
+
+<a id="免费额度用完后如何充值"></a>
+
+<a id="496753d2d5iqs"></a>
 
 ### 免费额度用完后如何充值？
 
 阿里云支持支付宝、银联在线支付、网银等多种充值方式，具体可用方式以账号[充值界面](https://billing-cost.console.aliyun.com/fortune/fund-management/recharge)展示为准。更多信息请参考[充值方式介绍](https://help.aliyun.com/zh/user-center/use-alipay-online-banking-to-recharge-online#8e4f4cdcf42rl)。
 
 充值完成后，账户余额可能有几分钟的更新延迟，请稍后前往[费用与成本](https://billing-cost.console.aliyun.com/home)查看可用余额。余额到账且无欠费时即可正常调用模型。
+
+<a id="如何查看免费额度消耗记录或账单"></a>
+
+<a id="cd6a12aa2eh0x"></a>
 
 ### 如何查看免费额度消耗记录或账单？
 
@@ -560,28 +664,44 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
 2.  单击账单列表右上角的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1247144771/p1062109.png)图标，找到**用量信息**，勾选**用量**，单击**确定**。
 3.  找到**费用类型**为**免费额度**的账单项，**用量**即为免费额度已抵扣的用量。
 
+<a id="为什么产生了费用"></a>
+
+<a id="4ed36453edmeh"></a>
+
 ### 为什么产生了费用？
 
 常见原因：
 
 -   使用的模型已经没有免费额度。
--   免费额度不支持抵扣[OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)产生的费用。
+-   免费额度不支持抵扣[OpenAI兼容-Batch（文件输入）](../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)产生的费用。
 -   控制台的免费额度数据为分钟级更新且需手动刷新。若未及时刷新，页面显示仍有额度但实际已耗尽，导致产生调用费用。操作前刷新页面，以最新显示为准。
 -   IDE 插件自动补全导致 Token 快速消耗。使用 Cline、CodeBuddy 等 IDE 插件调用模型时，插件会自动携带完整的代码上下文和对话历史，单次对话可能消耗数千 Token，远高于普通简短对话的消耗。
 
-可通过[如何查看产生费用的模型？](https://help.aliyun.com/zh/model-studio/new-free-quota#3bfa8283d0tc2)和[如何查看模型调用记录？](https://help.aliyun.com/zh/model-studio/new-free-quota#ab6ba5c538rn3)确认费用详情。
+可通过[如何查看产生费用的模型？](new-free-quota.md#3bfa8283d0tc2)和[如何查看模型调用记录？](new-free-quota.md#ab6ba5c538rn3)确认费用详情。
 
 大模型按实际消耗 Token 计费，无论输出是否存在幻觉或事实错误，只要发起调用即消耗额度，不支持因输出质量问题恢复已用额度或退款。免费试用结束或额度用完后产生的按量计费属于正常使用，已产生费用无法回退。建议开启**免费额度用完即停**功能防止意外扣费。
+
+<a id="如何查看产生费用的模型"></a>
+
+<a id="3bfa8283d0tc2"></a>
 
 ### 如何查看产生费用的模型？
 
 调用结束**几分钟后**，在[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail)页面，选择账单月份，**商品名称**选择**阿里云百炼大模型推理**，单击**搜索**。在资产/资源实例ID （出账粒度）列查看产生费用的模型。
 
+<a id="如何查看模型调用记录"></a>
+
+<a id="ab6ba5c538rn3"></a>
+
 ### 如何查看模型调用记录？
 
-模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
+模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](../model-monitoring/model-telemetry.md)文档。
 
 > 监控数据按分钟级更新，仅供参考，不作为计费依据。
+
+<a id="如何避免扣费"></a>
+
+<a id="04af5d52c55p9"></a>
 
 ### 如何避免扣费？
 
@@ -594,9 +714,17 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
     在**预警产品**下拉框中选择具体产品（如**百炼大模型部署**、**百炼大模型推理**、**百炼大模型训练**），在**预警阈值**输入框中填写金额（如`0.01`），然后单击**增加**即可添加预警规则。
     
 
+<a id="还有剩余额度-为何调用失败"></a>
+
+<a id="3bed02f924erk"></a>
+
 ### 还有剩余额度，为何调用失败？
 
-请检查[阿里云账户](https://billing-cost.console.aliyun.com/home?spm=a2c4g.11186623.nav-v2-dropdown-my-aliyun.9.f6683048dWvpGu)是否欠费。欠费限制按商品 Code 隔离，某个商品 Code 产生欠费时，该商品 Code 对应的服务不可用，即使模型仍有免费额度也无法调用，结清欠费后恢复。您可以在账单中[查询商品 Code](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#query-overdue-commodity-code)。
+请检查[阿里云账户](https://billing-cost.console.aliyun.com/home?spm=a2c4g.11186623.nav-v2-dropdown-my-aliyun.9.f6683048dWvpGu)是否欠费。欠费限制按商品 Code 隔离，某个商品 Code 产生欠费时，该商品 Code 对应的服务不可用，即使模型仍有免费额度也无法调用，结清欠费后恢复。您可以在账单中[查询商品 Code](bill-query-and-cost-management.md#query-overdue-commodity-code)。
+
+<a id="为什么看不到免费额度与有效期"></a>
+
+<a id="cc19dbace5tjy"></a>
 
 ### 为什么看不到免费额度与有效期？
 
@@ -606,6 +734,10 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
 -   **该模型所在地域或服务部署范围不享有免费额度**：仅华北2（北京）地域的模型享有免费额度，其他地域和部署范围无免费额度。
 -   **该模型本身不提供免费额度**：部分模型不参与新人免费额度发放。判断某模型是否享有免费额度，可在控制台**模型广场**进入该模型详情页，查看免费额度区域是否有余量显示（参见本文“查看剩余额度 > 方式二：通过模型广场查看”），详情页未显示免费额度的模型即表示不享有免费额度。
 
+<a id="使用哪种-api-key-才能消耗免费额度"></a>
+
+<a id="h3-api-key-quota"></a>
+
 ### 使用哪种 API Key 才能消耗免费额度？
 
 API Key 本身不绑定特定模型，同一个 API Key 可调用所有模型，无需为使用免费额度单独创建新的 API Key。
@@ -613,6 +745,10 @@ API Key 本身不绑定特定模型，同一个 API Key 可调用所有模型，
 实时调用时，系统将自动优先使用免费额度抵扣，无需手动设置。按消耗优先级依次为：免费额度 > 资源包 > 节省计划 > 按量付费。
 
 **Token Plan/Coding Plan 专属 API Key** 不消耗免费额度。使用 Token Plan 专属 API Key 调用模型时，直接消耗 Token Plan 的 Credits 额度；使用 Coding Plan 专属 API Key 调用模型时，消耗 Coding Plan 的套餐额度。两者均不会转为按量付费。如需使用免费额度，请改用通用 API Key（非专属 API Key）。
+
+<a id="oauth-认证的免费额度为什么在控制台不显示"></a>
+
+<a id="h3-oauth-quota-display"></a>
 
 ### OAuth 认证的免费额度为什么在控制台不显示？
 
@@ -622,15 +758,27 @@ OAuth 认证提供独立的免费额度（每天 2000 次调用），与百炼�
 
 如需查看 OAuth 认证的调用记录，登录百炼控制台，在左侧导航栏选择**运维管理** > **模型监控**查看。
 
+<a id="使用-token-plan-专属-api-key-调用图像-视频生成模型报-400-错误"></a>
+
+<a id="h3-faq-token-plan-400"></a>
+
 ### 使用 Token Plan 专属 API Key 调用图像/视频生成模型报 400 错误？
 
 图像/视频生成模型（如 wanx 系列、qwen-vl-max-latest 等多模态生成模型）不支持通过文本生成类 Base URL 直接调用。若使用 Token Plan 团队版专属 API Key 经文本 Base URL（`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`）直接请求此类模型，将返回 HTTP 400 错误。
 
 解决方法：请通过百炼应用中的 Skill（技能）或扩展机制接入多模态生成模型，而非直接以文本对话方式调用。
 
+<a id="新人免费额度与节省计划是什么关系"></a>
+
+<a id="h3-faq-savings-plan"></a>
+
 ### 新人免费额度与节省计划是什么关系？
 
 新人免费额度与**节省计划**相互独立，购买节省计划不会额外赠送免费额度。每个模型均有独立的免费额度（通常为 100 万 Token），不能跨模型合并或转移使用。
+
+<a id="调用大模型响应慢-有延迟正常吗"></a>
+
+<a id="h3-faq-response-latency"></a>
 
 ### 调用大模型响应慢/有延迟正常吗？
 

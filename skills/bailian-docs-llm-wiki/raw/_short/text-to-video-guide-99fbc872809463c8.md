@@ -2,23 +2,36 @@
 
 万相-文生视频模型支持文本、图像、音频多模态输入生成视频。wan3.0-video支持最长30秒、自适应宽高比、智能时长、480P/720P/1080P分辨率、音频开关、参考音频，以及传入参考文件和网页链接。
 
+<a id="快速开始"></a>
+
+<a id="a05623c0f4msm"></a>
+
 ## 快速开始
 
-**输入提示词**
+|  |  |
+| --- | --- |
+| **输入提示词** | **输出视频（多镜头，有声视频）** |
+| **第1个镜头**大远景开篇，镜头从接近地面的低机位开始向前移动，镜头沿草原方向推进，同时向上移动，将视角从贴地逐渐抬升至略高位置，使猎豹从左侧进入画面并与前方逃窜的羚羊共同处于同一追逐路径中，建立清晰的前后空间关系。**第2个镜头**向下移动回到接近地面高度，并沿猎豹运动方向向右移动，与其保持侧向平行关系进行稳定跟随，主体始终处于画面中部偏左位置，背景产生连续横向位移效果，在这一阶段镜头运动保持稳定一段时间以强化速度感与空间连续性。 **第3个镜头**在维持向右移动的同时，沿猎豹运动路径内侧做小幅弧线移动，使画面产生轻微绕行变化但始终保持与主体同向。 **第4个镜头**逐渐减缓横向移动速度并过渡为机位相对稳定，同时执行变焦推进，将视觉焦点逐步压缩至猎豹与羚羊之间不断缩短的距离上。 **第5个镜头**再次向前移动并轻微向下移动，贴近地面逼近两者之间的空间，在猎豹前肢逼近羚羊后方的临界位置停住，形成强烈压迫感与张力，同时配合逐渐增强的交响配乐、持续加密的鼓点、风声与踏地声推进节奏，并在最后阶段压低音乐仅保留环境声与节奏声形成短暂停顿。 |  |
 
-**输出视频（多镜头，有声视频）**
+在调用前，先[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。通过SDK进行调用，请[安装DashScope SDK](../model-api-reference/preparations/install-sdk.md)。
 
-**第1个镜头**大远景开篇，镜头从接近地面的低机位开始向前移动，镜头沿草原方向推进，同时向上移动，将视角从贴地逐渐抬升至略高位置，使猎豹从左侧进入画面并与前方逃窜的羚羊共同处于同一追逐路径中，建立清晰的前后空间关系。**第2个镜头**向下移动回到接近地面高度，并沿猎豹运动方向向右移动，与其保持侧向平行关系进行稳定跟随，主体始终处于画面中部偏左位置，背景产生连续横向位移效果，在这一阶段镜头运动保持稳定一段时间以强化速度感与空间连续性。 **第3个镜头**在维持向右移动的同时，沿猎豹运动路径内侧做小幅弧线移动，使画面产生轻微绕行变化但始终保持与主体同向。 **第4个镜头**逐渐减缓横向移动速度并过渡为机位相对稳定，同时执行变焦推进，将视觉焦点逐步压缩至猎豹与羚羊之间不断缩短的距离上。 **第5个镜头**再次向前移动并轻微向下移动，贴近地面逼近两者之间的空间，在猎豹前肢逼近羚羊后方的临界位置停住，形成强烈压迫感与张力，同时配合逐渐增强的交响配乐、持续加密的鼓点、风声与踏地声推进节奏，并在最后阶段压低音乐仅保留环境声与节奏声形成短暂停顿。
+<a id="sec-tabs"></a>
 
-在调用前，先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+<a id="python-sdk"></a>
+
+<a id="python-sdk-h4"></a>
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+>
+> 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block"></a>
 
-```
+```python
 import os
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -44,13 +57,21 @@ else:
     print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
 ```
 
+<a id="java-sdk"></a>
+
+<a id="java-sdk-h4"></a>
+
 #### Java SDK
 
-**重要**请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
+>
+> 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block-2"></a>
 
-```
+```java
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
@@ -99,10 +120,17 @@ public class Text2Video {
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-3"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -120,24 +148,39 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-4"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="accordion-示例代码-wan2-6及早期模型"></a>
+
 示例代码：wan2.6及早期模型
+
+<a id="sec-tabs-2"></a>
+
+<a id="python-sdk-2"></a>
+
+<a id="python-sdk-2-h4"></a>
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+>
+> 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block-5"></a>
 
-```
+```python
 import os
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -163,13 +206,21 @@ else:
     print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
 ```
 
+<a id="java-sdk-2"></a>
+
+<a id="java-sdk-2-h4"></a>
+
 #### Java SDK
 
-**重要**请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
+>
+> 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block-6"></a>
 
-```
+```java
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
@@ -218,10 +269,17 @@ public class Text2Video {
 }
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-7"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -239,11 +297,14 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-8"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
@@ -252,7 +313,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 > `video_url` 有效期24小时，请及时下载视频。
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "request_id": "c1209113-8437-424f-a386-xxxxxx",
     "output": {
@@ -263,14 +326,26 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
+<a id="适用范围"></a>
+
+<a id="06f39eafa2dwt"></a>
+
 ## 适用范围
 
 -   各地域支持的模型有所差异，且资源相互独立。各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 -   调用时，确保**模型、Endpoint URL 和 API Key 均属于同一地域**，跨地域调用将会失败。
 
-**说明**本文的示例代码适用于**北京地域**。
+> **说明**
+>
+> 本文的示例代码适用于**北京地域**。
+
+<a id="核心能力"></a>
+
+<a id="dbdc7e40e2alh"></a>
 
 ## 核心能力
+
+<a id="制作多镜头视频"></a>
 
 ### 制作多镜头视频
 
@@ -283,21 +358,26 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 -   **wan2.7**：无需设置 `shot_type`，可以在 `prompt` 中用自然语言描述镜头结构（如使用时间戳分镜描述）。若 `prompt` 中未包含任何镜头结构描述，模型将分析语义内容，自行决策输出单镜头或多镜头视频。
 -   **wan2.6**：`shot_type` 必须设为 `"multi"`，且 `prompt_extend` 必须设为 `true`（开启智能改写以优化分镜描述）。
 
-**输入提示词**
+|  |  |
+| --- | --- |
+| **输入提示词** | **输出视频（wan3.0）** |
+| 展现未来科技与自然和谐共存的美好愿景。 第1个镜头\[0-2秒\] 未来城市的空中花园全景，悬浮植物在微风中摇曳。 第2个镜头\[2-4秒\] 机器人园丁正在精心修剪植物，动作精准而优雅。 第3个镜头\[4-7秒\] 阳光透过透明穹顶洒下，照亮整个花园，展现科技与自然的完美融合。 第4个镜头\[7-10秒\] 镜头拉远，展现整个未来城市的壮观景象，空中花园只是其中的一部分。 |  |
+| 这是一段以硬核对决为核心的武侠电影片段，在正午烈日照射的石板空地上，两名男子相对冲刺。一人出掌攻击，被对手旋身以手臂硬抗，相撞的冲击力震散地面微尘。随后两人在极小空间内拳掌疾速交错，一人腾空连环重踢，迫使对手双臂交叉抵挡并向后滑行数米，在石面磨出清晰白痕。最终两人分立两端，在剧烈呼吸中死死锁定对方。画面呈现出锐利光影下的写实动作质感，营造出从强力爆发到肃杀对峙的基调。 |  |
+| 这是一段以“青春期暗恋试探”为核心的校园电影片段。夕阳斜照操场，两人并肩而立，男同学抱着篮球，目光躲闪地问：“下周的联欢会，你要参加吗？”女同学摆弄着鬓角碎发，试探性地回道：“如果……你也去的话，我就去。”听到回答，男同学喉结滚动，嘴角虽强行压抑却仍牵动出欣喜，只能望着远方强装镇定。画面呈现清透自然的暖色调，营造出细腻而克制的青春初恋基调。 |  |
 
-**输出视频（wan3.0）**
+<a id="sec-tabs-3"></a>
 
-展现未来科技与自然和谐共存的美好愿景。 第1个镜头\[0-2秒\] 未来城市的空中花园全景，悬浮植物在微风中摇曳。 第2个镜头\[2-4秒\] 机器人园丁正在精心修剪植物，动作精准而优雅。 第3个镜头\[4-7秒\] 阳光透过透明穹顶洒下，照亮整个花园，展现科技与自然的完美融合。 第4个镜头\[7-10秒\] 镜头拉远，展现整个未来城市的壮观景象，空中花园只是其中的一部分。
+<a id="python-sdk-3"></a>
 
-这是一段以硬核对决为核心的武侠电影片段，在正午烈日照射的石板空地上，两名男子相对冲刺。一人出掌攻击，被对手旋身以手臂硬抗，相撞的冲击力震散地面微尘。随后两人在极小空间内拳掌疾速交错，一人腾空连环重踢，迫使对手双臂交叉抵挡并向后滑行数米，在石面磨出清晰白痕。最终两人分立两端，在剧烈呼吸中死死锁定对方。画面呈现出锐利光影下的写实动作质感，营造出从强力爆发到肃杀对峙的基调。
-
-这是一段以“青春期暗恋试探”为核心的校园电影片段。夕阳斜照操场，两人并肩而立，男同学抱着篮球，目光躲闪地问：“下周的联欢会，你要参加吗？”女同学摆弄着鬓角碎发，试探性地回道：“如果……你也去的话，我就去。”听到回答，男同学喉结滚动，嘴角虽强行压抑却仍牵动出欣喜，只能望着远方强装镇定。画面呈现清透自然的暖色调，营造出细腻而克制的青春初恋基调。
+<a id="python-sdk-3-h4"></a>
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-10"></a>
+
+```python
 import os
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -338,11 +418,17 @@ if __name__ == '__main__':
     sample_async_call_t2v()
 ```
 
+<a id="java-sdk-3"></a>
+
+<a id="java-sdk-3-h4"></a>
+
 #### Java SDK
 
-> 请确保 DashScope Java SDK 版本不低于 `2.22.14`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Java SDK 版本不低于 `2.22.14`，可参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-11"></a>
+
+```java
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
@@ -396,10 +482,17 @@ public class Text2Video {
 }
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-12"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -417,22 +510,35 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-13"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="accordion-示例代码-wan2-6模型"></a>
+
 示例代码：wan2.6模型
+
+<a id="sec-tabs-4"></a>
+
+<a id="python-sdk-4"></a>
+
+<a id="python-sdk-4-h4"></a>
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-14"></a>
+
+```python
 import os
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -473,11 +579,17 @@ if __name__ == '__main__':
     sample_async_call_t2v()
 ```
 
+<a id="java-sdk-4"></a>
+
+<a id="java-sdk-4-h4"></a>
+
 #### Java SDK
 
-> 请确保 DashScope Java SDK 版本不低于 `2.22.14`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Java SDK 版本不低于 `2.22.14`，可参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-15"></a>
+
+```java
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
@@ -532,10 +644,17 @@ public class Text2Video {
 }
 ```
 
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-16"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -553,39 +672,49 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-17"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="实现声画同步"></a>
 
 ### 实现声画同步
 
 **支持模型**：`wan3.0、wan2.7系列、wan2.6系列、wan2.5系列模型`。
 
-**功能介绍**：让视频画面中的人物“开口说话”或唱歌，嘴型与音频匹配。更多示例请参见[视频声音生成](https://help.aliyun.com/zh/model-studio/text-to-video-prompt#2cac7fc462so6)。
+**功能介绍**：让视频画面中的人物“开口说话”或唱歌，嘴型与音频匹配。更多示例请参见[视频声音生成](../model-user-guide/use-cases/text-to-video-prompt.md#2cac7fc462so6)。
 
 **参数设置：**
 
 -   **传入音频文件**：传入 `audio_url`。模型会根据音频文件对齐口型。
 -   **自动配音**：默认输出有声视频，无需传入 `audio_url`。模型会根据画面自动生成背景音效、音乐或人声。
 
-**输入示例**
+|  |  |
+| --- | --- |
+| **输入示例** | **输出视频（有声视频）** |
+| **输入提示词**：一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：“青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还”。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是“可爱”与“霸气”的搞笑和史诗般的融合。<br><br>**输入音频**： |  |
 
-**输出视频（有声视频）**
+<a id="sec-tabs-5"></a>
 
-**输入提示词**：一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：“青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还”。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是“可爱”与“霸气”的搞笑和史诗般的融合。
+<a id="python-sdk-5"></a>
 
-**输入音频**：
+<a id="python-sdk-5-h4"></a>
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-18"></a>
+
+```python
 import os
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -628,11 +757,17 @@ if __name__ == '__main__':
     sample_async_call_t2v()
 ```
 
+<a id="java-sdk-5"></a>
+
+<a id="java-sdk-5-h4"></a>
+
 #### Java SDK
 
-> 请确保 DashScope Java SDK 版本不低于 `2.22.14`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Java SDK 版本不低于 `2.22.14`，可参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-19"></a>
+
+```java
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
@@ -688,10 +823,17 @@ public class Text2Video {
 }
 ```
 
+<a id="curl-5"></a>
+
+<a id="curl-5-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-20"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -710,22 +852,35 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-21"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="accordion-示例代码-wan2-6模型-2"></a>
+
 示例代码：wan2.6模型
+
+<a id="sec-tabs-6"></a>
+
+<a id="python-sdk-6"></a>
+
+<a id="python-sdk-6-h4"></a>
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-22"></a>
+
+```python
 import os
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -766,11 +921,17 @@ if __name__ == '__main__':
     sample_async_call_t2v()
 ```
 
+<a id="java-sdk-6"></a>
+
+<a id="java-sdk-6-h4"></a>
+
 #### Java SDK
 
-> 请确保 DashScope Java SDK 版本不低于 `2.22.14`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Java SDK 版本不低于 `2.22.14`，可参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-23"></a>
+
+```java
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
@@ -825,10 +986,17 @@ public class Text2Video {
 }
 ```
 
+<a id="curl-6"></a>
+
+<a id="curl-6-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-24"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -846,14 +1014,19 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-25"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="生成无声视频"></a>
 
 ### 生成无声视频
 
@@ -863,17 +1036,24 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 **参数设置**：wan2.2及以下版本模型，默认生成无声视频，无需额外配置。
 
-**输入提示词**
+|  |  |
+| --- | --- |
+| **输入提示词** | **输出视频（无声视频）** |
+| 边缘光，低对比度，中近景，日光，左侧重构图，干净的单人镜头，暖色调，柔光，晴天光，侧光，白天，一个年轻的女孩坐在高草丛生的田野中，两条毛发蓬松的小毛驴站在她身后。女孩大约十一二岁，穿着简单的碎花裙子，头发扎成两条麻花辫，脸上带着纯真的笑容。她双腿交叉坐下，双手轻轻抚弄身旁的野花。小毛驴体型健壮，耳朵竖起，好奇地望着镜头方向。阳光洒在田野上，营造出温暖自然的画面感。 |  |
 
-**输出视频（无声视频）**
+<a id="sec-tabs-7"></a>
 
-边缘光，低对比度，中近景，日光，左侧重构图，干净的单人镜头，暖色调，柔光，晴天光，侧光，白天，一个年轻的女孩坐在高草丛生的田野中，两条毛发蓬松的小毛驴站在她身后。女孩大约十一二岁，穿着简单的碎花裙子，头发扎成两条麻花辫，脸上带着纯真的笑容。她双腿交叉坐下，双手轻轻抚弄身旁的野花。小毛驴体型健壮，耳朵竖起，好奇地望着镜头方向。阳光洒在田野上，营造出温暖自然的画面感。
+<a id="python-sdk-7"></a>
+
+<a id="python-sdk-7-h4"></a>
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-26"></a>
+
+```python
 import os
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -912,11 +1092,17 @@ if __name__ == '__main__':
     sample_async_call_t2v()
 ```
 
+<a id="java-sdk-7"></a>
+
+<a id="java-sdk-7-h4"></a>
+
 #### Java SDK
 
-> 请确保 DashScope Java SDK 版本不低于 `2.22.14`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Java SDK 版本不低于 `2.22.14`，可参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-27"></a>
+
+```java
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
@@ -968,10 +1154,17 @@ public class Text2Video {
 }
 ```
 
+<a id="curl-7"></a>
+
+<a id="curl-7-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-28"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -987,14 +1180,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-29"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="如何传入音频"></a>
+
+<a id="69308edfbebnx"></a>
 
 ## 如何传入音频
 
@@ -1003,13 +1203,17 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 -   **输入方式**：
     
     -   **公网 URL**：支持 HTTP 或 HTTPS 协议。
-    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](../model-api-reference/more-about-models/get-temporary-file-url.md)。
+
+<a id="输出视频"></a>
+
+<a id="80761d0d13me6"></a>
 
 ## 输出视频
 
 -   **视频数量**：1个。
     
--   **视频规格**：格式为MP4。具体请参见[视频规格](https://help.aliyun.com/zh/model-studio/text-to-video-guide#06f39eafa2dwt)。
+-   **视频规格**：格式为MP4。具体请参见[视频规格](text-to-video-guide-99fbc872809463c8.md#06f39eafa2dwt)。
     
 -   **视频URL有效期**：**24小时**。
     
@@ -1018,23 +1222,39 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
     -   wan3.0、wan2.7通过 `resolution`（分辨率档位）和 `ratio`（宽高比）指定；
     -   wan2.6及早期模型通过 `size` 指定。
 
+<a id="计费与限流"></a>
+
+<a id="6f5774ce5fqie"></a>
+
 ## 计费与限流
 
--   模型免费额度和计费单价请参见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#ba6f7744d5e0o)。
+-   模型免费额度和计费单价请参见[模型价格](../model-user-guide/test-1/model-pricing.md#ba6f7744d5e0o)。
     
--   模型限流请参见[万相系列](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+-   模型限流请参见[万相系列](../model-user-guide/get-started-with-models/rate-limit.md)。
     
 -   计费说明：
     
     -   输入不计费，输出计费。按成功生成的 **视频秒数** 计费。
-    -   模型调用失败或处理错误不产生任何费用，也不消耗[免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+    -   模型调用失败或处理错误不产生任何费用，也不消耗[免费额度](../model-user-guide/test-1/new-free-quota.md)。
     -   文生视频还支持[节省计划](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
+
+<a id="api文档"></a>
+
+<a id="a847ef6c2ecvj"></a>
 
 ## API文档
 
-[文生视频API参考](raw/model-api-reference/video-generation-api/wan-api-reference/text-to-video-api-reference.md)
+[文生视频API参考](../model-api-reference/video-generation-api/wan-api-reference/text-to-video-api-reference.md)
+
+<a id="常见问题"></a>
+
+<a id="01dd2cf1ff8ql"></a>
 
 ## 常见问题
+
+<a id="q-从-wan2-7-升级到-wan3-0-代码需要改哪些地方"></a>
+
+<a id="faq-wan27-to-wan30-h"></a>
 
 #### Q: 从 wan2.7 升级到 wan3.0，代码需要改哪些地方？
 
@@ -1042,10 +1262,18 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 -   **时长上限提升**：wan3.0 支持最长 30 秒（wan2.7 为 15 秒），`duration` 可设为 2～30 之间的整数。
 -   **新增参考文件和网页输入**：wan3.0 支持在 `input.media` 中传入 `type: "file"`（docx、ppt、pdf等）或 `type: "link"`（公开网页链接），模型自动理解内容生成视频。两者不可同时输入。
 
+<a id="q-控制台生成的视频有水印-如何去除"></a>
+
+<a id="faq-watermark-remove-h"></a>
+
 #### Q: 控制台生成的视频有水印，如何去除？
 
 -   百炼控制台的**视频生成界面**不提供水印开关，无法在控制台关闭水印。
 -   通过 API 调用模型时，`watermark` 默认为 `false`，不传或设为 `false` 都不添加水印。本文示例代码传入了 `watermark=true`，如需去除水印请改为 `false`。
+
+<a id="q-购买了-ai-通用节省计划-为什么生成的视频仍有水印"></a>
+
+<a id="faq-watermark-savings-plan-h"></a>
 
 #### Q: 购买了 AI 通用节省计划，为什么生成的视频仍有水印？
 

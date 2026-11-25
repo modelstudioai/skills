@@ -2,64 +2,57 @@
 
 通过 AOQ 接入 qwen3.8-omni-flash-realtime，由客户端控制语音起止，实现按键通话和可选的拍照提问。客户端代码以 iOS Swift 为例。
 
+<a id="方案概述"></a>
+
+<a id="manual-overview-title"></a>
+
 ## 方案概述
 
 Qwen-Omni-Realtime 支持由服务端 VAD 自动划分轮次，也支持由客户端控制轮次的 Manual 模式。本教程将 session.turn\_detection 设为 null：用户按下按钮时发送音频，松开按钮时提交音频并显式触发模型回复。
 
 Manual 模式适用于硬件按键对讲、屏幕按住说话、噪声环境下由业务自行判停，以及在一轮语音中按需附带图片等场景。音频通过 AOQ Audio 轨传输，不需要发送 input\_audio\_buffer.append。
 
-**对比项**
+|  |  |  |
+| --- | --- | --- |
+| **对比项** | **VAD 模式** | **Manual 模式** |
+| 语音起止 | 服务端通过 server\_vad 或 semantic\_vad 检测 | 客户端根据按键或业务状态控制 |
+| 会话配置 | turn\_detection 为 VAD 参数 | turn\_detection 为 null |
+| 提交音频 | 服务端自动提交 | 客户端发送 input\_audio\_buffer.commit |
+| 触发回复 | 服务端自动触发 | 客户端发送 response.create |
+| 图片输入 | 视频轨持续推流或 Data 轨按需发图 | 视频轨持续推流或 Data 轨按需发图 |
 
-**VAD 模式**
+<a id="准备工作"></a>
 
-**Manual 模式**
-
-语音起止
-
-服务端通过 server\_vad 或 semantic\_vad 检测
-
-客户端根据按键或业务状态控制
-
-会话配置
-
-turn\_detection 为 VAD 参数
-
-turn\_detection 为 null
-
-提交音频
-
-服务端自动提交
-
-客户端发送 input\_audio\_buffer.commit
-
-触发回复
-
-服务端自动触发
-
-客户端发送 response.create
-
-图片输入
-
-视频轨持续推流或 Data 轨按需发图
-
-视频轨持续推流或 Data 轨按需发图
+<a id="manual-prerequisites-title"></a>
 
 ## 准备工作
 
-1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
+1.  开通阿里云百炼，并按[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
 2.  `{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
-3.  从[SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
-4.  按 [Qwen-Omni-Realtime 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/omni-realtime-aoq-access#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+3.  从[SDK 下载](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
+4.  按 [Qwen-Omni-Realtime 的 AOQ 鉴权步骤](../model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+
+<a id="导入-sdk"></a>
+
+<a id="manual-import-sdk-title"></a>
 
 ### 导入 SDK
 
 根据开发平台导入对应 SDK。后续客户端代码以 iOS Swift 为例，其他平台使用相同的接口设计和事件流程。本文以 Opus 音频流为例，请先导入 Opus 插件。
 
+<a id="sec-tabs"></a>
+
+<a id="android"></a>
+
+<a id="android-h4"></a>
+
 #### Android
 
 1.  将 Opus 插件中的 libPluginOpus.so 按 ABI 放入 app/src/main/jniLibs/armeabi-v7a/ 和 app/src/main/jniLibs/arm64-v8a/，将 AoqClientSdk-release.aar 放入 app/libs，并在 app/build.gradle 中配置依赖和 SDK 支持的 ABI：
 
-```
+<a id="code-block"></a>
+
+```groovy
 android {
     defaultConfig {
         minSdk 21
@@ -74,7 +67,9 @@ dependencies {
 
 2.  在 AndroidManifest.xml 中声明以下权限：
 
-```
+<a id="code-block-2"></a>
+
+```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -84,17 +79,27 @@ dependencies {
 
 3.  在使用相应设备前动态申请 RECORD\_AUDIO、CAMERA 权限。
 
+<a id="ios"></a>
+
+<a id="ios-h4"></a>
+
 #### iOS
 
 1.  将 AoqClientSdk.framework 与 PluginOpus.framework 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
 2.  在 Info.plist 中添加 NSMicrophoneUsageDescription、NSCameraUsageDescription，并在使用相应设备前请求用户授权。
 3.  Swift 工程使用 import AoqClientSdk；Objective-C 工程使用 #import <AoqClientSdk/AoqClientSdk.h>。
 
+<a id="harmonyos"></a>
+
+<a id="harmonyos-h4"></a>
+
 #### HarmonyOS
 
 1.  将 Opus 插件中的 libPluginOpus.so 放入 entry/libs/arm64-v8a/，将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "dependencies": {
     "@aoq/client-sdk": "file:./libs/AoqClientSdk.har"
@@ -104,7 +109,9 @@ dependencies {
 
 2.  在 entry/src/main/module.json5 中声明以下权限：
 
-```
+<a id="code-block-4"></a>
+
+```json
 "requestPermissions": [
   { "name": "ohos.permission.INTERNET" },
   { "name": "ohos.permission.MICROPHONE",
@@ -118,17 +125,27 @@ dependencies {
 
 3.  在使用相应设备前调用 abilityAccessCtrl.createAtManager().requestPermissionsFromUser 申请 ohos.permission.MICROPHONE、ohos.permission.CAMERA。
 
+<a id="linux-python"></a>
+
+<a id="linux-python-h4"></a>
+
 #### Linux (Python)
 
 1.  解压 SDK，并保持 aoq\_client\_sdk.py、libAoqClientSdk.so 和 libonnxruntime.so.1.16.3 位于同一目录。
 2.  将 SDK 目录加入 Python 和动态库搜索路径：
 
-```
+<a id="code-block-5"></a>
+
+```bash
 export PYTHONPATH="$PWD/AoqClientSdk:$PYTHONPATH"
 export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 ```
 
 3.  在 Python 代码中使用 import aoq\_client\_sdk。也可通过 AOQ\_CLIENT\_SDK\_LIB 指定 libAoqClientSdk.so 的绝对路径。
+
+<a id="实现流程"></a>
+
+<a id="manual-flow-title"></a>
 
 ## 实现流程
 
@@ -139,11 +156,21 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 5.  用户按下按钮时开启 Audio 轨；松开时先关闭 Audio 轨，再按需发送图片，然后依次发送 input\_audio\_buffer.commit 和 response.create。
 6.  收到 response.done 后可开始下一轮；结束使用时停止设备、断开连接并销毁引擎。
 
+<a id="sec-tabs-2"></a>
+
+<a id="视频轨持续推流"></a>
+
+<a id="视频轨持续推流-h4"></a>
+
 #### 视频轨持续推流
 
 发布 Video 轨并在 session.updated 后开启视频发送。模型持续看到最新画面；每轮语音只需提交音频并触发回复。
 
 ![AOQ Manual 模式视频轨持续推流时序图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6518966871/p1094863.png)
+
+<a id="data-轨按需发图"></a>
+
+<a id="data-轨按需发图-h4"></a>
 
 #### Data 轨按需发图
 
@@ -151,11 +178,17 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 
 ![AOQ Manual 模式 Data 轨按需发图时序图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6518966871/p1094864.png)
 
+<a id="appserver-获取-token"></a>
+
+<a id="manual-token-request-title"></a>
+
 ## AppServer 获取 Token
 
 在 AppServer 设置 DASHSCOPE\_API\_KEY，并使用所选地域的 Endpoint 发送请求。clientIp 为客户端的真实公网 IP；该字段可选，但建议传入，以便服务分配合适的 Relay 接入点。
 
-```
+<a id="code-block-6"></a>
+
+```bash
 curl -X POST \
   "https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime" \
   -H "Content-Type: application/json" \
@@ -164,53 +197,56 @@ curl -X POST \
   -d "{\"clientIp\": \"${CLIENT_REAL_IP}\"}"
 ```
 
-**说明**如果 AppServer 无法获取客户端真实公网 IP，请删除 clientIp 字段，不要传空字符串。
+> **说明**
+>
+> 如果 AppServer 无法获取客户端真实公网 IP，请删除 clientIp 字段，不要传空字符串。
 
 AppServer 将响应中的以下字段返回客户端。API Key 仅保存在 AppServer。
 
-**响应字段**
+|  |  |
+| --- | --- |
+| **响应字段** | **SDK 字段** |
+| aoqTokenForClient | AoqConnectConfig.token |
+| sid | AoqConnectConfig.sid |
+| clientRelayCertFingerprint | AoqConnectConfig.certFingerprint |
+| clientRelayEndpoints | AoqConnectConfig.relayEndpoints |
+| extraInfo.workspaceIdHash | AoqConnectConfig.workspaceIdHash |
 
-**SDK 字段**
+<a id="实现-ios-客户端"></a>
 
-aoqTokenForClient
-
-AoqConnectConfig.token
-
-sid
-
-AoqConnectConfig.sid
-
-clientRelayCertFingerprint
-
-AoqConnectConfig.certFingerprint
-
-clientRelayEndpoints
-
-AoqConnectConfig.relayEndpoints
-
-extraInfo.workspaceIdHash
-
-AoqConnectConfig.workspaceIdHash
+<a id="manual-implementation-title"></a>
 
 ## 实现 iOS 客户端
 
 客户端从 AppServer 获取 AoqConnectConfig 后，按以下步骤实现 iOS 端按键语音对话。
 
+<a id="1-创建引擎并设置回调"></a>
+
+<a id="manual-step-1-title"></a>
+
 ### 1\. 创建引擎并设置回调
 
 创建 AOQ 单例引擎，并把业务对象注册为回调接收方。客户需要在回调中处理连接状态、服务端事件、错误和告警。
 
-```
+<a id="code-block-7"></a>
+
+```swift
 let createConfig = AoqCreateConfig()
 createConfig.workDir = workDir
 engine = AoqClientEngine.createEngine(createConfig, delegate: self)
 ```
 
+<a id="2-启动音视频设备"></a>
+
+<a id="manual-step-2-title"></a>
+
 ### 2\. 启动音视频设备
 
 初始化音频采集与播放。只有持续视频轨方案需要启动摄像头；客户需要在调用前获得麦克风和摄像头权限。
 
-```
+<a id="code-block-8"></a>
+
+```swift
 let captureConfig = AoqAudioCaptureConfig()
 captureConfig.channel = 1
 captureConfig.isExternal = false
@@ -223,15 +259,27 @@ playbackConfig.isDefaultSpeaker = true
 engine.startAudioPlayer(playbackConfig)
 ```
 
+<a id="3-配置编解码和轨道"></a>
+
+<a id="manual-step-3-title"></a>
+
 ### 3\. 配置编解码和轨道
 
 根据接入模型和业务音频格式配置音频编解码参数，并根据图片输入方式选择轨道。以下音频与视频数值仅为示例，请按模型要求和业务场景调整。连接前必须关闭 Audio 轨发送。
+
+<a id="sec-tabs-3"></a>
+
+<a id="视频轨持续推流-2"></a>
+
+<a id="视频轨持续推流-2-h4"></a>
 
 #### 视频轨持续推流
 
 客户需要配置 Audio、Video 和 Data 发布轨，并根据实际画质与带宽调整视频编码参数。
 
-```
+<a id="code-block-9"></a>
+
+```swift
 let audioEncoderConfig = AoqAudioCodecConfig()
 audioEncoderConfig.trackType = .audio
 audioEncoderConfig.codecType = .audioOpus
@@ -269,11 +317,17 @@ connectConfig.publishTracks = [publishAudioTrack, publishVideoTrack, publishData
 connectConfig.subscribeTracks = [subscribeAudioTrack, subscribeDataTrack]
 ```
 
+<a id="data-轨按需发图-2"></a>
+
+<a id="data-轨按需发图-2-h4"></a>
+
 #### Data 轨按需发图
 
 客户仅配置 Audio 和 Data 轨，不配置视频编码器，从而避免持续采集、编码和传输视频。音频数值仅为示例。
 
-```
+<a id="code-block-10"></a>
+
+```swift
 let audioEncoderConfig = AoqAudioCodecConfig()
 audioEncoderConfig.trackType = .audio
 audioEncoderConfig.codecType = .audioOpus
@@ -300,11 +354,17 @@ connectConfig.publishTracks = [publishAudioTrack, publishDataTrack]
 connectConfig.subscribeTracks = [subscribeAudioTrack, subscribeDataTrack]
 ```
 
+<a id="4-配置-manual-会话"></a>
+
+<a id="manual-step-4-title"></a>
+
 ### 4\. 配置 Manual 会话
 
-连接成功后，调用 sendDataMsg 发送 session.update 事件。客户需要把 turn\_detection 设为 null，并按业务选择音色、系统指令和输出模态。示例中的音频参数需要与 SDK 编解码配置保持一致。完整字段请参见[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
+连接成功后，调用 sendDataMsg 发送 session.update 事件。客户需要把 turn\_detection 设为 null，并按业务选择音色、系统指令和输出模态。示例中的音频参数需要与 SDK 编解码配置保持一致。完整字段请参见[客户端事件](../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
 
-```
+<a id="code-block-11"></a>
+
+```swift
 private func sendSessionUpdate() {
     let event: [String: Any] = [
         "type": "session.update",
@@ -325,11 +385,17 @@ private func sendSessionUpdate() {
 }
 ```
 
+<a id="5-等待会话配置生效"></a>
+
+<a id="manual-step-5-title"></a>
+
 ### 5\. 等待会话配置生效
 
 在 onDataMsg 回调中处理 session.updated 事件，收到该事件后才能发送媒体。持续视频轨方案此时调用 enableSendMediaStream 开启 Video 轨；Audio 轨仍保持关闭，避免用户按键前的音频进入缓冲区。
 
-```
+<a id="code-block-12"></a>
+
+```swift
 func onDataMsg(_ msg: AoqDataMsg) {
     guard let event = try? JSONSerialization.jsonObject(with: msg.data) as? [String: Any],
           let type = event["type"] as? String else { return }
@@ -340,11 +406,17 @@ func onDataMsg(_ msg: AoqDataMsg) {
 }
 ```
 
+<a id="6-实现按键语音交互"></a>
+
+<a id="manual-step-6-title"></a>
+
 ### 6\. 实现按键语音交互
 
 按下按钮时调用 enableSendMediaStream 开启 Audio 轨。松开按钮时先调用 enableSendMediaStream 关闭 Audio 轨，确认本轮确有音频，再按需发送图片，并调用 sendDataMsg 依次发送 input\_audio\_buffer.commit 和 response.create 事件。
 
-```
+<a id="code-block-13"></a>
+
+```swift
 func onPushToTalkPressed() {
     hasAudioInCurrentTurn = true
     engine.enableSendMediaStream(.audio, enable: true)
@@ -377,19 +449,35 @@ func onPushToTalkReleased(base64Jpeg: String? = nil) {
 }
 ```
 
+<a id="7-选择图片输入方式"></a>
+
+<a id="manual-step-7-title"></a>
+
 ### 7\. 选择图片输入方式
 
 持续视觉理解和偶发拍照提问使用不同的轨道配置与发送方式；客户需要根据带宽、功耗和交互方式选择。
+
+<a id="sec-tabs-4"></a>
+
+<a id="视频轨持续推流-3"></a>
+
+<a id="视频轨持续推流-3-h4"></a>
 
 #### 视频轨持续推流
 
 适合视频通话、画面变化较快或模型需要持续理解视觉上下文的场景。发布 Video 轨后，不要再发送 input\_image\_buffer.append。
 
+<a id="data-轨按需发送单张图片"></a>
+
+<a id="data-轨按需发送单张图片-h4"></a>
+
 #### Data 轨按需发送单张图片
 
 适合拍照提问或偶发配图。客户需要把图片处理为 JPG/JPEG 并进行 Base64 编码，在松开按键后、提交音频前发送：
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
   "type": "input_image_buffer.append",
   "image": "<Base64-encoded JPEG data>"
@@ -400,20 +488,32 @@ func onPushToTalkReleased(base64Jpeg: String? = nil) {
 -   Base64 编码后不得超过 256 KB，建议编码前不超过 190 KB，并为 JSON 包装字段预留空间。
 -   发送图片前，Audio 轨必须已经在本轮至少上行过一帧音频；随后的 input\_audio\_buffer.commit 会同时提交音频和图片。
 
+<a id="8-断开连接并销毁引擎"></a>
+
+<a id="manual-step-8-title"></a>
+
 ### 8\. 断开连接并销毁引擎
 
 结束会话时断开连接并销毁引擎。disconnect 或 destroy 会自动关闭媒体设备，无需额外调用停止接口。AoqClientEngine 为全局单例，只有 destroy 后才能重新创建。
 
-```
+<a id="code-block-15"></a>
+
+```swift
 engine.disconnect()
 AoqClientEngine.destroy()
 ```
+
+<a id="完整示例"></a>
+
+<a id="manual-complete-title"></a>
 
 ## 完整示例
 
 以下类接收已由 AppServer Token 响应转换完成的 AoqConnectConfig。请在生产代码中补充 UI 状态、权限、错误恢复和图片压缩逻辑。
 
-```
+<a id="code-block-16"></a>
+
+```swift
 import Foundation
 import AoqClientSdk
 
@@ -581,6 +681,10 @@ final class ManualPushToTalkClient: NSObject, AoqEngineDelegate {
 }
 ```
 
+<a id="运行并验证"></a>
+
+<a id="manual-run-title"></a>
+
 ## 运行并验证
 
 分别完成一次纯语音按键对话和一次带图片的按键对话，预期结果如下：
@@ -589,7 +693,11 @@ final class ManualPushToTalkClient: NSObject, AoqEngineDelegate {
 2.  松开按钮后依次收到 input\_audio\_buffer.committed、response.created 和 response.done，模型语音通过订阅的 Audio 轨播放。
 3.  选择单张图片方案时，模型结合本轮图片与语音作答；选择持续视频方案时，模型使用最新视频画面。
 
-服务端事件字段和完整响应结构请参见[服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)。
+服务端事件字段和完整响应结构请参见[服务端事件](../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)。
+
+<a id="注意事项"></a>
+
+<a id="manual-notes-title"></a>
 
 ## 注意事项
 
@@ -598,16 +706,20 @@ final class ManualPushToTalkClient: NSObject, AoqEngineDelegate {
 3.  空音频缓冲区不要提交，否则服务端会返回错误。
 4.  不要在收到 session.updated 前开启媒体发送；Manual 模式下也不要在用户按下按钮前开启 Audio 轨。
 
+<a id="相关文档"></a>
+
+<a id="manual-related-title"></a>
+
 ## 相关文档
 
 如需查看完整参数、事件字段或其他平台接口，请参见：
 
--   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
--   [AOQ Client SDK 简介](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
--   [Qwen-Omni-Realtime AOQ 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md)
--   [Qwen-Omni-Realtime 用户指南](raw/model-user-guide/model-experience/omni-modal/realtime.md)
--   [通过 AOQ 实现 VAD 模式实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)
--   [客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
--   [服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
+-   [获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)
+-   [选择地域、服务部署范围和接入域名](../model-user-guide/get-started-with-models/regions.md)
+-   [AOQ Client SDK 简介](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   [SDK 下载](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
+-   [Qwen-Omni-Realtime AOQ 接入](../model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md)
+-   [Qwen-Omni-Realtime 用户指南](../model-user-guide/model-experience/omni-modal/realtime.md)
+-   [通过 AOQ 实现 VAD 模式实时通话](../model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)
+-   [客户端事件](../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
+-   [服务端事件](../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)

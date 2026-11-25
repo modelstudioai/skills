@@ -1,63 +1,58 @@
 # support
 
-阿里云百炼平台为开发者提供覆盖模型调用、应用构建、计费管理及故障排查的全链路技术支持。支持形式包括自助文档、API/SDK 工具链、7×24 小时工单与电话服务，以及面向企业客户的付费增值服务。所有服务均以《阿里云百炼服务协议》和《SLA》为法律与服务质量基准。
+阿里云百炼平台的 `support` 模块涵盖服务开通、计费、API/SDK 使用、故障排查、协议合规及售后响应等全链路支持能力。面向开发者，核心目标是保障模型调用稳定、权限配置正确、问题可定位、责任边界清晰。所有支持行为均以官方文档、SLA 协议及控制台实际功能为准，不依赖非官方渠道信息。
 
 ## 支持的模型/功能
 
-- **模型范围**：支持千问系列（Qwen-Max、Qwen-Plus、Qwen3.5-Flash、qwen3-vl-plus 等）、开源模型及三方模型（详见[三方模型服务协议和使用条款清单](../../raw/model-user-guide/support/related-agreements.md)）；其中 qwen3-vl-plus 已支持图片微调训练。
-- **核心能力**：
-  - Completion / Assistant API 调用（含 function call 基础支持，但**不支持连续调用两个本地函数**）；
-  - RAG 应用构建与 doc_reference_type 参数控制（仅在旧版应用中生效，新版需通过控制台开关启用）；
-  - CLI 工具（`bl`）支持模型推理、[Token](../concepts/token.md) Plan 切换及多 Profile 管理；
-  - 业务空间（Workspace）级数据隔离，保障多租户数据不关联。
+- **模型覆盖**：支持千问系列（Qwen-Max、Qwen-Plus、Qwen3.5-Flash、Qwen3-VL-Plus 等）、开源模型及部分三方模型；其中 Qwen3-VL-Plus 已支持图像微调训练 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)。
+- **核心功能支持**：
+  - Completion / Assistant API 调用（含 Function Calling 基础能力，但**不支持单次请求中依次调用两个本地函数**）；
+  - RAG 应用构建与 `doc_reference_type` 参数控制（仅在旧版应用中生效，新版需通过控制台开关启用）；
+  - CLI 工具（`bl`）的鉴权、Profile 切换与 [Token](../concepts/token.md) Plan 使用；
+  - 业务空间（Workspace）级数据隔离，实现多租户数据物理/逻辑分离；
+  - 模型训练、微调、评估全流程（但**不支持导出自训练模型**，且本地训练模型不可上传）。
 
-> **注意**：文档 2 中称“Assistant API 当前暂不支持 memory 配置功能”，但未说明是否计划支持；该限制应视为当前稳定行为，非临时缺陷。
+> **注意**：文档 1 中提及“Assistant API 当前暂不支持 memory 配置功能”，而部分 SDK 示例代码中存在 `memory` 字段占位。该字段为预留接口，**当前版本无实际作用，不应依赖其状态或行为** [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)。
 
 ## 关键参数
 
-| 参数 | 说明 | 注意事项 |
-|------|------|----------|
-| `temperature`, `top_p`, `top_k` | 控制生成随机性与确定性 | 降低可减少幻觉，但可能削弱创造性；需结合人工评估验证效果 |
-| `max_tokens` | 限制响应长度 | 过长易引发后半段捏造，建议按任务需求设合理上限 |
-| `doc_reference_type` | 指定答案来源展示格式 | **仅在旧版应用中生效**；新版必须开启控制台「展示回答来源」开关才生效（见[常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)） |
-| `RequestId`, `AppId` | 必填请求标识字段 | 缺失或格式错误将返回错误码 `100004`（参数缺失） |
+| 参数名 | 说明 | 生效条件 | 参考 |
+|--------|------|----------|------|
+| `doc_reference_type` | 控制答案来源展示方式（如 `all`/`none`/`selected`） | **仅旧版应用生效**；新版需在应用配置中开启「展示回答来源」开关 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) | |
+| `temperature` / `top_p` / `top_k` | 影响输出随机性与确定性 | 全模型通用，推荐降低 `temperature`（如设为 0.1–0.3）以抑制幻觉 | |
+| `max_tokens` | 限制生成最大 token 数 | 防止冗余输出导致幻觉延伸，尤其适用于结构化响应场景 | |
+| `RequestId` | 全局唯一请求标识 | 必填，用于问题定位与工单追踪，格式需符合 UUID v4 标准 | |
 
 ## 使用方式
 
-- **开通服务**：无需手动开通，主账号或具备 `AliyunBailianFullAccess` 权限的 RAM 账号登录控制台并完成实名认证后自动启用；
-- **API 调用**：使用 Bearer [Token](../concepts/token.md) 认证，Header 中携带 `Authorization: Bearer <api_key>`，Body 为 JSON 格式（示例见[常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)）；
-- **SDK 安装**：DashScope SDK 支持 Python/Java；多模态 Realtime API 需单独参考对应文档；
-- **CLI 鉴权**：支持多 Profile（如 `default`、`token-plan`、`console`），需显式切换（`bl config use --name token-plan`）方可使用 [Token](../concepts/token.md) Plan 扣减；
-- **售后接入**：
-  - 基础咨询：官网[售后服务](https://smartservice.console.aliyun.com/service/robot-chat)、电话 95187 / 4008013260；
-  - 工单与深度支持：参见[阿里云百炼平台售后服务范围说明](../../raw/model-user-guide/support/after-sales-service-scope.md)。
+- **服务开通**：无需手动开通。使用阿里云主账号或具备 `AliyunBailianFullAccess` 权限的 RAM 子账号登录 [百炼控制台](https://bailian.console.aliyun.com/)，完成实名认证后自动启用。
+- **API 调用**：
+  - 必须携带 `Authorization: Bearer <API-Key>` 请求头；
+  - 推荐使用 DashScope SDK（Python/Java），安装方式见 [安装SDK](../../model-api-reference/preparations/install-sdk.md)；
+  - CLI 工具需显式切换 Profile（如 `bl config use --name token-plan`）以启用 [Token](../concepts/token.md) Plan 计费。
+- **问题反馈**：
+  - 技术问题 → 提交标准工单或通过 [官网-售后服务](https://smartservice.console.aliyun.com/service/robot-chat)；
+  - 业务合作 → 拨打 4008013260 或使用 [官网-售前咨询](https://smartservice.console.aliyun.com/service/pre-sales-chat)；
+  - 错误码解析 → 查阅 [错误码](../../model-api-reference/preparations/error-code.md) 文档。
 
 ## 限制和注意事项
 
-- **功能限制**：
-  - Assistant API 不支持 memory 配置、不支持连续 function call；
-  - 不支持导出训练完成的开源模型；
-  - 不支持直接对接 MySQL/Hive 等结构化数据库（RDS 对接已在开发中）；
-  - 未登录状态下的体验对话、推理报错对话**不保存**；控制台最多保留 100 条历史记录。
-  
-- **计费与账户**：
-  - 万相会员权益**不适用于百炼 API 调用**；
-  - 后付费按分钟出账、按月结算；账户余额须 ≥ 0 元方可开通服务；
-  - CLI 调用 Token Plan 需使用订阅 API Key 并切换至 `token-plan` Profile，否则不扣减。
-
-- **数据与安全**：
-  - 百炼**不会将用户数据用于模型训练**，传输全程 AES-256 加密；
-  - 数据存储依据《阿里云百炼服务协议》执行，详情见[相关协议](../../raw/model-user-guide/support/related-agreements.md)；
-  - 第三方工具（如 Cursor、Windsurf）的部署、配置及故障排查**不在标准售后范围内**，仅提供方向性接入建议。
-
-- **模型行为**：
-  - 模型重复输出、幻觉等问题与训练数据质量、prompt 设计、参数配置强相关；
-  - 降低 `temperature` 等参数可缓解幻觉，但最终效果须以人工评估为准（loss 不是可靠过拟合指标）。
+- **服务不可关闭**：百炼服务开通后无法主动关闭，如需停用，应删除全部 API-Key 并停止调用。
+- **数据留存策略**：
+  - 控制台体验中心最多保留 **100 条历史对话记录**（无时间限制），未登录或报错对话不保存；
+  - 所有调用数据按《[阿里云百炼服务协议](https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20230728213935489/20230728213935489.html?spm=5176.2020520104.0.0.52a63a98OYNqWq)》要求加密存储，**绝不用于模型再训练**。
+- **第三方工具边界**：
+  - 阿里云仅支持百炼服务端本身（API 可达性、计费明细、官方 SDK 行为）；
+  - **不支持**第三方工具（如 Cursor、Windsurf）的安装、配置、本地环境（代理/防火墙/VPN）或业务代码调试 [阿里云百炼平台售后服务范围说明 (raw/model-user-guide/support/after-sales-service-scope.md)](../../raw/model-user-guide/support/after-sales-service-scope.md)。
+- **计费与额度**：
+  - 后付费按分钟出账、按月结算；
+  - 账户余额必须 ≥ 0 元方可开通服务；
+  - 万相会员权益**不适用于百炼 API 调用**，二者计费体系完全独立 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)。
 
 ## 来源文档
 
-- [相关协议](../../raw/model-user-guide/support/related-agreements.md)
 - [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)
+- [相关协议](../../raw/model-user-guide/support/related-agreements.md)
 - [阿里云百炼平台售后服务范围说明](../../raw/model-user-guide/support/after-sales-service-scope.md)
 
 

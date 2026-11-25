@@ -2,14 +2,28 @@
 
 万相视频编辑统一模型支持 多模态输入 （文本/图像/视频），可实现 多图参考、视频重绘、局部编辑、视频延展、画面扩展 五大核心能力。
 
+<a id="适用范围"></a>
+
+<a id="scope-title"></a>
+
 ## 适用范围
 
 -   各地域支持的模型有所差异，且资源相互独立。各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 -   调用时，确保**模型、Endpoint URL 和 API Key 均属于同一地域**，跨地域调用将会失败。
 
-**说明**本文的示例代码适用于**北京地域**。
+> **说明**
+>
+> 本文的示例代码适用于**北京地域**。
+
+<a id="核心能力"></a>
+
+<a id="14662a4c30k7g"></a>
 
 ## 核心能力
+
+<a id="多图参考"></a>
+
+<a id="cap1-title"></a>
 
 ### 多图参考
 
@@ -21,26 +35,26 @@
 -   `ref_images_url`：URL数组，支持输入1～3张参考图。
 -   `obj_or_bg`：标识每张图为主体（obj）还是背景（bg），与`ref_images_url`长度一致。
 
-**输入提示词**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **输入提示词** | **输入参考图1（参考主体）** | **输入参考图2（参考背景）** | **输出视频** |
+| 视频中，一位女孩自晨雾缭绕的**古老森林深处款款走出**，她步伐轻盈，镜头捕捉她每一个灵动瞬间。当她站定，环顾四周葱郁林木时，她**脸上绽放出惊喜与喜悦交织的笑容**。这一幕，定格在了光影交错的瞬间，记录下她与大自然的美妙邂逅。 | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2786951571/p955656.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2786951571/p955657.png) |  |
 
-**输入参考图1（参考主体）**
+在调用前，先[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-**输入参考图2（参考背景）**
+<a id="sec-tabs"></a>
 
-**输出视频**
+<a id="curl"></a>
 
-视频中，一位女孩自晨雾缭绕的**古老森林深处款款走出**，她步伐轻盈，镜头捕捉她每一个灵动瞬间。当她站定，环顾四周葱郁林木时，她**脸上绽放出惊喜与喜悦交织的笑容**。这一幕，定格在了光影交错的瞬间，记录下她与大自然的美妙邂逅。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2786951571/p955656.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2786951571/p955657.png)
-
-在调用前，先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+<a id="curl-h4"></a>
 
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
 --header 'X-DashScope-Async: enable' \
@@ -63,18 +77,27 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-2"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-3"></a>
+
+```python
 import os
 import requests
 import time
@@ -143,9 +166,15 @@ if __name__ == "__main__":
     print(f"\n视频生成成功: {video_url}")
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-4"></a>
+
+```java
 import org.json.*;
 import java.io.*;
 import java.net.*;
@@ -319,6 +348,10 @@ public class VideoSynthesis {
 }
 ```
 
+<a id="视频重绘"></a>
+
+<a id="6586825768b60"></a>
+
 ### 视频重绘
 
 **功能介绍**：从输入视频中提取主体姿态与动作、构图与运动轮廓或线稿结构,结合文本提示词生成具有相同动态特征的新视频。还支持通过参考图像替换原视频中的主体。
@@ -340,18 +373,24 @@ public class VideoSynthesis {
 -   `ref_images_url`：可选。传入1张参考图像URL，用于替换输入视频中的主体。
     
 
-**输入提示词**
+|  |  |  |
+| --- | --- | --- |
+| **输入提示词** | **输入视频** | **输出视频** |
+| 视频展示了一辆黑色的**蒸汽朋克风格汽车**，绅士驾驶着，车辆装饰着齿轮和铜管。背景是蒸汽驱动的糖果工厂和复古元素，画面复古与趣味 |  |  |
 
-**输入视频**
+<a id="sec-tabs-2"></a>
 
-**输出视频**
+<a id="curl-2"></a>
 
-视频展示了一辆黑色的**蒸汽朋克风格汽车**，绅士驾驶着，车辆装饰着齿轮和铜管。背景是蒸汽驱动的糖果工厂和复古元素，画面复古与趣味
+<a id="curl-2-h4"></a>
 
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-5"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
 --header 'X-DashScope-Async: enable' \
@@ -370,18 +409,27 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-6"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-7"></a>
+
+```python
 import os
 import requests
 import time
@@ -449,9 +497,15 @@ if __name__ == "__main__":
     print(f"\n视频生成成功: {video_url}")
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-8"></a>
+
+```java
 import org.json.*;
 import java.io.*;
 import java.net.*;
@@ -580,6 +634,10 @@ public class VideoRepainting {
 }
 ```
 
+<a id="局部编辑"></a>
+
+<a id="6617434c8cbi6"></a>
+
 ### 局部编辑
 
 **功能介绍：**对视频指定区域进行精细化编辑，支持元素增删改和主体背景替换。上传掩码图像指定编辑区域，模型将自动跟踪目标并融合生成内容。
@@ -605,24 +663,21 @@ public class VideoRepainting {
 -   `ref_images_url`：可选。传入1张参考图像URL，用于将编辑区域的内容替换为该参考图的内容。
     
 
-**输入提示词**
+<table><tbody><tr><td><strong>输入提示词</strong></td><td><strong>输入视频</strong></td><td><strong>输入掩码图像</strong></td><td><strong>输出视频</strong></td></tr><tr><td><p>视频展示了一家巴黎风情的法式咖啡馆，一只<strong>穿着西装的狮子</strong>优雅地品着咖啡。它一手端着咖啡杯，轻轻啜饮，神情惬意。咖啡馆装饰雅致，柔和的色调与温暖灯光映照着狮子所在的区域。</p></td><td></td><td><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3778351571/p955179.png" alt="mask"><blockquote><p>白色区域表示编辑区域</p></blockquote></td><td></td></tr></tbody></table>
 
-**输入视频**
+<a id="sec-tabs-3"></a>
 
-**输入掩码图像**
+<a id="curl-3"></a>
 
-**输出视频**
-
-视频展示了一家巴黎风情的法式咖啡馆，一只**穿着西装的狮子**优雅地品着咖啡。它一手端着咖啡杯，轻轻啜饮，神情惬意。咖啡馆装饰雅致，柔和的色调与温暖灯光映照着狮子所在的区域。
-
-![mask](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3778351571/p955179.png)
-
-> 白色区域表示编辑区域
+<a id="curl-3-h4"></a>
 
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-9"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
 --header 'X-DashScope-Async: enable' \
@@ -644,20 +699,29 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-10"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
 
 #### Python
 
 > 安装依赖：pip install requests。
 
-```
+<a id="code-block-11"></a>
+
+```python
 import os
 import requests
 import time
@@ -728,9 +792,15 @@ if __name__ == "__main__":
     print(f"\n视频生成成功: {video_url}")
 ```
 
+<a id="java-3"></a>
+
+<a id="java-3-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-12"></a>
+
+```java
 import org.json.*;
 import java.io.*;
 import java.net.*;
@@ -846,6 +916,10 @@ public class VideoRegionalEdit {
 }
 ```
 
+<a id="视频延展"></a>
+
+<a id="32fd562bb4fnf"></a>
+
 ### 视频延展
 
 **功能介绍：**基于输入的图像或视频片段，预测并生成具有连续性的后续内容。支持“首帧/首片段”向后延展，或“尾帧/尾片段”向前延展。最终生成的视频总时长固定为5秒。
@@ -867,18 +941,24 @@ public class VideoRegionalEdit {
     > **注意**：first\_clip\_url、last\_clip\_url、first\_frame\_url、last\_frame\_url 四个参数中，**必须至少提供一项**作为输入。
     
 
-**输入提示词**
+|  |  |  |
+| --- | --- | --- |
+| **输入提示词** | **输入首片段视频（1秒）** | **输出视频（延长后的视频为5秒）** |
+| 一只戴着墨镜的**狗在街道上滑滑板**，3D卡通。 |  |  |
 
-**输入首片段视频（1秒）**
+<a id="sec-tabs-4"></a>
 
-**输出视频（延长后的视频为5秒）**
+<a id="curl-4"></a>
 
-一只戴着墨镜的**狗在街道上滑滑板**，3D卡通。
+<a id="curl-4-h4"></a>
 
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-13"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
 --header 'X-DashScope-Async: enable' \
@@ -896,18 +976,27 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-14"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-15"></a>
+
+```python
 import os
 import requests
 import time
@@ -974,9 +1063,15 @@ if __name__ == "__main__":
     print(f"\n视频生成成功: {video_url}")
 ```
 
+<a id="java-4"></a>
+
+<a id="java-4-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-16"></a>
+
+```java
 import org.json.*;
 import java.io.*;
 import java.net.*;
@@ -1088,6 +1183,10 @@ public class VideoExtension {
 }
 ```
 
+<a id="视频画面扩展"></a>
+
+<a id="ada0bb3c9b2g3"></a>
+
 ### 视频画面扩展
 
 **功能介绍：** 在视频的上下左右四个方向上，根据提示词按比例扩展画面内容，保持视频主体的连贯性和背景的自然融合。
@@ -1103,18 +1202,24 @@ public class VideoExtension {
 
 > **示例**：设置 `left_scale` 为 1.5，表示左侧画面将扩展为原宽度的1.5倍。
 
-**输入提示词**
+|  |  |  |
+| --- | --- | --- |
+| **输入提示词** | **输入视频** | **输出视频** |
+| 一位优雅的女士正在激情演奏小提琴，**她身后是一支完整的交响乐团**。 |  |  |
 
-**输入视频**
+<a id="sec-tabs-5"></a>
 
-**输出视频**
+<a id="curl-5"></a>
 
-一位优雅的女士正在激情演奏小提琴，**她身后是一支完整的交响乐团**。
+<a id="curl-5-h4"></a>
 
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-17"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
 --header 'X-DashScope-Async: enable' \
@@ -1136,18 +1241,27 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-18"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="python-5"></a>
+
+<a id="python-5-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-19"></a>
+
+```python
 import os
 import requests
 import time
@@ -1218,9 +1332,15 @@ if __name__ == "__main__":
     print(f"\n视频生成成功: {video_url}")
 ```
 
+<a id="java-5"></a>
+
+<a id="java-5-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-20"></a>
+
+```java
 import org.json.*;
 import java.io.*;
 import java.net.*;
@@ -1339,25 +1459,41 @@ public class VideoOutpainting {
 }
 ```
 
+<a id="如何输入图像和视频"></a>
+
+<a id="0d19965c4c55x"></a>
+
 ## 如何输入图像和视频
+
+<a id="输入图像"></a>
+
+<a id="a74659da43xad"></a>
 
 ### 输入图像
 
--   **图像数量**：根据[所选功能](https://help.aliyun.com/zh/model-studio/wan-vace-guide#14662a4c30k7g)传入对应数量的图像。
+-   **图像数量**：根据[所选功能](wan-vace-guide.md#14662a4c30k7g)传入对应数量的图像。
     
 -   **输入方式**：
     
     -   **公网URL**：支持 HTTP 或 HTTPS 协议。示例：[](https://xxxx/xxx.png)[https://xxxx/xxx.png](https://xxxx/xxx.png)。
-    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.png。
+    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](../../../../model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.png。
+
+<a id="输入视频"></a>
+
+<a id="300251c90afeb"></a>
 
 ### 输入视频
 
--   **视频数量**：根据[所选功能](https://help.aliyun.com/zh/model-studio/wan-vace-guide#14662a4c30k7g)传入对应数量的视频。
+-   **视频数量**：根据[所选功能](wan-vace-guide.md#14662a4c30k7g)传入对应数量的视频。
     
 -   **输入方式**：
     
     -   **公网URL**：支持 HTTP 或 HTTPS 协议。示例：[](https://xxxx/xxx.mp4)[https://xxxx/xxx.mp4](https://xxxx/xxx.mp4)。
-    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.mp4。
+    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](../../../../model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.mp4。
+
+<a id="输出视频"></a>
+
+<a id="80761d0d13me6"></a>
 
 ## 输出视频
 
@@ -1372,37 +1508,61 @@ public class VideoOutpainting {
     -   **多图参考 / 局部编辑**：
         
         -   输出固定为 720P 规格。
-        -   具体宽高由请求参数 [size](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wanx-vace-api-reference.md) 决定。
+        -   具体宽高由请求参数 [size](../../../../model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wanx-vace-api-reference.md) 决定。
     -   **视频重绘 / 视频延展 / 视频画面扩展**：
         
         -   若输入视频分辨率 ≤ 720P：保持原始分辨率输出。
         -   若输入视频分辨率 > 720P：保持宽高比不变，按比例缩放至 720P 输出。
 
+<a id="计费与限流"></a>
+
+<a id="28d266a7f1ogi"></a>
+
 ## 计费与限流
 
--   模型免费额度和计费单价请参见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#89e9be041ek81)。
+-   模型免费额度和计费单价请参见[模型价格](../../../test-1/model-pricing.md#89e9be041ek81)。
     
--   模型限流请参见[万相系列](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+-   模型限流请参见[万相系列](../../../get-started-with-models/rate-limit.md)。
     
 -   计费说明：
     
     -   输入不计费，输出计费。按成功生成的 **视频秒数** 计费。
-    -   模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+    -   模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](../../../test-1/new-free-quota.md)。
     -   通用视频编辑还支持[节省计划](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
+
+<a id="api文档"></a>
+
+<a id="cc5f51ec5b8hu"></a>
 
 ## API文档
 
-[通用视频编辑API参考](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wanx-vace-api-reference.md)
+[通用视频编辑API参考](../../../../model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wanx-vace-api-reference.md)
+
+<a id="常见问题"></a>
+
+<a id="1c4c77cad9k20"></a>
 
 ## 常见问题
+
+<a id="q-多图参考功能最多支持几张图片"></a>
+
+<a id="cd3ddb5091lz7"></a>
 
 #### Q：多图参考功能最多支持几张图片?
 
 A：最多支持3张参考图像。若超过3张，仅保留前3张作为输入。建议主体图像使用纯色背景以便更好突出主体，背景图像不包含任何主体对象。
 
+<a id="q-视频重绘时什么情况下应该关闭prompt智能改写"></a>
+
+<a id="0548e1ac464g7"></a>
+
 #### Q: 视频重绘时什么情况下应该关闭prompt智能改写?
 
 A: 当文本描述与输入视频内容不一致时，模型可能产生误解。建议手动关闭智能改写`prompt_extend=false`，并在prompt中提供清晰、具体的画面描述，以提升生成一致性与准确性。
+
+<a id="q-局部编辑功能中-掩码图像和掩码视频有什么区别"></a>
+
+<a id="f04216f0365e8"></a>
 
 #### Q：局部编辑功能中，掩码图像和掩码视频有什么区别?
 

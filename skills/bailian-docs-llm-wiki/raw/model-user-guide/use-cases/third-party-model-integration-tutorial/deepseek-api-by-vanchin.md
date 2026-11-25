@@ -2,7 +2,13 @@
 
 本文档介绍如何在阿里云百炼平台调用快手万擎直供的 DeepSeek 系列模型推理服务。
 
-**重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+> **重要**
+>
+> 本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。
+
+<a id="服务开通"></a>
+
+<a id="p6q4r5s7t8u9v"></a>
 
 ## 服务开通
 
@@ -11,17 +17,31 @@
 
 完成以上步骤即可调用快手万擎提供的 DeepSeek 模型服务。
 
+<a id="快速开始"></a>
+
+<a id="y5z3a4b6c7d8e"></a>
+
 ## 快速开始
 
-API 使用前提：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+API 使用前提：已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
 
 以下以 vanchin/deepseek-v4-pro 为例，展示如何通过 OpenAI 兼容方式开启思考模式进行流式输出。
 
+<a id="sec-tabs"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
+
+<a id="i5j3k4l6m7n8o"></a>
 
 ### 示例代码
 
-```
+<a id="code-block"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -61,9 +81,13 @@ for chunk in completion:
             answer_content += delta.content
 ```
 
+<a id="l8m6n7o9p0q1r"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-2"></a>
+
+```text
 ====================思考过程====================
 
 嗯，用户问了一个简单的自我介绍问题。这是一个常见的开场白，不需要复杂拆解。
@@ -77,11 +101,19 @@ for chunk in completion:
 你好！我是DeepSeek，由深度求索公司创造的AI助手。我是一个纯文本模型，擅长回答各种问题、协助分析、写作、编程等等。有什么我可以帮助你的吗？
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
+
+<a id="q3r1s2t4u5v6w"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -136,9 +168,13 @@ async function main() {
 main();
 ```
 
+<a id="t6u4v5w7x8y9z"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```text
 ====================思考过程====================
 
 嗯，用户问了一个简单的自我介绍问题。这是一个常见的开场白，不需要复杂拆解。
@@ -152,13 +188,27 @@ main();
 你好！我是DeepSeek，由深度求索公司创造的AI助手。我是一个纯文本模型，擅长回答各种问题、协助分析、写作、编程等等。有什么我可以帮助你的吗？
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
+
+<a id="y1z9a0b2c3d4e"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-2"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-5"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -175,9 +225,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="e7f5g6h8i9j0k2"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "choices": [
         {
@@ -205,17 +259,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="推理强度-reasoning-effort"></a>
+
+<a id="re_section_title"></a>
+
 ## 推理强度（reasoning\_effort）
 
 deepseek-v4-pro 默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`high`和`max`，默认为`high`。
 
 vanchin/deepseek-v4.1-flash 默认开启思考模式，`reasoning_effort`可选值为`low`、`high`和`max`，默认为`high`。
 
-**说明**设为`low`或`medium`时会映射为`high`，设为`xhigh`时会映射为`max`。
+> **说明**
+>
+> 设为`low`或`medium`时会映射为`high`，设为`xhigh`时会映射为`max`。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -233,9 +299,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -252,9 +322,13 @@ const completion = await openai.chat.completions.create({
 console.log(completion.choices[0].message.content);
 ```
 
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -266,17 +340,35 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="文字提取"></a>
+
+<a id="ocr_quick_start_002"></a>
+
 ## 文字提取
+
+<a id="示例代码"></a>
+
+<a id="ocr_quick_start_003"></a>
 
 ### 示例代码
 
 以下展示如何通过 OpenAI 兼容方式，输入图像URL调用 vanchin/deepseek-ocr 模型进行文字提取。
 
+<a id="sec-tabs-3"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
+
 #### Python
+
+<a id="d05c66cb53n0z"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-7"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -311,19 +403,31 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="d804af7af08rp"></a>
+
 ### 返回结果
 
-```
-如果您使用Linux环境下的系统管理员，那么学会编写shell脚本将让你受益匪浅。本书并未细述安装Linux系统的每个步骤，但只要系统已安装好Linux并能运行起来，你就可以开始考虑如何让一些日常的系统管理任务实现自动化。这时shell脚本编程就能发挥作用了，这也正是本书的作用所在。本书将演示如何使用shell脚本来自动处理系统管理任务，包括从监测系统统计数据和数据文件到为你的老炼成报表。
+<a id="code-block-8"></a>
+
+```text
+ 如果您使用Linux环境下的系统管理员，那么学会编写shell脚本将让你受益匪浅。本书并未细述安装Linux系统的每个步骤，但只要系统已安装好Linux并能运行起来，你就可以开始考虑如何让一些日常的系统管理任务实现自动化。这时shell脚本编程就能发挥作用了，这也正是本书的作用所在。本书将演示如何使用shell脚本来自动处理系统管理任务，包括从监测系统统计数据和数据文件到为你的老炼成报表。
 
 如果您是采用Linux爱好者，同样能从本书中获益。现今，用户很容易在诸多部件堆积而成的图形环境中迷失。大多数桌面Linux发行版都尽量向一般用户隐藏系统的内部细节。但有时你确实需要知道内部发生了什么。本书将告诉你如何启动Linux命令行以及接下来要做什么。通常，如果是执行一些简单任务（比scf文件管理），在命令行下操作要比在华丽的图形界面下方方便得多。在命令行下有大量的命令可供使用，本书将会展示如何使用它们。
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
+
+<a id="0c8dcf1a34tzw"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-9"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -362,21 +466,39 @@ async function main() {
 main();
 ```
 
+<a id="31e6fb592d21n"></a>
+
 ### 返回结果
 
-```
-如果您使用Linux环境下的系统管理员，那么学会编写shell脚本将让你受益匪浅。本书并未细述安装Linux系统的每个步骤，但只要系统已安装好Linux并能运行起来，你就可以开始考虑如何让一些日常的系统管理任务实现自动化。这时shell脚本编程就能发挥作用了，这也正是本书的作用所在。本书将演示如何使用shell脚本来自动处理系统管理任务，包括从监测系统统计数据和数据文件到为你的老炼成报表。
+<a id="code-block-10"></a>
+
+```text
+ 如果您使用Linux环境下的系统管理员，那么学会编写shell脚本将让你受益匪浅。本书并未细述安装Linux系统的每个步骤，但只要系统已安装好Linux并能运行起来，你就可以开始考虑如何让一些日常的系统管理任务实现自动化。这时shell脚本编程就能发挥作用了，这也正是本书的作用所在。本书将演示如何使用shell脚本来自动处理系统管理任务，包括从监测系统统计数据和数据文件到为你的老炼成报表。
 
 如果您是采用Linux爱好者，同样能从本书中获益。现今，用户很容易在诸多部件堆积而成的图形环境中迷失。大多数桌面Linux发行版都尽量向一般用户隐藏系统的内部细节。但有时你确实需要知道内部发生了什么。本书将告诉你如何启动Linux命令行以及接下来要做什么。通常，如果是执行一些简单任务（比scf文件管理），在命令行下操作要比在华丽的图形界面下方方便得多。在命令行下有大量的命令可供使用，本书将会展示如何使用它们。
 ```
 
+<a id="http-2"></a>
+
+<a id="http-2-h4"></a>
+
 #### HTTP
+
+<a id="c28e36f6f6poi"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-4"></a>
+
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-11"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -404,9 +526,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="c01f0adf96dvy"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
     "choices": [
         {
@@ -431,176 +557,47 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="文件传入方式"></a>
+
+<a id="a57eddd8d92y9"></a>
+
 ### 文件传入方式
 
 -   公网 URL：一个公网可访问的图像地址，支持 HTTP 或 HTTPS 协议。
--   Base64 编码：将图像文件转换为 Base64 编码字符串，详情请参见[Base64 编码上传](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)。
+-   Base64 编码：将图像文件转换为 Base64 编码字符串，详情请参见[Base64 编码上传](../../model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)。
+
+<a id="图像限制"></a>
+
+<a id="ocr_img_limit_section_002"></a>
 
 ### 图像限制
 
 图像的大小、分辨率、格式及数量均无硬性限制，实际处理能力取决于引擎资源。建议合理控制单次请求的数据量，以获得最佳响应速度。
 
+<a id="其它功能"></a>
+
+<a id="h0i8j9k1l2m3n2"></a>
+
 ## 其它功能
 
-**模型**
-
-[多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
-
-[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)
-
-[Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)
-
-[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)
-
-[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
-
-[前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)
-
-[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)
-
-vanchin/deepseek-v4.1-flash
-
-支持
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-支持
-
-vanchin/deepseek-v4-pro-0813
-
-支持
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-支持
-
-vanchin/deepseek-v4-pro
-
-支持
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-支持
-
-vanchin/deepseek-v3.2-think
-
-支持
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-支持
-
-vanchin/deepseek-v3.1-terminus
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-支持
-
-vanchin/deepseek-r1
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-支持
-
-支持
-
-vanchin/deepseek-v3
-
-支持
-
-不支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-支持
-
-vanchin/deepseek-ocr
-
-不支持
-
-不支持
-
-不支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
+| 模型 | [多轮对话](../../model-experience/text-generation-model/multi-round-conversation.md) | [深度思考](../../model-experience/text-generation-model/deep-thinking.md) | [Function Calling](../../model-experience/text-generation-model/tool-calls/qwen-function-calling.md) | [结构化输出](../../model-experience/text-generation-model/qwen-structured-output.md) | [联网搜索](../../model-experience/text-generation-model/tool-calls/web-search.md) | [前缀续写](../../model-experience/text-generation-model/partial-mode.md) | [上下文缓存](../../model-experience/text-generation-model/context-cache.md) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| vanchin/deepseek-v4.1-flash | 支持 | 支持 | 支持 | 支持 | 不支持 | 不支持 | 支持 |
+| vanchin/deepseek-v4-pro-0813 | 支持 | 支持 | 支持 | 支持 | 不支持 | 支持 | 支持 |
+| vanchin/deepseek-v4-pro | 支持 | 支持 | 支持 | 支持 | 不支持 | 支持 | 支持 |
+| vanchin/deepseek-v3.2-think | 支持 | 支持 | 支持 | 支持 | 不支持 | 支持 | 支持 |
+| vanchin/deepseek-v3.1-terminus | 支持 | 支持 | 支持 | 不支持 | 不支持 | 不支持 | 支持 |
+| vanchin/deepseek-r1 | 支持 | 支持 | 支持 | 不支持 | 不支持 | 支持 | 支持 |
+| vanchin/deepseek-v3 | 支持 | 不支持 | 支持 | 支持 | 不支持 | 支持 | 支持 |
+| vanchin/deepseek-ocr | 不支持 | 不支持 | 不支持 | 支持 | 不支持 | 不支持 | 不支持 |
 
 vanchin/deepseek-v4-pro 不支持以下参数：`repetition_penalty`、`preserve_thinking`、`thinking_budget`、`tool_stream`、`enable_code_interpreter`、`seed`、`logprobs`、`top_logprobs`、`enable_search`、`search_options`、`skill`。
 
 支持的参数中，部分参数取值范围与功能与百炼不一致：
 
-**参数**
-
-**百炼**
-
-**DeepSeek-V4-Pro**
-
-`n`
-
-取值范围 1-4
-
-思考模式下仅支持取值为 1
+| 参数 | 百炼 | DeepSeek-V4-Pro |
+| --- | --- | --- |
+| `n` | 取值范围 1-4 | 思考模式下仅支持取值为 1 |
 
 -   除 vanchin/deepseek-ocr 外，其他模型均支持上下文缓存（隐式缓存，自动开启），缓存命中时的输入价格折扣为：
     
@@ -609,97 +606,26 @@ vanchin/deepseek-v4-pro 不支持以下参数：`repetition_penalty`、`preserve
     -   vanchin/deepseek-v3.2-think：按输入价格的 10% 计费
     -   vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3：按输入价格的 40% 计费
 
+<a id="参数默认值"></a>
+
+<a id="a9b7c8d0e1f2g3"></a>
+
 ## 参数默认值
 
-**模型**
+| 模型 | temperature | top\_p | enable\_thinking | detail |
+| --- | --- | --- | --- | --- |
+| vanchin/deepseek-v4.1-flash | 0.6 | 0.95 | true | \- |
+| vanchin/deepseek-v4-pro-0813 | 0.6 | 0.95 | true | \- |
+| vanchin/deepseek-v4-pro | 0.6 | 0.95 | true | \- |
+| vanchin/deepseek-v3.2-think | 0.6 | 0.95 | false | \- |
+| vanchin/deepseek-v3.1-terminus | 0.7 | 0.95 | false | \- |
+| vanchin/deepseek-r1 | 1.0 | 0.8 | \-（仅支持思考模式） | \- |
+| vanchin/deepseek-v3 | 1.0 | 1.0 | \-（不支持思考模式） | \- |
+| vanchin/deepseek-ocr | 1.0 | 1.0 | \-（不支持思考模式） | auto（可取值为：auto、high、low） |
 
-**temperature**
+<a id="模型列表与计费"></a>
 
-**top\_p**
-
-**enable\_thinking**
-
-**detail**
-
-vanchin/deepseek-v4.1-flash
-
-0.6
-
-0.95
-
-true
-
-\-
-
-vanchin/deepseek-v4-pro-0813
-
-0.6
-
-0.95
-
-true
-
-\-
-
-vanchin/deepseek-v4-pro
-
-0.6
-
-0.95
-
-true
-
-\-
-
-vanchin/deepseek-v3.2-think
-
-0.6
-
-0.95
-
-false
-
-\-
-
-vanchin/deepseek-v3.1-terminus
-
-0.7
-
-0.95
-
-false
-
-\-
-
-vanchin/deepseek-r1
-
-1.0
-
-0.8
-
-\-（仅支持思考模式）
-
-\-
-
-vanchin/deepseek-v3
-
-1.0
-
-1.0
-
-\-（不支持思考模式）
-
-\-
-
-vanchin/deepseek-ocr
-
-1.0
-
-1.0
-
-\-（不支持思考模式）
-
-auto（可取值为：auto、high、low）
+<a id="m7n8o9p0q1r2s7"></a>
 
 ## 模型列表与计费
 
@@ -709,6 +635,10 @@ vanchin/deepseek-v4-pro、vanchin/deepseek-v4-pro-0813 模型兼顾高计算效�
 
 按照模型的输入与输出 Token 数量计费。
 
+<a id="错误码"></a>
+
+<a id="u5v3w4x6y7z8a3"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。

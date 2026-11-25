@@ -2,22 +2,32 @@
 
 Qwen-MT模型是基于Qwen3模型优化的机器翻译大语言模型，支持92个语种（包括中、英、日、韩、法、西、德、泰、印尼、越、阿等）互译，且提供了术语干预、领域提示、记忆库等能力，提升模型在复杂应用场景下的翻译效果。
 
+<a id="工作方式"></a>
+
+<a id="d8b1952a69frv"></a>
+
 ## 工作方式
 
 1.  **传入待翻译内容**：`messages` 数组中有且仅有一个 `role` 为 `user` 的消息，其 `content` 为待翻译文本。
     
-2.  **设置语种**：参考[支持的语言](https://help.aliyun.com/zh/model-studio/machine-translation#038d2865bbydc)，在 `translation_options` 中设置源语种 (`source_lang`) 和目标语种 (`target_lang`)。若需自动检测源语种，可将 `source_lang` 设为 `auto`。
+2.  **设置语种**：参考[支持的语言](machine-translation.md#038d2865bbydc)，在 `translation_options` 中设置源语种 (`source_lang`) 和目标语种 (`target_lang`)。若需自动检测源语种，可将 `source_lang` 设为 `auto`。
     
     > 指明源语种有利于提升翻译准确率。
     
-    > Qwen-MT 模型也支持通过 [自定义提示词](https://help.aliyun.com/zh/model-studio/machine-translation#42ac4e67d6bnf) 设置语种。
+    > Qwen-MT 模型也支持通过 [自定义提示词](machine-translation.md#42ac4e67d6bnf) 设置语种。
     
 
 以下以 OpenAI 兼容和 DashScope 的 Python SDK为例，演示 Qwen-MT 的基本调用方式。所有翻译配置均通过 `translation_options` 参数传入。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-openai-兼容-tab"></a>
+
 OpenAI 兼容
 
-```
+<a id="code-code-group-openai-兼容"></a>
+
+```python
 # 导入依赖与创建客户端...
 completion = client.chat.completions.create(
     model="qwen-mt-flash",    # 选择模型
@@ -28,9 +38,13 @@ completion = client.chat.completions.create(
 )
 ```
 
+<a id="fig-code-group-dashscope-tab"></a>
+
 DashScope
 
-```
+<a id="code-code-group-dashscope"></a>
+
+```python
 # 导入依赖与创建客户端...
 response = client.chat.completions.create(
     model="qwen-mt-flash",  # 选择模型
@@ -41,9 +55,15 @@ response = client.chat.completions.create(
 )
 ```
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-openai-兼容-tab"></a>
+
 OpenAI 兼容
 
-```
+<a id="code-code-group-2-openai-兼容"></a>
+
+```python
 import os
 from openai import OpenAI
 client = OpenAI(
@@ -72,9 +92,13 @@ completion = client.chat.completions.create(
 )
 ```
 
+<a id="fig-code-group-2-dashscope-tab"></a>
+
 DashScope
 
-```
+<a id="code-code-group-2-dashscope"></a>
+
+```python
 import os
 import dashscope
 
@@ -107,12 +131,16 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-通过 `translation_options`也可实现[术语干预](https://help.aliyun.com/zh/model-studio/machine-translation#2bf54a5ab5voe)、[翻译记忆](https://help.aliyun.com/zh/model-studio/machine-translation#17e15234e7gfp)、[领域提示](https://help.aliyun.com/zh/model-studio/machine-translation#4af23a31db7lf)等翻译定制功能。
+通过 `translation_options`也可实现[术语干预](machine-translation.md#2bf54a5ab5voe)、[翻译记忆](machine-translation.md#17e15234e7gfp)、[领域提示](machine-translation.md#4af23a31db7lf)等翻译定制功能。
 
 **使用限制：**
 
 -   **仅支持单轮翻译**：模型专为翻译任务设计，不支持多轮对话。
 -   **不支持设置 System Message**：不支持通过 `system` 角色的消息来设定全局行为。翻译配置通过 `translation_options` 中定义。
+
+<a id="模型选型"></a>
+
+<a id="154957e783dxk"></a>
 
 ## 模型选型
 
@@ -122,77 +150,43 @@ print(response.choices[0].message.content)
 
 各模型详细对比如下：
 
-**模型**
+| 模型 | 推荐场景 | 效果 | 速度 | 成本 | 支持的语言 | 支持增量流式输出 |
+| --- | --- | --- | --- | --- | --- | --- |
+| qwen-mt-plus | 专业领域、正式文书、论文、技术报告等对译文质量要求高的场景 | 最好 | 标准 | 较高 | 92种 | 不支持 |
+| qwen-mt-flash | **通用首选**，适用于网站/App内容、商品描述、日常沟通、博客文章等场景 | 较好 | 较快 | 较低 | 92种 | 支持 |
+| qwen-mt-lite | 实时聊天、弹幕翻译等对延迟敏感的简单场景 | 基础 | 最快 | 最低 | 31种 | 支持 |
 
-**推荐场景**
+各模式支持模型的上下文、价格等信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)；并发限流条件请参考[限流](../../../get-started-with-models/rate-limit.md#19090eae8arxa)；翻译模型计费详情请参见[模型调用价格](../../../test-1/model-pricing.md#d4d9ec4242oj7)。
 
-**效果**
+<a id="快速开始"></a>
 
-**速度**
-
-**成本**
-
-**支持的语言**
-
-**支持增量流式输出**
-
-qwen-mt-plus
-
-专业领域、正式文书、论文、技术报告等对译文质量要求高的场景
-
-最好
-
-标准
-
-较高
-
-92种
-
-不支持
-
-qwen-mt-flash
-
-**通用首选**，适用于网站/App内容、商品描述、日常沟通、博客文章等场景
-
-较好
-
-较快
-
-较低
-
-92种
-
-支持
-
-qwen-mt-lite
-
-实时聊天、弹幕翻译等对延迟敏感的简单场景
-
-基础
-
-最快
-
-最低
-
-31种
-
-支持
-
-各模式支持模型的上下文、价格等信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)；并发限流条件请参考[限流](https://help.aliyun.com/zh/model-studio/rate-limit#19090eae8arxa)；翻译模型计费详情请参见[模型调用价格](https://help.aliyun.com/zh/model-studio/model-pricing#d4d9ec4242oj7)。
+<a id="7061ab486cead"></a>
 
 ## 快速开始
 
 以下示例将 `“我看到这个视频后没有笑”` 翻译为英文。
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+您需要已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](../../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="sec-tabs"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
 
 **请求示例**
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -224,9 +218,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-3-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-3-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -245,19 +243,34 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 **响应示例**
-```
+
+<a id="code-block"></a>
+
+```text
 I didn't laugh after watching this video.
 ```
+
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
 
 #### DashScope
 
 **请求示例**
 
-**重要**DashScope Java SDK版本需要不低于 2.20.6。
+> **重要**
+>
+> DashScope Java SDK版本需要不低于 2.20.6。
+
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -287,9 +300,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-4-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-4-java"></a>
+
+```java
 // DashScope SDK 版本需要不低于 2.20.6
 import java.lang.System;
 import java.util.Collections;
@@ -341,9 +358,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-4-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-4-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -371,21 +392,40 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 ```
 
 **响应示例**
-```
+
+<a id="code-block-2"></a>
+
+```text
 I didn't laugh after watching this video.
 ```
 
+<a id="流式输出"></a>
+
+<a id="234525f4f7y0k"></a>
+
 ## 流式输出
 
-流式输出可实时返回翻译内容，减少用户等待时间。`qwen-mt-flash` 和 `qwen-mt-lite` 支持增量流式输出，通过 `incremental_output` 参数开启，每次仅返回新生成的内容。`qwen-mt-plus` 仅支持非增量流式输出，每次返回当前已生成的完整序列。详情请参见[流式输出](raw/model-user-guide/model-experience/text-generation-model/stream.md)。
+流式输出可实时返回翻译内容，减少用户等待时间。`qwen-mt-flash` 和 `qwen-mt-lite` 支持增量流式输出，通过 `incremental_output` 参数开启，每次仅返回新生成的内容。`qwen-mt-plus` 仅支持非增量流式输出，每次返回当前已生成的完整序列。详情请参见[流式输出](../stream.md)。
+
+<a id="sec-tabs-2"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
 
 #### OpenAI兼容
 
 **请求示例**
 
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-5-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -415,9 +455,13 @@ for chunk in completion:
         print(chunk.usage)
 ```
 
+<a id="fig-code-group-5-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-5-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -437,19 +481,32 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 **响应示例**
-```
+
+<a id="code-block-3"></a>
+
+```text
 I didn’t laugh after watching this video.
 ====================usage 消耗====================
 CompletionUsage(completion_tokens=9, prompt_tokens=56, total_tokens=65, completion_tokens_details=None, prompt_tokens_details=None)
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
 
 **请求示例**
 
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-6-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -482,9 +539,13 @@ for chunk in response:
     print(chunk.choices[0].delta.content, end="", flush=True)
 ```
 
+<a id="fig-code-group-6-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-6-java"></a>
+
+```java
 // DashScope SDK 版本需要不低于 2.20.6
 import java.lang.System;
 import com.alibaba.dashscope.aigc.generation.Generation;
@@ -545,9 +606,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-6-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-6-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -577,11 +642,18 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 ```
 
 **响应示例**
-```
+
+<a id="code-block-4"></a>
+
+```text
 I didn't laugh after watching this video.
 ```
 
 > qwen-mt-plus模型不支持增量式流式输出。
+
+<a id="提升翻译效果"></a>
+
+<a id="b08082142cbju"></a>
 
 ## 提升翻译效果
 
@@ -591,6 +663,10 @@ I didn't laugh after watching this video.
 -   **风格不匹配**：译文风格不符合法律、营销等特定领域的规范。
 
 以下三种方式可针对性地解决这些问题：
+
+<a id="术语干预"></a>
+
+<a id="2bf54a5ab5voe"></a>
 
 ### 术语干预
 
@@ -603,7 +679,9 @@ I didn't laugh after watching this video.
     创建JSON数组，赋值给 `terms` 字段。每个对象代表一条术语：
     
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "source": "术语",
     "target": "提前翻译好的术语"
@@ -615,13 +693,25 @@ I didn't laugh after watching this video.
     通过 `translation_options` 参数传入 `terms` 数组。
     
 
+<a id="sec-tabs-3"></a>
+
+<a id="openai兼容-3"></a>
+
+<a id="openai兼容-3-h4"></a>
+
 #### OpenAI兼容
 
 **请求示例**
 
+<a id="fig-code-group-7"></a>
+
+<a id="fig-code-group-7-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-7-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -685,9 +775,13 @@ completion_with_terms = client.chat.completions.create(
 print(completion_with_terms.choices[0].message.content)
 ```
 
+<a id="fig-code-group-7-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-7-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -724,7 +818,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 加入术语后，翻译结果与传入的术语一致：“**生物传感器**”（biological sensor）和“**身体健康状况**”（the health status of the body）。
 
-```
+<a id="code-block-6"></a>
+
+```text
 --- [不使用 terms] 的翻译结果 ---
 This set of biosensors uses graphene, a new material, whose target substance is chemical elements. Its sensitive "sense of smell" allows it to more deeply and accurately reflect one's health condition.
 
@@ -734,13 +830,23 @@ This set of biosensors uses graphene, a new material, whose target substance is 
 This biological sensor uses a new material called graphene. Its target is chemical elements, and its sensitive "sense of smell" enables it to reflect the health status of the body more deeply and accurately.
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
 
 **请求示例**
 
+<a id="fig-code-group-8"></a>
+
+<a id="fig-code-group-8-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-8-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -780,9 +886,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-8-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-8-java"></a>
+
+```java
 // DashScope SDK 版本需要不低于 2.20.6
 import java.lang.System;
 import java.util.Collections;
@@ -843,9 +953,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-8-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-8-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -883,9 +997,16 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 ```
 
 **响应示例**
-```
+
+<a id="code-block-7"></a>
+
+```text
 This biological sensor uses graphene, a new material, and its target is chemical elements. Its sensitive "nose" can more deeply and accurately reflect the health status of the human body.
 ```
+
+<a id="翻译记忆"></a>
+
+<a id="17e15234e7gfp"></a>
 
 ### 翻译记忆
 
@@ -896,7 +1017,9 @@ This biological sensor uses graphene, a new material, and its target is chemical
     创建JSON数组赋值给 `tm_list`，每个对象包含源语句与对应译文：
     
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "source": "源语句",
     "target": "已翻译的语句"
@@ -910,13 +1033,25 @@ This biological sensor uses graphene, a new material, and its target is chemical
 
 可参考以下代码实现翻译记忆功能。
 
+<a id="sec-tabs-4"></a>
+
+<a id="openai兼容-4"></a>
+
+<a id="openai兼容-4-h4"></a>
+
 #### OpenAI兼容
 
 **请求示例**
 
+<a id="fig-code-group-9"></a>
+
+<a id="fig-code-group-9-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-9-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -962,9 +1097,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-9-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-9-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -993,17 +1132,30 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 **响应示例**
-```
+
+<a id="code-block-9"></a>
+
+```text
 You can run the following command to view the version of Thrift that is installed:
 ```
+
+<a id="dashscope-4"></a>
+
+<a id="dashscope-4-h4"></a>
 
 #### DashScope
 
 **请求示例**
 
+<a id="fig-code-group-10"></a>
+
+<a id="fig-code-group-10-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-10-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1046,9 +1198,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-10-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-10-java"></a>
+
+```java
 // DashScope SDK 版本需要不低于 2.20.6
 import java.lang.System;
 import java.util.Collections;
@@ -1113,9 +1269,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-10-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-10-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -1148,23 +1308,44 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 ```
 
 **响应示例**
-```
+
+<a id="code-block-10"></a>
+
+```text
 You can use the following commands to check the version information of thrift installed;
 ```
+
+<a id="领域提示"></a>
+
+<a id="4af23a31db7lf"></a>
 
 ### 领域提示
 
 若需要译文风格符合特定领域（如法律文书要求严肃正式，社交内容要求口语化），可通过 `translation_options` 参数传入领域提示语句。
 
-**重要**领域提示语句当前只支持英文。
+> **重要**
+>
+> 领域提示语句当前只支持英文。
+
+<a id="sec-tabs-5"></a>
+
+<a id="openai兼容-5"></a>
+
+<a id="openai兼容-5-h4"></a>
 
 #### OpenAI兼容
 
 **请求示例**
 
+<a id="fig-code-group-11"></a>
+
+<a id="fig-code-group-11-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-11-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1218,9 +1399,13 @@ completion_with_domains = client.chat.completions.create(
 print(completion_with_domains.choices[0].message.content)
 ```
 
+<a id="fig-code-group-11-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-11-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -1245,7 +1430,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 **响应示例**
-```
+
+<a id="code-block-11"></a>
+
+```text
 --- [不使用 domains] 的翻译结果 ---
 The second SELECT statement returns a number indicating how many rows the first SELECT statement would return without the LIMIT clause.
 
@@ -1255,13 +1443,23 @@ The second SELECT statement returns a number indicating how many rows the first 
 The second SELECT statement returns a number that indicates how many rows the first SELECT statement would have returned if it had not included a LIMIT clause.
 ```
 
+<a id="dashscope-5"></a>
+
+<a id="dashscope-5-h4"></a>
+
 #### DashScope
 
 **请求示例**
 
+<a id="fig-code-group-12"></a>
+
+<a id="fig-code-group-12-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-12-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1293,9 +1491,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-12-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-12-java"></a>
+
+```java
 // DashScope SDK 版本需要不低于 2.20.6
 import java.lang.System;
 import java.util.Collections;
@@ -1346,9 +1548,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-12-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-12-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -1377,9 +1583,16 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 ```
 
 **响应示例**
-```
+
+<a id="code-block-12"></a>
+
+```text
 The second SELECT statement returns a number that indicates how many rows were returned by the first SELECT statement without a LIMIT clause.
 ```
+
+<a id="自定义提示词"></a>
+
+<a id="42ac4e67d6bnf"></a>
 
 ## 自定义提示词
 
@@ -1389,11 +1602,23 @@ Qwen-MT 支持通过自定义提示词（如指定语种、风格）引导翻译
 
 以下以法律领域的汉译英为例：
 
+<a id="sec-tabs-6"></a>
+
+<a id="openai兼容-6"></a>
+
+<a id="openai兼容-6-h4"></a>
+
 #### OpenAI兼容
+
+<a id="fig-code-group-13"></a>
+
+<a id="fig-code-group-13-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-13-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1438,9 +1663,13 @@ translation_result = completion.choices[0].message.content
 print(translation_result)
 ```
 
+<a id="fig-code-group-13-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-13-javascript"></a>
+
+```javascript
 import OpenAI from 'openai';
 
 const client = new OpenAI({
@@ -1488,17 +1717,30 @@ main();
 ```
 
 **响应示例**
-```
+
+<a id="code-block-13"></a>
+
+```text
 This Contract shall become effective from the date on which both parties sign and affix their seals, and its term of validity shall be one year.
 ```
+
+<a id="dashscope-6"></a>
+
+<a id="dashscope-6-h4"></a>
 
 #### DashScope
 
 **请求示例**
 
+<a id="fig-code-group-14"></a>
+
+<a id="fig-code-group-14-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-14-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1548,9 +1790,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-14-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-14-java"></a>
+
+```java
 // DashScope SDK 版本需要不低于 2.20.6
 import java.lang.System;
 import java.util.Collections;
@@ -1612,9 +1858,16 @@ public class Main {
 ```
 
 **响应示例**
-```
+
+<a id="code-block-14"></a>
+
+```text
 This Contract shall become effective from the date on which both parties sign and affix their seals, and its term of validity shall be one year.
 ```
+
+<a id="应用于生产环境"></a>
+
+<a id="75259aaa2eoen"></a>
 
 ## 应用于生产环境
 
@@ -1629,7 +1882,15 @@ This Contract shall become effective from the date on which both parties sign an
     -   不确定源语种时（如多语言混杂的社交聊天场景），将 `source_lang` 设为 `auto`，模型自动识别语种。
     -   语种固定、准确度要求高的场景（如技术文档、操作手册），始终明确指定 `source_lang`，可有效提升翻译准确率。
 
+<a id="常见问题"></a>
+
+<a id="7edb402f48pq8"></a>
+
 ## 常见问题
+
+<a id="q-如何接入沉浸式翻译"></a>
+
+<a id="f0c383f06eych"></a>
 
 ### Q：如何接入沉浸式翻译？
 
@@ -1645,6 +1906,10 @@ A：在最新版插件中添加**自定义翻译服务**，选择 **Qwen MT**。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4898705571/p996982.png)
 
+<a id="q-如何接入其它三方工具"></a>
+
+<a id="50887cd54cd3i"></a>
+
 ### Q：如何接入其它三方工具？
 
 A：[Dify](https://cloud.dify.ai/apps)的最新版通义千问插件已支持 Qwen-MT 模型。
@@ -1653,766 +1918,163 @@ A：[Dify](https://cloud.dify.ai/apps)的最新版通义千问插件已支持 Qw
 
 > 其它三方工具是否支持以实际情况为准。
 
+<a id="支持的语言"></a>
+
+<a id="038d2865bbydc"></a>
+
 ## 支持的语言
 
 发起请求时，用下表中的**英文名**或**代码**指定语种。
 
 > 当不确定源语种时，可为 `source_lang` 参数赋值 `auto` 以自动检测。
 
+<a id="sec-tabs-7"></a>
+
+<a id="qwen-mt-plus-flash-支持的语言-92种"></a>
+
+<a id="qwen-mt-plus-flash-支持的语言-92种-h4"></a>
+
 #### qwen-mt-plus/flash 支持的语言 (92种)
 
-**语言**
-
-**英文名**
-
-**代码**
-
-英语
-
-English
-
-en
-
-简体中文
-
-Chinese
-
-zh
-
-繁体中文
-
-Traditional Chinese
-
-zh\_tw
-
-俄语
-
-Russian
-
-ru
-
-日语
-
-Japanese
-
-ja
-
-韩语
-
-Korean
-
-ko
-
-西班牙语
-
-Spanish
-
-es
-
-法语
-
-French
-
-fr
-
-葡萄牙语
-
-Portuguese
-
-pt
-
-德语
-
-German
-
-de
-
-意大利语
-
-Italian
-
-it
-
-泰语
-
-Thai
-
-th
-
-越南语
-
-Vietnamese
-
-vi
-
-印度尼西亚语
-
-Indonesian
-
-id
-
-马来语
-
-Malay
-
-ms
-
-阿拉伯语
-
-Arabic
-
-ar
-
-印地语
-
-Hindi
-
-hi
-
-希伯来语
-
-Hebrew
-
-he
-
-缅甸语
-
-Burmese
-
-my
-
-泰米尔语
-
-Tamil
-
-ta
-
-乌尔都语
-
-Urdu
-
-ur
-
-孟加拉语
-
-Bengali
-
-bn
-
-波兰语
-
-Polish
-
-pl
-
-荷兰语
-
-Dutch
-
-nl
-
-罗马尼亚语
-
-Romanian
-
-ro
-
-土耳其语
-
-Turkish
-
-tr
-
-高棉语
-
-Khmer
-
-km
-
-老挝语
-
-Lao
-
-lo
-
-粤语
-
-Cantonese
-
-yue
-
-捷克语
-
-Czech
-
-cs
-
-希腊语
-
-Greek
-
-el
-
-瑞典语
-
-Swedish
-
-sv
-
-匈牙利语
-
-Hungarian
-
-hu
-
-丹麦语
-
-Danish
-
-da
-
-芬兰语
-
-Finnish
-
-fi
-
-乌克兰语
-
-Ukrainian
-
-uk
-
-保加利亚语
-
-Bulgarian
-
-bg
-
-塞尔维亚语
-
-Serbian
-
-sr
-
-泰卢固语
-
-Telugu
-
-te
-
-南非荷兰语
-
-Afrikaans
-
-af
-
-亚美尼亚语
-
-Armenian
-
-hy
-
-阿萨姆语
-
-Assamese
-
-as
-
-阿斯图里亚斯语
-
-Asturian
-
-ast
-
-巴斯克语
-
-Basque
-
-eu
-
-白俄罗斯语
-
-Belarusian
-
-be
-
-波斯尼亚语
-
-Bosnian
-
-bs
-
-加泰罗尼亚语
-
-Catalan
-
-ca
-
-宿务语
-
-Cebuano
-
-ceb
-
-克罗地亚语
-
-Croatian
-
-hr
-
-埃及阿拉伯语
-
-Egyptian Arabic
-
-arz
-
-爱沙尼亚语
-
-Estonian
-
-et
-
-加利西亚语
-
-Galician
-
-gl
-
-格鲁吉亚语
-
-Georgian
-
-ka
-
-古吉拉特语
-
-Gujarati
-
-gu
-
-冰岛语
-
-Icelandic
-
-is
-
-爪哇语
-
-Javanese
-
-jv
-
-卡纳达语
-
-Kannada
-
-kn
-
-哈萨克语
-
-Kazakh
-
-kk
-
-拉脱维亚语
-
-Latvian
-
-lv
-
-立陶宛语
-
-Lithuanian
-
-lt
-
-卢森堡语
-
-Luxembourgish
-
-lb
-
-马其顿语
-
-Macedonian
-
-mk
-
-马加希语
-
-Maithili
-
-mai
-
-马耳他语
-
-Maltese
-
-mt
-
-马拉地语
-
-Marathi
-
-mr
-
-美索不达米亚阿拉伯语
-
-Mesopotamian Arabic
-
-acm
-
-摩洛哥阿拉伯语
-
-Moroccan Arabic
-
-ary
-
-内志阿拉伯语
-
-Najdi Arabic
-
-ars
-
-尼泊尔语
-
-Nepali
-
-ne
-
-北阿塞拜疆语
-
-North Azerbaijani
-
-az
-
-北黎凡特阿拉伯语
-
-North Levantine Arabic
-
-apc
-
-北乌兹别克语
-
-Northern Uzbek
-
-uz
-
-书面语挪威语
-
-Norwegian Bokmål
-
-nb
-
-新挪威语
-
-Norwegian Nynorsk
-
-nn
-
-奥克语
-
-Occitan
-
-oc
-
-奥里亚语
-
-Odia
-
-or
-
-邦阿西楠语
-
-Pangasinan
-
-pag
-
-西西里语
-
-Sicilian
-
-scn
-
-信德语
-
-Sindhi
-
-sd
-
-僧伽罗语
-
-Sinhala
-
-si
-
-斯洛伐克语
-
-Slovak
-
-sk
-
-斯洛文尼亚语
-
-Slovenian
-
-sl
-
-南黎凡特阿拉伯语
-
-South Levantine Arabic
-
-ajp
-
-斯瓦希里语
-
-Swahili
-
-sw
-
-他加禄语
-
-Tagalog
-
-tl
-
-塔伊兹-亚丁阿拉伯语
-
-Ta’izzi-Adeni Arabic
-
-acq
-
-托斯克阿尔巴尼亚语
-
-Tosk Albanian
-
-sq
-
-突尼斯阿拉伯语
-
-Tunisian Arabic
-
-aeb
-
-威尼斯语
-
-Venetian
-
-vec
-
-瓦莱语
-
-Waray
-
-war
-
-威尔士语
-
-Welsh
-
-cy
-
-西波斯语
-
-Western Persian
-
-fa
+| 语言 | 英文名 | 代码 |
+| --- | --- | --- |
+| 英语 | English | en |
+| 简体中文 | Chinese | zh |
+| 繁体中文 | Traditional Chinese | zh\_tw |
+| 俄语 | Russian | ru |
+| 日语 | Japanese | ja |
+| 韩语 | Korean | ko |
+| 西班牙语 | Spanish | es |
+| 法语 | French | fr |
+| 葡萄牙语 | Portuguese | pt |
+| 德语 | German | de |
+| 意大利语 | Italian | it |
+| 泰语 | Thai | th |
+| 越南语 | Vietnamese | vi |
+| 印度尼西亚语 | Indonesian | id |
+| 马来语 | Malay | ms |
+| 阿拉伯语 | Arabic | ar |
+| 印地语 | Hindi | hi |
+| 希伯来语 | Hebrew | he |
+| 缅甸语 | Burmese | my |
+| 泰米尔语 | Tamil | ta |
+| 乌尔都语 | Urdu | ur |
+| 孟加拉语 | Bengali | bn |
+| 波兰语 | Polish | pl |
+| 荷兰语 | Dutch | nl |
+| 罗马尼亚语 | Romanian | ro |
+| 土耳其语 | Turkish | tr |
+| 高棉语 | Khmer | km |
+| 老挝语 | Lao | lo |
+| 粤语 | Cantonese | yue |
+| 捷克语 | Czech | cs |
+| 希腊语 | Greek | el |
+| 瑞典语 | Swedish | sv |
+| 匈牙利语 | Hungarian | hu |
+| 丹麦语 | Danish | da |
+| 芬兰语 | Finnish | fi |
+| 乌克兰语 | Ukrainian | uk |
+| 保加利亚语 | Bulgarian | bg |
+| 塞尔维亚语 | Serbian | sr |
+| 泰卢固语 | Telugu | te |
+| 南非荷兰语 | Afrikaans | af |
+| 亚美尼亚语 | Armenian | hy |
+| 阿萨姆语 | Assamese | as |
+| 阿斯图里亚斯语 | Asturian | ast |
+| 巴斯克语 | Basque | eu |
+| 白俄罗斯语 | Belarusian | be |
+| 波斯尼亚语 | Bosnian | bs |
+| 加泰罗尼亚语 | Catalan | ca |
+| 宿务语 | Cebuano | ceb |
+| 克罗地亚语 | Croatian | hr |
+| 埃及阿拉伯语 | Egyptian Arabic | arz |
+| 爱沙尼亚语 | Estonian | et |
+| 加利西亚语 | Galician | gl |
+| 格鲁吉亚语 | Georgian | ka |
+| 古吉拉特语 | Gujarati | gu |
+| 冰岛语 | Icelandic | is |
+| 爪哇语 | Javanese | jv |
+| 卡纳达语 | Kannada | kn |
+| 哈萨克语 | Kazakh | kk |
+| 拉脱维亚语 | Latvian | lv |
+| 立陶宛语 | Lithuanian | lt |
+| 卢森堡语 | Luxembourgish | lb |
+| 马其顿语 | Macedonian | mk |
+| 马加希语 | Maithili | mai |
+| 马耳他语 | Maltese | mt |
+| 马拉地语 | Marathi | mr |
+| 美索不达米亚阿拉伯语 | Mesopotamian Arabic | acm |
+| 摩洛哥阿拉伯语 | Moroccan Arabic | ary |
+| 内志阿拉伯语 | Najdi Arabic | ars |
+| 尼泊尔语 | Nepali | ne |
+| 北阿塞拜疆语 | North Azerbaijani | az |
+| 北黎凡特阿拉伯语 | North Levantine Arabic | apc |
+| 北乌兹别克语 | Northern Uzbek | uz |
+| 书面语挪威语 | Norwegian Bokmål | nb |
+| 新挪威语 | Norwegian Nynorsk | nn |
+| 奥克语 | Occitan | oc |
+| 奥里亚语 | Odia | or |
+| 邦阿西楠语 | Pangasinan | pag |
+| 西西里语 | Sicilian | scn |
+| 信德语 | Sindhi | sd |
+| 僧伽罗语 | Sinhala | si |
+| 斯洛伐克语 | Slovak | sk |
+| 斯洛文尼亚语 | Slovenian | sl |
+| 南黎凡特阿拉伯语 | South Levantine Arabic | ajp |
+| 斯瓦希里语 | Swahili | sw |
+| 他加禄语 | Tagalog | tl |
+| 塔伊兹-亚丁阿拉伯语 | Ta’izzi-Adeni Arabic | acq |
+| 托斯克阿尔巴尼亚语 | Tosk Albanian | sq |
+| 突尼斯阿拉伯语 | Tunisian Arabic | aeb |
+| 威尼斯语 | Venetian | vec |
+| 瓦莱语 | Waray | war |
+| 威尔士语 | Welsh | cy |
+| 西波斯语 | Western Persian | fa |
+
+<a id="qwen-mt-lite-支持的语言-31种"></a>
+
+<a id="qwen-mt-lite-支持的语言-31种-h4"></a>
 
 #### qwen-mt-lite 支持的语言 (31种)
 
-**语言**
-
-**英文名**
-
-**代码**
-
-英语
-
-English
-
-en
-
-简体中文
-
-Chinese
-
-zh
-
-繁体中文
-
-Traditional Chinese
-
-zh\_tw
-
-俄语
-
-Russian
-
-ru
-
-日语
-
-Japanese
-
-ja
-
-韩语
-
-Korean
-
-ko
-
-西班牙语
-
-Spanish
-
-es
-
-法语
-
-French
-
-fr
-
-葡萄牙语
-
-Portuguese
-
-pt
-
-德语
-
-German
-
-de
-
-意大利语
-
-Italian
-
-it
-
-泰语
-
-Thai
-
-th
-
-越南语
-
-Vietnamese
-
-vi
-
-印度尼西亚语
-
-Indonesian
-
-id
-
-马来语
-
-Malay
-
-ms
-
-阿拉伯语
-
-Arabic
-
-ar
-
-印地语
-
-Hindi
-
-hi
-
-希伯来语
-
-Hebrew
-
-he
-
-乌尔都语
-
-Urdu
-
-ur
-
-孟加拉语
-
-Bengali
-
-bn
-
-波兰语
-
-Polish
-
-pl
-
-荷兰语
-
-Dutch
-
-nl
-
-土耳其语
-
-Turkish
-
-tr
-
-高棉语
-
-Khmer
-
-km
-
-捷克语
-
-Czech
-
-cs
-
-瑞典语
-
-Swedish
-
-sv
-
-匈牙利语
-
-Hungarian
-
-hu
-
-丹麦语
-
-Danish
-
-da
-
-芬兰语
-
-Finnish
-
-fi
-
-他加禄语
-
-Tagalog
-
-tl
-
-波斯语
-
-Persian
-
-fa
+| 语言 | 英文名 | 代码 |
+| --- | --- | --- |
+| 英语 | English | en |
+| 简体中文 | Chinese | zh |
+| 繁体中文 | Traditional Chinese | zh\_tw |
+| 俄语 | Russian | ru |
+| 日语 | Japanese | ja |
+| 韩语 | Korean | ko |
+| 西班牙语 | Spanish | es |
+| 法语 | French | fr |
+| 葡萄牙语 | Portuguese | pt |
+| 德语 | German | de |
+| 意大利语 | Italian | it |
+| 泰语 | Thai | th |
+| 越南语 | Vietnamese | vi |
+| 印度尼西亚语 | Indonesian | id |
+| 马来语 | Malay | ms |
+| 阿拉伯语 | Arabic | ar |
+| 印地语 | Hindi | hi |
+| 希伯来语 | Hebrew | he |
+| 乌尔都语 | Urdu | ur |
+| 孟加拉语 | Bengali | bn |
+| 波兰语 | Polish | pl |
+| 荷兰语 | Dutch | nl |
+| 土耳其语 | Turkish | tr |
+| 高棉语 | Khmer | km |
+| 捷克语 | Czech | cs |
+| 瑞典语 | Swedish | sv |
+| 匈牙利语 | Hungarian | hu |
+| 丹麦语 | Danish | da |
+| 芬兰语 | Finnish | fi |
+| 他加禄语 | Tagalog | tl |
+| 波斯语 | Persian | fa |
+
+<a id="api参考"></a>
+
+<a id="86ef54a951big"></a>
 
 ## API参考
 
-Qwen-MT 模型的输入与输出参数请参考[Qwen-MT 翻译模型](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)。
+Qwen-MT 模型的输入与输出参数请参考[Qwen-MT 翻译模型](../../../../model-api-reference/more-models/qwen-mt-api.md)。

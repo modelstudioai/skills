@@ -2,9 +2,17 @@
 
 创建新的数据集，用于管理数据导入来源。
 
+<a id="前提"></a>
+
+<a id="h-ragapi-add-connector-prereq"></a>
+
 ## 前提
 
-已获取阿里云百炼 API Key（[控制台 API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)）并完成鉴权配置，详见 [Knowledge（原RAG） API 概览](raw/application-api-reference/rag-api/rag-api-overview.md)与[鉴权](raw/application-api-reference/rag-api/rag-api-authentication.md)。数据导入接口与其他 Knowledge API（原RAG API） 使用相同的 Base URL 与鉴权方式，路径前缀为 `/api/v1/connector/dash/`。
+已获取阿里云百炼 API Key（[控制台 API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)）并完成鉴权配置，详见 [Knowledge（原RAG） API 概览](../rag-api-overview.md)与[鉴权](../rag-api-authentication.md)。数据导入接口与其他 Knowledge API（原RAG API） 使用相同的 Base URL 与鉴权方式，路径前缀为 `/api/v1/connector/dash/`。
+
+<a id="接口"></a>
+
+<a id="h-ragapi-add-connector-endpoint"></a>
 
 ## 接口
 
@@ -12,53 +20,32 @@
 
 创建新的数据集，用于管理数据导入来源。
 
-**说明**当前 `connectorType` 仅支持 `FILE` 类型。`storeType` 为 `CUSTOM` 时需要额外传入 `regionId` 和 `bucketName`。
+> **说明**
+>
+> 当前 `connectorType` 仅支持 `FILE` 类型。`storeType` 为 `CUSTOM` 时需要额外传入 `regionId` 和 `bucketName`。
+
+<a id="请求体"></a>
+
+<a id="h-ragapi-add-connector-req"></a>
 
 ## 请求体
 
-字段
+| 字段 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `connectorType` | 是 | string | 数据集类型，当前仅支持 `FILE`。 |
+| `connectorName` | 是 | string | 数据集名称，长度 1~20 个字符。 |
+| `description` | 是 | string | 数据集描述信息，长度 1~200 个字符。 |
+| `fileConnectorConfig` | 是 | object | 文件数据集配置。子字段 `storeType`（string，必填，存储类型：`PLATFORM`（平台托管）或 `CUSTOM`（自定义 OSS））、`regionId`（string，OSS 地域 ID，当 storeType 为 `CUSTOM` 时需要）、`bucketName`（string，OSS Bucket 名称，当 storeType 为 `CUSTOM` 时需要）。 |
 
-必填
+<a id="请求示例"></a>
 
-类型
-
-说明
-
-`connectorType`
-
-是
-
-string
-
-数据集类型，当前仅支持 `FILE`。
-
-`connectorName`
-
-是
-
-string
-
-数据集名称，长度 1~20 个字符。
-
-`description`
-
-是
-
-string
-
-数据集描述信息，长度 1~200 个字符。
-
-`fileConnectorConfig`
-
-是
-
-object
-
-文件数据集配置。子字段 `storeType`（string，必填，存储类型：`PLATFORM`（平台托管）或 `CUSTOM`（自定义 OSS））、`regionId`（string，OSS 地域 ID，当 storeType 为 `CUSTOM` 时需要）、`bucketName`（string，OSS Bucket 名称，当 storeType 为 `CUSTOM` 时需要）。
+<a id="h-ragapi-add-connector-eg"></a>
 
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST "$BASE_URL/api/v1/connector/dash/addConnector" \
   -H "Authorization: Bearer $BAILIAN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -74,11 +61,17 @@ curl -X POST "$BASE_URL/api/v1/connector/dash/addConnector" \
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`（`{workspace_id}` 为业务空间 ID），`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
+<a id="响应示例"></a>
+
+<a id="h-ragapi-add-connector-resp"></a>
+
 ## 响应示例
 
 成功返回 200。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "code": "Success",
   "status_code": 200,
@@ -89,62 +82,29 @@ curl -X POST "$BASE_URL/api/v1/connector/dash/addConnector" \
 }
 ```
 
+<a id="响应字段"></a>
+
+<a id="h-ragapi-add-connector-dto"></a>
+
 ### 响应字段
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `code` | string | 响应码，成功时为 `Success`。 |
+| `message` | string | 错误或提示信息，成功时为空字符串。 |
+| `requestId` | string | 请求唯一标识，排查问题时请提供此 ID。 |
+| `data` | object | 创建结果。子字段 `connectorId`（string，新创建的数据集 ID）。 |
+| `status` | integer | 业务状态码。成功为 `200`，参数错误等失败场景为 `400`。注意失败时 HTTP 状态码仍为 200，需根据本字段与 `code` 判断结果。 |
 
-类型
+<a id="错误码"></a>
 
-说明
-
-`code`
-
-string
-
-响应码，成功时为 `Success`。
-
-`message`
-
-string
-
-错误或提示信息，成功时为空字符串。
-
-`requestId`
-
-string
-
-请求唯一标识，排查问题时请提供此 ID。
-
-`data`
-
-object
-
-创建结果。子字段 `connectorId`（string，新创建的数据集 ID）。
-
-`status`
-
-integer
-
-业务状态码。成功为 `200`，参数错误等失败场景为 `400`。注意失败时 HTTP 状态码仍为 200，需根据本字段与 `code` 判断结果。
+<a id="h-ragapi-add-connector-err"></a>
 
 ## 错误码
 
-HTTP 状态码
-
-错误码 `code`
-
-说明
-
-400
-
-`InvalidParameter`
-
-请求参数无效。`message` 示例：`Required parameter missing or invalid.`
-
-401
-
-`InvalidApiKey`
-
-鉴权失败，API Key 无效或缺失。`message` 示例：`Invalid API-key provided.`
+| HTTP 状态码 | 错误码 `code` | 说明 |
+| --- | --- | --- |
+| 400 | `InvalidParameter` | 请求参数无效。`message` 示例：`Required parameter missing or invalid.` |
+| 401 | `InvalidApiKey` | 鉴权失败，API Key 无效或缺失。`message` 示例：`Invalid API-key provided.` |
 
 业务失败时 HTTP 状态码仍为 200，需根据响应体中的 `status` 与 `code` 判断结果。

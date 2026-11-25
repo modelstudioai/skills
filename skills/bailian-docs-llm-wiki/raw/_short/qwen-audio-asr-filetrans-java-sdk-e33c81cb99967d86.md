@@ -2,23 +2,39 @@
 
 本文介绍Qwen-Audio-ASR-Filetrans非实时语音识别Java SDK的参数和接口细节。
 
-关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
+关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02)。
+
+<a id="前提条件"></a>
+
+<a id="8c73014707u4b"></a>
 
 ## 前提条件
 
--   已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请配置API Key到环境变量，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+-   已开通服务并[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。请配置API Key到环境变量，而非硬编码在代码中，防范因代码泄露导致的安全风险。
     
--   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+-   [安装最新版DashScope SDK](../model-api-reference/preparations/install-sdk.md)。
     
+
+<a id="快速开始"></a>
+
+<a id="e4705e474eiyi"></a>
 
 ## 快速开始
 
-[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-filetrans-java-sdk#adcb5e9bddbyq)提供了异步提交任务、同步等待任务结束和异步查询任务执行结果的接口。可通过如下两种调用方式进行非实时语音识别：
+[核心类（Transcription）](qwen-audio-asr-filetrans-java-sdk-e33c81cb99967d86.md#adcb5e9bddbyq)提供了异步提交任务、同步等待任务结束和异步查询任务执行结果的接口。可通过如下两种调用方式进行非实时语音识别：
 
 -   异步提交任务+同步等待任务结束：提交任务后，阻塞当前线程直到任务结束并获取识别结果。
 -   异步提交任务+异步查询任务执行结果：提交任务后，在需要的时候通过调用查询任务接口获取任务的执行结果。
 
+<a id="sec-tabs"></a>
+
+<a id="异步提交任务-同步等待任务结束"></a>
+
+<a id="异步提交任务-同步等待任务结束-h4"></a>
+
 #### 异步提交任务+同步等待任务结束
+
+<a id="3f0e8beb6ccng"></a>
 
 ![提交任务并同步等待](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f93bd.png)
 
@@ -28,10 +44,10 @@
     
 3.  调用核心类（Transcription）的`asyncCall`方法异步提交任务。
     
-    **说明**
-    
-    -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
-    -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
+    > **说明**
+    >
+    > -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
+    > -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
     
 4.  调用核心类（Transcription）的`wait`方法同步等待任务结束。
     
@@ -40,7 +56,9 @@
     `wait`返回任务执行结果（TranscriptionResult）。
     
 
-```
+<a id="code-block"></a>
+
+```java
 import com.alibaba.dashscope.audio.asr.transcription.*;
 import com.alibaba.dashscope.utils.Constants;
 import com.google.gson.*;
@@ -80,7 +98,13 @@ public class Main {
 }
 ```
 
+<a id="异步提交任务-异步查询任务执行结果"></a>
+
+<a id="异步提交任务-异步查询任务执行结果-h4"></a>
+
 #### 异步提交任务+异步查询任务执行结果
+
+<a id="909738567dq8d"></a>
 
 ![提交任务并主动轮询](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f93bc.png)
 
@@ -90,10 +114,10 @@ public class Main {
     
 3.  调用核心类（Transcription）的`asyncCall`方法异步提交任务。
     
-    **说明**
-    
-    -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
-    -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
+    > **说明**
+    >
+    > -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
+    > -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
     
 4.  循环调用核心类（Transcription）的`fetch`方法直到获取最终的任务结果。
     
@@ -102,7 +126,9 @@ public class Main {
     `fetch`返回任务执行结果（TranscriptionResult）。
     
 
-```
+<a id="code-block-2"></a>
+
+```java
 import com.alibaba.dashscope.audio.asr.transcription.*;
 import com.alibaba.dashscope.common.TaskStatus;
 import com.alibaba.dashscope.utils.Constants;
@@ -148,37 +174,59 @@ public class Main {
 }
 ```
 
+<a id="接口地址"></a>
+
+<a id="10fe1be1c35re"></a>
+
 ## 接口地址
 
 SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，需在初始化前修改 `Constants.baseHttpApiUrl`。
+
+<a id="sec-tabs-2"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
-
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
 **注意**：
 
 -   不同地域的 API Key 不同，请确保使用对应地域的 API Key
 -   地域配置为全局设置，影响所有 DashScope SDK 的 API 调用
 
+<a id="请求参数"></a>
+
+<a id="48ea212b1d08r"></a>
+
 ## 请求参数
 
 请求参数通过`TranscriptionParam`的链式方法进行配置。
 
-```
+<a id="code-block-3"></a>
+
+```java
 TranscriptionParam param = TranscriptionParam.builder()
   .model("qwen-audio-3.1-asr-flash-filetrans")
   .fileUrls(
@@ -187,420 +235,117 @@ TranscriptionParam param = TranscriptionParam.builder()
   .build();
 ```
 
-**参数**
-
-**类型**
-
-**是否必须**
-
-**说明**
-
-`model`
-
-`String`
-
-是
-
-模型名称。
-
-`fileUrls`
-
-List<String>
-
-是
-
-音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
-
-若录音文件存储在阿里云OSS，使用RESTful API方式支持使用以`oss://`为前缀的临时 URL，使用SDK方式不支持使用以 oss://为前缀的临时 URL。
-
-**重要**
-
--   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
-    
--   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
-    
--   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
-    
--   录音文件URL设置成OSS临时公网访问不通该如何处理？请求头中将`X-DashScope-OssResourceResolve`设为`enable`（不推荐该方式）。
-    
-    SDK不支持对请求头进行配置。
-    
-
-`keep_dialect`
-
-`boolean`
-
-否
-
-仅 `qwen-audio-3.1-asr-flash-filetrans` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。通过 `.parameter("keep_dialect", value)` 设置。完整参数说明请参见[API 参考](raw/_short/qwen-audio-asr-filetrans-http-api-e0184f38f9d98459.md)。
-
-`vocabularyId`
-
-`String`
-
-否
-
-预编译热词列表 ID。
-
-需预先调用创建热词列表接口生成，识别时传入该 ID 即可使用列表中的热词。
-
-适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。
-
-使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
-
-`vocabulary`
-
-Map<String, Integer>
-
-否
-
-即时热词。
-
-以键值对形式传入，键为热词文本（`string`），值为热词权重（`integer`），无需预先创建热词列表。权重取值范围为 \[1, 5\] 或 50：取 \[1, 5\] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。
-
-适用于临时性、会话级别的热词优化。
-
-与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
-`vocabulary`需要通过`TranscriptionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-通过parameter设置
-
-```
-Map<String, Integer> vocab = new HashMap<>();
-vocab.put("张三", 5);
-vocab.put("李四", 5);
+<table><thead><tr><th><strong>参数</strong></th><th><strong>类型</strong></th><th><strong>是否必须</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><p><code>model</code></p></td><td><p><code>String</code></p></td><td><p>是</p></td><td><p>模型名称。</p></td></tr><tr><td><p><code>fileUrls</code></p></td><td><p>List&lt;String&gt;</p></td><td><p>是</p></td><td><p>音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02">音频规格</a>。</p><p>若录音文件存储在阿里云OSS，使用RESTful API方式支持使用以<code>oss://</code>为前缀的临时 URL，使用SDK方式不支持使用以 oss://为前缀的临时 URL。</p><div><div><p><strong>重要</strong></p><ul><li><p>临时 URL 有效期48小时，过期后无法使用，<strong>请勿用于生产环境。</strong></p></li><li><p>文件上传凭证接口限流为 100 QPS 且不支持扩容，<strong>请勿用于生产环境、高并发及压测场景。</strong></p></li><li><p>生产环境建议使用<a href="https://help.aliyun.com/zh/oss/user-guide/what-is-oss">阿里云OSS</a> 等稳定存储，确保文件长期可用并规避限流问题。</p></li><li><p>录音文件URL设置成OSS临时公网访问不通该如何处理？请求头中将<code>X-DashScope-OssResourceResolve</code>设为<code>enable</code>（不推荐该方式）。</p><p>SDK不支持对请求头进行配置。</p></li></ul></div></div></td></tr><tr><td><p><code>keep_dialect</code></p></td><td><p><code>boolean</code></p></td><td><p>否</p></td><td><p>仅 <code>qwen-audio-3.1-asr-flash-filetrans</code> 支持。默认 <code>false</code>，将方言转写为普通话；设为 <code>true</code> 时保留方言表达。通过 <code>.parameter(&quot;keep_dialect&quot;, value)</code> 设置。完整参数说明请参见<a href="qwen-audio-asr-filetrans-http-api-e0184f38f9d98459.md">API 参考</a>。</p></td></tr><tr><td><p><code>vocabularyId</code></p></td><td><p><code>String</code></p></td><td><p>否</p></td><td><p>预编译热词列表 ID。</p><p>需预先调用创建热词列表接口生成，识别时传入该 ID 即可使用列表中的热词。</p><p>适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。</p><p>使用方法请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_precompiled_h3">预编译热词</a>。</p></td></tr><tr><td><p><code>vocabulary</code></p></td><td><p>Map&lt;String, Integer&gt;</p></td><td><p>否</p></td><td><p>即时热词。</p><p>以键值对形式传入，键为热词文本（<code>string</code>），值为热词权重（<code>integer</code>），无需预先创建热词列表。权重取值范围为 [1, 5] 或 50：取 [1, 5] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。</p><p>适用于临时性、会话级别的热词优化。</p><p>与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_instant_h3">即时热词</a>。</p><p><code>vocabulary</code>需要通过<code>TranscriptionParam</code>实例的<code>parameter</code>方法或者<code>parameters</code>方法进行设置：</p><a id="fig-code-group"></a><div><a id="fig-code-group-通过parameter设置-tab"></a>通过parameter设置<div><a id="code-code-group-通过parameter设置"></a><pre class="language-java"><code>Map&lt;String, Integer&gt; vocab = new HashMap&lt;&gt;();
+vocab.put(&quot;张三&quot;, 5);
+vocab.put(&quot;李四&quot;, 5);
 
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.1-asr-flash-filetrans")
-  .parameter("vocabulary", vocab)
+  .model(&quot;qwen-audio-3.1-asr-flash-filetrans&quot;)
+  .parameter(&quot;vocabulary&quot;, vocab)
   .build();
-```
-
-通过parameters设置
-
-```
-Map<String, Integer> vocab = new HashMap<>();
-vocab.put("张三", 5);
-vocab.put("李四", 5);
+</code></pre></div><a id="fig-code-group-通过parameters设置-tab"></a>通过parameters设置<div><a id="code-code-group-通过parameters设置"></a><pre class="language-java"><code>Map&lt;String, Integer&gt; vocab = new HashMap&lt;&gt;();
+vocab.put(&quot;张三&quot;, 5);
+vocab.put(&quot;李四&quot;, 5);
 
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.1-asr-flash-filetrans")
-  .parameters(Collections.singletonMap("vocabulary", vocab))
+  .model(&quot;qwen-audio-3.1-asr-flash-filetrans&quot;)
+  .parameters(Collections.singletonMap(&quot;vocabulary&quot;, vocab))
   .build();
-```
-
-`channelId`
-
-List<Integer>
-
-否
-
-指定在多音轨音频文件中需要识别的音轨索引，索引从 0 开始。例如，\[0\] 表示识别第一个音轨，\[0, 1\] 表示同时识别第一和第二个音轨。如果省略此参数，则默认处理第一个音轨。
-
-**重要**指定的每一个音轨都将独立计费。例如，为单个文件请求 \[0, 1\] 会产生两笔独立的费用。
-
-默认值：\[0\]。
-
-`specialWordFilter`
-
-`String`
-
-否
-
-指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_sensitive_h3)。
-
-`diarizationEnabled`
-
-`Boolean`
-
-否
-
-是否启用说话人分离，默认关闭。
-
-仅适用于单声道音频，多声道音频不支持说话人分离。
-
-启用该功能后，识别结果中将显示`speaker_id`字段，用于区分不同说话人。
-
-**说明**如果启用说话人分离功能，建议音频时长不超过2小时，否则可能导致识别失败或超时。
-
-默认值：false。
-
-有关`speaker_id`的示例，请参见识别结果说明。
-
-`speakerCount`
-
-`Integer`
-
-否
-
-**重要**仅在开启说话人分离功能（`diarization_enabled`设置为`true`）时生效。
-
-说话人数量参考值。取值范围为2至100的整数（包含2和100）。
-
-默认自动判断说话人数量，如果配置此项，只能辅助算法尽量输出指定人数，无法保证一定会输出此人数。
-
-无默认值。
-
-`language_hints`
-
-`String[]`
-
-否
-
-设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。
-
-最多支持设置 4 个值，超出时仅前 4 个生效。
-
-点击查看支持的语言代码
-
--   zh: 中文
--   en: 英文
--   ja: 日语
--   ko：韩语
--   vi：越南语
--   th：泰语
--   id：印尼语
--   ms：马来语
--   tl：菲律宾语
--   hi：印地语
--   ar：阿拉伯语
--   fr：法语
--   de：德语
--   es：西班牙语
--   pt：葡萄牙语
--   ru：俄语
--   it：意大利语
--   nl：荷兰语
--   sv：瑞典语
--   da：丹麦语
--   fi：芬兰语
--   no：挪威语
--   el：希腊语
--   pl：波兰语
--   cs：捷克语
--   hu：匈牙利语
--   ro：罗马尼亚语
--   bg：保加利亚语
--   hr：克罗地亚语
--   sk：斯洛伐克语
-
-`language_hints`需要通过`TranscriptionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-通过parameter设置
-
-```
-TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.1-asr-flash-filetrans")
-  .parameter("language_hints", new String[]{"zh"})
+</code></pre></div></div></td></tr><tr><td><p><code>channelId</code></p></td><td><p>List&lt;Integer&gt;</p></td><td><p>否</p></td><td><p>指定在多音轨音频文件中需要识别的音轨索引，索引从 0 开始。例如，[0] 表示识别第一个音轨，[0, 1] 表示同时识别第一和第二个音轨。如果省略此参数，则默认处理第一个音轨。</p><div><div><p><strong>重要</strong>指定的每一个音轨都将独立计费。例如，为单个文件请求 [0, 1] 会产生两笔独立的费用。</p></div></div><p>默认值：[0]。</p></td></tr><tr><td><p><code>specialWordFilter</code></p></td><td><p><code>String</code></p></td><td><p>否</p></td><td><p>指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/non-realtime-speech-recognition-user-guide.md#nrt03_sensitive_h3">敏感词过滤</a>。</p></td></tr><tr><td><p><code>diarizationEnabled</code></p></td><td><p><code>Boolean</code></p></td><td><p>否</p></td><td><p>是否启用说话人分离，默认关闭。</p><p>仅适用于单声道音频，多声道音频不支持说话人分离。</p><p>启用该功能后，识别结果中将显示<code>speaker_id</code>字段，用于区分不同说话人。</p><div><div><p><strong>说明</strong>如果启用说话人分离功能，建议音频时长不超过2小时，否则可能导致识别失败或超时。</p></div></div><p>默认值：false。</p><p>有关<code>speaker_id</code>的示例，请参见识别结果说明。</p></td></tr><tr><td><p><code>speakerCount</code></p></td><td><p><code>Integer</code></p></td><td><p>否</p></td><td><div><div><p><strong>重要</strong>仅在开启说话人分离功能（<code>diarization_enabled</code>设置为<code>true</code>）时生效。</p></div></div><p>说话人数量参考值。取值范围为2至100的整数（包含2和100）。</p><p>默认自动判断说话人数量，如果配置此项，只能辅助算法尽量输出指定人数，无法保证一定会输出此人数。</p><p>无默认值。</p></td></tr><tr><td><p><code>language_hints</code></p></td><td><p><code>String[]</code></p></td><td><p>否</p></td><td><p>设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。</p><p>最多支持设置 4 个值，超出时仅前 4 个生效。</p><a id="accordion-点击查看支持的语言代码"></a><section><p>点击查看支持的语言代码</p><div><ul><li>zh: 中文</li><li>en: 英文</li><li>ja: 日语</li><li>ko：韩语</li><li>vi：越南语</li><li>th：泰语</li><li>id：印尼语</li><li>ms：马来语</li><li>tl：菲律宾语</li><li>hi：印地语</li><li>ar：阿拉伯语</li><li>fr：法语</li><li>de：德语</li><li>es：西班牙语</li><li>pt：葡萄牙语</li><li>ru：俄语</li><li>it：意大利语</li><li>nl：荷兰语</li><li>sv：瑞典语</li><li>da：丹麦语</li><li>fi：芬兰语</li><li>no：挪威语</li><li>el：希腊语</li><li>pl：波兰语</li><li>cs：捷克语</li><li>hu：匈牙利语</li><li>ro：罗马尼亚语</li><li>bg：保加利亚语</li><li>hr：克罗地亚语</li><li>sk：斯洛伐克语</li></ul></div></section><p><code>language_hints</code>需要通过<code>TranscriptionParam</code>实例的<code>parameter</code>方法或者<code>parameters</code>方法进行设置：</p><a id="fig-code-group-2"></a><div><a id="fig-code-group-2-通过parameter设置-tab"></a>通过parameter设置<div><a id="code-code-group-2-通过parameter设置"></a><pre class="language-java"><code>TranscriptionParam param = TranscriptionParam.builder()
+  .model(&quot;qwen-audio-3.1-asr-flash-filetrans&quot;)
+  .parameter(&quot;language_hints&quot;, new String[]{&quot;zh&quot;})
   .build();
-```
-
-通过parameters设置
-
-```
-TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.1-asr-flash-filetrans")
-  .parameters(Collections.singletonMap("language_hints", new String[]{"zh"}))
+</code></pre></div><a id="fig-code-group-2-通过parameters设置-tab"></a>通过parameters设置<div><a id="code-code-group-2-通过parameters设置"></a><pre class="language-java"><code>TranscriptionParam param = TranscriptionParam.builder()
+  .model(&quot;qwen-audio-3.1-asr-flash-filetrans&quot;)
+  .parameters(Collections.singletonMap(&quot;language_hints&quot;, new String[]{&quot;zh&quot;}))
   .build();
-```
+</code></pre></div></div></td></tr><tr><td><p><code>apiKey</code></p></td><td><p><code>String</code></p></td><td><p>否</p></td><td><p>用户API Key。如已将API Key配置到环境变量，则无须在代码中设置。否则一定要在代码中进行设置。</p></td></tr></tbody></table>
 
-`apiKey`
+<a id="响应结果"></a>
 
-`String`
-
-否
-
-用户API Key。如已将API Key配置到环境变量，则无须在代码中设置。否则一定要在代码中进行设置。
+<a id="deebdc73cawgt"></a>
 
 ## 响应结果
+
+<a id="任务执行结果-transcriptionresult"></a>
+
+<a id="11a082e1d9ijq"></a>
 
 ### 任务执行结果（`TranscriptionResult`）
 
 `TranscriptionResult`封装了当前任务执行结果。
 
-**接口/方法**
-
-**参数**
-
-**返回值**
-
-**描述**
-
-```
-public String getRequestId()
-```
-
-无
-
-requestId
-
-获取requestId。
-
-```
-public String getTaskId()
-```
-
-无
-
-taskId
-
-获取taskId。
-
-```
-public TaskStatus getTaskStatus()
-```
-
-无
-
-`TaskStatus`，任务状态
-
-获取任务状态。
-
-`TaskStatus`为枚举类，只需关注`PENDING`、`RUNNING`、`SUCCEEDED`和`FAILED`这四个状态即可。
-
-**说明**当任务包含多个子任务时，只要存在任一子任务成功，整个任务状态将标记为`SUCCEEDED`，需通过`subtask_status`字段判断具体子任务结果。
-
-```
-public List<TranscriptionTaskResult> getResults()
-```
-
-无
-
-子任务执行结果（TranscriptionTaskResult）
-
-获取子任务执行结果（TranscriptionTaskResult）。
-
-每个任务对一个或多个音频文件进行识别，不同音频文件在不同的子任务中处理，因此每个任务对应一到多个子任务。
-
-```
-public JsonObject getOutput()
-```
-
-无
-
-任务执行结果，为JSON格式的数据
-
-获取任务执行结果。
-
-该结果是一个JSON格式的数据，如果您想通过`getOutput`接口获取任务执行结果，请您在获取结果后自行解析。
-
-点击查看JSON示例
-
-**正常示例**
-```
-{
-    "task_id":"0795ff8c-b666-4e91-bb8b-xxx",
-    "task_status":"SUCCEEDED",
-    "submit_time":"2025-02-13 16:12:09.109",
-    "scheduled_time":"2025-02-13 16:12:09.128",
-    "end_time":"2025-02-13 16:12:10.189",
-    "results":[
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-4"></a><pre class="language-java"><code>public String getRequestId()
+</code></pre></td><td><p>无</p></td><td><p>requestId</p></td><td><p>获取requestId。</p></td></tr><tr><td><a id="code-block-5"></a><pre class="language-java"><code>public String getTaskId()
+</code></pre></td><td><p>无</p></td><td><p>taskId</p></td><td><p>获取taskId。</p></td></tr><tr><td><a id="code-block-6"></a><pre class="language-java"><code>public TaskStatus getTaskStatus()
+</code></pre></td><td><p>无</p></td><td><p><code>TaskStatus</code>，任务状态</p></td><td><p>获取任务状态。</p><p><code>TaskStatus</code>为枚举类，只需关注<code>PENDING</code>、<code>RUNNING</code>、<code>SUCCEEDED</code>和<code>FAILED</code>这四个状态即可。</p><div><div><p><strong>说明</strong>当任务包含多个子任务时，只要存在任一子任务成功，整个任务状态将标记为<code>SUCCEEDED</code>，需通过<code>subtask_status</code>字段判断具体子任务结果。</p></div></div></td></tr><tr><td><a id="code-block-7"></a><pre class="language-java"><code>public List&lt;TranscriptionTaskResult&gt; getResults()
+</code></pre></td><td><p>无</p></td><td><p>子任务执行结果（TranscriptionTaskResult）</p></td><td><p>获取子任务执行结果（TranscriptionTaskResult）。</p><p>每个任务对一个或多个音频文件进行识别，不同音频文件在不同的子任务中处理，因此每个任务对应一到多个子任务。</p></td></tr><tr><td><a id="code-block-8"></a><pre class="language-java"><code>public JsonObject getOutput()
+</code></pre></td><td><p>无</p></td><td><p>任务执行结果，为JSON格式的数据</p></td><td><p>获取任务执行结果。</p><p>该结果是一个JSON格式的数据，如果您想通过<code>getOutput</code>接口获取任务执行结果，请您在获取结果后自行解析。</p><a id="accordion-点击查看json示例"></a><section><p>点击查看JSON示例</p><div><strong>正常示例</strong><a id="code-block-9"></a><pre class="language-json"><code>{
+    &quot;task_id&quot;:&quot;0795ff8c-b666-4e91-bb8b-xxx&quot;,
+    &quot;task_status&quot;:&quot;SUCCEEDED&quot;,
+    &quot;submit_time&quot;:&quot;2025-02-13 16:12:09.109&quot;,
+    &quot;scheduled_time&quot;:&quot;2025-02-13 16:12:09.128&quot;,
+    &quot;end_time&quot;:&quot;2025-02-13 16:12:10.189&quot;,
+    &quot;results&quot;:[
         {
-            "file_url":"{YOUR_AUDIO_URL}",
-            "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/16%3A12/3baafe5f-d09d-46c6-8b01-724927670edb-1.json?Expires=1739520730&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
-            "subtask_status":"SUCCEEDED"
+            &quot;file_url&quot;:&quot;{YOUR_AUDIO_URL}&quot;,
+            &quot;transcription_url&quot;:&quot;https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/16%3A12/3baafe5f-d09d-46c6-8b01-724927670edb-1.json?Expires=1739520730&amp;OSSAccessKeyId=YOUR_ACCESS_KEY_ID&amp;Signature=YOUR_SIGNATURE&quot;,
+            &quot;subtask_status&quot;:&quot;SUCCEEDED&quot;
         }
     ],
-    "task_metrics":{
-        "TOTAL":1,
-        "SUCCEEDED":1,
-        "FAILED":0
+    &quot;task_metrics&quot;:{
+        &quot;TOTAL&quot;:1,
+        &quot;SUCCEEDED&quot;:1,
+        &quot;FAILED&quot;:0
     }
 }
-```
-**异常示例**
-
-`code`为错误码，`message`为错误信息，只有异常情况才有这两个字段，您可以通过这两个字段，对照错误码排查问题。
-
-```
-{
-    "task_id": "7bac899c-06ec-4a79-8875-xxxxxxxxxxxx",
-    "task_status": "SUCCEEDED",
-    "submit_time": "2024-12-16 16:30:59.170",
-    "scheduled_time": "2024-12-16 16:30:59.204",
-    "end_time": "2024-12-16 16:31:02.375",
-    "results": [
+</code></pre><strong>异常示例</strong><p><code>code</code>为错误码，<code>message</code>为错误信息，只有异常情况才有这两个字段，您可以通过这两个字段，对照错误码排查问题。</p><a id="code-block-10"></a><pre class="language-json"><code>{
+    &quot;task_id&quot;: &quot;7bac899c-06ec-4a79-8875-xxxxxxxxxxxx&quot;,
+    &quot;task_status&quot;: &quot;SUCCEEDED&quot;,
+    &quot;submit_time&quot;: &quot;2024-12-16 16:30:59.170&quot;,
+    &quot;scheduled_time&quot;: &quot;2024-12-16 16:30:59.204&quot;,
+    &quot;end_time&quot;: &quot;2024-12-16 16:31:02.375&quot;,
+    &quot;results&quot;: [
         {
-            "file_url": "{YOUR_AUDIO_URL}",
-            "code": "FILE_DOWNLOAD_FAILED",
-            "message": "The audio file cannot be downloaded.",
-            "subtask_status": "FAILED"
+            &quot;file_url&quot;: &quot;{YOUR_AUDIO_URL}&quot;,
+            &quot;code&quot;: &quot;FILE_DOWNLOAD_FAILED&quot;,
+            &quot;message&quot;: &quot;The audio file cannot be downloaded.&quot;,
+            &quot;subtask_status&quot;: &quot;FAILED&quot;
         }
     ],
-    "task_metrics": {
-        "TOTAL": 1,
-        "SUCCEEDED": 0,
-        "FAILED": 1
+    &quot;task_metrics&quot;: {
+        &quot;TOTAL&quot;: 1,
+        &quot;SUCCEEDED&quot;: 0,
+        &quot;FAILED&quot;: 1
     }
 }
-```
+</code></pre></div></section></td></tr></tbody></table>
+
+<a id="子任务执行结果-transcriptiontaskresult"></a>
+
+<a id="86b568aa3asuj"></a>
 
 ### 子任务执行结果（`TranscriptionTaskResult`）
 
 `TranscriptionTaskResult`封装了子任务执行结果。子任务对单个音频文件进行识别。
 
-**接口/方法**
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-11"></a><pre class="language-java"><code>public String getFileUrl()
+</code></pre></td><td><p>无</p></td><td><p>被识别的音频文件的链接</p></td><td><p>获取被识别音频文件的链接。</p></td></tr><tr><td><a id="code-block-12"></a><pre class="language-java"><code>public String getTranscriptionUrl()
+</code></pre></td><td><p>无</p></td><td><p>识别结果对应的链接</p></td><td><p>获取识别结果对应的链接。该链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。</p><p>识别结果保存为JSON文件，您可以通过上述链接下载该文件或直接通过HTTP请求读取该文件中的内容。</p><p>JSON数据中各字段含义请参见识别结果说明。</p></td></tr><tr><td><a id="code-block-13"></a><pre class="language-java"><code>public TaskStatus getSubTaskStatus()
+</code></pre></td><td><p>无</p></td><td><p><code>TaskStatus</code>，子任务状态</p></td><td><p>获取子任务状态。</p><p><code>TaskStatus</code>为枚举类，只需关注<code>PENDING</code>、<code>RUNNING</code>、<code>SUCCEEDED</code>和<code>FAILED</code>这四个状态即可。</p></td></tr><tr><td><a id="code-block-14"></a><pre class="language-java"><code>public String getMessage()
+</code></pre></td><td><p>无</p></td><td><p>任务执行过程中关键信息，可能为空</p></td><td><p>获取任务执行过程中的关键信息。</p><p>当任务失败时，可查看该内容分析原因。</p></td></tr></tbody></table>
 
-**参数**
+<a id="识别结果说明"></a>
 
-**返回值**
-
-**描述**
-
-```
-public String getFileUrl()
-```
-
-无
-
-被识别的音频文件的链接
-
-获取被识别音频文件的链接。
-
-```
-public String getTranscriptionUrl()
-```
-
-无
-
-识别结果对应的链接
-
-获取识别结果对应的链接。该链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
-
-识别结果保存为JSON文件，您可以通过上述链接下载该文件或直接通过HTTP请求读取该文件中的内容。
-
-JSON数据中各字段含义请参见识别结果说明。
-
-```
-public TaskStatus getSubTaskStatus()
-```
-
-无
-
-`TaskStatus`，子任务状态
-
-获取子任务状态。
-
-`TaskStatus`为枚举类，只需关注`PENDING`、`RUNNING`、`SUCCEEDED`和`FAILED`这四个状态即可。
-
-```
-public String getMessage()
-```
-
-无
-
-任务执行过程中关键信息，可能为空
-
-获取任务执行过程中的关键信息。
-
-当任务失败时，可查看该内容分析原因。
+<a id="a9021178ccl7s"></a>
 
 ### 识别结果说明
 
 识别结果保存为JSON文件。
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
     "file_url":"{YOUR_AUDIO_URL}",
     "properties":{
@@ -647,103 +392,32 @@ public String getMessage()
 
 需要关注的参数如下：
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `audio_format` | `string` | 源文件中音频的格式。 |
+| `channels` | array\[integer\] | 源文件中音频的音轨索引信息，对单轨音频返回\[0\]，对双轨音频返回\[0, 1\]，以此类推。 |
+| `original_sampling_rate` | `integer` | 源文件中音频的采样率（Hz）。 |
+| `original_duration_in_milliseconds` | `integer` | 源文件中的原始音频时长（ms）。 |
+| `channel_id` | `integer` | 转写结果的音轨索引，以0为起始。 |
+| `content_duration` | `integer` | 音轨中被判定为语音内容的时长（ms）。<br><br>> **说明**<br>><br>> 以下计费说明适用于 `qwen-audio-3.0-asr-flash-filetrans`。`qwen-audio-3.1-asr-flash-filetrans` 按 Token 计费。<br><br>语音识别模型服务仅对音轨中被判定为语音内容的时长进行语音转写，并据此进行计量计费，非语音内容不计量、不计费。通常情况下语音内容时长会短于原始音频时长。由于对是否存在语音内容的判定是由AI模型给出的，可能与实际情况存在一定误差。 |
+| `transcript` | `string` | 段落级别的语音转写结果。 |
+| `sentences` | `array` | 句子级别的语音转写结果。 |
+| `words` | `array` | 词级别的语音转写结果。 |
+| `begin_time` | `integer` | 开始时间戳（ms）。 |
+| `end_time` | `integer` | 结束时间戳（ms）。 |
+| `text` | `string` | 语音转写结果。 |
+| `speaker_id` | `integer` | 当前说话人的索引，以0为起始，用于区分不同的说话人。<br><br>仅在启用说话人分离功能时，该字段才会显示于识别结果中。 |
+| `punctuation` | `string` | 预测出的词之后的标点符号（如有）。 |
 
-**类型**
+<a id="关键接口"></a>
 
-**说明**
-
-`audio_format`
-
-`string`
-
-源文件中音频的格式。
-
-`channels`
-
-array\[integer\]
-
-源文件中音频的音轨索引信息，对单轨音频返回\[0\]，对双轨音频返回\[0, 1\]，以此类推。
-
-`original_sampling_rate`
-
-`integer`
-
-源文件中音频的采样率（Hz）。
-
-`original_duration_in_milliseconds`
-
-`integer`
-
-源文件中的原始音频时长（ms）。
-
-`channel_id`
-
-`integer`
-
-转写结果的音轨索引，以0为起始。
-
-`content_duration`
-
-`integer`
-
-音轨中被判定为语音内容的时长（ms）。
-
-**说明**以下计费说明适用于 `qwen-audio-3.0-asr-flash-filetrans`。`qwen-audio-3.1-asr-flash-filetrans` 按 Token 计费。
-
-语音识别模型服务仅对音轨中被判定为语音内容的时长进行语音转写，并据此进行计量计费，非语音内容不计量、不计费。通常情况下语音内容时长会短于原始音频时长。由于对是否存在语音内容的判定是由AI模型给出的，可能与实际情况存在一定误差。
-
-`transcript`
-
-`string`
-
-段落级别的语音转写结果。
-
-`sentences`
-
-`array`
-
-句子级别的语音转写结果。
-
-`words`
-
-`array`
-
-词级别的语音转写结果。
-
-`begin_time`
-
-`integer`
-
-开始时间戳（ms）。
-
-`end_time`
-
-`integer`
-
-结束时间戳（ms）。
-
-`text`
-
-`string`
-
-语音转写结果。
-
-`speaker_id`
-
-`integer`
-
-当前说话人的索引，以0为起始，用于区分不同的说话人。
-
-仅在启用说话人分离功能时，该字段才会显示于识别结果中。
-
-`punctuation`
-
-`string`
-
-预测出的词之后的标点符号（如有）。
+<a id="60280ef1ec77f"></a>
 
 ## 关键接口
+
+<a id="任务查询参数配置类-transcriptionqueryparam"></a>
+
+<a id="3639e1cb40mxi"></a>
 
 ### 任务查询参数配置类（`TranscriptionQueryParam`）
 
@@ -751,7 +425,9 @@ array\[integer\]
 
 通过静态方法`FromTranscriptionParam`创建`TranscriptionQueryParam`实例。
 
-```
+<a id="code-block-16"></a>
+
+```java
 // 创建转写请求参数
 TranscriptionParam param =
         TranscriptionParam.builder()
@@ -774,80 +450,45 @@ try {
 }
 ```
 
-**接口/方法**
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-17"></a><pre class="language-java"><code>public static TranscriptionQueryParam FromTranscriptionParam(TranscriptionParam param, String taskId)
+</code></pre></td><td><ul><li><code>param</code>：<code>TranscriptionParam</code>实例</li><li><code>taskId</code>：任务ID</li></ul></td><td><p><code>TranscriptionQueryParam</code>实例</p></td><td><p>创建<code>TranscriptionQueryParam</code>实例。</p></td></tr></tbody></table>
 
-**参数**
+<a id="核心类-transcription"></a>
 
-**返回值**
-
-**描述**
-
-```
-public static TranscriptionQueryParam FromTranscriptionParam(TranscriptionParam param, String taskId)
-```
-
--   `param`：`TranscriptionParam`实例
--   `taskId`：任务ID
-
-`TranscriptionQueryParam`实例
-
-创建`TranscriptionQueryParam`实例。
+<a id="adcb5e9bddbyq"></a>
 
 ### 核心类（`Transcription`）
 
 `Transcription`可以通过`import com.alibaba.dashscope.audio.asr.transcription.*;`方式引入。它的关键接口如下：
 
-**接口/方法**
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-18"></a><pre class="language-java"><code>public TranscriptionResult asyncCall(TranscriptionParam param)
+</code></pre></td><td><p><code>param</code>：语音识别相关参数，<code>TranscriptionParam</code>实例</p></td><td><p>任务执行结果（TranscriptionResult）</p></td><td><p>异步提交语音识别任务。</p></td></tr><tr><td><a id="code-block-19"></a><pre class="language-java"><code>public TranscriptionResult wait(TranscriptionQueryParam queryParam)
+</code></pre></td><td><p><code>queryParam</code>：<code>TranscriptionQueryParam</code>实例</p></td><td><p>任务执行结果（TranscriptionResult）</p></td><td><p>阻塞当前线程直到异步任务结束（任务状态为<code>SUCCEEDED</code>或<code>FAILED</code>）。</p></td></tr><tr><td><a id="code-block-20"></a><pre class="language-java"><code>public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
+</code></pre></td><td><p><code>queryParam</code>：<code>TranscriptionQueryParam</code>实例</p></td><td><p>任务执行结果（TranscriptionResult）</p></td><td><p>异步查询当前任务执行结果。</p></td></tr></tbody></table>
 
-**参数**
+<a id="其他接口-批量查询任务状态-取消任务"></a>
 
-**返回值**
-
-**描述**
-
-```
-public TranscriptionResult asyncCall(TranscriptionParam param)
-```
-
-`param`：语音识别相关参数，`TranscriptionParam`实例
-
-任务执行结果（TranscriptionResult）
-
-异步提交语音识别任务。
-
-```
-public TranscriptionResult wait(TranscriptionQueryParam queryParam)
-```
-
-`queryParam`：`TranscriptionQueryParam`实例
-
-任务执行结果（TranscriptionResult）
-
-阻塞当前线程直到异步任务结束（任务状态为`SUCCEEDED`或`FAILED`）。
-
-```
-public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
-```
-
-`queryParam`：`TranscriptionQueryParam`实例
-
-任务执行结果（TranscriptionResult）
-
-异步查询当前任务执行结果。
+<a id="afbd594d9a7hx"></a>
 
 ## 其他接口：批量查询任务状态/取消任务
 
-详情请参见[管理异步任务](raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md)：支持批量查询24小时内提交的非实时语音识别任务，同时支持取消`PENDING`（排队）状态的任务。
+详情请参见[管理异步任务](../model-api-reference/more-about-models/manage-asynchronous-tasks.md)：支持批量查询24小时内提交的非实时语音识别任务，同时支持取消`PENDING`（排队）状态的任务。
+
+<a id="错误码"></a>
+
+<a id="a370386972oa4"></a>
 
 ## 错误码
 
-如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
+如遇报错问题，请参见[错误码](../model-api-reference/preparations/error-code.md)进行排查。
 
 当任务包含多个子任务时，只要存在任一子任务成功，整个任务状态将标记为`SUCCEEDED`，需通过`subtask_status`字段判断具体子任务结果。
 
 错误返回示例：
 
-```
+<a id="code-block-21"></a>
+
+```json
 {
     "task_id": "7bac899c-06ec-4a79-8875-xxxxxxxxxxxx",
     "task_status": "SUCCEEDED",
@@ -870,17 +511,35 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
 }
 ```
 
+<a id="常见问题"></a>
+
+<a id="7640d5d455ayp"></a>
+
 ## 常见问题
 
+<a id="功能特性"></a>
+
+<a id="ef653d0bb7ol9"></a>
+
 ### 功能特性
+
+<a id="q-是否支持base64编码方式的音频"></a>
+
+<a id="326a5e31a2p0m"></a>
 
 #### Q：是否支持Base64编码方式的音频？
 
 不支持Base64编码方式的音频。仅支持可通过公网访问的 URL 所指向的音频的识别，不支持识别二进制流，也不支持直接识别本地文件。
 
+<a id="q-如何将音频文件以公网可访问的url形式提供"></a>
+
+<a id="01d5f797c8ksz"></a>
+
 #### Q：如何将音频文件以公网可访问的URL形式提供？
 
 通常遵循以下几个步骤（这里为您提供一种思路，具体情况因不同存储产品而异，推荐将音频[上传至阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)）：
+
+<a id="accordion-1-选择存储和托管方式"></a>
 
 1、选择存储和托管方式
 
@@ -899,6 +558,8 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
     -   将音频文件托管在 CDN 上，通过 CDN 提供的 URL 访问。
     -   优点：加速文件传输，适合高并发场景。
 
+<a id="accordion-2-上传音频文件"></a>
+
 2、上传音频文件
 
 根据选择的存储/托管方式，将音频上传，如：
@@ -911,6 +572,8 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
     
     -   将音频文件放置在服务器指定目录下（如 `/var/www/html/audio/`）。
     -   确保文件可以通过 HTTP/HTTPS 访问。
+
+<a id="accordion-3-生成公网可访问的url"></a>
 
 3、生成公网可访问的URL
 
@@ -927,6 +590,8 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
     
     -   配置 CDN 加速后，使用 CDN 提供的 URL（如 `https://cdn.your-domain.com/audio/file.mp3`）。
 
+<a id="accordion-4-验证url的可用性"></a>
+
 4、验证URL的可用性
 
 公网环境下，确保生成的 URL 可以正常访问，例如：
@@ -938,23 +603,39 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
 
 使用RESTful API时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，支持使用以 `oss://`为前缀的临时 URL：
 
-**重要**
+> **重要**
+>
+> -   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
+> -   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
+> -   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
 
--   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
--   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
--   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
+<a id="q-多久能获取识别结果"></a>
+
+<a id="33c69cf322xkf"></a>
 
 #### Q：多久能获取识别结果？
 
 任务提交后将进入排队（PENDING）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内，请耐心等待。并且音频时长越长，所需时间越久。
 
+<a id="故障排查"></a>
+
+<a id="abe43b2c2a8sq"></a>
+
 ### 故障排查
 
 如遇代码报错问题，请根据错误码中的信息进行排查。
 
+<a id="q-一直轮询不到结果"></a>
+
+<a id="ed3d52b907dbl"></a>
+
 #### Q：一直轮询不到结果？
 
 可能是限流原因，请耐心等待。
+
+<a id="q-无法识别语音-无识别结果-是什么原因"></a>
+
+<a id="88d8b9a4b6xv7"></a>
 
 #### Q：无法识别语音（无识别结果）是什么原因？
 
@@ -962,6 +643,8 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
 
 可以使用[ffprobe](https://ffmpeg.org/ffprobe.html)工具获取音频的容器、编码、采样率、声道等信息：
 
-```
+<a id="code-block-22"></a>
+
+```bash
 ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 input.xxx
 ```

@@ -2,9 +2,17 @@
 
 修改数据源文档。
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,297 +31,72 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:UpdateDatasetDocument | update | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:UpdateDatasetDocument
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
-
-**类型**
-
-**必填**
-
-**描述**
-
-**示例值**
-
-WorkspaceId
-
-string
-
-否
-
-阿里云百炼业务空间唯一标识：[获取 workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-xxxx
-
-Document
-
-object
-
-是
-
-文档
-
-DocUuid
-
-string
-
-否
-
-文档系统唯一 ID
-
-xxx
-
-Title
-
-string
-
-否
-
-文档标题
-
-xx
-
-DocId
-
-string
-
-否
-
-文档用户侧唯一 ID
-
-xxx
-
-CategoryUuid
-
-string
-
-否
-
-类目唯一标识
-
-xx
-
-Tags
-
-array
-
-否
-
-标签
-
-string
-
-否
-
-标签值。
-
-xx
-
-Extend1
-
-string
-
-否
-
-扩展字段 1
-
-xxx
-
-Extend2
-
-string
-
-否
-
-扩展字段 2
-
-xxxx
-
-Extend3
-
-string
-
-否
-
-扩展字段 3
-
-xxx
-
-DatasetId
-
-integer
-
-否
-
-数据集唯一标识
-
-1
-
-DatasetName
-
-string
-
-否
-
-数据集名称
-
-数据集名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 否 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| Document | object | 是 | 文档 |  |
+| DocUuid | string | 否 | 文档系统唯一 ID | xxx |
+| Title | string | 否 | 文档标题 | xx |
+| DocId | string | 否 | 文档用户侧唯一 ID | xxx |
+| CategoryUuid | string | 否 | 类目唯一标识 | xx |
+| Tags | array | 否 | 标签 |  |
+|  | string | 否 | 标签值。 | xx |
+| Extend1 | string | 否 | 扩展字段 1 | xxx |
+| Extend2 | string | 否 | 扩展字段 2 | xxxx |
+| Extend3 | string | 否 | 扩展字段 3 | xxx |
+| DatasetId | integer | 否 | 数据集唯一标识 | 1 |
+| DatasetName | string | 否 | 数据集名称 | 数据集名称 |
+
+<a id="返回参数"></a>
+
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | 响应结果 |  |
+| Data | object | 业务数据 |  |
+| DocUuid | string | 内部文档唯一 ID | 内部文档唯一ID |
+| Title | string | 文档标题 | 文章标题 |
+| DocId | string | 用户指定的文档唯一 ID | 用户指定的文档唯一ID |
+| Tags | array | 标签。 |  |
+|  | string | 标签。 | xx |
+| CategoryUuid | string | 类目唯一标识 | xx |
+| Extend1 | string | 扩展字段 1 | xx |
+| Extend2 | string | 扩展字段 2 | xx |
+| Extend3 | string | 扩展字段 3 | xx |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+| Code | string | 状态码 | NoData |
+| Message | string | 错误说明 | success |
+| HttpStatusCode | integer | http 状态码 | 200 |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-**示例值**
-
-object
-
-响应结果
-
-Data
-
-object
-
-业务数据
-
-DocUuid
-
-string
-
-内部文档唯一 ID
-
-内部文档唯一ID
-
-Title
-
-string
-
-文档标题
-
-文章标题
-
-DocId
-
-string
-
-用户指定的文档唯一 ID
-
-用户指定的文档唯一ID
-
-Tags
-
-array
-
-标签。
-
-string
-
-标签。
-
-xx
-
-CategoryUuid
-
-string
-
-类目唯一标识
-
-xx
-
-Extend1
-
-string
-
-扩展字段 1
-
-xx
-
-Extend2
-
-string
-
-扩展字段 2
-
-xx
-
-Extend3
-
-string
-
-扩展字段 3
-
-xx
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Message
-
-string
-
-错误说明
-
-success
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -321,7 +104,9 @@ http 状态码
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Data": {
     "DocUuid": "内部文档唯一ID",
@@ -343,9 +128,17 @@ http 状态码
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

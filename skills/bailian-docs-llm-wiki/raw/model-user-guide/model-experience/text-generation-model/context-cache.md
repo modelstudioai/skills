@@ -4,56 +4,42 @@
 
 为满足不同场景的需求，上下文缓存提供两种工作模式，可以根据对便捷性、确定性及成本的需求进行选择：
 
--   [显式缓存](https://help.aliyun.com/zh/model-studio/context-cache#825f201c5fy6o)：需要**主动开启**的缓存模式。需要主动为指定内容创建缓存，以在有效期（5分钟）内实现确定性命中。除了输入 Token 计费，用于创建缓存的 Token 通常按输入 Token 标准单价的 125% 计费，后续命中通常仅需支付 10% 的费用，具体价格见[如何计费](https://help.aliyun.com/zh/model-studio/context-cache#904e3da8aatwp)。 `qwen4-max` 的显式缓存用法请参见 [显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
--   [隐式缓存](https://help.aliyun.com/zh/model-studio/context-cache#2317ea09cfxok)：此为自动模式，无需额外配置，且无法关闭，适合追求便捷的通用场景。系统会**自动识别**请求内容的**公共前缀**并进行缓存，但缓存**命中率不确定**。对命中缓存的部分，通常按输入 Token 标准单价的 20% 计费，具体价格见[如何计费](https://help.aliyun.com/zh/model-studio/context-cache#7768a4362ailr)。
+-   [显式缓存](context-cache.md#825f201c5fy6o)：需要**主动开启**的缓存模式。需要主动为指定内容创建缓存，以在有效期（5分钟）内实现确定性命中。除了输入 Token 计费，用于创建缓存的 Token 通常按输入 Token 标准单价的 125% 计费，后续命中通常仅需支付 10% 的费用，具体价格见[如何计费](context-cache.md#904e3da8aatwp)。 `qwen4-max` 的显式缓存用法请参见 [显式缓存（Qwen4）](explicit-cache-qwen4.md)。
+-   [隐式缓存](context-cache.md#2317ea09cfxok)：此为自动模式，无需额外配置，且无法关闭，适合追求便捷的通用场景。系统会**自动识别**请求内容的**公共前缀**并进行缓存，但缓存**命中率不确定**。对命中缓存的部分，通常按输入 Token 标准单价的 20% 计费，具体价格见[如何计费](context-cache.md#7768a4362ailr)。
 
-**项目**
-
-**显式缓存**
-
-**隐式缓存**
-
-是否影响回复效果
-
-不影响
-
-不影响
-
-用于创建缓存Token计费
-
-通常为输入 Token 单价的125%
-
-输入 Token 单价的100%
-
-命中缓存的输入 Token 计费
-
-通常为输入 Token 单价的10%（[详见计费说明](https://help.aliyun.com/zh/model-studio/context-cache#904e3da8aatwp)）
-
-通常为输入 Token 单价的20%（[详见计费说明](https://help.aliyun.com/zh/model-studio/context-cache#7768a4362ailr)）
-
-缓存最少 Token 数
-
-1024
-
-1024
-
-缓存有效期
-
-5分钟（命中后重置）
-
-不确定，系统会定期清理长期未使用的缓存数据
+| 项目 | 显式缓存 | 隐式缓存 |
+| --- | --- | --- |
+| 是否影响回复效果 | 不影响 | 不影响 |
+| 用于创建缓存Token计费 | 通常为输入 Token 单价的125% | 输入 Token 单价的100% |
+| 命中缓存的输入 Token 计费 | 通常为输入 Token 单价的10%（[详见计费说明](context-cache.md#904e3da8aatwp)） | 通常为输入 Token 单价的20%（[详见计费说明](context-cache.md#7768a4362ailr)） |
+| 缓存最少 Token 数 | 1024 | 1024 |
+| 缓存有效期 | 5分钟（命中后重置） | 不确定，系统会定期清理长期未使用的缓存数据 |
 
 两者的最小 Token 数虽然相同，但含义不同：显式缓存由用户主动创建和管理；隐式缓存由系统自动创建和管理，达到 1,024 Token 仅代表具备命中条件，不保证实际命中。
 
-**说明**显式缓存、隐式缓存两者互斥，单个请求只能应用其中一种模式。
+> **说明**
+>
+> 显式缓存、隐式缓存两者互斥，单个请求只能应用其中一种模式。
 
-**说明**预置吞吐（PTU）部署同样支持上下文缓存。命中缓存时，PTU 额度消耗按缓存折扣系数折算。详见[预置吞吐长输入与缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
+> **说明**
+>
+> 预置吞吐（PTU）部署同样支持上下文缓存。命中缓存时，PTU 额度消耗按缓存折扣系数折算。详见[预置吞吐长输入与缓存](context-cache.md)。
 
-**说明**下方示例使用 Chat Completions、DashScope 和 Anthropic 兼容接口。Responses API 另有 [Session 缓存](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#example-session-cache-title)配置。
+> **说明**
+>
+> 下方示例使用 Chat Completions、DashScope 和 Anthropic 兼容接口。Responses API 另有 [Session 缓存](../../../model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md#example-session-cache-title)配置。
+
+<a id="显式缓存"></a>
+
+<a id="825f201c5fy6o"></a>
 
 ## 显式缓存
 
 与隐式缓存相比，显式缓存需要显式创建并承担相应开销，但能实现更高的缓存命中率和更低的访问延迟。
+
+<a id="使用方式"></a>
+
+<a id="d041c165d4wi3"></a>
 
 ### 使用方式
 
@@ -78,13 +64,17 @@
 
 1.  **发起第一个请求**：发送包含超 1024 Token 文本 A 的系统消息，并加入缓存标记：
 
-```
+<a id="code-block"></a>
+
+```json
 [{"role": "system", "content": [{"type": "text", "text": A, "cache_control": {"type": "ephemeral"}}]}]
 ```
 
 系统将创建首个缓存块，记为 A 缓存块。 2. **发起第二个请求：**发送以下结构的请求：
 
-```
+<a id="code-block-2"></a>
+
+```json
 [
     {"role": "system", "content": A},
     <其他 message>
@@ -95,7 +85,17 @@
 -   若“其他message”不超过 20 条，则命中 A 缓存块，并将其有效期重置为 5 分钟；同时，系统会基于 A、其他message和 B 创建一个新的缓存块。
 -   若“其他message”超过 20 条，则无法命中 A 缓存块，系统仍会基于完整上下文（A + 其他message + B）创建新缓存块。
 
+<a id="支持的模型"></a>
+
+<a id="29f4500309mmr"></a>
+
 ### 支持的模型
+
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
@@ -118,6 +118,10 @@
 Kimi：kimi-k2.6、kimi-k2.5、kimi-k2.7-code
 
 GLM：glm-5.1
+
+<a id="美国-弗吉尼亚"></a>
+
+<a id="美国-弗吉尼亚-h4"></a>
 
 #### 美国（弗吉尼亚）
 
@@ -144,6 +148,10 @@ GLM：glm-5.1
     GLM：glm-5.1
     
 
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
+
 #### 新加坡
 
 > 以下模型均为国际部署范围。
@@ -159,6 +167,10 @@ GLM：glm-5.1
 千问 Coder：qwen3-coder-flash
 
 千问 VL：qwen3-vl-plus
+
+<a id="德国-法兰克福"></a>
+
+<a id="德国-法兰克福-h4"></a>
 
 #### 德国（法兰克福）
 
@@ -189,6 +201,10 @@ GLM：glm-5.1
     千问 VL：qwen3-vl-plus
     
 
+<a id="日本-东京"></a>
+
+<a id="日本-东京-h4"></a>
+
 #### 日本（东京）
 
 不同服务部署范围支持的模型不同。
@@ -209,6 +225,10 @@ GLM：glm-5.1
     
     GLM：glm-5.1
     
+
+<a id="中国香港"></a>
+
+<a id="中国香港-h4"></a>
 
 #### 中国香港
 
@@ -233,13 +253,25 @@ GLM：glm-5.1
     千问 VL：qwen3-vl-plus
     
 
+<a id="快速开始"></a>
+
+<a id="7fc35587e9byq"></a>
+
 ### 快速开始
 
 以下示例展示了在 OpenAI 兼容、DashScope 和 Anthropic 兼容协议中，缓存块的创建与命中机制。
 
+<a id="sec-tabs-2"></a>
+
+<a id="openai-兼容"></a>
+
+<a id="openai-兼容-h4"></a>
+
 #### OpenAI 兼容
 
-```
+<a id="code-block-3"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -291,11 +323,21 @@ print(f"第二次请求创建缓存 Token：{second_completion.usage.prompt_toke
 print(f"第二次请求命中缓存 Token：{second_completion.usage.prompt_tokens_details['cached_tokens']}")
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -348,9 +390,13 @@ print(f"第二次请求创建缓存 Token：{second_completion.usage.prompt_toke
 print(f"第二次请求命中缓存 Token：{second_completion.usage.prompt_tokens_details['cached_tokens']}")
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 // Java SDK 最低版本为 2.21.6
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
@@ -429,9 +475,15 @@ public class Main {
 }
 ```
 
+<a id="anthropic-兼容"></a>
+
+<a id="anthropic-兼容-h4"></a>
+
 #### Anthropic 兼容
 
-```
+<a id="code-block-4"></a>
+
+```python
 import anthropic
 import os
 
@@ -481,13 +533,19 @@ print(f"第二次请求命中缓存 Token：{second_completion.usage.cache_read_
 
 模拟的代码仓库内容通过添加 `cache_control`标记启用显式缓存。后续针对该代码仓库的提问请求，系统可复用该缓存块，无需重新计算，可获得比创建缓存前更快的响应与更低的成本。
 
-```
+<a id="code-block-5"></a>
+
+```text
 第一次请求创建缓存 Token：1605
 第一次请求命中缓存 Token：0
 ====================
 第二次请求创建缓存 Token：0
 第二次请求命中缓存 Token：1605
 ```
+
+<a id="使用多个缓存标记实现精细控制"></a>
+
+<a id="2bb8a2e7desl2"></a>
 
 ### 使用多个缓存标记实现精细控制
 
@@ -503,6 +561,10 @@ print(f"第二次请求命中缓存 Token：{second_completion.usage.cache_read_
 如果将整个提示词作为一个整体缓存，任何微小变化（如外部知识改变）都可能导致无法命中缓存。
 
 在请求中最多可设置四个缓存标记，为提示词的不同部分分别创建缓存块，从而提升命中率并实现精细控制。
+
+<a id="如何计费"></a>
+
+<a id="904e3da8aatwp"></a>
 
 ### 如何计费
 
@@ -526,13 +588,19 @@ print(f"第二次请求命中缓存 Token：{second_completion.usage.cache_read_
     -   qwen3.8-max、qwen3.8-max-0902、qwen3.8-2.4t-a95b：创建缓存按标准输入单价的 125% 计费，但命中缓存的价格不是标准输入单价的 10%。
     -   qwen3.8-flash：**创建缓存的价格不是标准输入单价的 125%**，命中缓存的价格也不是标准输入单价的 10%，且不同地域的比例不同。
 
+<a id="可缓存内容"></a>
+
+<a id="6b2bbf688a3dl"></a>
+
 ### 可缓存内容
 
 仅 `messages` 数组中的以下消息类型支持添加缓存标记：
 
 -   系统消息（System Message）
     
-    **说明**若请求包含 `tools` 参数（Function Calling 场景），工具定义会作为系统消息的一部分参与缓存计算。工具定义不支持独立缓存，在工具定义中添加缓存标记会被忽略，缓存标记只能添加在 messages 的 content 中。
+    > **说明**
+    >
+    > 若请求包含 `tools` 参数（Function Calling 场景），工具定义会作为系统消息的一部分参与缓存计算。工具定义不支持独立缓存，在工具定义中添加缓存标记会被忽略，缓存标记只能添加在 messages 的 content 中。
     
 -   用户消息（User Message）
     
@@ -545,7 +613,9 @@ print(f"第二次请求命中缓存 Token：{second_completion.usage.cache_read_
 
 以系统消息为例，需将 `content` 字段改为数组形式，并添加 `cache_control` 字段：
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
   "role": "system",
   "content": [
@@ -562,6 +632,10 @@ print(f"第二次请求命中缓存 Token：{second_completion.usage.cache_read_
 
 此结构同样适用于 `messages` 数组中的其他消息类型。
 
+<a id="缓存限制"></a>
+
+<a id="3ac7cbab7fzz0"></a>
+
 ### 缓存限制
 
 -   最小可缓存提示词长度为 **1024**Token。
@@ -575,6 +649,10 @@ print(f"第二次请求命中缓存 Token：{second_completion.usage.cache_read_
     > 若缓存标记个数大于4，则最后四个缓存标记生效。
     
 
+<a id="提高-function-calling-缓存命中率"></a>
+
+<a id="a7c4e9f21bn6q"></a>
+
 ### 提高 Function Calling 缓存命中率
 
 由于工具定义会被序列化为 JSON 字符串参与缓存计算，请确保每次请求的工具定义完全一致，以避免缓存失效。具体需注意：
@@ -582,6 +660,10 @@ print(f"第二次请求命中缓存 Token：{second_completion.usage.cache_read_
 -   **工具列表顺序一致**：tools 数组中各工具的排列顺序需保持一致；
 -   **字段顺序一致**：同一个 tool 的 JSON 字段顺序需保持一致；
 -   **字段结构一致**：不要遗漏或新增字段，即使该字段为空或可选。
+
+<a id="并行工具调用场景下的消息结构优化"></a>
+
+<a id="h3-parallel-tool-opt"></a>
 
 ### 并行工具调用场景下的消息结构优化
 
@@ -593,7 +675,9 @@ print(f"第二次请求命中缓存 Token：{second_completion.usage.cache_read_
 
 每个工具结果单独一条 `tool` 消息，多条消息分别占据独立的 `content` 块位置：
 
-```
+<a id="code-block-7"></a>
+
+```python
 # 并行工具调用后，逐条回传结果（不推荐）
 # 若工具数量较多，连续tool消息可能使缓存标记超出20块回溯范围
 messages.extend([
@@ -614,11 +698,14 @@ messages.extend([
     }
 ])
 ```
+
 **合并后（合并传，推荐）**
 
 将所有工具结果合并为一条消息 + 多个 `content` 块，并在最后一个 `content` 块添加 `cache_control` 标记：
 
-```
+<a id="code-block-8"></a>
+
+```python
 # 并行工具调用后，合并回传结果（推荐）
 # 将所有tool结果收集为单条消息的content块，减少消息总量
 tool_results = []
@@ -644,11 +731,19 @@ messages.append({
 
 在消息数组的其他稳定位置（如系统消息末尾）可设置额外的 `cache_control` 标记，单次请求最多支持 4 个标记，合理分布可进一步提升缓存命中率。
 
+<a id="使用示例"></a>
+
+<a id="e6a07a16d4o9z"></a>
+
 ### 使用示例
+
+<a id="accordion-针对长文本的不同提问"></a>
 
 针对长文本的不同提问
 
-```
+<a id="code-block-9"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -706,7 +801,9 @@ print(f"第二次请求未命中也未创建缓存的 Token：{second_completion
 
 此示例缓存代码仓库内容作为前缀。后续针对该仓库进行不同提问。
 
-```
+<a id="code-block-10"></a>
+
+```text
 第一次请求创建缓存 Token：1605
 第一次请求命中缓存 Token：0
 第一次请求未命中也未创建缓存的 Token：13
@@ -716,7 +813,9 @@ print(f"第二次请求未命中也未创建缓存的 Token：{second_completion
 第二次请求未命中也未创建缓存的 Token：15
 ```
 
-> 系统为保证模型效果，会追加少量内部Token，这部分Token按标准输入价格计费，请参见[常见问题](https://help.aliyun.com/zh/model-studio/context-cache#b728b718d5dxf)。
+> 系统为保证模型效果，会追加少量内部Token，这部分Token按标准输入价格计费，请参见[常见问题](context-cache.md#b728b718d5dxf)。
+
+<a id="accordion-function-calling-时缓存工具列表"></a>
 
 Function Calling 时缓存工具列表
 
@@ -724,7 +823,9 @@ Function Calling 时缓存工具列表
 
 以下为完整流程：第一次请求创建缓存，第二次请求命中缓存。
 
-```
+<a id="code-block-11"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -873,7 +974,9 @@ print(f"模型选择了工具: {[t.function.name for t in second_completion.choi
 
 运行代码得到类似如下输出：
 
-```
+<a id="code-block-12"></a>
+
+```text
 === 第一次请求（创建缓存）===
  Prompt Tokens: 2174
  创建缓存 Token: 2156
@@ -887,11 +990,15 @@ print(f"模型选择了工具: {[t.function.name for t in second_completion.choi
  模型选择了工具: ['get_weather']
 ```
 
+<a id="accordion-持续多轮对话"></a>
+
 持续多轮对话
 
 在日常聊天的多轮对话场景，可将每一次请求的 messages 数组中最后一个 content 添加缓存标记。从第二轮对话开始，每次请求都将命中并刷新前一轮对话创建的缓存块，且创建新的缓存块。
 
-```
+<a id="code-block-13"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -927,9 +1034,23 @@ while True:
 
 运行以上代码，输入问题与大模型沟通，每次提问都会命中前一轮创建的缓存块。
 
+<a id="隐式缓存"></a>
+
+<a id="2317ea09cfxok"></a>
+
 ## 隐式缓存
 
+<a id="支持的模型-2"></a>
+
+<a id="05160254d97rg"></a>
+
 ### 支持的模型
+
+<a id="sec-tabs-3"></a>
+
+<a id="华北2-北京-2"></a>
+
+<a id="华北2-北京-2-h4"></a>
 
 #### 华北2（北京）
 
@@ -957,8 +1078,12 @@ while True:
 -   **视觉理解模型**
     -   千问 VL：qwen3-vl-plus
 -   **行业模型**
-    -   [数据挖掘](raw/model-user-guide/model-experience/text-generation-model/specialized-models/data-mining-qwen-doc.md)：qwen-doc-turbo
-    -   [对话分析](raw/_short/tongyi-xiaomi-analysis-pro-972391ee7b0391a7.md)：tongyi-xiaomi-analysis-pro、tongyi-xiaomi-analysis-flash
+    -   [数据挖掘](specialized-models/data-mining-qwen-doc.md)：qwen-doc-turbo
+    -   [对话分析](../../../_short/tongyi-xiaomi-analysis-pro-972391ee7b0391a7.md)：tongyi-xiaomi-analysis-pro、tongyi-xiaomi-analysis-flash
+
+<a id="新加坡-2"></a>
+
+<a id="新加坡-2-h4"></a>
 
 #### 新加坡
 
@@ -978,6 +1103,10 @@ while True:
     -   Kimi（阿里云百炼部署）：kimi-k3.1-pro、kimi-k3.1-pro-prime、kimi-k3、kimi-k2.7-code
 -   **视觉理解模型**
     -   千问 VL：qwen3-vl-plus
+
+<a id="美国-弗吉尼亚-2"></a>
+
+<a id="美国-弗吉尼亚-2-h4"></a>
 
 #### 美国（弗吉尼亚）
 
@@ -1009,6 +1138,10 @@ while True:
         -   DeepSeek（阿里云百炼部署）：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731
         -   GLM（阿里云百炼部署）：glm-5.2
 
+<a id="德国-法兰克福-2"></a>
+
+<a id="德国-法兰克福-2-h4"></a>
+
 #### 德国（法兰克福）
 
 不同服务部署范围支持的模型不同。
@@ -1039,6 +1172,10 @@ while True:
         
         -   千问 VL：qwen3-vl-plus
 
+<a id="日本-东京-2"></a>
+
+<a id="日本-东京-2-h4"></a>
+
 #### 日本（东京）
 
 不同服务部署范围支持的模型不同。
@@ -1061,6 +1198,10 @@ while True:
         -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731
         -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2、glm-5.1
         -   Kimi（阿里云百炼部署）：kimi-k3.1-pro、kimi-k3、kimi-k2.5、kimi-k2.7-code
+
+<a id="中国香港-2"></a>
+
+<a id="中国香港-2-h4"></a>
 
 #### 中国香港
 
@@ -1092,6 +1233,10 @@ while True:
         
         -   千问 VL：qwen3-vl-plus
 
+<a id="工作方式"></a>
+
+<a id="cf508f91cc3x4"></a>
+
 ### 工作方式
 
 向支持隐式缓存的模型发送请求时，该功能会自动开启。系统的工作方式如下：
@@ -1105,9 +1250,15 @@ while True:
 
 > 系统会定期清理长期未使用的缓存数据。上下文缓存命中概率并非100%，即使请求上下文完全一致，仍可能未命中，具体命中概率由系统判定。
 
-**说明**对于阿里云百炼部署的支持隐式缓存的模型，当请求之间存在不少于 1024 Token 的相同前缀时，该公共前缀具备隐式缓存写入和命中的技术条件。智谱部署的GLM、稀宇科技部署的 MiniMax 模型为 512。
+> **说明**
+>
+> 对于阿里云百炼部署的支持隐式缓存的模型，当请求之间存在不少于 1024 Token 的相同前缀时，该公共前缀具备隐式缓存写入和命中的技术条件。智谱部署的GLM、稀宇科技部署的 MiniMax 模型为 512。
 
 达到最小 Token 数不代表请求必然命中缓存。实际是否命中还会受到缓存生成状态、缓存有效期及系统调度等因素影响，请以 API 响应中的缓存命中 Token 数为准。
+
+<a id="提升命中缓存的概率"></a>
+
+<a id="879d1c813epsv"></a>
 
 ### 提升命中缓存的概率
 
@@ -1119,6 +1270,10 @@ while True:
     -   对**同一图像或视频**进行多次提问：将图像或视频放在文本信息前会提高命中概率。
     -   对**不同图像或视频**提问同一问题：将文本信息放在图像或视频前面会提高命中概率。
 
+<a id="如何计费-2"></a>
+
+<a id="7768a4362ailr"></a>
+
 ### 如何计费
 
 开启隐式缓存模式无需额外付费。
@@ -1126,7 +1281,7 @@ while True:
 当请求命中缓存时，命中的输入 Token 按 `cached_token` 计费，折扣比例因模型来源不同而有差异；未被命中的输入 Token 按标准 `input_token`计费。输出 Token 仍按原价计费。
 
 -   阿里云百炼部署的模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、qwen4-max、qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-omni-flash 除外）：`cached_token` 单价为 `input_token` 单价的 **20%**
--   qwen3.8-omni-flash：命中缓存的输入 Token 按固定单价计费，各地域单价见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#4c2e910ce4pcq)。
+-   qwen3.8-omni-flash：命中缓存的输入 Token 按固定单价计费，各地域单价见[模型价格](../../test-1/model-pricing.md#4c2e910ce4pcq)。
 -   deepseek-v4-pro：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
 -   deepseek-v4.1-flash、deepseek-v4.1-flash-1017：`cached_token` 单价为 `input_token` 单价的 **2%**。在华北2（北京）、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港六个地域的繁忙、闲时时段均适用，按对应地域和时段的输入单价计算。
 -   deepseek-v4-pro-0813、deepseek-v4-flash-0731：`cached_token` 单价为 `input_token` 单价的 **10%**
@@ -1149,19 +1304,37 @@ while True:
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1913916571/p893561.png)
 
-可从[返回结果](https://help.aliyun.com/zh/model-studio/context-cache#366ab5759d8ab)的`cached_tokens`属性获取命中缓存的 Token 数。
+可从[返回结果](context-cache.md#366ab5759d8ab)的`cached_tokens`属性获取命中缓存的 Token 数。
 
-> [OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)方式调用无法享受缓存折扣。
+> [OpenAI兼容-Batch（文件输入）](../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)方式调用无法享受缓存折扣。
+
+<a id="命中缓存的案例"></a>
+
+<a id="366ab5759d8ab"></a>
 
 ### 命中缓存的案例
 
+<a id="sec-tabs-4"></a>
+
+<a id="文本生成模型"></a>
+
+<a id="文本生成模型-h4"></a>
+
 #### 文本生成模型
+
+<a id="sec-tabs-5"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
 
 当您使用 OpenAI 兼容的方式调用模型并触发了隐式缓存后，可以得到如下的返回结果，在`usage.prompt_tokens_details['cached_tokens']`可以查看命中缓存的 Token 数（该数值为`usage.prompt_tokens`的一部分）。
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
     "choices": [
         {
@@ -1190,11 +1363,17 @@ while True:
 }
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
 
 当您通过 HTTP 方式调用模型并触发了隐式缓存后，可以得到如下的返回结果（HTTP 接口返回），在`usage.prompt_tokens_details['cached_tokens']`可以查看命中缓存的 Token 数（该数值是 `usage.input_tokens` 的一部分）。通过 DashScope Python SDK 2.0 调用时，返回的是扁平化后的响应对象，同样在 `response.usage.prompt_tokens_details['cached_tokens']` 查看命中缓存的 Token 数。
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
     "request_id": "f3acaa33-e248-97bb-96d5-cbeed34699e1",
     "output": {
@@ -1221,11 +1400,17 @@ while True:
 }
 ```
 
+<a id="anthropic-兼容-2"></a>
+
+<a id="anthropic-兼容-2-h4"></a>
+
 #### Anthropic 兼容
 
 当您使用 Anthropic 兼容的方式调用模型并触发了隐式缓存后，命中缓存的 Token 数通过 `usage.cache_read_input_tokens` 查看（该数值不计入 `usage.input_tokens`，而是单独报告）。
 
-```
+<a id="code-block-16"></a>
+
+```json
 {
     "id": "msg_01XFDUDYJgAACzvnptvVoYEL",
     "type": "message",
@@ -1247,13 +1432,25 @@ while True:
 }
 ```
 
+<a id="视觉理解模型"></a>
+
+<a id="视觉理解模型-h4"></a>
+
 #### 视觉理解模型
+
+<a id="sec-tabs-6"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
 
 #### OpenAI兼容
 
 当您使用 OpenAI 兼容的方式调用模型并触发了隐式缓存后，可以得到如下的返回结果，在`usage.prompt_tokens_details['cached_tokens']`可以查看命中缓存的 Token 数（该 Token 数是`usage.prompt_tokens`的一部分）。
 
-```
+<a id="code-block-17"></a>
+
+```json
 {
   "id": "chatcmpl-3f3bf7d0-b168-9637-a245-dd0f946c700f",
   "choices": [
@@ -1289,6 +1486,10 @@ while True:
 }
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
 
 当您通过 HTTP 方式调用视觉理解模型并触发了隐式缓存后，命中缓存的Token数包含在总输入Token（usage.input\_tokens）中，具体查看位置因地域和模型而异（DashScope Python SDK 2.0 返回扁平化后的响应对象，查看位置相同，如 `response.usage.prompt_tokens_details['cached_tokens']`）：
@@ -1301,7 +1502,9 @@ while True:
 
 > 目前使用`usage.cached_tokens`的模型，后续将升级至`usage.prompt_tokens_details['cached_tokens']`。
 
-```
+<a id="code-block-18"></a>
+
+```json
 {
   "request_id": "06a8f3bb-d871-9db4-857d-2c6eeac819bc",
   "output": {
@@ -1340,11 +1543,17 @@ while True:
 }
 ```
 
+<a id="anthropic-兼容-3"></a>
+
+<a id="anthropic-兼容-3-h4"></a>
+
 #### Anthropic 兼容
 
 当您使用 Anthropic兼容的方式调用视觉理解模型并触发了隐式缓存后，命中缓存的 Token 数会体现在 `usage.cache_read_input_tokens` 字段中（与文本生成模型一致）。
 
-```
+<a id="code-block-19"></a>
+
+```json
 {
   "id": "msg_01XFDUDYJgAACzvnptvVoYEL",
   "type": "message",
@@ -1366,6 +1575,10 @@ while True:
 }
 ```
 
+<a id="典型场景"></a>
+
+<a id="c54101d34fvj1"></a>
+
 ### 典型场景
 
 如果您的不同请求有着相同的前缀信息，上下文缓存可以有效提升这些请求的推理速度，降低推理成本与首包延迟。以下是几个典型的应用场景：
@@ -1376,12 +1589,18 @@ while True:
     
     **第一次请求的消息数组**
 
-```
+<a id="code-block-20"></a>
+
+```python
 messages = [{"role": "system","content": "你是一个语文老师，你可以帮助学生进行阅读理解。"},
           {"role": "user","content": "<文章内容> 这篇课文表达了作者怎样的思想感情？"}]
 ```
+
 **之后请求的消息数组**
-```
+
+<a id="code-block-21"></a>
+
+```python
 messages = [{"role": "system","content": "你是一个语文老师，你可以帮助学生进行阅读理解。"},
           {"role": "user","content": "<文章内容> 请赏析这篇课文的第三自然段。"}]
 ```
@@ -1393,12 +1612,19 @@ messages = [{"role": "system","content": "你是一个语文老师，你可以�
 实现多轮对话需要将每一轮的对话信息添加到 messages 数组中，因此每轮对话的请求都会存在与前轮对话前缀相同的情况，有较高概率命中缓存。
 
 **第一轮对话的消息数组**
-```
+
+<a id="code-block-22"></a>
+
+```python
 messages=[{"role": "system","content": "You are a helpful assistant."},
           {"role": "user","content": "你是谁？"}]
 ```
+
 **第二轮对话的消息数组**
-```
+
+<a id="code-block-23"></a>
+
+```python
 messages=[{"role": "system","content": "You are a helpful assistant."},
           {"role": "user","content": "你是谁？"},
           {"role": "assistant","content": "我是由阿里云开发的千问。"},
@@ -1411,7 +1637,9 @@ messages=[{"role": "system","content": "You are a helpful assistant."},
 
 以让大模型扮演营销专家为例，System prompt包含有大量文本信息，以下是两次请求的消息示例：
 
-```
+<a id="code-block-24"></a>
+
+```python
 system_prompt = """你是一位经验丰富的营销专家。请针对不同产品提供详细的营销建议，格式如下：
 
 1. 目标受众：xxx
@@ -1441,7 +1669,9 @@ messages_2=[
 
 在视频理解场景中，如果对同一个视频提问多次，将`video`放在`text`前会提高命中缓存的概率；如果对不同的视频提问相同的问题，则将`text`放在`video`前面，会提高命中缓存的概率。以下是对同一个视频请求两次的消息示例：
 
-```
+<a id="code-block-25"></a>
+
+````python
 # 第一次请求的user message 提问这段视频的内容
 messages1 = [
     {"role":"system","content":[{"text": "You are a helpful assistant."}]},
@@ -1463,9 +1693,17 @@ messages2 = [
         ]
     }
 ]
-```
+````
+
+<a id="常见问题"></a>
+
+<a id="b7552d704f6zp"></a>
 
 ## 常见问题
+
+<a id="q-上下文缓存的有效期是多久-可以保留多长时间"></a>
+
+<a id="faq-ttl-h3"></a>
 
 ### Q：上下文缓存的有效期是多久（可以保留多长时间）？
 
@@ -1474,11 +1712,21 @@ A：上下文缓存的有效期取决于缓存类型：
 -   **显式缓存**：有效期为 5 分钟，且每次命中后会重新计时 5 分钟；若超过 5 分钟未被命中，系统将自动清理该缓存块。
 -   **隐式缓存**：由系统自动管理，无固定有效期，系统会定期清理长期未使用的缓存数据。
 
-**说明**此处的有效期指通过 API 调用时上下文缓存的生命周期，与**体验中心**的**模型调试**面板中展示的历史对话记录不是同一功能。
+> **说明**
+>
+> 此处的有效期指通过 API 调用时上下文缓存的生命周期，与**体验中心**的**模型调试**面板中展示的历史对话记录不是同一功能。
+
+<a id="q-如何关闭隐式缓存"></a>
+
+<a id="c2021da48cz8w"></a>
 
 ### Q：如何关闭隐式缓存？
 
 A：无法关闭。隐式缓存对所有适用模型请求开启的前提是对回复效果没有影响，且在命中缓存时降低使用成本，提升响应速度。
+
+<a id="q-为什么创建显式缓存后没有命中"></a>
+
+<a id="4192bc246bbsb"></a>
 
 ### Q：为什么创建显式缓存后没有命中？
 
@@ -1487,25 +1735,45 @@ A：有以下可能原因：
 -   创建后 5 分钟内未被命中，超过有效期系统将清理该缓存块；
 -   最后一个`content`与已存在的缓存块的间隔大于20个`content`块时，不会命中缓存，建议创建新的缓存块。
 
+<a id="q-显式缓存命中后-是否会重置有效期"></a>
+
+<a id="659b1eb4b88x0"></a>
+
 ### Q：显式缓存命中后，是否会重置有效期？
 
 A：是的，每次命中都会将该缓存块的有效期重置为5分钟。
+
+<a id="q-不同账号之间的显式缓存是否会共享"></a>
+
+<a id="39c3701cb21ax"></a>
 
 ### Q：不同账号之间的显式缓存是否会共享？
 
 A：不会。无论是隐式缓存还是显式缓存，数据都在账号级别隔离，不会共享。
 
+<a id="q-相同账号使用不同模型显式缓存是否会共享"></a>
+
+<a id="bf7bad26d5mry"></a>
+
 ### Q：相同账号使用不同模型显式缓存是否会共享？
 
 A：不会。缓存数据存在模型间隔离，不会共享。
 
+<a id="q-为什么usage的input-tokens不等于cache-creation-input-tokens和cached-tokens的总和"></a>
+
+<a id="b728b718d5dxf"></a>
+
 ### Q：为什么`usage`的`input_tokens`不等于`cache_creation_input_tokens`和`cached_tokens`的总和？
 
 A：为了确保模型输出效果，后端服务会在用户提供的提示词之后追加少量 Token（通常在10以内），这些 Token 在 `cache_control` 标记之后，因此不会被计入缓存的创建或读取，但会计入总的 `input_tokens`。
+
+<a id="q-如何查看一段时间内-按天-按周-的缓存命中-token-数量"></a>
+
+<a id="faq-cache-stats-by-day-h3"></a>
 
 ### Q：如何查看一段时间内（按天/按周）的缓存命中 Token 数量？
 
 A：可通过以下方式获取指定时间段内的缓存命中数据：
 
 -   **模型监控：**在百炼控制台“[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)”页面，选择目标模型和时间范围，查看 `cache_tokens` 指标（支持按分钟/按小时精度统计）。
--   **账单明细：**在百炼控制台“账单详情”页面导出账单明细，按计费类型筛选"缓存命中"（`cache`）相关记录，按日期分组汇总，可获取每日的缓存命中 Token 计量数据。详细操作请参见[账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
+-   **账单明细：**在百炼控制台“账单详情”页面导出账单明细，按计费类型筛选"缓存命中"（`cache`）相关记录，按日期分组汇总，可获取每日的缓存命中 Token 计量数据。详细操作请参见[账单查询与成本管理](../../test-1/bill-query-and-cost-management.md)。

@@ -2,27 +2,31 @@
 
 让 Agent 工具把本地音频或音频 URL 提交给 Token Plan 语音识别模型，返回转写文本。
 
+<a id="支持的模型"></a>
+
+<a id="tp-asr-models"></a>
+
 ## 支持的模型
 
-模型
+| 模型 | 能力 | 类型 |
+| --- | --- | --- |
+| `qwen-audio-3.0-asr-flash` | 语音识别 | 非实时 |
 
-能力
+更多模型以 [个人版](../token-plan-personal/token-plan-personal-overview.md#tppo-h-models)和[团队版](../token-plan-team-edition/token-plan-team-overview.md#tpto-h-models)支持的模型 为准。
 
-类型
+<a id="前提"></a>
 
-`qwen-audio-3.0-asr-flash`
-
-语音识别
-
-非实时
-
-更多模型以 [个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tppo-h-models)和[团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpto-h-models)支持的模型 为准。
+<a id="tp-asr-prereq"></a>
 
 ## 前提
 
 -   已订阅 Token Plan。个人版在 [我的订阅（个人版）](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal) 获取以 `sk-sp-` 开头的 API Key；团队版在 [成员管理](https://bailian.console.aliyun.com/cn-beijing/subscription/uac-admin/organization/members/list) 分配席位后获取 API Key。
 -   本地已安装 Python 3.9 及以上版本。
--   音频为公网可访问的 URL，或本地文件。音频时长不超过 5 分钟，支持 `wav`、`mp3`、`opus` 等格式，具体限制见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
+-   音频为公网可访问的 URL，或本地文件。音频时长不超过 5 分钟，支持 `wav`、`mp3`、`opus` 等格式，具体限制见[音频规格](../../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02)。
+
+<a id="接口"></a>
+
+<a id="tp-asr-endpoint"></a>
 
 ## 接口
 
@@ -30,13 +34,19 @@
 
 请求头使用 `Authorization: Bearer $ANTHROPIC_AUTH_TOKEN`。请求体和响应字段见下文。
 
+<a id="步骤一-创建-slash-command"></a>
+
+<a id="tp-asr-step1"></a>
+
 ## 步骤一：创建 Slash Command
 
 将套餐 API Key（以 `sk-sp-` 为前缀）配置为环境变量 `$ANTHROPIC_AUTH_TOKEN`，供后续脚本鉴权使用。
 
 在项目根目录创建 `.claude/commands/speech-to-text.md`，写入以下内容：
 
-```
+<a id="code-block"></a>
+
+````text
 调用 Token Plan 语音识别 API，将音频转写为文字。
 
 音频文件或 URL：$ARGUMENTS
@@ -110,39 +120,35 @@ print(result.get("output", {}).get("text") or json.dumps(result, ensure_ascii=Fa
 ```
 
 4. 输出识别文本。需要详细结果时，展示返回 JSON 中的 `output.sentence.text` 和 `output.sentence.words` 字段。
-```
+````
+
+<a id="步骤二-识别音频"></a>
+
+<a id="tp-asr-step2"></a>
 
 ## 步骤二：识别音频
 
 在 Claude Code 中输入 `/speech-to-text ./meeting.wav`，或传入音频 URL：`/speech-to-text https://example.com/audio.mp3`。
 
+<a id="请求要点"></a>
+
+<a id="tp-asr-params"></a>
+
 ## 请求要点
 
-参数
+| 参数 | 说明 |
+| --- | --- |
+| `model` | 固定为 `qwen-audio-3.0-asr-flash`。 |
+| `input.messages[0].content[0].input_audio.data` | 音频 URL，或 `data:audio/{format};base64,{data}` 格式的 Base64 Data URI。 |
+| `parameters.format` | 必填，音频格式，例如 `wav`、`mp3`。 |
+| `parameters.sample_rate` | 可选，音频采样率，例如 `16000`。 |
+| `parameters.language_hints` | 可选，待识别语言代码，最多 4 个，例如 `["zh"]`。 |
 
-说明
+完整参数和响应字段见[非实时语音识别（Qwen-Audio-ASR）HTTP API](../../_short/qwen-audio-asr-http-api-90b9d62787e911f4.md)。
 
-`model`
+<a id="返回结果"></a>
 
-固定为 `qwen-audio-3.0-asr-flash`。
-
-`input.messages[0].content[0].input_audio.data`
-
-音频 URL，或 `data:audio/{format};base64,{data}` 格式的 Base64 Data URI。
-
-`parameters.format`
-
-必填，音频格式，例如 `wav`、`mp3`。
-
-`parameters.sample_rate`
-
-可选，音频采样率，例如 `16000`。
-
-`parameters.language_hints`
-
-可选，待识别语言代码，最多 4 个，例如 `["zh"]`。
-
-完整参数和响应字段见[非实时语音识别（Qwen-Audio-ASR）HTTP API](raw/_short/qwen-audio-asr-http-api-90b9d62787e911f4.md)。
+<a id="tp-asr-response"></a>
 
 ## 返回结果
 
@@ -150,12 +156,20 @@ print(result.get("output", {}).get("text") or json.dumps(result, ensure_ascii=Fa
 -   句子级结果：`output.sentence.text`、`output.sentence.words`（词级时间戳）。
 -   音频时长：`usage.duration`，单位秒。
 
+<a id="其他工具"></a>
+
+<a id="tp-asr-other-tools"></a>
+
 ## 其他工具
 
-其他工具的扩展机制和配置文件路径，参见[接入概览](https://help.aliyun.com/zh/model-studio/token-plan-integration-overview#tp-ext-tools)中的“工具配置路径”。
+其他工具的扩展机制和配置文件路径，参见[接入概览](token-plan-integration-overview.md#tp-ext-tools)中的“工具配置路径”。
+
+<a id="限制"></a>
+
+<a id="tp-asr-limits"></a>
 
 ## 限制
 
 -   Token Plan 当前提供非实时语音识别模型 `qwen-audio-3.0-asr-flash`。
--   单次音频时长不超过 5 分钟，文件大小和格式以[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)为准。
+-   单次音频时长不超过 5 分钟，文件大小和格式以[音频规格](../../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02)为准。
 -   语音识别使用 DashScope 协议接口，Endpoint 为 `https://token-plan.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`。

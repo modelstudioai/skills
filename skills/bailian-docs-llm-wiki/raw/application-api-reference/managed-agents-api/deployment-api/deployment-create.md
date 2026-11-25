@@ -2,216 +2,99 @@
 
 创建一个新的部署，绑定 Agent 并配置触发方式。
 
+<a id="前提"></a>
+
+<a id="h-create-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
+已完成 Endpoint 与鉴权配置，详见[API 总览与认证](../managed-agents-api-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-create-endpoint"></a>
 
 ## 接口
 
 **POST** `/deployments`
 
-## 请求体
-
-**name** `string` **（必选）**
-
-Deployment 名称，最长 256 字符
-
-**description** `string` **（可选）**
-
-部署用途描述
-
-**agent** `object` **（必选）**
-
-关联的 Agent
-
-**environment\_id** `string` **（可选）**
-
-关联的 Environment ID
-
-**schedule** `object` **（可选）**
-
-定时触发配置；不传则为手动触发
-
-**initial\_events** `array<object>` **（必选）**
-
-触发时发送给 Agent 的初始事件列表，1-50 项
-
-**resources** `array<object>` **（可选）**
-
-挂载文件资源列表
-
-**vault\_ids** `array<string>` **（可选）**
-
-关联的 Vault ID 列表
-
-**metadata** `object` **（可选）**
-
-业务自定义键值对
-
-## 请求示例
-
-curl
-
-```
-curl -X POST "$AGENTSTUDIO_URL/deployments" \
-  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-  -H "Content-Type: application/json" \
+<table><tbody><tr><td><a id="h-create-req"></a><h2>请求体</h2><p><strong>name</strong> <code>string</code> <strong>（必选）</strong></p><p>Deployment 名称，最长 256 字符</p><p><strong>description</strong> <code>string</code> <strong>（可选）</strong></p><p>部署用途描述</p><p><strong>agent</strong> <code>object</code> <strong>（必选）</strong></p><p>关联的 Agent</p><p><strong>environment_id</strong> <code>string</code> <strong>（可选）</strong></p><p>关联的 Environment ID</p><p><strong>schedule</strong> <code>object</code> <strong>（可选）</strong></p><p>定时触发配置；不传则为手动触发</p><p><strong>initial_events</strong> <code>array&lt;object&gt;</code> <strong>（必选）</strong></p><p>触发时发送给 Agent 的初始事件列表，1-50 项</p><p><strong>resources</strong> <code>array&lt;object&gt;</code> <strong>（可选）</strong></p><p>挂载文件资源列表</p><p><strong>vault_ids</strong> <code>array&lt;string&gt;</code> <strong>（可选）</strong></p><p>关联的 Vault ID 列表</p><p><strong>metadata</strong> <code>object</code> <strong>（可选）</strong></p><p>业务自定义键值对</p></td><td><a id="h-create-eg"></a><h2>请求示例</h2><a id="fig-code-group"></a><div><a id="fig-code-group-curl-tab"></a>curl<div><a id="code-code-group-curl"></a><pre class="language-bash"><code>curl -X POST &quot;$AGENTSTUDIO_URL/deployments&quot; \
+  -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
   -d '{
-    "name": "每日订单汇总",
-    "agent": {
-      "id": "agent_xxx",
-      "version": 12
+    &quot;name&quot;: &quot;每日订单汇总&quot;,
+    &quot;agent&quot;: {
+      &quot;id&quot;: &quot;agent_xxx&quot;,
+      &quot;version&quot;: 12
     },
-    "environment_id": "env_xxx",
-    "schedule": {
-      "type": "cron",
-      "expression": "0 9 * * 1-5",
-      "timezone": "Asia/Shanghai"
+    &quot;environment_id&quot;: &quot;env_xxx&quot;,
+    &quot;schedule&quot;: {
+      &quot;type&quot;: &quot;cron&quot;,
+      &quot;expression&quot;: &quot;0 9 * * 1-5&quot;,
+      &quot;timezone&quot;: &quot;Asia/Shanghai&quot;
     },
-    "initial_events": [
+    &quot;initial_events&quot;: [
       {
-        "type": "message",
-        "role": "user",
-        "content": [
+        &quot;type&quot;: &quot;message&quot;,
+        &quot;role&quot;: &quot;user&quot;,
+        &quot;content&quot;: [
           {
-            "type": "text",
-            "text": "汇总昨日订单数据"
+            &quot;type&quot;: &quot;text&quot;,
+            &quot;text&quot;: &quot;汇总昨日订单数据&quot;
           }
         ]
       }
     ]
   }'
-```
+</code></pre></div></div></td></tr></tbody></table>
 
-### 响应字段
-
-**id** `string`
-
-Deployment ID
-
-**type** `string`
-
-固定值 deployment
-
-**name** `string`
-
-Deployment 名称
-
-**description** `string`
-
-部署用途描述
-
-**agent** `object`
-
-—
-
-**environment\_id** `string`
-
-—
-
-**schedule** `object`
-
-—
-
-**initial\_events** `array<object>`
-
-—
-
-**resources** `array<object>`
-
-—
-
-**vault\_ids** `array<string>`
-
-—
-
-**metadata** `object`
-
-—
-
-**status** `string`
-
-—
-
-**paused\_reason** `object | null`
-
-暂停原因，仅暂停状态时返回
-
-**archived\_at** `string | null`
-
-—
-
-**created\_at** `string`
-
-—
-
-**updated\_at** `string`
-
-—
-
-**request\_id** `string`
-
-本次请求的唯一标识，排查问题时附带
-
-## 响应
-
-```
-{
-  "id": "depl_xxx",
-  "type": "deployment",
-  "name": "每日订单汇总",
-  "status": "active",
-  "agent": {
-    "id": "agent_xxx",
-    "version": 12
+<table><tbody><tr><td><a id="h-create-dto"></a><h3>响应字段</h3><p><strong>id</strong> <code>string</code></p><p>Deployment ID</p><p><strong>type</strong> <code>string</code></p><p>固定值 deployment</p><p><strong>name</strong> <code>string</code></p><p>Deployment 名称</p><p><strong>description</strong> <code>string</code></p><p>部署用途描述</p><p><strong>agent</strong> <code>object</code></p><p>—</p><p><strong>environment_id</strong> <code>string</code></p><p>—</p><p><strong>schedule</strong> <code>object</code></p><p>—</p><p><strong>initial_events</strong> <code>array&lt;object&gt;</code></p><p>—</p><p><strong>resources</strong> <code>array&lt;object&gt;</code></p><p>—</p><p><strong>vault_ids</strong> <code>array&lt;string&gt;</code></p><p>—</p><p><strong>metadata</strong> <code>object</code></p><p>—</p><p><strong>status</strong> <code>string</code></p><p>—</p><p><strong>paused_reason</strong> <code>object | null</code></p><p>暂停原因，仅暂停状态时返回</p><p><strong>archived_at</strong> <code>string | null</code></p><p>—</p><p><strong>created_at</strong> <code>string</code></p><p>—</p><p><strong>updated_at</strong> <code>string</code></p><p>—</p><p><strong>request_id</strong> <code>string</code></p><p>本次请求的唯一标识，排查问题时附带</p></td><td><a id="h-create-resp"></a><h2>响应</h2><a id="code-block"></a><pre class="language-json"><code>{
+  &quot;id&quot;: &quot;depl_xxx&quot;,
+  &quot;type&quot;: &quot;deployment&quot;,
+  &quot;name&quot;: &quot;每日订单汇总&quot;,
+  &quot;status&quot;: &quot;active&quot;,
+  &quot;agent&quot;: {
+    &quot;id&quot;: &quot;agent_xxx&quot;,
+    &quot;version&quot;: 12
   },
-  "environment_id": "env_xxx",
-  "schedule": {
-    "type": "cron",
-    "expression": "0 9 * * 1-5",
-    "timezone": "Asia/Shanghai",
-    "last_run_at": null,
-    "next_run_at": "2026-07-28T01:00:00Z"
+  &quot;environment_id&quot;: &quot;env_xxx&quot;,
+  &quot;schedule&quot;: {
+    &quot;type&quot;: &quot;cron&quot;,
+    &quot;expression&quot;: &quot;0 9 * * 1-5&quot;,
+    &quot;timezone&quot;: &quot;Asia/Shanghai&quot;,
+    &quot;last_run_at&quot;: null,
+    &quot;next_run_at&quot;: &quot;2026-07-28T01:00:00Z&quot;
   },
-  "initial_events": [
+  &quot;initial_events&quot;: [
     {
-      "type": "message",
-      "role": "user",
-      "content": [
+      &quot;type&quot;: &quot;message&quot;,
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
         {
-          "type": "text",
-          "text": "汇总昨日订单数据"
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;汇总昨日订单数据&quot;
         }
       ]
     }
   ],
-  "resources": [],
-  "vault_ids": [],
-  "metadata": {},
-  "paused_reason": null,
-  "archived_at": null,
-  "created_at": "2026-07-28T01:00:00Z",
-  "updated_at": "2026-07-28T01:00:00Z",
-  "request_id": "req_xxx"
+  &quot;resources&quot;: [],
+  &quot;vault_ids&quot;: [],
+  &quot;metadata&quot;: {},
+  &quot;paused_reason&quot;: null,
+  &quot;archived_at&quot;: null,
+  &quot;created_at&quot;: &quot;2026-07-28T01:00:00Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-07-28T01:00:00Z&quot;,
+  &quot;request_id&quot;: &quot;req_xxx&quot;
 }
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="错误码"></a>
+
+<a id="h-create-err"></a>
 
 ## 错误码
 
-**状态码**
-
-**错误码**
-
-**说明**
-
-400
-
-`InvalidParameter`
-
-Required parameter missing or invalid.
-
-401
-
-`InvalidApiKey`
-
-Invalid API-key provided.
+| 状态码 | 错误码 | 说明 |
+| --- | --- | --- |
+| 400 | `InvalidParameter` | Required parameter missing or invalid. |
+| 401 | `InvalidApiKey` | Invalid API-key provided. |

@@ -2,6 +2,10 @@
 
 可查阅有关阿里云百炼应用和知识库的常见问题。
 
+<a id="应用中心"></a>
+
+<a id="846d9cb485g82"></a>
+
 ## 应用中心
 
 1.  **目前官方都支持什么类型的插件？**
@@ -48,6 +52,10 @@
      不支持自定义header， 仅支持authorization。
      
 
+<a id="数据管理"></a>
+
+<a id="4ecf827036o7v"></a>
+
 ## 数据管理
 
 1.  **上传文件仅支持 pdf/doc/docx 文件, 请重试 错误码：140010**
@@ -67,11 +75,19 @@
     请确认表格中的数据中是否存在空行。产品策略中如果出现空行后面的数据将不会识别。如果第一行是空行，就会认为是空文件。
     
 
+<a id="应用-小程序备案"></a>
+
+<a id="7f74b9d508c4u"></a>
+
 ## 应用/小程序备案
 
 1.  **我的产品接入了通义千问大模型，现需上架到应用市场或小程序平台中，如何备案及申请合作协议？**
-    1.  请参考[应用合规备案](raw/_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)进行备案。
+    1.  请参考[应用合规备案](../../_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)进行备案。
     2.  请通过[大模型百炼合作协议备案自助申请助手](https://smartservice.console.aliyun.com/service/self-service-center/search?id=28023&mode=toolPage&trackFrom=topic-llm2&showDrawer=true)申请通义千问系列模型的合作协议，提交后可在[审核列表](https://smartservice.console.aliyun.com/service/audit-list?spm=5176.2020520104.0.0.52a63a98OYNqWq)查看审核进度。
+
+<a id="阿里云百炼服务协议"></a>
+
+<a id="acc5e39e973vu"></a>
 
 ## 阿里云百炼服务协议
 

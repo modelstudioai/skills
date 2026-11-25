@@ -6,6 +6,10 @@
 
 按 `type` 处理事件。回执的 `client_event_id` 对应请求的 `event_id`。服务端事件自己的 `event_id` 标识当前事件。
 
+<a id="session-created"></a>
+
+<a id="live-session-created"></a>
+
 ## session.created
 
 连接建立后，服务返回会话的默认信息。发送 `session.update` 后，等待 `session.updated` 确认配置生效。
@@ -21,6 +25,8 @@
 `session`object必填
 
 默认会话信息。
+
+<a id="accordion-查看子字段"></a>
 
 查看子字段
 
@@ -47,6 +53,8 @@
 `turn_detection`object按模型返回
 
 默认轮次检测配置。 以下检测参数在 `type` 为 `server_vad` 时返回。
+
+<a id="accordion-查看子字段-2"></a>
 
 查看子字段
 
@@ -78,6 +86,8 @@
 
 输入音频转写能力及默认配置。
 
+<a id="accordion-查看子字段-3"></a>
+
 查看子字段
 
 `model`string
@@ -88,7 +98,9 @@
 
 服务具有接入模型的能力。会话配置生效后再开始推理交互。
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "type": "session.created",
   "event_id": "evt_created",
@@ -111,6 +123,10 @@
 }
 ```
 
+<a id="session-updated"></a>
+
+<a id="live-session-updated"></a>
+
 ## session.updated
 
 会话配置已生效。使用返回的配置。
@@ -126,6 +142,8 @@
 `session`object必填
 
 生效的会话配置。含会话元数据和任务模式。
+
+<a id="accordion-查看子字段-4"></a>
 
 查看子字段
 
@@ -149,6 +167,8 @@
 
 任务模式。
 
+<a id="accordion-查看子字段-5"></a>
+
 查看子字段
 
 `type`string必填
@@ -159,6 +179,8 @@
 
 返回所选传输方式的连接信息。
 
+<a id="accordion-查看子字段-6"></a>
+
 查看子字段
 
 `type`string按配置返回
@@ -167,11 +189,13 @@
 
 `sdp`string按配置返回
 
-使用 WebRTC 时返回 Answer SDP。客户端将它设为远端描述。详见 [WebRTC 接入](raw/_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md)。
+使用 WebRTC 时返回 Answer SDP。客户端将它设为远端描述。详见 [WebRTC 接入](../../../_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md)。
 
 `aoq`object按配置返回
 
-使用 AOQ 时返回临时连接信息。请在收到 `session.updated` 后的 5 分钟内使用返回的 `sid` 和临时凭证发起连接。接入步骤见 [AOQ 接入](raw/_short/qwen-audio-live-aoq-access-7fc752b6a8e53044.md)。
+使用 AOQ 时返回临时连接信息。请在收到 `session.updated` 后的 5 分钟内使用返回的 `sid` 和临时凭证发起连接。接入步骤见 [AOQ 接入](../../../_short/qwen-audio-live-aoq-access-7fc752b6a8e53044.md)。
+
+<a id="accordion-查看子字段-7"></a>
 
 查看子字段
 
@@ -191,6 +215,8 @@ Relay 的 TLS 证书指纹。
 
 可连接的 Relay 地址列表。
 
+<a id="accordion-查看子字段-8"></a>
+
 查看子字段
 
 `endpoint`string
@@ -209,15 +235,25 @@ Relay 路由索引。
 
 附加连接信息。
 
+<a id="accordion-查看子字段-9"></a>
+
 查看子字段
 
 `workspaceIdHash`string
 
 业务空间 ID 的哈希值。
 
+<a id="sec-tabs"></a>
+
+<a id="websocket"></a>
+
+<a id="websocket-h4"></a>
+
 #### WebSocket
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "type": "session.updated",
   "event_id": "evt_updated",
@@ -236,9 +272,15 @@ Relay 路由索引。
 }
 ```
 
+<a id="webrtc-节选"></a>
+
+<a id="webrtc-节选-h4"></a>
+
 #### WebRTC（节选）
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "type": "session.updated",
   "event_id": "evt_updated",
@@ -252,9 +294,15 @@ Relay 路由索引。
 }
 ```
 
+<a id="aoq-节选"></a>
+
+<a id="aoq-节选-h4"></a>
+
 #### AOQ（节选）
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "type": "session.updated",
   "event_id": "evt_updated",
@@ -281,6 +329,10 @@ Relay 路由索引。
 }
 ```
 
+<a id="session-input-audio-muted"></a>
+
+<a id="live-input-audio-muted"></a>
+
 ## session.input\_audio.muted
 
 输入已静音。
@@ -297,13 +349,19 @@ Relay 路由索引。
 
 对应客户端请求的 `event_id`。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
   "type": "session.input_audio.muted",
   "event_id": "evt_muted",
   "client_event_id": "evt_mute"
 }
 ```
+
+<a id="session-input-audio-unmuted"></a>
+
+<a id="live-input-audio-unmuted"></a>
 
 ## session.input\_audio.unmuted
 
@@ -321,13 +379,19 @@ Relay 路由索引。
 
 对应客户端请求的 `event_id`。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
   "type": "session.input_audio.unmuted",
   "event_id": "evt_unmuted",
   "client_event_id": "evt_unmute"
 }
 ```
+
+<a id="session-input-transcript-delta"></a>
+
+<a id="live-input-transcript-delta"></a>
 
 ## session.input\_transcript.delta
 
@@ -353,7 +417,9 @@ Relay 路由索引。
 
 会话时间线上的结束时间，单位为毫秒。
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
   "type": "session.input_transcript.delta",
   "event_id": "evt_input_transcript",
@@ -362,6 +428,10 @@ Relay 路由索引。
   "end_ms": 1600
 }
 ```
+
+<a id="session-output-transcript-delta"></a>
+
+<a id="live-output-transcript-delta"></a>
 
 ## session.output\_transcript.delta
 
@@ -387,7 +457,9 @@ Relay 路由索引。
 
 会话时间线上的结束时间，单位为毫秒。
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
   "type": "session.output_transcript.delta",
   "event_id": "evt_output_transcript",
@@ -396,6 +468,10 @@ Relay 路由索引。
   "end_ms": 5400
 }
 ```
+
+<a id="session-output-audio-delta"></a>
+
+<a id="live-output-audio-delta"></a>
 
 ## session.output\_audio.delta
 
@@ -421,7 +497,9 @@ Base64 编码的 24 kHz 单声道 PCM16LE 原始音频。解码后字节数为�
 
 会话时间线上的结束时间，单位为毫秒。
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
   "type": "session.output_audio.delta",
   "delta": "AAAAAA==",
@@ -429,6 +507,10 @@ Base64 编码的 24 kHz 单声道 PCM16LE 原始音频。解码后字节数为�
   "end_ms": 5420
 }
 ```
+
+<a id="session-delegation-created"></a>
+
+<a id="live-delegation-created"></a>
 
 ## session.delegation.created
 
@@ -462,6 +544,8 @@ Base64 编码的 24 kHz 单声道 PCM16LE 原始音频。解码后字节数为�
 
 任务受理时的上下文快照。
 
+<a id="accordion-查看子字段-10"></a>
+
 查看子字段
 
 `summary`string必填
@@ -471,6 +555,8 @@ Base64 编码的 24 kHz 单声道 PCM16LE 原始音频。解码后字节数为�
 `messages`array\[object\]任务派发时返回
 
 上下文消息。
+
+<a id="accordion-查看子字段-11"></a>
 
 查看子字段
 
@@ -518,6 +604,8 @@ Base64 编码的 24 kHz 单声道 PCM16LE 原始音频。解码后字节数为�
 
 本批受理的补充内容及各自的上下文。
 
+<a id="accordion-查看子字段-12"></a>
+
 查看子字段
 
 `summary`string必填
@@ -527,6 +615,8 @@ Base64 编码的 24 kHz 单声道 PCM16LE 原始音频。解码后字节数为�
 `context`object任务派发时返回
 
 任务受理时的上下文快照。
+
+<a id="accordion-查看子字段-13"></a>
 
 查看子字段
 
@@ -542,7 +632,9 @@ Base64 编码的 24 kHz 单声道 PCM16LE 原始音频。解码后字节数为�
 
 兼容字段。JSON 字符串，可包含 `summary`。
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
   "type": "session.delegation.created",
   "event_id": "evt_delegation",
@@ -578,6 +670,10 @@ Base64 编码的 24 kHz 单声道 PCM16LE 原始音频。解码后字节数为�
 }
 ```
 
+<a id="session-event"></a>
+
+<a id="live-session-event"></a>
+
 ## session.event
 
 接收前台函数调用。使用 `call_id` 关联结果。
@@ -598,6 +694,8 @@ Base64 编码的 24 kHz 单声道 PCM16LE 原始音频。解码后字节数为�
 
 前台模型的函数调用事件。
 
+<a id="accordion-查看子字段-14"></a>
+
 查看子字段
 
 `type`string必填
@@ -607,6 +705,8 @@ Base64 编码的 24 kHz 单声道 PCM16LE 原始音频。解码后字节数为�
 `item`object按事件返回
 
 函数调用项。
+
+<a id="accordion-查看子字段-15"></a>
 
 查看子字段
 
@@ -642,7 +742,9 @@ JSON 字符串形式的函数参数。
 
 前台响应 ID。
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
   "type": "session.event",
   "event_id": "evt_frontend_tool",
@@ -661,6 +763,10 @@ JSON 字符串形式的函数参数。
   }
 }
 ```
+
+<a id="response-event"></a>
+
+<a id="live-response-event"></a>
 
 ## response.event
 
@@ -684,7 +790,9 @@ JSON 字符串形式的函数参数。
 
 `event`object必填
 
-内层事件对象。客户端根据 `event.type` 读取对应字段。下方仅列出部分子字段。Responses 流式事件的结构见 [Responses 流式输出](https://help.aliyun.com/zh/model-studio/qwen-api-via-openai-responses#94ea60632am5g)。
+内层事件对象。客户端根据 `event.type` 读取对应字段。下方仅列出部分子字段。Responses 流式事件的结构见 [Responses 流式输出](../../qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md#94ea60632am5g)。
+
+<a id="accordion-查看子字段-16"></a>
 
 查看子字段
 
@@ -694,7 +802,9 @@ JSON 字符串形式的函数参数。
 
 `response`object按事件返回
 
-后台响应对象。返回字段随事件类型变化。字段定义见 [Responses 响应对象](https://help.aliyun.com/zh/model-studio/retrieve-a-response#retrieve-resp-h2)。
+后台响应对象。返回字段随事件类型变化。字段定义见 [Responses 响应对象](../../qwen-api-reference/openai-compatible-responses/retrieve-a-response.md#retrieve-resp-h2)。
+
+<a id="accordion-查看子字段-17"></a>
 
 查看子字段
 
@@ -705,6 +815,8 @@ JSON 字符串形式的函数参数。
 `usage`object可选
 
 后台模型的 Token 用量。
+
+<a id="accordion-查看子字段-18"></a>
 
 查看子字段
 
@@ -720,7 +832,9 @@ JSON 字符串形式的函数参数。
 
 输入和输出的 Token 总数。
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
   "type": "response.event",
   "event_id": "evt_backend_completed",
@@ -738,6 +852,10 @@ JSON 字符串形式的函数参数。
   }
 }
 ```
+
+<a id="session-thinking-appended"></a>
+
+<a id="live-thinking-appended"></a>
 
 ## session.thinking.appended
 
@@ -763,7 +881,9 @@ JSON 字符串形式的函数参数。
 
 对应客户端请求的 `event_id`。
 
-```
+<a id="code-block-13"></a>
+
+```json
 {
   "type": "session.thinking.appended",
   "event_id": "evt_ack",
@@ -772,6 +892,10 @@ JSON 字符串形式的函数参数。
   "client_event_id": "evt_client_request"
 }
 ```
+
+<a id="session-instructions-appended"></a>
+
+<a id="live-instructions-appended"></a>
 
 ## session.instructions.appended
 
@@ -797,7 +921,9 @@ JSON 字符串形式的函数参数。
 
 对应客户端请求的 `event_id`。
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
   "type": "session.instructions.appended",
   "event_id": "evt_ack",
@@ -806,6 +932,10 @@ JSON 字符串形式的函数参数。
   "client_event_id": "evt_client_request"
 }
 ```
+
+<a id="session-commentary-appended"></a>
+
+<a id="live-commentary-appended"></a>
 
 ## session.commentary.appended
 
@@ -831,7 +961,9 @@ JSON 字符串形式的函数参数。
 
 对应客户端请求的 `event_id`。
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
   "type": "session.commentary.appended",
   "event_id": "evt_ack",
@@ -840,6 +972,10 @@ JSON 字符串形式的函数参数。
   "client_event_id": "evt_client_request"
 }
 ```
+
+<a id="session-usage-updated"></a>
+
+<a id="live-usage-updated"></a>
 
 ## session.usage.updated
 
@@ -857,6 +993,8 @@ JSON 字符串形式的函数参数。
 
 会话用量。
 
+<a id="accordion-查看子字段-19"></a>
+
 查看子字段
 
 `seconds`number必填
@@ -867,13 +1005,17 @@ JSON 字符串形式的函数参数。
 
 上下文使用情况。
 
+<a id="accordion-查看子字段-20"></a>
+
 查看子字段
 
 `usage_ratio`number可选
 
 Token 用量除以上下文上限。结果可能滞后。
 
-```
+<a id="code-block-16"></a>
+
+```json
 {
   "type": "session.usage.updated",
   "event_id": "evt_usage",
@@ -885,6 +1027,10 @@ Token 用量除以上下文上限。结果可能滞后。
   }
 }
 ```
+
+<a id="session-closed"></a>
+
+<a id="live-session-closed"></a>
 
 ## session.closed
 
@@ -905,6 +1051,8 @@ Token 用量除以上下文上限。结果可能滞后。
 `session`object必填
 
 会话关闭时返回的配置快照。
+
+<a id="accordion-查看子字段-21"></a>
 
 查看子字段
 
@@ -928,13 +1076,17 @@ Token 用量除以上下文上限。结果可能滞后。
 
 会话结束时的最终用量。
 
+<a id="accordion-查看子字段-22"></a>
+
 查看子字段
 
 `seconds`number必填
 
 会话累计计费时长（秒）。连接建立后，取 3 秒与实际会话时长中的较大值。
 
-```
+<a id="code-block-17"></a>
+
+```json
 {
   "type": "session.closed",
   "event_id": "evt_closed",
@@ -951,6 +1103,10 @@ Token 用量除以上下文上限。结果可能滞后。
 }
 ```
 
+<a id="error"></a>
+
+<a id="live-error"></a>
+
 ## error
 
 收到 `error` 时，根据 `error.code` 检查请求和会话状态。如果随后收到 `session.closed`，需要继续对话时再建立新连接并配置会话。
@@ -966,6 +1122,8 @@ Token 用量除以上下文上限。结果可能滞后。
 `error`object必填
 
 错误详情。
+
+<a id="accordion-查看子字段-23"></a>
 
 查看子字段
 
@@ -985,7 +1143,9 @@ Token 用量除以上下文上限。结果可能滞后。
 
 对应客户端请求的 `event_id`。
 
-```
+<a id="code-block-18"></a>
+
+```json
 {
   "type": "error",
   "event_id": "evt_server_error",

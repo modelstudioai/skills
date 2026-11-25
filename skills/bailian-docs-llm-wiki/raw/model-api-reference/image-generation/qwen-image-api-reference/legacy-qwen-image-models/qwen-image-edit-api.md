@@ -2,83 +2,51 @@
 
 千问-图像编辑模型支持多图输入和多图输出，可精确修改图内文字、增删或移动物体、改变主体动作、迁移图片风格及增强画面细节。
 
-**快速入口：**[使用指南](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md) | [技术博客](https://qwen.ai/blog?id=1675c295dc29dd31073e5b3f72876e9d684e41c6&from=research.research-list) | [在线体验](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=qwen-image-edit-3.0-pro)
+|  |
+| --- |
+| **快速入口：**[使用指南](../../../../model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md) \| [技术博客](https://qwen.ai/blog?id=1675c295dc29dd31073e5b3f72876e9d684e41c6&from=research.research-list) \| [在线体验](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=qwen-image-edit-3.0-pro) |
+
+<a id="模型概览"></a>
+
+<a id="9809c6c428y0y"></a>
 
 ## 模型概览
 
-**提示词**
+| 提示词 | 输入图 | 输出图像 |
+| --- | --- | --- |
+| 在画面右下角石板路旁、靠近树干根部的位置，以浅灰墨色手写体题写一首七言绝句，字体为行楷风格，笔触自然流畅、略带飞白，大小适中（约占画面高度1/10），与整体水墨淡雅氛围协调。诗文内容为：“青石桥畔柳风轻， 素手拈花闭目听。 一水碧痕浮旧梦， 半篙烟雨入空舲。”诗句横向排列，四句分两行书写（前两句一行，后两句一行），末句“舲”字右下角钤一枚朱红小印，印文为“江南”二字篆书，尺寸约等于单字高度的1/3。 | ![image (18)-2026-03-10-16-39-59](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3279833771/p1058430.webp) | ![image (19)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3279833771/p1058432.png) |
+| 使用图一的城市照片作为底图。请勿更改照片中的真实建筑、街道、车辆或人物。保持照片的真实性。三个图二中的卡通形象在建筑物周围，一个趴在建筑物上方，一个从建筑物的右边探出头来，一个坐在建筑物前的空地上。该形象应采用扁平化的图形风格绘制，轮廓清晰，类似于壁画或海报插图。 | ![image (15)-combine](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3279833771/p1058424.webp) | ![image (17)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3279833771/p1058425.png) |
 
-**输入图**
-
-**输出图像**
-
-在画面右下角石板路旁、靠近树干根部的位置，以浅灰墨色手写体题写一首七言绝句，字体为行楷风格，笔触自然流畅、略带飞白，大小适中（约占画面高度1/10），与整体水墨淡雅氛围协调。诗文内容为：“青石桥畔柳风轻， 素手拈花闭目听。 一水碧痕浮旧梦， 半篙烟雨入空舲。”诗句横向排列，四句分两行书写（前两句一行，后两句一行），末句“舲”字右下角钤一枚朱红小印，印文为“江南”二字篆书，尺寸约等于单字高度的1/3。
-
-![image (18)-2026-03-10-16-39-59](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3279833771/p1058430.webp)
-
-![image (19)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3279833771/p1058432.png)
-
-使用图一的城市照片作为底图。请勿更改照片中的真实建筑、街道、车辆或人物。保持照片的真实性。三个图二中的卡通形象在建筑物周围，一个趴在建筑物上方，一个从建筑物的右边探出头来，一个坐在建筑物前的空地上。该形象应采用扁平化的图形风格绘制，轮廓清晰，类似于壁画或海报插图。
-
-![image (15)-combine](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3279833771/p1058424.webp)
-
-![image (17)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3279833771/p1058425.png)
-
-**模型名称**
-
-**模型简介**
-
-**输出图像规格**
-
-qwen-image-2.0-pro `推荐`
-
-> 当前与qwen-image-2.0-pro-2026-04-22能力相同
-
-千问图像生成与编辑模型Pro系列。文字渲染、真实质感、语义遵循能力更强。
-
-> 图像生成请参考[千问-文生图](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-api.md)。
-
-图像分辨率：
-
--   **可指定**：图像总像素需在512_512至2048_2048之间。
--   **默认**：总像素数接近 1024\*1024，宽高比与输入图（多图输入时为最后一张）相近。
-
-图像格式：png
-
-图像张数：1-6张
-
-qwen-image-2.0-pro-2026-06-22 `推荐`
-
-qwen-image-2.0-pro-2026-04-22
-
-qwen-image-2.0-pro-2026-03-03
-
-qwen-image-2.0 `推荐`
-
-> 当前与qwen-image-2.0-2026-03-03能力相同
-
-千问图像生成与编辑模型加速版，兼顾效果与响应速度。
-
-> 图像生成请参考[千问-文生图](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-api.md)。
-
-qwen-image-2.0-2026-03-03 `推荐`
+<table><thead><tr><th><strong>模型名称</strong></th><th><strong>模型简介</strong></th><th><strong>输出图像规格</strong></th></tr></thead><tbody><tr><td><p>qwen-image-2.0-pro <code>推荐</code></p><blockquote><p>当前与qwen-image-2.0-pro-2026-04-22能力相同</p></blockquote></td><td rowspan="4"><p>千问图像生成与编辑模型Pro系列。文字渲染、真实质感、语义遵循能力更强。</p><blockquote><p>图像生成请参考<a href="qwen-image-api.md">千问-文生图</a>。</p></blockquote></td><td rowspan="6"><p>图像分辨率：</p><ul><li><strong>可指定</strong>：图像总像素需在512<em>512至2048</em>2048之间。</li><li><strong>默认</strong>：总像素数接近 1024*1024，宽高比与输入图（多图输入时为最后一张）相近。</li></ul><p>图像格式：png</p><p>图像张数：1-6张</p></td></tr><tr><td><p>qwen-image-2.0-pro-2026-06-22 <code>推荐</code></p></td></tr><tr><td><p>qwen-image-2.0-pro-2026-04-22</p></td></tr><tr><td><p>qwen-image-2.0-pro-2026-03-03</p></td></tr><tr><td><p>qwen-image-2.0 <code>推荐</code></p><blockquote><p>当前与qwen-image-2.0-2026-03-03能力相同</p></blockquote></td><td rowspan="2"><p>千问图像生成与编辑模型加速版，兼顾效果与响应速度。</p><blockquote><p>图像生成请参考<a href="qwen-image-api.md">千问-文生图</a>。</p></blockquote></td></tr><tr><td><p>qwen-image-2.0-2026-03-03 <code>推荐</code></p></td></tr></tbody></table>
 
 各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 
+<a id="前提条件"></a>
+
+<a id="45139ce723d8f"></a>
+
 ## 前提条件
 
-在调用前，您需要[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+在调用前，您需要[获取与配置 API Key](../../../preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。目前，该SDK已支持Python和Java。
+如需通过SDK进行调用，请[安装DashScope SDK](../../../preparations/install-sdk.md)。目前，该SDK已支持Python和Java。
 
-**重要**华北2（北京）和新加坡地域拥有独立的 **API Key**与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错。
+> **重要**
+>
+> 华北2（北京）和新加坡地域拥有独立的 **API Key**与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+>
+> 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
--   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+<a id="http调用"></a>
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+<a id="42703589880ts"></a>
 
 ## HTTP调用
 
@@ -86,345 +54,133 @@ qwen-image-2.0-2026-03-03 `推荐`
 
 **新加坡地域**：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-#### 请求参数
-
-##### 请求头（Headers）
-
-**Content-Type**`string`**（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-##### 请求体（Request Body）
-
-**model** `string` **（必选）**
-
-模型名称，示例值qwen-image-2.0-pro。
-
-**input** `object` **（必选）**
-
-输入参数对象，包含以下字段：
-
-属性
-
-**messages** `array` **（必选）**
-
-请求内容数组。**当前仅支持单轮对话**，因此数组内**有且只有一个对象**，该对象包含`role`和`content`两个属性。
-
-属性
-
-**role**`string` **（必选）**
-
-消息发送者角色，必须设置为`user`。
-
-**content**`array` **（必选）**
-
-消息内容，包含1-3张图像，格式为 `{"image": "..."}`；以及单个编辑指令，格式为 `{"text": "..."}`。
-
-属性
-
-**image** `string` **（必选）**
-
-输入图像的 URL 或 Base64 编码数据。支持传入1-3张图像。
-
-多图输入时，按照数组顺序定义图像顺序，输出图像的比例以最后一张为准。
-
-**图像要求：**
-
--   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP和GIF。
-    
-    > 输出图像为PNG格式，对于GIF动图，仅处理其第一帧。
-    
--   图像分辨率：为获得最佳效果，建议图像的宽和高均在384像素至3072像素之间。分辨率过低可能导致生成效果模糊，过高则会增加处理时长。
-    
--   图像大小：不超过10MB。
-    
-
-**支持的输入格式**
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-    -   示例值：`https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/fpakfo/image36.webp`。
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-    -   示例值：`oss://dashscope-instant/xxx/2024-07-18/xxx/cat.png`。
-3.  传入 Base64 编码图像后的字符串
-    
-    -   示例值：`data:image/jpeg;base64,GDU7MtCZz...`（示例已截断，仅做演示）
-    -   Base64 编码规范请参见[通过Base64编码传入图片](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
-
-**text**`string`**（必选）**
-
-正向提示词用于描述您期望生成的图像内容、风格和构图。
-
-支持中英文，qwen-image-2.0系列模型长度上限为 1300 Token，超出部分将自动截断。
-
-**注意**：仅支持传入一个text，不传或传入多个将报错。
-
-**parameters** `object` （可选）
-
-控制图像生成的附加参数。
-
-属性
-
-**n** `integer` （可选）
-
-输出图像的数量，默认值为1。
-
-对于qwen-image-2.0系列模型，可选择输出1-6张图片。
-
-**negative\_prompt** `string` （可选）
-
-反向提示词，用来描述不希望在画面中看到的内容，可以对画面进行限制。
-
-支持中英文，长度上限500个字符，每个汉字、字母、数字或符号计为一个字符，超过部分会自动截断。
-
-示例值：低分辨率、错误、最差质量、低质量、残缺、多余的手指、比例不良等。
-
-**size** `string` （可选）
-
-设置输出图像的分辨率，格式为`宽*高`，例如`"1024*1536"`。
-
-**qwen-image-2.0系列模型**：
-
--   图像总像素需在512_512至2048_2048之间。
--   默认总像素数接近 `1024*1024`，宽高比与输入图（多图输入时为最后一张）相近。
-
-> 指定 `size` 参数，系统会以 `size`指定的宽高为目标，将实际输出图像的宽高调整为最接近的16的倍数。例如，设置`1033*1032`，输出图像尺寸为`1040*1024`。
-
-常见比例推荐分辨率
-
--   1:1: 1024_1024、1536_1536
--   2:3: 768_1152、1024_1536
--   3:2: 1152_768、1536_1024
--   3:4: 960_1280、1080_1440
--   4:3: 1280_960、1440_1080
--   9:16: 720_1280、1080_1920
--   16:9: 1280_720、1920_1080
--   21:9: 1344_576、2048_872
-
-**支持模型**：所有模型。
-
-**prompt\_extend** `boolean` （可选）
-
-是否开启提示词智能改写，默认值为 `true`。开启后，模型会优化正向提示词（`text`），对描述较简单的提示词效果提升明显。
-
-**支持模型**：所有模型。
-
-**watermark** `boolean` （可选）
-
-是否在图像右下角添加 "Qwen-Image" 水印。默认值为 `false`。
-
-**seed** `integer` （可选）
-
-随机数种子，取值范围`[0,2147483647]`。
-
-使用相同的`seed`参数值可使生成内容保持相对稳定。若不提供，算法将自动使用随机数种子。
-
-**注意**：模型生成过程具有概率性，即使使用相同的`seed`，也不能保证每次生成结果完全一致。
-
-单图编辑
-
-```
-curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+<table><tbody><tr><td><a id="afcd41d2b57zf"></a><h4>请求参数</h4><a id="79473e45c592d"></a><h5>请求头（Headers）</h5><p><strong>Content-Type</strong><code>string</code><strong>（必选）</strong></p><p>请求内容类型。此参数必须设置为<code>application/json</code>。</p><p><strong>Authorization</strong><code>string</code><strong>（必选）</strong></p><p>请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。</p><a id="45d1fa2260zn6"></a><h5>请求体（Request Body）</h5><p><strong>model</strong> <code>string</code> <strong>（必选）</strong></p><p>模型名称，示例值qwen-image-2.0-pro。</p><p><strong>input</strong> <code>object</code> <strong>（必选）</strong></p><p>输入参数对象，包含以下字段：</p><a id="accordion-属性"></a><section><p>属性</p><div><p><strong>messages</strong> <code>array</code> <strong>（必选）</strong></p><p>请求内容数组。<strong>当前仅支持单轮对话</strong>，因此数组内<strong>有且只有一个对象</strong>，该对象包含<code>role</code>和<code>content</code>两个属性。</p><a id="accordion-属性-2"></a><section><p>属性</p><div><p><strong>role</strong><code>string</code> <strong>（必选）</strong></p><p>消息发送者角色，必须设置为<code>user</code>。</p><p><strong>content</strong><code>array</code> <strong>（必选）</strong></p><p>消息内容，包含1-3张图像，格式为 <code>{&quot;image&quot;: &quot;...&quot;}</code>；以及单个编辑指令，格式为 <code>{&quot;text&quot;: &quot;...&quot;}</code>。</p><a id="accordion-属性-3"></a><section><p>属性</p><div><p><strong>image</strong> <code>string</code> <strong>（必选）</strong></p><p>输入图像的 URL 或 Base64 编码数据。支持传入1-3张图像。</p><p>多图输入时，按照数组顺序定义图像顺序，输出图像的比例以最后一张为准。</p><strong>图像要求：</strong><ul><li><p>图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP和GIF。</p><blockquote><p>输出图像为PNG格式，对于GIF动图，仅处理其第一帧。</p></blockquote></li><li><p>图像分辨率：为获得最佳效果，建议图像的宽和高均在384像素至3072像素之间。分辨率过低可能导致生成效果模糊，过高则会增加处理时长。</p></li><li><p>图像大小：不超过10MB。</p></li></ul><strong>支持的输入格式</strong><ol><li><p>公网URL：</p><ul><li>支持 HTTP 和 HTTPS 协议。</li><li>示例值：<code>https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/fpakfo/image36.webp</code>。</li></ul></li><li><p>临时URL：</p><ul><li>支持OSS协议，必须通过<a href="../../../more-about-models/get-temporary-file-url.md">上传文件获取临时 URL</a>。</li><li>示例值：<code>oss://dashscope-instant/xxx/2024-07-18/xxx/cat.png</code>。</li></ul></li><li><p>传入 Base64 编码图像后的字符串</p><ul><li>示例值：<code>data:image/jpeg;base64,GDU7MtCZz...</code>（示例已截断，仅做演示）</li><li>Base64 编码规范请参见<a href="qwen-image-edit-api.md">通过Base64编码传入图片</a>。</li></ul></li></ol><p><strong>text</strong><code>string</code><strong>（必选）</strong></p><p>正向提示词用于描述您期望生成的图像内容、风格和构图。</p><p>支持中英文，qwen-image-2.0系列模型长度上限为 1300 Token，超出部分将自动截断。</p><p><strong>注意</strong>：仅支持传入一个text，不传或传入多个将报错。</p></div></section></div></section></div></section><p><strong>parameters</strong> <code>object</code> （可选）</p><p>控制图像生成的附加参数。</p><a id="accordion-属性-4"></a><section><p>属性</p><div><p><strong>n</strong> <code>integer</code> （可选）</p><p>输出图像的数量，默认值为1。</p><p>对于qwen-image-2.0系列模型，可选择输出1-6张图片。</p><p><strong>negative_prompt</strong> <code>string</code> （可选）</p><p>反向提示词，用来描述不希望在画面中看到的内容，可以对画面进行限制。</p><p>支持中英文，长度上限500个字符，每个汉字、字母、数字或符号计为一个字符，超过部分会自动截断。</p><p>示例值：低分辨率、错误、最差质量、低质量、残缺、多余的手指、比例不良等。</p><p><strong>size</strong> <code>string</code> （可选）</p><p>设置输出图像的分辨率，格式为<code>宽*高</code>，例如<code>&quot;1024*1536&quot;</code>。</p><p><strong>qwen-image-2.0系列模型</strong>：</p><ul><li>图像总像素需在512<em>512至2048</em>2048之间。</li><li>默认总像素数接近 <code>1024*1024</code>，宽高比与输入图（多图输入时为最后一张）相近。</li></ul><blockquote><p>指定 <code>size</code> 参数，系统会以 <code>size</code>指定的宽高为目标，将实际输出图像的宽高调整为最接近的16的倍数。例如，设置<code>1033*1032</code>，输出图像尺寸为<code>1040*1024</code>。</p></blockquote><a id="accordion-常见比例推荐分辨率"></a><section><p>常见比例推荐分辨率</p><div><ul><li>1:1: 1024<em>1024、1536</em>1536</li><li>2:3: 768<em>1152、1024</em>1536</li><li>3:2: 1152<em>768、1536</em>1024</li><li>3:4: 960<em>1280、1080</em>1440</li><li>4:3: 1280<em>960、1440</em>1080</li><li>9:16: 720<em>1280、1080</em>1920</li><li>16:9: 1280<em>720、1920</em>1080</li><li>21:9: 1344<em>576、2048</em>872</li></ul></div></section><p><strong>支持模型</strong>：所有模型。</p><p><strong>prompt_extend</strong> <code>boolean</code> （可选）</p><p>是否开启提示词智能改写，默认值为 <code>true</code>。开启后，模型会优化正向提示词（<code>text</code>），对描述较简单的提示词效果提升明显。</p><p><strong>支持模型</strong>：所有模型。</p><p><strong>watermark</strong> <code>boolean</code> （可选）</p><p>是否在图像右下角添加 &quot;Qwen-Image&quot; 水印。默认值为 <code>false</code>。</p><p><strong>seed</strong> <code>integer</code> （可选）</p><p>随机数种子，取值范围<code>[0,2147483647]</code>。</p><p>使用相同的<code>seed</code>参数值可使生成内容保持相对稳定。若不提供，算法将自动使用随机数种子。</p><p><strong>注意</strong>：模型生成过程具有概率性，即使使用相同的<code>seed</code>，也不能保证每次生成结果完全一致。</p></div></section></td><td><a id="fig-code-group"></a><div><a id="fig-code-group-单图编辑-tab"></a>单图编辑<div><a id="code-code-group-单图编辑"></a><pre class="language-bash"><code>curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 --header 'Content-Type: application/json' \
---header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
 --data '{
-    "model": "qwen-image-2.0-pro",
-    "input": {
-        "messages": [
+    &quot;model&quot;: &quot;qwen-image-2.0-pro&quot;,
+    &quot;input&quot;: {
+        &quot;messages&quot;: [
             {
-                "role": "user",
-                "content": [
+                &quot;role&quot;: &quot;user&quot;,
+                &quot;content&quot;: [
                     {
-                        "image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260310/jiydyi/image+%2818%29-2026-03-10-16-39-59.webp"
+                        &quot;image&quot;: &quot;https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260310/jiydyi/image+%2818%29-2026-03-10-16-39-59.webp&quot;
                     },
                     {
-                        "text": "在画面右下角石板路旁、靠近树干根部的位置，以浅灰墨色手写体题写一首七言绝句，字体为行楷风格，笔触自然流畅、略带飞白，大小适中（约占画面高度1/10），与整体水墨淡雅氛围协调。诗文内容为：“青石桥畔柳风轻， 素手拈花闭目听。 一水碧痕浮旧梦， 半篙烟雨入空舲。”诗句横向排列，四句分两行书写（前两句一行，后两句一行），末句“舲”字右下角钤一枚朱红小印，印文为“江南”二字篆书，尺寸约等于单字高度的1/3。"
+                        &quot;text&quot;: &quot;在画面右下角石板路旁、靠近树干根部的位置，以浅灰墨色手写体题写一首七言绝句，字体为行楷风格，笔触自然流畅、略带飞白，大小适中（约占画面高度1/10），与整体水墨淡雅氛围协调。诗文内容为：“青石桥畔柳风轻， 素手拈花闭目听。 一水碧痕浮旧梦， 半篙烟雨入空舲。”诗句横向排列，四句分两行书写（前两句一行，后两句一行），末句“舲”字右下角钤一枚朱红小印，印文为“江南”二字篆书，尺寸约等于单字高度的1/3。&quot;
                     }
                 ]
             }
         ]
     },
-    "parameters": {
-        "n": 1,
-        "negative_prompt": " ",
-        "prompt_extend": true,
-        "watermark": false,
-        "size": "2048*2048"
+    &quot;parameters&quot;: {
+        &quot;n&quot;: 1,
+        &quot;negative_prompt&quot;: &quot; &quot;,
+        &quot;prompt_extend&quot;: true,
+        &quot;watermark&quot;: false,
+        &quot;size&quot;: &quot;2048*2048&quot;
     }
 }'
-```
-
-多图融合
-
-```
-curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+</code></pre></div><a id="fig-code-group-多图融合-tab"></a>多图融合<div><a id="code-code-group-多图融合"></a><pre class="language-bash"><code>curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 --header 'Content-Type: application/json' \
---header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
 --data '{
-    "model": "qwen-image-2.0-pro",
-    "input": {
-        "messages": [
+    &quot;model&quot;: &quot;qwen-image-2.0-pro&quot;,
+    &quot;input&quot;: {
+        &quot;messages&quot;: [
             {
-                "role": "user",
-                "content": [
+                &quot;role&quot;: &quot;user&quot;,
+                &quot;content&quot;: [
                     {
-                        "image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260310/rdsgaa/image+%2815%29.png"
+                        &quot;image&quot;: &quot;https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260310/rdsgaa/image+%2815%29.png&quot;
                     },
                     {
-                        "image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260310/qokhtl/image+%2816%29.png"
+                        &quot;image&quot;: &quot;https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260310/qokhtl/image+%2816%29.png&quot;
                     },
                     {
-                        "text": "使用图一的城市照片作为底图。请勿更改照片中的真实建筑、街道、车辆或人物。保持照片的真实性。三个图二中的卡通形象在建筑物周围，一个趴在建筑物上方，一个从建筑物的右边探出头来，一个坐在建筑物前的空地上。该形象应采用扁平化的图形风格绘制，轮廓清晰，类似于壁画或海报插图。"
+                        &quot;text&quot;: &quot;使用图一的城市照片作为底图。请勿更改照片中的真实建筑、街道、车辆或人物。保持照片的真实性。三个图二中的卡通形象在建筑物周围，一个趴在建筑物上方，一个从建筑物的右边探出头来，一个坐在建筑物前的空地上。该形象应采用扁平化的图形风格绘制，轮廓清晰，类似于壁画或海报插图。&quot;
                     }
                 ]
             }
         ]
     },
-    "parameters": {
-        "n": 1,
-        "negative_prompt": " ",
-        "prompt_extend": true,
-        "watermark": false,
-        "size": "2048*2048"
+    &quot;parameters&quot;: {
+        &quot;n&quot;: 1,
+        &quot;negative_prompt&quot;: &quot; &quot;,
+        &quot;prompt_extend&quot;: true,
+        &quot;watermark&quot;: false,
+        &quot;size&quot;: &quot;2048*2048&quot;
     }
 }'
-```
+</code></pre></div></div></td></tr></tbody></table>
 
-#### 响应参数
-
-**output** `object`
-
-包含模型生成结果。
-
-属性
-
-**choices** `array`
-
-结果选项列表。
-
-属性
-
-**finish\_reason** `string`
-
-任务停止原因，自然停止时为`stop`。
-
-**message** `object`
-
-模型返回的消息。
-
-属性
-
-**role**`string`
-
-消息的角色，固定为`assistant`。
-
-**content**`array`
-
-消息内容，包含生成的图像信息。
-
-属性
-
-**image** `string`
-
-生成图像的 URL，格式为PNG。**链接有效期为24小时**，请及时下载并保存图像。
-
-**usage** `object`
-
-本次调用的资源使用情况，仅调用成功时返回。
-
-属性
-
-**image\_count** `integer`
-
-生成图像的张数。
-
-**width** `integer`
-
-生成图像的宽度（像素）。
-
-**height** `integer`
-
-生成图像的高度（像素）。
-
-**request\_id**`string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-#### 任务执行成功
-
-任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
-
-```
-{
-    "output": {
-        "choices": [
+<table><tbody><tr><td><a id="b7e833ee1f962"></a><h4>响应参数</h4><p><strong>output</strong> <code>object</code></p><p>包含模型生成结果。</p><a id="accordion-属性-5"></a><section><p>属性</p><div><p><strong>choices</strong> <code>array</code></p><p>结果选项列表。</p><a id="accordion-属性-6"></a><section><p>属性</p><div><p><strong>finish_reason</strong> <code>string</code></p><p>任务停止原因，自然停止时为<code>stop</code>。</p><p><strong>message</strong> <code>object</code></p><p>模型返回的消息。</p><a id="accordion-属性-7"></a><section><p>属性</p><div><p><strong>role</strong><code>string</code></p><p>消息的角色，固定为<code>assistant</code>。</p><p><strong>content</strong><code>array</code></p><p>消息内容，包含生成的图像信息。</p><a id="accordion-属性-8"></a><section><p>属性</p><div><p><strong>image</strong> <code>string</code></p><p>生成图像的 URL，格式为PNG。<strong>链接有效期为24小时</strong>，请及时下载并保存图像。</p></div></section></div></section></div></section></div></section><p><strong>usage</strong> <code>object</code></p><p>本次调用的资源使用情况，仅调用成功时返回。</p><a id="accordion-属性-9"></a><section><p>属性</p><div><p><strong>image_count</strong> <code>integer</code></p><p>生成图像的张数。</p><p><strong>width</strong> <code>integer</code></p><p>生成图像的宽度（像素）。</p><p><strong>height</strong> <code>integer</code></p><p>生成图像的高度（像素）。</p></div></section><p><strong>request_id</strong><code>string</code></p><p>请求唯一标识。可用于请求明细溯源和问题排查。</p><p><strong>code</strong><code>string</code></p><p>请求失败的错误码。请求成功时不会返回此参数，详情请参见<a href="../../../preparations/error-code.md">错误码</a>。</p><p><strong>message</strong><code>string</code></p><p>请求失败的详细信息。请求成功时不会返回此参数，详情请参见<a href="../../../preparations/error-code.md">错误码</a>。</p></td><td><a id="sec-tabs"></a><section><a id="任务执行成功"></a><section><a id="任务执行成功-h4"></a><h4>任务执行成功</h4><p>任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。</p><a id="code-block"></a><pre class="language-json"><code>{
+    &quot;output&quot;: {
+        &quot;choices&quot;: [
             {
-                "finish_reason": "stop",
-                "message": {
-                    "content": [
+                &quot;finish_reason&quot;: &quot;stop&quot;,
+                &quot;message&quot;: {
+                    &quot;content&quot;: [
                         {
-                            "image": "https://dashscope-result-sz.oss-cn-shenzhen.aliyuncs.com/xxx.png?Expires=xxx"
+                            &quot;image&quot;: &quot;https://dashscope-result-sz.oss-cn-shenzhen.aliyuncs.com/xxx.png?Expires=xxx&quot;
                         }
                     ],
-                    "role": "assistant"
+                    &quot;role&quot;: &quot;assistant&quot;
                 }
             }
         ]
     },
-    "usage": {
-        "height": 2048,
-        "image_count": 1,
-        "width": 2048
+    &quot;usage&quot;: {
+        &quot;height&quot;: 2048,
+        &quot;image_count&quot;: 1,
+        &quot;width&quot;: 2048
     },
-    "request_id": "571ae02f-5c9d-436c-83c2-f221e6df0xxx"
+    &quot;request_id&quot;: &quot;571ae02f-5c9d-436c-83c2-f221e6df0xxx&quot;
 }
-```
-
-#### 任务执行异常
-
-如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
-
-```
-{
-    "request_id": "31f808fd-8eef-9004-xxxxx",
-    "code": "InvalidApiKey",
-    "message": "Invalid API-key provided."
+</code></pre></section><a id="任务执行异常"></a><section><a id="任务执行异常-h4"></a><h4>任务执行异常</h4><p>如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见<a href="../../../preparations/error-code.md">错误码</a>进行解决。</p><a id="code-block-2"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;: &quot;31f808fd-8eef-9004-xxxxx&quot;,
+    &quot;code&quot;: &quot;InvalidApiKey&quot;,
+    &quot;message&quot;: &quot;Invalid API-key provided.&quot;
 }
-```
+</code></pre></section></section></td></tr></tbody></table>
+
+<a id="dashscope-sdk调用"></a>
+
+<a id="db17b3098c2iv"></a>
 
 ## DashScope SDK调用
 
-SDK 的参数命名与[HTTP接口](https://help.aliyun.com/zh/model-studio/qwen-image-edit-api#42703589880ts)基本一致，参数结构根据语言特性进行封装，完整参数列表请参见[千问 API 参考](raw/model-api-reference/qwen-api-reference.md)。
+SDK 的参数命名与[HTTP接口](qwen-image-edit-api.md#42703589880ts)基本一致，参数结构根据语言特性进行封装，完整参数列表请参见[千问 API 参考](../../../qwen-api-reference.md)。
+
+<a id="python-sdk调用"></a>
+
+<a id="a3ad9a3b6d9if"></a>
 
 ### Python SDK调用
 
-**说明**
+> **说明**
+>
+> -   推荐安装最新版DashScope Python SDK，否则可能运行报错：[安装或升级SDK](../../../preparations/install-sdk.md)。
+> -   不支持异步接口。
 
--   推荐安装最新版DashScope Python SDK，否则可能运行报错：[安装或升级SDK](raw/model-api-reference/preparations/install-sdk.md)。
--   不支持异步接口。
+<a id="请求示例"></a>
+
+<a id="3533b0e3eag1b"></a>
 
 #### 请求示例
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-通过公网url传入图片-tab"></a>
+
 通过公网URL传入图片
 
-```
+<a id="code-code-group-2-通过公网url传入图片"></a>
+
+```python
 import json
 import os
 from dashscope import MultiModalConversation
@@ -474,9 +230,13 @@ else:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/error-code")
 ```
 
+<a id="fig-code-group-2-通过base64编码传入图片-tab"></a>
+
 通过Base64编码传入图片
 
-```
+<a id="code-code-group-2-通过base64编码传入图片"></a>
+
+```python
 import json
 import os
 from dashscope import MultiModalConversation
@@ -545,9 +305,13 @@ else:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/error-code")
 ```
 
+<a id="fig-code-group-2-通过url下载图像-tab"></a>
+
 通过URL下载图像
 
-```
+<a id="code-code-group-2-通过url下载图像"></a>
+
+```python
 # 需要安装requests以下载图像: pip install requests
 import requests
 
@@ -567,13 +331,19 @@ image_url = "https://dashscope-result-sz.oss-cn-shenzhen.aliyuncs.com/xxx.png?Ex
 download_image(image_url, save_path='output.png')
 ```
 
+<a id="响应示例"></a>
+
+<a id="177b27c9b28it"></a>
+
 #### 响应示例
 
 图像链接的有效期为24小时，请及时下载图像。
 
 > `input_tokens`、`output_tokens`和`characters`为兼容字段，当前固定为0。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "status_code": 200,
     "request_id": "959afba6-544e-487e-b58a-6bd9fea97xxx",
@@ -608,15 +378,31 @@ download_image(image_url, save_path='output.png')
 }
 ```
 
+<a id="java-sdk调用"></a>
+
+<a id="589b80853e6rn"></a>
+
 ### Java SDK调用
 
-**说明**推荐安装最新版DashScope Java SDK，否则可能运行报错：[安装或升级SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **说明**
+>
+> 推荐安装最新版DashScope Java SDK，否则可能运行报错：[安装或升级SDK](../../../preparations/install-sdk.md)。
+
+<a id="请求示例-2"></a>
+
+<a id="75001167f1m0v"></a>
 
 #### 请求示例
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-通过公网url传入图片-tab"></a>
+
 通过公网URL传入图片
 
-```
+<a id="code-code-group-3-通过公网url传入图片"></a>
+
+```java
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
@@ -691,9 +477,13 @@ public class QwenImageEdit {
 }
 ```
 
+<a id="fig-code-group-3-通过base64编码传入图片-tab"></a>
+
 通过Base64编码传入图片
 
-```
+<a id="code-code-group-3-通过base64编码传入图片"></a>
+
+```java
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
@@ -804,9 +594,13 @@ public class QwenImageEdit {
 }
 ```
 
+<a id="fig-code-group-3-通过url下载图像-tab"></a>
+
 通过URL下载图像
 
-```
+<a id="code-code-group-3-通过url下载图像"></a>
+
+```java
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -844,11 +638,17 @@ public class ImageDownloader {
 }
 ```
 
+<a id="响应示例-2"></a>
+
+<a id="9e9be7d617n7f"></a>
+
 #### 响应示例
 
 图像链接的有效期为24小时，请及时下载图像。
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "requestId": "5d5c3260-fc6c-4b4f-8b35-c06366effxxx",
     "usage": {
@@ -877,25 +677,45 @@ public class ImageDownloader {
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="OajFO"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../preparations/error-code.md)进行解决。
+
+<a id="计费与限流"></a>
+
+<a id="5dafefe82bgrh"></a>
 
 ## 计费与限流
 
--   模型免费额度和计费单价请参见[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
--   模型限流请参见[千问（Qwen-Image）](https://help.aliyun.com/zh/model-studio/rate-limit#f812e7c63axvx)。
--   计费说明：按成功生成的 **图像张数** 计费。模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+-   模型免费额度和计费单价请参见[选择模型](../../../../model-user-guide/get-started-with-models/models.md)。
+-   模型限流请参见[千问（Qwen-Image）](../../../../model-user-guide/get-started-with-models/rate-limit.md#f812e7c63axvx)。
+-   计费说明：按成功生成的 **图像张数** 计费。模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](../../../../model-user-guide/test-1/new-free-quota.md)。
+
+<a id="常见问题"></a>
+
+<a id="fe491e0f39tfz"></a>
 
 ## 常见问题
+
+<a id="q-千问图像编辑模型支持哪些语言"></a>
+
+<a id="e70c6f863ecyc"></a>
 
 #### Q：千问图像编辑模型支持哪些语言？
 
 A：目前正式支持**简体中文和英文**；其他语言可自行尝试，但效果存在不确定性。
 
+<a id="ae11776b04p4u"></a>
+
 ##### Q: 如何查看模型调用量？
 
-A: 模型调用完一小时后，请在[**模型监控**（北京）](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[**模型监控**（新加坡）](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry) 页面，查看模型的调用次数、成功率等指标。详情请参见[账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
+A: 模型调用完一小时后，请在[**模型监控**（北京）](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[**模型监控**（新加坡）](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry) 页面，查看模型的调用次数、成功率等指标。详情请参见[账单查询与成本管理](../../../../model-user-guide/test-1/bill-query-and-cost-management.md)。
+
+<a id="5fb153423ct8z"></a>
 
 ##### Q：如何获取图像存储的访问域名白名单？
 

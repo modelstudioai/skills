@@ -2,30 +2,27 @@
 
 在阿里云上，您无需任何编码，即可为您的组织在企业微信上集成一个有大模型能力加成的 AI 助手。这个助手可以全天候（7x24）响应用户咨询，还能解答私域问题，成为您企业的专属助手，提升用户体验，增强业务竞争力。
 
+<a id="方案概览"></a>
+
+<a id="9f090f0e31045"></a>
+
 ## 方案概览
 
-在企业微信中集成一个 AI 助手，只需几步：
+<table><tbody><tr><td><p>在企业微信中集成一个 AI 助手，只需几步：</p><ol><li><p><strong>创建大模型问答应用</strong>：通过阿里云百炼创建一个大模型应用，并获取调用大模型应用 API 的相关凭证。</p></li><li><p><strong>创建企业微信应用</strong>：创建一个企业微信应用，为您的企业微信组织提供问答服务。</p></li><li><p><strong>创建企业微信连接流：</strong>基于阿里云的 AppFlow 服务，在无需编写代码的情况下，完成企业微信应用和阿里云百炼 RAG 应用的关联，最终实现用户在企业微信聊天中和 RAG 应用对话。</p></li><li><p><strong>配置企业微信应用</strong>：为企业微信应用配置接收消息，即可在聊天中回答用户问题。</p></li><li><p><strong>为大模型问答应用增加私有知识：</strong>开启知识检索增强（RAG），为大模型问答应用增加知识库，让 AI 机器人能回答私有领域的问题，帮助您更好地应对用户咨询。</p></li></ol><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4005080371/p833943.png" alt="image"></p></td><td><p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7752553271/p834112.gif" alt="b681241d-ee05-4416-a3f9-52bca113ff81"></p></td></tr></tbody></table>
 
-1.  **创建大模型问答应用**：通过阿里云百炼创建一个大模型应用，并获取调用大模型应用 API 的相关凭证。
-    
-2.  **创建企业微信应用**：创建一个企业微信应用，为您的企业微信组织提供问答服务。
-    
-3.  **创建企业微信连接流：**基于阿里云的 AppFlow 服务，在无需编写代码的情况下，完成企业微信应用和阿里云百炼 RAG 应用的关联，最终实现用户在企业微信聊天中和 RAG 应用对话。
-    
-4.  **配置企业微信应用**：为企业微信应用配置接收消息，即可在聊天中回答用户问题。
-    
-5.  **为大模型问答应用增加私有知识：**开启知识检索增强（RAG），为大模型问答应用增加知识库，让 AI 机器人能回答私有领域的问题，帮助您更好地应对用户咨询。
-    
+<a id="1-创建大模型问答应用"></a>
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4005080371/p833943.png)
-
-![b681241d-ee05-4416-a3f9-52bca113ff81](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7752553271/p834112.gif)
+<a id="e9e4d5a24buxu"></a>
 
 ## 1\. 创建大模型问答应用
 
 首先创建百炼应用，获取大模型推理 API 服务。
 
-> 阿里云百炼提供的[新用户免费额度](raw/model-user-guide/test-1/new-free-quota.md)可以完全覆盖本教程所需资源消耗。额度消耗完后按 token 计费，相比自行部署大模型可以显著降低初期投入成本。
+> 阿里云百炼提供的[新用户免费额度](../../model-user-guide/test-1/new-free-quota.md)可以完全覆盖本教程所需资源消耗。额度消耗完后按 token 计费，相比自行部署大模型可以显著降低初期投入成本。
+
+<a id="1-1-创建应用"></a>
+
+<a id="4f8c2f65a6wpc"></a>
 
 ### 1.1 创建应用
 
@@ -36,11 +33,17 @@
     > 您可输入Prompt设置角色，引导模型应对客户咨询。
     
 
-```
+<a id="code-block"></a>
+
+```text
 你叫小助，可以帮助用户解答产品选购、使用等方面的问题。
 ```
 
 在右侧**调试**区域输入问题进行测试，智能体将按照提示词设定进行回复，例如询问身份时会回答"我叫小助"。 3. 在页面右侧可以提问验证模型效果。不过目前它还无法准确回答您公司的商品信息。点击右上角的**发布**，我们将在后面的步骤中去解决这一问题。
+
+<a id="1-2-获取调用-api-所需的应用id和api-key"></a>
+
+<a id="48d862bea9yrn"></a>
 
 ### 1.2 获取调用 API 所需的应用ID和API Key
 
@@ -53,9 +56,17 @@
 2.  前往[API Key](https://bailian.console.aliyun.com/?tab=app#/api-key)页面，点击**创建API Key**，在弹出窗口中创建一个新 API-Key。保存 API-Key 到本地用于后续配置。
     
 
+<a id="2-创建企业微信应用"></a>
+
+<a id="44697bdbf6foe"></a>
+
 ## 2\. 创建企业微信应用
 
 接下来您需要在您的组织中创建应用，作为 AI 助手回答用户问题。
+
+<a id="2-1-创建应用"></a>
+
+<a id="1900e02f7ayuo"></a>
 
 ### 2.1 创建应用
 
@@ -63,10 +74,18 @@
 2.  在顶部导航栏中，选择**应用管理**，在**应用**页面下半部分点击**创建应用**。
 3.  在**创建应用**页面，填写**应用名称**和**应用介绍**，上传应用 logo，选择可见范围，完成后点击**创建应用**。
 
+<a id="2-2-获取企业-id-应用agentid-和-secret"></a>
+
+<a id="8aa50710757ev"></a>
+
 ### 2.2 获取企业 ID、应用AgentId 和 Secret
 
 1.  在应用详情页面，复制 AgentID和 Secret，用于下一步创建连接流。
 2.  在顶部导航栏中，选择**我的企业**，在**企业信息**页面，复制企业 ID，用于下一步创建连接流。
+
+<a id="3-创建企业微信连接流"></a>
+
+<a id="3bea46ab0defc"></a>
 
 ## 3\. 创建企业微信连接流
 
@@ -78,7 +97,7 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
     
     在**请选择凭证**下拉框右侧点击刷新按钮（若已有凭证可直接选择），或点击下方**添加新凭证**按钮创建新的企业微信凭证。
     
-3.  在**创建凭证**对话框中，设置一个自定义凭证名称，填入之前获取的企业微信的企业ID、应用 AgentId 和 Secret。保存AppFlow生成的 Token 和 EncodingAESKey到本地（[4.1 配置API接收消息](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-work-wechat#d6e2ae9678564)时需要填写）、保存IP白名单到本地（在[4.2 配置企业可信IP](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-work-wechat#9bbf4aacacund)时需要填写）。点击**下一步**。
+3.  在**创建凭证**对话框中，设置一个自定义凭证名称，填入之前获取的企业微信的企业ID、应用 AgentId 和 Secret。保存AppFlow生成的 Token 和 EncodingAESKey到本地（[4.1 配置API接收消息](add-an-ai-assistant-to-your-work-wechat.md#d6e2ae9678564)时需要填写）、保存IP白名单到本地（在[4.2 配置企业可信IP](add-an-ai-assistant-to-your-work-wechat.md#9bbf4aacacund)时需要填写）。点击**下一步**。
     
 4.  点击**保存**，完成配置。
     
@@ -88,12 +107,20 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
     
 7.  在**基本信息**配置向导页，填写**连接流名称**和**连接流描述**（建议保持默认），完成后点击**下一步**。
     
-8.  界面提示流程配置成功，复制并保存 **WebhookUrl**（[4.1 配置API接收消息](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-work-wechat#d6e2ae9678564)时需要填写），点击**发布**。
+8.  界面提示流程配置成功，复制并保存 **WebhookUrl**（[4.1 配置API接收消息](add-an-ai-assistant-to-your-work-wechat.md#d6e2ae9678564)时需要填写），点击**发布**。
     
+
+<a id="4-配置企业微信应用"></a>
+
+<a id="d148f347d1bum"></a>
 
 ## 4\. 配置企业微信应用
 
 有了 Webhook 地址后，接下来您可以在企业微信应用中配置接收消息来回答用户问题了。
+
+<a id="4-1-配置api接收消息"></a>
+
+<a id="d6e2ae9678564"></a>
 
 ### 4.1 配置API接收消息
 
@@ -114,13 +141,21 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
         如果之前未保存，可访问[AppFlow连接凭证](https://appflow.console.aliyun.com/vendor/cn-hangzhou/connector/user/auth/manage)页面，在**公共连接器企业微信**中，找到刚刚配置的凭证，点击**操作**列的**编辑**从凭证中获取。
         
     
-    > 如果域名主体校验未通过，请参考[域名主体校验未通过怎么办？](raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md)进行处理。
+    > 如果域名主体校验未通过，请参考[域名主体校验未通过怎么办？](add-an-ai-assistant-to-your-work-wechat.md)进行处理。
     
+
+<a id="4-2-配置企业可信ip"></a>
+
+<a id="9bbf4aacacund"></a>
 
 ### 4.2 配置企业可信IP
 
 1.  在应用详情页面，在页面下方开发者接口找到**企业可信IP**卡片，点击**配置**。
 2.  在企业可信IP对话框，粘贴复制的 IP 地址，然后点击**确定**。
+
+<a id="4-3-测试应用"></a>
+
+<a id="4058ba069639d"></a>
 
 ### 4.3 测试应用
 
@@ -129,7 +164,15 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
 1.  在企业微信顶部搜索框搜索应用名称，点击应用进入聊天。在搜索栏中输入**AI 助手**，在搜索结果的**应用**分类下找到并单击**AI 助手**。
 2.  与应用对话，进行交流互动。进入聊天后，发送问题进行测试，**AI 助手**将自动生成回复内容。
 
+<a id="5-为大模型问答应用增加私有知识"></a>
+
+<a id="ebb1851659l79"></a>
+
 ## 5\. 为大模型问答应用增加私有知识
+
+<a id="5-1-配置知识库"></a>
+
+<a id="2c287c4de54w0"></a>
 
 ### 5.1 配置知识库
 
@@ -154,25 +197,53 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
     在应用配置页面中，**文件处理**区域可选择**全文引用**、**切片检索**或**自定义处理**三种处理方式。**知识**区域可设置**调用方式**（如**必定调用**），已添加的知识文档支持配置**相似度阈值**和**权重**。
     
 
+<a id="5-2-检验效果"></a>
+
+<a id="14274667880s2"></a>
+
 ### 5.2 检验效果
 
 有了参考知识，AI 应用就能准确回答您关于阿里云百炼手机的问题了。![2024-08-12\_22-24-56](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7752553271/p834111.png)
+
+<a id="总结"></a>
+
+<a id="2ef9cb54c8ml8"></a>
 
 ## 总结
 
 通过前面的学习，您已经能搭建一个大模型 RAG 应用，并将其以应用的形式添加到企业微信中应对客户咨询，在免费试用额度内无需额外费用。
 
+<a id="应用评测"></a>
+
+<a id="012a3cbc50fpn"></a>
+
 ### 应用评测
 
-建议您在正式上线 AI 应用前，组织业务人员一起参与[应用评测](raw/application-user-guide/agent-governance/agenteval/agenteval-start-using/agenteval-introduction.md)，确保大模型应用的回答效果符合预期。如果不符合预期，可以通过[优化提示词](https://edu.aliyun.com/course/3126500/lesson/344730348)、完善补充私有知识、调整文档切分策略等方法来改进回答效果。
+建议您在正式上线 AI 应用前，组织业务人员一起参与[应用评测](../agent-governance/agenteval/agenteval-start-using/agenteval-introduction.md)，确保大模型应用的回答效果符合预期。如果不符合预期，可以通过[优化提示词](https://edu.aliyun.com/course/3126500/lesson/344730348)、完善补充私有知识、调整文档切分策略等方法来改进回答效果。
+
+<a id="持续改进"></a>
+
+<a id="f978b19e7dwyg"></a>
 
 ### 持续改进
+
+<a id="大模型课程"></a>
+
+<a id="6b40f0f011n3v"></a>
 
 #### 大模型课程
 
 系统体验的改进优化永远没有终点，您可以考虑学习并通过[阿里云大模型ACA认证](https://edu.aliyun.com/certification/aca13)，该认证配套的免费课程能帮助您进一步了解大模型的能力和应用场景，以及如何优化通过大模型的应用效果。
 
+<a id="常见问题"></a>
+
+<a id="f696972e4a25w"></a>
+
 ## 常见问题
+
+<a id="域名主体校验未通过怎么办"></a>
+
+<a id="cd23eee222dvj"></a>
 
 ### 域名主体校验未通过怎么办？
 
@@ -188,7 +259,7 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
         
     3.  解析配置完成后，返回**添加域名**页面，点击**提交**。
         
-    4.  使用该二级域名替换[API接收消息](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-work-wechat#d6e2ae9678564)的URL（即已经填写的WebhookUrl）中的主机名。
+    4.  使用该二级域名替换[API接收消息](add-an-ai-assistant-to-your-work-wechat.md#d6e2ae9678564)的URL（即已经填写的WebhookUrl）中的主机名。
         
 -   如果您的域名没有在阿里云备案，您可以参考如下步骤，将API接收消息中的URL配置为您的企业自有域名，并在企业自有域名对外提供服务的Nginx上配置转发规则，将请求转发到连接流的WebhookUrl。
     
@@ -202,17 +273,27 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
         
     4.  配置可信域名。
         
+        <a id="sec-tabs"></a>
+        
+        <a id="使用计算巢nginx代理"></a>
+        
+        <a id="使用计算巢nginx代理-h4"></a>
+        
         #### 使用计算巢Nginx代理
         
         如果您没有在阿里云备案的可信主体域名，同时也没有Nginx代理，可以通过点击**部署Nginx代理实例**一键自动为您部署并配置Nginx代理。按控制台提示直接确认订单或更改您期望的配置下单，等待部署完成即可。部署过程通常耗时1-3分钟，请刷新列表并耐心等待。
         
-        部署完成后，点击下拉框选择计算巢实例，用计算巢实例Host替换[API接收消息](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-work-wechat#d6e2ae9678564)的URL（即已经填写的WebhookUrl）中的主机名，复制IP白名单并添加到[企业可信IP](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-work-wechat#9bbf4aacacund)中，点击**保存**，完成配置。
+        部署完成后，点击下拉框选择计算巢实例，用计算巢实例Host替换[API接收消息](add-an-ai-assistant-to-your-work-wechat.md#d6e2ae9678564)的URL（即已经填写的WebhookUrl）中的主机名，复制IP白名单并添加到[企业可信IP](add-an-ai-assistant-to-your-work-wechat.md#9bbf4aacacund)中，点击**保存**，完成配置。
+        
+        <a id="使用自有的nginx代理"></a>
+        
+        <a id="使用自有的nginx代理-h4"></a>
         
         #### 使用自有的Nginx代理
         
         使用您自有的Nginx进行代理，同时也需要一台ECS或托管实例进行消息转发。
         
-        1.  选择ECS实例或托管实例，并将IP白名单添加到[企业可信IP](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-work-wechat#9bbf4aacacund)中。
+        1.  选择ECS实例或托管实例，并将IP白名单添加到[企业可信IP](add-an-ai-assistant-to-your-work-wechat.md#9bbf4aacacund)中。
             
         2.  如果您没有实例，可单击**新增实例**前往ECS购买页新购ECS，或者创建托管实例。
             
@@ -220,9 +301,13 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
             
         3.  点击**保存**，完成配置。
             
-        4.  使用Nginx的IP地址替换[API接收消息](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-work-wechat#d6e2ae9678564)的URL（即已经填写的WebhookUrl）中的主机名。
+        4.  使用Nginx的IP地址替换[API接收消息](add-an-ai-assistant-to-your-work-wechat.md#d6e2ae9678564)的URL（即已经填写的WebhookUrl）中的主机名。
             
         
+
+<a id="配置企业可信-ip-时-报错-以下ip属于第三方服务商-为保证企业数据安全-请配置本企业服务器的ip"></a>
+
+<a id="cc72915644bm4"></a>
 
 ### 配置企业可信 IP 时，报错“以下IP属于第三方服务商，为保证企业数据安全，请配置本企业服务器的IP”？
 
@@ -252,6 +337,10 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
 4.  将代理机器的 IP 添加到企业微信可信 IP。访问[企业微信应用列表](https://work.weixin.qq.com/wework_admin/frame#apps)，进入应用详情页面，在页面下方开发者接口找到**企业可信IP**卡片，点击**配置**。
     
 
+<a id="记录-ai-助理对话日志"></a>
+
+<a id="4ba2025501ufl"></a>
+
 ### 记录 AI 助理对话日志
 
 如果您想要记录 AI 助理对话日志并进行分析，您可以参考如下内容在 Appflow 中添加日志节点，将对话内容记录在阿里云日志服务中。
@@ -272,6 +361,10 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
     
 7.  进行对话测试，并查看日志。
     
+
+<a id="如何查看连接流的webhookurl"></a>
+
+<a id="2e8fdc7215xkz"></a>
 
 ### 如何查看连接流的WebhookUrl？
 

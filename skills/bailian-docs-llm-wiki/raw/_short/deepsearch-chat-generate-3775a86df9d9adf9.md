@@ -2,359 +2,90 @@
 
 基于智能体应用管理提供的 agent\_id 与 agent\_version 信息，提供场景化对话、研究、写作相关能力。
 
+<a id="请求语法"></a>
+
+<a id="15a1b40702q4w"></a>
+
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```http
 POST /deep-search-agent/chat/completions HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="764bba3785jy4"></a>
+
 ## 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| stream | bool | 是 | **必须填 true**，当前版本仅支持流式响应。若提供`false`或不提供，请求将失败 |
+| input | object | 是 | 输入字段 |
+| input.request\_id | str | 否 | 请求ID（业务自定义） |
+| input.messages | array\[object\] | 是 | 对话消息 |
+| input.messages.\[\].role | str | 是 | 角色，枚举值为：`user`、`assistant` |
+| input.messages.\[\].content | str | 是 | 生成内容 |
+| parameters | object | 是 | 配置参数字段 |
+| parameters.agent\_options | object | 是 | 智能体专用参数 |
+| parameters.agent\_options.agent\_id | string | 是 | 应用ID |
+| parameters.agent\_options.agent\_version | string | 是 | 应用版本 |
+| parameters.agent\_options.session\_files | array\[string\] | 否 | 动态文件 ID 列表，文件 ID 的获取参考文件上传文档，最大支持传入10个文件ID |
 
-**类型**
+<a id="返回参数"></a>
 
-**是否必须**
-
-**说明**
-
-stream
-
-bool
-
-是
-
-**必须填 true**，当前版本仅支持流式响应。若提供`false`或不提供，请求将失败
-
-input
-
-object
-
-是
-
-输入字段
-
-input.request\_id
-
-str
-
-否
-
-请求ID（业务自定义）
-
-input.messages
-
-array\[object\]
-
-是
-
-对话消息
-
-input.messages.\[\].role
-
-str
-
-是
-
-角色，枚举值为：`user`、`assistant`
-
-input.messages.\[\].content
-
-str
-
-是
-
-生成内容
-
-parameters
-
-object
-
-是
-
-配置参数字段
-
-parameters.agent\_options
-
-object
-
-是
-
-智能体专用参数
-
-parameters.agent\_options.agent\_id
-
-string
-
-是
-
-应用ID
-
-parameters.agent\_options.agent\_version
-
-string
-
-是
-
-应用版本
-
-parameters.agent\_options.session\_files
-
-array\[string\]
-
-否
-
-动态文件 ID 列表，文件 ID 的获取参考文件上传文档，最大支持传入10个文件ID
+<a id="185f157a302l4"></a>
 
 ## 返回参数
 
-**参数名**
-
-**类型**
-
-**是否必须**
-
-**说明**
-
-request\_id
-
-str
-
-是
-
-请求ID（dashscope 平台）
-
-code
-
-str
-
-是
-
-状态码（成功：200）
-
-message
-
-str
-
-是
-
-状态信息
-
-output
-
-object
-
-是
-
-输出字段
-
-output.request\_id
-
-str
-
-否
-
-请求ID（业务自定义）
-
-output.choices
-
-array\[object\]
-
-是
-
-模型输出信息
-
-output.choices.\[\].finish\_reason
-
-str
-
-是
-
-生成结束原因，仅尾包输出`stop`
-
-output.choices.\[\].message
-
-object
-
-是
-
-对话消息
-
-output.choices.\[\].message.role
-
-str
-
-是
-
-角色，枚举值为：`user`、`assistant`、`tool`
-
-output.choices.\[\].message.content
-
-str | array\[object\]
-
-是
-
-生成内容/工具返回内容，当生成配置开启输出报告时，报告消息体类型为`array[object]`
-
-output.choices.\[\].message.reasoning\_content
-
-str
-
-否
-
-思考内容，如果 content内没有内容，则尝试获取最后一轮深度思考中的reasoning\_content内容
-
-output.choices.\[\].message.tool\_calls
-
-array\[object\]
-
-否
-
-工具调用信息
-
-output.choices.\[\].message.tool\_calls\[0\].arguments
-
-dcit\[str,object\]
-
-否
-
-工具调用参数
-
-output.choices.\[\].message.tool\_calls\[0\].name
-
-str
-
-否
-
-工具调用名称
-
-output.choices.\[\].message.additional\_kwargs.extra\_json
-
-Any
-
-否
-
-工具调用返回时，携带结构化输出信息
-
-output.choices.\[\].message.extra
-
-dict
-
-否
-
-步骤状态信息
-
-output.choices.\[\].message.extra.group
-
-str
-
-否
-
-执行阶段
-
-output.choices.\[\].message.extra.step\_change
-
-str
-
-否
-
-步骤变化事件
-
-output.choices.\[\].message.extra.step
-
-str
-
-否
-
-当前步骤
-
-output.choices.\[\].message.response\_metadata
-
-dict
-
-否
-
-请求模型调用详细信息
-
-output.usage
-
-object
-
-否
-
-用量统计
-
-output.usage.input\_tokens
-
-int
-
-否
-
-输入 tokens
-
-output.usage.output\_tokens
-
-int
-
-否
-
-输出 tokens
-
-output.usage.total\_tokens
-
-int
-
-否
-
-总 tokens
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| request\_id | str | 是 | 请求ID（dashscope 平台） |
+| code | str | 是 | 状态码（成功：200） |
+| message | str | 是 | 状态信息 |
+| output | object | 是 | 输出字段 |
+| output.request\_id | str | 否 | 请求ID（业务自定义） |
+| output.choices | array\[object\] | 是 | 模型输出信息 |
+| output.choices.\[\].finish\_reason | str | 是 | 生成结束原因，仅尾包输出`stop` |
+| output.choices.\[\].message | object | 是 | 对话消息 |
+| output.choices.\[\].message.role | str | 是 | 角色，枚举值为：`user`、`assistant`、`tool` |
+| output.choices.\[\].message.content | str \| array\[object\] | 是 | 生成内容/工具返回内容，当生成配置开启输出报告时，报告消息体类型为`array[object]` |
+| output.choices.\[\].message.reasoning\_content | str | 否 | 思考内容，如果 content内没有内容，则尝试获取最后一轮深度思考中的reasoning\_content内容 |
+| output.choices.\[\].message.tool\_calls | array\[object\] | 否 | 工具调用信息 |
+| output.choices.\[\].message.tool\_calls\[0\].arguments | dcit\[str,object\] | 否 | 工具调用参数 |
+| output.choices.\[\].message.tool\_calls\[0\].name | str | 否 | 工具调用名称 |
+| output.choices.\[\].message.additional\_kwargs.extra\_json | Any | 否 | 工具调用返回时，携带结构化输出信息 |
+| output.choices.\[\].message.extra | dict | 否 | 步骤状态信息 |
+| output.choices.\[\].message.extra.group | str | 否 | 执行阶段 |
+| output.choices.\[\].message.extra.step\_change | str | 否 | 步骤变化事件 |
+| output.choices.\[\].message.extra.step | str | 否 | 当前步骤 |
+| output.choices.\[\].message.response\_metadata | dict | 否 | 请求模型调用详细信息 |
+| output.usage | object | 否 | 用量统计 |
+| output.usage.input\_tokens | int | 否 | 输入 tokens |
+| output.usage.output\_tokens | int | 否 | 输出 tokens |
+| output.usage.total\_tokens | int | 否 | 总 tokens |
+
+<a id="计划枚举"></a>
+
+<a id="2b499e26c5p47"></a>
 
 ### 计划枚举
 
-**执行阶段（**`group`**）**
+| 执行阶段（**`group`**） | 描述 | 说明 |
+| --- | --- | --- |
+| planning | 计划中 | 对应plan模型，即系统处于任务规划阶段，该阶段包含 start 和 end 事件 |
+| generating | 生成中 | 表示为写作模型，表示系统正处于报告生成阶段，此阶段不区分详细事件变化，无 start/end 事件；step 状态仅包括 thinking 和 generating，且不会调用工具。 |
 
-**描述**
-
-**说明**
-
-planning
-
-计划中
-
-对应plan模型，即系统处于任务规划阶段，该阶段包含 start 和 end 事件
-
-generating
-
-生成中
-
-表示为写作模型，表示系统正处于报告生成阶段，此阶段不区分详细事件变化，无 start/end 事件；step 状态仅包括 thinking 和 generating，且不会调用工具。
-
-**当前步骤（**`step`**）**
-
-**描述和说明**
-
-planning
-
-计划中
-
-thinking
-
-思考中
-
-reporting
-
-总结中（法律场景特有）
-
-generating
-
-生成中
-
-tool\_calling
-
-工具调用中
-
-tool\_calling\_{工具名称}
-
-工具调用中，附带工具名称
+| 当前步骤（**`step`**） | 描述和说明 |
+| --- | --- |
+| planning | 计划中 |
+| thinking | 思考中 |
+| reporting | 总结中（法律场景特有） |
+| generating | 生成中 |
+| tool\_calling | 工具调用中 |
+| tool\_calling\_{工具名称} | 工具调用中，附带工具名称 |
 
 -   由于模型原因 step\_change 值可能为不存在，请尽可能使用持久化的标志step
 -   空包情况下 step、step\_change、group 字段的值可能不存在
@@ -362,107 +93,35 @@ tool\_calling\_{工具名称}
 -   tool\_call 由 tool\_call\_start、tool\_calling、tool\_return 三个事件组成
 -   tool\_call\_start 表示工具调用开始（开始流式收集工具调用信息，此时还无法吐出工具调用详情（name、args等））、tool\_calling 表示获取到完整工具调用的参数并会抛出完整的工具调用参数tool\_return 表示工具调用返回结果，同时会携带结构化的工具返回信息。
 
-**步骤变化事件 (**`step_change`**)**
+| 步骤变化事件 (**`step_change`**) | 事件发生时**`step`**的值 | 事件名称 | 解释说明 |
+| --- | --- | --- | --- |
+| plan\_start | `planning` | 开始规划 | `step` 状态变为 `planning`, 表示对应状态的开头（包含当前包）。 |
+| plan\_end | `planning` | 结束规划 | `step` 开始变成其他状态，事件发生时 `step` 仍为 `planning`，表示对应状态的结尾（包含当前包）。 |
+| think\_start | `thinking` | 开始思考 | 与 `plan` 事件同理 |
+| think\_end | `thinking` | 结束思考 | 与 `plan` 事件同理 |
+| report\_start | `reporting` | 开始总结 | 与 `plan` 事件同理 |
+| report\_end | `reporting` | 结束总结 | 与 `plan` 事件同理 |
+| generation\_start | `generating` | 开始生成 | 与 `plan` 事件同理 |
+| generation\_end | `generating` | 结束生成 | 与 `plan` 事件同理 |
+| tool\_call\_start | `tool_calling` | 开始工具调用 | 表示工具调用开始（开始流式收集工具调用信息，此时还无法吐出工具调用详情（name、arguments等））。 |
+| tool\_calling | `tool_calling_{工具名称}` | 工具调用中 | 会输出tool\_call的具体参数和工具名称，`tool_calling`状态变为`tool_calling_{工具名称}`。 |
+| tool\_return | `tool_calling_{工具名称}` | 工具返回 | 会携带工具返回信息， `step` 开始变成其他状态，事件发生时 `step` 仍为 `tool_calling_{工具名称}`。 |
 
-**事件发生时**`step`**的值**
+<a id="示例"></a>
 
-**事件名称**
-
-**解释说明**
-
-plan\_start
-
-`planning`
-
-开始规划
-
-`step` 状态变为 `planning`, 表示对应状态的开头（包含当前包）。
-
-plan\_end
-
-`planning`
-
-结束规划
-
-`step` 开始变成其他状态，事件发生时 `step` 仍为 `planning`，表示对应状态的结尾（包含当前包）。
-
-think\_start
-
-`thinking`
-
-开始思考
-
-与 `plan` 事件同理
-
-think\_end
-
-`thinking`
-
-结束思考
-
-与 `plan` 事件同理
-
-report\_start
-
-`reporting`
-
-开始总结
-
-与 `plan` 事件同理
-
-report\_end
-
-`reporting`
-
-结束总结
-
-与 `plan` 事件同理
-
-generation\_start
-
-`generating`
-
-开始生成
-
-与 `plan` 事件同理
-
-generation\_end
-
-`generating`
-
-结束生成
-
-与 `plan` 事件同理
-
-tool\_call\_start
-
-`tool_calling`
-
-开始工具调用
-
-表示工具调用开始（开始流式收集工具调用信息，此时还无法吐出工具调用详情（name、arguments等））。
-
-tool\_calling
-
-`tool_calling_{工具名称}`
-
-工具调用中
-
-会输出tool\_call的具体参数和工具名称，`tool_calling`状态变为`tool_calling_{工具名称}`。
-
-tool\_return
-
-`tool_calling_{工具名称}`
-
-工具返回
-
-会携带工具返回信息， `step` 开始变成其他状态，事件发生时 `step` 仍为 `tool_calling_{工具名称}`。
+<a id="99d580f7f7kzr"></a>
 
 ## 示例
 
+<a id="请求示例"></a>
+
+<a id="f842698af5y13"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "input": {
         "messages": [
@@ -481,9 +140,15 @@ tool\_return
 }
 ```
 
+<a id="返回示例"></a>
+
+<a id="9fb8dffe84ixt"></a>
+
 ### 返回示例
 
-```
+<a id="code-block-3"></a>
+
+```json
 data: {
     "code": "200",
     "message": "",
@@ -516,7 +181,9 @@ data: {
 -   md\_file\_url：md下载链接
 -   html\_file\_url：html下载链接
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "status_code": 200,
   "code": "",
@@ -557,11 +224,21 @@ data: {
 }
 ```
 
+<a id="调用示例"></a>
+
+<a id="ab0dc25cccefs"></a>
+
 ## 调用示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 # coding=utf-8
 
 import os
@@ -643,9 +320,13 @@ if __name__ == "__main__":
                     print("异常解析:", e)
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import java.io.*;
 import java.net.*;
 import java.util.*;

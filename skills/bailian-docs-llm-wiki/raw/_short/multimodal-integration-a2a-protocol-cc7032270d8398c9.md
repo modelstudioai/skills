@@ -2,14 +2,21 @@
 
 已完成自研Agent与多模态交互开发套件的基础集成后，如果想进一步获取端侧的用户信息、设备信息、位置信息、自定义传参信息，或向端侧下发端指令信息等，可以参考此文档来完成协议扩展。
 
+<a id="扩展协议声明"></a>
+
+<a id="d9c96f985051p"></a>
+
 ## 扩展协议声明
 
-将本文档URI添加到[AgentCard](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#854b8c0b10ozm)的`capabilities.extensions`字段，声明支持其中定义的扩展协议。
+将本文档URI添加到[AgentCard](multimodal-integration-a2a-9862d72fb0298480.md#854b8c0b10ozm)的`capabilities.extensions`字段，声明支持其中定义的扩展协议。
 
 本文档URI为：`https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a-protocol`。
 
 **示例：**
-```
+
+<a id="code-block"></a>
+
+```json
 {
   ...
   "capabilities": {
@@ -25,48 +32,37 @@
 }
 ```
 
+<a id="字段说明"></a>
+
+<a id="c44376a5efw3b"></a>
+
 ## 字段说明
+
+<a id="agent调用请求字段"></a>
+
+<a id="9878de0c55013"></a>
 
 ### Agent调用请求字段
 
+<a id="message"></a>
+
+<a id="1f61b50405m3h"></a>
+
 #### Message
 
-Message其他字段说明，请参见[Message](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#ad7fc73eeelos)。
+Message其他字段说明，请参见[Message](multimodal-integration-a2a-9862d72fb0298480.md#ad7fc73eeelos)。
 
-**字段名称**
+<table><thead><tr><th><p><strong>字段名称</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必填</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>metadata</p></td><td><p>Map&lt;String, Object&gt;</p></td><td><p>是</p></td><td><p>与此消息关联的元数据。</p><ul><li><p>user: 用户信息</p></li><li><p>device: 设备信息</p></li><li><p>location: 位置信息</p></li><li><p>userDefinedParams: 自定义参数</p></li><li><p>commandResults: 指令执行结果</p></li><li><p>images：图片信息</p></li><li><p>chatId：标识一轮对话ID</p></li></ul></td></tr></tbody></table>
 
-**类型**
+<a id="示例"></a>
 
-**是否必填**
-
-**说明**
-
-metadata
-
-Map<String, Object>
-
-是
-
-与此消息关联的元数据。
-
--   user: 用户信息
-    
--   device: 设备信息
-    
--   location: 位置信息
-    
--   userDefinedParams: 自定义参数
-    
--   commandResults: 指令执行结果
-    
--   images：图片信息
-    
--   chatId：标识一轮对话ID
-    
+<a id="77be9dfec91j8"></a>
 
 #### 示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "jsonrpc": "2.0",
   "id": "request-1",
@@ -111,99 +107,57 @@ Map<String, Object>
 }
 ```
 
+<a id="agent调用返回字段"></a>
+
+<a id="6e74c0e6d8uwa"></a>
+
 ### Agent调用返回字段
+
+<a id="artifact"></a>
+
+<a id="40569462abr4e"></a>
 
 #### Artifact
 
-**字段名称**
+| 字段名称 | 类型 | 是否必填 | 说明 |
+| --- | --- | --- | --- |
+| metadata | Map<String, [Command](multimodal-integration-a2a-protocol-cc7032270d8398c9.md#06b2940f44vev)\[\]> | 否 | 与此消息关联的元数据。可在返回的最后一个Artifact结构中添加扩展字段。 |
 
-**类型**
+<a id="command"></a>
 
-**是否必填**
-
-**说明**
-
-metadata
-
-Map<String, [Command](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a-protocol#06b2940f44vev)\[\]>
-
-否
-
-与此消息关联的元数据。可在返回的最后一个Artifact结构中添加扩展字段。
+<a id="06b2940f44vev"></a>
 
 #### Command
 
 下发给终端的指令。
 
-**字段名称**
+| 字段名称 | 类型 | 是否必填 | 说明 |
+| --- | --- | --- | --- |
+| name | String | 是 | 指令名称。 |
+| params | [Param](multimodal-integration-a2a-protocol-cc7032270d8398c9.md#b98dc04c3erj1)\[\] | 否 | 指令参数信息。 |
+| commandRequestId | String | 否 | 指令请求ID。 |
 
-**类型**
+<a id="param"></a>
 
-**是否必填**
-
-**说明**
-
-name
-
-String
-
-是
-
-指令名称。
-
-params
-
-[Param](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a-protocol#b98dc04c3erj1)\[\]
-
-否
-
-指令参数信息。
-
-commandRequestId
-
-String
-
-否
-
-指令请求ID。
+<a id="b98dc04c3erj1"></a>
 
 #### Param
 
-**字段**
+| 字段 | 类型 | 是否必填 | 说明 |
+| --- | --- | --- | --- |
+| name | String | 是 | 指令参数名称。 |
+| value | String | 是 | 指令参数值。 |
+| normValue | String | 否 | 指令参数归一化后的值。 |
 
-**类型**
+<a id="示例-2"></a>
 
-**是否必填**
-
-**说明**
-
-name
-
-String
-
-是
-
-指令参数名称。
-
-value
-
-String
-
-是
-
-指令参数值。
-
-normValue
-
-String
-
-否
-
-指令参数归一化后的值。
+<a id="5e39bbcd14tas"></a>
 
 #### 示例
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "id": "request-1",
   "jsonrpc": "2.0",

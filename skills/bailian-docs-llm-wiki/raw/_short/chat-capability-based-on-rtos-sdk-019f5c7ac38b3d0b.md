@@ -2,17 +2,31 @@
 
 本文介绍如何基于设备端C SDK实现聊天能力。
 
+<a id="1-开发准备"></a>
+
+<a id="349795265cc5q"></a>
+
+<a id="eee573648ayw6"></a>
+
 ## 1\. 开发准备
 
-根据[应用创建](raw/_short/multimodal-app-creation-ef194a004f7549d5.md)的文档，创建应用，购买 license，获取 [APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和 AppSecret。
+根据[应用创建](multimodal-app-creation-ef194a004f7549d5.md)的文档，创建应用，购买 license，获取 [APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和 AppSecret。
 
-参考[设备端C SDK](raw/_short/mmi-rtos-sdk-dbfd414713bc31c9.md)，根据芯片型号，下载相应的 SDK 包。
+参考[设备端C SDK](mmi-rtos-sdk-dbfd414713bc31c9.md)，根据芯片型号，下载相应的 SDK 包。
 
-如采用半托管模式，需要根据[设备端C SDK](raw/_short/mmi-rtos-sdk-dbfd414713bc31c9.md)，完成服务端相关接口对接。
+如采用半托管模式，需要根据[设备端C SDK](mmi-rtos-sdk-dbfd414713bc31c9.md)，完成服务端相关接口对接。
+
+<a id="2-sdk-适配"></a>
+
+<a id="9953fba0d6u8p"></a>
+
+<a id="7e89900de26zt"></a>
 
 ## 2\. SDK 适配
 
-**说明****本文档示例和日志中所有形如**`<ID>`**中的**`ID`**均为数据，文档中展示的为脱敏数据。**
+> **说明**
+>
+> **本文档示例和日志中所有形如**`<ID>`**中的**`ID`**均为数据，文档中展示的为脱敏数据。**
 
 不同芯片平台需要使用对应平台的toolchain进行编译，目前百炼已经支持的芯片清单，可直接下载SDK。
 
@@ -20,11 +34,19 @@
 
 `qwen_sdk_<PLATFORM>_<SDK_VERSION>.tar.gz`
 
+<a id="2-1-sdk-目录结构说明"></a>
+
+<a id="1e0b663e0d3uf"></a>
+
+<a id="a90c3f952dv2e"></a>
+
 ### 2.1. SDK 目录结构说明
 
 获取的 SDK 目录结构如下
 
-```
+<a id="code-block"></a>
+
+```c
 ├── ReleaseNote.md
 ├── include
 │   ├── c_utils
@@ -52,6 +74,7 @@
         │   └── ...
         └── libtinycrypt.a
 ```
+
 **说明：**
 
 -   include目录下包含使用SDK所需要的头文件，需要将该目录添加至工程头文件目录下。
@@ -62,11 +85,19 @@
 -   libtinycrypt.a包含加解密依赖接口，如果平台未集成该三方库则必须加载。
 -   libcjson.a包含SDK相关依赖接口，如果平台未集成该三方库则必须加载。
 
+<a id="2-2-sdk-hal-层适配"></a>
+
+<a id="64f6760ae9s13"></a>
+
+<a id="b50858fe195ty"></a>
+
 ### 2.2. SDK HAL 层适配
 
 SDK 包中如下列出的五个头文件中的函数声明，开发者必须根据自己的开发平台实现相关函数。
 
-```
+<a id="code-block-2"></a>
+
+```c
 qwen_sdk/include/c_utils/
     ├──hal_util_mem.h
     ├──hal_util_mutex.h
@@ -82,21 +113,27 @@ qwen_sdk/include/c_utils/
 
 -   **内存模块（**`qwen_sdk/include/c_utils/hal_util_mem.h`**）**
 
-```
+<a id="code-block-3"></a>
+
+```c
 void * util_malloc(int32_t size);
 void util_free(void *ptr);
 ```
 
 -   **随机数模块（**`qwen_sdk/include/c_utils/hal_util_random.h`**）**
 
-```
+<a id="code-block-4"></a>
+
+```c
 int32_t util_random_init(uint32_t seed);
 uint32_t util_random(void);
 ```
 
 -   **存储模块（**`qwen_sdk/include/c_utils/hal_util_storage.h`**）**
 
-```
+<a id="code-block-5"></a>
+
+```c
 int32_t util_storage_erase(void);
 int32_t util_storage_storage(uint8_t *data, uint32_t size);
 int32_t util_storage_load(uint8_t *data, uint32_t size);
@@ -104,7 +141,9 @@ int32_t util_storage_load(uint8_t *data, uint32_t size);
 
 -   **时间模块（**`qwen_sdk/include/c_utils/hal_util_time.h`**）**
 
-```
+<a id="code-block-6"></a>
+
+```c
 void util_msleep(uint32_t ms);
 int64_t util_get_timestamp_ms(void);
 uint8_t util_timestamp_inited(void);
@@ -112,7 +151,9 @@ uint8_t util_timestamp_inited(void);
 
 -   **互斥锁模块（**`qwen_sdk/include/c_utils/hal_util_mutex.h`**）**
 
-```
+<a id="code-block-7"></a>
+
+```c
 /* 互斥锁结构体定义 */
 typedef struct _util_mutex_t {
     void *mutex_handle; /* 互斥锁句柄，具体实现依赖于平台 */
@@ -124,6 +165,12 @@ int32_t util_mutex_lock(util_mutex_t *mutex, int32_t timeout);
 int32_t util_mutex_unlock(util_mutex_t *mutex);
 ```
 
+<a id="2-3-hal-层移植验收标准"></a>
+
+<a id="f114d33fb1poc"></a>
+
+<a id="0dccbd4c99jtx"></a>
+
 ### 2.3. HAL 层移植验收标准
 
 在实现以上各模块之后，加载`libqwen_test.a`，在主程序中直接调用函数`qwen_sdk_test()`，就会对以上工作模块进行测试，输出日志可查看测试结果。
@@ -132,7 +179,9 @@ int32_t util_mutex_unlock(util_mutex_t *mutex);
 
 测试成功的输出日志示例：
 
-```
+<a id="code-block-8"></a>
+
+```bash
 [UT][I][qwen_sdk_test]********************* Hal Test Start *********************
 [UT][I][qwen_sdk_test]********************* memory test done *******************
 [UT][I][qwen_sdk_test]time is 1753344478377
@@ -143,6 +192,12 @@ int32_t util_mutex_unlock(util_mutex_t *mutex);
 [UT][I][qwen_sdk_test]********************* Hal Test End ***********************
 ```
 
+<a id="3-设备初始化"></a>
+
+<a id="WuyBt"></a>
+
+<a id="9313d235474xz"></a>
+
 ## 3\. 设备初始化
 
 在使用 SDK 前，需要通过阿里云百炼平台——[多模态控制台](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app)，创建应用并获取 AppId 、API Key
@@ -151,7 +206,9 @@ int32_t util_mutex_unlock(util_mutex_t *mutex);
 
 初始化示例代码如下：（以 license全托管模式为例）
 
-```
+<a id="code-block-9"></a>
+
+```c
 #include "c_mmi.h"
 #include "lib_c_license.h"
 
@@ -199,7 +256,9 @@ int dummy_qwen_sdk_init(void)
 
 参考日志
 
-```
+<a id="code-block-10"></a>
+
+```bash
 [c_license_reset]ver[0x00010100][1.1.0] done
 [UT][I][c_mmi_storage_save]stroage [176]
 [UT][I][c_mmi_storage_save]ver[0x00010100][1.1.0] done
@@ -243,15 +302,29 @@ int dummy_qwen_sdk_init(void)
 [UT][I][c_mmi_config_print]>>>>>>>>>>> mmi config end <<<<<<<<<<<
 ```
 
+<a id="4-设备侧网络通信构建"></a>
+
+<a id="9298bcd2fb11l"></a>
+
+<a id="45f01789bdfib"></a>
+
 ## 4\. 设备侧网络通信构建
 
 SDK使用中需要使用`HTTP`和`WEBSOCKET`协议，需要开发者实现相应收发流程，SDK 仅负责发送数据的封装和接收数据的解析。
+
+<a id="4-1-http-通信"></a>
+
+<a id="2eec6fd19c8jp"></a>
+
+<a id="c50295d724s9t"></a>
 
 ### 4.1. HTTP 通信
 
 文档中将 http 通信相关功能简化为接收和发送两个函数，具体不同平台实现需要开发者自行适配，以下示例代码仅用于说明交互流程。
 
-```
+<a id="code-block-11"></a>
+
+```c
 // http发送函数
 int dummy_http_request(char* method, char* host, char* api, char *port, char* header, \
                          char* body, int(*rsp_async_cb)(char* rsp_data, int rsp_len));
@@ -263,11 +336,19 @@ int dummy_http_response_for_register(char* rsp_data, int rsp_len);
 int dummy_http_response_for_token(char* rsp_data, int rsp_len);
 ```
 
+<a id="4-1-1-设备注册"></a>
+
+<a id="cb01494801a2s"></a>
+
+<a id="d8f6e47a76lkh"></a>
+
 #### 4.1.1. 设备注册
 
 设备注册示例代码如下：
 
-```
+<a id="code-block-12"></a>
+
+```c
 int dummy_http_response_for_register(int status, char* rsp_data, int rsp_len)
 {
     int err;
@@ -351,7 +432,9 @@ int dummy_qwen_sdk_init(void)
 
 设备端SDK生成的请求数据包示例，如下是http请求报文中body字段
 
-```
+<a id="code-block-13"></a>
+
+```json
 {
     "appId": "Your AppId",
     "deviceName": "Your DeviceName",
@@ -364,7 +447,9 @@ int dummy_qwen_sdk_init(void)
 
 设备端解析的注册信息数据包示例，如下是http回应报文中data字段
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
     "appId": "Your AppId",
     "deviceName": "Your DeviceName",
@@ -374,11 +459,14 @@ int dummy_qwen_sdk_init(void)
     "signature": "YOUR_SIGNATURE"
 }
 ```
+
 **注意：调用c\_license\_analyze\_register\_rsp时，入参数据必须与示例数据格式保持一致**
 
 调试日志如下：
 
-```
+<a id="code-block-15"></a>
+
+```bash
 [LICENSE][I][c_license_gen_register_str]req_str [356][{"appId":"mm_Your AppId","deviceName":"Your DeviceName","nonce":"Nonce","requestTime":"Time","sdkVersion":"1.1.0","signature":"YOUR_SIGNATURE"}]
 [LICENSE][I][c_license_analyze_register_rsp]rsp_str [376][{"nonce":"Nonce","responseTime":"Time","appId":"mm_Your AppId","deviceName":"Your DeviceName","signature":"YOUR_SIGNATURE"}]
 [LICENSE][I][c_license_analyze_register_rsp]nonce       [Nonce]
@@ -386,7 +474,9 @@ int dummy_qwen_sdk_init(void)
 
 完整的 http 发送报文如下所示：
 
-```
+<a id="code-block-16"></a>
+
+```http
 POST /api/device/v1/register HTTP/1.1
 Host: bailian.multimodalagent.aliyuncs.com
 Accept: */*
@@ -398,7 +488,9 @@ Content-Length: 356
 
 完整的 http 接收报文如下所示：
 
-```
+<a id="code-block-17"></a>
+
+```http
 HTTP/1.1 200 OK
 content-type: application/json
 date: Wed, 07 Jan 2026 11:38:25 GMT
@@ -415,11 +507,19 @@ transfer-encoding: chunked
 0
 ```
 
+<a id="4-1-2-设备登录"></a>
+
+<a id="d351b527a4dly"></a>
+
+<a id="39632b6c734sk"></a>
+
 #### 4.1.2. 设备登录
 
 设备**每次**在连接阿里云多模态交互 AI 应用前，需要先获取 token 才能进行连接，获取 token示例代码如下：
 
-```
+<a id="code-block-18"></a>
+
+```c
 int dummy_http_response_for_token(int status, char* rsp_data, int rsp_len)
 {
     int err;
@@ -515,11 +615,19 @@ int dummy_qwen_sdk_init(void)
 
 * * *
 
+<a id="4-1-3-示例数据"></a>
+
+<a id="e2be69f1d960l"></a>
+
+<a id="afd1283824gad"></a>
+
 #### 4.1.3. 示例数据
 
 设备端SDK生成的请求数据包示例，如下是http请求报文中body字段
 
-```
+<a id="code-block-19"></a>
+
+```json
 {
     "appId": "Your AppId",
     "deviceName": "Your DeviceName",
@@ -533,7 +641,9 @@ int dummy_qwen_sdk_init(void)
 
 设备端解析的注册信息数据包示例,，如下是http回应报文中data字段
 
-```
+<a id="code-block-20"></a>
+
+```json
 {
     "nonce": "Nonce",
     "responseTime": "Time",
@@ -543,11 +653,14 @@ int dummy_qwen_sdk_init(void)
     "signature": "YOUR_SIGNATURE"
 }
 ```
+
 **注意：调用c\_license\_analyze\_get\_token\_rsp时，入参数据必须与示例数据格式保持一致。**
 
 调试日志如下：
 
-```
+<a id="code-block-21"></a>
+
+```bash
 [LICENSE][I][_gen_get_token_str]plaintext [201][{"apiKey":"Your ApiKey","appId":"Your AppId","deviceName":"Your DeviceName","payMode":"LICENSE","requestTime":"Time","sdkVersion":"1.1.0","tokenType":"MMI"}]
 [LICENSE][I][_gen_get_token_str]req_str [462][{"appId":"Your AppId","deviceName":"Your DeviceName","nonce":"Nonce","requestTime":"Time","sdkVersion":"1.1.0","tokenType":"MMI","signature":"YOUR_SIGNATURE"}]
 [LICENSE][I][c_license_analyze_get_token_rsp]rsp_str [603][{"nonce":"Nonce","responseTime":"Time","appId":"Your AppId","deviceName":"Your DeviceName","requestIp":"Your IP","signature":"YOUR_SIGNATURE"}]
@@ -556,7 +669,9 @@ int dummy_qwen_sdk_init(void)
 
 完整的 http 发送报文如下所示：
 
-```
+<a id="code-block-22"></a>
+
+```http
 POST /api/token/v1/getToken HTTP/1.1
 Host: bailian.multimodalagent.aliyuncs.com
 Accept: */*
@@ -568,7 +683,9 @@ Content-Length: 462
 
 完整的 http 接收报文如下所示：
 
-```
+<a id="code-block-23"></a>
+
+```http
 HTTP/1.1 200 OK
 content-type: application/json
 date: Wed, 07 Jan 2026 11:38:24 GMT
@@ -585,6 +702,12 @@ transfer-encoding: chunked
 0
 ```
 
+<a id="4-2-websocket-通信"></a>
+
+<a id="fbbecfbb9a2q8"></a>
+
+<a id="ffa9894b22ciz"></a>
+
 ### 4.2. WEBSOCKET 通信
 
 在完成设备登录功能对接后，开始进行 websocket 通信调试。
@@ -593,7 +716,9 @@ transfer-encoding: chunked
 
 websocket 示例代码
 
-```
+<a id="code-block-24"></a>
+
+```c
 // 进行websocket连接
 int dummy_wss_connect(char* host, char* port, char* api, char* header);
 
@@ -613,11 +738,19 @@ int dummy_wss_task_send(void);
 int dummy_wss_task_recv(void);
 ```
 
+<a id="4-2-1-建立-websocket-连接"></a>
+
+<a id="053a067889jll"></a>
+
+<a id="e95708eaefjnv"></a>
+
 #### 4.2.1. 建立 websocket 连接
 
 以下示例代码描述了如何建立 websocket连接，SDK会提供host、port、api以及header字段，其余字段需要开发者自己填充打包并完成发送流程。
 
-```
+<a id="code-block-25"></a>
+
+```c
 int dummy_wss_init(void)
 {
     // 建立websocket连接，获取连接字段
@@ -635,15 +768,19 @@ int dummy_wss_init(void)
 }
 ```
 
-**重要**本 SDK 与云端的 websocket 通信需要建立 TLS 隧道，需要做如下配置：
-
--   TLS 版本要求 TLS1.2 或以上
--   开启 SNI（SERVER NAME INDICATION）
--   配置 CA 证书（[GlobalSign Root CA - R46](https://secure.globalsign.com/cacert/rootr46.crt)）（也可至[GlobalSign官网](https://support.globalsign.com/ca-certificates/globalsign-root-certificates)下载）
+> **重要**
+>
+> 本 SDK 与云端的 websocket 通信需要建立 TLS 隧道，需要做如下配置：
+>
+> -   TLS 版本要求 TLS1.2 或以上
+> -   开启 SNI（SERVER NAME INDICATION）
+> -   配置 CA 证书（[GlobalSign Root CA - R46](https://secure.globalsign.com/cacert/rootr46.crt)）（也可至[GlobalSign官网](https://support.globalsign.com/ca-certificates/globalsign-root-certificates)下载）
 
 websocket建立连接时upgrade请求报文示例
 
-```
+<a id="code-block-26"></a>
+
+```http
 GET <WSS API> HTTP/1.1
 Host: <WSS HOST>
 Upgrade: websocket
@@ -655,7 +792,9 @@ Sec-WebSocket-Version: 13
 
 websocket建立连接时回应报文示例
 
-```
+<a id="code-block-27"></a>
+
+```http
 HTTP/1.1 101 Switching Protocols
 upgrade: websocket
 connection: upgrade
@@ -663,8 +802,12 @@ sec-websocket-accept: sqchBdVDX8kKBgi90/PFl5+/4VI=
 date: Thu, 24 Jul 2025 08:25:24 GMT
 server: istio-envoy
 ```
+
 **日志示例**
-```
+
+<a id="code-block-28"></a>
+
+```bash
 [UT][I][dummy_wss_init]work
 [UT][I][dummy_wss_connect]wss update
 [UT][I][dummy_wss_connect]request[239][GET <wss_api> HTTP/1.1
@@ -687,7 +830,14 @@ server: istio-envoy
 ]
 [UT][I][dummy_wss_connect][MMI]done
 ```
+
 **正确建立 websocket 后，可以观察平台相应的日志，正确场景下该连接会保持 1 分钟，后被服务端主动断开。**
+
+<a id="4-2-2-websocket-数据交互"></a>
+
+<a id="f0e065a34bpzc"></a>
+
+<a id="86fb533accprb"></a>
 
 #### 4.2.2. websocket 数据交互
 
@@ -695,7 +845,9 @@ server: istio-envoy
 
 以下示例代码描述了如何通过创建线程实现 websocket 数据交互。
 
-```
+<a id="code-block-29"></a>
+
+```c
 int dummy_wss_task_recv(void)
 {
     int opcode;
@@ -749,7 +901,9 @@ int dummy_wss_task_send(void)
 
 当完成数据对接后，可以看到如下日志
 
-```
+<a id="code-block-30"></a>
+
+```bash
 [UT][I][dummy_wss_thread_start][dummy_wss_task_send] send task [0x135e27180]
 [UT][I][dummy_wss_thread_start][dummy_wss_task_recv] recv task [0x135e271a0]
 [UT][I][_gen_cmd_start]task_id [<TASK ID>]
@@ -762,7 +916,19 @@ int dummy_wss_task_send(void)
 [UT][I][_on_payload_event_state_change]recv [Listening] [0-4]
 ```
 
+<a id="5-语音交互流程开发"></a>
+
+<a id="954e3f3033xek"></a>
+
+<a id="4eea55d003ui6"></a>
+
 ## 5\. 语音交互流程开发
+
+<a id="5-1-音频数据接口"></a>
+
+<a id="9c20150b811a6"></a>
+
+<a id="3936b3d91exsy"></a>
 
 ### 5.1. 音频数据接口
 
@@ -770,7 +936,9 @@ int dummy_wss_task_send(void)
 
 以下代码仅作演示，实现和业务逻辑仅供参考。
 
-```
+<a id="code-block-31"></a>
+
+```c
 //当recorder start后，麦克风开始异步获取数据
 int dummy_recorder_async_callback(void);
 // 启动麦克风录音
@@ -796,7 +964,9 @@ int dummy_palyer_is_work(void);
 
 本文档使用多线程实现喇叭播放与麦克风录音，因此构建以下示例
 
-```
+<a id="code-block-32"></a>
+
+```c
 void dummy_recorder_task(void)
 {
     uint32_t send_size =0;
@@ -841,13 +1011,21 @@ void dummy_player_task(void)
 }
 ```
 
+<a id="5-2-按键接口"></a>
+
+<a id="1f32ab390aukj"></a>
+
+<a id="4e4c747d05rt7"></a>
+
 ### 5.2. 按键接口
 
 本文档示例为 PUSH TO TALK，因此需要有按键按下和按键抬起两个事件的捕捉，本文档采用事件回调形式实现，此处只给出回调函数，具体逻辑与实现需要开发者自行实现。
 
 以下代码仅做演示：
 
-```
+<a id="code-block-33"></a>
+
+```c
 // 按键抬起时触发
 int dummy_button_up(void);
 // 按键按下时触发
@@ -856,7 +1034,9 @@ int dummy_button_down(void);
 
 示例实现与调用如下所示：
 
-```
+<a id="code-block-34"></a>
+
+```c
 int dummy_button_up(void)
 {
     // 关闭麦克风
@@ -878,11 +1058,19 @@ int dummy_button_down(void)
 }
 ```
 
+<a id="5-3-事件回调"></a>
+
+<a id="e596006e0aly1"></a>
+
+<a id="1d5acd83dcgwd"></a>
+
 ### 5.3. 事件回调
 
 阿里云百炼多模态交互 SDK 语音交互相关的事件回调如下：
 
-```
+<a id="code-block-35"></a>
+
+```c
 enum {
     C_MMI_EVENT_USER_CONFIG,      // 用户对于sdk的配置应该在该事件回调中实现，如音频缓冲区大小、工作模式、音色等
     C_MMI_EVENT_STATE_CHANGE,     // major state 切换时触发，param = uint8_t* 指向新状态值
@@ -916,7 +1104,9 @@ enum {
 
 参考示例代码如下：
 
-```
+<a id="code-block-36"></a>
+
+```c
 int32_t _mmi_event_callback(uint32_t event, void *param)
 {
     char *text;
@@ -978,7 +1168,9 @@ int32_t _mmi_event_callback(uint32_t event, void *param)
 
 示例日志如下
 
-```
+<a id="code-block-37"></a>
+
+```bash
 [UT][I][_on_payload_event_state_change]recv [Listening] [0-4]
 [UT][D][dummy_button_down]
 [UT][I][dummy_player_stop]
@@ -1008,13 +1200,27 @@ int32_t _mmi_event_callback(uint32_t event, void *param)
 [UT][D][_on_payload_event_respond_end]recv audio data size [371200]
 ```
 
+<a id="6-sdk-完整构建流程"></a>
+
+<a id="c22fedd2d0ipo"></a>
+
+<a id="cdd29d61a40f7"></a>
+
 ## 6\. SDK 完整构建流程
+
+<a id="6-1-完整示例代码"></a>
+
+<a id="f99b94d1a4v9x"></a>
+
+<a id="3be8895522y32"></a>
 
 ### 6.1. 完整示例代码
 
 示例代码如下
 
-```
+<a id="code-block-38"></a>
+
+```c
 #include "lib_c_license.h"
 #include "lib_c_mmi.h"
 
@@ -1302,11 +1508,19 @@ int main(void)
 }
 ```
 
+<a id="6-2-完整示例日志"></a>
+
+<a id="842e767c79ymg"></a>
+
+<a id="04936388ea7cj"></a>
+
 ### 6.2. 完整示例日志
 
 完整示例日志如下：
 
-```
+<a id="code-block-39"></a>
+
+```bash
 [UT][I][c_storage_init]sdk ver       [0x00000300]
 [UT][I][c_storage_init]flag          [0x0000003f]
 [UT][I][c_storage_init]app_id        [<APP ID>]

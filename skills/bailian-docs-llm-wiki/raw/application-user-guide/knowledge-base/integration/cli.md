@@ -1,0 +1,41 @@
+# 使用 CLI
+
+在终端用阿里云百炼 CLI 直接检索与问答知识库。
+
+阿里云百炼 CLI（`bailian-cli`）把知识库检索与问答封装为命令，便于在终端或 Agent 中调度。
+
+> **说明**
+>
+> 知识库相关 CLI 能力目前仅对中国站（aliyun.com）账号开放。
+
+<a id="命令"></a>
+
+<a id="h-ragcli-commands"></a>
+
+## 命令
+
+| 能力 | 命令 | 说明 | 常用参数 |
+| --- | --- | --- | --- |
+| 语义检索 | `bl knowledge search` | 调用检索服务进行语义检索 | `--query` 查询内容、`--agent-id` 检索服务 ID |
+| RAG 问答 | `bl knowledge chat` | 调用问答服务进行 RAG 问答，支持流式输出 | `--message` 消息内容、`--agent-id` 问答服务 ID |
+
+需要初始化知识库或同步本地目录时，使用 `bl knowledge init`、`bl knowledge doc sync` 或 `bl knowledge doc import`；完整参数见 [Knowledge（原RAG） 命令参考](../../../cli/capabilities/agent-infrastructure/rag.md)。
+
+<a id="示例"></a>
+
+<a id="h-ragcli-examples"></a>
+
+## 示例
+
+<a id="code-block"></a>
+
+```bash
+bl knowledge search --query "如何配置切片策略？" --agent-id <检索服务ID>
+bl knowledge chat --message "如何配置切片策略？" --agent-id <问答服务ID>
+```
+
+任意命令追加 `--help` 查看完整参数。控制台 [**服务渠道**](https://bailian.console.aliyun.com/cn-beijing/rag/channel) 页面提供安装命令和使用示例。
+
+> **说明**
+>
+> `bl knowledge retrieve`（按知识库 ID 直接检索）已从百炼 CLI 2.5.0 起移除，请改用 `bl knowledge search`（传已发布检索服务的 `--agent-id`），详见 [Knowledge（原RAG） 命令参考](../../../cli/capabilities/agent-infrastructure/rag.md)。

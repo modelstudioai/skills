@@ -2,6 +2,12 @@
 
 调用百炼前，根据数据存储位置和推理范围的要求确定地域与服务部署范围，再选择该地域的接入域名。
 
+<a id="地域和服务部署范围的区别"></a>
+
+<a id="h2-region-overview"></a>
+
+<a id="地域概述"></a>
+
 ## 地域和服务部署范围的区别
 
 地域决定**接入点和数据存储位置**，就近选择可降低延迟。
@@ -17,185 +23,50 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9377607871/CAEQchiBgICkyp3I_hkiIGFjZmY5ZThjZWM2MzRkMmJhNTk5NWVmYTkwMWY3ZGI07466796_20260515102254.505.svg)
 
+<a id="选择地域和服务部署范围"></a>
+
+<a id="h2_recommend"></a>
+
 ## 选择地域和服务部署范围
 
 不同地域支持不同的服务部署范围，百炼将在所选范围内进行推理调度。例如美国（弗吉尼亚）支持全球和美国，德国（法兰克福）支持全球和欧盟等。各地域支持的服务部署范围和接入方式，请参见[华北2（北京）](https://help.aliyun.com/zh/model-studio/beijing-access-information)、[新加坡](https://help.aliyun.com/zh/model-studio/singapore-regional-access-information)、[美国（弗吉尼亚）](https://help.aliyun.com/zh/model-studio/usa-virginia-global)、[德国（法兰克福）](https://help.aliyun.com/zh/model-studio/germany-frankfurt-global)、[日本（东京）](https://help.aliyun.com/zh/model-studio/japan-tokyo-global)、[中国香港](https://help.aliyun.com/zh/model-studio/hong-kong-china-global)。
+
+<a id="选择接入域名"></a>
+
+<a id="39f66b0187bsx"></a>
 
 ## 选择接入域名
 
 百炼为模型推理 API 提供业务空间专属、DashScope 和试用三种接入域名，适用于从试用体验到企业级生产的不同场景。推荐使用**业务空间专属域名**，各域名的核心差异如下：
 
-**对比项**
+<table><thead><tr><th><strong>对比项</strong></th><th><strong>业务空间专属域名（推荐）</strong></th><th><strong>DashScope 域名（现有域名）</strong></th><th><strong>试用域名</strong></th></tr></thead><tbody><tr><td><strong>域名格式</strong></td><td><p><code>{WorkspaceId}.{region}.maas.aliyuncs.com</code></p></td><td><p><code>dashscope.aliyuncs.com</code></p><blockquote><p>以华北2（北京）地域为例</p></blockquote></td><td><p><code>trial.{region}.maas.aliyuncs.com</code></p></td></tr><tr><td><strong>适用场景</strong></td><td><p>推荐在生产环境中使用，具备更高并发承载能力与网络隔离性，保障大流量场景下的稳定、低延迟访问体验。</p></td><td><p>存量业务兼容，建议<a href="regions.md#h2_migrate_domain">迁移至业务空间专属域名</a>。DashScope 域名（dashscope.aliyuncs.com）自2026年9月30日起不再支持新特性。</p></td><td><p>快速体验、功能验证，不建议用于生产环境。</p></td></tr><tr><td><strong>鉴权方式</strong></td><td><p>仅访问当前业务空间</p></td><td><p>可访问所有业务空间</p></td><td><p>可访问所有业务空间</p></td></tr><tr><td><strong>限流额度</strong></td><td><p>RPM、TPM 按模型区分，主账号维度合并计算</p></td><td><p>RPM、TPM 按模型区分，主账号维度合并计算</p></td><td><p>RPM 为1000（主账号维度），TPM 按模型区分</p></td></tr><tr><td><strong>请求超时</strong></td><td><p>3600 秒</p></td><td><p>600 秒</p></td><td><p>600 秒</p></td></tr><tr><td><strong>协议支持</strong></td><td><p>HTTP、SSE、WebSocket、WebRTC、AOQ（AI over QUIC）</p></td><td><p>HTTP、SSE、WebSocket</p></td><td><p>HTTP、SSE</p></td></tr><tr><td><strong>SLA</strong></td><td><p>99.9%</p></td><td><p>99.9%</p></td><td><p>不提供</p></td></tr></tbody></table>
 
-**业务空间专属域名（推荐）**
+<a id="各地域接入信息"></a>
 
-**DashScope 域名（现有域名）**
-
-**试用域名**
-
-**域名格式**
-
-`{WorkspaceId}.{region}.maas.aliyuncs.com`
-
-`dashscope.aliyuncs.com`
-
-> 以华北2（北京）地域为例
-
-`trial.{region}.maas.aliyuncs.com`
-
-**适用场景**
-
-推荐在生产环境中使用，具备更高并发承载能力与网络隔离性，保障大流量场景下的稳定、低延迟访问体验。
-
-存量业务兼容，建议[迁移至业务空间专属域名](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。DashScope 域名（dashscope.aliyuncs.com）自2026年9月30日起不再支持新特性。
-
-快速体验、功能验证，不建议用于生产环境。
-
-**鉴权方式**
-
-仅访问当前业务空间
-
-可访问所有业务空间
-
-可访问所有业务空间
-
-**限流额度**
-
-RPM、TPM 按模型区分，主账号维度合并计算
-
-RPM、TPM 按模型区分，主账号维度合并计算
-
-RPM 为1000（主账号维度），TPM 按模型区分
-
-**请求超时**
-
-3600 秒
-
-600 秒
-
-600 秒
-
-**协议支持**
-
-HTTP、SSE、WebSocket、WebRTC、AOQ（AI over QUIC）
-
-HTTP、SSE、WebSocket
-
-HTTP、SSE
-
-**SLA**
-
-99.9%
-
-99.9%
-
-不提供
+<a id="h2_cc92e61c"></a>
 
 ## 各地域接入信息
 
 每个地域有独立的接入域名、API Key 和模型列表，**不能跨地域混用**。
 
-**地域**
-
-**地域ID**
-
-**业务空间专属域名**
-
-**DashScope 域名**
-
-**试用域名**
-
-**API Key 入口**
-
-**模型列表**
-
-华北2（北京）
-
-`cn-beijing`
-
-`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-
-`dashscope.aliyuncs.com`
-
-`trial.cn-beijing.maas.aliyuncs.com`
-
-[API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)
-
-[可用模型](https://bailian.console.aliyun.com/cn-beijing/model/market)
-
-新加坡
-
-`ap-southeast-1`
-
-`{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-
-`dashscope-intl.aliyuncs.com`
-
-`trial.ap-southeast-1.maas.aliyuncs.com`
-
-[API Key](https://bailian.console.aliyun.com/ap-southeast-1/model/settings/api-key)
-
-[可用模型](https://bailian.console.aliyun.com/ap-southeast-1/model/market)
-
-德国（法兰克福）
-
-`eu-central-1`
-
-`{WorkspaceId}.eu-central-1.maas.aliyuncs.com`
-
-不支持
-
-暂不支持
-
-[API Key](https://bailian.console.aliyun.com/eu-central-1/model/settings/api-key)
-
-[可用模型](https://bailian.console.aliyun.com/eu-central-1/model/market)
-
-日本（东京）
-
-`ap-northeast-1`
-
-`{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com`
-
-不支持
-
-暂不支持
-
-[API Key](https://bailian.console.aliyun.com/ap-northeast-1/model/settings/api-key)
-
-[可用模型](https://bailian.console.aliyun.com/ap-northeast-1/model/market)
-
-中国香港
-
-`cn-hongkong`
-
-`{WorkspaceId}.cn-hongkong.maas.aliyuncs.com`
-
-`cn-hongkong.dashscope.aliyuncs.com`
-
-`trial.cn-hongkong.maas.aliyuncs.com`
-
-[API Key](https://bailian.console.aliyun.com/cn-hongkong/model/settings/api-key)
-
-[可用模型](https://bailian.console.aliyun.com/cn-hongkong/model/market)
-
-美国（弗吉尼亚）
-
-`us-east-1`
-
-`{WorkspaceId}.us-east-1.maas.aliyuncs.com`
-
-`dashscope-us.aliyuncs.com`
-
-暂不支持
-
-[API Key](https://bailian.console.aliyun.com/us-east-1/model/settings/api-key)
-
-[可用模型](https://bailian.console.aliyun.com/us-east-1/model/market)
+| 地域 | 地域ID | 业务空间专属域名 | DashScope 域名 | 试用域名 | API Key 入口 | 模型列表 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 华北2（北京） | `cn-beijing` | `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` | `dashscope.aliyuncs.com` | `trial.cn-beijing.maas.aliyuncs.com` | [API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key) | [可用模型](https://bailian.console.aliyun.com/cn-beijing/model/market) |
+| 新加坡 | `ap-southeast-1` | `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com` | `dashscope-intl.aliyuncs.com` | `trial.ap-southeast-1.maas.aliyuncs.com` | [API Key](https://bailian.console.aliyun.com/ap-southeast-1/model/settings/api-key) | [可用模型](https://bailian.console.aliyun.com/ap-southeast-1/model/market) |
+| 德国（法兰克福） | `eu-central-1` | `{WorkspaceId}.eu-central-1.maas.aliyuncs.com` | 不支持 | 暂不支持 | [API Key](https://bailian.console.aliyun.com/eu-central-1/model/settings/api-key) | [可用模型](https://bailian.console.aliyun.com/eu-central-1/model/market) |
+| 日本（东京） | `ap-northeast-1` | `{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com` | 不支持 | 暂不支持 | [API Key](https://bailian.console.aliyun.com/ap-northeast-1/model/settings/api-key) | [可用模型](https://bailian.console.aliyun.com/ap-northeast-1/model/market) |
+| 中国香港 | `cn-hongkong` | `{WorkspaceId}.cn-hongkong.maas.aliyuncs.com` | `cn-hongkong.dashscope.aliyuncs.com` | `trial.cn-hongkong.maas.aliyuncs.com` | [API Key](https://bailian.console.aliyun.com/cn-hongkong/model/settings/api-key) | [可用模型](https://bailian.console.aliyun.com/cn-hongkong/model/market) |
+| 美国（弗吉尼亚） | `us-east-1` | `{WorkspaceId}.us-east-1.maas.aliyuncs.com` | `dashscope-us.aliyuncs.com` | 暂不支持 | [API Key](https://bailian.console.aliyun.com/us-east-1/model/settings/api-key) | [可用模型](https://bailian.console.aliyun.com/us-east-1/model/market) |
 
 -   **德国（法兰克福）、日本（东京）、中国香港、美国（弗吉尼亚）**地域通过**业务空间（Workspace）**区分服务部署范围，开始调用前需前往业务空间管理页面创建业务空间并选择服务部署范围：[德国（法兰克福）](https://bailian.console.aliyun.com/eu-central-1/settings/workspace)（全球/欧盟）、[日本（东京）](https://bailian.console.aliyun.com/ap-northeast-1/settings/workspace)（全球/日本）、[中国香港](https://bailian.console.aliyun.com/cn-hongkong/settings/workspace)（全球/中国香港）、[美国（弗吉尼亚）](https://bailian.console.aliyun.com/us-east-1/settings/workspace)（全球/美国）。
 
-**说明**美国（弗吉尼亚）地域的部署模式已升级。如果正在使用带 `-us` 后缀的模型，请尽快完成切换升级，详情请参见[升级公告](https://www.aliyun.com/notice/118646)。
+> **说明**
+>
+> 美国（弗吉尼亚）地域的部署模式已升级。如果正在使用带 `-us` 后缀的模型，请尽快完成切换升级，详情请参见[升级公告](https://www.aliyun.com/notice/118646)。
+
+<a id="迁移至业务空间专属域名"></a>
+
+<a id="h2_migrate_domain"></a>
 
 ## 迁移至业务空间专属域名
 
@@ -211,168 +82,35 @@ HTTP、SSE
     -   DashScope 接口：从 `https://dashscope.aliyuncs.com/api/v1` 替换为 `https://llm-xxx.cn-beijing.maas.aliyuncs.com/api/v1`
     -   Anthropic 兼容接口：从 `https://dashscope.aliyuncs.com/apps/anthropic` 替换为 `https://llm-xxx.cn-beijing.maas.aliyuncs.com/apps/anthropic`
 
+<a id="各地域功能支持"></a>
+
+<a id="h2_acc79c7f"></a>
+
 ## 各地域功能支持
 
-**功能**
-
-**华北2（北京）**
-
-**新加坡**
-
-**美国（弗吉尼亚）**
-
-**中国香港**
-
-**德国（法兰克福）**
-
-**日本（东京）**
-
-实时推理
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-批量推理
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-模型体验
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-模型监控（普通）
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-模型监控（高级）
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-模型告警
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-传输安全
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-权限管理
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-模型调优
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-应用开发
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-不支持
+| 功能 | 华北2（北京） | 新加坡 | 美国（弗吉尼亚） | 中国香港 | 德国（法兰克福） | 日本（东京） |
+| --- | --- | --- | --- | --- | --- | --- |
+| 实时推理 | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 |
+| 批量推理 | 支持 | 支持 | 不支持 | 不支持 | 不支持 | 不支持 |
+| 模型体验 | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 |
+| 模型监控（普通） | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 |
+| 模型监控（高级） | 支持 | 支持 | 支持 | 不支持 | 不支持 | 不支持 |
+| 模型告警 | 支持 | 支持 | 不支持 | 不支持 | 不支持 | 不支持 |
+| 传输安全 | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 |
+| 权限管理 | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 |
+| 模型调优 | 支持 | 不支持 | 不支持 | 不支持 | 不支持 | 不支持 |
+| 应用开发 | 支持 | 不支持 | 不支持 | 不支持 | 不支持 | 不支持 |
+
+<a id="相关文档"></a>
+
+<a id="h2_2caf88e3"></a>
 
 ## 相关文档
 
--   [通义千问 API 参考](raw/model-api-reference/qwen-api-reference.md)
--   [选择模型](raw/model-user-guide/get-started-with-models/models.md) — 各地域模型及上下文长度
--   [模型调用计费](raw/model-user-guide/test-1/model-pricing.md) — 各地域价格
--   [限流](raw/model-user-guide/get-started-with-models/rate-limit.md)— RPM、TPM 限制
--   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md) — 创建和管理 Key
--   [Base URL总览](raw/model-api-reference/preparations/base-url.md) — 模型服务调用地址
--   [Realtime API 协议选型](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-protocol-selection)
+-   [通义千问 API 参考](../../model-api-reference/qwen-api-reference.md)
+-   [选择模型](models.md) — 各地域模型及上下文长度
+-   [模型调用计费](../test-1/model-pricing.md) — 各地域价格
+-   [限流](rate-limit.md)— RPM、TPM 限制
+-   [获取与配置 API Key](../../model-api-reference/preparations/get-api-key.md) — 创建和管理 Key
+-   [Base URL总览](../../model-api-reference/preparations/base-url.md) — 模型服务调用地址
+-   [Realtime API 协议选型](../../model-api-reference/realtime-api-directory/realtime-api-overview.md#rtov-protocol-selection)

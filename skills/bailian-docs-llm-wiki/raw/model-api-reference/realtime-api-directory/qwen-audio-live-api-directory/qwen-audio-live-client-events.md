@@ -2,11 +2,15 @@
 
 配置会话、发送音频并回传任务结果。
 
-通过控制 WebSocket 发送 JSON 事件。连接和鉴权见 [WebSocket 接入](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md)。
+通过控制 WebSocket 发送 JSON 事件。连接和鉴权见 [WebSocket 接入](qwen-audio-live-websocket-access.md)。
+
+<a id="session-update"></a>
+
+<a id="live-session-update"></a>
 
 ## session.update
 
-发送此事件可配置会话，包括前台模型、对话指令和音频传输方式。省略 `session.transport` 时，音频通过控制 WebSocket 收发。服务通过 [`session.updated`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated) 确认配置已生效。仅用 WebSocket 时，收到确认后即可发送音频。使用 WebRTC 或 AOQ 时，还需等待媒体连接就绪。
+发送此事件可配置会话，包括前台模型、对话指令和音频传输方式。省略 `session.transport` 时，音频通过控制 WebSocket 收发。服务通过 [`session.updated`](qwen-audio-live-server-events.md#live-session-updated) 确认配置已生效。仅用 WebSocket 时，收到确认后即可发送音频。使用 WebRTC 或 AOQ 时，还需等待媒体连接就绪。
 
 `type`string必填
 
@@ -19,6 +23,8 @@
 `session`object必填
 
 会话配置。
+
+<a id="accordion-查看子字段"></a>
 
 查看子字段
 
@@ -36,49 +42,28 @@
 
 输出模态。默认包含 `audio` 和 `text`。
 
+<a id="live-session-voice"></a>
+
 `voice`string可选
 
 前台模型使用的系统音色 ID。默认值为 `yunshu`。
 
-音色名称
-
-音色 ID
-
-云舒
-
-`yunshu`
-
-小满
-
-`xiaoman`
-
-晚风
-
-`wanfeng`
-
-青柚
-
-`qingyou`
-
-破晓
-
-`poxiao`
-
-麦芽
-
-`maiya`
-
-乌龙
-
-`wulong`
-
-雪松
-
-`xuesong`
+| 音色名称 | 音色 ID |
+| --- | --- |
+| 云舒 | `yunshu` |
+| 小满 | `xiaoman` |
+| 晚风 | `wanfeng` |
+| 青柚 | `qingyou` |
+| 破晓 | `poxiao` |
+| 麦芽 | `maiya` |
+| 乌龙 | `wulong` |
+| 雪松 | `xuesong` |
 
 `turn_detection`object可选
 
 轮次检测配置。
+
+<a id="accordion-查看子字段-2"></a>
 
 查看子字段
 
@@ -98,6 +83,8 @@
 
 应用可以执行的前台函数。默认为空数组。
 
+<a id="accordion-查看子字段-3"></a>
+
 查看子字段
 
 `type`string
@@ -115,6 +102,8 @@
 `parameters`object
 
 使用 JSON Schema 描述函数参数。
+
+<a id="accordion-查看子字段-4"></a>
 
 查看子字段
 
@@ -138,6 +127,8 @@
 
 任务执行方式。
 
+<a id="accordion-查看子字段-5"></a>
+
 查看子字段
 
 `type`string必填
@@ -146,7 +137,9 @@
 
 `responses`object条件必填
 
-Responses 模式必填。百炼将此处列出的配置传给后台模型。工具定义的格式见 [Responses API](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+Responses 模式必填。百炼将此处列出的配置传给后台模型。工具定义的格式见 [Responses API](../../qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+
+<a id="accordion-查看子字段-6"></a>
 
 查看子字段
 
@@ -161,6 +154,8 @@ Responses 模式下的后台任务提示词由您配置。省略时，百炼不�
 `tools`array\[object\]可选
 
 声明供后台模型使用的工具。 工具元素通过 `type` 选择结构。以下字段适用于自定义函数（`type` 为 `function`）。
+
+<a id="accordion-查看子字段-7"></a>
 
 查看子字段
 
@@ -179,6 +174,8 @@ Responses 模式下的后台任务提示词由您配置。省略时，百炼不�
 `parameters`object
 
 使用 JSON Schema 描述函数参数。
+
+<a id="accordion-查看子字段-8"></a>
 
 查看子字段
 
@@ -202,6 +199,8 @@ Responses 模式下的后台任务提示词由您配置。省略时，百炼不�
 
 省略或传空对象时使用 WebSocket。
 
+<a id="accordion-查看子字段-9"></a>
+
 查看子字段
 
 `type`string条件必填
@@ -210,11 +209,13 @@ Responses 模式下的后台任务提示词由您配置。省略时，百炼不�
 
 `sdp`string条件必填
 
-当 `type` 为 `rtc` 时必填。传入客户端生成的 Offer SDP。见 [WebRTC 接入](raw/_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md)。
+当 `type` 为 `rtc` 时必填。传入客户端生成的 Offer SDP。见 [WebRTC 接入](../../../_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md)。
 
 `aoq`object可选
 
 AOQ 配置。
+
+<a id="accordion-查看子字段-10"></a>
 
 查看子字段
 
@@ -222,9 +223,17 @@ AOQ 配置。
 
 是否通过 WebSocket 附加一份下行音频。默认 `false`。
 
+<a id="sec-tabs"></a>
+
+<a id="client-模式"></a>
+
+<a id="client-模式-h4"></a>
+
 #### Client 模式
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "type": "session.update",
   "event_id": "evt_update_client",
@@ -244,9 +253,15 @@ AOQ 配置。
 }
 ```
 
+<a id="responses-模式"></a>
+
+<a id="responses-模式-h4"></a>
+
 #### Responses 模式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "type": "session.update",
   "event_id": "evt_update_responses",
@@ -269,6 +284,10 @@ AOQ 配置。
 }
 ```
 
+<a id="session-input-audio-append"></a>
+
+<a id="live-input-audio-append"></a>
+
 ## session.input\_audio.append
 
 仅用 WebSocket 接入时，通过此事件发送一帧音频。使用 WebRTC 时，通过 WebRTC 媒体轨道发送音频。使用 AOQ 时，通过 AOQ 媒体连接发送音频。
@@ -285,12 +304,18 @@ AOQ 配置。
 
 Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "type": "session.input_audio.append",
   "audio": "AAAAAA=="
 }
 ```
+
+<a id="session-input-audio-mute"></a>
+
+<a id="live-input-audio-mute"></a>
 
 ## session.input\_audio.mute
 
@@ -304,12 +329,18 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 客户端事件 ID。非空，最长 128 字符。
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "type": "session.input_audio.mute",
   "event_id": "evt_mute"
 }
 ```
+
+<a id="session-input-audio-unmute"></a>
+
+<a id="live-input-audio-unmute"></a>
 
 ## session.input\_audio.unmute
 
@@ -323,12 +354,18 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 客户端事件 ID。非空，最长 128 字符。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
   "type": "session.input_audio.unmute",
   "event_id": "evt_unmute"
 }
 ```
+
+<a id="session-item-create"></a>
+
+<a id="live-item-create"></a>
 
 ## session.item.create
 
@@ -346,6 +383,8 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 待写入的会话内容。
 
+<a id="accordion-查看子字段-11"></a>
+
 查看子字段
 
 `type`string必填
@@ -359,6 +398,8 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 `content`array按类型填写
 
 `message` 的内容。
+
+<a id="accordion-查看子字段-12"></a>
 
 查看子字段
 
@@ -378,9 +419,17 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 `function_call_output` 的字符串结果。
 
+<a id="sec-tabs-2"></a>
+
+<a id="回传函数结果"></a>
+
+<a id="回传函数结果-h4"></a>
+
 #### 回传函数结果
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
   "type": "session.item.create",
   "event_id": "evt_function_result",
@@ -392,9 +441,15 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 }
 ```
 
+<a id="输入文本"></a>
+
+<a id="输入文本-h4"></a>
+
 #### 输入文本
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
   "type": "session.item.create",
   "event_id": "evt_user_message",
@@ -410,6 +465,10 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
   }
 }
 ```
+
+<a id="session-thinking-append"></a>
+
+<a id="live-thinking-append"></a>
 
 ## session.thinking.append
 
@@ -439,7 +498,9 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 结束时间，单位为毫秒。与 `start_ms` 成对提供。两者须为有限非负数，结束时间不得早于开始时间。
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
   "type": "session.thinking.append",
   "event_id": "evt_thinking",
@@ -447,6 +508,10 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
   "content": "正在查询库存。"
 }
 ```
+
+<a id="session-instruction-append"></a>
+
+<a id="live-instruction-append"></a>
 
 ## session.instruction.append
 
@@ -480,7 +545,9 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 结束时间，单位为毫秒。与 `start_ms` 成对提供。两者须为有限非负数，结束时间不得早于开始时间。
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
   "type": "session.instruction.append",
   "event_id": "evt_instruction",
@@ -488,6 +555,10 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
   "content": "请问要查哪种商品的库存？"
 }
 ```
+
+<a id="session-commentary-append"></a>
+
+<a id="live-commentary-append"></a>
 
 ## session.commentary.append
 
@@ -521,9 +592,17 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 任务错误信息。
 
+<a id="sec-tabs-3"></a>
+
+<a id="回传任务结果"></a>
+
+<a id="回传任务结果-h4"></a>
+
 #### 回传任务结果
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
   "type": "session.commentary.append",
   "event_id": "evt_stock_result",
@@ -532,15 +611,25 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 }
 ```
 
+<a id="输入文本-2"></a>
+
+<a id="输入文本-2-h4"></a>
+
 #### 输入文本
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
   "type": "session.commentary.append",
   "event_id": "evt_user_text",
   "content": "请查询雨伞库存。"
 }
 ```
+
+<a id="response-item-create"></a>
+
+<a id="live-response-item-create"></a>
 
 ## response.item.create
 
@@ -558,6 +647,8 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 后台输入。支持 `message` 和 `function_call_output`。
 
+<a id="accordion-查看子字段-13"></a>
+
 查看子字段
 
 `type`string必填
@@ -571,6 +662,8 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 `content`array按类型填写
 
 用户消息内容。
+
+<a id="accordion-查看子字段-14"></a>
 
 查看子字段
 
@@ -590,9 +683,17 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 `function_call_output` 的函数结果，格式为字符串。
 
+<a id="sec-tabs-4"></a>
+
+<a id="输入文本-3"></a>
+
+<a id="输入文本-3-h4"></a>
+
 #### 输入文本
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
   "type": "response.item.create",
   "event_id": "evt_backend_item",
@@ -609,9 +710,15 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 }
 ```
 
+<a id="回传后台函数结果"></a>
+
+<a id="回传后台函数结果-h4"></a>
+
 #### 回传后台函数结果
 
-```
+<a id="code-block-13"></a>
+
+```json
 {
   "type": "response.item.create",
   "event_id": "evt_backend_output",
@@ -622,6 +729,10 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
   }
 }
 ```
+
+<a id="response-create"></a>
+
+<a id="live-response-create"></a>
 
 ## response.create
 
@@ -637,14 +748,20 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 `response`object可选
 
-传入后台生成配置。配置格式参见 [Responses API](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+传入后台生成配置。配置格式参见 [Responses API](../../qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
   "type": "response.create",
   "event_id": "evt_backend_create"
 }
 ```
+
+<a id="session-close"></a>
+
+<a id="live-session-close"></a>
 
 ## session.close
 
@@ -658,7 +775,9 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 客户端事件 ID。非空，最长 128 字符。
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
   "type": "session.close",
   "event_id": "evt_close"

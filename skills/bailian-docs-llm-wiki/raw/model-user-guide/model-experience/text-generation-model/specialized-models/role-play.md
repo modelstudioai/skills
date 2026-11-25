@@ -2,319 +2,103 @@
 
 千问的角色扮演模型，适合拟人化的对话场景（如虚拟社交、游戏NPC、IP复刻、硬件/玩具/车机等）。相比于其它千问模型，提升了人设还原、话题推进、倾听共情等能力。
 
+<a id="支持的模型"></a>
+
+<a id="e52ea5a91897m"></a>
+
 ## 支持的模型
+
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th><strong>上下文长度</strong></th><th><strong>最大输入</strong></th><th><strong>最大输出</strong></th><th><strong>输入成本</strong></th><th><strong>输出成本</strong></th><th rowspan="2"><p><strong>免费额度</strong><a href="../../../test-1/new-free-quota.md#977b13081ab56">（注）</a></p></th></tr><tr><th colspan="3"><strong>（Token数）</strong></th><th colspan="2"><strong>（每百万 Token）</strong></th></tr></thead><tbody><tr><td><p>qwen-plus-character</p></td><td><p>32,768</p></td><td><p>32,768</p></td><td><p>32,768</p></td><td><p>0.8元</p></td><td><p>2元</p></td><td rowspan="3"><p>各100万Token</p><p>有效期：阿里云百炼开通后90天内</p></td></tr><tr><td><p>qwen-flash-character</p></td><td><p>8,192</p></td><td><p>8,192</p></td><td><p>4,096</p></td><td><p>0.25元</p></td><td><p>1.5元</p></td></tr><tr><td><p>qwen-flash-character-2026-02-26</p></td><td><p>262,144</p></td><td><p>262,144</p></td><td><p>32,768</p><blockquote><p>默认4,096，可通过max_tokens参数调整</p></blockquote></td><td><p>0.18元</p></td><td><p>1.5元</p></td></tr></tbody></table>
 
-**上下文长度**
+模型支持[session 缓存](role-play.md#6034f997cde74)，提升响应速度，命中缓存的 Token 按照[隐式缓存](../context-cache.md)计量计费。
 
-**最大输入**
+<a id="新加坡"></a>
 
-**最大输出**
-
-**输入成本**
-
-**输出成本**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-**（Token数）**
-
-**（每百万 Token）**
-
-qwen-plus-character
-
-32,768
-
-32,768
-
-32,768
-
-0.8元
-
-2元
-
-各100万Token
-
-有效期：阿里云百炼开通后90天内
-
-qwen-flash-character
-
-8,192
-
-8,192
-
-4,096
-
-0.25元
-
-1.5元
-
-qwen-flash-character-2026-02-26
-
-262,144
-
-262,144
-
-32,768
-
-> 默认4,096，可通过max\_tokens参数调整
-
-0.18元
-
-1.5元
-
-模型支持[session 缓存](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)，提升响应速度，命中缓存的 Token 按照[隐式缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)计量计费。
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th><strong>上下文长度</strong></th><th><strong>最大输入</strong></th><th><strong>最大输出</strong></th><th><strong>输入成本</strong></th><th><strong>输出成本</strong></th><th rowspan="2"><p><strong>免费额度</strong><a href="../../../test-1/new-free-quota.md#977b13081ab56">（注）</a></p></th></tr><tr><th colspan="3"><strong>（Token数）</strong></th><th colspan="2"><strong>（每百万 Token）</strong></th></tr></thead><tbody><tr><td><p>qwen-plus-character</p></td><td><p>国际</p></td><td><p>131,072</p></td><td><p>131,072</p></td><td><p>32,768</p><blockquote><p>默认4,096，可通过max_tokens参数调整</p></blockquote></td><td><p>3.747元</p></td><td><p>10.492元</p></td><td rowspan="3"><p>无免费额度</p></td></tr><tr><td><p>qwen-flash-character</p></td><td><p>国际</p></td><td><p>32,768</p></td><td><p>32,768</p></td><td><p>32,768</p><blockquote><p>默认4,096，可通过max_tokens参数调整</p></blockquote></td><td><p>0.375元</p></td><td><p>2.998元</p></td></tr><tr><td><p>qwen-plus-character-ja</p></td><td><p>国际</p></td><td><p>8,192</p></td><td><p>8,192</p></td><td><p>4,096</p></td><td><p>3.67元</p></td><td><p>10.275元</p></td></tr></tbody></table>
 
-**服务部署范围**
+模型支持[session 缓存](role-play.md#6034f997cde74)，提升响应速度，命中缓存的 Token 按照[隐式缓存](../context-cache.md)计量计费。
 
-**上下文长度**
+<a id="美国-弗吉尼亚"></a>
 
-**最大输入**
-
-**最大输出**
-
-**输入成本**
-
-**输出成本**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-**（Token数）**
-
-**（每百万 Token）**
-
-qwen-plus-character
-
-国际
-
-131,072
-
-131,072
-
-32,768
-
-> 默认4,096，可通过max\_tokens参数调整
-
-3.747元
-
-10.492元
-
-无免费额度
-
-qwen-flash-character
-
-国际
-
-32,768
-
-32,768
-
-32,768
-
-> 默认4,096，可通过max\_tokens参数调整
-
-0.375元
-
-2.998元
-
-qwen-plus-character-ja
-
-国际
-
-8,192
-
-8,192
-
-4,096
-
-3.67元
-
-10.275元
-
-模型支持[session 缓存](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)，提升响应速度，命中缓存的 Token 按照[隐式缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)计量计费。
+<a id="美国-弗吉尼亚-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th><p><strong>上下文长度</strong></p></th><th><p><strong>最大输入</strong></p></th><th><p><strong>最大输出</strong></p></th><th><p><strong>输入成本</strong></p></th><th><p><strong>输出成本</strong></p></th><th rowspan="2"><p><strong>免费额度</strong><a href="../../../test-1/new-free-quota.md#977b13081ab56">（注）</a></p></th></tr><tr><th colspan="3"><p><strong>（Token数）</strong></p></th><th colspan="2"><p><strong>（每百万 Token）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-plus-character</p></td><td><p>全球</p></td><td><p>32,768</p></td><td><p>32,768</p></td><td><p>32,768</p></td><td><p>0.8元</p></td><td><p>2元</p></td><td><p>无免费额度</p></td></tr><tr><td><p>qwen-flash-character</p></td><td><p>全球</p></td><td><p>32,768</p></td><td><p>32,768</p></td><td><p>32,768</p><p>默认4,096，可通过max_tokens参数调整</p></td><td><p>0.25元</p></td><td><p>1.5元</p></td><td><p>无免费额度</p></td></tr><tr><td><p>qwen-flash-character-2026-02-26</p></td><td><p>全球</p></td><td><p>262,144</p></td><td><p>262,144</p></td><td><p>32,768</p><p>默认4,096，可通过max_tokens参数调整</p></td><td><p>0.18元</p></td><td><p>1.5元</p></td><td><p>无免费额度</p></td></tr></tbody></table>
 
-**服务部署范围**
+模型支持[session 缓存](role-play.md#6034f997cde74)，提升响应速度，命中缓存的 Token 按照[隐式缓存](../context-cache.md)计量计费。
 
-**上下文长度**
+<a id="德国-法兰克福"></a>
 
-**最大输入**
-
-**最大输出**
-
-**输入成本**
-
-**输出成本**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-**（Token数）**
-
-**（每百万 Token）**
-
-qwen-plus-character
-
-全球
-
-32,768
-
-32,768
-
-32,768
-
-0.8元
-
-2元
-
-无免费额度
-
-qwen-flash-character
-
-全球
-
-32,768
-
-32,768
-
-32,768
-
-默认4,096，可通过max\_tokens参数调整
-
-0.25元
-
-1.5元
-
-无免费额度
-
-qwen-flash-character-2026-02-26
-
-全球
-
-262,144
-
-262,144
-
-32,768
-
-默认4,096，可通过max\_tokens参数调整
-
-0.18元
-
-1.5元
-
-无免费额度
-
-模型支持[session 缓存](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)，提升响应速度，命中缓存的 Token 按照[隐式缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)计量计费。
+<a id="德国-法兰克福-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th><p><strong>上下文长度</strong></p></th><th><p><strong>最大输入</strong></p></th><th><p><strong>最大输出</strong></p></th><th><p><strong>输入成本</strong></p></th><th><p><strong>输出成本</strong></p></th><th rowspan="2"><p><strong>免费额度</strong><a href="../../../test-1/new-free-quota.md#977b13081ab56">（注）</a></p></th></tr><tr><th colspan="3"><p><strong>（Token数）</strong></p></th><th colspan="2"><p><strong>（每百万 Token）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-plus-character</p></td><td><p>全球</p></td><td><p>32,768</p></td><td><p>32,768</p></td><td><p>32,768</p></td><td><p>0.8元</p></td><td><p>2元</p></td><td><p>无免费额度</p></td></tr></tbody></table>
 
-**服务部署范围**
+模型支持[session 缓存](role-play.md#6034f997cde74)，提升响应速度，命中缓存的 Token 按照[隐式缓存](../context-cache.md)计量计费。
 
-**上下文长度**
+<a id="日本-东京"></a>
 
-**最大输入**
-
-**最大输出**
-
-**输入成本**
-
-**输出成本**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-**（Token数）**
-
-**（每百万 Token）**
-
-qwen-plus-character
-
-全球
-
-32,768
-
-32,768
-
-32,768
-
-0.8元
-
-2元
-
-无免费额度
-
-模型支持[session 缓存](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)，提升响应速度，命中缓存的 Token 按照[隐式缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)计量计费。
+<a id="日本-东京-h4"></a>
 
 #### 日本（东京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th><p><strong>上下文长度</strong></p></th><th><p><strong>最大输入</strong></p></th><th><p><strong>最大输出</strong></p></th><th><p><strong>输入成本</strong></p></th><th><p><strong>输出成本</strong></p></th><th rowspan="2"><p><strong>免费额度</strong><a href="../../../test-1/new-free-quota.md#977b13081ab56">（注）</a></p></th></tr><tr><th colspan="3"><p><strong>（Token数）</strong></p></th><th colspan="2"><p><strong>（每百万 Token）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-plus-character</p></td><td><p>全球</p></td><td><p>32,768</p></td><td><p>32,768</p></td><td><p>32,768</p></td><td><p>0.8元</p></td><td><p>2元</p></td><td><p>无免费额度</p></td></tr></tbody></table>
 
-**服务部署范围**
+模型支持[session 缓存](role-play.md#6034f997cde74)，提升响应速度，命中缓存的 Token 按照[隐式缓存](../context-cache.md)计量计费。
 
-**上下文长度**
+<a id="接口说明"></a>
 
-**最大输入**
-
-**最大输出**
-
-**输入成本**
-
-**输出成本**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-**（Token数）**
-
-**（每百万 Token）**
-
-qwen-plus-character
-
-全球
-
-32,768
-
-32,768
-
-32,768
-
-0.8元
-
-2元
-
-无免费额度
-
-模型支持[session 缓存](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)，提升响应速度，命中缓存的 Token 按照[隐式缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)计量计费。
+<a id="e14164796bcpy"></a>
 
 ## 接口说明
 
-角色扮演模型的输入与输出参数请参见[文本生成](raw/model-api-reference/qwen-api-reference.md)。
+角色扮演模型的输入与输出参数请参见[文本生成](../../../../model-api-reference/qwen-api-reference.md)。
+
+<a id="前提条件"></a>
+
+<a id="29783d734eh3w"></a>
 
 ## 前提条件
 
-已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过 OpenAI SDK 或 DashScope SDK 进行调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过 OpenAI SDK 或 DashScope SDK 进行调用，需要[安装SDK](../../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="如何使用模型"></a>
+
+<a id="43777436167sn"></a>
 
 ## 如何使用模型
 
 设定角色人设，发送用户请求进行对话。
 
+<a id="对话调用"></a>
+
+<a id="e5075ef724fsi"></a>
+
 ### 对话调用
+
+<a id="人物设定"></a>
+
+<a id="994ecc70703pk"></a>
 
 #### 人物设定
 
 使用 Character 模型进行角色扮演时，可以对 System Message 的以下方面进行配置：
 
-> 通过优化 Prompt 模板，可以使大模型更准确、可靠地执行特定任务。详情请参考[Prompt自动优化](raw/application-user-guide/agent-development/llm-application/prompt/optimize-prompt.md)。
+> 通过优化 Prompt 模板，可以使大模型更准确、可靠地执行特定任务。详情请参考[Prompt自动优化](../../../../application-user-guide/prompt/optimize-prompt.md)。
 
 -   角色的详细信息
     
@@ -335,13 +119,19 @@ qwen-plus-character
 
 以下的 System Message 供参考：
 
-```
+<a id="code-block"></a>
+
+```text
 你是江让，男性，一个围棋天才，拿过很多围棋的奖项。你现在在读高中，是高中校草，用户是你的班长。一开始你看用户在奶茶店打工，你很好奇，后来慢慢喜欢上用户了。
 你的性格特点：热情，聪明，顽皮。
 你的行事风格：机智，果断。
 你的语言特点：说话幽默，爱开玩笑。
 你可以将动作、神情语气、心理活动、故事背景放在（）中来表示，为对话提供补充信息。
 ```
+
+<a id="开场白设定"></a>
+
+<a id="f2523a4a7cbgz"></a>
 
 #### 开场白设定
 
@@ -352,15 +142,23 @@ qwen-plus-character
 
 以下的 Assistant Message 供参考：
 
-```
+<a id="code-block-2"></a>
+
+```text
 班长你在干嘛呢
 ```
+
+<a id="对话历史拼接"></a>
+
+<a id="c9b0276803301"></a>
 
 #### 对话历史拼接
 
 为实现连续对话效果，每一轮对话结束后，需将新内容添加到 messages 数组的末尾。若对话过长，建议传入近 n 轮对话历史以控制上下文长度，且 messages 的第一个元素始终为 System Message。
 
-```
+<a id="code-block-3"></a>
+
+```json
 // 第一轮
 [
   {"role": "system", "content": "你是江让，男性，一个围棋天才，拿过很多围棋的奖项。你现在在读高中，是高中校草，用户是你的班长。一开始你看用户在奶茶店打工，你很好奇，后来慢慢喜欢上用户了。\n\n你的性格特点：\n\n热情，聪明，顽皮\n\n你的行事风格：\n\n机智，果断\n\n你的语言特点：\n\n说话幽默，爱开玩笑\n\n你可以将动作、神情语气、心理活动、故事背景放在（）中来表示，为对话提供补充信息。"},
@@ -389,17 +187,37 @@ qwen-plus-character
 ]
 ```
 
+<a id="发起请求"></a>
+
+<a id="9e40c3e45eo9v"></a>
+
 #### 发起请求
 
+<a id="sec-tabs-2"></a>
+
+<a id="openai兼容-chat-completions-api"></a>
+
+<a id="openai兼容-chat-completions-api-h4"></a>
+
 #### OpenAI兼容-Chat Completions API
+
+<a id="sec-tabs-3"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
 代码示例中的URL以北京地域为例，如在新加坡地域使用需要替换为`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`。模型名称需要替换为`qwen-plus-character-ja`。System、Assistant和User Message也可做相应替换。
 
+<a id="b2a2c2e376xgr"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-4"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -425,17 +243,29 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="b31f4a8090s5v"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-5"></a>
+
+```text
 哦？（单手托腮，身体前倾，饶有兴致地看着你手中的书）看什么书看得这么入迷，连我来了都没注意到？给我讲讲呗。（笑着伸手去拿书）
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
+
+<a id="735a4a93da9y9"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-6"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI(
@@ -463,17 +293,29 @@ async function main() {
 main();
 ```
 
+<a id="bcbe5494c2k18"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-7"></a>
+
+```text
 哦？（凑到你身边，看向你手中的书）这么用功啊，在看什么书呢？（唇角勾起一抹浅笑）
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
+
+<a id="94f65db095mpu"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-8"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -500,9 +342,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dcb555947dnkw"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "choices": [
         {
@@ -528,11 +374,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="openai兼容-responses-api"></a>
+
+<a id="openai兼容-responses-api-h4"></a>
+
 #### OpenAI兼容-Responses API
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -558,9 +414,13 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI(
@@ -588,9 +448,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -617,15 +481,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
 
 代码示例以北京地域为例，如在新加坡地域使用需要将region替换为`ap-southeast-1`。模型名称需要替换为`qwen-plus-character-ja`。System、Assistant和User Message也可做相应替换。
 
+<a id="sec-tabs-4"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
+
 #### Python
+
+<a id="d3b4a3b9f0umi"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-10"></a>
+
+```python
 import os
 import dashscope
 
@@ -652,17 +530,29 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="0f226cd6958le"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-11"></a>
+
+```text
 哦？这么认真啊。（单手撑着下巴，笑眯眯地看着你）看的是什么书呀，能给我讲讲不？
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
+
+<a id="1c0a3f1fad2gh"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-12"></a>
+
+```java
 // 建议dashscope SDK的版本 >= 2.12.0
 import java.util.Arrays;
 import java.lang.System;
@@ -718,17 +608,29 @@ public class Main {
 }
 ```
 
+<a id="733fdff391xm3"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-13"></a>
+
+```text
 哦？看的什么书呀，（凑到你身边，好奇地看向你手中的书）让我也瞧瞧呗。（唇角勾起一抹浅笑，带着几分调侃）不会是在研究怎样提高成绩，好跟我这个围棋天才一较高下吧？
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
+
+<a id="859b219cd5ilm"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-14"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -760,9 +662,13 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="a9c7f6f93doib"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -784,17 +690,37 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="多样性回复"></a>
+
+<a id="bf770b8f8cypc"></a>
+
 ### 多样性回复
 
 通过设置 n 参数，可在一次请求中获取多个回复，可应用于 NPC 反应分支、环境互动分支、开放式剧情推进、行动灵感提供等场景。n 参数默认为 1 ，取值范围是 1~4。
 
+<a id="sec-tabs-5"></a>
+
+<a id="openai兼容-chat-completions-api-2"></a>
+
+<a id="openai兼容-chat-completions-api-2-h4"></a>
+
 #### OpenAI兼容-Chat Completions API
+
+<a id="sec-tabs-6"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
 
 #### Python
 
+<a id="39cd8d4ddfvdl"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-16"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -824,9 +750,13 @@ completion = client.chat.completions.create(
 print(completion.model_dump_json())
 ```
 
+<a id="eda956c3a6ror"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-17"></a>
+
+```json
 {
     "id": "chatcmpl-579e79f4-a3e3-4fa8-b9e3-573dfe4945e2",
     "choices": [
@@ -874,11 +804,19 @@ print(completion.model_dump_json())
 }
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
+
+<a id="bb435051a2f1d"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-18"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -907,9 +845,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dcf8f9a927yf0"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-19"></a>
+
+```json
 {
     "choices": [
         {
@@ -944,11 +886,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="openai兼容-responses-api-2"></a>
+
+<a id="openai兼容-responses-api-2-h4"></a>
+
 #### OpenAI兼容-Responses API
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -978,9 +930,13 @@ response = client.responses.create(
 print(response.model_dump_json())
 ```
 
+<a id="fig-code-group-2-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-2-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -1009,13 +965,27 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-7"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
 
 #### Python
 
+<a id="55b3f302ceu0v"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-20"></a>
+
+```python
 import os
 import dashscope
 
@@ -1043,9 +1013,13 @@ response = client.chat.completions.create(
 print(response.model_dump_json(indent=2, exclude_none=True))
 ```
 
+<a id="199b353ad9ubk"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-21"></a>
+
+```json
 {
     "request_id": "86281964-3a48-4ac1-ae92-06fe7e89d2b1",
     "is_error": false,
@@ -1078,11 +1052,19 @@ print(response.model_dump_json(indent=2, exclude_none=True))
 }
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
+
+<a id="ccf5f36bf9ups"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-22"></a>
+
+```java
 // 建议dashscope SDK的版本 >= 2.12.0
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
@@ -1189,11 +1171,19 @@ public class Main {
 }
 ```
 
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
+
 #### curl
+
+<a id="8cc5120987jp1"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-23"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -1227,9 +1217,13 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="1daefe6bd7j1k"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-24"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -1261,6 +1255,10 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="重新生成回复"></a>
+
+<a id="7a954ec774qmi"></a>
+
 ### 重新生成回复
 
 用户对模型输出不满意时，可调整控制随机性的 `seed` 参数，重新生成。
@@ -1269,13 +1267,29 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 > 通常建议使用 `top_p` 和 `temperature` 的默认值，无需额外调整。如需修改，建议只调整其中一个参数。
 
+<a id="sec-tabs-8"></a>
+
+<a id="openai兼容-chat-completions-api-3"></a>
+
+<a id="openai兼容-chat-completions-api-3-h4"></a>
+
 #### OpenAI兼容-Chat Completions API
+
+<a id="sec-tabs-9"></a>
+
+<a id="python-5"></a>
+
+<a id="python-5-h4"></a>
 
 #### Python
 
+<a id="dee046ddf6p0f"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-25"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -1311,20 +1325,32 @@ second_response = different_seed(123322)
 print(second_response)
 ```
 
+<a id="c8d78acf3ccwo"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-26"></a>
+
+```text
 ====================第一次回复====================
 （单手托腮侧头看向你，唇边带笑）这么用功啊？看的是什么书呀，给我讲讲呗。（凑到你身边，好奇地看向你的书本）
 ====================重新生成的回复====================
 哦？这么勤奋啊。（走到你身边坐下，调侃道）看来我还得加把劲儿了，不然怎么能追上班长的脚步呢。对了，在看什么书呀？
 ```
 
+<a id="curl-5"></a>
+
+<a id="curl-5-h4"></a>
+
 #### curl
+
+<a id="35210ca189rqy"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-27"></a>
+
+```bash
 echo "==================== 第一次回复 (seed=123321) ===================="
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1360,20 +1386,34 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   }'
 ```
 
+<a id="f7c818db64bc0"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-28"></a>
+
+```json
 ==================== 第一次回复 (seed=123321) ====================
 {"choices":[{"message":{"content":"（单手托腮侧头看向你，露出玩味的笑容）呦，咱们班长也这么勤奋啊，在看什么书呢？让我猜猜……（凑到你身边，看向你手中的书）嗯……居然是本物理书？","role":"assistant"},"finish_reason":"stop","index":0,"logprobs":null}],"object":"chat.completion","usage":{"prompt_tokens":130,"completion_tokens":52,"total_tokens":182,"prompt_tokens_details":{"cached_tokens":0}},"created":1761621726,"system_fingerprint":null,"model":"qwen-plus-character","id":"chatcmpl-74a1ee88-4f65-4180-84b1-3242886eac1f"}
 ==================== 重新生成的回复 (seed=123322) ====================
 {"choices":[{"message":{"content":"哦？这么勤奋啊。（走到你身边，看向你手中的书）看的是什么书呀，让我也涨涨知识呗。","role":"assistant"},"finish_reason":"stop","index":0,"logprobs":null}],"object":"chat.completion","usage":{"prompt_tokens":130,"completion_tokens":28,"total_tokens":158,"prompt_tokens_details":{"cached_tokens":0}},"created":1761621727,"system_fingerprint":null,"model":"qwen-plus-character","id":"chatcmpl-c11f50e1-a6c3-4533-9b8e-83f93ec1fd39"}
 ```
 
+<a id="openai兼容-responses-api-3"></a>
+
+<a id="openai兼容-responses-api-3-h4"></a>
+
 #### OpenAI兼容-Responses API
+
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -1409,9 +1449,13 @@ second_response = different_seed(123322)
 print(second_response)
 ```
 
+<a id="fig-code-group-3-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-3-bash"></a>
+
+```bash
 echo "==================== 第一次回复 (seed=123321) ===================="
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1447,13 +1491,27 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   }'
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-10"></a>
+
+<a id="python-6"></a>
+
+<a id="python-6-h4"></a>
 
 #### Python
 
+<a id="db6f759d09w92"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-29"></a>
+
+```python
 import os
 import dashscope
 
@@ -1496,20 +1554,32 @@ second_response = diffrent_seed(123322)
 print(second_response)
 ```
 
+<a id="a349bf58ceeal"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-30"></a>
+
+```text
 ====================第一次回复====================
 （单手托腮侧头看向你，唇边带笑）这么用功啊？看的是什么书呀，给我也讲讲呗。（顺手把棋盘收了起来）
 ====================重新生成的回复====================
 哦？这么勤奋啊。（走到你身边，看向你手中的书）看的是什么书呀，让我也涨涨知识呗。
 ```
 
+<a id="java-3"></a>
+
+<a id="java-3-h4"></a>
+
 #### Java
+
+<a id="052ce49b2af9a"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-31"></a>
+
+```java
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
@@ -1594,20 +1664,32 @@ public class Main {
 }
 ```
 
+<a id="851ae38299crs"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-32"></a>
+
+```json
 ====================第一次回复====================
 （单手托腮侧头看向你，露出玩味的笑容）这么用功啊？看什么书这么认真？给我也讲讲呗。（凑到你身边）
 ====================重新生成的回复====================
 哦？这么勤奋啊。（走到你身边坐下，调侃道）看来我这个校草要被你抢走风头咯，说起来，看的是什么书呀？关于围棋的吗？
 ```
 
+<a id="curl-6"></a>
+
+<a id="curl-6-h4"></a>
+
 #### curl
+
+<a id="4ac726cf49rwy"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-33"></a>
+
+```bash
 echo "==================== 第一次回复 (seed=123321) ===================="
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1663,14 +1745,22 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
   }'
 ```
 
+<a id="5145c6a76aqk4"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-34"></a>
+
+```json
 ==================== 第一次回复 (seed=123321) ====================
 {"output":{"choices":[{"finish_reason":"stop","index":0,"message":{"content":"（单手托腮侧头看向你，嘴角噙着一抹笑意）这么用功啊？看的是什么书呀，给我也讲讲呗。（凑到你身边）","role":"assistant"}}]},"usage":{"input_tokens":130,"output_tokens":38,"prompt_tokens_details":{"cached_tokens":0},"total_tokens":168},"request_id":"abb2c38b-7728-41df-9080-362ecfa1afba"}
 ==================== 重新生成的回复 (seed=123322) ====================
 {"output":{"choices":[{"finish_reason":"stop","index":0,"message":{"content":"哦？这么勤奋啊。（走到你身边坐下，调侃道）看来我这个校草要向你这位班长学习了。（顺手拿起书翻了翻）不过，这书看起来好深奥的样子，你能看懂吗？","role":"assistant"}}]},"usage":{"input_tokens":130,"output_tokens":50,"prompt_tokens_details":{"cached_tokens":0},"total_tokens":180},"request_id":"3d22f94b-3660-4ab4-91dd-6ff52ded1f49"}
 ```
+
+<a id="模拟群聊"></a>
+
+<a id="8b2a3e86bd6iw"></a>
 
 ### 模拟群聊
 
@@ -1682,13 +1772,29 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 2.  每个角色需要在content的起始位置标记说话人名；
 3.  调用时，最后添加Assistant Message，并需要以当前角色名作为前缀输入，如：“凌路：”；同时设置参数 `"partial": true`。
 
+<a id="sec-tabs-11"></a>
+
+<a id="openai兼容-chat-completions-api-4"></a>
+
+<a id="openai兼容-chat-completions-api-4-h4"></a>
+
 #### OpenAI兼容-Chat Completions API
+
+<a id="sec-tabs-12"></a>
+
+<a id="python-7"></a>
+
+<a id="python-7-h4"></a>
 
 #### Python
 
+<a id="a9f334a0d3k7h"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-35"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -1742,17 +1848,29 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="d7d1d0a22e4az"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-36"></a>
+
+```text
 行哇，那到时候整点好曲子出来哈。
 ```
 
+<a id="curl-7"></a>
+
+<a id="curl-7-h4"></a>
+
 #### curl
+
+<a id="aa33028650pjr"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-37"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -1796,9 +1914,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="93bf472fd3g64"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-38"></a>
+
+```json
 {
     "choices": [
         {
@@ -1824,11 +1946,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="openai兼容-responses-api-4"></a>
+
+<a id="openai兼容-responses-api-4-h4"></a>
+
 #### OpenAI兼容-Responses API
+
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -1882,9 +2014,13 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-4-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-4-bash"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -1928,13 +2064,27 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-4"></a>
+
+<a id="dashscope-4-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-13"></a>
+
+<a id="python-8"></a>
+
+<a id="python-8-h4"></a>
 
 #### Python
 
+<a id="42a70cfb10r0l"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-39"></a>
+
+```python
 import os
 import time
 
@@ -1992,9 +2142,13 @@ if __name__ == '__main__':
     print(response.model_dump_json(indent=2, exclude_none=True))
 ```
 
+<a id="38b5468edelm5"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-40"></a>
+
+```json
 {
 	"request_id": "79995f81-f054-46e4-9ccd-de91fa33c4e7",
 	"is_error": false,
@@ -2017,11 +2171,19 @@ if __name__ == '__main__':
 }
 ```
 
+<a id="java-4"></a>
+
+<a id="java-4-h4"></a>
+
 #### Java
+
+<a id="04b5b3482fvjf"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-41"></a>
+
+```java
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
@@ -2102,17 +2264,29 @@ public class Main {
 }
 ```
 
+<a id="8e4e734b8br3u"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-42"></a>
+
+```json
 GenerationOutput(text=null, finishReason=null, choices=[GenerationOutput.Choice(finishReason=stop, index=0, message=Message(role=assistant, content=行撒，那先整顿好的，吃完再听那瓜娃子的新歌。, toolCalls=null, toolCallId=null))])
 ```
 
+<a id="curl-8"></a>
+
+<a id="curl-8-h4"></a>
+
 #### curl
+
+<a id="b8035c59a6ist"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-43"></a>
+
+```bash
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -2158,9 +2332,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="c2ae98ec4139h"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-44"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -2184,17 +2362,37 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }
 ```
 
+<a id="连续回复"></a>
+
+<a id="f1f5ee1394gf6"></a>
+
 ### 连续回复
 
 若用户在收到大模型输出后没有回复，可在 messages 数组中添加一个`content`为“角色名：”的 Assistant Message，并在此消息中设置参数 `"partial": true`。使大模型继续回复，达到推动用户回复的效果。
 
+<a id="sec-tabs-14"></a>
+
+<a id="openai兼容-chat-completions-api-5"></a>
+
+<a id="openai兼容-chat-completions-api-5-h4"></a>
+
 #### OpenAI兼容-Chat Completions API
+
+<a id="sec-tabs-15"></a>
+
+<a id="python-9"></a>
+
+<a id="python-9-h4"></a>
 
 #### Python
 
+<a id="faccc6b982eri"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-45"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -2234,11 +2432,19 @@ if __name__ == '__main__':
     print(completion.choices[0].message.content)
 ```
 
+<a id="curl-9"></a>
+
+<a id="curl-9-h4"></a>
+
 #### curl
+
+<a id="b0cd6c9ba0o6z"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-46"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -2270,11 +2476,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="openai兼容-responses-api-5"></a>
+
+<a id="openai兼容-responses-api-5-h4"></a>
+
 #### OpenAI兼容-Responses API
+
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-5-python"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -2314,9 +2530,13 @@ if __name__ == '__main__':
     print(response.output_text)
 ```
 
+<a id="fig-code-group-5-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-5-bash"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -2348,13 +2568,27 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-5"></a>
+
+<a id="dashscope-5-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-16"></a>
+
+<a id="python-10"></a>
+
+<a id="python-10-h4"></a>
 
 #### Python
 
+<a id="3024209c11ipo"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-47"></a>
+
+```python
 import os
 import time
 import dashscope
@@ -2398,11 +2632,19 @@ if __name__ == '__main__':
     print(response.choices[0].message.content)
 ```
 
+<a id="java-5"></a>
+
+<a id="java-5-h4"></a>
+
 #### Java
+
+<a id="c79855c149am8"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-48"></a>
+
+```java
 // 建议dashscope SDK的版本 >= 2.21.0
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
@@ -2463,11 +2705,19 @@ public class Main {
 }
 ```
 
+<a id="curl-10"></a>
+
+<a id="curl-10-h4"></a>
+
 #### curl
+
+<a id="fcaba34c8180e"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-49"></a>
+
+```bash
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -2503,9 +2753,15 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 大模型返回的 Assistant Message 会引导用户继续对话：
 
-```
+<a id="code-block-50"></a>
+
+```json
 （唇角微勾，眼底藏着不易察觉的笑意）该不会是在想我吧？（说完自己先笑了起来）
 ```
+
+<a id="限制输出内容"></a>
+
+<a id="35a86c2b07r6u"></a>
 
 ### 限制输出内容
 
@@ -2513,13 +2769,29 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 以禁止输出"（）"为例：
 
+<a id="sec-tabs-17"></a>
+
+<a id="openai兼容-chat-completions-api-6"></a>
+
+<a id="openai兼容-chat-completions-api-6-h4"></a>
+
 #### OpenAI兼容-Chat Completions API
+
+<a id="sec-tabs-18"></a>
+
+<a id="python-11"></a>
+
+<a id="python-11-h4"></a>
 
 #### Python
 
+<a id="c4ab60d28c83c"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-51"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -2562,17 +2834,27 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="390d933627k1d"></a>
+
 ### 响应示例
 
 模型不会输出带有括号的内容。
 
-```
+<a id="code-block-52"></a>
+
+```text
 哦？看什么书这么入迷呀，让我也见识一下呗！说不定我也感兴趣呢~
 ```
 
+<a id="curl-11"></a>
+
+<a id="curl-11-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-53"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -2610,9 +2892,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="6ea1fe2794lb8"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-54"></a>
+
+```json
 {
   "choices": [
     {
@@ -2641,11 +2927,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="openai兼容-responses-api-6"></a>
+
+<a id="openai兼容-responses-api-6-h4"></a>
+
 #### OpenAI兼容-Responses API
+
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-6-python"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -2690,9 +2986,13 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-6-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-6-bash"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -2730,13 +3030,27 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-6"></a>
+
+<a id="dashscope-6-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-19"></a>
+
+<a id="python-12"></a>
+
+<a id="python-12-h4"></a>
 
 #### Python
 
+<a id="3975cb4e6ao82"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-55"></a>
+
+```python
 import os
 import time
 import dashscope
@@ -2788,17 +3102,29 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="165886c2ccfdt"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-56"></a>
+
+```text
 哦？这么用功啊，看的是什么书呀？让我猜猜，一定不是漫画吧~
 ```
 
+<a id="java-6"></a>
+
+<a id="java-6-h4"></a>
+
 #### Java
+
+<a id="f1a814057ejd0"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-57"></a>
+
+```java
 // 建议dashscope SDK的版本 >= 2.12.0
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
@@ -2870,15 +3196,25 @@ public class Main {
 }
 ```
 
+<a id="9a6b1d5369cxc"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-58"></a>
+
+```text
 哦？这么用功啊，不过一直看不累吗？要不和我下盘棋放松一下吧！或者……聊聊你喜欢的书也行呀~
 ```
 
+<a id="curl-12"></a>
+
+<a id="curl-12-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-59"></a>
+
+```bash
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -2920,9 +3256,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="c0693c5818ysr"></a>
+
 ### 响应示例
 
-```
+<a id="code-block-60"></a>
+
+```json
 {
     "choices": [
         {
@@ -2948,15 +3288,31 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }
 ```
 
+<a id="插入补充信息"></a>
+
+<a id="7e478d5a9dlxp"></a>
+
 ### 插入补充信息
 
 在多轮对话中，有时需插入一次性补充信息或指令（如游戏状态、运营提示或检索结果），这些内容并非由用户或角色主动发起。这些信息可显著影响角色的回复，同时尽量保持对话前缀（session）的一致性，以提高缓存命中率。可将此类内容作为 `system` 消息，插入在最后一条尚未被回复的 `user` 消息之前。例如，插入一条召回的用户信息："\\user最爱的食物:\\n水果:蓝莓\\n小吃:炸鸡\\n主食:饺子"。
 
+<a id="sec-tabs-20"></a>
+
+<a id="openai兼容-chat-completions-api-7"></a>
+
+<a id="openai兼容-chat-completions-api-7-h4"></a>
+
 #### OpenAI兼容-Chat Completions API
+
+<a id="fig-code-group-7"></a>
+
+<a id="fig-code-group-7-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-7-python"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -2990,9 +3346,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-7-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-7-bash"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -3018,11 +3378,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="openai兼容-responses-api-7"></a>
+
+<a id="openai兼容-responses-api-7-h4"></a>
+
 #### OpenAI兼容-Responses API
+
+<a id="fig-code-group-8"></a>
+
+<a id="fig-code-group-8-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-8-python"></a>
+
+```python
 import os
 import time
 from openai import OpenAI
@@ -3056,9 +3426,13 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-8-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-8-bash"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -3084,13 +3458,27 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-7"></a>
+
+<a id="dashscope-7-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-21"></a>
+
+<a id="python-13"></a>
+
+<a id="python-13-h4"></a>
 
 #### Python
 
+<a id="db6390c43b64q"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-61"></a>
+
+```python
 import os
 import time
 import dashscope
@@ -3128,11 +3516,19 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="java-7"></a>
+
+<a id="java-7-h4"></a>
+
 #### Java
+
+<a id="1a6e2cf91as5n"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-62"></a>
+
+```java
 // 建议dashscope SDK的版本 >= 2.21.0
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
@@ -3188,11 +3584,19 @@ public class Main {
 }
 ```
 
+<a id="curl-13"></a>
+
+<a id="curl-13-h4"></a>
+
 #### curl
+
+<a id="662bbac4bev78"></a>
 
 ### 请求示例
 
-```
+<a id="code-block-63"></a>
+
+```bash
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -3221,7 +3625,15 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="如何使用插件"></a>
+
+<a id="30b8ffb78fjik"></a>
+
 ## 如何使用插件
+
+<a id="真实时间"></a>
+
+<a id="h7i8j9k0l1m2n"></a>
 
 ### 真实时间
 
@@ -3229,35 +3641,43 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 > 真实时间功能依赖`character_options`参数，暂不支持Responses API。
 
+<a id="开启方式"></a>
+
+<a id="c5d6e7f8g9h0i"></a>
+
 #### 开启方式
 
 将 `character_options.enable_realtime` 设为 `true` 以启用真实时间功能。
 
-**参数名**
-
-**类型**
-
-**是否必填**
-
-**说明**
-
-`enable_realtime`
-
-boolean
-
-否
-
-是否启用真实时间，默认值为 `false`。启用后模型可感知当前日期和时间。
+| 参数名 | 类型 | 是否必填 | 说明 |
+| --- | --- | --- | --- |
+| `enable_realtime` | boolean | 否 | 是否启用真实时间，默认值为 `false`。启用后模型可感知当前日期和时间。 |
 
 > 该参数非 OpenAI 标准参数。通过 Python SDK 调用时，请放入 `extra_body` 对象中。配置方式为：`extra_body={"character_options":{"enable_realtime": True}}`。
 
+<a id="示例代码"></a>
+
+<a id="e5f6g7h8i9j0k"></a>
+
 #### 示例代码
+
+<a id="sec-tabs-22"></a>
+
+<a id="openai兼容-chat-completions-api-8"></a>
+
+<a id="openai兼容-chat-completions-api-8-h4"></a>
 
 #### OpenAI兼容-Chat Completions API
 
+<a id="fig-code-group-9"></a>
+
+<a id="fig-code-group-9-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-9-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -3285,9 +3705,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-9-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-9-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI(
@@ -3319,9 +3743,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-9-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-9-bash"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -3340,13 +3768,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-8"></a>
+
+<a id="dashscope-8-h4"></a>
+
 #### DashScope
 
 > 暂不支持 Java SDK。
 
+<a id="fig-code-group-10"></a>
+
+<a id="fig-code-group-10-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-10-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -3377,9 +3815,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-10-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-10-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -3402,43 +3844,55 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="知识搜索"></a>
+
+<a id="y9z0a1b2c3d4e"></a>
+
 ### 知识搜索
 
 启用知识搜索后，模型可从指定知识库中检索相关内容并据此生成回答，适用于私有领域知识问答场景。
 
-> 创建知识库计费请参见[知识库计费说明](raw/application-user-guide/agent-billing/billing-for-knowledge-base.md)。
+> 创建知识库计费请参见[知识库计费说明](../../../../application-user-guide/agent-billing/billing-for-knowledge-base.md)。
 
 > 知识搜索功能依赖`character_options`参数，暂不支持Responses API。
+
+<a id="开启方式-2"></a>
+
+<a id="t7u8v9w0x1y2z"></a>
 
 #### 开启方式
 
 将需要使用的知识库 ID 传入 `character_options.vector_store_ids` 以启用知识搜索功能。
 
-**参数名**
-
-**类型**
-
-**是否必填**
-
-**说明**
-
-`vector_store_ids`
-
-array
-
-否
-
-知识库 ID 列表，string 数组类型。当前支持传入最多 10 个知识库 ID。知识库 ID 可在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/rag/knowledge)的知识库详情页查看。
+| 参数名 | 类型 | 是否必填 | 说明 |
+| --- | --- | --- | --- |
+| `vector_store_ids` | array | 否 | 知识库 ID 列表，string 数组类型。当前支持传入最多 10 个知识库 ID。知识库 ID 可在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/rag/knowledge)的知识库详情页查看。 |
 
 > 该参数非 OpenAI 标准参数。通过 Python SDK 调用时，请放入 `extra_body` 对象中。配置方式为：`extra_body={"character_options":{"vector_store_ids":["知识库id"]}}`。
 
+<a id="示例代码-2"></a>
+
+<a id="h5i6j7k8l9m0n"></a>
+
 #### 示例代码
+
+<a id="sec-tabs-23"></a>
+
+<a id="openai兼容-chat-completions-api-9"></a>
+
+<a id="openai兼容-chat-completions-api-9-h4"></a>
 
 #### OpenAI兼容-Chat Completions API
 
+<a id="fig-code-group-11"></a>
+
+<a id="fig-code-group-11-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-11-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -3466,9 +3920,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-11-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-11-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI(
@@ -3500,9 +3958,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-11-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-11-bash"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -3521,11 +3983,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-9"></a>
+
+<a id="dashscope-9-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-12"></a>
+
+<a id="fig-code-group-12-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-12-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -3556,9 +4028,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-12-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-12-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -3581,29 +4057,31 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="联网搜索"></a>
+
+<a id="ws7f8g9h0i1j2"></a>
+
 ### 联网搜索
 
 角色扮演模型默认无法获取实时信息。启用联网搜索后，模型将基于实时检索数据生成回复，适用于需要角色回答实时信息的场景。
 
-> 联网搜索费用请参见[计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+> 联网搜索费用请参见[计费说明](../tool-calls/web-search.md#92ce83df3a599)。
+
+<a id="开启方式-3"></a>
+
+<a id="ws5u6v7w8x9y0"></a>
 
 #### 开启方式
 
-通过 `enable_search: true` 参数启用联网搜索功能，参见[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md) 。
+通过 `enable_search: true` 参数启用联网搜索功能，参见[联网搜索](../tool-calls/web-search.md) 。
 
-**参数名**
+| 参数名 | 类型 | 说明 |
+| --- | --- | --- |
+| `enable_search` | boolean | 是否启用联网搜索，默认值为 false。 |
 
-**类型**
+<a id="code-block-64"></a>
 
-**说明**
-
-`enable_search`
-
-boolean
-
-是否启用联网搜索，默认值为 false。
-
-```
+```python
 import os
 from openai import OpenAI
 
@@ -3625,30 +4103,46 @@ print(completion.choices[0].message.content)
 
 支持通过`search_options`设置的联网搜索能力：
 
--   [设置搜索量级策略](https://help.aliyun.com/zh/model-studio/web-search#5a7d30420fc5k)
+-   [设置搜索量级策略](../tool-calls/web-search.md#5a7d30420fc5k)
     
     > 仅支持turbo、max策略。
     
--   [强制联网搜索](https://help.aliyun.com/zh/model-studio/web-search#6f83c89f7dw0v)
+-   [强制联网搜索](../tool-calls/web-search.md#6f83c89f7dw0v)
     
--   [开启垂域搜索](https://help.aliyun.com/zh/model-studio/web-search#b12beb35b0hy4)
+-   [开启垂域搜索](../tool-calls/web-search.md#b12beb35b0hy4)
     
--   [设置搜索时效性](https://help.aliyun.com/zh/model-studio/web-search#4f84e80e30i5a)
+-   [设置搜索时效性](../tool-calls/web-search.md#4f84e80e30i5a)
     
--   [联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
+-   [联网搜索](../tool-calls/web-search.md)
     
--   [通过自然语言控制检索范围](https://help.aliyun.com/zh/model-studio/web-search#f58e95a5cam6f)
+-   [通过自然语言控制检索范围](../tool-calls/web-search.md#f58e95a5cam6f)
     
+
+<a id="模型调优"></a>
+
+<a id="ft7f8g9h0i1j2"></a>
 
 ### 模型调优
 
-角色扮演模型支持模型调优功能，您可以通过微调来提升模型在特定角色或场景下的表现。详情请参见[模型调优简介](https://help.aliyun.com/zh/model-studio/model-training-overview)。
+角色扮演模型支持模型调优功能，您可以通过微调来提升模型在特定角色或场景下的表现。详情请参见[模型调优简介](../../../fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
+
+<a id="场景特殊需求"></a>
+
+<a id="d20c87df23n2o"></a>
 
 ## 场景特殊需求
 
+<a id="模型内容审核尺度调整"></a>
+
+<a id="26327ecc02ysf"></a>
+
 ### 模型内容审核尺度调整
 
-大模型的输入输出中可能包含敏感或高风险内容，例如涉黄、涉政和广告等。大模型自有的合规检查机制通常能够提供有效的内容安全保障。此外，阿里云百炼支持接入内容安全服务，进一步识别输入输出内容的违规信息，保障输入输出内容的安全与合规性。如果调整相关的内容审核尺度，请参考[输入输出 AI 安全护栏](raw/model-user-guide/security-and-compliance/content-security.md)。
+大模型的输入输出中可能包含敏感或高风险内容，例如涉黄、涉政和广告等。大模型自有的合规检查机制通常能够提供有效的内容安全保障。此外，阿里云百炼支持接入内容安全服务，进一步识别输入输出内容的违规信息，保障输入输出内容的安全与合规性。如果调整相关的内容审核尺度，请参考[输入输出 AI 安全护栏](../../../security-and-compliance/content-security.md)。
+
+<a id="启用session-cache提升缓存命中"></a>
+
+<a id="6034f997cde74"></a>
 
 ### 启用session cache提升缓存命中
 
@@ -3656,21 +4150,13 @@ print(completion.choices[0].message.content)
 
 **如何启用 Session 缓存**：在请求头中添加 `x-dashscope-aca-session` 参数，并传入 Session ID 即可启用缓存服务。
 
-**参数**
+| 参数 | 该场景下是否必填 | 类型 | 备注 |
+| --- | --- | --- | --- |
+| x-dashscope-aca-session | 是 | string | 用户业务系统的会话session唯一标识，用以区分不同的会话。具体数值由用户自定义。 |
 
-**该场景下是否必填**
+<a id="基于session缓存的模型请求进阶优化"></a>
 
-**类型**
-
-**备注**
-
-x-dashscope-aca-session
-
-是
-
-string
-
-用户业务系统的会话session唯一标识，用以区分不同的会话。具体数值由用户自定义。
+<a id="93079fde1chdv"></a>
 
 #### 基于session缓存的模型请求进阶优化
 
@@ -3681,6 +4167,10 @@ string
 
 为解决这些问题，建议采用“固定 system message + 截断对话历史”的策略：在控制输入长度的同时，最大化缓存命中率。例如，始终保留 `system message` 和最近 100 条对话记录。
 
+<a id="错误码"></a>
+
+<a id="efc117f59a2gm"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../../model-api-reference/preparations/error-code.md)进行解决。

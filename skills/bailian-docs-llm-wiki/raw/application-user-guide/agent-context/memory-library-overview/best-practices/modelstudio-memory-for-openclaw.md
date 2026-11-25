@@ -2,41 +2,21 @@
 
 OpenClaw Agent 默认无法跨会话记忆用户偏好。阿里云百炼提供的记忆插件通过长期记忆 API 实现跨会话上下文感知：对话结束后自动提取关键信息并存储，下次对话前自动召回相关记忆。
 
+<a id="效果对比"></a>
+
+<a id="416a1fbec04tn"></a>
+
 ## 效果对比
 
 以下两段对话展示同一场景下，默认 Agent 与使用长期记忆插件后的 Agent 行为差异。
 
-**默认 Agent（无记忆）**
+| 默认 Agent（无记忆） | 启用长期记忆插件后的 Agent |
+| --- | --- |
+| **第一次对话：**<br><br>用户：我在做一个 Python 项目，用的是 FastAPI 框架。<br><br>Agent：好的，FastAPI 是一个高性能的 Web 框架。需要什么帮助？<br><br>**第二次对话（新会话）：**<br><br>用户：帮我写个接口。<br><br>Agent：使用的是什么语言和接口？<br><br>Agent 无法记住上一轮的对话内容。 | **第一次对话：**<br><br>用户：我在做一个 Python 项目，用的是 FastAPI 框架。<br><br>Agent：好的，FastAPI 是一个高性能的 Web 框架。需要什么帮助？<br><br>**第二次对话（新会话）：**<br><br>用户：帮我写个接口。<br><br>Agent 检索到相关记忆： “用户正在做一个 FastAPI 框架的 Python 项目。”<br><br>Agent 开始帮助写接口。 |
 
-**启用长期记忆插件后的 Agent**
+<a id="工作原理"></a>
 
-**第一次对话：**
-
-用户：我在做一个 Python 项目，用的是 FastAPI 框架。
-
-Agent：好的，FastAPI 是一个高性能的 Web 框架。需要什么帮助？
-
-**第二次对话（新会话）：**
-
-用户：帮我写个接口。
-
-Agent：使用的是什么语言和接口？
-
-Agent 无法记住上一轮的对话内容。
-
-**第一次对话：**
-
-用户：我在做一个 Python 项目，用的是 FastAPI 框架。
-
-Agent：好的，FastAPI 是一个高性能的 Web 框架。需要什么帮助？
-
-**第二次对话（新会话）：**
-
-用户：帮我写个接口。
-
-Agent 检索到相关记忆： “用户正在做一个 FastAPI 框架的 Python 项目。”
-
-Agent 开始帮助写接口。
+<a id="da9f269d01wwk"></a>
 
 ## 工作原理
 
@@ -47,39 +27,67 @@ Agent 开始帮助写接口。
 -   **自动记忆捕获**（autoCapture）：对话结束后自动提取关键信息存储
 -   **自动记忆召回**（autoRecall）：对话开始前自动检索相关记忆注入上下文
 
+<a id="安装与配置插件"></a>
+
+<a id="8e7c1e7b9fxh0"></a>
+
 ## 安装与配置插件
 
-**重要**记忆插件为统一配置，所有 Agent 共享同一记忆，暂不支持按 Agent 独立配置。
+> **重要**
+>
+> 记忆插件为统一配置，所有 Agent 共享同一记忆，暂不支持按 Agent 独立配置。
+
+<a id="步骤-1-确认-openclaw-运行状态"></a>
+
+<a id="f36923f23cyjy"></a>
 
 ### 步骤 1：确认 OpenClaw 运行状态
 
 运行以下命令确认 OpenClaw Gateway 已启动：
 
-```
+<a id="code-block"></a>
+
+```bash
 openclaw gateway status
 ```
 
 输出应包含 `Gateway: bind=loopback` 和端口信息。
 
+<a id="步骤-2-获取-dashscope-api-key"></a>
+
+<a id="91ac0d8210b2q"></a>
+
 ### 步骤 2：获取 DashScope API Key
 
-在阿里云百炼的[密钥管理](https://bailian.console.aliyun.com/cn-beijing?tab=app#/api-key)页面[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并保存，后续步骤需使用。
+在阿里云百炼的[密钥管理](https://bailian.console.aliyun.com/cn-beijing?tab=app#/api-key)页面[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并保存，后续步骤需使用。
+
+<a id="步骤-3-安装插件"></a>
+
+<a id="58a09979c5909"></a>
 
 ### 步骤 3：安装插件
 
 npm 安装
 
-```
+<a id="code-block-2"></a>
+
+```bash
 openclaw plugins install @modelstudio/modelstudio-memory-for-openclaw
 ```
 
 安装成功后 CLI 输出 `Installed plugin: modelstudio-memory-for-openclaw`，暂不重启，先完成配置。
 
+<a id="步骤-4-配置插件参数"></a>
+
+<a id="2f623669dbzg5"></a>
+
 ### 步骤 4：配置插件参数
 
 打开 `~/.openclaw/openclaw.json`，在 `plugins` 部分添加配置：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "plugins": {
     "slots": {
@@ -104,100 +112,34 @@ openclaw plugins install @modelstudio/modelstudio-memory-for-openclaw
 **配置说明**：
 
 -   `slots.memory`：注册为记忆槽位，自动禁用内置 `memory-core` 和 `memory-lancedb`
--   `apiKey`：直接填写[步骤 2](https://help.aliyun.com/zh/model-studio/modelstudio-memory-for-openclaw#91ac0d8210b2q) 获取的 DashScope API Key
+-   `apiKey`：直接填写[步骤 2](modelstudio-memory-for-openclaw.md#91ac0d8210b2q) 获取的 DashScope API Key
 -   `userId`：用户标识符，用于隔离不同用户的记忆空间，同一 `userId` 共享命名空间，不同 `userId` 完全隔离
 
 **完整配置项**：
 
-**配置项**
+| 配置项 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `apiKey`**(必填)** | string | \- | 以 sk-xxx 开头 |
+| `userId`**(必填)** | string | \- | 记忆空间的用户标识 |
+| `autoCapture` | boolean | `true` | 对话后自动提取并存储记忆 |
+| `autoRecall` | boolean | `true` | 对话前自动检索并注入记忆 |
+| `topK` | number | `5` | 每次召回返回的记忆条数 |
+| `minScore` | number | `0` | 最小相似度阈值（0–100） |
+| `profileSchema` | string | \- | 用户画像 ID，非必填。可访问[记忆库](https://bailian.console.aliyun.com/cn-beijing?tab=app#/memory/list)页面，点击指定记忆库的**查看详情**，进入记忆规则页面获取。 |
+| `memoryLibraryId` | string | \- | 记忆库 ID，非必填。在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上获取。<br><br>如不传此参数，会自动选择默认记忆库 ID。 |
+| `projectId` | string | \- | 记忆片段规则 ID，非必填。点击指定记忆库的**查看详情**，进入记忆规则页面获取。<br><br>如不传此参数，会自动选择指定记忆库的默认的记忆片段规则 ID。 |
 
-**类型**
+<a id="步骤-5-验证"></a>
 
-**默认值**
-
-**说明**
-
-`apiKey`**(必填)**
-
-string
-
-\-
-
-以 sk-xxx 开头
-
-`userId`**(必填)**
-
-string
-
-\-
-
-记忆空间的用户标识
-
-`autoCapture`
-
-boolean
-
-`true`
-
-对话后自动提取并存储记忆
-
-`autoRecall`
-
-boolean
-
-`true`
-
-对话前自动检索并注入记忆
-
-`topK`
-
-number
-
-`5`
-
-每次召回返回的记忆条数
-
-`minScore`
-
-number
-
-`0`
-
-最小相似度阈值（0–100）
-
-`profileSchema`
-
-string
-
-\-
-
-用户画像 ID，非必填。可访问[记忆库](https://bailian.console.aliyun.com/cn-beijing?tab=app#/memory/list)页面，点击指定记忆库的**查看详情**，进入记忆规则页面获取。
-
-`memoryLibraryId`
-
-string
-
-\-
-
-记忆库 ID，非必填。在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上获取。
-
-如不传此参数，会自动选择默认记忆库 ID。
-
-`projectId`
-
-string
-
-\-
-
-记忆片段规则 ID，非必填。点击指定记忆库的**查看详情**，进入记忆规则页面获取。
-
-如不传此参数，会自动选择指定记忆库的默认的记忆片段规则 ID。
+<a id="8fa4ba5627grv"></a>
 
 ### 步骤 5：验证
 
 验证安装
 
-```
+<a id="code-block-4"></a>
+
+```bash
 # 查看插件信息
 openclaw plugins info modelstudio-memory-for-openclaw
 
@@ -207,19 +149,25 @@ openclaw modelstudio-memory stats
 
 重启 Gateway：
 
-```
+<a id="code-block-5"></a>
+
+```bash
 openclaw gateway restart
 ```
 
 重启完成后，运行以下命令验证插件状态：
 
-```
+<a id="code-block-6"></a>
+
+```bash
 openclaw plugins info modelstudio-memory-for-openclaw
 ```
 
 预期输出：
 
-```
+<a id="code-block-7"></a>
+
+```text
 Memory (Bailian)
 id: modelstudio-memory-for-openclaw
 Status: loaded
@@ -229,13 +177,17 @@ CLI commands: modelstudio-memory
 
 `Status: loaded` 表示加载成功。确认阿里云百炼 API 连通性：
 
-```
+<a id="code-block-8"></a>
+
+```bash
 openclaw modelstudio-memory stats
 ```
 
 预期输出：
 
-```
+<a id="code-block-9"></a>
+
+```text
 User: user_001
 Total memories: 0
 Auto-capture: true
@@ -244,6 +196,10 @@ Top-K: 5
 ```
 
 至此，长期记忆插件配置完成，Agent 的自动捕获和召回已默认启用，无需任何手动操作。打开 OpenClaw 面板页面（默认地址：[](http://127.0.0.1:18789)[http://127.0.0.1:18789](http://127.0.0.1:18789)）即可与启用记忆的 Agent 开始对话。
+
+<a id="在对话中使用记忆工具"></a>
+
+<a id="7248073c227au"></a>
 
 ## 在对话中使用记忆工具
 
@@ -256,7 +212,9 @@ Top-K: 5
 
 **CLI 等效命令**：
 
-```
+<a id="code-block-10"></a>
+
+```bash
 # 语义检索记忆
 openclaw modelstudio-memory search "用户偏好"
 
@@ -267,31 +225,29 @@ openclaw modelstudio-memory list --page 1 --size 10
 openclaw modelstudio-memory stats
 ```
 
+<a id="配额与限制"></a>
+
+<a id="4be0a15a7034x"></a>
+
 ## 配额与限制
 
-阿里云百炼[长期记忆 API](raw/application-user-guide/agent-context/memory-library-overview/long-term-memory-2-0.md) 存在以下速率限制：
+阿里云百炼[长期记忆 API](../long-term-memory-2-0.md) 存在以下速率限制：
 
-**API 操作**
-
-**速率上限**
-
-AddMemory (写入)
-
-120 次/分钟
-
-SearchMemory (查询)
-
-300 次/分钟
-
-所有操作合计
-
-3000 次/分钟
+| API 操作 | 速率上限 |
+| --- | --- |
+| AddMemory (写入) | 120 次/分钟 |
+| SearchMemory (查询) | 300 次/分钟 |
+| 所有操作合计 | 3000 次/分钟 |
 
 **性能指标**：
 
 -   SearchMemory 端到端延迟：200–500ms
 -   AddMemory 延迟：500–1000ms
 -   自动捕获异步执行，不影响响应速度
+
+<a id="常见问题"></a>
+
+<a id="54f88bb00389h"></a>
 
 ## 常见问题
 
@@ -312,7 +268,9 @@ SearchMemory (查询)
     OpenClaw Gateway 的日志文件按日期存储在系统临时目录中，文件名格式为 `openclaw-YYYY-MM-DD.log`
     
 
-```
+<a id="code-block-11"></a>
+
+```bash
 # Linux / macOS
 tail -f /tmp/openclaw/openclaw-$(date +%F).log | grep modelstudio-memory
 # Windows PowerShell
@@ -321,24 +279,15 @@ Get-Content "$env:TEMP\openclaw\openclaw-$(Get-Date -Format 'yyyy-MM-dd').log" -
 
 本文档完成了从安装到验证的完整流程。插件的自动捕获与自动召回机制已覆盖大部分使用场景，无需额外干预。后续可关注记忆数据在[记忆库](https://bailian.console.aliyun.com/cn-beijing?tab=app#/memory/list)中的增长情况，并根据业务规模调整 `topK` 和缓存策略。
 
+<a id="相关文档"></a>
+
+<a id="3e37dac3c5l9o"></a>
+
 ## 相关文档
 
-文档
-
-说明
-
-[OpenClaw](raw/token-plan-user-guide/use-chat-client-or-development-tool/openclaw.md)
-
-阿里云官方 OpenClaw 集成配置文档
-
-[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
-
-阿里云百炼 API Key 创建和管理
-
-[长期记忆 API](raw/application-user-guide/agent-context/memory-library-overview/long-term-memory-2-0.md)
-
-AddMemory、SearchMemory 等 API 的完整参数描述和代码示例
-
-[记忆库](raw/application-user-guide/agent-context/memory-library-overview/memory-library.md)
-
-用于在控制台创建和管理记忆库
+| 文档 | 说明 |
+| --- | --- |
+| [OpenClaw](../../../../token-plan-user-guide/use-chat-client-or-development-tool/openclaw.md) | 阿里云官方 OpenClaw 集成配置文档 |
+| [获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md) | 阿里云百炼 API Key 创建和管理 |
+| [长期记忆 API](../long-term-memory-2-0.md) | AddMemory、SearchMemory 等 API 的完整参数描述和代码示例 |
+| [记忆库](../memory-library.md) | 用于在控制台创建和管理记忆库 |

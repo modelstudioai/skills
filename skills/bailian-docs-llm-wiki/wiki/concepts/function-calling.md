@@ -1,45 +1,63 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台支持的一种结构化工具编排能力，允许大模型在推理过程中主动识别用户意图、生成符合预定义 Schema 的函数调用请求，并将结果交由外部系统执行。该机制是构建可靠 Agent 的核心基础设施，实现了 LLM 与真实世界 API、数据库、业务逻辑的安全解耦。
+函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、生成结构化[工具调用](tool-calling.md)请求，并协同外部系统执行具体操作的核心能力。它使模型不再仅输出文本，而是可按需触发计算器、搜索、代码执行、图像生成等真实服务，实现“思考→决策→行动”的闭环。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **Agent 开发**：在 Managed Agent 和 Flow Agent 中，函数调用通过「工具注册」实现——开发者上传 OpenAPI Spec 或 JSON Schema 定义的工具，平台自动注入模型上下文；模型根据 `system` 提示和用户输入，输出 `tool_calls` 结构，平台负责路由、执行、注入结果并继续推理。Sandbox Agent 则由开发者在 Python 代码中手动解析 `tool_calls` 并调用对应函数。
-  
-- **API 直接调用**：通过 OpenAI 兼容 `/v1/chat/completions` 接口启用函数调用，需在请求中传入 `tools`（数组，每个元素含 `function.name`、`function.description` 和严格符合 JSON Schema 规范的 `function.parameters`）及 `tool_choice`（可选 `"auto"`、`"none"` 或指定 `{"type": "function", "function": {"name": "xxx"}}`）。模型返回 `finish_reason: "tool_calls"` 且响应体含 `message.tool_calls` 字段。
+函数调用在百炼平台中并非通用能力，而是**严格绑定于特定模型与调用路径**，主要应用于以下三类场景：
 
-- **专用模型增强**：`tongyi-intent-detect-v3`（意图理解模型）专为函数调用优化，支持毫秒级意图识别与高精度参数提取，在对话路由、客服工单分派等低延迟场景中替代通用模型，显著提升调用准确率与响应速度。
+- **标准聊天接口（`/v1/chat/completions`）**：  
+  仅 `qwen-max` 和 `qwen-plus` 支持。开发者需在请求中传入 `tools` 数组（定义可用函数），并设置 `tool_choice`（如 `"auto"` 或指定 `{"type": "function", "function": {"name": "calculator"}}`）。模型将返回 `tool_calls` 字段（含 `function.name` 和 `function.arguments`），而非纯文本响应。客户端需解析该结构、调用对应工具、再将结果以 `role: "tool"` 消息回传，完成多轮协作。
 
-- **CLI 限制说明**：当前 `bailian-cli`（v2.3+）**不支持函数调用功能**，所有 `--input` 请求均以纯文本生成模式处理。如需使用函数调用，请改用 SDK（Python/Java）或直接调用 REST API。
+- **插件（Plug-in）集成场景**：  
+  插件本质即标准化的函数封装。官方插件（如 `calculator`、`code_interpreter`）、三方插件及自定义 MCP 插件，均通过 `tools` 参数注入到 `qwen-plus`/`qwen-max` 请求中。智能体应用中由模型自主决策调用；工作流应用中则作为显式编排节点，不依赖模型推理触发。
 
-- **框架集成**：LangChain 的 `BailianLLM` 封装类原生支持 `tools` 参数，调用 `invoke()` 时自动处理 `tool_calls` 解析与回调；OpenAI SDK 用户只需配置百炼兼容 endpoint，即可复用 `openai.ChatCompletion.create(..., tools=...)` 语法（注意：不支持 `stream=True` 与 `tools` 同时启用）。
+- **专用意图理解模型（`tongyi-intent-detect-v3`）**：  
+  该模型专为低延迟、高精度意图识别与函数路由设计。它不直接执行工具，但可快速解析用户输入，输出标准化的 `<intent>` 标签结构（含 `tool_name`、`parameters` 等），供业务系统直接调度后端服务，适用于对话路由、客服工单分发等强确定性场景。
+
+> ⚠️ 注意：`qwen-turbo`、`qwen-vl-plus`、`qwen-mt-plus`、`gui-plus` 等所有其他模型**均不支持函数调用能力**。OCR、ASR、TTS、文生图等专用模型需通过独立 API 调用，不可嵌入 `tools` 流程。
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `tools` | array | 是（启用函数调用时） | 工具定义列表，每个工具必须包含：<br>• `function.name`（字符串，仅字母数字下划线，长度 ≤ 64）<br>• `function.description`（字符串，用于模型理解用途）<br>• `function.parameters`（JSON Schema object，**不支持 `null`、`anyOf`、`oneOf`、`not` 等复杂关键字**；必需字段需显式声明 `"required": ["field1", "field2"]`） |
-| `tool_choice` | string / object | 否 | 控制调用策略：<br>• `"auto"`（默认）：模型自主决定是否调用及调用哪个工具<br>• `"none"`：禁止任何函数调用，强制文本输出<br>• `{"type": "function", "function": {"name": "xxx"}}`：强制调用指定函数（适用于确定性流程） |
-| `response_format` | object | 否（但推荐显式设置） | 若需模型返回结构化 JSON，设为 `{"type": "json_object"}`；注意：仅部分模型（如 `qwen-plus`）稳定支持，且与 `tools` 同时使用时，模型优先满足工具调用格式而非 JSON 输出格式 |
+| 参数 | 类型 | 必填 | 说明 | 示例 |
+|------|------|------|------|------|
+| `tools` | array | 是（启用函数调用时） | 工具定义列表，每个元素为 OpenAI 兼容格式对象，含 `function.name`（字符串，≤20字符）、`function.description`、`function.parameters`（JSON Schema） | `[{"function": {"name": "calculator", "description": "执行数学计算", "parameters": {"type": "object", "properties": {"expression": {"type": "string"}}}}}]` |
+| `tool_choice` | string / object | 否 | 控制调用策略：<br>• `"none"`：禁用函数调用（默认）<br>• `"auto"`：由模型自主决定是否调用<br>• `{"type": "function", "function": {"name": "xxx"}}`：强制调用指定函数 | `"auto"` |
+| `tool_choice`（意图模型） | string | 是（调用 `tongyi-intent-detect-v3` 时） | 固定为 `"required"`，且需在 `system` 消息中声明 `Response in INTENT_MODE.` | `"required"` |
+| `messages.role` | string | 是 | 函数调用流程中必须包含 `role: "tool"` 的消息，用于回传工具执行结果；`content` 为 JSON 字符串或 `null`（失败时） | `{"role": "tool", "tool_call_id": "call_abc123", "content": "{\"result\": 42}"}"` |
 
-> ⚠️ 重要限制：  
-> - **流式响应（`stream=true`）与函数调用互斥**：同时设置将返回 HTTP 400 错误。  
-> - **工具参数 Schema 必须为 object 类型**：`"parameters": null` 或 `"parameters": {}` 均非法；空参数应写为 `"parameters": {"type": "object", "properties": {}, "required": []}`。  
-> - **地域与模型约束**：`tongyi-intent-detect-v3` 仅支持华北2（北京）地域；Qwen 系列通用模型需 `qwen-plus` 及以上版本才能稳定支持多工具选择。
+- **工具 ID 与鉴权**：自定义插件需配置 `tool_id` 及 Header/Query 鉴权（如 `Authorization: Bearer xxx`），该信息不参与模型推理，仅由客户端在调用工具时透传。
+- **参数校验**：`function.parameters` 必须为合法 JSON Schema；`Object` 类型参数的子属性不可为空，否则发布失败。
+- **安全要求**：函数调用本身不改变鉴权方式，仍依赖 API Key 或临时 [Token](token.md)；但工具后端服务需自行实现鉴权与风控。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证**：用 `curl` 调用 `/v1/chat/completions`，先测试单工具（如天气查询），确认 `tool_calls` 返回结构正确后再扩展。
-- ✅ **调试技巧**：开启 `enable_tracing=true`（Agent 场景）或在请求头加 `X-DashScope-Trace: enable`（API 场景），可在控制台可观测性中查看完整工具调用链路与参数填充过程。
-- ✅ **错误处理**：当模型返回无效 `tool_calls`（如参数类型错误、缺失必填字段），平台不会自动重试；建议在客户端捕获 `finish_reason: "tool_calls"` 后，先校验参数再执行，失败时回传 `tool_result` 并附带错误信息供模型修正。
-- ❌ **避免踩坑**：不要在 `system` 消息中要求“只返回 JSON”，这会干扰函数调用协议；应依赖 `tools` 定义本身驱动行为。
+- ✅ **快速验证**：用 CLI 一行命令测试函数调用是否生效：  
+  ```bash
+  bailian chat --model qwen-plus \
+    --message "计算 123*456" \
+    --tools '[{"function":{"name":"calculator","description":"执行数学计算","parameters":{"type":"object","properties":{"expression":{"type":"string"}}}}}]' \
+    --tool-choice auto
+  ```
+
+- ✅ **必做检查项**：  
+  - 确认模型为 `qwen-plus` 或 `qwen-max`；  
+  - `tools` 中每个 `function.name` 唯一且符合命名规范（小写字母+下划线，≤20字符）；  
+  - `function.parameters` 使用标准 JSON Schema，避免 `required: []` 等无效写法；  
+  - 工具执行结果必须原样、无修改地以 `role: "tool"` 消息回传，`tool_call_id` 必须与模型返回值完全一致。
+
+- ❌ **常见错误**：  
+  - 对 `qwen-turbo` 传 `tools` → 返回 `400 Bad Request`（模型不支持）；  
+  - `function.parameters` 缺少 `type` 字段 → 模型无法解析参数，可能静默忽略工具；  
+  - 工具返回非 JSON 字符串（如带中文引号）→ 解析失败，导致后续对话中断。
+
+函数调用是构建生产级智能体的关键跃迁点。从定义清晰的工具 Schema 开始，逐步接入真实服务，即可让大模型真正“动起来”。
 
 ## 关联主题页
 
 - [getting started](../guides/getting-started.md)
-- [qwen api reference](../api/qwen-api-reference.md)
+- [more about models](../api/more-about-models.md)
+- [plug in](../guides/plug-in.md)
 - [more models](../api/more-models.md)
-- [agent development](../guides/agent-development.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
 
 

@@ -2,11 +2,19 @@
 
 通义多模态翻译获取html翻译结果
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AnyTrans/2025-07-07/GetHtmlTranslateTask)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,163 +33,55 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>anytrans:GetHtmlTranslateTask</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-anytrans:GetHtmlTranslateTask
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /anytrans/translate/html/get HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 当前请求所使用的百炼业务空间 id | llm-kqtrcpdee4xm29xx |
+| taskId | string | 否 | html 翻译任务 id | 868c2fdd-96c2-4546-96d2-a259b8f35252 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-当前请求所使用的百炼业务空间 id
-
-llm-kqtrcpdee4xm29xx
-
-taskId
-
-string
-
-否
-
-html 翻译任务 id
-
-868c2fdd-96c2-4546-96d2-a259b8f35252
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| code | string | 响应状态码 | success |
+| message | string | 响应信息 | success |
+| requestId | string | 请求 id，用于追溯 API 调用链路 | 04B53310-CB1A-14B4-AC85-26C154D8366A |
+| success | boolean | 接口调用是否成功 | true |
+| httpStatusCode | string | http 状态码 | 200 |
+| data | object | 返回数据 |  |
+| translation | string | 翻译结果 | <!DOCTYPE html> <html lang="zh-CN"> <head> <meta charset="utf-8"/> <meta content="width=device-width, initial-scale=1.0" name="viewport"/> <title>My First Webpage</title> </head> <body> <h1>Welcome to my webpage!</h1> <p>This is a simple HTML page.</p> <p>Learning HTML is the first step to entering web development.</p> <a href="[https://www.example.com"&gt;Click](https://www.example.com%22&gt;Click) here to visit the sample website</a> </body> </html> |
+| usage | object | token 用量 |  |
+| inputTokens | long | 输入 token 数 | 22 |
+| outputTokens | long | 输出 token 数 | 19 |
+| totalTokens | long | 总 token 数 | 41 |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-code
-
-string
-
-响应状态码
-
-success
-
-message
-
-string
-
-响应信息
-
-success
-
-requestId
-
-string
-
-请求 id，用于追溯 API 调用链路
-
-04B53310-CB1A-14B4-AC85-26C154D8366A
-
-success
-
-boolean
-
-接口调用是否成功
-
-true
-
-httpStatusCode
-
-string
-
-http 状态码
-
-200
-
-data
-
-object
-
-返回数据
-
-translation
-
-string
-
-翻译结果
-
-<!DOCTYPE html> <html lang="zh-CN"> <head> <meta charset="utf-8"/> <meta content="width=device-width, initial-scale=1.0" name="viewport"/> <title>My First Webpage</title> </head> <body> <h1>Welcome to my webpage!</h1> <p>This is a simple HTML page.</p> <p>Learning HTML is the first step to entering web development.</p> <a href="[https://www.example.com"&gt;Click](https://www.example.com%22&gt;Click) here to visit the sample website</a> </body> </html>
-
-usage
-
-object
-
-token 用量
-
-inputTokens
-
-long
-
-输入 token 数
-
-22
-
-outputTokens
-
-long
-
-输出 token 数
-
-19
-
-totalTokens
-
-long
-
-总 token 数
-
-41
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -189,7 +89,9 @@ long
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "code": "success",
   "message": "success",
@@ -207,28 +109,25 @@ long
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-400
-
-IdempotentParameterMismatch
-
-The request uses the same client token as a previous, but non-identical request. Do not reuse a client token with different requests, unless the requests are identical.
+| HTTP status code | 错误码 | 错误信息 |
+| --- | --- | --- |
+| 400 | IdempotentParameterMismatch | The request uses the same client token as a previous, but non-identical request. Do not reuse a client token with different requests, unless the requests are identical. |
 
 访问[错误中心](https://api.aliyun.com/document/AnyTrans/2025-07-07/errorCode)查看更多错误码。
 
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
+
 ## 变更历史
 
-变更时间
-
-变更内容概要
-
-操作
+| 变更时间 | 变更内容概要 | 操作 |
+| --- | --- | --- |
 
 暂无变更历史

@@ -4,6 +4,10 @@
 
 在音视频交互场景，您可能在您的项目中使用了成熟的技术方案。如第三方的RTC 服务来实现音视频的转发和处理。为了方便您通过最小的改动接入阿里云百炼多模交互开发套件，我们提供了提交图片序列的方式实现视频通话（LiveAI） 功能。
 
+<a id="调用流程"></a>
+
+<a id="c68c013bc4cer"></a>
+
 ### 调用流程
 
 在典型的方案中，我们推荐您的客户端（网页或者APP）通过RTC与您的服务端建立连接，传输视频和音频。然后您将服务端采集到的视频帧以 500ms/张 的速度发送给多模交互SDK，同时保持实时的音频输入。
@@ -12,15 +16,27 @@
 
 -   LiveAI调用时序
 
+<a id="2f661ea660bti"></a>
+
 #### ![截屏2025-06-20 11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6685452571/p985488.png)
+
+<a id="调用示例"></a>
+
+<a id="ec31ddced7mo9"></a>
 
 ### 调用示例
 
-我们在各语言的 SDK 文档中提供了通过 Websocket 链路接入 LiveAI 的示例，以下是通过服务端接入LiveAI 功能的简单示例。更多调用说明请参考[SDK安装](raw/application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-sdk.md)。
+我们在各语言的 SDK 文档中提供了通过 Websocket 链路接入 LiveAI 的示例，以下是通过服务端接入LiveAI 功能的简单示例。更多调用说明请参考[SDK安装](../application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-sdk.md)。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-java-tab"></a>
 
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 public void testMultimodalLiveAI() {
     log.info("############ Starting LiveAI Test ############");
 
@@ -126,9 +142,13 @@ private void startVideoFrameStreaming() {
 }
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 # 1. 设置请求模式为AudioAndVideo
 up_stream = Upstream(type="AudioAndVideo", mode="duplex", audio_format="pcm")
 ...
@@ -170,9 +190,13 @@ def send_connect_video_command(self):
 # 其他调用过程省略，可参考完整示例。
 ```
 
+<a id="fig-code-group-cpp-tab"></a>
+
 cpp
 
-```
+<a id="code-code-group-cpp"></a>
+
+```cpp
 // 发送图片base64数据的示例
 // 这里base64encode可借用SDK的辅助接口也可自行实现
 ConversationUtils utils;

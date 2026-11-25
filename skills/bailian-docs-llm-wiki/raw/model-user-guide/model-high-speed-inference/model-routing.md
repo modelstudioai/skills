@@ -2,39 +2,24 @@
 
 智能路由是一种通过动态分析用户请求内容，在模型备选集中自动匹配最合适模型进行处理，帮助企业在复杂场景中实现 AI 资源的最优配置。
 
+<a id="概述"></a>
+
 ## 概述
+
+<a id="model-routing-overview"></a>
 
 智能路由的 model-code 固定为 `auto-model` 前缀，后接 8 位随机字符（如 `auto-model-abcd1234`）。客户端通过该 model-code 发起请求 → 路由服务动态分析请求内容并从备选集中自动匹配最合适的模型 → 实际模型推理 → 响应返回（响应体标注实际执行模型，保留真实 token 用量）。
 
 **适用范围**：
 
-维度
-
-说明
-
-地域
-
-北京（`cn-beijing`）+ 新加坡（`ap-southeast-1`）
-
-模型类型
-
-仅文本输入
-
-调用协议
-
-支持 OpenAI 兼容接口（Chat Completions、Responses）与 Anthropic 协议（Messages），不支持 DashScope 原生协议
-
-访问域名
-
-仅支持 `maas.aliyuncs.com`（OpenAI 兼容与 Responses 协议：`https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1`；Anthropic 协议：`https://{WorkspaceId}.{region}.maas.aliyuncs.com/apps/anthropic`；region 为 `cn-beijing` 或 `ap-southeast-1`），不支持 `dashscope.aliyuncs.com`（含 compatible-mode）
-
-计费
-
-按量计费
-
-限流
-
-按实际路由模型在账号和业务空间限流
+| 维度 | 说明 |
+| --- | --- |
+| 地域 | 北京（`cn-beijing`）+ 新加坡（`ap-southeast-1`） |
+| 模型类型 | 仅文本输入 |
+| 调用协议 | 支持 OpenAI 兼容接口（Chat Completions、Responses）与 Anthropic 协议（Messages），不支持 DashScope 原生协议 |
+| 访问域名 | 仅支持 `maas.aliyuncs.com`（OpenAI 兼容与 Responses 协议：`https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1`；Anthropic 协议：`https://{WorkspaceId}.{region}.maas.aliyuncs.com/apps/anthropic`；region 为 `cn-beijing` 或 `ap-southeast-1`），不支持 `dashscope.aliyuncs.com`（含 compatible-mode） |
+| 计费 | 按量计费 |
+| 限流 | 按实际路由模型在账号和业务空间限流 |
 
 **主要优势**：
 
@@ -43,14 +28,22 @@
 -   **化解模型选择难题**：无需用户手动开展复杂的模型评测与对比，平台全程自动筛选最优解，大幅降低模型选型门槛。
 -   **极简使用体验**：与常规模型接入流程完全一致，通过 model-code 即可调用，无需额外修改代码。
 
+<a id="创建智能路由"></a>
+
 ## 创建智能路由
 
+<a id="create-model-routing"></a>
+
 在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/smart-routing)“模型推理 > 智能路由”下，点击“**新建智能路由**”进入创建页。
+
+<a id="前提条件"></a>
 
 ### 前提条件
 
 -   已开通百炼工作空间。
 -   目标路由模型版本已发布，且当前账号已开通该版本及备选模型的调用权限。
+
+<a id="操作步骤"></a>
 
 ### 操作步骤
 
@@ -62,169 +55,90 @@
 
 部署成功后系统生成全局唯一的 `model-code`（形如 `auto-model-XXXXXXXX`），客户端以该 `model-code` 发起调用。`model-code` 删除后不复用。
 
-除控制台外，也可通过 OpenAPI 创建智能路由，接口说明见[智能路由 API 参考](raw/model-api-reference/model-production/model-routing-api-reference.md)。
+除控制台外，也可通过 OpenAPI 创建智能路由，接口说明见[智能路由 API 参考](../../model-api-reference/model-production/model-routing-api-reference.md)。
+
+<a id="路由策略"></a>
 
 ### 路由策略
 
+<a id="routing-strategy"></a>
+
 路由策略决定每条请求由备选模型集内哪个模型执行。两种策略均按请求内容动态匹配（非固定路由），创建时选定。
 
-**策略**
+| 策略 | 选模机制 | 适用场景 |
+| --- | --- | --- |
+| 效果优先（EFFECT\_FIRST） | 每条请求选备选集内效果最强的模型 | 关键业务、复杂推理、高质量内容生成等质量要求严苛的场景 |
+| 成本优先（COST\_FIRST） | 在满足效果下限前提下智能调度轻量级模型 | 成本敏感、高并发、对延迟与单位成本更关注的场景 |
 
-**选模机制**
-
-**适用场景**
-
-效果优先（EFFECT\_FIRST）
-
-每条请求选备选集内效果最强的模型
-
-关键业务、复杂推理、高质量内容生成等质量要求严苛的场景
-
-成本优先（COST\_FIRST）
-
-在满足效果下限前提下智能调度轻量级模型
-
-成本敏感、高并发、对延迟与单位成本更关注的场景
+<a id="备选模型配置"></a>
 
 ### 备选模型配置
 
+<a id="model-routing-candidate"></a>
+
 备选模型集是路由服务选模时可挑选的范围。创建智能路由时，在“**模型备选集**”区域从备选列表中勾选参与路由的模型，**至少选择 2 个备选模型**，否则无法部署。
 
-**说明**RAM 用户只能勾选其已获
-
-**模型调用权限**的备选模型——可勾选项不足 2 个时，需先在该业务空间为该 RAM 用户补充模型调用授权。
+> **说明**
+>
+> RAM 用户只能勾选其已获
+>
+> **模型调用权限**的备选模型——可勾选项不足 2 个时，需先在该业务空间为该 RAM 用户补充模型调用授权。
 
 路由模型版本是智能路由能力的标准化发布形态，每个版本明确了对应阶段下路由系统支持的模型范围与核心能力。 备选模型清单由所选路由模型版本决定——每个版本对应一组备选集，不能跨版本组合。 当前已发布的路由模型版本及备选模型如下：
 
+<a id="sec-tabs"></a>
+
+<a id="model-router-20260908"></a>
+
+<a id="model-router-20260908-h4"></a>
+
 #### model-router-20260908
 
-**备选模型**
-
-**输入**
-
-**缓存输入**
-
-**输出**
-
-**`qwen3.8-flash`**
-
-0.8元
-
-0.1元
-
-2.7元
-
-**`kimi-k3`**
-
-20元
-
-2元
-
-100元
-
-**`qwen3.7-plus`**
-
-0-256K：2元
-
-256k-1M：6元
-
-0-256K：0.4元
-
-256k-1M：1.2元
-
-0-256K：8元
-
-256k-1M：24元
-
-**`deepseek-v4-flash-0731`（忙时）**
-
-3元
-
-0.3元
-
-9元
-
-**`deepseek-v4-flash-0731`（闲时）**
-
-1.5元
-
-0.15元
-
-4.5元
-
-**`qwen3.7-max`**
-
-12元
-
-2.4元
-
-36元
-
-**`glm-5.2`**
-
-8元
-
-2元
-
-28元
-
-**`deepseek-v4-pro-0813`（忙时）**
-
-9元
-
-0.9元
-
-27元
-
-**`deepseek-v4-pro-0813`（闲时）**
-
-4.5元
-
-0.45元
-
-13.5元
-
-**`qwen3.8-max`**
-
-12元
-
-1.5元
-
-36元
-
-**`qwen3.7-flash`**
-
-0-32K：0.2元
-
-256k-1M：1.2元
-
-32k-256K：0.6元
-
-0-32K：0.04元
-
-256k-1M：0.24元
-
-32k-256K：0.12元
-
-0-32K：0.8元
-
-256k-1M：4.8元
-
-32k-256K：2.4元
+| 备选模型 | 输入 | 缓存输入 | 输出 |
+| --- | --- | --- | --- |
+| **`qwen3.8-flash`** | 0.8元 | 0.1元 | 2.7元 |
+| **`kimi-k3`** | 20元 | 2元 | 100元 |
+| **`qwen3.7-plus`** | 0-256K：2元<br><br>256k-1M：6元 | 0-256K：0.4元<br><br>256k-1M：1.2元 | 0-256K：8元<br><br>256k-1M：24元 |
+| **`deepseek-v4-flash-0731`（忙时）** | 3元 | 0.3元 | 9元 |
+| **`deepseek-v4-flash-0731`（闲时）** | 1.5元 | 0.15元 | 4.5元 |
+| **`qwen3.7-max`** | 12元 | 2.4元 | 36元 |
+| **`glm-5.2`** | 8元 | 2元 | 28元 |
+| **`deepseek-v4-pro-0813`（忙时）** | 9元 | 0.9元 | 27元 |
+| **`deepseek-v4-pro-0813`（闲时）** | 4.5元 | 0.45元 | 13.5元 |
+| **`qwen3.8-max`** | 12元 | 1.5元 | 36元 |
+| **`qwen3.7-flash`** | 0-32K：0.2元<br><br>256k-1M：1.2元<br><br>32k-256K：0.6元 | 0-32K：0.04元<br><br>256k-1M：0.24元<br><br>32k-256K：0.12元 | 0-32K：0.8元<br><br>256k-1M：4.8元<br><br>32k-256K：2.4元 |
 
 上表为各备选模型调用价格（元/百万tokens）。deepseek-v4 系列采用忙时/闲时分时计费。所有备选模型支持思考模式，思考 token 按输出价格计费。
 
-**说明**选择备选模型时需注意各备选模型的配额限制，避免路由到备选模型由于配额不足导致被限流。建议选择配额充足的模型作为备选，或在创建前为账号提升相应模型的 RPM/TPM 额度。
+> **说明**
+>
+> 选择备选模型时需注意各备选模型的配额限制，避免路由到备选模型由于配额不足导致被限流。建议选择配额充足的模型作为备选，或在创建前为账号提升相应模型的 RPM/TPM 额度。
+
+<a id="调用智能路由"></a>
 
 ## 调用智能路由
 
+<a id="invoke-model-routing"></a>
+
 智能路由创建后，调用方式与普通模型一致——仅需将请求中的 `model` 参数替换为智能路由的 `model-code`（如 `auto-model-abcd1234`），客户端零代码改动接入。支持 OpenAI 兼容接口（Chat Completions、Responses）与 Anthropic 协议三种调用方式，调用示例按调用协议分页签展示。
+
+<a id="sec-tabs-2"></a>
+
+<a id="openai-兼容-chat-completions"></a>
+
+<a id="openai-兼容-chat-completions-h4"></a>
 
 #### OpenAI 兼容（Chat Completions）
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
@@ -234,9 +148,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   }'
 ```
 
+<a id="fig-code-group-openai-sdk-tab"></a>
+
 OpenAI SDK
 
-```
+<a id="code-code-group-openai-sdk"></a>
+
+```python
 # OpenAI SDK
 from openai import OpenAI
 
@@ -252,9 +170,13 @@ print(resp.choices[0].message.content)
 print(resp.model)  # 实际执行的模型名
 ```
 
+<a id="fig-code-group-dashscope-sdk-tab"></a>
+
 DashScope SDK
 
-```
+<a id="code-code-group-dashscope-sdk"></a>
+
+```python
 # DashScope SDK（需先安装 pip install dashscope）
 # 智能路由仅支持 maas.aliyuncs.com 域名，需在构造 Client 时传入业务空间（workspace）与地域（region）
 import dashscope
@@ -272,9 +194,13 @@ resp = client.chat.completions.create(
 print(resp.choices[0].message.content)
 ```
 
+<a id="fig-code-group-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-node-js"></a>
+
+```javascript
 // OpenAI SDK
 使用 OpenAI SDK（需先安装 npm install openai）
 
@@ -292,11 +218,21 @@ console.log(resp.choices[0].message.content);
 console.log(resp.model); // 实际执行的模型名
 ```
 
+<a id="openai-兼容-responses"></a>
+
+<a id="openai-兼容-responses-h4"></a>
+
 #### OpenAI 兼容（Responses）
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-curl-tab"></a>
 
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
@@ -306,9 +242,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   }'
 ```
 
+<a id="fig-code-group-2-openai-sdk-tab"></a>
+
 OpenAI SDK
 
-```
+<a id="code-code-group-2-openai-sdk"></a>
+
+```python
 # OpenAI SDK
 from openai import OpenAI
 
@@ -328,11 +268,21 @@ for item in resp.output:
 print(resp.model)  # 实际执行的模型名
 ```
 
+<a id="anthropic-协议"></a>
+
+<a id="anthropic-协议-h4"></a>
+
 #### Anthropic 协议
+
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-curl-tab"></a>
 
 curl
 
-```
+<a id="code-code-group-3-curl"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages \
   -H "x-api-key: $API_KEY" \
   -H "Content-Type: application/json" \
@@ -343,9 +293,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
   }'
 ```
 
+<a id="fig-code-group-3-anthropic-sdk-tab"></a>
+
 Anthropic SDK
 
-```
+<a id="code-code-group-3-anthropic-sdk"></a>
+
+```python
 # Anthropic SDK（需先安装 pip install anthropic）
 # base_url 指向百炼 Anthropic 兼容端点，调用时请将{WorkspaceId}替换为真实的业务空间ID
 from anthropic import Anthropic
@@ -370,7 +324,11 @@ print(resp.model)  # 实际执行的模型名
 
 **计费**：按实际路由到的模型计费，智能路由服务本身暂不收费。
 
+<a id="故障自动切换"></a>
+
 ### 故障自动切换
+
+<a id="model-routing-failover"></a>
 
 智能路由内置故障自动切换，默认启用、无需配置。目标模型不可用时，路由服务用备选集内其他模型重新发起整个请求，不在推理中途切换。
 
@@ -381,7 +339,11 @@ print(resp.model)  # 实际执行的模型名
 -   超时或网络异常
 -   流式已开始返回内容后出错
 
-**说明**故障自动切换不重复计费：模型 A → 故障自动切换 → 模型 B 成功，只计模型 B 费用。
+> **说明**
+>
+> 故障自动切换不重复计费：模型 A → 故障自动切换 → 模型 B 成功，只计模型 B 费用。
+
+<a id="实时过滤规则"></a>
 
 ### 实时过滤规则
 
@@ -393,31 +355,30 @@ print(resp.model)  # 实际执行的模型名
 
 单条请求实际可选的子集随权限、模型状态与请求参数动态变化。
 
+<a id="使用限制"></a>
+
 ## 使用限制
 
-限制项
+<a id="usage-limits"></a>
 
-说明
+| 限制项 | 说明 |
+| --- | --- |
+| 调用协议 | OpenAI 兼容接口（Chat Completions、Responses）与 Anthropic 协议（Messages）；不支持 DashScope 原生协议 |
+| 请求类型 | 仅支持文本输入（Chat Completions、Responses、Messages 三种接口均可）；不支持图片、视频输入、图像生成（文生图）、Batch 批量推理、Embedding/Rerank 等非生成接口 |
+| 上下文长度 | 上限 = 备选集内模型的最小上下文窗口；超长直接报错，不触发故障自动切换 |
+| 限流 | 按实际路由模型在账号和业务空间的 RPM/TPM 限流；故障自动切换时只计最终成功模型的消耗 |
 
-调用协议
-
-OpenAI 兼容接口（Chat Completions、Responses）与 Anthropic 协议（Messages）；不支持 DashScope 原生协议
-
-请求类型
-
-仅支持文本输入（Chat Completions、Responses、Messages 三种接口均可）；不支持图片、视频输入、图像生成（文生图）、Batch 批量推理、Embedding/Rerank 等非生成接口
-
-上下文长度
-
-上限 = 备选集内模型的最小上下文窗口；超长直接报错，不触发故障自动切换
-
-限流
-
-按实际路由模型在账号和业务空间的 RPM/TPM 限流；故障自动切换时只计最终成功模型的消耗
+<a id="参数说明"></a>
 
 ### 参数说明
 
 智能路由按请求参数对备选集做实时过滤，并拒绝不支持的参数（返回 400 错误，形如 `does not support parameter(s): <参数名>`）。三种调用协议的参数支持情况不同，分述如下：
+
+<a id="sec-tabs-3"></a>
+
+<a id="openai-兼容-chat-completions-2"></a>
+
+<a id="openai-兼容-chat-completions-2-h4"></a>
 
 #### OpenAI 兼容（Chat Completions）
 
@@ -429,53 +390,23 @@ OpenAI 兼容接口（Chat Completions、Responses）与 Anthropic 协议（Mess
 
 在智能路由模式下，以下参数不支持使用，设置会导致运行报错：
 
-参数
+| 参数 | 说明 |
+| --- | --- |
+| `top_logprobs` | 限制返回 logprobs 数量 |
+| `logit_bias` | token 偏置 |
+| `stop` | 停止序列 |
+| `tool_choice` | 工具选择 |
+| `parallel_tool_calls` | 并行工具调用 |
+| `logprobs` | 是否返回 logprobs |
+| `top_p` | 核采样 |
+| `temperature` | 采样温度 |
+| `presence_penalty` | 存在惩罚 |
+| `n` | 生成数量 |
+| `thinking_budget` | 思考预算长度 |
 
-说明
+<a id="openai-兼容-responses-2"></a>
 
-`top_logprobs`
-
-限制返回 logprobs 数量
-
-`logit_bias`
-
-token 偏置
-
-`stop`
-
-停止序列
-
-`tool_choice`
-
-工具选择
-
-`parallel_tool_calls`
-
-并行工具调用
-
-`logprobs`
-
-是否返回 logprobs
-
-`top_p`
-
-核采样
-
-`temperature`
-
-采样温度
-
-`presence_penalty`
-
-存在惩罚
-
-`n`
-
-生成数量
-
-`thinking_budget`
-
-思考预算长度
+<a id="openai-兼容-responses-2-h4"></a>
 
 #### OpenAI 兼容（Responses）
 
@@ -486,29 +417,17 @@ token 偏置
 
 以下参数不支持使用，设置会导致运行报错：
 
-参数
+| 参数 | 说明 |
+| --- | --- |
+| `temperature` | 采样温度 |
+| `top_p` | 核采样 |
+| `n` | 生成数量 |
+| `stop` | 停止序列 |
+| `tools` | 工具定义 |
 
-说明
+<a id="anthropic-协议-2"></a>
 
-`temperature`
-
-采样温度
-
-`top_p`
-
-核采样
-
-`n`
-
-生成数量
-
-`stop`
-
-停止序列
-
-`tools`
-
-工具定义
+<a id="anthropic-协议-2-h4"></a>
 
 #### Anthropic 协议
 
@@ -518,21 +437,13 @@ token 偏置
 
 以下参数不支持使用，设置会导致运行报错：
 
-参数
+| 参数 | 说明 |
+| --- | --- |
+| `top_p` | 核采样 |
+| `stop_sequences` | 停止序列 |
+| `thinking` | 思考控制 |
 
-说明
-
-`top_p`
-
-核采样
-
-`stop_sequences`
-
-停止序列
-
-`thinking`
-
-思考控制
+<a id="缓存"></a>
 
 ### 缓存
 
@@ -541,9 +452,15 @@ token 偏置
 -   若请求配置了显式缓存标识，系统会忽略显式缓存相关参数。
 -   显式缓存不参与计费。
 
-仅支持实际调用模型提供的隐式缓存：仅当请求被路由至同一模型，且提示词前缀满足该模型的缓存条件时，才可能命中缓存。由于不同请求可能被路由至不同模型，智能路由不保障缓存命中率。有关缓存的工作原理及其支持模型的详细信息，请参阅[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
+仅支持实际调用模型提供的隐式缓存：仅当请求被路由至同一模型，且提示词前缀满足该模型的缓存条件时，才可能命中缓存。由于不同请求可能被路由至不同模型，智能路由不保障缓存命中率。有关缓存的工作原理及其支持模型的详细信息，请参阅[上下文缓存](../model-experience/text-generation-model/context-cache.md)。
+
+<a id="管理路由服务"></a>
 
 ## 管理路由服务
+
+<a id="manage-model-router"></a>
+
+<a id="查看详情"></a>
 
 ### 查看详情
 
@@ -554,109 +471,68 @@ token 偏置
 -   **计费方式**：按量计费，按实际使用模型单价计费。
 -   **部署配置**：各备选模型的 TPM/RPM 限流配额。
 
+<a id="修改路由配置"></a>
+
 ### 修改路由配置
 
 在详情页“路由配置”区域点击“编辑”，可修改路由模型版本、路由策略与备选模型。切换路由版本时备选模型集随之变更，修改后几分钟内生效、不影响线上请求。也可通过更新模型部署任务接口（`PUT /api/v1/deployments/{deployed_model}/update`）编辑，语义为完整替换——`routing_config` 三字段全部必填。
 
 选定具体版本后，线上业务的路由行为将保持长期稳定；升级版本前请务必做全面评估，避免对业务产生影响。当前版本为 `model-router-2026-0908`。路由版本默认不自动更新。
 
+<a id="删除服务"></a>
+
 ### 删除服务
 
 在智能路由列表中删除智能路由服务，或调用删除智能路由服务接口（`DELETE /api/v1/deployments/{deployed_model}`）直接删除。`model-code` 删除后不复用，需重新创建。
 
+<a id="通过-api-管理"></a>
+
 ### 通过 API 管理
 
-除控制台外，智能路由服务的创建、查询详情、列举、编辑路由配置与删除均支持通过 OpenAPI 完成（仅支持后付费），完整接口说明见[智能路由 API 参考](raw/model-api-reference/model-production/model-routing-api-reference.md)。支持的接口：
+除控制台外，智能路由服务的创建、查询详情、列举、编辑路由配置与删除均支持通过 OpenAPI 完成（仅支持后付费），完整接口说明见[智能路由 API 参考](../../model-api-reference/model-production/model-routing-api-reference.md)。支持的接口：
 
-功能
-
-接口
-
-获取模型路由版本列表
-
-`GET /api/v1/deployments/model-routing/versions`
-
-创建智能路由服务
-
-`POST /api/v1/deployments`
-
-列举智能路由服务
-
-`GET /api/v1/deployments?plan=mr`
-
-查询智能路由服务详情
-
-`GET /api/v1/deployments/{deployed_model}`
-
-编辑路由配置
-
-`PUT /api/v1/deployments/{deployed_model}/update`
-
-删除智能路由服务
-
-`DELETE /api/v1/deployments/{deployed_model}`
+| 功能 | 接口 |
+| --- | --- |
+| 获取模型路由版本列表 | `GET /api/v1/deployments/model-routing/versions` |
+| 创建智能路由服务 | `POST /api/v1/deployments` |
+| 列举智能路由服务 | `GET /api/v1/deployments?plan=mr` |
+| 查询智能路由服务详情 | `GET /api/v1/deployments/{deployed_model}` |
+| 编辑路由配置 | `PUT /api/v1/deployments/{deployed_model}/update` |
+| 删除智能路由服务 | `DELETE /api/v1/deployments/{deployed_model}` |
 
 创建或编辑前，先通过「获取模型路由版本列表」接口查询可选的路由模型版本、策略与备选模型。智能路由不支持扩缩容、启停、限流配置与改名等算力类操作。
 
+<a id="智能路由效果"></a>
+
 ## 智能路由效果
 
+<a id="monitoring"></a>
+
 本章介绍智能路由的运行效果指标与监控方式。效果指标在详情页“智能路由效果”标签页查看，调用监控在模型监控页面查看。
+
+<a id="路由效果指标"></a>
 
 ### 路由效果指标
 
 在详情页“智能路由效果”标签页查看以下指标。页面显示的指标为预估值，仅供参考，不能用于出账，实际账单以“费用用量”为准：
 
-**指标**
+| 指标 | 含义 | 异常处理 |
+| --- | --- | --- |
+| 路由请求总量 | 路由服务接收的请求总数（含故障自动切换成功） | 突增排查上游限流/异常 |
+| 路由成功率 | 成功转发请求 ÷ 总请求 × 100% | 下降则排查备选模型可用性 |
+| 实际模型成本（预估） | 按实际模型目录价估算的全量成本（阶梯计费取最低档，峰谷定价取峰值，不含免费额度，与实际账单有偏差） | 上升则检查路由策略与备选集 |
+| 基线模型成本（预估） | 假设全部由基线模型处理的对照成本（同口径估算） | — |
+| 节约金额 | 基线成本 − 实际成本（正值表示路由节约） | — |
+| 计费请求数 | 产生费用的成功请求数 | — |
+| 花费占比 | 单模型成本 ÷ 总成本 | 异常则检查备选集分布 |
 
-**含义**
-
-**异常处理**
-
-路由请求总量
-
-路由服务接收的请求总数（含故障自动切换成功）
-
-突增排查上游限流/异常
-
-路由成功率
-
-成功转发请求 ÷ 总请求 × 100%
-
-下降则排查备选模型可用性
-
-实际模型成本（预估）
-
-按实际模型目录价估算的全量成本（阶梯计费取最低档，峰谷定价取峰值，不含免费额度，与实际账单有偏差）
-
-上升则检查路由策略与备选集
-
-基线模型成本（预估）
-
-假设全部由基线模型处理的对照成本（同口径估算）
-
-—
-
-节约金额
-
-基线成本 − 实际成本（正值表示路由节约）
-
-—
-
-计费请求数
-
-产生费用的成功请求数
-
-—
-
-花费占比
-
-单模型成本 ÷ 总成本
-
-异常则检查备选集分布
+<a id="成本说明"></a>
 
 ### 成本说明
 
 成本分析数据约有 1 小时延迟，非实时统计。 上述成本均按目录价估算全量成本，不含账号折扣优惠与免费额度，仅供衡量智能路由节约效果参考。 阶梯计费模型取最低档目录价，峰谷定价模型取峰值价格。 实际账单金额可在“费用用量”中查看。
+
+<a id="模型监控"></a>
 
 ### 模型监控
 

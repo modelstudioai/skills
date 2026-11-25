@@ -2,6 +2,10 @@
 
 创建一个长期记忆体。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 -   您可以将对话过程中的特定信息（即记忆片段，详见长期记忆）存储到长期记忆体（Memory）中，智能体应用将在后续对话中持续引用这些信息（非自动，您需要先调用 CreateMemory 接口创建长期记忆体，获取memoryId。然后通过 API 调用智能体应用时，传入该memoryId）。
@@ -15,11 +19,19 @@
 
 **限流说明：** 请确保两次请求间隔至少 1 秒，否则可能触发系统限流。如遇限流，请稍后重试。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/bailian/2023-12-29/CreateMemory)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -38,97 +50,46 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>sfm:CreateMemory</td><td>create</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-sfm:CreateMemory
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/memories HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 长期记忆体所属的业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。 | llm-3z7uw7fwz0vexxxx |
+| description | string | 否 | 长期记忆体的描述信息。长度为 1~50 个字符，支持 Unicode 中 letter 分类下的字符（其中包括英文、中文和数字等）。可以包含半角冒号（:）、下划线（\_）、半角句号（.）或者短划线（-）。 | 我的大模型应用$APP\_ID关于A用户的长期记忆体 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-长期记忆体所属的业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。
-
-llm-3z7uw7fwz0vexxxx
-
-description
-
-string
-
-否
-
-长期记忆体的描述信息。长度为 1~50 个字符，支持 Unicode 中 letter 分类下的字符（其中包括英文、中文和数字等）。可以包含半角冒号（:）、下划线（\_）、半角句号（.）或者短划线（-）。
-
-我的大模型应用$APP\_ID关于A用户的长期记忆体
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| memoryId | string | 长期记忆体 ID。<br><br>**说明** 请妥善保管该值，它将用于后续所有与此长期记忆体相关的 API 操作。 | 6bff4f317a14442fbc9f73d29dbxxxx |
+| requestId | string | 请求 ID。 | 17204B98-xxxx-4F9A--2446A84821CA |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-memoryId
-
-string
-
-长期记忆体 ID。
-
-**说明** 请妥善保管该值，它将用于后续所有与此长期记忆体相关的 API 操作。
-
-6bff4f317a14442fbc9f73d29dbxxxx
-
-requestId
-
-string
-
-请求 ID。
-
-17204B98-xxxx-4F9A--2446A84821CA
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -136,45 +97,25 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "memoryId": "6bff4f317a14442fbc9f73d29dbxxxx",
   "requestId": "17204B98-xxxx-4F9A--2446A84821CA"
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-400
-
-Memory.DescriptionInvalid
-
-Input parameter description is invalid.
-
-长期记忆的描述信息无效
-
-404
-
-Memory.MemoryIdNotFound
-
-Memory Id not exist or is not authorized.
-
-memoryId 未找到
-
-500
-
-Memory.InternalError
-
-Memory service inner exception.
-
-长期记忆服务内部异常。
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 400 | Memory.DescriptionInvalid | Input parameter description is invalid. | 长期记忆的描述信息无效 |
+| 404 | Memory.MemoryIdNotFound | Memory Id not exist or is not authorized. | memoryId 未找到 |
+| 500 | Memory.InternalError | Memory service inner exception. | 长期记忆服务内部异常。 |
 
 访问[错误中心](https://api.aliyun.com/document/bailian/2023-12-29/errorCode)查看更多错误码。

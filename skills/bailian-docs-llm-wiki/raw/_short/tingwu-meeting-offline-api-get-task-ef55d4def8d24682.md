@@ -2,376 +2,109 @@
 
 获取离线会议纪要任务结果的API参考。
 
+<a id="前提条件"></a>
+
+<a id="8a24f2ed09vr0"></a>
+
 ## 前提条件
 
-已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+已开通服务并[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
 
-**说明**当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
+> **说明**
+>
+> 当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](../model-api-reference/more-about-models/generate-temporary-api-key.md)。
+>
+> 与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
+>
+> 使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
 
-与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
+<a id="接入地址"></a>
 
-使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
+<a id="52a5ef4ab7tfg"></a>
 
 ## 接入地址
 
-```
+<a id="code-block"></a>
+
+```http
 https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
 ```
+
+<a id="请求方式"></a>
+
+<a id="606a6390d6xdn"></a>
 
 ## 请求方式
 
 post方法请求
 
+<a id="请求头"></a>
+
+<a id="24323e44bdlg5"></a>
+
 ## 请求头
 
-```
+<a id="code-block-2"></a>
+
+```http
 Authorization: Bearer {api-key} // 需将{api-key}替换为实际的API Key
 Content-Type: application/json
 ```
 
+<a id="请求参数"></a>
+
+<a id="49d9739eabds5"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| model | string | 是 | 定义业务类型，固定为`tingwu-meeting` | `tingwu-meeting` |
+| input | object | 是 | 传入相关业务参数 |  |
+| input.task | string | 是 | 定义任务类型，固定为`getTask`，表示获取任务结果 | getTask |
+| input.dataId | string | 是 | 需要查询的离线会议纪要任务id | wkb\*\*\* |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-model
-
-string
-
-是
-
-定义业务类型，固定为`tingwu-meeting`
-
-`tingwu-meeting`
-
-input
-
-object
-
-是
-
-传入相关业务参数
-
-input.task
-
-string
-
-是
-
-定义任务类型，固定为`getTask`，表示获取任务结果
-
-getTask
-
-input.dataId
-
-string
-
-是
-
-需要查询的离线会议纪要任务id
-
-wkb\*\*\*
+<a id="117fc92769d5k"></a>
 
 ## 返回参数
 
-**名称**
+<table><thead><tr><th><p><strong>名称</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>描述</strong></p></th><th><p><strong>示例值/解析协议</strong></p></th></tr></thead><tbody><tr><td><p>code</p></td><td><p>string</p></td><td><p>错误码</p></td><td></td></tr><tr><td><p>message</p></td><td><p>string</p></td><td><p>错误信息</p></td><td></td></tr><tr><td><p>request_id</p></td><td><p>string</p></td><td><p>请求id</p></td><td><p>f97ee37d-0f9c-9b93-b6bf-bd263a232bf9</p></td></tr><tr><td><p>usage</p></td><td><p>object</p></td><td><p>用量，目前无值</p></td><td><p>{}</p></td></tr><tr><td><p>output</p></td><td><p>object</p></td><td><p>业务返回体</p></td><td></td></tr><tr><td><p>output.status</p></td><td><p>int</p></td><td><p>任务状态：</p><ul><li><p>0：成功</p></li><li><p>1：进行中</p></li><li><p>2：失败</p></li></ul></td><td><p>0</p></td></tr><tr><td><p>output.errorCode</p></td><td><p>string</p></td><td><p>任务成功提交，但是执行失败（<code>status</code>为2时）的错误码</p></td><td><p>TSC.FileError</p></td></tr><tr><td><p>output.errorMessage</p></td><td><p>string</p></td><td><p>任务成功提交，但是任务执行失败（<code>status</code>为2时）的错误信息</p></td><td><p>File cannot be read.</p></td></tr><tr><td><p>output.playbackUrl</p></td><td><p>string</p></td><td><p>回听音频url，有效期是24h</p></td><td rowspan="9"><p>ossUrl对应的文件内容解析协议参见：</p><ul><li><p><a href="tingwu-meeting-offline-api-get-task-ef55d4def8d24682.md#842aa17ccdv95">output.transcriptionPath的解析协议</a></p></li><li><p><a href="tingwu-meeting-offline-api-get-task-ef55d4def8d24682.md#87d3ea1c81d4p">output.translationsPath的解析协议</a></p></li><li><p><a href="tingwu-meeting-offline-api-get-task-ef55d4def8d24682.md#0d8cca338fay8">output.autoChaptersPath的解析协议</a></p></li><li><p><a href="tingwu-meeting-offline-api-get-task-ef55d4def8d24682.md#085d4a95d3ffb">output.summarizationPath的解析协议</a></p></li><li><p><a href="tingwu-meeting-offline-api-get-task-ef55d4def8d24682.md#2ef20891aftjk">output.meetingAssistancePath的解析协议</a></p></li><li><p><a href="tingwu-meeting-offline-api-get-task-ef55d4def8d24682.md#dbbb3c7eb6sz8">output.pptExtractionPath的解析协议</a></p></li><li><p><a href="tingwu-meeting-offline-api-get-task-ef55d4def8d24682.md#bfde32a6a5n6k">output.textPolishPath的解析协议</a></p></li><li><p><a href="tingwu-meeting-offline-api-get-task-ef55d4def8d24682.md#041ed2bfbd5z4">output.customPromptPath的解析协议</a></p></li></ul><p>注意，当且仅当url中字符串为null时，代表子任务失败，否则认为子任务成功</p></td></tr><tr><td><p>output.transcriptionPath</p></td><td><p>string</p></td><td><p>转写结果对象的ossUrl</p></td></tr><tr><td><p>output.translationsPath</p></td><td><p>string</p></td><td><p>翻译的ossUrl</p></td></tr><tr><td><p>output.autoChaptersPath</p></td><td><p>string</p></td><td><p>章节速览的ossUrl</p></td></tr><tr><td><p>output.summarizationPath</p></td><td><p>string</p></td><td><p>全文摘要、发言总结、问答回顾、思维导图的ossUrl</p></td></tr><tr><td><p>output.meetingAssistancePath</p></td><td><p>string</p></td><td><p>待办事项、关键词的ossUrl</p></td></tr><tr><td><p>output.pptExtractionPath</p></td><td><p>string</p></td><td><p>PPT抽取及摘要的ossUrl</p></td></tr><tr><td><p>output.textPolishPath</p></td><td><p>string</p></td><td><p>口语书面化的ossUrl</p></td></tr><tr><td><p>output.customPromptPath</p></td><td><p>string</p></td><td><p>自定义Prompt的ossUrl</p></td></tr></tbody></table>
 
-**类型**
+<a id="output-transcriptionpath的解析协议"></a>
 
-**描述**
-
-**示例值/解析协议**
-
-code
-
-string
-
-错误码
-
-message
-
-string
-
-错误信息
-
-request\_id
-
-string
-
-请求id
-
-f97ee37d-0f9c-9b93-b6bf-bd263a232bf9
-
-usage
-
-object
-
-用量，目前无值
-
-{}
-
-output
-
-object
-
-业务返回体
-
-output.status
-
-int
-
-任务状态：
-
--   0：成功
-    
--   1：进行中
-    
--   2：失败
-    
-
-0
-
-output.errorCode
-
-string
-
-任务成功提交，但是执行失败（`status`为2时）的错误码
-
-TSC.FileError
-
-output.errorMessage
-
-string
-
-任务成功提交，但是任务执行失败（`status`为2时）的错误信息
-
-File cannot be read.
-
-output.playbackUrl
-
-string
-
-回听音频url，有效期是24h
-
-ossUrl对应的文件内容解析协议参见：
-
--   [output.transcriptionPath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-meeting-offline-api-get-task#842aa17ccdv95)
-    
--   [output.translationsPath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-meeting-offline-api-get-task#87d3ea1c81d4p)
-    
--   [output.autoChaptersPath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-meeting-offline-api-get-task#0d8cca338fay8)
-    
--   [output.summarizationPath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-meeting-offline-api-get-task#085d4a95d3ffb)
-    
--   [output.meetingAssistancePath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-meeting-offline-api-get-task#2ef20891aftjk)
-    
--   [output.pptExtractionPath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-meeting-offline-api-get-task#dbbb3c7eb6sz8)
-    
--   [output.textPolishPath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-meeting-offline-api-get-task#bfde32a6a5n6k)
-    
--   [output.customPromptPath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-meeting-offline-api-get-task#041ed2bfbd5z4)
-    
-
-注意，当且仅当url中字符串为null时，代表子任务失败，否则认为子任务成功
-
-output.transcriptionPath
-
-string
-
-转写结果对象的ossUrl
-
-output.translationsPath
-
-string
-
-翻译的ossUrl
-
-output.autoChaptersPath
-
-string
-
-章节速览的ossUrl
-
-output.summarizationPath
-
-string
-
-全文摘要、发言总结、问答回顾、思维导图的ossUrl
-
-output.meetingAssistancePath
-
-string
-
-待办事项、关键词的ossUrl
-
-output.pptExtractionPath
-
-string
-
-PPT抽取及摘要的ossUrl
-
-output.textPolishPath
-
-string
-
-口语书面化的ossUrl
-
-output.customPromptPath
-
-string
-
-自定义Prompt的ossUrl
+<a id="842aa17ccdv95"></a>
 
 #### output.transcriptionPath的解析协议
 
 最外层是一个Object，具体字段如下：
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-audioInfo
-
-object
-
-音频信息对象。
-
-audioInfo.Size
-
-long
-
-音频大小，单位：字节。
-
-3335756
-
-audioInfo.Duration
-
-long
-
-音频时长，单位：毫秒。（实时语音转写时，该字段不表示实际音频时长）
-
-104006
-
-audioInfo.SampleRate
-
-int
-
-音频采样率。
-
-16000
-
-audioInfo.Language
-
-string
-
-音频语种。
-
-cn
-
-audioSegments
-
-array<array<int>>
-
-有效音频片断范围。
-
-audioSegments\[i\]\[0\]
-
-int
-
-有效音频片段的开始时间，单位为毫秒。
-
-1690
-
-audioSegments\[i\]\[1\]
-
-int
-
-有效音频片段的结束时间，单位为毫秒。
-
-10704
-
-paragraphs
-
-array
-
-段落列表
-
-paragraphs\[0\].paragraphId
-
-String
-
-段落ID
-
-16987422100275\*\*\*\*\*
-
-paragraphs\[0\].speakerId
-
-String
-
-说话者ID
-
-1
-
-paragraphs\[0\].words
-
-array
-
-字词列表
-
-paragraphs\[0\].words\[0\].id
-
-int
-
-字词编号
-
-10
-
-paragraphs\[0\].words\[0\].sentenceId
-
-int
-
-句子ID
-
-1
-
-paragraphs\[0\].words\[0\].start
-
-int
-
-开始时间（毫秒）
-
-4970
-
-paragraphs\[0\].words\[0\].end
-
-int
-
-结束时间（毫秒）
-
-5560
-
-paragraphs\[0\].words\[0\].text
-
-String
-
-字词文本
-
-您好，
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+| audioInfo | object | 音频信息对象。 |  |
+| audioInfo.Size | long | 音频大小，单位：字节。 | 3335756 |
+| audioInfo.Duration | long | 音频时长，单位：毫秒。（实时语音转写时，该字段不表示实际音频时长） | 104006 |
+| audioInfo.SampleRate | int | 音频采样率。 | 16000 |
+| audioInfo.Language | string | 音频语种。 | cn |
+| audioSegments | array<array<int>> | 有效音频片断范围。 |  |
+| audioSegments\[i\]\[0\] | int | 有效音频片段的开始时间，单位为毫秒。 | 1690 |
+| audioSegments\[i\]\[1\] | int | 有效音频片段的结束时间，单位为毫秒。 | 10704 |
+| paragraphs | array | 段落列表 |  |
+| paragraphs\[0\].paragraphId | String | 段落ID | 16987422100275\*\*\*\*\* |
+| paragraphs\[0\].speakerId | String | 说话者ID | 1 |
+| paragraphs\[0\].words | array | 字词列表 |  |
+| paragraphs\[0\].words\[0\].id | int | 字词编号 | 10 |
+| paragraphs\[0\].words\[0\].sentenceId | int | 句子ID | 1 |
+| paragraphs\[0\].words\[0\].start | int | 开始时间（毫秒） | 4970 |
+| paragraphs\[0\].words\[0\].end | int | 结束时间（毫秒） | 5560 |
+| paragraphs\[0\].words\[0\].text | String | 字词文本 | 您好， |
 
 示例json如下：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "audioInfo": {
     "duration": 300000,
@@ -414,61 +147,29 @@ String
 }
 ```
 
+<a id="output-translationspath的解析协议"></a>
+
+<a id="87d3ea1c81d4p"></a>
+
 #### output.translationsPath的解析协议
 
 最外层是一个Object，具体字段如下：
 
-**参数名**
-
-**类型**
-
-**说明**
-
-paragraphs
-
-list\[\]
-
-翻译结果以段落形式组织的集合，和语音识别结果报文对应。
-
-paragraphs.paragraphId
-
-string
-
-段落分段id标识，和语音识别结果中的ParagraphId对应。
-
-paragraphs.sentences
-
-list\[\]
-
-翻译文本集合。
-
-paragraphs.sentences\[i\].sentenceId
-
-long
-
-句子id。
-
-paragraphs.sentences\[i\].start
-
-long
-
-该段相对于音频起始时间的开始时间，相对时间戳，单位毫秒。
-
-paragraphs.sentences\[i\].end
-
-long
-
-该段相对于音频起始时间的结束时间，相对时间戳，单位毫秒。
-
-paragraphs.sentences\[i\].text
-
-string
-
-翻译文本，和语音识别结果报文对应。
+| 参数名 | 类型 | 说明 |
+| --- | --- | --- |
+| paragraphs | list\[\] | 翻译结果以段落形式组织的集合，和语音识别结果报文对应。 |
+| paragraphs.paragraphId | string | 段落分段id标识，和语音识别结果中的ParagraphId对应。 |
+| paragraphs.sentences | list\[\] | 翻译文本集合。 |
+| paragraphs.sentences\[i\].sentenceId | long | 句子id。 |
+| paragraphs.sentences\[i\].start | long | 该段相对于音频起始时间的开始时间，相对时间戳，单位毫秒。 |
+| paragraphs.sentences\[i\].end | long | 该段相对于音频起始时间的结束时间，相对时间戳，单位毫秒。 |
+| paragraphs.sentences\[i\].text | string | 翻译文本，和语音识别结果报文对应。 |
 
 示例json如下：
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "paragraphs": [
     {
@@ -522,49 +223,27 @@ string
 }
 ```
 
+<a id="output-autochapterspath的解析协议"></a>
+
+<a id="0d8cca338fay8"></a>
+
 #### output.autoChaptersPath的解析协议
 
 最外层是一个array，具体字段如下：
 
-**参数名**
-
-**类型**
-
-**说明**
-
-\[i\].id
-
-int
-
-该章节序号。
-
-\[i\].start
-
-long
-
-该章节相对于音频起始时间的开始时间，相对时间戳，单位毫秒。
-
-\[i\].end
-
-long
-
-该章节相对于音频起始时间的结束时间，相对时间戳，单位毫秒。
-
-\[i\].headline
-
-string
-
-该章节的一句话标题。
-
-\[i\].summary
-
-string
-
-章节总结。
+| 参数名 | 类型 | 说明 |
+| --- | --- | --- |
+| \[i\].id | int | 该章节序号。 |
+| \[i\].start | long | 该章节相对于音频起始时间的开始时间，相对时间戳，单位毫秒。 |
+| \[i\].end | long | 该章节相对于音频起始时间的结束时间，相对时间戳，单位毫秒。 |
+| \[i\].headline | string | 该章节的一句话标题。 |
+| \[i\].summary | string | 章节总结。 |
 
 示例json如下：
 
-```
+<a id="code-block-5"></a>
+
+```json
 [
     {
         "end": 245450,
@@ -583,108 +262,21 @@ string
 ]
 ```
 
+<a id="output-summarizationpath的解析协议"></a>
+
+<a id="085d4a95d3ffb"></a>
+
 #### output.summarizationPath的解析协议
 
 最外层是一个Object，具体字段如下：
 
-**参数名**
-
-**类型**
-
-**说明**
-
-paragraphSummary
-
-string
-
-全文摘要结果，以`@#`符号分割为两部分：
-
--   `@#`前：开头通过简短的文字，总结全文内容；
-    
--   `@#`后：用markdown格式的无序列表呈现内容要点
-    
-
-conversationalSummary
-
-list\[\]
-
-发言总结摘要结果列表。
-
-conversationalSummary\[i\].speakerId
-
-string
-
-发言人id。
-
-conversationalSummary\[i\].speakerName
-
-string
-
-发言人名字。
-
-conversationalSummary\[i\].summary
-
-string
-
-该发言人对应的总结。
-
-questionsAnsweringSummary
-
-list\[\]
-
-问答回顾摘要结果列表。
-
-questionsAnsweringSummary\[i\].question
-
-string
-
-问题
-
-questionsAnsweringSummary\[i\].sentenceIdsOfQuestion
-
-list\[\]
-
-提炼出该问题对应的原语音转写的SentenceId列表。
-
-questionsAnsweringSummary\[i\].answer
-
-string
-
-问题对应的答案。
-
-questionsAnsweringSummary\[i\].sentenceIdsOfAnswer
-
-list\[\]
-
-总结出该答案对应的原语音转写的SentenceId列表。
-
-mindMapSummary
-
-list\[\]
-
-思维导图结果列表。
-
-mindMapSummary\[i\].title
-
-string
-
-思维导图单个节点的文本内容。
-
-mindMapSummary\[i\].beginTime
-
-int
-
-思维导图单个节点相较于开始时的时间戳，单位ms，仅存在叶子节点中。
-
-mindMapSummary\[i\].topic
-
-list\[\]
-
-思维导图单个节点的子节点列表
+<table><thead><tr><th><p><strong>参数名</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>paragraphSummary</p></td><td><p>string</p></td><td><p>全文摘要结果，以<code>@#</code>符号分割为两部分：</p><ul><li><p><code>@#</code>前：开头通过简短的文字，总结全文内容；</p></li><li><p><code>@#</code>后：用markdown格式的无序列表呈现内容要点</p></li></ul></td></tr><tr><td><p>conversationalSummary</p></td><td><p>list[]</p></td><td><p>发言总结摘要结果列表。</p></td></tr><tr><td><p>conversationalSummary[i].speakerId</p></td><td><p>string</p></td><td><p>发言人id。</p></td></tr><tr><td><p>conversationalSummary[i].speakerName</p></td><td><p>string</p></td><td><p>发言人名字。</p></td></tr><tr><td><p>conversationalSummary[i].summary</p></td><td><p>string</p></td><td><p>该发言人对应的总结。</p></td></tr><tr><td><p>questionsAnsweringSummary</p></td><td><p>list[]</p></td><td><p>问答回顾摘要结果列表。</p></td></tr><tr><td><p>questionsAnsweringSummary[i].question</p></td><td><p>string</p></td><td><p>问题</p></td></tr><tr><td><p>questionsAnsweringSummary[i].sentenceIdsOfQuestion</p></td><td><p>list[]</p></td><td><p>提炼出该问题对应的原语音转写的SentenceId列表。</p></td></tr><tr><td><p>questionsAnsweringSummary[i].answer</p></td><td><p>string</p></td><td><p>问题对应的答案。</p></td></tr><tr><td><p>questionsAnsweringSummary[i].sentenceIdsOfAnswer</p></td><td><p>list[]</p></td><td><p>总结出该答案对应的原语音转写的SentenceId列表。</p></td></tr><tr><td><p>mindMapSummary</p></td><td><p>list[]</p></td><td><p>思维导图结果列表。</p></td></tr><tr><td><p>mindMapSummary[i].title</p></td><td><p>string</p></td><td><p>思维导图单个节点的文本内容。</p></td></tr><tr><td><p>mindMapSummary[i].beginTime</p></td><td><p>int</p></td><td><p>思维导图单个节点相较于开始时的时间戳，单位ms，仅存在叶子节点中。</p></td></tr><tr><td><p>mindMapSummary[i].topic</p></td><td><p>list[]</p></td><td><p>思维导图单个节点的子节点列表</p></td></tr></tbody></table>
 
 示例json如下：
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
   "conversationalSummary": [
     {
@@ -758,85 +350,33 @@ list\[\]
 }
 ```
 
+<a id="output-meetingassistancepath的解析协议"></a>
+
+<a id="2ef20891aftjk"></a>
+
 #### output.meetingAssistancePath的解析协议
 
 最外层是一个Object，具体字段如下：
 
-**参数名**
-
-**类型**
-
-**说明**
-
-keywords
-
-list\[\]
-
-关键词提取结果。
-
-actions
-
-list\[\]
-
-待办内容、待办摘要的集合。
-
-actions\[i\].id
-
-long
-
-待办序号。
-
-actions\[i\].sentenceId
-
-long
-
-该关键句在原ASR转写中对应的句子Id。
-
-actions\[i\].start
-
-long
-
-相对于音频起始时间的开始时间，相对时间戳，单位毫秒。
-
-actions\[i\].end
-
-long
-
-相对于音频起始时间的结束时间，相对时间戳，单位毫秒。
-
-actions\[i\].text
-
-string
-
-待办内容。
-
-classifications
-
-object
-
-场景识别分类，目前只有3种场景分类。
-
-classifications.interview
-
-float
-
-面试场景置信度得分。
-
-classifications.lecture
-
-float
-
-演讲场景置信度得分。
-
-classifications.meeting
-
-float
-
-会议场景置信度得分。
+| 参数名 | 类型 | 说明 |
+| --- | --- | --- |
+| keywords | list\[\] | 关键词提取结果。 |
+| actions | list\[\] | 待办内容、待办摘要的集合。 |
+| actions\[i\].id | long | 待办序号。 |
+| actions\[i\].sentenceId | long | 该关键句在原ASR转写中对应的句子Id。 |
+| actions\[i\].start | long | 相对于音频起始时间的开始时间，相对时间戳，单位毫秒。 |
+| actions\[i\].end | long | 相对于音频起始时间的结束时间，相对时间戳，单位毫秒。 |
+| actions\[i\].text | string | 待办内容。 |
+| classifications | object | 场景识别分类，目前只有3种场景分类。 |
+| classifications.interview | float | 面试场景置信度得分。 |
+| classifications.lecture | float | 演讲场景置信度得分。 |
+| classifications.meeting | float | 会议场景置信度得分。 |
 
 示例json如下：
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
   "actions": [
     {
@@ -859,61 +399,29 @@ float
 }
 ```
 
+<a id="output-pptextractionpath的解析协议"></a>
+
+<a id="dbbb3c7eb6sz8"></a>
+
 #### output.pptExtractionPath的解析协议
 
 最外层是一个Object，具体字段如下：
 
-**参数名**
-
-**类型**
-
-**说明**
-
-availableForSummary
-
-boolean
-
-标识是否存在PPT总结文本。为false表示没有PPT总结结果，为true表示至少有一条。
-
-keyFrameList
-
-list\[\]
-
-PPT结果list，含PPT图片和总结文本。
-
-keyFrameList\[i\].id
-
-long
-
-序号。
-
-keyFrameList\[i\].start
-
-long
-
-相对于音频起始时间的开始时间，相对时间戳，单位毫秒。
-
-keyFrameList\[i\].end
-
-long
-
-相对于音频起始时间的结束时间，相对时间戳，单位毫秒。
-
-keyFrameList\[i\].fileUrl
-
-string
-
-生成的PPT图片结果，HTTP下载链接。
-
-keyFrameList\[i\].summary
-
-string
-
-对应的PPT总结。
+| 参数名 | 类型 | 说明 |
+| --- | --- | --- |
+| availableForSummary | boolean | 标识是否存在PPT总结文本。为false表示没有PPT总结结果，为true表示至少有一条。 |
+| keyFrameList | list\[\] | PPT结果list，含PPT图片和总结文本。 |
+| keyFrameList\[i\].id | long | 序号。 |
+| keyFrameList\[i\].start | long | 相对于音频起始时间的开始时间，相对时间戳，单位毫秒。 |
+| keyFrameList\[i\].end | long | 相对于音频起始时间的结束时间，相对时间戳，单位毫秒。 |
+| keyFrameList\[i\].fileUrl | string | 生成的PPT图片结果，HTTP下载链接。 |
+| keyFrameList\[i\].summary | string | 对应的PPT总结。 |
 
 示例json如下：
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "availableForSummary": true,
     "keyFrameList": [
@@ -927,49 +435,27 @@ string
 }
 ```
 
+<a id="output-textpolishpath的解析协议"></a>
+
+<a id="bfde32a6a5n6k"></a>
+
 #### output.textPolishPath的解析协议
 
 最外层是一个array，具体字段如下：
 
-**JSON字段**
-
-**类型**
-
-**说明**
-
-\[i\].formalParagraphText
-
-string
-
-口语书面化的文本结果。
-
-\[i\].sentenceIds
-
-list
-
-口语书面化改写内容对应的SentenceId列表。
-
-\[i\].paragraphId
-
-string
-
-文本结果的段落id，和语音转写结果中的段落id对应。
-
-\[i\].start
-
-long
-
-文本结果在原音频中的开始时间，相对时间戳，单位为毫秒。
-
-\[i\].end
-
-long
-
-文本结果在原音频中的结束时间，相对时间戳，单位为毫秒。
+| JSON字段 | 类型 | 说明 |
+| --- | --- | --- |
+| \[i\].formalParagraphText | string | 口语书面化的文本结果。 |
+| \[i\].sentenceIds | list | 口语书面化改写内容对应的SentenceId列表。 |
+| \[i\].paragraphId | string | 文本结果的段落id，和语音转写结果中的段落id对应。 |
+| \[i\].start | long | 文本结果在原音频中的开始时间，相对时间戳，单位为毫秒。 |
+| \[i\].end | long | 文本结果在原音频中的结束时间，相对时间戳，单位为毫秒。 |
 
 示例json如下：
 
-```
+<a id="code-block-9"></a>
+
+```json
 [
     {
         "end": 32392,
@@ -987,37 +473,26 @@ long
 ]
 ```
 
+<a id="output-custompromptpath的解析协议"></a>
+
+<a id="041ed2bfbd5z4"></a>
+
 #### output.customPromptPath的解析协议
 
 最外层是一个array，具体字段如下：
 
-JSON字段
-
-类型
-
-说明
-
-\[i\].name
-
-string
-
-任务相应的dataId
-
-\[i\].result
-
-string
-
-大模型返回结果。
-
-\[i\].truncated
-
-boolean
-
-是否发生了截断。
+|  |  |  |
+| --- | --- | --- |
+| JSON字段 | 类型 | 说明 |
+| \[i\].name | string | 任务相应的dataId |
+| \[i\].result | string | 大模型返回结果。 |
+| \[i\].truncated | boolean | 是否发生了截断。 |
 
 示例json如下：
 
-```
+<a id="code-block-10"></a>
+
+```json
 [
     {
         "name": "fgVnGvkqj5xA",
@@ -1027,9 +502,15 @@ boolean
 ]
 ```
 
+<a id="请求示例"></a>
+
+<a id="a6aedd7e040z0"></a>
+
 ## 请求示例
 
-```
+<a id="code-block-11"></a>
+
+```bash
 curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 --header 'Authorization: Bearer sk-***' \
 --header 'Content-Type: application/json' \
@@ -1042,9 +523,15 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-
 }'
 ```
 
+<a id="返回示例"></a>
+
+<a id="54c6eae773nj9"></a>
+
 ## 返回示例
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
     "output": {
         "autoChaptersPath": "https://oss.example.com/...",

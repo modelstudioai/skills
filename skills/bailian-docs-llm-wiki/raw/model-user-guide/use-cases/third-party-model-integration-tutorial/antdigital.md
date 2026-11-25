@@ -2,7 +2,13 @@
 
 本文档介绍如何在阿里云百炼平台调用蚂蚁数科直供的 Ling 系列模型推理服务。
 
-**重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+> **重要**
+>
+> 本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。
+
+<a id="服务开通"></a>
+
+<a id="antdigital-activation"></a>
 
 ## 服务开通
 
@@ -11,30 +17,42 @@
 
 完成以上步骤即可调用蚂蚁数科提供的 Ling 模型服务。
 
+<a id="快速开始"></a>
+
+<a id="antdigital-quick-start"></a>
+
 ## 快速开始
 
 **前提条件**
 
--   需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)
+-   需要已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)
+-   如果通过SDK调用，需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)
 
 antdigital/Ling-3.1-flash 是蚂蚁数科直供的混合思考模型，仅支持文本输入，默认开启思考模式：
 
 -   **思考模式**（默认，或 `enable_thinking: true`）：模型会输出推理过程（`reasoning_content`）
 -   **非思考模式**（`enable_thinking: false`）：直接输出结果，不包含推理过程
 
-支持通过 `preserve_thinking` 参数在多轮对话中传递思考过程，详情请参见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
+支持通过 `preserve_thinking` 参数在多轮对话中传递思考过程，详情请参见[传递思考过程](../../model-experience/text-generation-model/deep-thinking.md#jln7docdq5et5)。
 
 以下示例演示如何以流式输出调用思考模式的 antdigital/Ling-3.1-flash 模型。
 
-**说明**
+> **说明**
+>
+> -   `enable_thinking` 非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body` 传入，Node.js SDK 作为顶层参数传入。
+> -   流式输出时，`stream_options` 中的 `include_usage` 仅支持 `true`，传入 `false` 会报错。
 
--   `enable_thinking` 非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body` 传入，Node.js SDK 作为顶层参数传入。
--   流式输出时，`stream_options` 中的 `include_usage` 仅支持 `true`，传入 `false` 会报错。
+<a id="sec-tabs"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
-```
+<a id="code-block"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -86,9 +104,15 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-2"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -156,9 +180,15 @@ async function main() {
 main();
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-3"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -179,74 +209,44 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="其它功能"></a>
+
+<a id="antdigital-features"></a>
+
 ## 其它功能
 
-功能
-
-支持情况
-
-备注
-
-[多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
-
-支持
-
-—
-
-[Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)
-
-支持
-
-支持通过 `tool_stream` 以流式方式返回工具入参；不支持 `parallel_tool_calls`
-
-[前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)
-
-支持
-
-—
-
-[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)
-
-支持
-
-隐式缓存，命中缓存的输入 Token 按输入价格的 20% 计费
-
-[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)
-
-支持
-
-`response_format` 仅支持 `{"type": "json_object"}`，不支持 `json_schema`
-
-[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
-
-不支持
-
-—
-
-多模态输入
-
-不支持
-
-仅支持文本输入
+| 功能 | 支持情况 | 备注 |
+| --- | --- | --- |
+| [多轮对话](../../model-experience/text-generation-model/multi-round-conversation.md) | 支持 | — |
+| [Function Calling](../../model-experience/text-generation-model/tool-calls/qwen-function-calling.md) | 支持 | 支持通过 `tool_stream` 以流式方式返回工具入参；不支持 `parallel_tool_calls` |
+| [前缀续写](../../model-experience/text-generation-model/partial-mode.md) | 支持 | — |
+| [上下文缓存](../../model-experience/text-generation-model/context-cache.md) | 支持 | 隐式缓存，命中缓存的输入 Token 按输入价格的 20% 计费 |
+| [结构化输出](../../model-experience/text-generation-model/qwen-structured-output.md) | 支持 | `response_format` 仅支持 `{"type": "json_object"}`，不支持 `json_schema` |
+| [联网搜索](../../model-experience/text-generation-model/tool-calls/web-search.md) | 不支持 | — |
+| 多模态输入 | 不支持 | 仅支持文本输入 |
 
 antdigital/Ling-3.1-flash 不支持以下参数：`thinking_budget`、`reasoning_effort`、`parallel_tool_calls`、`seed`、`logprobs`、`top_logprobs`、`enable_code_interpreter`、`enable_search`、`search_options`、`skill`。
 
+<a id="模型列表与计费"></a>
+
+<a id="antdigital-models-billing"></a>
+
 ## 模型列表与计费
 
-模型
+| 模型 | 说明 |
+| --- | --- |
+| [antdigital/Ling-3.1-flash](../../../_short/ling-3-1-flash-by-antdigital-d1ed99fc07a3c7b1.md) | 混合思考模型，默认开启思考模式，上下文长度为 1048576 Token |
 
-说明
-
-[antdigital/Ling-3.1-flash](raw/_short/ling-3-1-flash-by-antdigital-d1ed99fc07a3c7b1.md)
-
-混合思考模型，默认开启思考模式，上下文长度为 1048576 Token
-
-模型价格与限流请参见[模型价格](raw/model-user-guide/test-1/model-pricing.md)和[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+模型价格与限流请参见[模型价格](../../test-1/model-pricing.md)和[限流](../../get-started-with-models/rate-limit.md)。
 
 按照模型的输入与输出 Token 计费。
 
 > 思考模式下，思维链按照输出 Token 计费。
 
+<a id="错误码"></a>
+
+<a id="antdigital-error-code"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。

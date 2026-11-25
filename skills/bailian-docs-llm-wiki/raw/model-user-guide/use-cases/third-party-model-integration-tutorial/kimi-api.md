@@ -6,11 +6,23 @@
 
 **模型体验：**您可以前往[体验中心](https://bailian.console.aliyun.com/cn-beijing/model/experience/text)体验 Kimi 模型效果。
 
-`kimi-k3.1-pro` 支持 [OpenAI Chat Completions](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)、[OpenAI Responses](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)、[Anthropic Messages](raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md) 和 DashScope 原生 API。
+`kimi-k3.1-pro` 支持 [OpenAI Chat Completions](../../../model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)、[OpenAI Responses](../../../model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)、[Anthropic Messages](../../../model-api-reference/qwen-api-reference/anthropic-api-messages.md) 和 DashScope 原生 API。
 
 不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL。
 
+<a id="sec-tabs"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
+
 #### OpenAI兼容
+
+<a id="sec-tabs-2"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
@@ -18,11 +30,19 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
+<a id="美国-弗吉尼亚"></a>
+
+<a id="美国-弗吉尼亚-h4"></a>
+
 #### 美国（弗吉尼亚）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+<a id="德国-法兰克福"></a>
+
+<a id="德国-法兰克福-h4"></a>
 
 #### 德国（法兰克福）
 
@@ -30,11 +50,19 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.eu-central-1.maas.aliyunc
 
 HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
+
 #### 新加坡
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+<a id="日本-东京"></a>
+
+<a id="日本-东京-h4"></a>
 
 #### 日本（东京）
 
@@ -42,15 +70,29 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-northeast-1.maas.aliyu
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
+<a id="中国香港"></a>
+
+<a id="中国香港-h4"></a>
+
 #### 中国香港
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-调用 OpenAI Responses 时，可复用同地域的上述 `base_url`；HTTP 请求地址为 `POST https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1/responses`，其中 `{region}` 替换为对应地域标识（如 `cn-beijing`）。接口参数与调用示例请参见[OpenAI Responses API 参考](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+调用 OpenAI Responses 时，可复用同地域的上述 `base_url`；HTTP 请求地址为 `POST https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1/responses`，其中 `{region}` 替换为对应地域标识（如 `cn-beijing`）。接口参数与调用示例请参见[OpenAI Responses API 参考](../../../model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
 
 #### DashScope
+
+<a id="sec-tabs-3"></a>
+
+<a id="华北2-北京-2"></a>
+
+<a id="华北2-北京-2-h4"></a>
 
 #### 华北2（北京）
 
@@ -58,20 +100,34 @@ HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/co
 
 SDK调用配置的`region`：
 
+<a id="sec-tabs-4"></a>
+
+<a id="python代码"></a>
+
+<a id="python代码-h4"></a>
+
 #### Python代码
 
-```
+<a id="code-block"></a>
+
+```python
 import dashscope
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(workspace="{WorkspaceId}", region="cn-beijing")
 ```
 
+<a id="java代码"></a>
+
+<a id="java代码-h4"></a>
+
 #### Java代码
 
 -   **方式一：**
 
-```
+<a id="code-block-2"></a>
+
+```java
 import com.alibaba.dashscope.protocol.Protocol;
 // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1");
@@ -79,11 +135,17 @@ Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}
 
 -   **方式二：**
 
-```
+<a id="code-block-3"></a>
+
+```java
 import com.alibaba.dashscope.utils.Constants;
 // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
 ```
+
+<a id="美国-弗吉尼亚-2"></a>
+
+<a id="美国-弗吉尼亚-2-h4"></a>
 
 #### 美国（弗吉尼亚）
 
@@ -91,29 +153,49 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api
 
 SDK调用配置的`region`：
 
+<a id="sec-tabs-5"></a>
+
+<a id="python代码-2"></a>
+
+<a id="python代码-2-h4"></a>
+
 #### Python代码
 
-```
+<a id="code-block-4"></a>
+
+```python
 import dashscope
 
 client = dashscope.Client(workspace="{WorkspaceId}", region="us-east-1")
 ```
 
+<a id="java代码-2"></a>
+
+<a id="java代码-2-h4"></a>
+
 #### Java代码
 
 -   **方式一：**
 
-```
+<a id="code-block-5"></a>
+
+```java
 import com.alibaba.dashscope.protocol.Protocol;
 Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1");
 ```
 
 -   **方式二：**
 
-```
+<a id="code-block-6"></a>
+
+```java
 import com.alibaba.dashscope.utils.Constants;
 Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1";
 ```
+
+<a id="德国-法兰克福-2"></a>
+
+<a id="德国-法兰克福-2-h4"></a>
 
 #### 德国（法兰克福）
 
@@ -121,29 +203,49 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/
 
 SDK调用配置的`region`：
 
+<a id="sec-tabs-6"></a>
+
+<a id="python代码-3"></a>
+
+<a id="python代码-3-h4"></a>
+
 #### Python代码
 
-```
+<a id="code-block-7"></a>
+
+```python
 import dashscope
 
 client = dashscope.Client(workspace="{WorkspaceId}", region="eu-central-1")
 ```
 
+<a id="java代码-3"></a>
+
+<a id="java代码-3-h4"></a>
+
 #### Java代码
 
 -   **方式一：**
 
-```
+<a id="code-block-8"></a>
+
+```java
 import com.alibaba.dashscope.protocol.Protocol;
 Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1");
 ```
 
 -   **方式二：**
 
-```
+<a id="code-block-9"></a>
+
+```java
 import com.alibaba.dashscope.utils.Constants;
 Constants.baseHttpApiUrl="https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1";
 ```
+
+<a id="新加坡-2"></a>
+
+<a id="新加坡-2-h4"></a>
 
 #### 新加坡
 
@@ -151,20 +253,34 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/a
 
 SDK调用配置的`region`：
 
+<a id="sec-tabs-7"></a>
+
+<a id="python代码-4"></a>
+
+<a id="python代码-4-h4"></a>
+
 #### Python代码
 
-```
+<a id="code-block-10"></a>
+
+```python
 import dashscope
 
 # 以下为新加坡地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(workspace="{WorkspaceId}", region="ap-southeast-1")
 ```
 
+<a id="java代码-4"></a>
+
+<a id="java代码-4-h4"></a>
+
 #### Java代码
 
 -   **方式一：**
 
-```
+<a id="code-block-11"></a>
+
+```java
 import com.alibaba.dashscope.protocol.Protocol;
 // 以下为新加坡地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
@@ -172,11 +288,17 @@ Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}
 
 -   **方式二：**
 
-```
+<a id="code-block-12"></a>
+
+```java
 import com.alibaba.dashscope.utils.Constants;
 // 以下为新加坡地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
 ```
+
+<a id="日本-东京-2"></a>
+
+<a id="日本-东京-2-h4"></a>
 
 #### 日本（东京）
 
@@ -184,29 +306,49 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com
 
 SDK调用配置的`region`：
 
+<a id="sec-tabs-8"></a>
+
+<a id="python代码-5"></a>
+
+<a id="python代码-5-h4"></a>
+
 #### Python代码
 
-```
+<a id="code-block-13"></a>
+
+```python
 import dashscope
 
 client = dashscope.Client(workspace="{WorkspaceId}", region="ap-northeast-1")
 ```
 
+<a id="java代码-5"></a>
+
+<a id="java代码-5-h4"></a>
+
 #### Java代码
 
 -   **方式一：**
 
-```
+<a id="code-block-14"></a>
+
+```java
 import com.alibaba.dashscope.protocol.Protocol;
 Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1");
 ```
 
 -   **方式二：**
 
-```
+<a id="code-block-15"></a>
+
+```java
 import com.alibaba.dashscope.utils.Constants;
 Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1";
 ```
+
+<a id="中国香港-2"></a>
+
+<a id="中国香港-2-h4"></a>
 
 #### 中国香港
 
@@ -214,15 +356,33 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
 
 SDK调用配置的`region`：
 
+<a id="sec-tabs-9"></a>
+
+<a id="python代码-6"></a>
+
+<a id="python代码-6-h4"></a>
+
 #### Python代码
 
-```
+<a id="code-block-16"></a>
+
+```python
 import dashscope
 
 client = dashscope.Client(workspace="{WorkspaceId}", region="cn-hongkong")
 ```
 
+<a id="anthropic兼容"></a>
+
+<a id="anthropic兼容-h4"></a>
+
 #### Anthropic兼容
+
+<a id="sec-tabs-10"></a>
+
+<a id="华北2-北京-3"></a>
+
+<a id="华北2-北京-3-h4"></a>
 
 #### 华北2（北京）
 
@@ -230,11 +390,19 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages`
 
+<a id="美国-弗吉尼亚-3"></a>
+
+<a id="美国-弗吉尼亚-3-h4"></a>
+
 #### 美国（弗吉尼亚）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/apps/anthropic`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/apps/anthropic/v1/messages`
+
+<a id="德国-法兰克福-3"></a>
+
+<a id="德国-法兰克福-3-h4"></a>
 
 #### 德国（法兰克福）
 
@@ -242,11 +410,19 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.eu-central-1.maas.aliyunc
 
 HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/apps/anthropic/v1/messages`
 
+<a id="新加坡-3"></a>
+
+<a id="新加坡-3-h4"></a>
+
 #### 新加坡
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic/v1/messages`
+
+<a id="日本-东京-3"></a>
+
+<a id="日本-东京-3-h4"></a>
 
 #### 日本（东京）
 
@@ -254,27 +430,49 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-northeast-1.maas.aliyu
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/apps/anthropic/v1/messages`
 
+<a id="中国香港-3"></a>
+
+<a id="中国香港-3-h4"></a>
+
 #### 中国香港
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/apps/anthropic`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/apps/anthropic/v1/messages`
 
-Anthropic兼容接口仅支持 Messages 接口（`/v1/messages`）。更多接口限制和调用说明，请参见[Anthropic兼容-Messages](raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。
+Anthropic兼容接口仅支持 Messages 接口（`/v1/messages`）。更多接口限制和调用说明，请参见[Anthropic兼容-Messages](../../../model-api-reference/qwen-api-reference/anthropic-api-messages.md)。
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-你需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+你需要已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="快速开始"></a>
+
+<a id="9d84551784a6l"></a>
 
 ## 快速开始
 
-以下为纯文本输入示例。多模态示例请参见[多模态调用示例](https://help.aliyun.com/zh/model-studio/kimi-api#af95c67524)。
+以下为纯文本输入示例。多模态示例请参见[多模态调用示例](kimi-api.md#af95c67524)。
+
+<a id="sec-tabs-11"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-12"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-17"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -314,9 +512,13 @@ for chunk in completion:
             answer_content += delta.content
 ```
 
+<a id="7a142728d5hah"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-18"></a>
+
+```text
 ====================思考过程====================
 
 用户问"你是谁"，这是一个关于身份的直接问题。我需要根据我的实际身份如实回答。
@@ -339,9 +541,15 @@ for chunk in completion:
 我是由月之暗面科技有限公司（Moonshot AI）开发的AI助手，名叫Kimi。我基于混合专家（MoE）架构，具备超长上下文理解、智能对话、文件处理、代码生成和复杂任务推理等能力。有什么可以帮您的吗？
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-19"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -396,9 +604,13 @@ async function main() {
 main();
 ```
 
+<a id="d221c3c1d3k93"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-20"></a>
+
+```text
 ====================思考过程====================
 
 用户问"你是谁"，这是一个关于身份的直接问题。我需要根据我的实际身份如实回答。
@@ -429,11 +641,23 @@ main();
 作为一个AI助手，我没有个人意识、情感或经历，但会尽力为您提供准确、有用的帮助。有什么可以帮您的吗？
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
+
+<a id="sec-tabs-13"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
 
 #### curl
 
-```
+<a id="code-block-21"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -450,9 +674,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="03cd04fa04kxk"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-22"></a>
+
+```json
 {
     "choices": [
         {
@@ -479,13 +707,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
 
-> 以下 DashScope 示例使用 `multimodal-generation` 端点调用 kimi-k3（支持文本与多模态）。更多多模态用法请参见[多模态调用示例](https://help.aliyun.com/zh/model-studio/kimi-api#af95c67524)。
+> 以下 DashScope 示例使用 `multimodal-generation` 端点调用 kimi-k3（支持文本与多模态）。更多多模态用法请参见[多模态调用示例](kimi-api.md#af95c67524)。
+
+<a id="sec-tabs-14"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-23"></a>
+
+```python
 import os
 import dashscope
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
@@ -537,9 +777,13 @@ for chunk in completion:
 # print(f"\n完整回复:\n{answer_content}")
 ```
 
+<a id="dab4d2a159ddg"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-24"></a>
+
+```text
 ====================思考过程====================
 
 用户问"你是谁？"，这是一个关于身份的直接问题。我需要根据我的实际身份如实回答。
@@ -563,9 +807,15 @@ for chunk in completion:
 我是Kimi，由月之暗面科技有限公司（Moonshot AI）开发的人工智能助手。我可以帮助你回答问题、进行创作、分析文档等多种任务。有什么我可以帮你的吗？
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-25"></a>
+
+```java
 // dashscope SDK的版本 >= 2.19.4
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
@@ -610,17 +860,33 @@ public class Main {
 }
 ```
 
+<a id="0a2fd0c94cpt2"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-26"></a>
+
+```text
 回复: 我是由月之暗面科技有限公司（Moonshot AI）开发的人工智能助手，名叫 Kimi。我擅长处理长文本、进行智能对话、解答问题、辅助创作，还能帮您分析和处理文件。有什么可以帮您的吗？
 ```
 
+<a id="http-2"></a>
+
+<a id="http-2-h4"></a>
+
 #### HTTP
+
+<a id="sec-tabs-15"></a>
+
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
 
 #### curl
 
-```
+<a id="code-block-27"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -642,9 +908,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="1f41c33807oma"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-28"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -667,13 +937,27 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }
 ```
 
+<a id="anthropic兼容-2"></a>
+
+<a id="anthropic兼容-2-h4"></a>
+
 #### Anthropic兼容
+
+<a id="sec-tabs-16"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
 
 #### Python
 
+<a id="kimi_anthropic_py_code_h3"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-29"></a>
+
+```python
 import anthropic
 import os
 
@@ -701,13 +985,27 @@ for event in message:
             print(event.delta.text, end="", flush=True)
 ```
 
+<a id="http-3"></a>
+
+<a id="http-3-h4"></a>
+
 #### HTTP
+
+<a id="kimi_anthropic_curl_code_h3"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-17"></a>
+
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-30"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -725,9 +1023,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 }'
 ```
 
+<a id="多模态调用示例"></a>
+
+<a id="af95c67524"></a>
+
 ## 多模态调用示例
 
 kimi-k3.1-pro、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5 支持同时处理文本与图像输入。视频输入仅 kimi-k2.7-code、kimi-k2.6、kimi-k2.5 支持，kimi-k3.1-pro 和 kimi-k3 不支持视频输入。可通过 `enable_thinking` 参数开启思考模式。以下示例展示如何调用多模态能力。
+
+<a id="开启或关闭思考模式"></a>
+
+<a id="thinking_mode_title"></a>
 
 ### 开启或关闭思考模式
 
@@ -740,15 +1046,27 @@ kimi-k2.7-code 为仅思考模型，始终开启思考模式（`enable_thinking`
 
 kimi-k3.1-pro 与 kimi-k3 默认开启思考（`enable_thinking=true`），可设为 `false` 关闭，但建议保持开启。kimi-k3.1-pro 关闭思考会显著影响输出效果，强烈建议保持开启。两者默认保留客户端传入的历史 `reasoning_content`，建议在多轮请求中完整回传历史 assistant 消息的 `reasoning_content`。
 
-kimi-k2.6 支持通过 `preserve_thinking` 参数在多轮对话中传递思考过程，详情请参见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
+kimi-k2.6 支持通过 `preserve_thinking` 参数在多轮对话中传递思考过程，详情请参见[传递思考过程](../../model-experience/text-generation-model/deep-thinking.md#jln7docdq5et5)。
 
 以下示例展示如何使用图像 URL 并开启思考模式，支持单图输入（主示例）和多图输入（注释代码）。
 
+<a id="sec-tabs-18"></a>
+
+<a id="openai兼容-3"></a>
+
+<a id="openai兼容-3-h4"></a>
+
 #### OpenAI兼容
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -815,9 +1133,13 @@ print(completion.choices[0].message.content)
 # print("\n完整回复：\n" + completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -886,9 +1208,13 @@ console.log(completion.choices[0].message.content);
 // console.log('\n完整回复：\n' + multiCompletion.choices[0].message.content);
 ```
 
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -950,11 +1276,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 # }'
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 import dashscope
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
@@ -1010,9 +1346,13 @@ print(response.output_text)
 # print("\n完整回复：\n" + response.output_text)
 ```
 
+<a id="fig-code-group-2-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 // dashscope SDK的版本 >= 2.22.24
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
@@ -1101,9 +1441,13 @@ public class KimiK26MultiModalExample {
 }
 ```
 
+<a id="fig-code-group-2-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1161,9 +1505,21 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 # }'
 ```
 
+<a id="视频理解"></a>
+
+<a id="a018e89a5dl9t"></a>
+
 ### 视频理解
 
-**说明**kimi-k3.1-pro 和 kimi-k3 不支持视频输入（仅支持文本与图片输入），本节视频理解示例及 `fps`、`max_frames` 参数均不适用于这两个型号。
+> **说明**
+>
+> kimi-k3.1-pro 和 kimi-k3 不支持视频输入（仅支持文本与图片输入），本节视频理解示例及 `fps`、`max_frames` 参数均不适用于这两个型号。
+
+<a id="sec-tabs-19"></a>
+
+<a id="视频文件"></a>
+
+<a id="视频文件-h4"></a>
 
 #### 视频文件
 
@@ -1178,13 +1534,25 @@ kimi-k2.7-code、kimi-k2.6、kimi-k2.5模型通过从视频中提取帧序列进
     当按 fps 计算的总帧数超过此限制时，系统将自动在 max\_frames 内均匀抽帧。**此参数仅在使用 DashScope SDK 时可用。**
     
 
+<a id="sec-tabs-20"></a>
+
+<a id="openai兼容-4"></a>
+
+<a id="openai兼容-4-h4"></a>
+
 #### OpenAI兼容
 
 > 使用OpenAI SDK或HTTP方式向模型直接输入视频文件时，需要将用户消息中的`"type"`参数设为`"video_url"`。
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1220,9 +1588,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-3-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-3-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -1261,9 +1633,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-3-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-3-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1291,11 +1667,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   }'
 ```
 
+<a id="dashscope-4"></a>
+
+<a id="dashscope-4-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 import dashscope
 import os
 
@@ -1325,9 +1711,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-4-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-4-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -1377,9 +1767,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-4-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-4-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1393,17 +1787,33 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="图像列表"></a>
+
+<a id="图像列表-h4"></a>
+
 #### 图像列表
 
 当视频以图像列表（即预先抽取的视频帧）传入时，可通过`fps`参数告知模型视频帧之间的时间间隔，这能帮助模型更准确地理解事件的顺序、持续时间和动态变化。模型支持通过 `fps` 参数指定原始视频的抽帧率，表示视频帧是每隔 1/fps 秒从原始视频中抽取的。
+
+<a id="sec-tabs-21"></a>
+
+<a id="openai兼容-5"></a>
+
+<a id="openai兼容-5-h4"></a>
 
 #### OpenAI兼容
 
 > 使用OpenAI SDK或HTTP方式向模型输入图片列表形式的视频时，需要将用户消息中的`"type"`参数设为`"video"`。
 
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-5-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1430,9 +1840,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-5-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-5-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -1470,9 +1884,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-5-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-5-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1489,11 +1907,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-5"></a>
+
+<a id="dashscope-5-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-6-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1520,9 +1948,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-6-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-6-java"></a>
+
+```java
 // DashScope SDK版本需要不低于2.21.10
 import java.util.Arrays;
 import java.util.Collections;
@@ -1576,9 +2008,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-6-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-6-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1610,17 +2046,33 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="传入本地文件"></a>
+
+<a id="df59523f9azhd"></a>
+
 ### 传入本地文件
 
 以下示例展示如何传入本地文件。OpenAI 兼容接口仅支持 Base64 编码方式，DashScope 同时支持 Base64 编码和文件路径两种方式。
 
+<a id="sec-tabs-22"></a>
+
+<a id="openai兼容-6"></a>
+
+<a id="openai兼容-6-h4"></a>
+
 #### OpenAI兼容
 
-Base64 编码方式传入需要构建 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)，构建方法请参见[构建 Data URL](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
+Base64 编码方式传入需要构建 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)，构建方法请参见[构建 Data URL](../../model-experience/text-generation-model/vision.md)。
+
+<a id="fig-code-group-7"></a>
+
+<a id="fig-code-group-7-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-7-python"></a>
+
+```python
 from openai import OpenAI
 import os
 import base64
@@ -1670,9 +2122,13 @@ print(completion.choices[0].message.content)
 #   content = [{"type": "video", "video": image_data_urls, "fps": 2}, {"type": "text", "text": "描述这个视频的具体过程"}]
 ```
 
+<a id="fig-code-group-7-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-7-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 import { readFileSync } from 'fs';
 
@@ -1719,15 +2175,31 @@ main();
 //   再调用 openai.chat.completions.create(model: "kimi-k2.6", messages: messages)
 ```
 
+<a id="dashscope-6"></a>
+
+<a id="dashscope-6-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-23"></a>
+
+<a id="base64-编码方式"></a>
+
+<a id="base64-编码方式-h4"></a>
 
 #### Base64 编码方式
 
-Base64 编码方式传入需要构建 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)，构建方法请参见[构建 Data URL](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
+Base64 编码方式传入需要构建 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)，构建方法请参见[构建 Data URL](../../model-experience/text-generation-model/vision.md)。
+
+<a id="fig-code-group-8"></a>
+
+<a id="fig-code-group-8-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-8-python"></a>
+
+```python
 import base64
 import os
 import dashscope
@@ -1774,9 +2246,13 @@ print(response.output_text)
 #   content: [{"video": image_data_urls, "fps": 2}, {"text": "描述这个视频的具体过程"}]
 ```
 
+<a id="fig-code-group-8-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-8-java"></a>
+
+```java
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1862,47 +2338,29 @@ public class Main {
 }
 ```
 
+<a id="本地文件路径方式"></a>
+
+<a id="本地文件路径方式-h4"></a>
+
 #### 本地文件路径方式
 
 直接向模型传入本地文件路径。仅 DashScope Python 和 Java SDK 支持，不支持 DashScope HTTP 和OpenAI 兼容方式。请您参考下表，结合您的编程语言与操作系统指定文件的路径。
 
+<a id="accordion-指定文件路径-以图像为例"></a>
+
 指定文件路径（以图像为例）
 
-**系统**
+<table><thead><tr><th><p><strong>系统</strong></p></th><th><p><strong>SDK</strong></p></th><th><p><strong>传入的文件路径</strong></p></th><th><p><strong>示例</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>Linux或macOS系统</p></td><td><p>Python SDK</p></td><td rowspan="2"><p>file://{文件的绝对路径}</p></td><td rowspan="2"><p>file:///home/images/test.png</p></td></tr><tr><td><p>Java SDK</p></td></tr><tr><td rowspan="2"><p>Windows系统</p></td><td><p>Python SDK</p></td><td><p>file://{文件的绝对路径}</p></td><td><p>file://D:/images/test.png</p></td></tr><tr><td><p>Java SDK</p></td><td><p>file:///{文件的绝对路径}</p></td><td><p>file:///D:/images/test.png</p></td></tr></tbody></table>
 
-**SDK**
+<a id="fig-code-group-9"></a>
 
-**传入的文件路径**
-
-**示例**
-
-Linux或macOS系统
-
-Python SDK
-
-file://{文件的绝对路径}
-
-file:///home/images/test.png
-
-Java SDK
-
-Windows系统
-
-Python SDK
-
-file://{文件的绝对路径}
-
-file://D:/images/test.png
-
-Java SDK
-
-file:///{文件的绝对路径}
-
-file:///D:/images/test.png
+<a id="fig-code-group-9-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-9-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1935,9 +2393,13 @@ print(response.output_text)
 # content: [{"video": image_paths, "fps": 2}, {"text": "描述这个视频的具体过程"}]
 ```
 
+<a id="fig-code-group-9-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-9-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -2000,7 +2462,17 @@ public class Main {
 }
 ```
 
+<a id="文件限制"></a>
+
+<a id="f5cf21da8ee0k"></a>
+
 ### 文件限制
+
+<a id="sec-tabs-24"></a>
+
+<a id="图像限制"></a>
+
+<a id="图像限制-h4"></a>
 
 #### 图像限制
 
@@ -2011,47 +2483,14 @@ public class Main {
 -   **支持的图像格式**
     -   分辨率在4K`(3840x2160)`以下，支持的图像格式如下：
         
-        **图像格式**
-        
-        **常见扩展名**
-        
-        **MIME Type**
-        
-        BMP
-        
-        .bmp
-        
-        image/bmp
-        
-        JPEG
-        
-        .jpe, .jpeg, .jpg
-        
-        image/jpeg
-        
-        PNG
-        
-        .png
-        
-        image/png
-        
-        TIFF
-        
-        .tif, .tiff
-        
-        image/tiff
-        
-        WEBP
-        
-        .webp
-        
-        image/webp
-        
-        HEIC
-        
-        .heic
-        
-        image/heic
+        | 图像格式 | 常见扩展名 | MIME Type |
+        | --- | --- | --- |
+        | BMP | .bmp | image/bmp |
+        | JPEG | .jpe, .jpeg, .jpg | image/jpeg |
+        | PNG | .png | image/png |
+        | TIFF | .tif, .tiff | image/tiff |
+        | WEBP | .webp | image/webp |
+        | HEIC | .heic | image/heic |
         
     -   分辨率处于`4K(3840x2160)`到`8K(7680x4320)`范围，仅支持 JPEG、JPG 、PNG 格式。
         
@@ -2060,10 +2499,14 @@ public class Main {
     -   以公网 URL 和本地路径传入时：单个图像的大小不超过`10MB`。
     -   以 Base64 编码传入时：编码后的字符串不超过`10MB`。
     
-    > 如需压缩文件体积请参见[如何将图像或视频压缩到满足要求的大小](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
+    > 如需压缩文件体积请参见[如何将图像或视频压缩到满足要求的大小](../../model-experience/text-generation-model/vision.md)。
     
 -   **支持传入的图片数量：**传入多张图像时，图片数量受模型的最大输入的限制，所有图片和文本的总 Token 数必须小于模型的最大输入。
     
+
+<a id="视频限制"></a>
+
+<a id="视频限制-h4"></a>
 
 #### 视频限制
 
@@ -2085,103 +2528,23 @@ public class Main {
 -   **音频理解：**不支持对视频文件的音频进行理解。
     
 
+<a id="其它功能"></a>
+
+<a id="d062ed0e4d5fe"></a>
+
 ## 其它功能
 
-**模型**
+| 模型 | [多轮对话](../../model-experience/text-generation-model/multi-round-conversation.md) | [深度思考](../../model-experience/text-generation-model/deep-thinking.md) | [Function Calling](../../model-experience/text-generation-model/tool-calls/qwen-function-calling.md#dd5a3dca390k9) | [结构化输出](../../model-experience/text-generation-model/qwen-structured-output.md) | [联网搜索](../../model-experience/text-generation-model/tool-calls/web-search.md) | [前缀续写](../../model-experience/text-generation-model/partial-mode.md) | [上下文缓存](../../model-experience/text-generation-model/context-cache.md) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| kimi-k3.1-pro | 支持 | 支持 | 支持 | 支持（JSON Mode） | 支持 | 不支持 | 支持（隐式缓存） |
+| kimi-k3 | 支持 | 支持 | 支持 | 支持 | 支持（Responses API） | 支持 | 支持 |
+| kimi-k2.7-code | 支持 | 支持 | 支持 | 不支持 | 不支持 | 不支持 | 支持 |
+| kimi-k2.6 | 支持 | 支持 | 支持 | 不支持 | 不支持 | 不支持 | 支持 |
+| kimi-k2.5 | 支持 | 支持 | 支持 | 不支持 | 不支持 | 不支持 | 支持 |
 
-[多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
+<a id="动态加载工具"></a>
 
-[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)
-
-[Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#dd5a3dca390k9)
-
-[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)
-
-[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
-
-[前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)
-
-[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)
-
-kimi-k3.1-pro
-
-支持
-
-支持
-
-支持
-
-支持（JSON Mode）
-
-支持
-
-不支持
-
-支持（隐式缓存）
-
-kimi-k3
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持（Responses API）
-
-支持
-
-支持
-
-kimi-k2.7-code
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-支持
-
-kimi-k2.6
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-支持
-
-kimi-k2.5
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-支持
+<a id="kimi_dlt_h2"></a>
 
 ## 动态加载工具
 
@@ -2189,7 +2552,13 @@ kimi-k2.5
 
 动态加载工具（Dynamically Loaded Tools）允许在对话过程中按需注入工具：先只挂载少量核心工具，当对话进展到需要某个工具时，再把它动态插入`messages`中，从而降低 Token 消耗、提升工具选择的准确性。
 
-**说明**动态加载工具目前支持 kimi-k3.1-pro 和 kimi-k3，在其他模型（如 kimi-k2.6）上请求会返回`tokenization failed`错误。以下在 `system` 消息中使用 `tools` 字段的格式针对 OpenAI Chat Completions 接口。
+> **说明**
+>
+> 动态加载工具目前支持 kimi-k3.1-pro 和 kimi-k3，在其他模型（如 kimi-k2.6）上请求会返回`tokenization failed`错误。以下在 `system` 消息中使用 `tools` 字段的格式针对 OpenAI Chat Completions 接口。
+
+<a id="在-messages-中注入工具声明"></a>
+
+<a id="kimi_dlt_inject_h3"></a>
 
 ### 在 messages 中注入工具声明
 
@@ -2200,9 +2569,15 @@ kimi-k2.5
 -   动态注入的工具声明必须是完整的工具定义，不能只传工具名或引用全局已声明的工具。
 -   携带`tools`的`system`消息不能再携带`content`字段，否则请求会以 400 报错。使用 OpenAI SDK 时可直接在`messages`中透传`tools`字段。
 
+<a id="fig-code-group-10"></a>
+
+<a id="fig-code-group-10-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-10-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -2246,9 +2621,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.tool_calls)
 ```
 
+<a id="fig-code-group-10-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-10-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Content-Type: application/json" \
@@ -2284,6 +2663,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="结合搜索工具实现按需加载"></a>
+
+<a id="kimi_dlt_search_h3"></a>
+
 ### 结合搜索工具实现按需加载
 
 API 层面没有专门的工具搜索接口。如果工具数量很多，可以组合"自定义搜索工具 + 动态加载工具"实现按需加载：
@@ -2295,6 +2678,10 @@ API 层面没有专门的工具搜索接口。如果工具数量很多，可以�
 
 这样无论工具总量有多大，每一轮请求中实际存在的工具声明都只有少量几个，上下文窗口和模型的选择压力都可控。
 
+<a id="注意事项"></a>
+
+<a id="kimi_dlt_notes_h3"></a>
+
 ### 注意事项
 
 -   动态工具声明按请求生效，不会被服务端记住。下一轮请求是否继续携带，由接入方自行决定：继续携带则工具仍然可用，也有利于命中前缀缓存；不再携带则该工具声明失效，如果工具未在其他位置声明，模型将无法调用这个工具，且变更位置之后的前缀缓存可能无法命中。
@@ -2302,95 +2689,19 @@ API 层面没有专门的工具搜索接口。如果工具数量很多，可以�
 -   携带`tools`的`system`消息同样会占用上下文长度，请只对当前对话真正需要的工具做动态注入。
 -   动态工具声明与全局`tools`声明格式完全统一，接入方无需维护两套 Schema。
 
+<a id="参数默认值"></a>
+
+<a id="20f0ad5093srb"></a>
+
 ## 参数默认值
 
-**模型**
-
-**enable\_thinking**
-
-**temperature**
-
-**top\_p**
-
-**presence\_penalty**
-
-**fps**
-
-**max\_frames**
-
-kimi-k3.1-pro
-
-true（可关闭，但强烈建议保持开启）
-
-1.0
-
-0.95
-
-0.0
-
-\-
-
-\-
-
-kimi-k3
-
-true（可关闭，建议保持开启）
-
-1.0
-
-0.95
-
-0.0
-
-\-
-
-\-
-
-kimi-k2.7-code
-
-true（仅思考模式，不可关闭）
-
-1.0
-
-0.95
-
-0.0
-
-2
-
-2000
-
-kimi-k2.6
-
-false
-
-思考模式：1.0
-
-非思考模式：0.6
-
-思考/非思考模式：0.95
-
-思考/非思考模式：0.0
-
-2
-
-2000
-
-kimi-k2.5
-
-false
-
-思考模式：1.0
-
-非思考模式：0.6
-
-思考/非思考模式：0.95
-
-思考/非思考模式：0.0
-
-2
-
-2000
+| 模型 | enable\_thinking | temperature | top\_p | presence\_penalty | fps | max\_frames |
+| --- | --- | --- | --- | --- | --- | --- |
+| kimi-k3.1-pro | true（可关闭，但强烈建议保持开启） | 1.0 | 0.95 | 0.0 | \- | \- |
+| kimi-k3 | true（可关闭，建议保持开启） | 1.0 | 0.95 | 0.0 | \- | \- |
+| kimi-k2.7-code | true（仅思考模式，不可关闭） | 1.0 | 0.95 | 0.0 | 2 | 2000 |
+| kimi-k2.6 | false | 思考模式：1.0<br><br>非思考模式：0.6 | 思考/非思考模式：0.95 | 思考/非思考模式：0.0 | 2 | 2000 |
+| kimi-k2.5 | false | 思考模式：1.0<br><br>非思考模式：0.6 | 思考/非思考模式：0.95 | 思考/非思考模式：0.0 | 2 | 2000 |
 
 “-" 表示没有默认值，也不支持设置。
 
@@ -2410,19 +2721,25 @@ false
 
 kimi-k3.1-pro 的 `temperature`、`top_p`、`presence_penalty` 仅支持默认值，分别为 `1.0`、`0.95`、`0.0`；传入非默认值会报错。kimi-k3.1-pro 和 kimi-k3 不支持视频输入，`fps` 和 `max_frames` 不适用。
 
+<a id="模型列表与计费"></a>
+
+<a id="m7n8o9p0q1r2s9"></a>
+
 ## 模型列表与计费
 
 Kimi 系列模型是由月之暗面公司（Moonshot AI）推出的大语言模型。
 
--   [kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)：支持文本与图片输入、文本输出和动态加载工具，不支持视频输入、Batch 和微调。
+-   [kimi-k3.1-pro](../../get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)：支持文本与图片输入、文本输出和动态加载工具，不支持视频输入、Batch 和微调。
 -   kimi-k3：Kimi 旗舰模型，默认进行推理并采用保留式思考。支持文本与图片输入（暂不支持视频输入）、对话与 Agent 任务，并支持动态加载工具。
 -   kimi-k2.7-code：Kimi 编程模型，长上下文指令遵循更可靠，编程任务成功率更高。支持文本、图片与视频输入、思考模式、对话与 Agent 任务。
 -   kimi-k2.6：具备更强更稳的长程代码编写能力，指令遵循和自我纠错能力显著提升。同时支持文本、图片与视频输入、思考与非思考模式、对话与 Agent 任务。
 -   kimi-k2.5：在 Agent、代码生成、视觉理解及一系列通用智能任务上取得开源 SOTA 表现。同时支持图像、视频与文本输入、思考与非思考模式、对话与 Agent 任务。
 
-**说明**kimi-k3.1-pro 和 kimi-k3 不支持 `thinking_budget` 参数，思考长度不可通过该参数限制。
+> **说明**
+>
+> kimi-k3.1-pro 和 kimi-k3 不支持 `thinking_budget` 参数，思考长度不可通过该参数限制。
 
-> 价格信息请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
+> 价格信息请参见[模型调用计费](../../test-1/model-pricing.md)。
 
 模型上下文长度与价格信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 
@@ -2430,6 +2747,10 @@ Kimi 系列模型是由月之暗面公司（Moonshot AI）推出的大语言模�
 
 > 思考模式下，思维链按照输出 Token 计费。
 
+<a id="错误码"></a>
+
+<a id="e592dd2ca4qfl"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。

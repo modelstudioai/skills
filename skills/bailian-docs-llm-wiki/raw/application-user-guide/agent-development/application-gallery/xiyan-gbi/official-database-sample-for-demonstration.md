@@ -2,21 +2,35 @@
 
 本文主要提供了用于演示的测试数据，旨在帮助您快速构建测试数据，并在实际项目中灵活运用API进行后续的集成开发。
 
+<a id="前提条件"></a>
+
+<a id="83068ed6e1vgu"></a>
+
 ## 前提条件
 
 -   已开通阿里云百炼。
 -   已[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 -   已[获取AccessKey ID和AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
 -   RAM用户已添加`AliyunDataAnalysisGBIFullAccess`权限策略：[管理RAM用户的权限](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)。
--   已在析言GBI的**[数据表管理](https://bailian.console.aliyun.com/xiyan#/dataManagement/dataSourceM)**中授权联接了数据库。具体操作，请参见[数据库连接](https://help.aliyun.com/zh/model-studio/xiyan-gbi-user-guide#8e5d17697392b)。
+-   已在析言GBI的**[数据表管理](https://bailian.console.aliyun.com/xiyan#/dataManagement/dataSourceM)**中授权联接了数据库。具体操作，请参见[数据库连接](xiyan-gbi-user-guide.md#8e5d17697392b)。
+
+<a id="操作步骤"></a>
+
+<a id="lkhDe"></a>
 
 ## 操作步骤
+
+<a id="步骤一-准备数据"></a>
+
+<a id="89db339188iz5"></a>
 
 ### 步骤一：准备数据
 
 为方便演示基本功能，您可以将以下样例数据导入到自己的数据库中。
 
-```
+<a id="code-block"></a>
+
+```sql
 CREATE TABLE products (
     product_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '产品ID',
     product_name VARCHAR(255) NOT NULL COMMENT '产品名称',
@@ -90,6 +104,10 @@ INSERT INTO `orders` (`order_id`, `customer_id`, `product_id`, `order_date`, `qu
 ```
 
 完成数据的导入后，您需要在析言控制台中将这些数据表进行关联。
+
+<a id="步骤二-在控制台验证问答功能"></a>
+
+<a id="22816f90e3ymv"></a>
 
 ### 步骤二：在控制台验证问答功能
 

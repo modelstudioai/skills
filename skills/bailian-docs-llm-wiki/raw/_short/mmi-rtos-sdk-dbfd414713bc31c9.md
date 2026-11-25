@@ -2,316 +2,66 @@
 
 本文介绍如何使用阿里云百炼大模型服务提供的嵌入式C SDK进行实时多模态交互，涵盖设备管理、SDK下载和安装、全托管和半托管方式，以及云端和设备端关键接口及代码示例。
 
+<a id="前提条件"></a>
+
+<a id="f0d5c9d8eegkq"></a>
+
 ## 前提条件
 
-**重要**
+> **重要**
+>
+> 1.  开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](../model-api-reference/preparations/get-api-key.md)
+> 2.  根据[应用创建](multimodal-app-creation-ef194a004f7549d5.md)的文档完成应用创建。
+> 3.  根据[应用配置](multimodal-app-configuration-8919f99b339e17da.md)的文档完成应用的配置。
+> 4.  License模式[产品计费](../application-user-guide/agent-development/application-gallery/multimodal-products/product-billing.md)
 
-1.  开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](raw/model-api-reference/preparations/get-api-key.md)
-2.  根据[应用创建](raw/_short/multimodal-app-creation-ef194a004f7549d5.md)的文档完成应用创建。
-3.  根据[应用配置](raw/_short/multimodal-app-configuration-8919f99b339e17da.md)的文档完成应用的配置。
-4.  License模式[产品计费](raw/application-user-guide/agent-development/application-gallery/multimodal-products/product-billing.md)
-
-**说明**当前最新SDK版本：v1.3.1
+> **说明**
+>
+> 当前最新SDK版本：v1.3.1
 
 -   已适配的硬件列表
 
-**序号**
+<table><thead><tr><th rowspan="2"><p><strong>序号</strong></p></th><th colspan="2"><p><strong>硬件平台信息</strong></p></th><th rowspan="2"><p><strong>SDK包下载地址</strong></p></th></tr><tr><th><p><strong>厂商</strong></p></th><th><p><strong>芯片平台</strong></p></th></tr></thead><tbody><tr><td><p>1</p></td><td><p>安凯</p></td><td><p>V500</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f19.tar">SDK下载链接</a></p></td></tr><tr><td><p>2</p></td><td><p>爱旗</p></td><td><p>AiW626X</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1a.tar">SDK下载链接</a></p></td></tr><tr><td><p>3</p></td><td><p>翱捷</p></td><td><p>ASR1606</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f18.tar">SDK下载链接</a></p></td></tr><tr><td><p>4</p></td><td><p>博流</p></td><td><p>BL616CL</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f13.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="2"><p>5</p></td><td rowspan="2"><p>博通</p></td><td><p>BK7252</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1d.tar">SDK下载链接</a></p></td></tr><tr><td><p>BK7258</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1c.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="2"><p>6</p></td><td rowspan="2"><p>创芯慧联</p></td><td><p>LM600</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f14.tar">SDK下载链接</a></p></td></tr><tr><td><p>LM620</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2b.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="3"><p>7</p></td><td rowspan="3"><p>海思</p></td><td><p>AV100</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1f.tar">SDK下载链接</a></p></td></tr><tr><td><p>AV200</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1e.tar">SDK下载链接</a></p></td></tr><tr><td><p>Hi3516CV610</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f16.tar">SDK下载链接</a></p></td></tr><tr><td><p>8</p></td><td><p>恒玄</p></td><td><p>WS53</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3e.tar">SDK下载链接</a></p></td></tr><tr><td><p>9</p></td><td><p>匠芯创</p></td><td><p>D121</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f12.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="3"><p>10</p></td><td rowspan="3"><p>杰理</p></td><td><p>AC7911</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f04.tar">SDK下载链接</a></p></td></tr><tr><td><p>AC792X</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1b.tar">SDK下载链接</a></p></td></tr><tr><td><p>JL7014</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f15.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="3"><p>11</p></td><td rowspan="3"><p>君正</p></td><td><p>G32S10M</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f17.tar">SDK下载链接</a></p></td></tr><tr><td><p>T23</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f20.tar">SDK下载链接</a></p></td></tr><tr><td><p>T41</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f27.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="2"><p>12</p></td><td rowspan="2"><p>乐鑫</p></td><td><p>ESP32</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f30.tar">SDK下载链接</a></p></td></tr><tr><td><p>ESP32S3</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f37.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="5"><p>13</p></td><td rowspan="5"><p>全志</p></td><td><p>F133</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f10.tar">SDK下载链接</a></p></td></tr><tr><td><p>R128</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f28.tar">SDK下载链接</a></p></td></tr><tr><td><p>V821</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3b.tar">SDK下载链接</a></p></td></tr><tr><td><p>V853</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3a.tar">SDK下载链接</a></p></td></tr><tr><td><p>XR872</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3c.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="3"><p>14</p></td><td rowspan="3"><p>瑞芯微</p></td><td><p>RK3506</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2f.tar">SDK下载链接</a></p></td></tr><tr><td><p>RK3588</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2e.tar">SDK下载链接</a></p></td></tr><tr><td><p>RV1103</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f23.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="2"><p>15</p></td><td rowspan="2"><p>瑞昱</p></td><td><p>RTL8711</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2d.tar">SDK下载链接</a></p></td></tr><tr><td><p>RTL8721</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2c.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="2"><p>16</p></td><td rowspan="2"><p>小米</p></td><td><p>VELA_V7A</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f39.tar">SDK下载链接</a></p></td></tr><tr><td><p>VELA_V8A</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f38.tar">SDK下载链接</a></p></td></tr><tr><td><p>17</p></td><td><p>芯迈微</p></td><td><p>XMW718</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3d.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="2"><p>18</p></td><td rowspan="2"><p>星宸科技</p></td><td><p>SSC305DE</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f22.tar">SDK下载链接</a></p></td></tr><tr><td><p>SSC309QL</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f21.tar">SDK下载链接</a></p></td></tr><tr><td><p>19</p></td><td><p>星翼科技</p></td><td><p>XY4100LC</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f33.tar">SDK下载链接</a></p></td></tr><tr><td><p>20</p></td><td><p>移芯</p></td><td><p>EC718PM</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f11.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="2"><p>21</p></td><td rowspan="2"><p>中国移动</p></td><td><p>ML307H</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2a.tar">SDK下载链接</a></p></td></tr><tr><td><p>ML307N</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f29.tar">SDK下载链接</a></p></td></tr><tr><td rowspan="4"><p>22</p></td><td rowspan="4"><p>紫光展锐</p></td><td><p>UIS8910(ARMCC)</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f25.tar">SDK下载链接</a></p></td></tr><tr><td><p>UIS8910(GCC)</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f26.tar">SDK下载链接</a></p></td></tr><tr><td><p>UMS9117</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f24.tar">SDK下载链接</a></p></td></tr><tr><td><p>W217</p></td><td><p><a href="https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3f.tar">SDK下载链接</a></p></td></tr></tbody></table>
 
-**硬件平台信息**
+<a id="1-接入模式说明"></a>
 
-**SDK包下载地址**
-
-**厂商**
-
-**芯片平台**
-
-1
-
-安凯
-
-V500
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f19.tar)
-
-2
-
-爱旗
-
-AiW626X
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1a.tar)
-
-3
-
-翱捷
-
-ASR1606
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f18.tar)
-
-4
-
-博流
-
-BL616CL
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f13.tar)
-
-5
-
-博通
-
-BK7252
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1d.tar)
-
-BK7258
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1c.tar)
-
-6
-
-创芯慧联
-
-LM600
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f14.tar)
-
-LM620
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2b.tar)
-
-7
-
-海思
-
-AV100
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1f.tar)
-
-AV200
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1e.tar)
-
-Hi3516CV610
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f16.tar)
-
-8
-
-恒玄
-
-WS53
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3e.tar)
-
-9
-
-匠芯创
-
-D121
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f12.tar)
-
-10
-
-杰理
-
-AC7911
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f04.tar)
-
-AC792X
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1b.tar)
-
-JL7014
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f15.tar)
-
-11
-
-君正
-
-G32S10M
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f17.tar)
-
-T23
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f20.tar)
-
-T41
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f27.tar)
-
-12
-
-乐鑫
-
-ESP32
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f30.tar)
-
-ESP32S3
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f37.tar)
-
-13
-
-全志
-
-F133
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f10.tar)
-
-R128
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f28.tar)
-
-V821
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3b.tar)
-
-V853
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3a.tar)
-
-XR872
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3c.tar)
-
-14
-
-瑞芯微
-
-RK3506
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2f.tar)
-
-RK3588
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2e.tar)
-
-RV1103
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f23.tar)
-
-15
-
-瑞昱
-
-RTL8711
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2d.tar)
-
-RTL8721
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2c.tar)
-
-16
-
-小米
-
-VELA\_V7A
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f39.tar)
-
-VELA\_V8A
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f38.tar)
-
-17
-
-芯迈微
-
-XMW718
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3d.tar)
-
-18
-
-星宸科技
-
-SSC305DE
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f22.tar)
-
-SSC309QL
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f21.tar)
-
-19
-
-星翼科技
-
-XY4100LC
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f33.tar)
-
-20
-
-移芯
-
-EC718PM
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f11.tar)
-
-21
-
-中国移动
-
-ML307H
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2a.tar)
-
-ML307N
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f29.tar)
-
-22
-
-紫光展锐
-
-UIS8910(ARMCC)
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f25.tar)
-
-UIS8910(GCC)
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f26.tar)
-
-UMS9117
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f24.tar)
-
-W217
-
-[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3f.tar)
+<a id="35ecad8abceji"></a>
 
 ## 1\. 接入模式说明
+
+<a id="半托管模式"></a>
+
+<a id="K9kd1"></a>
 
 #### 半托管模式
 
 适用场景：客户未来有后运营/设备升级等需求的。客户自有云服务，能对自己的设备进行管理和鉴权，客户云服务和设备端有双向通信通道；
 
-**警告**同一个DeviceName注册过后，无法再次注册去获取设备证书
+> **警告**
+>
+> 同一个DeviceName注册过后，无法再次注册去获取设备证书
 
 ![image.jpeg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1975660571/p966440.jpeg)
 
 -   服务端开发：
     
-    -   参考[云端接口说明](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#557a524795xam)部分完成云端接口对接，设备计量管理服务提供设备注册和获取Token两个接口
+    -   参考[云端接口说明](mmi-rtos-sdk-dbfd414713bc31c9.md#557a524795xam)部分完成云端接口对接，设备计量管理服务提供设备注册和获取Token两个接口
 -   设备端开发
     
-    -   参考[芯片平台HAL层对接](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#GiY73)部分进行芯片适配（若采用阿里云推荐芯片/模组，则可以省略此步骤）
-    -   参考[设备端业务逻辑对接](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#3ba890579dmb9)部分在集成SDK后完成业务逻辑开发，设备按**一型一密**进行注册，设备预置创建应用时生成的AppId和AppSecret（License 密钥）
+    -   参考[芯片平台HAL层对接](mmi-rtos-sdk-dbfd414713bc31c9.md#GiY73)部分进行芯片适配（若采用阿里云推荐芯片/模组，则可以省略此步骤）
+    -   参考[设备端业务逻辑对接](mmi-rtos-sdk-dbfd414713bc31c9.md#3ba890579dmb9)部分在集成SDK后完成业务逻辑开发，设备按**一型一密**进行注册，设备预置创建应用时生成的AppId和AppSecret（License 密钥）
+
+<a id="全托管模式"></a>
+
+<a id="HlMxc"></a>
 
 #### 全托管模式
 
 适用场景：客户一次性售卖硬件无后向运营需求，且客户没有云服务，无法对设备进行管理，由阿里云进行设备管理和鉴权。
 
-**警告**同一个DeviceName注册过后，无法再次注册去获取设备证书
+> **警告**
+>
+> 同一个DeviceName注册过后，无法再次注册去获取设备证书
 
 ![yuque\_diagram (3)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7496264571/p987882.jpg)
 
@@ -320,23 +70,30 @@ W217
     -   无
 -   设备端开发
     
-    -   参考[芯片平台HAL层对接](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#GiY73)部分进行芯片适配（若采用阿里云推荐芯片/模组，则可以省略此步骤）
-    -   参考[设备端业务逻辑对接](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#3ba890579dmb9)部分在集成SDK后完成业务逻辑开发，设备按**一型一密**进行注册，设备预置创建应用时生成的AppId和AppSecret（License 密钥）
+    -   参考[芯片平台HAL层对接](mmi-rtos-sdk-dbfd414713bc31c9.md#GiY73)部分进行芯片适配（若采用阿里云推荐芯片/模组，则可以省略此步骤）
+    -   参考[设备端业务逻辑对接](mmi-rtos-sdk-dbfd414713bc31c9.md#3ba890579dmb9)部分在集成SDK后完成业务逻辑开发，设备按**一型一密**进行注册，设备预置创建应用时生成的AppId和AppSecret（License 密钥）
 
-**说明**
+> **说明**
+>
+> 1.  **什么是一型一密？**
+>     
+>     就是同一产品型号下所有设备预烧录相同的产品信息（AppId、AppSecret（License 密钥））。当设备到计量管理服务进行注册时，会对其携带的设备信息（AppId、AppSecret（License 密钥）、DeviceName）进行认证。认证通过后，会下发设备唯一的设备证书（即三元组AppId、DeviceName和DeviceSecret），后续设备通过该证书才能完成后续所有通信链路的鉴权。
+>     
+> 2.  **如何查看AppId和AppSecret（License 密钥）？**
+>     
+>     在我的应用界面能够直接复制应用ID（AppID）。在配置应用按钮边上有三个小点的按钮，点击后能够查看AppSecret（License 密钥）**（购买License之后才会有）**
+>     
+>     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7719720871/p1075768.png)
 
-1.  **什么是一型一密？**
-    
-    就是同一产品型号下所有设备预烧录相同的产品信息（AppId、AppSecret（License 密钥））。当设备到计量管理服务进行注册时，会对其携带的设备信息（AppId、AppSecret（License 密钥）、DeviceName）进行认证。认证通过后，会下发设备唯一的设备证书（即三元组AppId、DeviceName和DeviceSecret），后续设备通过该证书才能完成后续所有通信链路的鉴权。
-    
-2.  **如何查看AppId和AppSecret（License 密钥）？**
-    
-    在我的应用界面能够直接复制应用ID（AppID）。在配置应用按钮边上有三个小点的按钮，点击后能够查看AppSecret（License 密钥）**（购买License之后才会有）**
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7719720871/p1075768.png)
-    
+<a id="2-云端接口开发说明"></a>
+
+<a id="557a524795xam"></a>
 
 ## 2\. 云端接口开发说明
+
+<a id="导入依赖包"></a>
+
+<a id="56251ebccays0"></a>
 
 #### 导入依赖包
 
@@ -348,7 +105,9 @@ version: 使用最新版本version
 
 -   查询地址： [https://mvnrepository.com/artifact/com.aliyun/bailianmodelonchip20240816](https://mvnrepository.com/artifact/com.aliyun/bailianmodelonchip20240816)
 
-```
+<a id="code-block"></a>
+
+```text
 <dependency>
   <groupId>com.aliyun</groupId>
   <artifactId>bailianmodelonchip20240816</artifactId>
@@ -363,17 +122,25 @@ version: 使用最新版本version
 </dependency>
 ```
 
-**说明**maven仓库地址：[https://repo1.maven.org/maven2](https://repo1.maven.org/maven2)
-
-endPoint：bailianmodelonchip.cn-beijing.aliyuncs.com
-
-regionId：cn-beijing
+> **说明**
+>
+> maven仓库地址：[https://repo1.maven.org/maven2](https://repo1.maven.org/maven2)
+>
+> endPoint：bailianmodelonchip.cn-beijing.aliyuncs.com
+>
+> regionId：cn-beijing
 
 python版本
 
-```
+<a id="code-block-2"></a>
+
+```text
 pip install alibabacloud_bailianmodelonchip20240816==1.4.0alibabacloud_bailianmodelonchip20240816
 ```
+
+<a id="2-1-设备注册接口deviceregister"></a>
+
+<a id="f0f4854f39g75"></a>
 
 ### 2.1 设备注册接口deviceRegister
 
@@ -381,163 +148,41 @@ pip install alibabacloud_bailianmodelonchip20240816==1.4.0alibabacloud_bailianmo
 
 **接口入参：DeviceRegisterRequest对象**
 
-**参数**
-
-**类型**
-
-**必填**
-
-**描述**
-
-nonce
-
-String
-
-是
-
-13字节随机数（26字符)，由设备端SDK生成的数据中提取，参考[设备注册接口](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#Gejwz)
-
-appId
-
-String
-
-是
-
-产品标识，在百炼控制台创建应用之后会生成该ID
-
-workspaceId
-
-String
-
-否
-
-工作空间ID
-
-requestTime
-
-String
-
-是
-
-请求时间戳（ms），由设备端SDK生成的数据中提取，参考[设备注册接口](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#Gejwz)
-
-signature
-
-String
-
-是
-
-YOUR\_SIGNATURE
+| 参数 | 类型 | 必填 | 描述 |
+| --- | --- | --- | --- |
+| nonce | String | 是 | 13字节随机数（26字符)，由设备端SDK生成的数据中提取，参考[设备注册接口](mmi-rtos-sdk-dbfd414713bc31c9.md#Gejwz) |
+| appId | String | 是 | 产品标识，在百炼控制台创建应用之后会生成该ID |
+| workspaceId | String | 否 | 工作空间ID |
+| requestTime | String | 是 | 请求时间戳（ms），由设备端SDK生成的数据中提取，参考[设备注册接口](mmi-rtos-sdk-dbfd414713bc31c9.md#Gejwz) |
+| signature | String | 是 | YOUR\_SIGNATURE |
 
 **接口出参：DeviceRegisterResponseBody对象**
 
-**参数**
-
-**类型**
-
-**必填**
-
-**描述**
-
-code
-
-String
-
-是
-
-错误码
-
-httpStatusCode
-
-Integer
-
-是
-
-http状态码
-
-200 成功
-
-其他 失败
-
-message
-
-String
-
-是
-
-错误信息
-
-requestId
-
-String
-
-是
-
-请求ID
-
-success
-
-Boolean
-
-是
-
-成功标志
-
-data
-
-DeviceRegisterResponseBodyData
-
-是
-
-注册结果，直接透传给设备端
+| 参数 | 类型 | 必填 | 描述 |
+| --- | --- | --- | --- |
+| code | String | 是 | 错误码 |
+| httpStatusCode | Integer | 是 | http状态码<br><br>200 成功<br><br>其他 失败 |
+| message | String | 是 | 错误信息 |
+| requestId | String | 是 | 请求ID |
+| success | Boolean | 是 | 成功标志 |
+| data | DeviceRegisterResponseBodyData | 是 | 注册结果，直接透传给设备端 |
 
 **DeviceRegisterResponseBodyData**
 
-**参数**
-
-**类型**
-
-**描述**
-
-nonce
-
-String
-
-13字节随机数（26字符)
-
-responseTime
-
-String
-
-响应时间戳（ms）
-
-appId
-
-String
-
-产品标识
-
-workspaceId
-
-String
-
-工作空间ID
-
-deviceName
-
-String
-
-设备唯一标识
-
-signature
-
-String
-
-YOUR\_SIGNATURE
+| 参数 | 类型 | 描述 |
+| --- | --- | --- |
+| nonce | String | 13字节随机数（26字符) |
+| responseTime | String | 响应时间戳（ms） |
+| appId | String | 产品标识 |
+| workspaceId | String | 工作空间ID |
+| deviceName | String | 设备唯一标识 |
+| signature | String | YOUR\_SIGNATURE |
 
 Java示例
 
-```
+<a id="code-block-3"></a>
+
+```java
 package pop;
 
 import com.alibaba.fastjson.JSON;
@@ -579,7 +224,9 @@ public class DeviceTest {
 
 Python示例
 
-```
+<a id="code-block-4"></a>
+
+```python
 import sys
 from typing import List
 
@@ -635,11 +282,15 @@ if __name__ == '__main__':
     PopDeviceRegister.main(sys.argv[1:])
 ```
 
-**重要**
+> **重要**
+>
+> 1.  **your-ak**和**your-as**可从阿里云官网控制台获取，具体请参见：[链接](https://ram.console.aliyun.com/profile/access-keys)
+> 2.  **endPoint**：bailianmodelonchip.cn-beijing.aliyuncs.com
+> 3.  DeviceRegisterResponseBodyData需要通过JSON.toJSONString转换成json格式，再下发给设备端，这部分逻辑需要厂商自行实现
 
-1.  **your-ak**和**your-as**可从阿里云官网控制台获取，具体请参见：[链接](https://ram.console.aliyun.com/profile/access-keys)
-2.  **endPoint**：bailianmodelonchip.cn-beijing.aliyuncs.com
-3.  DeviceRegisterResponseBodyData需要通过JSON.toJSONString转换成json格式，再下发给设备端，这部分逻辑需要厂商自行实现
+<a id="2-2-获取访问业务交互令牌接口gettoken"></a>
+
+<a id="G9sNX"></a>
 
 ### 2.2 获取访问业务交互令牌接口getToken
 
@@ -647,177 +298,42 @@ if __name__ == '__main__':
 
 **接口入参：** **GetTokenRequest**
 
-**参数**
-
-**类型**
-
-**必填**
-
-**描述**
-
-nonce
-
-String
-
-是
-
-13字节随机数（26字符)，由设备端SDK生成的数据中提取
-
-appId
-
-String
-
-是
-
-应用标识，在百炼控制台创建应用之后会生成该ID
-
-deviceName
-
-String
-
-是
-
-从设备上传的设备唯一标识，由设备端SDK生成的数据中提取
-
-requestTime
-
-String
-
-是
-
-请求时间戳（ms），由设备端SDK生成的数据中提取
-
-signature
-
-String
-
-是
-
-YOUR\_SIGNATURE
-
-tokenType
-
-String
-
-是
-
-请求令牌的类型（当前仅支持MMI类型）
-
-MMI：多模态交互令牌
-
-tokenKey
-
-String
-
-是
-
-用来换取令牌的Key，需要根据不同的令牌类型传递不同的值（当前仅支持MMI类型）
-
-MMI：传入百炼的[API Key](raw/model-api-reference/preparations/get-api-key.md)
+| 参数 | 类型 | 必填 | 描述 |
+| --- | --- | --- | --- |
+| nonce | String | 是 | 13字节随机数（26字符)，由设备端SDK生成的数据中提取 |
+| appId | String | 是 | 应用标识，在百炼控制台创建应用之后会生成该ID |
+| deviceName | String | 是 | 从设备上传的设备唯一标识，由设备端SDK生成的数据中提取 |
+| requestTime | String | 是 | 请求时间戳（ms），由设备端SDK生成的数据中提取 |
+| signature | String | 是 | YOUR\_SIGNATURE |
+| tokenType | String | 是 | 请求令牌的类型（当前仅支持MMI类型）<br><br>MMI：多模态交互令牌 |
+| tokenKey | String | 是 | 用来换取令牌的Key，需要根据不同的令牌类型传递不同的值（当前仅支持MMI类型）<br><br>MMI：传入百炼的[API Key](../model-api-reference/preparations/get-api-key.md) |
 
 **接口出参** **GetTokenResponseBody**
 
-**参数**
-
-**类型**
-
-**必填**
-
-**描述**
-
-code
-
-String
-
-是
-
-错误码
-
-httpStatusCode
-
-Integer
-
-是
-
-http状态码
-
-200 成功
-
-其他 失败
-
-message
-
-String
-
-是
-
-错误信息
-
-requestId
-
-String
-
-是
-
-请求ID
-
-success
-
-Boolean
-
-是
-
-成功标志
-
-data
-
-GetTokenResponseBodyData
-
-是
-
-结果，可直接透传给设备端解析，参考[获取交互令牌接口](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#Yo6VT)
+| 参数 | 类型 | 必填 | 描述 |
+| --- | --- | --- | --- |
+| code | String | 是 | 错误码 |
+| httpStatusCode | Integer | 是 | http状态码<br><br>200 成功<br><br>其他 失败 |
+| message | String | 是 | 错误信息 |
+| requestId | String | 是 | 请求ID |
+| success | Boolean | 是 | 成功标志 |
+| data | GetTokenResponseBodyData | 是 | 结果，可直接透传给设备端解析，参考[获取交互令牌接口](mmi-rtos-sdk-dbfd414713bc31c9.md#Yo6VT) |
 
 **GetTokenResponseBodyData**
 
-**参数**
-
-**类型**
-
-**描述**
-
-nonce
-
-String
-
-13字节随机数（26字符）
-
-responseTime
-
-String
-
-响应时间戳（ms）
-
-appId
-
-String
-
-应用标识
-
-deviceName
-
-String
-
-设备唯一标识
-
-signature
-
-String
-
-YOUR\_SIGNATURE
+| 参数 | 类型 | 描述 |
+| --- | --- | --- |
+| nonce | String | 13字节随机数（26字符） |
+| responseTime | String | 响应时间戳（ms） |
+| appId | String | 应用标识 |
+| deviceName | String | 设备唯一标识 |
+| signature | String | YOUR\_SIGNATURE |
 
 Java示例
 
-```
+<a id="code-block-5"></a>
+
+```java
 package pop;
 
 import com.alibaba.fastjson.JSON;
@@ -862,7 +378,9 @@ public class TokenTest {
 
 Python示例
 
-```
+<a id="code-block-6"></a>
+
+```python
 import sys
 from typing import List
 
@@ -921,123 +439,48 @@ if __name__ == '__main__':
     PopGetToken.main(sys.argv[1:])
 ```
 
-**重要**
+> **重要**
+>
+> 1.  **your-ak**和**your-as**可从阿里云官网控制台获取，具体请参见：[链接](https://ram.console.aliyun.com/profile/access-keys)
+> 2.  **endPoint**：bailianmodelonchip.cn-beijing.aliyuncs.com
+> 3.  GetTokenResponseBodyData需要通过JSON.toJSONString转换成json格式，再下发给设备端，这部分逻辑需要厂商自行实现。另外，**tokenKey**参数需要传入百炼的API Key，获取方式请参考百炼平台文档。
 
-1.  **your-ak**和**your-as**可从阿里云官网控制台获取，具体请参见：[链接](https://ram.console.aliyun.com/profile/access-keys)
-2.  **endPoint**：bailianmodelonchip.cn-beijing.aliyuncs.com
-3.  GetTokenResponseBodyData需要通过JSON.toJSONString转换成json格式，再下发给设备端，这部分逻辑需要厂商自行实现。另外，**tokenKey**参数需要传入百炼的API Key，获取方式请参考百炼平台文档。
+<a id="2-3-云端错误码"></a>
+
+<a id="e4e23ae3ecp0a"></a>
 
 ### 2.3 云端错误码
 
-**错误码**
+|  |  |  |
+| --- | --- | --- |
+| **错误码** | **错误说明** | **处理方法** |
+| 100007 | 产品没有额度可激活的设备 | 购买额度 |
+| 100008 | 设备已注册 | 检查设备唯一标识是否已注册，或修改设备唯一标识 |
+| 100009 | 设备未注册 | 注册设备 |
+| 100010 | 请求时间需要五分钟内 | 修改请求时间重新提交 |
+| 100011 | 签名为空 | 检查请求签名数据 |
+| 100012 | 设备唯一标识最长32个字符 | 检查设备唯一标识长度 |
+| 100013 | 设备名称无效 | 设备名称包含非法字符 |
+| 100023 | 设备已禁用 | 百炼平台-设备管理，启用设备 |
+| 100025 | 设备已激活不能重复注册 | 百炼平台-设备管理，重置设备后注册 |
+| 100032 | 接入模式不匹配 | 检查应用接入模式，根据LICENSE和后付费模式修改SDK调用 |
+| 100033 | 设备已过额度激活有效期 | 重新购买额度 |
+| 200014 | 额度已耗尽 | 重新购买额度 |
+| 200021 | 设备当日调用量达到最大限制 | 购买加油包 |
+| 200022 | 额度已过期 | 重新购买额度 |
+| 300002 | 请求百炼网关获取令牌失败 | 检查应用配置 |
+| 500001 | 加密数据和请求参数值不匹配 | 检查加密参数和请求参数值 |
+| 500002 | 解密失败 | 检查加密数据 |
 
-**错误说明**
+<a id="3-设备端接口说明"></a>
 
-**处理方法**
-
-100007
-
-产品没有额度可激活的设备
-
-购买额度
-
-100008
-
-设备已注册
-
-检查设备唯一标识是否已注册，或修改设备唯一标识
-
-100009
-
-设备未注册
-
-注册设备
-
-100010
-
-请求时间需要五分钟内
-
-修改请求时间重新提交
-
-100011
-
-签名为空
-
-检查请求签名数据
-
-100012
-
-设备唯一标识最长32个字符
-
-检查设备唯一标识长度
-
-100013
-
-设备名称无效
-
-设备名称包含非法字符
-
-100023
-
-设备已禁用
-
-百炼平台-设备管理，启用设备
-
-100025
-
-设备已激活不能重复注册
-
-百炼平台-设备管理，重置设备后注册
-
-100032
-
-接入模式不匹配
-
-检查应用接入模式，根据LICENSE和后付费模式修改SDK调用
-
-100033
-
-设备已过额度激活有效期
-
-重新购买额度
-
-200014
-
-额度已耗尽
-
-重新购买额度
-
-200021
-
-设备当日调用量达到最大限制
-
-购买加油包
-
-200022
-
-额度已过期
-
-重新购买额度
-
-300002
-
-请求百炼网关获取令牌失败
-
-检查应用配置
-
-500001
-
-加密数据和请求参数值不匹配
-
-检查加密参数和请求参数值
-
-500002
-
-解密失败
-
-检查加密数据
+<a id="swHQ4"></a>
 
 ## 3\. 设备端接口说明
+
+<a id="3-1-sdk获取"></a>
+
+<a id="GiY73"></a>
 
 ### 3.1. SDK获取
 
@@ -1046,7 +489,10 @@ if __name__ == '__main__':
 如果是新的芯片平台，请联系阿里云销售寻求技术支持
 
 **SDK目录结构**
-```
+
+<a id="code-block-7"></a>
+
+```text
 ├── ReleaseNote.md
 ├── include
 │   ├── c_agent
@@ -1081,23 +527,33 @@ if __name__ == '__main__':
         └── libtinycrypt.a
 ```
 
-**说明**
+> **说明**
+>
+> -   include目录下包含使用SDK所需要的头文件，需要将该目录添加至工程头文件目录下。
+> -   libqwen\_sdk.a包含SDK核心代码，必须加载。
+> -   libc\_license.a包含license模式相关代码，如使用license模式接入必须加载，如使用后付费模式接入不能加载该库。
+> -   libhal\_dummy.a包含dummy hal代码，用于SDK未适配前检查编译环境用，在完成hal移植后建议删除该库。
+> -   libqwen\_test.a包含测试代码，自动化测试过程需要加载该库，正式生产时需要去除。
+> -   libtinycrypt.a包含加解密依赖接口，如果平台未集成该三方库则必须加载。
+> -   libcjson.a包含SDK相关依赖接口，如果平台未集成该三方库则必须加载。
 
--   include目录下包含使用SDK所需要的头文件，需要将该目录添加至工程头文件目录下。
--   libqwen\_sdk.a包含SDK核心代码，必须加载。
--   libc\_license.a包含license模式相关代码，如使用license模式接入必须加载，如使用后付费模式接入不能加载该库。
--   libhal\_dummy.a包含dummy hal代码，用于SDK未适配前检查编译环境用，在完成hal移植后建议删除该库。
--   libqwen\_test.a包含测试代码，自动化测试过程需要加载该库，正式生产时需要去除。
--   libtinycrypt.a包含加解密依赖接口，如果平台未集成该三方库则必须加载。
--   libcjson.a包含SDK相关依赖接口，如果平台未集成该三方库则必须加载。
+<a id="3-2-厂商完成hal层开发"></a>
+
+<a id="d5a90f5b03i1n"></a>
 
 ### 3.2. 厂商完成HAL层开发
 
 SDK中抽象了HAL层，需要各个厂商在自己的芯片平台上完成对应的开发
 
+<a id="3-2-1-内存"></a>
+
+<a id="JYhL8"></a>
+
 #### 3.2.1. 内存
 
-```
+<a id="code-block-8"></a>
+
+```c
 /**
  * util_malloc - 分配指定大小的内存块。
  * @size: 需要分配的内存大小，以字节为单位。
@@ -1121,11 +577,19 @@ void * util_malloc(int32_t size);
 void util_free(void *ptr);
 ```
 
-**警告**内存数模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
+> **警告**
+>
+> 内存数模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
+
+<a id="3-2-2-随机数模块"></a>
+
+<a id="rUFb8"></a>
 
 #### 3.2.2. 随机数模块
 
-```
+<a id="code-block-9"></a>
+
+```c
 /**
  * 初始化随机数生成器
  *
@@ -1149,11 +613,19 @@ int32_t util_random_init(uint32_t seed);
 uint32_t util_random(void);
 ```
 
-**警告**随机数模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
+> **警告**
+>
+> 随机数模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
+
+<a id="3-2-3-存储模块"></a>
+
+<a id="dqUDv"></a>
 
 #### 3.2.3. 存储模块
 
-```
+<a id="code-block-10"></a>
+
+```c
 /**
  * @brief擦除存储器
  *
@@ -1189,13 +661,21 @@ int32_t util_storage_storage(uint8_t *data, uint32_t size);
 int32_t util_storage_load(uint8_t *data, uint32_t size);
 ```
 
-**警告**存储模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
+> **警告**
+>
+> 存储模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
+>
+> 建议将数据存储在独立分区，确保即使恢复出厂设置也不会被清除
 
-建议将数据存储在独立分区，确保即使恢复出厂设置也不会被清除
+<a id="3-2-4-时间模块"></a>
+
+<a id="jPfrH"></a>
 
 #### 3.2.4. 时间模块
 
-```
+<a id="code-block-11"></a>
+
+```c
 /**
  * 获取当前时间戳（毫秒级）
  *
@@ -1236,11 +716,19 @@ int64_t util_get_timestamp(void);
 uint8_t util_timestamp_inited(void);
 ```
 
-**警告**时间模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
+> **警告**
+>
+> 时间模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
+
+<a id="3-2-5-互斥锁模块"></a>
+
+<a id="eqo7U"></a>
 
 #### 3.2.5. 互斥锁模块
 
-```
+<a id="code-block-12"></a>
+
+```c
 /* 互斥锁结构体定义 */
 typedef struct _util_mutex_t {
     void *mutex_handle; /* 互斥锁句柄，具体实现依赖于平台 */
@@ -1283,7 +771,13 @@ int32_t util_mutex_lock(util_mutex_t *mutex, int32_t timeout);
 int32_t util_mutex_unlock(util_mutex_t *mutex);
 ```
 
-**警告**互斥锁模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
+> **警告**
+>
+> 互斥锁模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
+
+<a id="3-2-6-hal层移植验收标准"></a>
+
+<a id="c6cb922710g9l"></a>
 
 #### 3.2.6. HAL层移植验收标准
 
@@ -1295,38 +789,60 @@ int32_t util_mutex_unlock(util_mutex_t *mutex);
 
 ![p966580](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7719720871/p1075773.png)
 
+<a id="3-3-设备端业务逻辑对接"></a>
+
+<a id="3ba890579dmb9"></a>
+
 ### 3.3. 设备端业务逻辑对接
 
-**说明**本SDK兼容license模式与后付费模式
+> **说明**
+>
+> 本SDK兼容license模式与后付费模式
+>
+> -   当加载libc\_license.a时为license模式
+> -   当不加载libc\_license.a时为后付费模式。
 
--   当加载libc\_license.a时为license模式
--   当不加载libc\_license.a时为后付费模式。
+> **重要**
+>
+> 加载libc\_license.a需要添加编译选项强制加载库中所有符号
+>
+> 以ARM平台编译参数为例，需要做如下配置
+>
+> <a id="code-block-13"></a>
+>
+> ```makefile
+> # 链接器标志
+> LDFLAGS += -L./YourLibPath \
+>           -Wl,--whole-archive \
+>           -lc_license \
+>           -Wl,--no-whole-archive \
+> ```
 
-**重要**加载libc\_license.a需要添加编译选项强制加载库中所有符号
+> **重要**
+>
+> 当使用后付费模式时，在连接多模态网关前，需要在设备上写入API Key。
 
-以ARM平台编译参数为例，需要做如下配置
-
-```
-# 链接器标志
-LDFLAGS += -L./YourLibPath \
-          -Wl,--whole-archive \
-          -lc_license \
-          -Wl,--no-whole-archive \
-```
-
-**重要**当使用后付费模式时，在连接多模态网关前，需要在设备上写入API Key。
-
-**警告**当使用license模式（全托管模式）时，需在设备端写入API Key，开发者需自行确保API Key存储及应用安全。
-
-当使用后付费模式时，如在设备上写入API Key，开发者需自行确保API Key存储及应用安全。
+> **警告**
+>
+> 当使用license模式（全托管模式）时，需在设备端写入API Key，开发者需自行确保API Key存储及应用安全。
+>
+> 当使用后付费模式时，如在设备上写入API Key，开发者需自行确保API Key存储及应用安全。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9629836671/p1036191.png)
 
-**说明**对应的模块可参考图中标记的示例代码1-示例代码6，在详细接口说明中找到对应的示例代码
+> **说明**
+>
+> 对应的模块可参考图中标记的示例代码1-示例代码6，在详细接口说明中找到对应的示例代码
+
+<a id="3-3-1-初始化接口"></a>
+
+<a id="psPVW"></a>
 
 #### 3.3.1. 初始化接口
 
-```
+<a id="code-block-14"></a>
+
+```c
 /**
  * @brief 初始化MMI
  *
@@ -1346,23 +862,31 @@ int32_t c_mmi_sdk_init(void);
 int32_t c_mmi_config(mmi_user_config_t *config);
 ```
 
-**说明**本SDK兼容后付费模式，当不加载libc\_license.a时则为后付费模式。
+> **说明**
+>
+> 本SDK兼容后付费模式，当不加载libc\_license.a时则为后付费模式。
 
-**重要**加载libc\_license.a需要添加编译选项强制加载库中所有符号
-
-以ARM平台编译参数为例，需要做如下配置
-
-```
-# 链接器标志
-LDFLAGS += -L./YourLibPath \
-          -Wl,--whole-archive \
-          -lc_license \
-          -Wl,--no-whole-archive \
-```
+> **重要**
+>
+> 加载libc\_license.a需要添加编译选项强制加载库中所有符号
+>
+> 以ARM平台编译参数为例，需要做如下配置
+>
+> <a id="code-block-15"></a>
+>
+> ```makefile
+> # 链接器标志
+> LDFLAGS += -L./YourLibPath \
+>           -Wl,--whole-archive \
+>           -lc_license \
+>           -Wl,--no-whole-archive \
+> ```
 
 示例代码1
 
-```
+<a id="code-block-16"></a>
+
+```c
 #include "c_mmi.h"
 
 mmi_user_config_t mmi_config = C_MMI_CONFIG_DEFAULT();
@@ -1387,9 +911,15 @@ c_mmi_config(&mmi_config);
 c_mmi_set_voice_id("longxiaochun_v2");
 ```
 
+<a id="3-3-2-产品信息配置接口"></a>
+
+<a id="fazfO"></a>
+
 #### 3.3.2. 产品信息配置接口
 
-```
+<a id="code-block-17"></a>
+
+```c
 /**
  * @brief 检查设备是否已注册
  *
@@ -1481,7 +1011,9 @@ int32_t c_mmi_init(char *workspace, char *app_id, char *api_key);
 
 示例代码2.1 后付费模式配置
 
-```
+<a id="code-block-18"></a>
+
+```c
 #include "c_mmi.h"
 
 // 预置AppId
@@ -1500,7 +1032,9 @@ c_mmi_init("Your WorkspaceId", "Your AppId", "Your ApiKey");
 
 示例代码2.2 License模式配置
 
-```
+<a id="code-block-19"></a>
+
+```c
 #include "c_mmi.h"
 #include "lib_c_license.h"
 
@@ -1522,9 +1056,15 @@ if (c_license_device_is_registered() == 0) {
 c_mmi_storage_set_api_key("Your ApiKey");
 ```
 
+<a id="3-3-3-设备注册接口-后付费模式无需实现该流程"></a>
+
+<a id="Gejwz"></a>
+
 #### 3.3.3. 设备注册接口（后付费模式无需实现该流程）
 
-```
+<a id="code-block-20"></a>
+
+```c
 /**
  * @brief 生成注册字符串
  *
@@ -1545,7 +1085,9 @@ int32_t c_license_analyze_register_rsp(char *rsp_str);
 
 示例代码3
 
-```
+<a id="code-block-21"></a>
+
+```c
 #include "lib_c_license.h"
 
 #define REQ_BUFFER_SIZE  (1024)
@@ -1567,22 +1109,25 @@ if (c_license_device_is_registered() == 0) {
 }
 ```
 
-**说明**关于示例代码中dummy\_http\_request接口
-
--   半托管模式下，该dummy\_http\_request应访问客户已有的设备管理服务端提供的http接口，来间接完成设备端注册
-    
--   全托管模式下，该dummy\_http\_request应访问阿里云提供的设备管理服务接口完成设备端注册
-    
-    -   使用全托管模式时，接入信息如下：
-        
-        Host: bailian.multimodalagent.aliyuncs.com
-        
-        Register API: /api/device/v1/register
-        
+> **说明**
+>
+> 关于示例代码中dummy\_http\_request接口
+>
+> -   半托管模式下，该dummy\_http\_request应访问客户已有的设备管理服务端提供的http接口，来间接完成设备端注册
+>     
+> -   全托管模式下，该dummy\_http\_request应访问阿里云提供的设备管理服务接口完成设备端注册
+>     
+>     -   使用全托管模式时，接入信息如下：
+>         
+>         Host: bailian.multimodalagent.aliyuncs.com
+>         
+>         Register API: /api/device/v1/register
 
 设备端SDK生成的请求数据包示例
 
-```
+<a id="code-block-22"></a>
+
+```json
 {
     "appId": "<YOUR APP ID>",
     "deviceName": "<YOUR DEVICE NAME>",
@@ -1595,7 +1140,9 @@ if (c_license_device_is_registered() == 0) {
 
 设备端收到云端透传的数据包示例（如下数据是http回应报文中的data字段）
 
-```
+<a id="code-block-23"></a>
+
+```json
 {
   "nonce": "<YOUR NONCE>",
   "responseTime": "1753326621269",
@@ -1605,14 +1152,20 @@ if (c_license_device_is_registered() == 0) {
 }
 ```
 
-**说明**
+> **说明**
+>
+> 1.  http\_request需客户自行实现，负责从客户云端接收返回的数据
+> 2.  最终传递给c\_device\_analyze\_register\_rsp的时候，需要保持rsp示例数据相同的格式
 
-1.  http\_request需客户自行实现，负责从客户云端接收返回的数据
-2.  最终传递给c\_device\_analyze\_register\_rsp的时候，需要保持rsp示例数据相同的格式
+<a id="3-3-4-获取交互令牌接口-后付费模式无需实现该流程"></a>
+
+<a id="Yo6VT"></a>
 
 #### 3.3.4. 获取交互令牌接口（后付费模式无需实现该流程）
 
-```
+<a id="code-block-24"></a>
+
+```c
 /**
  * @brief 检查token是否已过期。
  *
@@ -1647,7 +1200,9 @@ int32_t c_license_analyze_get_token_rsp(char *rsp_str);
 
 示例代码4
 
-```
+<a id="code-block-25"></a>
+
+```c
 #include "lib_c_license.h"
 
 #define REQ_BUFFER_SIZE  (1024)
@@ -1670,24 +1225,29 @@ if (err) {
 }
 ```
 
-**说明**关于示例代码中dummy\_http\_request接口
+> **说明**
+>
+> 关于示例代码中dummy\_http\_request接口
+>
+> -   半托管模式下，该dummy\_http\_request应访问客户已有的设备管理服务端提供的http接口，来间接获取token
+>     
+> -   全托管模式下，该dummy\_http\_request应访问阿里云提供的设备管理服务接口完成设备端注册
+>     
+>     -   使用全托管模式时，接入信息如下：
+>         
+>         Host: bailian.multimodalagent.aliyuncs.com
+>         
+>         GetToken API: /api/token/v1/getToken
 
--   半托管模式下，该dummy\_http\_request应访问客户已有的设备管理服务端提供的http接口，来间接获取token
-    
--   全托管模式下，该dummy\_http\_request应访问阿里云提供的设备管理服务接口完成设备端注册
-    
-    -   使用全托管模式时，接入信息如下：
-        
-        Host: bailian.multimodalagent.aliyuncs.com
-        
-        GetToken API: /api/token/v1/getToken
-        
-
-**警告**getToken接口返回的数据最大可达到300字节以上，建议接收缓冲区预留512字节以上的空间。
+> **警告**
+>
+> getToken接口返回的数据最大可达到300字节以上，建议接收缓冲区预留512字节以上的空间。
 
 设备端SDK生成的请求数据包示例
 
-```
+<a id="code-block-26"></a>
+
+```json
 {
     "appId":"<YOUR APP ID>",
     "deviceName":"<YOUR DEVICE NAME>",
@@ -1701,7 +1261,9 @@ if (err) {
 
 云端补充完tokenKey字段后，再将请求发给阿里云Pop接口
 
-```
+<a id="code-block-27"></a>
+
+```json
 {
     "appId":"<YOUR APP ID>",
     "deviceName":"<YOUR DEVICE NAME>",
@@ -1714,11 +1276,15 @@ if (err) {
 }
 ```
 
-**重要**当设备将SDK生成数据传输至云端后，在云端需要添加对应的tokenKey字段后，才能访问阿里云提供的接口获取令牌，设备端尽量不存储TokenKey，避免泄露
+> **重要**
+>
+> 当设备将SDK生成数据传输至云端后，在云端需要添加对应的tokenKey字段后，才能访问阿里云提供的接口获取令牌，设备端尽量不存储TokenKey，避免泄露
 
 设备端收到云端透传的数据包示例
 
-```
+<a id="code-block-28"></a>
+
+```json
 {
     "nonce": "<YOUR NONCE>",
     "responseTime": "1753327458081",
@@ -1729,14 +1295,20 @@ if (err) {
 }
 ```
 
-**说明**
+> **说明**
+>
+> 1.  http\_request需客户自行实现，负责从客户云端接收返回的数据
+> 2.  最终传递给c\_mmi\_analyze\_rsp的时候，需要保持rsp示例数据相同的格式
 
-1.  http\_request需客户自行实现，负责从客户云端接收返回的数据
-2.  最终传递给c\_mmi\_analyze\_rsp的时候，需要保持rsp示例数据相同的格式
+<a id="3-3-5-建立业务连接"></a>
+
+<a id="Phrmq"></a>
 
 #### 3.3.5. 建立业务连接
 
-```
+<a id="code-block-29"></a>
+
+```c
 /**
  * @brief 获取WSS服务器主机名字符串。
  *
@@ -1777,7 +1349,9 @@ char *c_mmi_get_wss_header(void);
 
 示例代码5
 
-```
+<a id="code-block-30"></a>
+
+```c
 #include "c_mmi.h"
 
 char *wss_host = c_mmi_get_wss_host();
@@ -1789,17 +1363,21 @@ char *wss_header = c_mmi_get_wss_header();
 WSS_HANDLE *wss = dummy_wss_connect(wss_host, wss_port, wss_api, wss_header);
 ```
 
-**重要**本 SDK 与云端的 websocket 通信需要建立 TLS隧道，用户需自行做如下配置：
-
--   TLS 版本要求TLS1.2 或以上
--   开启SNI（SERVER NAME INDICATION）
--   配置CA证书（GlobalSign Root CA - R46）
--   务必通过这三个接口获取websocket建联所需要的端口，API，和header
--   wss\_connect、wss\_register\_recv\_func、wss\_register\_send\_func、wss\_send等相关的接口可复用各模商或芯片已有方案，需客户自行实现
+> **重要**
+>
+> 本 SDK 与云端的 websocket 通信需要建立 TLS隧道，用户需自行做如下配置：
+>
+> -   TLS 版本要求TLS1.2 或以上
+> -   开启SNI（SERVER NAME INDICATION）
+> -   配置CA证书（GlobalSign Root CA - R46）
+> -   务必通过这三个接口获取websocket建联所需要的端口，API，和header
+> -   wss\_connect、wss\_register\_recv\_func、wss\_register\_send\_func、wss\_send等相关的接口可复用各模商或芯片已有方案，需客户自行实现
 
 websocket建立连接时upgrade请求报文示例
 
-```
+<a id="code-block-31"></a>
+
+```http
 GET <WSS API> HTTP/1.1
 Host: <WSS HOST>
 Upgrade: websocket
@@ -1811,7 +1389,9 @@ Sec-WebSocket-Version: 13
 
 websocket建立连接时回应报文示例
 
-```
+<a id="code-block-32"></a>
+
+```http
 HTTP/1.1 101 Switching Protocols
 upgrade: websocket
 connection: upgrade
@@ -1820,9 +1400,15 @@ date: Thu, 24 Jul 2025 08:25:24 GMT
 server: istio-envoy
 ```
 
+<a id="3-3-7-事件回调"></a>
+
+<a id="1bb9d6f42aaxi"></a>
+
 #### 3.3.7. 事件回调
 
-```
+<a id="code-block-33"></a>
+
+```c
 enum {
     C_MMI_EVENT_USER_CONFIG,        // 用户对于sdk的配置应该在该事件回调中实现，如音频缓冲区大小、工作模式、音色等
     C_MMI_EVENT_STATE_CHANGE,       // 当SDK主状态发生切换时触发该事件，param指向新的状态值
@@ -1865,11 +1451,19 @@ enum {
 typedef int32_t(*c_mmi_event_callback)(uint32_t event, void *param);
 ```
 
-**说明**该回调接口的注册是在初始化阶段c\_mmi\_config配置的时候注册的
+> **说明**
+>
+> 该回调接口的注册是在初始化阶段c\_mmi\_config配置的时候注册的
+
+<a id="3-3-8-多模态数据交互"></a>
+
+<a id="f7f490822caa1"></a>
 
 #### 3.3.8. 多模态数据交互
 
-```
+<a id="code-block-34"></a>
+
+```c
 /**
  * @brief 向录音缓冲区写入数据
  *
@@ -1917,7 +1511,9 @@ uint32_t c_mmi_analyze_recv_data(uint8_t opcode, uint8_t *data, uint32_t size);
 
 示例代码6
 
-```
+<a id="code-block-35"></a>
+
+```c
 int dummy_wss_task_recv(void)
 {
     int opcode;
@@ -2014,4 +1610,6 @@ int _mmi_event_callback(uint32_t event, void *param)
 }
 ```
 
-**说明**在c\_mmi\_analyze\_recv\_data接口中会在SDK内部触发各种事件回调，回调到\_mmi\_event\_callback中，再由用户自己处理
+> **说明**
+>
+> 在c\_mmi\_analyze\_recv\_data接口中会在SDK内部触发各种事件回调，回调到\_mmi\_event\_callback中，再由用户自己处理

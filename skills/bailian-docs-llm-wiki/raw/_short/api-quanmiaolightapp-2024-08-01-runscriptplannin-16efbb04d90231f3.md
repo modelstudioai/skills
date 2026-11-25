@@ -2,15 +2,27 @@
 
 影视互娱乐剧本创作-剧本策划。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 根据用户对剧本前要的简单输入，就可得到剧本梗概及分镜头的简要描述，帮助编辑人员快速构思剧本框架
+
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
 
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/RunScriptPlanning)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -29,261 +41,67 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>quanmiaolightapp:RunScriptPlanning</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-quanmiaolightapp:RunScriptPlanning
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/quanmiao/lightapp/runScriptPlanning HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-e9zzbkg0aj2mlXX |
+| scriptName | string | 否 | 自然语言输入剧本名称 | 都市战神 |
+| scriptTypeKeyword | string | 否 | 剧本类型关键词：用户针对该剧本类型进行定性描述，如历史架空、科幻、爱情、玄幻等描述 | 现代，都市，爱情，玄幻 |
+| scriptSummary | string | 是 | 剧本梗概：用户针对该剧本进行简短的故事说明 | 在一个宁静的小镇上，每个家庭都在同一天收到一个神秘的、没有标记的包裹。 |
+| scriptShotCount | integer | 否 | 剧本的分镜数量：单个剧本内用户可以定义生成对应的镜头描述数量，取值范围为 1~10 个 | 3 |
+| dialogueInScene | boolean | 否 | 是否需要具体分镜对白，default=false |  |
+| plotConflict | boolean | 否 | 可读性：用户可以勾选是否增加剧情冲突、反转情节的策划内容，勾选后可自动生成在剧情中 |  |
+| additionalNote | string | 否 | 其他补充：用户可以在文本输入框中，通过自然语言的描述进行开放性调整，例如增加紧张刺激时刻的描述等等，帮助用户进行效果调整 | 故事尽可能狗血 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-e9zzbkg0aj2mlXX
-
-scriptName
-
-string
-
-否
-
-自然语言输入剧本名称
-
-都市战神
-
-scriptTypeKeyword
-
-string
-
-否
-
-剧本类型关键词：用户针对该剧本类型进行定性描述，如历史架空、科幻、爱情、玄幻等描述
-
-现代，都市，爱情，玄幻
-
-scriptSummary
-
-string
-
-是
-
-剧本梗概：用户针对该剧本进行简短的故事说明
-
-在一个宁静的小镇上，每个家庭都在同一天收到一个神秘的、没有标记的包裹。
-
-scriptShotCount
-
-integer
-
-否
-
-剧本的分镜数量：单个剧本内用户可以定义生成对应的镜头描述数量，取值范围为 1~10 个
-
-3
-
-dialogueInScene
-
-boolean
-
-否
-
-是否需要具体分镜对白，default=false
-
-plotConflict
-
-boolean
-
-否
-
-可读性：用户可以勾选是否增加剧情冲突、反转情节的策划内容，勾选后可自动生成在剧情中
-
-additionalNote
-
-string
-
-否
-
-其他补充：用户可以在文本输入框中，通过自然语言的描述进行开放性调整，例如增加紧张刺激时刻的描述等等，帮助用户进行效果调整
-
-故事尽可能狗血
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-end
-
-boolean
-
-输出是否完成，true 表示完成
-
-header
-
-object
-
-流式输出 header 头，包含返回通用信息
-
-errorCode
-
-string
-
-异常错误码
-
-403
-
-errorMessage
-
-string
-
-异常错误信息
-
-Pop sign mismatch, please check.
-
-event
-
-string
-
-事件类型
-
-result-generated
-
-eventInfo
-
-string
-
-事件描述
-
-模型生成事件
-
-requestId
-
-string
-
-请求 ID
-
-0EB27AE3-CA53-5FAE-83C6-EE66CA4DF5DF
-
-sessionId
-
-string
-
-一次会话 ID
-
-3cd10828-0e42-471c-8f1a-931cde20b035
-
-taskId
-
-string
-
-一次生成任务 ID
-
-d3be9981-ca2d-4e17-bf31-1c0a628e9f99
-
-traceId
-
-string
-
-链路 traceid
-
-2150451a17191950923411783e2927
-
-payload
-
-object
-
-返回结果的 payload,json 结构
-
-output
-
-object
-
-输出内容对象
-
-text
-
-string
-
-输出内容
-
-这是测试输出
-
-usage
-
-object
-
-大模型 token 用量信息
-
-inputTokens
-
-long
-
-输入 Token 数量
-
-100
-
-outputTokens
-
-long
-
-输出 Token 数量
-
-100
-
-totalTokens
-
-long
-
-总 oken 数量
-
-200
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| end | boolean | 输出是否完成，true 表示完成 |  |
+| header | object | 流式输出 header 头，包含返回通用信息 |  |
+| errorCode | string | 异常错误码 | 403 |
+| errorMessage | string | 异常错误信息 | Pop sign mismatch, please check. |
+| event | string | 事件类型 | result-generated |
+| eventInfo | string | 事件描述 | 模型生成事件 |
+| requestId | string | 请求 ID | 0EB27AE3-CA53-5FAE-83C6-EE66CA4DF5DF |
+| sessionId | string | 一次会话 ID | 3cd10828-0e42-471c-8f1a-931cde20b035 |
+| taskId | string | 一次生成任务 ID | d3be9981-ca2d-4e17-bf31-1c0a628e9f99 |
+| traceId | string | 链路 traceid | 2150451a17191950923411783e2927 |
+| payload | object | 返回结果的 payload,json 结构 |  |
+| output | object | 输出内容对象 |  |
+| text | string | 输出内容 | 这是测试输出 |
+| usage | object | 大模型 token 用量信息 |  |
+| inputTokens | long | 输入 Token 数量 | 100 |
+| outputTokens | long | 输出 Token 数量 | 100 |
+| totalTokens | long | 总 oken 数量 | 200 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -291,7 +109,9 @@ long
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "end": true,
   "header": {
@@ -317,22 +137,14 @@ long
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-403
-
-NoPermission
-
-You are not authorized to perform this action , Please check the assignment of the workspaceId.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action , Please check the assignment of the workspaceId. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/errorCode)查看更多错误码。

@@ -1,10 +1,18 @@
 # PreviewVoice - TTS合成试听
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/BailianVoiceBot/2025-01-01/PreviewVoice)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,211 +31,47 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>bailianvoicebot:PreviewVoice</td><td>create</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-bailianvoicebot:PreviewVoice
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| BusinessUnitId | string | 是 | 百炼业务空间 ID | llm-c11iig67g863rih8 |
+| NlsEngine | string | 是 | TTS 引擎 | BAILIAN |
+| NlsAccessType | string | 是 | TTS 调用方式 | MANAGED |
+| Model | string | 否 | TTS 模型 | Qwen |
+| Voice | string | 是 | 发音人 | Cherry |
+| Text | string | 是 | 试听文本 | 你好，很高兴认识你 |
+| Params | object | 否 | 合成参数 |  |
+| SpeechRate | float | 否 | 播报速度<br><br>**说明** 取值范围：-500~500。 | 0 |
+| Volume | integer | 否 | 音量<br><br>**说明** 取值范围：0~100。 | 50 |
+| PitchRate | float | 否 | 语调<br><br>**说明** 取值范围：-500~500。 | 0 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-BusinessUnitId
-
-string
-
-是
-
-百炼业务空间 ID
-
-llm-c11iig67g863rih8
-
-NlsEngine
-
-string
-
-是
-
-TTS 引擎
-
-BAILIAN
-
-NlsAccessType
-
-string
-
-是
-
-TTS 调用方式
-
-MANAGED
-
-Model
-
-string
-
-否
-
-TTS 模型
-
-Qwen
-
-Voice
-
-string
-
-是
-
-发音人
-
-Cherry
-
-Text
-
-string
-
-是
-
-试听文本
-
-你好，很高兴认识你
-
-Params
-
-object
-
-否
-
-合成参数
-
-SpeechRate
-
-float
-
-否
-
-播报速度
-
-**说明** 取值范围：-500~500。
-
-0
-
-Volume
-
-integer
-
-否
-
-音量
-
-**说明** 取值范围：0~100。
-
-50
-
-PitchRate
-
-float
-
-否
-
-语调
-
-**说明** 取值范围：-500~500。
-
-0
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | CF6D3484-19A1-5C77-863B-AC8B5754D37C |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误信息 | Instance llm-baployoyopf22m2r does not exist. |
+| Code | string | 内部错误码 | OK |
+| Data | string | 试听音频链接 | [https://cab-config-pre.oss-cn-hangzhou.aliyuncs.com/TTSDEMO/05B9FBF3-3681-10FF-9C24-340A93F3A25F.wav?Expires=1774795253&OSSAccessKeyId=YOUR\_ACCESS\_KEY\_ID&Signature=YOUR\_SIGNATURE&security-token=YOUR\_SECURITY\_TOKEN](https://cab-config-pre.oss-cn-hangzhou.aliyuncs.com/TTSDEMO/05B9FBF3-3681-10FF-9C24-340A93F3A25F.wav?Expires=1774795253&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE&security-token=YOUR_SECURITY_TOKEN) |
+| Params | array | 动态错误参数列表 |  |
+| param | string | 动态错误参数 | llm-xdne77rxe14ziszr |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-CF6D3484-19A1-5C77-863B-AC8B5754D37C
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误信息
-
-Instance llm-baployoyopf22m2r does not exist.
-
-Code
-
-string
-
-内部错误码
-
-OK
-
-Data
-
-string
-
-试听音频链接
-
-[https://cab-config-pre.oss-cn-hangzhou.aliyuncs.com/TTSDEMO/05B9FBF3-3681-10FF-9C24-340A93F3A25F.wav?Expires=1774795253&OSSAccessKeyId=YOUR\_ACCESS\_KEY\_ID&Signature=YOUR\_SIGNATURE&security-token=YOUR\_SECURITY\_TOKEN](https://cab-config-pre.oss-cn-hangzhou.aliyuncs.com/TTSDEMO/05B9FBF3-3681-10FF-9C24-340A93F3A25F.wav?Expires=1774795253&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE&security-token=YOUR_SECURITY_TOKEN)
-
-Params
-
-array
-
-动态错误参数列表
-
-param
-
-string
-
-动态错误参数
-
-llm-xdne77rxe14ziszr
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -235,7 +79,9 @@ llm-xdne77rxe14ziszr
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "RequestId": "CF6D3484-19A1-5C77-863B-AC8B5754D37C",
   "HttpStatusCode": 200,
@@ -248,20 +94,20 @@ llm-xdne77rxe14ziszr
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/BailianVoiceBot/2025-01-01/errorCode)查看更多错误码。
 
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
+
 ## 变更历史
 
-变更时间
-
-变更内容概要
-
-操作
-
-2026-04-22
-
-新增 OpenAPI
-
-[查看变更详情](https://api.aliyun.com/document/BailianVoiceBot/2025-01-01/PreviewVoice?updateTime=2026-04-22#workbench-doc-change-demo)
+| 变更时间 | 变更内容概要 | 操作 |
+| --- | --- | --- |
+| 2026-04-22 | 新增 OpenAPI | [查看变更详情](https://api.aliyun.com/document/BailianVoiceBot/2025-01-01/PreviewVoice?updateTime=2026-04-22#workbench-doc-change-demo) |

@@ -4,17 +4,39 @@
 
 音色设计适用于快速原型验证、创意内容生产、游戏角色配音等场景。
 
-**说明**创建音色无需提供音频样本。如需根据已有音频样本还原其声音，请使用[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)。
+<a id="vd00_overview_h2"></a>
+
+<a id="vd05_faq_h2"></a>
+
+<a id="vd05_q3_h3"></a>
+
+> **说明**
+>
+> 创建音色无需提供音频样本。如需根据已有音频样本还原其声音，请使用[音色复刻](voice-cloning-user-guide.md)。
+
+<a id="准备工作"></a>
+
+<a id="nrt00_prereq_h2"></a>
 
 ## 准备工作
 
 在控制台[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)，并配置 `DASHSCOPE_API_KEY` 环境变量。
 
-安装 [DashScope SDK](raw/model-api-reference/preparations/install-sdk.md) 和 `requests`：
+安装 [DashScope SDK](../../../../../model-api-reference/preparations/install-sdk.md) 和 `requests`：
 
-```
+<a id="code-block"></a>
+
+```bash
 pip install -U dashscope requests
 ```
+
+<a id="开始使用"></a>
+
+<a id="vd03_qs_h2"></a>
+
+<a id="vd06_apiref_h2"></a>
+
+<a id="vd03_cosy_h3"></a>
 
 ## 开始使用
 
@@ -24,7 +46,9 @@ Qwen-Audio-TTS 和 CosyVoice 使用相同的音色创建、预览和基础合成
 2.  **保存预览音频**：解码返回的 `preview_audio.data`，保存为 WAV 文件，用于试听。
 3.  **合成语音**：将创建音色时返回的 `voice_id` 作为 `voice`，使用绑定模型合成语音。
 
-```
+<a id="code-block-2"></a>
+
+```python
 import base64
 import os
 
@@ -69,11 +93,21 @@ with open("output.wav", "wb") as f:
 
 运行示例后，`preview.wav` 为预览音频，`output.wav` 为合成音频。保存打印的音色 ID，后续可使用该 ID 调用语音合成。
 
-HTTP 请求示例、可选参数和返回字段请参见[音色设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)；合成参数请参见 [Qwen-Audio-TTS Python SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-websocket-sdk-python#model-qwen-audio-tts-h3-cv-params)。
+HTTP 请求示例、可选参数和返回字段请参见[音色设计 API 参考](../../../../../model-api-reference/voice-customization-api-directory/voice-design-api-references.md)；合成参数请参见 [Qwen-Audio-TTS Python SDK](../../../../../_short/qwen-audio-tts-websocket-sdk-python-74a72caa32997dec.md#model-qwen-audio-tts-h3-cv-params)。
+
+<a id="声音描述指南"></a>
+
+<a id="vd02_prompt_h2"></a>
 
 ## 声音描述指南
 
 声音描述（`voice_prompt`）用于指定期望的声音特质。清晰、具体的描述有助于生成符合需求的音色。
+
+<a id="描述建议"></a>
+
+<a id="vd02_principle_h3"></a>
+
+<a id="vd02_dim_h3"></a>
 
 ### 描述建议
 
@@ -85,37 +119,21 @@ HTTP 请求示例、可选参数和返回字段请参见[音色设计 API 参考
 
 可组合以下维度编写声音描述：
 
-**维度**
+| 维度 | 描述示例 |
+| --- | --- |
+| 性别 | 男性、女性、中性 |
+| 年龄 | 儿童 (5-12 岁)、青少年 (13-18 岁)、青年 (19-35 岁)、中年 (36-55 岁)、老年 (55 岁以上) |
+| 音调 | 高音、中音、低音、偏高、偏低 |
+| 语速 | 快速、中速、缓慢、偏快、偏慢 |
+| 情感 | 开朗、沉稳、温柔、严肃、活泼、冷静、治愈 |
+| 特点 | 有磁性、清脆、沙哑、圆润、甜美、浑厚、有力 |
+| 用途 | 新闻播报、广告配音、有声书、动画角色、语音助手、纪录片解说 |
 
-**描述示例**
+<a id="描述示例"></a>
 
-性别
+<a id="vd02_example_h3"></a>
 
-男性、女性、中性
-
-年龄
-
-儿童 (5-12 岁)、青少年 (13-18 岁)、青年 (19-35 岁)、中年 (36-55 岁)、老年 (55 岁以上)
-
-音调
-
-高音、中音、低音、偏高、偏低
-
-语速
-
-快速、中速、缓慢、偏快、偏慢
-
-情感
-
-开朗、沉稳、温柔、严肃、活泼、冷静、治愈
-
-特点
-
-有磁性、清脆、沙哑、圆润、甜美、浑厚、有力
-
-用途
-
-新闻播报、广告配音、有声书、动画角色、语音助手、纪录片解说
+<a id="vd05_q1_h3"></a>
 
 ### 描述示例
 
@@ -125,7 +143,13 @@ HTTP 请求示例、可选参数和返回字段请参见[音色设计 API 参考
 -   温柔知性的女性，30 岁左右，语调平和，适合有声书朗读
 -   可爱的儿童声音，大约 8 岁女孩，说话略带稚气，适合动画角色配音
 
-**说明**相同描述可能生成不同的音色。创建后先试听预览音频；需要比较效果时，可多次生成后择优使用。
+> **说明**
+>
+> 相同描述可能生成不同的音色。创建后先试听预览音频；需要比较效果时，可多次生成后择优使用。
+
+<a id="音色管理"></a>
+
+<a id="vd04_manage_h2"></a>
 
 ## 音色管理
 
@@ -133,9 +157,19 @@ HTTP 请求示例、可选参数和返回字段请参见[音色设计 API 参考
 -   **查询音色详情**：查看音色绑定的模型、状态等信息。
 -   **删除音色**：删除不再使用的音色，释放配额。
 
-接口与参数说明请参见[音色设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)。
+接口与参数说明请参见[音色设计 API 参考](../../../../../model-api-reference/voice-customization-api-directory/voice-design-api-references.md)。
+
+<a id="支持模型"></a>
+
+<a id="vd01_scope_h2"></a>
 
 ## 支持模型
+
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
@@ -144,13 +178,27 @@ HTTP 请求示例、可选参数和返回字段请参见[音色设计 API 参考
 -   **CosyVoice**：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash
     
 
-**说明**CosyVoice 音色设计基于 FunAudioGen-VD 模型能力。
+> **说明**
+>
+> CosyVoice 音色设计基于 FunAudioGen-VD 模型能力。
+
+<a id="配额与限制"></a>
+
+<a id="vd07_quota_h2"></a>
+
+<a id="vd07_count_h3"></a>
+
+<a id="vd02_limit_h3"></a>
+
+<a id="vd05_q2_h3"></a>
 
 ## 配额与限制
 
 -   **音色数量**：每个阿里云百炼账号的自定义音色总数上限为 1000 个。音色复刻和音色设计共用该配额，不按模型分别计算。
     
-    **说明**达到上限后，新的音色复刻或音色设计创建请求将失败。需先删除不再使用的音色，释放配额后再创建。
+    > **说明**
+    >
+    > 达到上限后，新的音色复刻或音色设计创建请求将失败。需先删除不再使用的音色，释放配额后再创建。
     
 -   **声音描述**：`voice_prompt` 仅支持中文和英文，最大长度为 500 个字符。
     
@@ -161,8 +209,12 @@ HTTP 请求示例、可选参数和返回字段请参见[音色设计 API 参考
 
 生成的音色可用于合成多种语言的语音，具体支持范围以目标语音合成模型为准。
 
+<a id="计费说明"></a>
+
+<a id="vd07_billing_h3"></a>
+
 ## 计费说明
 
 创建音色免费。
 
-使用设计音色合成语音时，按目标语音合成模型计费。具体费用请参见[模型计费](raw/model-user-guide/test-1/model-pricing.md)。
+使用设计音色合成语音时，按目标语音合成模型计费。具体费用请参见[模型计费](../../../../test-1/model-pricing.md)。

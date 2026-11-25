@@ -2,9 +2,17 @@
 
 获取数据源文档。
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,411 +31,90 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:GetDatasetDocument | get | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:GetDatasetDocument
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| DatasetId | integer | 否 | 数据集唯一标识 | 1 |
+| DatasetName | string | 否 | 数据集名称 | 数据集名称 |
+| DocUuid | string | 否 | 内部文档唯一标识 | xxx |
+| DocId | string | 否 | 文档-自定义的唯一 ID | xxx |
+| IncludeFields | array | 否 | 包含的字段列表 |  |
+|  | string | 否 | 包含的字段：比如 metadata | metadata |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：[获取 workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-xxxx
-
-DatasetId
-
-integer
-
-否
-
-数据集唯一标识
-
-1
-
-DatasetName
-
-string
-
-否
-
-数据集名称
-
-数据集名称
-
-DocUuid
-
-string
-
-否
-
-内部文档唯一标识
-
-xxx
-
-DocId
-
-string
-
-否
-
-文档-自定义的唯一 ID
-
-xxx
-
-IncludeFields
-
-array
-
-否
-
-包含的字段列表
-
-string
-
-否
-
-包含的字段：比如 metadata
-
-metadata
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-响应结果
-
-Data
-
-object
-
-业务数据
-
-DocUuid
-
-string
-
-文档系统唯一 ID
-
-xxx
-
-Url
-
-string
-
-文章 URL
-
-[https://www.aliyun.com](https://www.aliyun.com)
-
-Content
-
-string
-
-内容
-
-文章内容
-
-Summary
-
-string
-
-文章摘要
-
-文章摘要
-
-Title
-
-string
-
-标题
-
-文档标题
-
-PubTime
-
-string
-
-发布时间，格式：yyyy-MM-dd HH:mm:ss
-
-2024-05-14 08:54:33
-
-SourceFrom
-
-string
-
-来源
-
-来源
-
-DisableHandleMultimodalMedia
-
-boolean
-
-当前记录是否落多模态索引库
-
-true
-
-DocId
-
-string
-
-文档用户侧唯一 ID
-
-xxx
-
-Metadata
-
-object
-
-字典信息
-
-Text
-
-string
-
-文档维度 meta
-
-xx
-
-VideoShots
-
-array<object>
-
-视频分片信息
-
-object
-
-视频分片信息
-
-StartTime
-
-integer
-
-视频分片开始时间：毫秒
-
-1000
-
-EndTime
-
-integer
-
-视频分片结束时间：毫秒
-
-2000
-
-Text
-
-string
-
-视频分片：内容
-
-xxx
-
-AsrSentences
-
-array<object>
-
-asr 结果
-
-object
-
-asr 结果
-
-StartTime
-
-integer
-
-开始时间：毫秒
-
-1000
-
-EndTime
-
-integer
-
-结束时间：毫秒
-
-2000
-
-Text
-
-string
-
-asr 内容
-
-xxx
-
-KeyValues
-
-array<object>
-
-key-value 结构的 metadata
-
-object
-
-keyValue 结构 metadata
-
-Key
-
-string
-
-参数名称
-
-xx
-
-Value
-
-string
-
-参数值
-
-xx
-
-DocType
-
-string
-
-文档类型：比如 video、image
-
-video
-
-Status
-
-integer
-
-文档状态：100：成功 0：失败 1：索引或排队中
-
-100
-
-CategoryUuid
-
-string
-
-类目唯一标识
-
-xx
-
-Tags
-
-array
-
-标签。
-
-string
-
-标签。
-
-xx
-
-Extend1
-
-string
-
-扩展字段 1
-
-xx
-
-Extend2
-
-string
-
-扩展字段 2
-
-xx
-
-Extend3
-
-string
-
-扩展字段 3
-
-xx
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Message
-
-string
-
-错误说明
-
-success
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | 响应结果 |  |
+| Data | object | 业务数据 |  |
+| DocUuid | string | 文档系统唯一 ID | xxx |
+| Url | string | 文章 URL | [https://www.aliyun.com](https://www.aliyun.com) |
+| Content | string | 内容 | 文章内容 |
+| Summary | string | 文章摘要 | 文章摘要 |
+| Title | string | 标题 | 文档标题 |
+| PubTime | string | 发布时间，格式：yyyy-MM-dd HH:mm:ss | 2024-05-14 08:54:33 |
+| SourceFrom | string | 来源 | 来源 |
+| DisableHandleMultimodalMedia | boolean | 当前记录是否落多模态索引库 | true |
+| DocId | string | 文档用户侧唯一 ID | xxx |
+| Metadata | object | 字典信息 |  |
+| Text | string | 文档维度 meta | xx |
+| VideoShots | array<object> | 视频分片信息 |  |
+|  | object | 视频分片信息 |  |
+| StartTime | integer | 视频分片开始时间：毫秒 | 1000 |
+| EndTime | integer | 视频分片结束时间：毫秒 | 2000 |
+| Text | string | 视频分片：内容 | xxx |
+| AsrSentences | array<object> | asr 结果 |  |
+|  | object | asr 结果 |  |
+| StartTime | integer | 开始时间：毫秒 | 1000 |
+| EndTime | integer | 结束时间：毫秒 | 2000 |
+| Text | string | asr 内容 | xxx |
+| KeyValues | array<object> | key-value 结构的 metadata |  |
+|  | object | keyValue 结构 metadata |  |
+| Key | string | 参数名称 | xx |
+| Value | string | 参数值 | xx |
+| DocType | string | 文档类型：比如 video、image | video |
+| Status | integer | 文档状态：100：成功 0：失败 1：索引或排队中 | 100 |
+| CategoryUuid | string | 类目唯一标识 | xx |
+| Tags | array | 标签。 |  |
+|  | string | 标签。 | xx |
+| Extend1 | string | 扩展字段 1 | xx |
+| Extend2 | string | 扩展字段 2 | xx |
+| Extend3 | string | 扩展字段 3 | xx |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+| Code | string | 状态码 | NoData |
+| Message | string | 错误说明 | success |
+| HttpStatusCode | integer | http 状态码 | 200 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -435,7 +122,9 @@ http 状态码
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Data": {
     "DocUuid": "xxx",
@@ -488,9 +177,17 @@ http 状态码
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

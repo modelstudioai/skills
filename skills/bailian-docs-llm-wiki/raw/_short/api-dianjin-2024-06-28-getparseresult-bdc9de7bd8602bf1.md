@@ -2,6 +2,10 @@
 
 获取文档解析结果。可查询文档的解析状态以及获取文档的解析结果。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 **前提条件**
@@ -9,11 +13,19 @@
 -   已开通阿里云百炼服务和通义点金服务。
 -   获取到 workspaceId：获取 [workspace 标识](https://help.aliyun.com/zh/model-studio/developer-reference/get-app-id-and-workspace?spm=openapi-amp.newDocPublishment.0.0.2eb8281foUVd15#2612f896detsz:~:text=%E6%9F%A5%E7%9C%8BAPI%2DKEY%E3%80%82-,%E8%8E%B7%E5%8F%96APP%2DID%E5%92%8CWORKSPACE,-%E8%BF%9B%E5%85%A5%E6%88%91%E7%9A%84%E5%BA%94%E7%94%A8)。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/DianJin/2024-06-28/GetParseResult)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -32,217 +44,61 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>dianjin:GetParseResult</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-dianjin:GetParseResult
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/api/library/document/getParseResult HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 路径参数，业务空间 id。 | llm-xxxxx |
+| body | object | 否 | 请求 body。 |  |
+| docId | string | 是 | 文档 id | 873648346573245 |
+| libraryId | string | 是 | 文档库 id | sjdgdsfg |
+| useUrlResult | boolean | 否 | 是否以 URL 形式返回结果。为 true 时，返回的解析结果在 resultUrl 中，result 为空。为 false 时，返回的解析结果在 result 中，resultUrl 为空。 | false |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-路径参数，业务空间 id。
-
-llm-xxxxx
-
-body
-
-object
-
-否
-
-请求 body。
-
-docId
-
-string
-
-是
-
-文档 id
-
-873648346573245
-
-libraryId
-
-string
-
-是
-
-文档库 id
-
-sjdgdsfg
-
-useUrlResult
-
-boolean
-
-否
-
-是否以 URL 形式返回结果。为 true 时，返回的解析结果在 resultUrl 中，result 为空。为 false 时，返回的解析结果在 result 中，resultUrl 为空。
-
-false
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | ResultCode |  |
+| success | boolean | 是否成功 | true |
+| dataType | string | 数据类型 | null |
+| time | string | 时间戳 | 2024-04-24 11:54:34 |
+| errCode | string | 错误码 | 0 |
+| message | string | 错误信息 | ok |
+| data | object | 响应数据 |  |
+| fileType | string | 文件类型 | pdf |
+| providerType | string | 供应商类型 | null |
+| requestId | string | 请求 id | b0a202e2-5031-4589-a6d7-39185f0d8d01 |
+| result | object | 解析结果 | { "Status": "Success", "Data": {}, "Message": null, "TaskId": "docmind-20240601-123abc" } |
+| status | string | 文档解析状态 | WaitRefresh |
+| resultUrl | string | 以 URL 形式返回的解析结果，可直接下载。注意：仅 pdf、doc、docx、ppt、pptx 类型文件会有解析结果。 | [https://xxx.oss-cn-beijing.aliyuncs.com/library/3mjeoywx7z/1826661605606129665.json](https://xxx.oss-cn-beijing.aliyuncs.com/library/3mjeoywx7z/1826661605606129665.json) |
+| requestId | string | 请求 id | 0abb793617204049360065953ec6dd |
+| cost | long | 耗时 | null |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-ResultCode
-
-success
-
-boolean
-
-是否成功
-
-true
-
-dataType
-
-string
-
-数据类型
-
-null
-
-time
-
-string
-
-时间戳
-
-2024-04-24 11:54:34
-
-errCode
-
-string
-
-错误码
-
-0
-
-message
-
-string
-
-错误信息
-
-ok
-
-data
-
-object
-
-响应数据
-
-fileType
-
-string
-
-文件类型
-
-pdf
-
-providerType
-
-string
-
-供应商类型
-
-null
-
-requestId
-
-string
-
-请求 id
-
-b0a202e2-5031-4589-a6d7-39185f0d8d01
-
-result
-
-object
-
-解析结果
-
-{ "Status": "Success", "Data": {}, "Message": null, "TaskId": "docmind-20240601-123abc" }
-
-status
-
-string
-
-文档解析状态
-
-WaitRefresh
-
-resultUrl
-
-string
-
-以 URL 形式返回的解析结果，可直接下载。注意：仅 pdf、doc、docx、ppt、pptx 类型文件会有解析结果。
-
-[https://xxx.oss-cn-beijing.aliyuncs.com/library/3mjeoywx7z/1826661605606129665.json](https://xxx.oss-cn-beijing.aliyuncs.com/library/3mjeoywx7z/1826661605606129665.json)
-
-requestId
-
-string
-
-请求 id
-
-0abb793617204049360065953ec6dd
-
-cost
-
-long
-
-耗时
-
-null
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -250,7 +106,9 @@ null
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "success": true,
   "dataType": null,
@@ -274,6 +132,10 @@ null
   "cost": 0
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

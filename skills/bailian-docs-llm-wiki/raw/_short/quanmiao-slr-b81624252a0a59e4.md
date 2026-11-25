@@ -2,31 +2,44 @@
 
 本文介绍与全妙有关的服务关联角色有哪些以及如何删除这些角色。
 
+<a id="背景信息"></a>
+
+<a id="TVPBA"></a>
+
 ## 背景信息
 
 在某些场景下，全妙为了完成自身的某个功能，需要获取其他云服务的访问权限，如OSS、IMS等。我们借助阿里云提供的服务关联角色SLR（Service Linked Role）来满足此类场景的需求。SLR是获取其他云服务的访问权限而提供的RAM角色。更多关于服务关联角色的信息请参见[服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles#concept-2448621)。
+
+<a id="相关的服务关联角色"></a>
+
+<a id="c624e5df408sg"></a>
 
 ## 相关的服务关联角色
 
 当前与全妙相关的SLR：
 
-**角色名**
+| 角色名 | 角色描述 |
+| --- | --- |
+| AliyunServiceRoleForAIMiaoBiAccessingOss | 用于阿里云全妙调用OSS产品的服务关联角色，全妙使用此角色来访问您在OSS中的服务或资源。 |
+| AliyunServiceRoleForAiMiaoBiAccessingIMS | 用于阿里云全妙调用IMS（智能媒体服务）产品的服务关联角色，全妙使用此角色来访问您在IMS中的服务和资源。 |
 
-**角色描述**
+<a id="aliyunserviceroleforaimiaobiaccessingoss"></a>
 
-AliyunServiceRoleForAIMiaoBiAccessingOss
-
-用于阿里云全妙调用OSS产品的服务关联角色，全妙使用此角色来访问您在OSS中的服务或资源。
-
-AliyunServiceRoleForAiMiaoBiAccessingIMS
-
-用于阿里云全妙调用IMS（智能媒体服务）产品的服务关联角色，全妙使用此角色来访问您在IMS中的服务和资源。
+<a id="NBPiV"></a>
 
 ## AliyunServiceRoleForAIMiaoBiAccessingOss
+
+<a id="应用场景"></a>
+
+<a id="Pqa9O"></a>
 
 ### 应用场景
 
 全妙素材库等存储功能需要访问OSS云服务的资源时，可通过自动创建的服务关联角色AliyunServiceRoleForAIMiaoBiAccessingOss获取访问权限。
+
+<a id="角色及权限说明"></a>
+
+<a id="BOF43"></a>
 
 ### 角色及权限说明
 
@@ -34,7 +47,9 @@ AliyunServiceRoleForAiMiaoBiAccessingIMS
 -   角色权限策略：AliyunServiceRolePolicyForAIMiaoBiAccessingOss；
 -   权限说明：
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "Version": "1",
   "Statement": [
@@ -70,17 +85,33 @@ AliyunServiceRoleForAiMiaoBiAccessingIMS
 }
 ```
 
+<a id="删除服务关联角色"></a>
+
+<a id="F6BuE"></a>
+
 ### 删除服务关联角色
 
 如果您使用了全妙素材库等功能，然后需要删除全妙服务关联角色AliyunServiceRoleForAIMiaoBiAccessingOss，例如您出于安全考虑，需要删除该角色，则需要先明确删除后的影响：删除AliyunServiceRoleForAIMiaoBiAccessingOss后，全妙将无法新增和访问当前账号下已经存储的素材库等功能下存储到OSS的文件及数据。
 
 关于删除服务关联角色具体操作，请参见[服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles#concept-2448621)。
 
+<a id="aliyunserviceroleforaimiaobiaccessingims"></a>
+
+<a id="EzARS"></a>
+
 ## AliyunServiceRoleForAiMiaoBiAccessingIMS
+
+<a id="应用场景-2"></a>
+
+<a id="TMSwt"></a>
 
 ### 应用场景
 
 全妙数据集管理等多模态功能依赖智能媒体服务（IMS），访问该资源时，可通过自动创建的服务关联角色AliyunServiceRoleForAiMiaoBiAccessingIMS获取访问权限。
+
+<a id="角色及权限说明-2"></a>
+
+<a id="AtOQF"></a>
 
 ### 角色及权限说明
 
@@ -88,7 +119,9 @@ AliyunServiceRoleForAiMiaoBiAccessingIMS
 -   角色权限策略：AliyunServiceRolePolicyForAiMiaoBiAccessingIMS；
 -   权限说明：
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "Version": "1",
     "Statement": [
@@ -132,11 +165,19 @@ AliyunServiceRoleForAiMiaoBiAccessingIMS
 }
 ```
 
+<a id="删除服务关联角色-2"></a>
+
+<a id="jefjo"></a>
+
 ### 删除服务关联角色
 
 如果您使用了全妙数据集管理，然后需要删除全妙服务关联角色AliyunServiceRoleForAiMiaoBiAccessingIMS，例如您出于安全考虑，需要删除该角色，则需要先明确删除后的影响：删除AliyunServiceRoleForAiMiaoBiAccessingIMS后，全妙将无法新增和访问当前账号下已经存储的数据集下多模态索引数据。
 
 关于删除服务关联角色具体操作，请参见[服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles#concept-2448621)。
+
+<a id="常见问题"></a>
+
+<a id="K8KRN"></a>
 
 ## 常见问题
 
@@ -146,7 +187,9 @@ AliyunServiceRoleForAiMiaoBiAccessingIMS
 
 请将主账号ID替换为您实际的阿里云账号（主账号）ID。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "Statement": [
         {

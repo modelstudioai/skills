@@ -2,13 +2,21 @@
 
 提交录音文件，异步获取按时间标注的语音、音效和背景声，以及整段录音的场景描述。
 
-**说明**示例使用华北2（北京）地域。将 `WORKSPACE_ID` 设为[业务空间 ID](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)，将 `DASHSCOPE_API_KEY` 设为该地域的 [API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)。
+> **说明**
+>
+> 示例使用华北2（北京）地域。将 `WORKSPACE_ID` 设为[业务空间 ID](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)，将 `DASHSCOPE_API_KEY` 设为该地域的 [API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)。
+
+<a id="提交任务"></a>
+
+<a id="submit-task"></a>
 
 ## 提交任务
 
 提交一个音频或视频文件，创建异步标注任务。
 
 POST`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription`
+
+<a id="请求头"></a>
 
 ### 请求头
 
@@ -23,6 +31,8 @@ POST`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/as
 `X-DashScope-Async`string必填
 
 固定为 `enable`，以异步方式处理文件。
+
+<a id="请求体"></a>
 
 ### 请求体
 
@@ -42,6 +52,8 @@ POST`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/as
 
 要处理的声道编号，从 0 开始。单声道文件可传 `[0]`；处理多声道时传入多个编号。
 
+<a id="返回参数"></a>
+
 ### 返回参数
 
 `output`object
@@ -58,7 +70,9 @@ POST`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/as
 
 本次请求的 ID，用于排查错误。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl --request POST "https://${WORKSPACE_ID}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
@@ -71,7 +85,10 @@ curl --request POST "https://${WORKSPACE_ID}.cn-beijing.maas.aliyuncs.com/api/v1
     "parameters": {"channel_id": [0]}
   }'
 ```
-```
+
+<a id="code-block-2"></a>
+
+```json
 {
   "output": {
     "task_id": "12345678-abcd-4abc-8123-123456789abc",
@@ -81,17 +98,25 @@ curl --request POST "https://${WORKSPACE_ID}.cn-beijing.maas.aliyuncs.com/api/v1
 }
 ```
 
+<a id="查询任务"></a>
+
+<a id="query-task"></a>
+
 ## 查询任务
 
 根据任务 ID 查询处理状态。任务成功后，响应中包含标注结果的下载地址。
 
 GET`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
+<a id="路径参数"></a>
+
 ### 路径参数
 
 `task_id`string必填
 
 提交时返回的任务 ID。
+
+<a id="返回参数-2"></a>
 
 ### 返回参数
 
@@ -139,11 +164,16 @@ GET`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 成功后返回的结果文件下载地址，有效期为 24 小时。使用完整 URL 下载，包括查询字符串。
 
-```
+<a id="code-block-3"></a>
+
+```bash
 curl "https://${WORKSPACE_ID}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/${TASK_ID}" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
-```
+
+<a id="code-block-4"></a>
+
+```json
 {
   "request_id": "01234567-abcd-4abc-8234-123456789abc",
   "output": {
@@ -159,9 +189,15 @@ curl "https://${WORKSPACE_ID}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/${TASK_I
 }
 ```
 
+<a id="下载并解析结果"></a>
+
+<a id="download-result"></a>
+
 ## 下载并解析结果
 
 任务成功后，可下载各声道的标注结果文件。文件包含原始音频属性、分段标注和 Token 用量。
+
+<a id="结果文件"></a>
 
 ### 结果文件
 
@@ -240,6 +276,8 @@ curl "https://${WORKSPACE_ID}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/${TASK_I
 `total_tokens`integer
 
 输入和输出 Token 总数。
+
+<a id="标注内容"></a>
 
 ### 标注内容
 
@@ -434,10 +472,15 @@ curl "https://${WORKSPACE_ID}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/${TASK_I
 
 情绪变化阶段。每项依次包含阶段标题和变化描述。
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl --fail "$TRANSCRIPTION_URL" -o annotation.json
 ```
-```
+
+<a id="code-block-6"></a>
+
+```python
 import json
 
 with open("annotation.json", encoding="utf-8") as f:
@@ -450,7 +493,10 @@ for channel in result["transcripts"]:
     for segment in annotation["background_segments"]:
         print(segment["start_time"], segment["end_time"], segment["description"])
 ```
-```
+
+<a id="code-block-7"></a>
+
+```json
 {
   "sound_segments": [
     {

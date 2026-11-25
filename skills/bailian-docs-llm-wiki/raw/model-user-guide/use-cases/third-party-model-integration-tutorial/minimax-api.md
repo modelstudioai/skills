@@ -2,19 +2,41 @@
 
 本文档介绍如何调用阿里云百炼部署的 MiniMax 模型推理服务。
 
-**重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+> **重要**
+>
+> 本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。
+
+<a id="快速开始"></a>
+
+<a id="9d84551784a6l"></a>
 
 ## 快速开始
 
-API 使用前提：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+API 使用前提：已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="sec-tabs"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
+
+<a id="bd292015a22sc"></a>
 
 ### 示例代码
 
-```
+<a id="code-block"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -53,9 +75,13 @@ for chunk in completion:
             answer_content += delta.content
 ```
 
+<a id="7a142728d5hah"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-2"></a>
+
+```text
 ====================思考过程====================
 
 用户用中文问"你是谁"，意思是"你是谁？"或"Who are you?"
@@ -66,11 +92,19 @@ for chunk in completion:
 你好！我是 MiniMax-M2.5，一个AI助手。我可以帮助你回答问题、提供信息、进行对话等。有什么我可以帮你的吗？
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
+
+<a id="9f294ed715hm6"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -124,9 +158,13 @@ async function main() {
 main();
 ```
 
+<a id="d221c3c1d3k93"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```text
 ====================思考过程====================
 
 用户用中文问"你是谁"，意思是"你是谁？"或"Who are you?"
@@ -137,13 +175,27 @@ main();
 你好！我是 MiniMax-M2.5，一个AI助手。我可以帮助你回答问题、提供信息、进行对话等。有什么我可以帮你的吗？
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
+
+<a id="d8d5ba8f252i6"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-3"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-5"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -159,9 +211,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="03cd04fa04kxk"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "choices": [
         {
@@ -194,13 +250,27 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-4"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
+<a id="1e7877cdadkn2"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-7"></a>
+
+```python
 import os
 import dashscope
 
@@ -250,9 +320,13 @@ for chunk in completion:
 # print(f"\n完整回复:\n{answer_content}")
 ```
 
+<a id="dab4d2a159ddg"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-8"></a>
+
+```text
 ====================思考过程====================
 
 用户用中文问"你是谁"，意思是"你是谁？"或"Who are you?"
@@ -263,11 +337,19 @@ for chunk in completion:
 你好！我是 MiniMax-M2.5，一个AI助手。我可以帮助你回答问题、提供信息、进行对话等。有什么我可以帮你的吗？
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
+
+<a id="a14509b864v6m"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-9"></a>
+
+```java
 // dashscope SDK的版本 >= 2.19.4
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
@@ -351,9 +433,13 @@ public class Main {
 }
 ```
 
+<a id="0a2fd0c94cpt2"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-10"></a>
+
+```text
 ====================思考过程====================
 
 用户用中文问"你是谁"，意思是"你是谁？"或"Who are you?"
@@ -364,13 +450,27 @@ public class Main {
 你好！我是 MiniMax-M2.5，一个AI助手。我可以帮助你回答问题、提供信息、进行对话等。有什么我可以帮你的吗？
 ```
 
+<a id="http-2"></a>
+
+<a id="http-2-h4"></a>
+
 #### HTTP
+
+<a id="67b33216b2wow"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-5"></a>
+
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-11"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -391,9 +491,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="1f41c33807oma"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -422,13 +526,27 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }
 ```
 
+<a id="anthropic兼容"></a>
+
+<a id="anthropic兼容-h4"></a>
+
 #### Anthropic兼容
+
+<a id="sec-tabs-6"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
 
 #### Python
 
+<a id="mm_anthropic_py_code_h3"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-13"></a>
+
+```python
 import anthropic
 import os
 
@@ -456,13 +574,27 @@ for event in message:
             print(event.delta.text, end="", flush=True)
 ```
 
+<a id="http-3"></a>
+
+<a id="http-3-h4"></a>
+
 #### HTTP
+
+<a id="mm_anthropic_curl_code_h3"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-7"></a>
+
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-14"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -480,59 +612,27 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 }'
 ```
 
+<a id="其它功能"></a>
+
+<a id="d062ed0e4d5fe"></a>
+
 ## 其它功能
 
-**模型**
+<table><thead><tr><th><strong>模型</strong></th><th><p><a href="../../model-experience/text-generation-model/multi-round-conversation.md">多轮对话</a></p></th><th><p><a href="../../model-experience/text-generation-model/deep-thinking.md">深度思考</a></p></th><th><p><a href="../../model-experience/text-generation-model/tool-calls/qwen-function-calling.md">Function Calling</a></p></th><th><p><a href="../../model-experience/text-generation-model/qwen-structured-output.md">结构化输出</a></p></th><th><p><a href="../../model-experience/text-generation-model/tool-calls/web-search.md">联网搜索</a></p></th><th><p><a href="../../model-experience/text-generation-model/partial-mode.md">前缀续写</a></p></th><th><p><a href="../../model-experience/text-generation-model/context-cache.md">上下文缓存</a></p></th></tr></thead><tbody><tr><td><p>MiniMax-M2.5</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>支持</p></td><td><p>不支持</p></td><td><p>支持</p></td><td><p>不支持</p></td><td><p>支持</p><blockquote><p>仅支持隐式缓存</p></blockquote></td></tr></tbody></table>
 
-[多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
+<a id="参数默认值"></a>
 
-[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)
-
-[Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)
-
-[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)
-
-[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
-
-[前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)
-
-[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)
-
-MiniMax-M2.5
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-> 仅支持隐式缓存
+<a id="20f0ad5093srb"></a>
 
 ## 参数默认值
 
-**模型**
+| 模型 | temperature | top\_p | presence\_penalty |
+| --- | --- | --- | --- |
+| MiniMax-M2.5 | 1.0 | 0.95 | 0.0 |
 
-**temperature**
+<a id="模型列表与计费"></a>
 
-**top\_p**
-
-**presence\_penalty**
-
-MiniMax-M2.5
-
-1.0
-
-0.95
-
-0.0
+<a id="m7n8o9p0q1r2s6"></a>
 
 ## 模型列表与计费
 
@@ -542,6 +642,10 @@ MiniMax-M2.5 模型擅长编程、办公、文本摘要等任务，且输出速�
 
 按照模型的输入与输出 Token 数量计费。
 
+<a id="错误码"></a>
+
+<a id="e592dd2ca4qfl"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。

@@ -4,19 +4,23 @@
 
 把本次 diff 交给模型，给出能不能合的结论与 blocking / suggestion / nit 三级意见。
 
-**说明**
-
-**免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
+> **说明**
+>
+> **免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
 
 本篇以一份跨 6 个文件的 PR diff 跑通（新增搜索接口 + 加缓存 + 改支付结算）：把 diff 交给 qwen3.8-flash，要它给出合并结论、分级意见（每条写出具体后果和改法）以及误报自查清单。diff 里预设了 7 个考察点，其中一个是专门检验误报的诱饵。本玩法同一份输入跑了关思考与开思考两轮，用来看清两种模式的差异。
 
 调用链：qwen3.8-flash（6 个文件的 diff 一次输入 → 合并结论 + 分级意见 + 误报自查清单）。关思考适合提交前的秒级预筛，开思考用于合并前再过一轮。
 
+<a id="步骤-把-pr-diff-交给模型评审"></a>
+
 ## 步骤：把 PR diff 交给模型评审
 
 把待评审的 diff 连同下面的指令一起发给 qwen3.8-flash。下面的 diff 为便于阅读做了节选（实测输入为跨 6 个文件的完整 diff）。节选后输入变短，产出条目数与措辞会与本页展示有出入。仅供参考
 
-```
+<a id="code-block"></a>
+
+```text
 你是代码评审员。下面是一个准备合并的 PR 的完整 diff，请评审后给出结论。
 
 只返回一个 JSON 对象，不要输出任何其他文字，结构固定为：
@@ -136,7 +140,9 @@ diff --git a/src/api/handler.py b/src/api/handler.py
 
 关键参数：
 
-```
+<a id="code-block-2"></a>
+
+```text
 # 提交前的秒级预筛：关闭思考
 {
   "model": "qwen3.8-flash",
@@ -149,9 +155,13 @@ diff --git a/src/api/handler.py b/src/api/handler.py
 
 OpenAI 兼容模式下，`enable_thinking` 放在请求体顶层；flash 默认开启思考。
 
+<a id="accordion-查看实测产出-关思考那一轮的评审-json-节选"></a>
+
 查看实测产出 · 关思考那一轮的评审 JSON（节选）
 
-```
+<a id="code-block-3"></a>
+
+````text
 {
   "verdict": "request_changes",
   "summary": "该 PR 存在严重的安全漏洞（SQL注入、鉴权缺失）和逻辑错误（支付异常吞没导致资损、类型不匹配报错）。必须修复 SQL 拼接和支付状态更新逻辑，并补充必要的输入校验与缓存失效机制后方可合并。",
@@ -179,7 +189,9 @@ OpenAI 兼容模式下，`enable_thinking` 放在请求体顶层；flash 默认�
       "problem": "`request.args[\"month\"]` 获取的是字符串，直接传入期望 `int` 类型的 `build_report`，且未处理 KeyError 或 ValueError。",
       "impact": "若请求缺少 month 参数会抛出 KeyError (500错误)；若参数存在，`build_report` 内部比较 `if month < 1` 时会因字符串与整数比较抛出 TypeError (500错误)。",
 ……
-```
+````
+
+<a id="说明"></a>
 
 ## 说明
 

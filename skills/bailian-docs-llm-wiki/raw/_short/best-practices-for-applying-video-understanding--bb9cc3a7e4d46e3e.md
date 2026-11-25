@@ -2,6 +2,10 @@
 
 本文介绍如何应用全妙的视频理解和一键成片能力，以实现长视频剪短视频和视频模仿。
 
+<a id="需要开通的阿里云产品"></a>
+
+<a id="55b931f633tp3"></a>
+
 ## 需要开通的阿里云产品
 
 -   阿里云百炼 > 应用广场 > [影视传媒视频理解](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/video-comprehend)
@@ -15,7 +19,15 @@
 -   [函数计算](https://www.aliyun.com/product/fc)
     
 
+<a id="长视频剪短视频工作流"></a>
+
+<a id="80cd90a5f2qc6"></a>
+
 ## 长视频剪短视频工作流
+
+<a id="总体思路"></a>
+
+<a id="9d74367eb8zxz"></a>
 
 ### 总体思路
 
@@ -30,11 +42,21 @@
     
     ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9918296371/p905382.png)
 
+<a id="操作步骤"></a>
+
+<a id="b61a2d1f6e3op"></a>
+
 ### 操作步骤
+
+<a id="创建函数计算函数"></a>
+
+<a id="39af4ba421y3q"></a>
 
 #### 创建函数计算函数
 
 需要创建2个函数计算函数，分别用于请求视频理解轻应用和全妙一键成片功能。
+
+<a id="f568e5230cqvl"></a>
 
 ##### 1.1 视频理解函数
 
@@ -45,13 +67,17 @@
     > **注意**：示例代码末尾的"."表示安装到当前目录，请确保其不被遗漏。
     
 
-```
+<a id="code-block"></a>
+
+```text
 pip install alibabacloud-tea-openapi-sse==1.0.2 -t .
 ```
 
-1.  代码示例参考如下，需要将[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)替换为实际值，以确保代码正常运行并返回正确的结果。
+1.  代码示例参考如下，需要将[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-2"></a>
+
+```python
 # -*- coding: utf-8 -*-
 import logging
 import json
@@ -166,6 +192,8 @@ def handler(event, context):
     return {'videoContent':result}
 ```
 
+<a id="450e6ab432d88"></a>
+
 ##### 1.2 一键成片函数
 
 创建一个事件函数，代码语言选择python3.10，函数运行时超时时间配置成600s。
@@ -175,13 +203,17 @@ def handler(event, context):
     > **注意**：示例代码末尾的"."表示安装到当前目录，请确保其不被遗漏。
     
 
-```
+<a id="code-block-3"></a>
+
+```text
 pip install alibabacloud-tea-openapi -t .
 ```
 
-1.  代码示例参考如下，需要将[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)替换为实际值，以确保代码正常运行并返回正确的结果。
+1.  代码示例参考如下，需要将[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-4"></a>
+
+```python
 # -*- coding: utf-8 -*-
 import logging
 import json
@@ -340,9 +372,13 @@ def handler(event, context):
     return {'outputUrl': outputUrl}
 ```
 
+<a id="bdabaa064f9da"></a>
+
 ##### 1.3 支持多素材的一键成片函数
 
-```
+<a id="code-block-5"></a>
+
+```python
 # -*- coding: utf-8 -*-
 import logging
 import json
@@ -502,6 +538,10 @@ def handler(event, context):
     return {'outputUrl': outputUrl}
 ```
 
+<a id="创建云工作流"></a>
+
+<a id="3e2a8ec2cfjoz"></a>
+
 #### 创建云工作流
 
 [创建云工作流实例](https://help.aliyun.com/zh/document_detail/2399888.html)后，您可以直接复制以下YAML文件进行配置，以减少从头开始配置所需的工作量。
@@ -512,7 +552,9 @@ def handler(event, context):
 
 支持一个原始素材的工作流：
 
-```
+<a id="code-block-6"></a>
+
+```yaml
 Type: StateMachine
 Name: video_edit
 SpecVersion: v1
@@ -553,7 +595,9 @@ States:
 
 支持多个原始素材的工作流：
 
-```
+<a id="code-block-7"></a>
+
+```yaml
 Type: StateMachine
 Name: video_learning
 SpecVersion: v1
@@ -592,13 +636,17 @@ States:
     End: true
 ```
 
+<a id="42b0b6a735y0c"></a>
+
 ##### 启动工作流执行
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9918296371/p905385.png)
 
 单个素材的输入参数可以参考：
 
-```
+<a id="code-block-8"></a>
+
+```python
 {
   "videoUrl": "https://abc.com/xyz.mp4",
   "vlPrompt": "# 角色\n你是一名视频分析师，擅长对各种视频片段进行理解。\n\n# 任务描述\n给你一个视频片段的多张关键帧图片，请你完成以下任务。\n- 输出每张图片的画面信息，包括人物、物体、动作、文字、字幕、镜头语言、一句话总结等。\n- 把每张图片的信息串联起来，生成视频的详细概述，还原该片段的剧情。\n\n# 限制\n- 分析范围严格限定于提供的视频子片段，不涉及视频之外的任何推测或背景信息。\n- 总结时需严格依据视频内容，不可添加个人臆测或创意性内容。\n- 保持对所有视频元素（尤其是文字和字幕）的高保真还原，避免信息遗漏或误解。\n\n# 输入数据\n## 视频片段ASR信息  (如果输入为空则忽略ASR信息)\n{videoAsrText}\n\n## 视频补充信息 (可能对你理解该片段有帮助，如果输入为空则忽略补充信息)\n{videoExtraInfo}\n\n# 输出格式\n直接按照任务目标里即可，先输出每张图片的描述，再串联起来输出整个视频片段的剧情。",
@@ -608,7 +656,9 @@ States:
 
 多个素材的输入参数可以参考：
 
-```
+<a id="code-block-9"></a>
+
+```yaml
 {
     "videoUrl": "https://goods-test1.oss-cn-hangzhou.aliyuncs.com/taishan.mp4?Expires=1733739990&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
     "vlPrompt": "# 角色\n你是一名视频分析师，擅长对各种视频片段进行理解。\n\n# 任务描述\n给你一个视频片段的多张关键帧图片，请你完成以下任务。\n- 输出每张图片的画面信息，包括人物、物体、动作、文字、字幕、镜头语言、一句话总结等。\n- 把每张图片的信息串联起来，生成视频的详细概述，还原该片段的剧情。\n\n# 限制\n- 分析范围严格限定于提供的视频子片段，不涉及视频之外的任何推测或背景信息。\n- 总结时需严格依据视频内容，不可添加个人臆测或创意性内容。\n- 保持对所有视频元素（尤其是文字和字幕）的高保真还原，避免信息遗漏或误解。\n\n# 输入数据\n## 视频片段ASR信息  (如果输入为空则忽略ASR信息)\n{videoAsrText}\n\n## 视频补充信息 (可能对你理解该片段有帮助，如果输入为空则忽略补充信息)\n{videoExtraInfo}\n\n# 输出格式\n直接按照任务目标里即可，先输出每张图片的描述，再串联起来输出整个视频片段的剧情。",
@@ -619,7 +669,15 @@ States:
 }
 ```
 
+<a id="视频模仿工作流"></a>
+
+<a id="f02ddaab633od"></a>
+
 ## 视频模仿工作流
+
+<a id="总体思路-2"></a>
+
+<a id="d31b555d4erce"></a>
 
 ### 总体思路
 
@@ -635,12 +693,18 @@ States:
     
     ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9918296371/p905384.png)
 
+<a id="工作流定义"></a>
+
+<a id="3c3951574anol"></a>
+
 ### 工作流定义
 
 -   其中65行的`${API_KEY}`要替换成实际大模型的API-KEY。
 -   `${ALIUID}`、`${VIDEO_ANALYSIS_FUNCTION_NAME}`、`${VIDEO_CUT_FUNCTION_NAME}`、 `${CONSTRUCT_PROMPT_FUNCTION_NAME}`需要替换成实际账号ID和三个函数计算函数名称。
 
-```
+<a id="code-block-10"></a>
+
+```yaml
 Type: StateMachine
 Name: video_learning
 SpecVersion: v1
@@ -732,11 +796,17 @@ States:
     End: true
 ```
 
+<a id="构建prompt函数"></a>
+
+<a id="c926570c60los"></a>
+
 ### 构建prompt函数
 
 创建一个事件函数，代码语言选择python3.10。
 
-```
+<a id="code-block-11"></a>
+
+```python
 # -*- coding: utf-8 -*-
 import logging
 import json
@@ -766,18 +836,34 @@ def handler(event, context):
     return {"messages": [{"role":"user","content":prompt}]}
 ```
 
+<a id="产品相关文档"></a>
+
+<a id="65314759bdb75"></a>
+
 ## 产品相关文档
+
+<a id="计费文档"></a>
+
+<a id="4fbd24ad29hze"></a>
 
 ### 计费文档
 
-视频理解：[影视传媒视频理解计费](raw/_short/film-and-television-media-video-understanding-bi-3c33978b6baa2e4f.md)
+视频理解：[影视传媒视频理解计费](film-and-television-media-video-understanding-bi-3c33978b6baa2e4f.md)
 
-妙笔（包含一键成片）：[计费说明（妙笔）](raw/_short/miaobi-billing-b440ad7a89ae27e6.md)
+妙笔（包含一键成片）：[计费说明（妙笔）](miaobi-billing-b440ad7a89ae27e6.md)
+
+<a id="api文档"></a>
+
+<a id="87765fd0cc7fq"></a>
 
 ### API文档
 
-视频理解：[影视传媒视频理解](raw/_short/api-quanmiaolightapp-2024-08-01-dir-film-and-tel-f33a395f20cdab57.md)
+视频理解：[影视传媒视频理解](api-quanmiaolightapp-2024-08-01-dir-film-and-tel-f33a395f20cdab57.md)
 
-一键成片：[妙笔-一键成片](raw/_short/api-aimiaobi-2023-08-01-dir-wonderful-pen-video--6db0e24732c77c0f.md)
+一键成片：[妙笔-一键成片](api-aimiaobi-2023-08-01-dir-wonderful-pen-video--6db0e24732c77c0f.md)
+
+<a id="介绍视频"></a>
+
+<a id="617b60500etx9"></a>
 
 ## 介绍视频

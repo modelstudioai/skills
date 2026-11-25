@@ -2,9 +2,17 @@
 
 复制已有 Agent，生成新的草稿。
 
+<a id="前提"></a>
+
+<a id="h-ragapi-copy-prereq"></a>
+
 ## 前提
 
-已获取阿里云百炼 API Key 与业务空间 ID，鉴权方式见[API 认证](raw/application-api-reference/rag-api/rag-api-authentication.md)。复制 Agent 需要知识库-创建权限，由[业务空间成员管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)中的角色决定，详见[权限要求](raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-overview.md)。
+已获取阿里云百炼 API Key 与业务空间 ID，鉴权方式见[API 认证](../rag-api-authentication.md)。复制 Agent 需要知识库-创建权限，由[业务空间成员管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)中的角色决定，详见[权限要求](rag-api-agent-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-ragapi-copy-endpoint"></a>
 
 ## 接口
 
@@ -12,27 +20,25 @@
 
 复制指定 Agent，创建一个新的草稿 Agent。新 Agent 名称自动添加 `copy_` 前缀，版本号为 `beta`，状态为 `draft`，配置继承自源 Agent。
 
+<a id="请求体"></a>
+
+<a id="h-ragapi-copy-req"></a>
+
 ## 请求体
 
-字段
+| 字段 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `agent_id` | 是 | string | 源 Agent ID。 |
 
-必填
+<a id="请求示例"></a>
 
-类型
-
-说明
-
-`agent_id`
-
-是
-
-string
-
-源 Agent ID。
+<a id="h-ragapi-copy-eg"></a>
 
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST "$BASE_URL/api/v1/indices/rag/app/copy" \
   -H "Authorization: Bearer $BAILIAN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -43,11 +49,17 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/app/copy" \
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`（`{workspace_id}` 为业务空间 ID），`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
+<a id="响应示例"></a>
+
+<a id="h-ragapi-copy-resp"></a>
+
 ## 响应示例
 
 操作成功返回 200。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "request_id": "a7b8c9d0-e1f2-3456-abcd-567890123456",
   "status_code": 200,
@@ -64,91 +76,40 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/app/copy" \
 }
 ```
 
+<a id="响应字段"></a>
+
+<a id="h-ragapi-copy-dto"></a>
+
 ## 响应字段
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `request_id` | string | 请求唯一标识，排查问题时请提供此 ID。 |
+| `status_code` | integer | HTTP 状态码。 |
+| `code` | string | 响应码，成功时为 `Success`。 |
+| `message` | string | 提示信息。 |
+| `status` | string | 请求状态：`SUCCESS` 或 `FAILED`。 |
+| `success` | boolean | 请求是否成功。 |
+| `data.agent_id` | string | 新创建的 Agent ID。 |
+| `data.agent_name` | string | 新 Agent 名称，自动添加 `copy_` 前缀。 |
+| `data.agent_version` | string | Agent 版本号，复制后为 `beta`。 |
+| `data.agent_status` | string | Agent 状态，复制后为 `draft`。 |
 
-类型
+<a id="错误码"></a>
 
-说明
-
-`request_id`
-
-string
-
-请求唯一标识，排查问题时请提供此 ID。
-
-`status_code`
-
-integer
-
-HTTP 状态码。
-
-`code`
-
-string
-
-响应码，成功时为 `Success`。
-
-`message`
-
-string
-
-提示信息。
-
-`status`
-
-string
-
-请求状态：`SUCCESS` 或 `FAILED`。
-
-`success`
-
-boolean
-
-请求是否成功。
-
-`data.agent_id`
-
-string
-
-新创建的 Agent ID。
-
-`data.agent_name`
-
-string
-
-新 Agent 名称，自动添加 `copy_` 前缀。
-
-`data.agent_version`
-
-string
-
-Agent 版本号，复制后为 `beta`。
-
-`data.agent_status`
-
-string
-
-Agent 状态，复制后为 `draft`。
+<a id="h-ragapi-copy-err"></a>
 
 ## 错误码
 
-HTTP 状态码
-
-错误码
-
-说明
-
-400
-
-`Index.InvalidParameter`
-
-请求参数不合法，请检查参数是否完整且类型正确。
+| HTTP 状态码 | 错误码 | 说明 |
+| --- | --- | --- |
+| 400 | `Index.InvalidParameter` | 请求参数不合法，请检查参数是否完整且类型正确。 |
 
 失败响应示例：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "request_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
   "status_code": 400,

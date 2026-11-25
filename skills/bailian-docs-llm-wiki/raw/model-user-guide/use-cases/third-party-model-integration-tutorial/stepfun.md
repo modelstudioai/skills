@@ -2,19 +2,35 @@
 
 本文档介绍如何在阿里云百炼平台调用阶跃星辰（Stepfun）直供的 Step 系列模型推理服务。
 
-**重要**本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> **重要**
+>
+> 本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+
+<a id="快速开始"></a>
+
+<a id="sf01h2_00001"></a>
 
 ## 快速开始
 
 stepfun/step-3.7-flash 和 stepfun/step-5-preview 是阶跃星辰直供的多模态推理模型，**默认开启思考模式且不支持关闭**，无需设置 `enable_thinking` 参数。模型的推理过程通过 `reasoning_content` 字段返回，您可以通过可选的 `reasoning_effort` 参数（可选值：`low`、`medium`、`high`）控制推理深度。运行以下代码快速调用模型（示例使用 stepfun/step-3.7-flash，可替换为 stepfun/step-5-preview）。
 
-需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+需要已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="sec-tabs"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
+<a id="sf01h3_00001"></a>
+
 ### 示例代码
 
-```
+<a id="code-block"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -64,9 +80,13 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
+<a id="sf01h3_00002"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-2"></a>
+
+```text
 ====================思考过程====================
 
 好的，用户问的是9.9和9.11哪个大。首先我需要比较这两个小数。
@@ -82,11 +102,19 @@ for chunk in completion:
 CompletionUsage(completion_tokens=85, prompt_tokens=10, total_tokens=95, prompt_tokens_details={'cached_tokens': 0})
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
+
+<a id="sf01h3_00003"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -152,9 +180,13 @@ async function main() {
 main();
 ```
 
+<a id="sf01h3_00004"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```text
 ====================思考过程====================
 
 好的，用户问的是9.9和9.11哪个大。首先我需要比较这两个小数。
@@ -170,13 +202,27 @@ main();
 { prompt_tokens: 10, completion_tokens: 85, total_tokens: 95, prompt_tokens_details: { cached_tokens: 0 } }
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
+
+<a id="sf01h3_00005"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-2"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-5"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -196,17 +242,33 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="多模态调用示例"></a>
+
+<a id="sf01h2_00007"></a>
+
 ## 多模态调用示例
 
 stepfun/step-3.7-flash 不仅支持纯文本对话，还具备多模态理解能力，支持图像和视频输入。
 
+<a id="图像理解"></a>
+
+<a id="sf01h3_00006"></a>
+
 ### 图像理解
 
-图像理解功能让模型能够识别和分析图像内容。支持通过公网 URL 或 Base64 编码传入图像。图像文件的限制请参见[图像限制](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md)。
+图像理解功能让模型能够识别和分析图像内容。支持通过公网 URL 或 Base64 编码传入图像。图像文件的限制请参见[图像限制](stepfun.md)。
+
+<a id="sec-tabs-3"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-6"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -245,9 +307,15 @@ print("\n" + "=" * 20 + "完整回复" + "=" * 20 + "\n")
 print(completion.choices[0].message.content)
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-7"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -287,11 +355,23 @@ console.log('\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\n');
 console.log(completion.choices[0].message.content);
 ```
 
+<a id="http-2"></a>
+
+<a id="http-2-h4"></a>
+
 #### HTTP
+
+<a id="sec-tabs-4"></a>
+
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
 
 #### curl
 
-```
+<a id="code-block-8"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -319,13 +399,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="视频理解"></a>
+
+<a id="sf01h3_00007"></a>
+
 ### 视频理解
 
-视频理解功能让模型能够识别和分析视频内容。支持通过公网 URL 传入视频。视频文件的限制请参见[视频限制](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md)。
+视频理解功能让模型能够识别和分析视频内容。支持通过公网 URL 传入视频。视频文件的限制请参见[视频限制](stepfun.md)。
+
+<a id="sec-tabs-5"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-9"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -359,9 +451,15 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="node-js-3"></a>
+
+<a id="node-js-3-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-10"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -398,11 +496,23 @@ async function main() {
 main();
 ```
 
+<a id="http-3"></a>
+
+<a id="http-3-h4"></a>
+
 #### HTTP
+
+<a id="sec-tabs-6"></a>
+
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
 
 #### curl
 
-```
+<a id="code-block-11"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -429,7 +539,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="文件限制"></a>
+
+<a id="sf01h3_00008"></a>
+
 ### 文件限制
+
+<a id="sec-tabs-7"></a>
+
+<a id="图像文件"></a>
+
+<a id="图像文件-h4"></a>
 
 #### 图像文件
 
@@ -439,113 +559,49 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -   **图像分辨率：**建议长或宽不超过 4096 像素。分辨率越高，模型推理成本越高（网络传输时间、首字延迟和费用消耗相应增加）
 -   **图像传入方式：**支持通过 HTTP/HTTPS 公网 URL 或 Base64 编码传入
 
+<a id="视频文件"></a>
+
+<a id="视频文件-h4"></a>
+
 #### 视频文件
 
 -   **视频大小：**最大 128M
 -   **视频时长：**无时长限制，推荐 5 分钟以内
 -   **音频理解：**不支持对视频文件的音频进行理解
 
+<a id="其它功能"></a>
+
+<a id="sf01h2_00020"></a>
+
 ## 其它功能
 
-**功能**
-
-**支持情况**
-
-**备注**
-
-[多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
-
-支持
-
-需在每轮 assistant 消息中保留 `reasoning_content` 字段，否则会报错
-
-[Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#dd5a3dca390k9)
-
-支持
-
-不支持 `tool_choice` 参数
-
-[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)
-
-支持
-
-支持隐式缓存，自动开启
-
-[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)
-
-支持
-
-`response_format` 不支持 json\_schema
-
-[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
-
-不支持
-
-—
-
-[前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)
-
-不支持
-
-—
-
-多模态输入
-
-支持
-
-支持图像（URL/Base64）和视频（URL）输入
+| 功能 | 支持情况 | 备注 |
+| --- | --- | --- |
+| [多轮对话](../../model-experience/text-generation-model/multi-round-conversation.md) | 支持 | 需在每轮 assistant 消息中保留 `reasoning_content` 字段，否则会报错 |
+| [Function Calling](../../model-experience/text-generation-model/tool-calls/qwen-function-calling.md#dd5a3dca390k9) | 支持 | 不支持 `tool_choice` 参数 |
+| [上下文缓存](../../model-experience/text-generation-model/context-cache.md) | 支持 | 支持隐式缓存，自动开启 |
+| [结构化输出](../../model-experience/text-generation-model/qwen-structured-output.md) | 支持 | `response_format` 不支持 json\_schema |
+| [联网搜索](../../model-experience/text-generation-model/tool-calls/web-search.md) | 不支持 | — |
+| [前缀续写](../../model-experience/text-generation-model/partial-mode.md) | 不支持 | — |
+| 多模态输入 | 支持 | 支持图像（URL/Base64）和视频（URL）输入 |
 
 stepfun/step-3.7-flash 和 stepfun/step-5-preview 不支持以下参数：`tool_choice`、`thinking_budget`、`top_k`、`modalities`、`repetition_penalty`、`vl_high_resolution_images`、`preserve_thinking`、`enable_search`、`search_options`、`seed`、`logprobs`、`top_logprobs`、`n`。
 
 支持的参数中，部分参数取值范围与功能与百炼不一致：
 
-**参数**
+| 参数 | 百炼 | Step |
+| --- | --- | --- |
+| `temperature` | 取值范围 \[0, 2) | 取值范围 \[0, 2)，默认 1.0 |
+| `top_p` | 取值范围 (0, 1.0\] | 取值范围 (0, 1.0\]，默认 0.95 |
+| `max_tokens` | 不限制思考模型思维链长度，仅限制输出长度 | 限制思考过程和最终回答的总体输出长度 |
+| `reasoning_effort` | 控制 DeepSeek-V4 系列模型的推理力度，可选值 `high`/`max` | 可选值为 `low`、`medium`、`high`，用于控制推理深度 |
+| `stream_options` | 其属性 `include_usage` 默认为 `false`，可设为 `true` | 其属性 `include_usage` 强制为 `true`，无法关闭 |
+| `detail` | 不支持 | 可选 `low`/`high`，默认 `low` |
+| `frequency_penalty` | 不支持 | 范围 0.0~1.0，默认 0 |
 
-**百炼**
+<a id="模型列表与计费"></a>
 
-**Step**
-
-`temperature`
-
-取值范围 \[0, 2)
-
-取值范围 \[0, 2)，默认 1.0
-
-`top_p`
-
-取值范围 (0, 1.0\]
-
-取值范围 (0, 1.0\]，默认 0.95
-
-`max_tokens`
-
-不限制思考模型思维链长度，仅限制输出长度
-
-限制思考过程和最终回答的总体输出长度
-
-`reasoning_effort`
-
-控制 DeepSeek-V4 系列模型的推理力度，可选值 `high`/`max`
-
-可选值为 `low`、`medium`、`high`，用于控制推理深度
-
-`stream_options`
-
-其属性 `include_usage` 默认为 `false`，可设为 `true`
-
-其属性 `include_usage` 强制为 `true`，无法关闭
-
-`detail`
-
-不支持
-
-可选 `low`/`high`，默认 `low`
-
-`frequency_penalty`
-
-不支持
-
-范围 0.0~1.0，默认 0
+<a id="sf01h2_00021"></a>
 
 ## 模型列表与计费
 
@@ -557,54 +613,20 @@ Step 系列模型是阶跃星辰直供的多模态推理模型，支持文本、
 
 > 思维链按照输出 Token 计费。
 
+<a id="错误码"></a>
+
+<a id="sf01h2_00022"></a>
+
 ## 错误码
 
 Step 系列模型由阶跃星辰直供，其错误码与百炼平台标准错误码存在差异。调用 Step 模型时，请以下表为准。
 
-**错误码**
-
-**错误原因**
-
-**解决方法**
-
-400 - 格式错误
-
-请求参数格式不正确，可能包括图片无法下载、图片数量超限、模型不支持的输入类型、参数值不合法
-
-检查请求体、模型能力和参数范围
-
-401 - 认证失败
-
-缺少或无效的 API Key
-
-检查 API Key 及请求头格式是否正确
-
-402 - 余额不足
-
-账户余额不足
-
-检查账户余额，及时进行充值
-
-429 - 请求超限
-
-请求过于频繁，超出速率限制
-
-实现指数退避和重试逻辑，或降低请求频率
-
-451 - 内容拦截
-
-请求内容或响应内容未通过审核
-
-修改请求内容，避免输入不安全或敏感内容
-
-500 - 服务器失败
-
-服务器内部故障
-
-请稍后重试，持续出现时联系我们解决
-
-503 - 服务器故障
-
-服务器负载过高
-
-请稍后重试
+| 错误码 | 错误原因 | 解决方法 |
+| --- | --- | --- |
+| 400 - 格式错误 | 请求参数格式不正确，可能包括图片无法下载、图片数量超限、模型不支持的输入类型、参数值不合法 | 检查请求体、模型能力和参数范围 |
+| 401 - 认证失败 | 缺少或无效的 API Key | 检查 API Key 及请求头格式是否正确 |
+| 402 - 余额不足 | 账户余额不足 | 检查账户余额，及时进行充值 |
+| 429 - 请求超限 | 请求过于频繁，超出速率限制 | 实现指数退避和重试逻辑，或降低请求频率 |
+| 451 - 内容拦截 | 请求内容或响应内容未通过审核 | 修改请求内容，避免输入不安全或敏感内容 |
+| 500 - 服务器失败 | 服务器内部故障 | 请稍后重试，持续出现时联系我们解决 |
+| 503 - 服务器故障 | 服务器负载过高 | 请稍后重试 |

@@ -4,39 +4,28 @@ HappyOyster iOS SDK 入口为进程级单例 HappyOysterEngine.shared ，业务�
 
 本文档是 HappyOyster iOS SDK 的**对外功能描述 + 接口细节参考**：逐个说明公开类型与方法的**参数、使用时机、用法与简单示例**。
 
-**完整接入流程**（工程搭建、依赖配置、服务端配合、端到端跑通）见 [HappyOyster iOS SDK 接入指南](raw/_short/happyoyster-ios-sdk-integration-guide-41ea7eabc2facd22.md)，本文不再重复。
+**完整接入流程**（工程搭建、依赖配置、服务端配合、端到端跑通）见 [HappyOyster iOS SDK 接入指南](../../../../../_short/happyoyster-ios-sdk-integration-guide-41ea7eabc2facd22.md)，本文不再重复。
+
+<a id="核心概念"></a>
+
+<a id="ho-ios-concepts-h"></a>
 
 ## 核心概念
 
 先建立几个名词，便于阅读后文。
 
-**概念**
+| 概念 | 说明 |
+| --- | --- |
+| **token** | **HTTP 鉴权 token（百炼临时 API Key）**。由你的服务端调用百炼接口换取后下发，经 `updateToken(_:)` 注入；SDK 以 HTTP Bearer 方式携带它请求网关。SDK 只保存最新一个，不持久化、不刷新，过期后由你重新换取并再次注入。 |
+| **ticket** | **一次性体验凭证**。由你的服务端调用开放平台 `get-travel-credential` 换取（前缀 `tk_`，有效期 **30 分钟**，一次性），作为 `createTravel(ticket:)` 入参；体验结束或过期后即失效，不可复用。 |
+| **World** | AI 世界，含角色、场景。由你的服务端创建与管理，SDK 不涉及。 |
+| **Travel** | 一次实时体验，对应一个 `OysterTravel` 句柄。**单次使用**，到达终态后失效，需经 engine 重新 `createTravel`。 |
+| **会话状态** | `OysterTravelStatus`：`idle → prepare → running → pausing → paused`（paused 经重连回 `prepare → running`），外加两终态 `ended` / `failed`（详见"事件与状态"章节）。 |
+| **模式** | `adventure`（世界探索，方向/视角/动作指令）、`directing`（实时导演，文本驱动剧情）或 `acting`（角色演绎，文本驱动人物演绎）。`start()` 返回的 `mode` 据此决定 UI，各模式可用的接口见"概览"章节。 |
 
-**说明**
+<a id="概览"></a>
 
-**token**
-
-**HTTP 鉴权 token（百炼临时 API Key）**。由你的服务端调用百炼接口换取后下发，经 `updateToken(_:)` 注入；SDK 以 HTTP Bearer 方式携带它请求网关。SDK 只保存最新一个，不持久化、不刷新，过期后由你重新换取并再次注入。
-
-**ticket**
-
-**一次性体验凭证**。由你的服务端调用开放平台 `get-travel-credential` 换取（前缀 `tk_`，有效期 **30 分钟**，一次性），作为 `createTravel(ticket:)` 入参；体验结束或过期后即失效，不可复用。
-
-**World**
-
-AI 世界，含角色、场景。由你的服务端创建与管理，SDK 不涉及。
-
-**Travel**
-
-一次实时体验，对应一个 `OysterTravel` 句柄。**单次使用**，到达终态后失效，需经 engine 重新 `createTravel`。
-
-**会话状态**
-
-`OysterTravelStatus`：`idle → prepare → running → pausing → paused`（paused 经重连回 `prepare → running`），外加两终态 `ended` / `failed`（详见"事件与状态"章节）。
-
-**模式**
-
-`adventure`（世界探索，方向/视角/动作指令）、`directing`（实时导演，文本驱动剧情）或 `acting`（角色演绎，文本驱动人物演绎）。`start()` 返回的 `mode` 据此决定 UI，各模式可用的接口见"概览"章节。
+<a id="ho-ios-overview-h"></a>
 
 ## 概览
 
@@ -44,143 +33,60 @@ AI 世界，含角色、场景。由你的服务端创建与管理，SDK 不涉�
 
 各模式可用的能力不同，请按 `start()` 返回的 `mode` 决定 UI：
 
-**能力**
+| 能力 | adventure | directing | acting |
+| --- | --- | --- | --- |
+| `sendCommand`（方向/视角/动作） | 支持 | 不支持 | 不支持 |
+| `sendInstruct`（文本指令） | 不支持 | 支持 | **支持** |
+| `pause()` / `resume()` | 不支持 | 支持 | **支持** |
+| `rewind(toSec:)` | 不支持 | 支持 | **不支持，请隐藏入口** |
+| `end()` | 支持 | 支持 | 支持 |
+| `start(maxExperienceTimeSec:)` | 生效 | 忽略 | 忽略 |
 
-**adventure**
-
-**directing**
-
-**acting**
-
-`sendCommand`（方向/视角/动作）
-
-支持
-
-不支持
-
-不支持
-
-`sendInstruct`（文本指令）
-
-不支持
-
-支持
-
-**支持**
-
-`pause()` / `resume()`
-
-不支持
-
-支持
-
-**支持**
-
-`rewind(toSec:)`
-
-不支持
-
-支持
-
-**不支持，请隐藏入口**
-
-`end()`
-
-支持
-
-支持
-
-支持
-
-`start(maxExperienceTimeSec:)`
-
-生效
-
-忽略
-
-忽略
-
-**说明**`acting` 世界为竖屏优先：`start()` 返回的 `aspectRatio` 给出本次体验的画幅（`9:16` / `16:9`），建议在拉流前据此决定播放器方向与容器尺寸（见"数据模型"章节）。
+> **说明**
+>
+> `acting` 世界为竖屏优先：`start()` 返回的 `aspectRatio` 给出本次体验的画幅（`9:16` / `16:9`），建议在拉流前据此决定播放器方向与容器尺寸（见"数据模型"章节）。
 
 `import HappyOysterSDK`，核心入口是两个类型。
 
 **`HappyOysterEngine`** —— 编排入口，进程级单例 `HappyOysterEngine.shared`。
 
-**方法 / 属性**
-
-**说明**
-
-`initialize(config:)`
-
-初始化运行时并自动注册实时引擎（`createTravel` 前一次）
-
-`updateToken(_:)`
-
-注入 / 更新 HTTP 鉴权 token
-
-`createTravel(ticket:)`
-
-用一次性凭证创建会话句柄
-
-`cleanup()`
-
-释放资源（可再 `initialize`）
-
-`version`
-
-当前 SDK 版本号
+| 方法 / 属性 | 说明 |
+| --- | --- |
+| `initialize(config:)` | 初始化运行时并自动注册实时引擎（`createTravel` 前一次） |
+| `updateToken(_:)` | 注入 / 更新 HTTP 鉴权 token |
+| `createTravel(ticket:)` | 用一次性凭证创建会话句柄 |
+| `cleanup()` | 释放资源（可再 `initialize`） |
+| `version` | 当前 SDK 版本号 |
 
 **`OysterTravel`** —— 一次体验的会话句柄，由 `createTravel(ticket:)` 创建。
 
-**方法 / 属性**
-
-**说明**
-
-`videoView` / `OysterVideoView(travel:)`
-
-播放视图（UIKit / SwiftUI）
-
-`events` / `status`
-
-状态变更 + 错误推送流 / 可观察的当前状态
-
-`start()` / `start(maxExperienceTimeSec:)`
-
-建连播放（可选请求世界探索模式体验的最大时长）
-
-`sendInstruct(content:)`
-
-实时导演模式文本指令
-
-`sendCommand(_:)` / `flushCommands()`
-
-世界探索模式操控
-
-`pause()` / `resume()`
-
-暂停 / 恢复（`directing` 与 `acting` 支持）
-
-`rewind(toSec:)`
-
-回溯（仅 paused）
-
-`end()`
-
-结束（幂等，务必调用）
-
-`pauseLocalAudioCapture()` / `resumeLocalAudioCapture()`
-
-临时让出 / 恢复麦克风
+| 方法 / 属性 | 说明 |
+| --- | --- |
+| `videoView` / `OysterVideoView(travel:)` | 播放视图（UIKit / SwiftUI） |
+| `events` / `status` | 状态变更 + 错误推送流 / 可观察的当前状态 |
+| `start()` / `start(maxExperienceTimeSec:)` | 建连播放（可选请求世界探索模式体验的最大时长） |
+| `sendInstruct(content:)` | 实时导演模式文本指令 |
+| `sendCommand(_:)` / `flushCommands()` | 世界探索模式操控 |
+| `pause()` / `resume()` | 暂停 / 恢复（`directing` 与 `acting` 支持） |
+| `rewind(toSec:)` | 回溯（仅 paused） |
+| `end()` | 结束（幂等，务必调用） |
+| `pauseLocalAudioCapture()` / `resumeLocalAudioCapture()` | 临时让出 / 恢复麦克风 |
 
 此外还有几个辅助导出：`OysterLog` 用于接管 SDK 内部日志；`HappyOysterEngine.version` 读取版本号；`OysterVideoView` 是 SwiftUI 播放视图（与 `videoView` 等价）。用法见后文。
 
 生命周期：**初始化 → 注入 token → 创建会话 → 挂载视频 + 订阅事件 → start 播放 → 互动 → end**。SDK 不负责世界的创建与管理（由你的服务端完成），也不暴露底层实时通信细节。
 
+<a id="快速上手"></a>
+
+<a id="ho-ios-quickstart-h"></a>
+
 ## 快速上手
 
 一段从初始化到结束的完整流程，分步注释。各 API 的细节见"API 参考"章节。
 
-```
+<a id="code-block"></a>
+
+```swift
 import HappyOysterSDK
 
 // 1) 初始化（App 启动后尽早，createTravel 前一次）
@@ -238,43 +144,43 @@ Task { @MainActor in
 // 退出 SDK / 切换网关：await engine.cleanup()
 ```
 
-**说明**工程搭建、依赖配置（含必须引入的 AliRTC 适配器与厂商二进制）、服务端配合与端到端跑通，见示例工程文档。
+> **说明**
+>
+> 工程搭建、依赖配置（含必须引入的 AliRTC 适配器与厂商二进制）、服务端配合与端到端跑通，见示例工程文档。
+
+<a id="环境要求"></a>
+
+<a id="ho-ios-env-h"></a>
 
 ## 环境要求
 
-**项**
-
-**要求**
-
-最低系统
-
-iOS 15.0+（公开类型均标 `@available(iOS 15.0, *)`）
-
-语言
-
-Swift（`async/await`）
-
-并发
-
-主线程访问（入口类型标 `@MainActor`）
-
-网络
-
-需可访问公网
-
-权限
-
-`Info.plist` 须配 `NSMicrophoneUsageDescription`（见下）
+| 项 | 要求 |
+| --- | --- |
+| 最低系统 | iOS 15.0+（公开类型均标 `@available(iOS 15.0, *)`） |
+| 语言 | Swift（`async/await`） |
+| 并发 | 主线程访问（入口类型标 `@MainActor`） |
+| 网络 | 需可访问公网 |
+| 权限 | `Info.plist` 须配 `NSMicrophoneUsageDescription`（见下） |
 
 **麦克风权限**：实时互动视频体验需要建立一条**双向（上行 + 下行）实时音视频通道**，因此 SDK 运行期间会占用本地麦克风——**这并非录音**。`Info.plist` 必须提供 `NSMicrophoneUsageDescription`，否则启动实时采集时会崩溃。当你需要独占麦克风（如语音识别）时，用 `pauseLocalAudioCapture()` / `resumeLocalAudioCapture()` 临时让出与恢复（见"OysterTravel"章节）。
 
+<a id="引入与鉴权"></a>
+
+<a id="ho-ios-import-auth-h"></a>
+
 ## 引入与鉴权
+
+<a id="引入与依赖"></a>
+
+<a id="ho-ios-import-h"></a>
 
 ### 引入与依赖
 
 代码层面 `import HappyOysterSDK` 即可。SDK 以预编译二进制（xcframework）按 CocoaPods subspec 分发，已发布到 CocoaPods 公开 Trunk——在 `Podfile` 中声明依赖：
 
-```
+<a id="code-block-2"></a>
+
+```ruby
 # HappyOysterSDK / AliVCSDK_ARTC 均发布在 CocoaPods 公开源。
 pod 'HappyOysterSDK', '1.0.3'              # 聚合入口（Core + World）
 pod 'HappyOysterSDK/UI', '1.0.3'           # 可选：默认 UI 组件（视频视图、操控 HUD）
@@ -284,9 +190,15 @@ pod 'HappyOysterSDK/StreamAliRTC', '1.0.3' # 视频流 + AliRTC 引擎适配器�
 pod 'AliVCSDK_ARTC', '7.11.0'
 ```
 
-**说明**引入 `HappyOysterSDK/StreamAliRTC` 时 **`AliVCSDK_ARTC` 为必需**：缺失时 SDK 会静默回落 Loopback——能连上、状态走到 `running`，但**黑屏不报错**。
+> **说明**
+>
+> 引入 `HappyOysterSDK/StreamAliRTC` 时 **`AliVCSDK_ARTC` 为必需**：缺失时 SDK 会静默回落 Loopback——能连上、状态走到 `running`，但**黑屏不报错**。
 
 工程搭建与端到端初始化流程由示例工程承担，见示例工程文档。本文聚焦接口本身。
+
+<a id="鉴权模型"></a>
+
+<a id="ho-ios-auth-h"></a>
 
 ### 鉴权模型
 
@@ -295,24 +207,38 @@ SDK **不获取、不刷新 token**，保持轻量。鉴权分两层，集成方
 1.  **HTTP 鉴权 token（百炼临时 API Key）**：由你的服务端调用百炼接口换取后下发，经 `updateToken(_:)` 注入。SDK 内部部分服务**直接调用百炼网关**，携带该 token 鉴权——因此它必须是百炼侧签发的临时 API Key，而非你自有业务服务的 token。SDK 只保存最新一个，不持久化、不刷新；过期后由你重新换取并再次注入。
 2.  **一次性体验凭证** `ticket`：由你的服务端调用开放平台 `get-travel-credential` 换取（前缀 `tk_`，有效期 **30 分钟**，一次性），作为 `createTravel(ticket:)` 入参；体验结束（正常或异常）或过期后即失效，不可复用。
 
-**说明**AK、签名密钥等高权限只存在于你的服务端，客户端 SDK 永不接触；客户端拿到的始终是短时效临时 API Key。
+> **说明**
+>
+> AK、签名密钥等高权限只存在于你的服务端，客户端 SDK 永不接触；客户端拿到的始终是短时效临时 API Key。
 
-**说明****Feature Gate（远程开关 / 强制升级）**：服务端可远程关停 SDK 或设定最低支持版本。被禁用时，受控调用（`start` / `pause` / `resume` / `rewind` / `sendInstruct` / `sendCommand`）会拒绝并透出 `108001`，进行中的体验会被 SDK 主动终止（见"错误码"章节）；`OysterSDKError.raw` 里带可读的禁用原因，版本过低时请引导用户升级。
+> **说明**
+>
+> **Feature Gate（远程开关 / 强制升级）**：服务端可远程关停 SDK 或设定最低支持版本。被禁用时，受控调用（`start` / `pause` / `resume` / `rewind` / `sendInstruct` / `sendCommand`）会拒绝并透出 `108001`，进行中的体验会被 SDK 主动终止（见"错误码"章节）；`OysterSDKError.raw` 里带可读的禁用原因，版本过低时请引导用户升级。
 
 **处理 token 过期**：上述 HTTP 鉴权 token 过期后，需立即向你的服务端重新请求 token，再通过 `updateToken(_:)` 注入。有两处需判断 token 是否过期：
 
 1.  调用 `engine.createTravel`、`travel.start` 等 API 时，处理 error，判断 token 过期/无效的 error 类型（`101001` / `101002`），注入新 token 后重新调用对应 API。
 2.  监听 `OysterTravelEvent` 的 `.error` 事件时，判断 token 过期/无效的 error 类型，重新请求 token 并注入。
 
+<a id="api-参考"></a>
+
+<a id="ho-ios-api-h"></a>
+
 ## API 参考
 
 入口为两个类型，均 `@MainActor`、`@available(iOS 15.0, *)`。业务方法为 `async throws`，失败抛 `OysterSDKError`；有返回值的方法均标 `@discardableResult`。
+
+<a id="happyoysterengine"></a>
+
+<a id="ho-ios-engine-h"></a>
 
 ### HappyOysterEngine
 
 进程级单例，编排入口。`init` 非 public——统一用 `HappyOysterEngine.shared`，不要自行实例化（底层实时引擎也是进程单例）。
 
-```
+<a id="code-block-3"></a>
+
+```swift
 @MainActor @available(iOS 15.0, *)
 public final class HappyOysterEngine {
     public static let shared: HappyOysterEngine            // 进程级唯一实例
@@ -326,6 +252,10 @@ public final class HappyOysterEngine {
 }
 ```
 
+<a id="initialize-config"></a>
+
+<a id="ho-ios-initialize-h"></a>
+
 #### initialize(config:)
 
 初始化运行时并**自动注册实时引擎**（无需宿主手动注册）。
@@ -334,42 +264,50 @@ public final class HappyOysterEngine {
 
 **注意**：空闲时再调即以新 config 重新装配（换 `apiHost` / `model` 都不必先 `cleanup()`，已注入的 token 保留）；仅当有进行中的 Travel 时为 no-op 并告警，需先 `end()`。config 非法时保持现状，已生效的运行时不受影响。
 
+<a id="ho-ios-initialize-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-4"></a>
+
+```swift
 @discardableResult
 public func initialize(config: OysterConfig) -> Bool
 ```
+
+<a id="ho-ios-initialize-returns-h"></a>
 
 ##### 返回值
 
 `Bool` —— 本次传入的 `config` 是否已生效。`false` 有两种情况：config 非法（`apiHost` / `model` 为空或拼不出合法网关 URL），或有进行中的 Travel 导致本次调用被忽略；两种情况下运行时都保持原状。
 
-**说明****换 config 时不要用 `isReady` 判断成败**：重新 `initialize` 若被拒，之前那份 config 仍在生效，`isReady` 照样是 `true`。`isReady` 回答"引擎现在可用吗"，本返回值回答"我刚传的这份 config 生效了吗"。
+> **说明**
+>
+> **换 config 时不要用 `isReady` 判断成败**：重新 `initialize` 若被拒，之前那份 config 仍在生效，`isReady` 照样是 `true`。`isReady` 回答"引擎现在可用吗"，本返回值回答"我刚传的这份 config 生效了吗"。
+
+<a id="ho-ios-initialize-params-h"></a>
 
 ##### 参数
 
-**字段**
+| 字段 | 类型 | 是否必填 | 描述 |
+| --- | --- | --- | --- |
+| `config` | `OysterConfig` | 是 | `config.apiHost` 是**百炼网关地址，不是你的业务服务器**，**必填**；预发/试用环境必须显式传入对应网关，否则请求失败（如 `106001` 域名无法解析）。`config.model` 是**已开通的模型名（含版本）**，同样**必填、无默认值**——HappyOyster 按模式拆成了不同子模型，SDK 无从推断该用哪个。两者须与注入的 token **同账号、同区域、成套**使用。其余字段见"数据模型"章节 `OysterConfig`。 |
 
-**类型**
+> **说明**
+>
+> **模型与 `mode` 一一对应**：按模式拆分后，每个模型是一条独立的网关路由，**一次 `initialize` 只服务一种 `mode` 的世界**。若你的 App 同时提供多种模式的世界，在进入不同模式的世界前用对应模型再 `initialize()` 一次即可——空闲时以最新 config 为准，不需要 `cleanup()`，已注入的 token 也保留；有进行中的 Travel 时该调用被忽略，需先 `end()`。模型与世界 `mode` 不匹配时，网关以 `AccessDenied` 拒绝并归一为 `106003`。
 
-**是否必填**
+<a id="oysterlog"></a>
 
-**描述**
-
-`config`
-
-`OysterConfig`
-
-是
-
-`config.apiHost` 是**百炼网关地址，不是你的业务服务器**，**必填**；预发/试用环境必须显式传入对应网关，否则请求失败（如 `106001` 域名无法解析）。`config.model` 是**已开通的模型名（含版本）**，同样**必填、无默认值**——HappyOyster 按模式拆成了不同子模型，SDK 无从推断该用哪个。两者须与注入的 token **同账号、同区域、成套**使用。其余字段见"数据模型"章节 `OysterConfig`。
-
-**说明****模型与 `mode` 一一对应**：按模式拆分后，每个模型是一条独立的网关路由，**一次 `initialize` 只服务一种 `mode` 的世界**。若你的 App 同时提供多种模式的世界，在进入不同模式的世界前用对应模型再 `initialize()` 一次即可——空闲时以最新 config 为准，不需要 `cleanup()`，已注入的 token 也保留；有进行中的 Travel 时该调用被忽略，需先 `end()`。模型与世界 `mode` 不匹配时，网关以 `AccessDenied` 拒绝并归一为 `106003`。
+<a id="ho-ios-oysterlog-h"></a>
 
 #### OysterLog
 
 配置并接管 SDK 内部的日志，打印到你自己的日志模块中。提供 `setMinimumLevel(_:)` 设置等级、`setHandler(_:)` 自定义打印（见"快速上手"示例）。
+
+<a id="updatetoken"></a>
+
+<a id="ho-ios-updatetoken-h"></a>
 
 #### updateToken(\_:)
 
@@ -379,29 +317,27 @@ public func initialize(config: OysterConfig) -> Bool
 
 **注意**：未 `initialize` 时为 no-op 并告警。
 
+<a id="ho-ios-updatetoken-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-5"></a>
+
+```swift
 public func updateToken(_ token: String)
 ```
 
+<a id="ho-ios-updatetoken-params-h"></a>
+
 ##### 参数
 
-**字段**
+| 字段 | 类型 | 是否必填 | 描述 |
+| --- | --- | --- | --- |
+| `token` | `String` | 是 | HTTP 鉴权 token（百炼临时 API Key，见"鉴权模型"章节）。 |
 
-**类型**
+<a id="createtravel-ticket"></a>
 
-**是否必填**
-
-**描述**
-
-`token`
-
-`String`
-
-是
-
-HTTP 鉴权 token（百炼临时 API Key，见"鉴权模型"章节）。
+<a id="ho-ios-createtravel-h"></a>
 
 #### createTravel(ticket:)
 
@@ -411,47 +347,42 @@ HTTP 鉴权 token（百炼临时 API Key，见"鉴权模型"章节）。
 
 **注意**（同步 `throws`）：未 `initialize` 抛 `100001`；上一个 Travel 未 `end()` 前再次调用抛 `103004`（每个 engine 同时只允许一个 active Travel）。
 
+<a id="ho-ios-createtravel-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-6"></a>
+
+```swift
 public func createTravel(ticket: String) throws -> OysterTravel
 ```
 
+<a id="ho-ios-createtravel-params-h"></a>
+
 ##### 参数
 
-**字段**
+| 字段 | 类型 | 是否必填 | 描述 |
+| --- | --- | --- | --- |
+| `ticket` | `String` | 是 | 一次性凭证，创建后即视为本次体验占用。 |
 
-**类型**
-
-**是否必填**
-
-**描述**
-
-`ticket`
-
-`String`
-
-是
-
-一次性凭证，创建后即视为本次体验占用。
+<a id="ho-ios-createtravel-returns-h"></a>
 
 ##### 返回值
 
 返回 `OysterTravel` 会话句柄；**尚未建连**，需再调 `start()`。
 
+<a id="ho-ios-createtravel-errors-h"></a>
+
 ##### 错误
 
-**code**
+| code | 说明 |
+| --- | --- |
+| `100001` | 未 `initialize` |
+| `103004` | 上一个 Travel 未 `end()` 前再次调用（每个 engine 同时只允许一个 active Travel） |
 
-**说明**
+<a id="cleanup"></a>
 
-`100001`
-
-未 `initialize`
-
-`103004`
-
-上一个 Travel 未 `end()` 前再次调用（每个 engine 同时只允许一个 active Travel）
+<a id="ho-ios-cleanup-h"></a>
 
 #### cleanup()
 
@@ -461,17 +392,27 @@ public func createTravel(ticket: String) throws -> OysterTravel
 
 **注意**：`async`——内部先确定性地 `end()` 当前 active travel，再拆运行时，不留 fire-and-forget。释放后可再次 `initialize`。
 
+<a id="ho-ios-cleanup-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-7"></a>
+
+```swift
 public func cleanup() async
 ```
+
+<a id="oystertravel"></a>
+
+<a id="ho-ios-travel-h"></a>
 
 ### OysterTravel
 
 由 `createTravel` 创建的会话句柄；**单次使用**，到达终态（`end` / 服务端结束 / 失败）后失效，需经 engine 重新 `createTravel`。同时是 `ObservableObject`（`@Published status`，可直接驱动 SwiftUI）。
 
-```
+<a id="code-block-8"></a>
+
+```swift
 @MainActor @available(iOS 15.0, *)
 public final class OysterTravel: ObservableObject {
     @Published public private(set) var status: OysterTravelStatus   // 当前对外状态（可观察）
@@ -494,6 +435,10 @@ public final class OysterTravel: ObservableObject {
 }
 ```
 
+<a id="videoview-oystervideoview-travel"></a>
+
+<a id="ho-ios-videoview-h"></a>
+
 #### videoView / OysterVideoView(travel:)
 
 远端画面渲染入口，“SDK 出视图、宿主摆放”。UIKit 取 `travel.videoView`；SwiftUI 用 `OysterVideoView(travel:)`。
@@ -502,11 +447,19 @@ public final class OysterTravel: ObservableObject {
 
 **注意**：会话结束时 SDK 自动释放渲染绑定，你按需把视图移出层级。
 
+<a id="ho-ios-videoview-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-9"></a>
+
+```swift
 public var videoView: UIView { get }
 ```
+
+<a id="events-status-isended"></a>
+
+<a id="ho-ios-events-status-h"></a>
 
 #### events / status / isEnded
 
@@ -516,13 +469,21 @@ public var videoView: UIView { get }
 
 **注意**：每次访问 `events` 返回一条独立流，支持多订阅；取消订阅 = 结束 `for await` 迭代（或销毁持有的 `Task`）。SwiftUI 可直接 `@StateObject`/`@ObservedObject` 观察 `status`（错误仍走 `events`）。详见"事件与状态"章节。
 
+<a id="ho-ios-events-status-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-10"></a>
+
+```swift
 @Published public private(set) var status: OysterTravelStatus
 public var isEnded: Bool { get }
 public var events: AsyncStream<OysterTravelEvent> { get }
 ```
+
+<a id="start-start-maxexperiencetimesec"></a>
+
+<a id="ho-ios-start-h"></a>
 
 #### start() / start(maxExperienceTimeSec:)
 
@@ -530,72 +491,54 @@ public var events: AsyncStream<OysterTravelEvent> { get }
 
 **注意（无推流自动结束）**：服务端下发“无推流超时”（默认约 30s）。若建连后在该时长内仍未收到推流（迟迟不进 `running`），SDK **自动结束本次体验**，状态转 `failed`、经 `events` 的 `.error` 透出 **`105006`**（致命，按回到开始前界面处理，无需自行计时）。
 
+<a id="ho-ios-start-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-11"></a>
+
+```swift
 @discardableResult public func start() async throws -> OysterStartTravelData
 @discardableResult public func start(maxExperienceTimeSec: Int?) async throws -> OysterStartTravelData
 ```
 
+<a id="ho-ios-start-params-h"></a>
+
 ##### 参数
 
-**字段**
+| 字段 | 类型 | 是否必填 | 描述 |
+| --- | --- | --- | --- |
+| `maxExperienceTimeSec` | `Int?` | 否 | （可选）——请求本次**世界探索（adventure）体验的最大持续时长（秒）**。参数原样发给服务端，**允许值、实际生效时长与到期自动结束时机均由服务端决定**，SDK 不做本地校验；传 `nil`（或调用无参 `start()`）时使用服务端默认时长。**实时导演（directing）模式忽略该参数**。到期后由服务端结束体验，宿主经 `events` 收到 `ended` 终态（同服务端主动结束，见"事件与状态"章节）。 |
 
-**类型**
-
-**是否必填**
-
-**描述**
-
-`maxExperienceTimeSec`
-
-`Int?`
-
-否
-
-（可选）——请求本次**世界探索（adventure）体验的最大持续时长（秒）**。参数原样发给服务端，**允许值、实际生效时长与到期自动结束时机均由服务端决定**，SDK 不做本地校验；传 `nil`（或调用无参 `start()`）时使用服务端默认时长。**实时导演（directing）模式忽略该参数**。到期后由服务端结束体验，宿主经 `events` 收到 `ended` 终态（同服务端主动结束，见"事件与状态"章节）。
+<a id="ho-ios-start-returns-h"></a>
 
 ##### 返回值
 
 `OysterStartTravelData`（`mode` / `version` / `encryptedTravelId` 等，见"数据模型"章节），据此决定互动 UI。
 
-**说明****`ticket` 的世界 `mode` 必须与 `initialize` 传入的 `model` 匹配（调用方保证）**：模型按 mode 拆分后，每个模型是一条独立的网关路由，`start()` 是把 `ticket` 发往**当前模型**那条路由。SDK **不会也无法**在调用前替你校验这一点——`mode` 由本次 `start()` 的响应下发（即 `OysterStartTravelData.mode`），调用前 SDK 手里只有不透明的 `ticket` 和模型名，没有可比对的 mode；而从模型名反推 mode 属于对服务端命名的猜测，SDK 不做。
+> **说明**
+>
+> **`ticket` 的世界 `mode` 必须与 `initialize` 传入的 `model` 匹配（调用方保证）**：模型按 mode 拆分后，每个模型是一条独立的网关路由，`start()` 是把 `ticket` 发往**当前模型**那条路由。SDK **不会也无法**在调用前替你校验这一点——`mode` 由本次 `start()` 的响应下发（即 `OysterStartTravelData.mode`），调用前 SDK 手里只有不透明的 `ticket` 和模型名，没有可比对的 mode；而从模型名反推 mode 属于对服务端命名的猜测，SDK 不做。
+>
+> 因此：**换一种 mode 的世界之前，用对应模型再 `initialize()` 一次**（空闲时以最新 config 为准，无需 `cleanup()`，token 保留；有进行中的 Travel 时该调用被忽略，需先 `end()`）。不匹配时本次 `start()` 会在网关侧失败，排查时请优先核对"当前 `model` 与本次 `ticket` 所属世界的 `mode` 是否成套"，再看下表的凭证类错误码。
 
-因此：**换一种 mode 的世界之前，用对应模型再 `initialize()` 一次**（空闲时以最新 config 为准，无需 `cleanup()`，token 保留；有进行中的 Travel 时该调用被忽略，需先 `end()`）。不匹配时本次 `start()` 会在网关侧失败，排查时请优先核对"当前 `model` 与本次 `ticket` 所属世界的 `mode` 是否成套"，再看下表的凭证类错误码。
+<a id="ho-ios-start-errors-h"></a>
 
 ##### 错误
 
-**code**
+| code | 说明 |
+| --- | --- |
+| `401010` | 凭证无效（也包括：凭证有效，但所属世界的 `mode` 与当前 `model` 不是同一条网关路由） |
+| `401011` | 凭证已用 |
+| `403002` | 世界未就绪 |
+| `403007` | 当前规格未开通（如角色演绎（acting）规格） |
+| `429001` / `429002` | 并发已满 / 可用容量不足 |
+| `500001` | 资源/服务端失败 |
+| `103004` | 并发开始 |
 
-**说明**
+<a id="pause-resume"></a>
 
-`401010`
-
-凭证无效（也包括：凭证有效，但所属世界的 `mode` 与当前 `model` 不是同一条网关路由）
-
-`401011`
-
-凭证已用
-
-`403002`
-
-世界未就绪
-
-`403007`
-
-当前规格未开通（如角色演绎（acting）规格）
-
-`429001` / `429002`
-
-并发已满 / 可用容量不足
-
-`500001`
-
-资源/服务端失败
-
-`103004`
-
-并发开始
+<a id="ho-ios-pause-resume-h"></a>
 
 #### pause() / resume()
 
@@ -603,34 +546,36 @@ public var events: AsyncStream<OysterTravelEvent> { get }
 
 **使用时机**：**`directing`（实时导演）与 `acting`（角色演绎）世界支持**，`adventure` 不支持。可用 `start()` 返回的 `mode` 提前决定是否展示暂停按钮。`pause` 要求当前 `running`；`resume` 要求 `paused`。
 
+<a id="ho-ios-pause-resume-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-12"></a>
+
+```swift
 @discardableResult public func pause() async throws -> OysterTravelStateData
 @discardableResult public func resume() async throws -> OysterTravelStateData
 ```
+
+<a id="ho-ios-pause-resume-returns-h"></a>
 
 ##### 返回值
 
 返回 `OysterTravelStateData`（字段见"数据模型"章节）。
 
+<a id="ho-ios-pause-resume-errors-h"></a>
+
 ##### 错误
 
-**code**
+| code | 说明 |
+| --- | --- |
+| `103001` | 无活跃体验 |
+| `103002` | 状态/版本不允许 |
+| `103003` | 模式不匹配 |
 
-**说明**
+<a id="rewind-tosec"></a>
 
-`103001`
-
-无活跃体验
-
-`103002`
-
-状态/版本不允许
-
-`103003`
-
-模式不匹配
+<a id="ho-ios-rewind-h"></a>
 
 #### rewind(toSec:)
 
@@ -638,47 +583,42 @@ public var events: AsyncStream<OysterTravelEvent> { get }
 
 **使用时机**：**仅** `paused` 状态可发起，且**只有 `directing`（实时导演）世界支持**——`acting` 与 `adventure` 均不支持回溯，请在这两种模式下隐藏回溯入口，不要调用。
 
+<a id="ho-ios-rewind-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-13"></a>
+
+```swift
 @discardableResult public func rewind(toSec: TimeInterval) async throws -> OysterRewindTravelData
 ```
 
+<a id="ho-ios-rewind-params-h"></a>
+
 ##### 参数
 
-**字段**
+| 字段 | 类型 | 是否必填 | 描述 |
+| --- | --- | --- | --- |
+| `toSec` | `TimeInterval` | 是 | 回溯到的目标秒数。 |
 
-**类型**
-
-**是否必填**
-
-**描述**
-
-`toSec`
-
-`TimeInterval`
-
-是
-
-回溯到的目标秒数。
+<a id="ho-ios-rewind-returns-h"></a>
 
 ##### 返回值
 
 返回 `OysterRewindTravelData`（字段见"数据模型"章节）。
 
+<a id="ho-ios-rewind-errors-h"></a>
+
 ##### 错误
 
-**code**
+| code | 说明 |
+| --- | --- |
+| `103001` | 无活跃体验 |
+| `103002` | 状态不允许 |
 
-**说明**
+<a id="end"></a>
 
-`103001`
-
-无活跃体验
-
-`103002`
-
-状态不允许
+<a id="ho-ios-end-h"></a>
 
 #### end()
 
@@ -686,15 +626,25 @@ public var events: AsyncStream<OysterTravelEvent> { get }
 
 **使用时机 / 注意**：无论用户主动退出还是被动结束（计时到期、收到 `.ended`/`.failed`、页面销毁），都要确保走到一次 `end()`，否则远端资源释放可能不及时。建议把所有退出路径收口到同一个幂等清理方法。
 
+<a id="ho-ios-end-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-14"></a>
+
+```swift
 @discardableResult public func end() async throws -> OysterEndTravelData
 ```
+
+<a id="ho-ios-end-returns-h"></a>
 
 ##### 返回值
 
 返回 `OysterEndTravelData`（字段见"数据模型"章节）。
+
+<a id="sendinstruct-content-实时导演模式"></a>
+
+<a id="ho-ios-sendinstruct-h"></a>
 
 #### sendInstruct(content:)（实时导演模式）
 
@@ -702,91 +652,77 @@ public var events: AsyncStream<OysterTravelEvent> { get }
 
 **使用时机**：实时导演模式；`running` 时直发，`paused` 时缓存、待 resume 重连进 `running` 后随首帧补发。
 
+<a id="ho-ios-sendinstruct-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-15"></a>
+
+```swift
 @discardableResult public func sendInstruct(content: String) async throws -> OysterSendInstructData
 ```
 
+<a id="ho-ios-sendinstruct-params-h"></a>
+
 ##### 参数
 
-**字段**
+| 字段 | 类型 | 是否必填 | 描述 |
+| --- | --- | --- | --- |
+| `content` | `String` | 是 | 要发送的文本指令内容。 |
 
-**类型**
-
-**是否必填**
-
-**描述**
-
-`content`
-
-`String`
-
-是
-
-要发送的文本指令内容。
+<a id="ho-ios-sendinstruct-returns-h"></a>
 
 ##### 返回值
 
 返回 `OysterSendInstructData`（字段见"数据模型"章节）。
 
+<a id="ho-ios-sendinstruct-errors-h"></a>
+
 ##### 错误
 
-**code**
+| code | 说明 |
+| --- | --- |
+| `103001` | 无活跃体验 |
+| `103002` | 状态不允许 |
+| `103003` | 在世界探索模式下调用 |
+| `403004` | 输入内容违规（内容安审） |
+| `404000` | Travel 不存在 |
 
-**说明**
+<a id="sendcommand-flushcommands-世界探索模式"></a>
 
-`103001`
-
-无活跃体验
-
-`103002`
-
-状态不允许
-
-`103003`
-
-在世界探索模式下调用
-
-`403004`
-
-输入内容违规（内容安审）
-
-`404000`
-
-Travel 不存在
+<a id="ho-ios-sendcommand-h"></a>
 
 #### sendCommand(\_:) / flushCommands()（世界探索模式）
 
 -   `sendCommand`：发送方向/视角/动作控制指令（见"数据模型"章节 `OysterAdventureCommand`，fire-and-forget，无返回、不 throws）。仅**世界探索模式**、`running` 时有效。**外部可每帧高频持续输入，SDK 内部做节流**（latest-wins 采样、按 RTC 线速合帧），宿主无需自行节流。注意服务端对指令的响应本身有延迟，实际生效时间不固定。
 -   `flushCommands`：“松键 / 输入释放”瞬间调用，立即补发队列里**已等待的最后一条**指令；无待发指令时为纯 no-op，不生成新指令。
 
+<a id="ho-ios-sendcommand-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-16"></a>
+
+```swift
 public func sendCommand(_ command: OysterAdventureCommand)
 public func flushCommands()
 ```
 
+<a id="ho-ios-sendcommand-errors-h"></a>
+
 ##### 错误
 
-**code**
-
-**说明**
-
-`103001`
-
-无活跃体验
-
-`103003`
-
-在实时导演模式下调用
-
-`105004`
-
-实时通道未就绪/发送失败
+| code | 说明 |
+| --- | --- |
+| `103001` | 无活跃体验 |
+| `103003` | 在实时导演模式下调用 |
+| `105004` | 实时通道未就绪/发送失败 |
 
 （均经 `events` 的 `.error` 透出，非 `throws`。）
+
+<a id="pauselocalaudiocapture-resumelocalaudiocapture"></a>
+
+<a id="ho-ios-audio-h"></a>
 
 #### pauseLocalAudioCapture() / resumeLocalAudioCapture()
 
@@ -794,18 +730,28 @@ public func flushCommands()
 
 **使用时机**：语音识别等需要独占麦克风时先 `pause`，结束后 `resume`。
 
+<a id="ho-ios-audio-signature-h"></a>
+
 ##### 签名
 
-```
+<a id="code-block-17"></a>
+
+```swift
 public func pauseLocalAudioCapture() async
 public func resumeLocalAudioCapture() async
 ```
+
+<a id="事件与状态"></a>
+
+<a id="ho-ios-events-h"></a>
 
 ## 事件与状态
 
 事件挂在 `OysterTravel.events` 上，是 SDK 对你的**主动推送通道**，用于透出非你主动调用触发的情况（如内部自动维护的实时连接或状态轮询出现问题）。
 
-```
+<a id="code-block-18"></a>
+
+```swift
 var events: AsyncStream<OysterTravelEvent> { get }
 
 @available(iOS 15.0, *)
@@ -821,7 +767,9 @@ public enum OysterTravelEvent {
 -   **SwiftUI**：`OysterTravel` 是 `ObservableObject`，直接 `@StateObject`/`@ObservedObject` 观察 `status` 驱动 UI；错误仍从 `events` 取。
 -   **命令式 / UIKit**：在 `Task` 中 `for await event in travel.events { ... }`，`switch` 处理 `.statusChanged` / `.error`；结束时取消持有的 `Task`。
 
-```
+<a id="code-block-19"></a>
+
+```swift
 let task = Task {
     for await event in travel.events {
         switch event {
@@ -835,63 +783,37 @@ let task = Task {
 
 `OysterTravelStatus`（5 个过程态 + 2 个终态）：
 
-**状态**
+| 状态 | 说明 | 典型处理 |
+| --- | --- | --- |
+| `idle` | create 后、start 前 | — |
+| `prepare` | 建连 / 重连中（内部 connecting / reconnecting） | 展示连接 / 重连提示 |
+| `running` | 流已就绪、可交互（内部 playing） | 显示画面与操控 |
+| `pausing` | 暂停已受理、等待服务端确认 | 展示“暂停中…” |
+| `paused` | 已暂停（确认） | 展示暂停态（仅 `directing` 展示回溯入口） |
+| `ended` | 已结束（主动 end 或服务端结束）。终态 | 收尾并关闭页面 |
+| `failed` | 失败。终态 | 展示错误并收尾 |
 
-**说明**
+> **说明**
+>
+> 进入 `ended` / `failed` 后会话已终止，所有会话操作（pause/resume/sendCommand…）都不再生效。回调可能在主线程触发，更新 UI 可直接使用。
 
-**典型处理**
+> **说明**
+>
+> SDK 内部状态轮询时会**自动上报客户端拉流/播放态心跳**（connecting / playing / paused / reconnecting / disconnected），供服务端区分推流侧与客户端侧状态——纯 SDK 内部行为，宿主无需感知或参与。
 
-`idle`
+<a id="数据模型"></a>
 
-create 后、start 前
-
-—
-
-`prepare`
-
-建连 / 重连中（内部 connecting / reconnecting）
-
-展示连接 / 重连提示
-
-`running`
-
-流已就绪、可交互（内部 playing）
-
-显示画面与操控
-
-`pausing`
-
-暂停已受理、等待服务端确认
-
-展示“暂停中…”
-
-`paused`
-
-已暂停（确认）
-
-展示暂停态（仅 `directing` 展示回溯入口）
-
-`ended`
-
-已结束（主动 end 或服务端结束）。终态
-
-收尾并关闭页面
-
-`failed`
-
-失败。终态
-
-展示错误并收尾
-
-**说明**进入 `ended` / `failed` 后会话已终止，所有会话操作（pause/resume/sendCommand…）都不再生效。回调可能在主线程触发，更新 UI 可直接使用。
-
-**说明**SDK 内部状态轮询时会**自动上报客户端拉流/播放态心跳**（connecting / playing / paused / reconnecting / disconnected），供服务端区分推流侧与客户端侧状态——纯 SDK 内部行为，宿主无需感知或参与。
+<a id="ho-ios-datamodel-h"></a>
 
 ## 数据模型
 
-**说明**所有公开类型均标 `@available(iOS 15.0, *)`。下列返回值/参数是 **SDK 出参**，由内部就地构造、用 Swift 原生类型（`Date` / `TimeInterval` / `OysterTravelStatus`），**不是** `Codable`、不暴露 wire（snake\_case）细节——wire 解码发生在 SDK 内部。
+> **说明**
+>
+> 所有公开类型均标 `@available(iOS 15.0, *)`。下列返回值/参数是 **SDK 出参**，由内部就地构造、用 Swift 原生类型（`Date` / `TimeInterval` / `OysterTravelStatus`），**不是** `Codable`、不暴露 wire（snake\_case）细节——wire 解码发生在 SDK 内部。
 
-```
+<a id="code-block-20"></a>
+
+```swift
 // 配置
 public struct OysterConfig: Sendable {
     public let apiHost: String             // 百炼网关地址（非业务 Server），必填、由宿主显式传入
@@ -976,11 +898,15 @@ public enum OysterErrorKind: Equatable, Sendable {
 }
 ```
 
-**说明**
+> **说明**
+>
+> -   操控指令 rawValue 为小写驼峰（如 `front` / `mouseLeft` / `jump`），以上述枚举取值为准。
+> -   `mode` 对外取值为 `adventure`（世界探索）/ `directing`（实时导演）/ `acting`（角色演绎），以 `OysterModeValue` 定义为准。
+> -   `aspectRatio` 为开放字符串（当前 `9:16` / `16:9`，后续可能扩展）。判断横竖屏请按 `宽:高` 解析比值，不要穷举已知取值。
 
--   操控指令 rawValue 为小写驼峰（如 `front` / `mouseLeft` / `jump`），以上述枚举取值为准。
--   `mode` 对外取值为 `adventure`（世界探索）/ `directing`（实时导演）/ `acting`（角色演绎），以 `OysterModeValue` 定义为准。
--   `aspectRatio` 为开放字符串（当前 `9:16` / `16:9`，后续可能扩展）。判断横竖屏请按 `宽:高` 解析比值，不要穷举已知取值。
+<a id="错误码"></a>
+
+<a id="ho-ios-errorcodes-h"></a>
 
 ## 错误码
 
@@ -988,249 +914,55 @@ SDK **统一以** `OysterSDKError` 报错，类型一律通过 `code` 区分，*
 
 错误码：**服务端**`4xxxxx`/`5xxxxx`，**客户端本地**`1xxxxx`。
 
+<a id="服务端错误码-常见"></a>
+
+<a id="ho-ios-errorcodes-biz-h"></a>
+
 ### 服务端错误码（常见）
 
-**code**
+| code | 含义 | 建议处理 |
+| --- | --- | --- |
+| `400000` | 参数非法（枚举非法等） | 检查请求参数或 SDK 版本 |
+| `401010` | 体验凭证（`ticket`）无效或已过期 | 让服务端重新下发凭证 |
+| `401011` | 体验凭证（`ticket`）已被使用 | 凭证一次性，重新下发 |
+| `403001` | World 不存在、已删除或不属于当前开发者（含凭证内世界已删除） | 重新选择有效 World |
+| `403002` | 世界状态非就绪 | 等世界就绪后再开始 |
+| `403003` | 当前接口仅允许主 API Key | 临时 Key 不可用于该接口 |
+| `403004` | 输入内容违规（内容安审）；适用于 `sendInstruct` 文本指令 | 修改输入内容后重试 |
+| `403007` | 当前规格未开通 | **不可按容量满重试**；换已开通规格或联系开通（典型：账号未开通角色演绎（acting）规格） |
+| `403008` | 容量配置暂不可用 | 稍后重试 |
+| `404000` | 资源不存在（世界 / Travel 归属或无产物） | 核对 ID / 状态 |
+| `409000` | 请求与当前资源状态冲突 | 检查体验状态 |
+| `429001` | 当前规格并发已满 | 等已有会话结束后重试（勿与 `500001` 混淆） |
+| `429002` | 当前可用容量不足 | 稍后重试 |
+| `500000` | 系统内部错误 | 稍后重试 / 反馈 |
+| `500001` | 推理资源分配/服务内部失败 | 稍后重试 |
 
-**含义**
+<a id="客户端本地错误码"></a>
 
-**建议处理**
-
-`400000`
-
-参数非法（枚举非法等）
-
-检查请求参数或 SDK 版本
-
-`401010`
-
-体验凭证（`ticket`）无效或已过期
-
-让服务端重新下发凭证
-
-`401011`
-
-体验凭证（`ticket`）已被使用
-
-凭证一次性，重新下发
-
-`403001`
-
-World 不存在、已删除或不属于当前开发者（含凭证内世界已删除）
-
-重新选择有效 World
-
-`403002`
-
-世界状态非就绪
-
-等世界就绪后再开始
-
-`403003`
-
-当前接口仅允许主 API Key
-
-临时 Key 不可用于该接口
-
-`403004`
-
-输入内容违规（内容安审）；适用于 `sendInstruct` 文本指令
-
-修改输入内容后重试
-
-`403007`
-
-当前规格未开通
-
-**不可按容量满重试**；换已开通规格或联系开通（典型：账号未开通角色演绎（acting）规格）
-
-`403008`
-
-容量配置暂不可用
-
-稍后重试
-
-`404000`
-
-资源不存在（世界 / Travel 归属或无产物）
-
-核对 ID / 状态
-
-`409000`
-
-请求与当前资源状态冲突
-
-检查体验状态
-
-`429001`
-
-当前规格并发已满
-
-等已有会话结束后重试（勿与 `500001` 混淆）
-
-`429002`
-
-当前可用容量不足
-
-稍后重试
-
-`500000`
-
-系统内部错误
-
-稍后重试 / 反馈
-
-`500001`
-
-推理资源分配/服务内部失败
-
-稍后重试
+<a id="ho-ios-errorcodes-local-h"></a>
 
 ### 客户端本地错误码
 
-**code**
-
-**含义**
-
-**SDK 是否自动终止会话**
-
-**建议处理**
-
-`100001`
-
-SDK 未初始化即调用；也包括 `initialize` 因 `apiHost`/`model` 为空或非法而未生效的情况
-
-否（同步抛出，拒绝该次调用）
-
-先 `initialize`，并确认 `apiHost` 与 `model` 都已正确填写
-
-`101001`
-
-未注入 HTTP 鉴权 token
-
-否
-
-`updateToken` 后重试
-
-`101002`
-
-HTTP 鉴权 token 无效 / 被拒
-
-否
-
-重新换取 token 后 `updateToken` 重试
-
-`103001`
-
-当前无活跃体验
-
-否（拒绝该次调用）
-
-先 `createTravel` + `start`
-
-`103002`
-
-当前状态/版本不允许该操作
-
-否（拒绝该次调用）
-
-检查体验状态 / `version`
-
-`103003`
-
-模式不匹配（如非 `adventure` 世界调用 `sendCommand`）
-
-否（拒绝该次调用）
-
-按 `mode` 选对应接口，见"概览"章节能力表
-
-`103004`
-
-并发创建/开始体验
-
-否（同步抛出）
-
-串行化调用，先 `end` 旧会话
-
-`105001`
-
-实时连接失败
-
-**是**
-
-结束并重新开始
-
-`105002`
-
-实时入会超时
-
-**是**
-
-结束并重新开始
-
-`105003`
-
-等待视频首帧超时
-
-**是**
-
-结束并重新开始
-
-`105004`
-
-实时通道未就绪/发送失败
-
-按场景（主动发送失败；心跳仅上报）
-
-待 `running` 后再发送
-
-`105005`
-
-回调超时（默认 30s）
-
-否
-
-重试，必要时调大 `callbackTimeoutMs`
-
-`105006`
-
-入会后无推流，SDK 自动结束体验
-
-**是**
-
-结束并重新开始
-
-`106001`
-
-本地网络错误
-
-否
-
-可重试
-
-`106002`
-
-响应解析失败
-
-按场景
-
-升级 SDK / 反馈
-
-`106003`
-
-未携带可识别错误码 / 代理字符串错误码
-
-否
-
-可重试
-
-`108001`
-
-被服务端功能开关远程禁用（整体关停或版本过低；原因见 `raw`）
-
-**是**
-
-按 `raw` 提示用户；版本过低时引导升级
+| code | 含义 | SDK 是否自动终止会话 | 建议处理 |
+| --- | --- | --- | --- |
+| `100001` | SDK 未初始化即调用；也包括 `initialize` 因 `apiHost`/`model` 为空或非法而未生效的情况 | 否（同步抛出，拒绝该次调用） | 先 `initialize`，并确认 `apiHost` 与 `model` 都已正确填写 |
+| `101001` | 未注入 HTTP 鉴权 token | 否 | `updateToken` 后重试 |
+| `101002` | HTTP 鉴权 token 无效 / 被拒 | 否 | 重新换取 token 后 `updateToken` 重试 |
+| `103001` | 当前无活跃体验 | 否（拒绝该次调用） | 先 `createTravel` + `start` |
+| `103002` | 当前状态/版本不允许该操作 | 否（拒绝该次调用） | 检查体验状态 / `version` |
+| `103003` | 模式不匹配（如非 `adventure` 世界调用 `sendCommand`） | 否（拒绝该次调用） | 按 `mode` 选对应接口，见"概览"章节能力表 |
+| `103004` | 并发创建/开始体验 | 否（同步抛出） | 串行化调用，先 `end` 旧会话 |
+| `105001` | 实时连接失败 | **是** | 结束并重新开始 |
+| `105002` | 实时入会超时 | **是** | 结束并重新开始 |
+| `105003` | 等待视频首帧超时 | **是** | 结束并重新开始 |
+| `105004` | 实时通道未就绪/发送失败 | 按场景（主动发送失败；心跳仅上报） | 待 `running` 后再发送 |
+| `105005` | 回调超时（默认 30s） | 否 | 重试，必要时调大 `callbackTimeoutMs` |
+| `105006` | 入会后无推流，SDK 自动结束体验 | **是** | 结束并重新开始 |
+| `106001` | 本地网络错误 | 否 | 可重试 |
+| `106002` | 响应解析失败 | 按场景 | 升级 SDK / 反馈 |
+| `106003` | 未携带可识别错误码 / 代理字符串错误码 | 否 | 可重试 |
+| `108001` | 被服务端功能开关远程禁用（整体关停或版本过低；原因见 `raw`） | **是** | 按 `raw` 提示用户；版本过低时引导升级 |
 
 **致命性怎么判断**：致命性**不再以布尔字段暴露**（`OysterSDKError` 没有 `isFatal`）。语义上“致命”专指 **SDK 是否主动终止会话**（断开 RTC、释放整次会话）——
 
@@ -1238,6 +970,10 @@ HTTP 鉴权 token 无效 / 被拒
 -   **调用拒绝类错误**（`100001/103001/103002/103003/103004`）：在你主动调用时同步抛出 / 拒绝该次调用，**不**终止会话。
 -   **其余非致命错误**（如 `101001/101002/105005/106001/106003`）：不终止会话，按建议重试或重新注入 token 后继续。
 
-**说明****`106001`** 可能有两种原因：本地网络错误，或 `apiHost` 配置错误。若重试无法恢复，检查 `apiHost` 是否配置正确。
+> **说明**
+>
+> **`106001`** 可能有两种原因：本地网络错误，或 `apiHost` 配置错误。若重试无法恢复，检查 `apiHost` 是否配置正确。
 
-**说明****`106003`** 若在填写 `model` 后出现，优先检查模型名称及版本是否正确、是否已为当前账号开通，并确认 `apiHost`、token 与模型属于同一账号和区域——不匹配时网关以 `AccessDenied` 拒绝并归一到本码。
+> **说明**
+>
+> **`106003`** 若在填写 `model` 后出现，优先检查模型名称及版本是否正确、是否已为当前账号开通，并确认 `apiHost`、token 与模型属于同一账号和区域——不匹配时网关以 `AccessDenied` 拒绝并归一到本码。

@@ -2,77 +2,58 @@
 
 全妙产品矩阵包含4个SaaS产品妙笔/妙策/妙搜/妙读和若干个AI Agent（场景化能力），本文档主要介绍AI Agent中电商文案智能可控生成应用的计费。
 
+<a id="计费说明"></a>
+
+<a id="853e21ee1a1fp"></a>
+
 ## 计费说明
 
 系统会根据您实际选取的大模型的输出、输出token总数做计量，并采用后付费模式向您收取费用。
 
+<a id="计费详情"></a>
+
+<a id="e6ca6606e5vn9"></a>
+
 ## 计费详情
 
-模型
+| 模型 | 输入价格 | 输出价格 |
+| --- | --- | --- |
+| 千问-Plus-Latest | ¥0.0008/千tokens | ¥0.002/千tokens |
+| 千问-Max-Latest | ¥0.0024/千tokens | ¥0.0096/千tokens |
+| 千问-Plus | ¥0.0008/千tokens | ¥0.002/千tokens |
+| 千问-Max | ¥0.0024/千tokens | ¥0.0096/千tokens |
+| 千问-Q-Plus-Latest | ¥0.0016/千tokens | ¥0.004/千tokens |
+| DeepSeek-R1 | ¥0.002/千tokens | ¥0.008/千tokens |
+| 全妙可控式LLM标准版 | ¥0.0008/千tokens | ¥0.002/千tokens |
+| 全妙可控式LLM高级版 | ¥0.003/千tokens | ¥0.009/千tokens |
 
-输入价格
+<a id="账单地址"></a>
 
-输出价格
-
-千问-Plus-Latest
-
-¥0.0008/千tokens
-
-¥0.002/千tokens
-
-千问-Max-Latest
-
-¥0.0024/千tokens
-
-¥0.0096/千tokens
-
-千问-Plus
-
-¥0.0008/千tokens
-
-¥0.002/千tokens
-
-千问-Max
-
-¥0.0024/千tokens
-
-¥0.0096/千tokens
-
-千问-Q-Plus-Latest
-
-¥0.0016/千tokens
-
-¥0.004/千tokens
-
-DeepSeek-R1
-
-¥0.002/千tokens
-
-¥0.008/千tokens
-
-全妙可控式LLM标准版
-
-¥0.0008/千tokens
-
-¥0.002/千tokens
-
-全妙可控式LLM高级版
-
-¥0.003/千tokens
-
-¥0.009/千tokens
+<a id="5002613c90d66"></a>
 
 ## 账单地址
 
 账单查询地址：[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail?spm=a2c4g.11186623.0.0.619355efACwmfT)。
 
+<a id="产品地址"></a>
+
+<a id="7b5539e694r56"></a>
+
 ## 产品地址
 
 可点击[产品地址](https://bailian.console.aliyun.com/?spm=5176.21213303.J_v8LsmxMG6alneH-O7TCPa.3.5d382f3dPKUN9O&scm=20140722.S_card%40%40&tab=app#/app/app-market/quanmiao/style-copy)进行产品体验。
 
+<a id="相关文档"></a>
+
+<a id="03b3d4a1e8bu6"></a>
+
 ## 相关文档
 
-[电商文案智能可控生成应用接口文档](raw/_short/api-quanmiaolightapp-2024-08-01-runstylewriting-c816c28217aa66e4.md)
+[电商文案智能可控生成应用接口文档](api-quanmiaolightapp-2024-08-01-runstylewriting-c816c28217aa66e4.md)
+
+<a id="常见问题"></a>
+
+<a id="5de1f8d74fb87"></a>
 
 ## 常见问题
 

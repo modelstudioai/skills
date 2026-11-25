@@ -2,9 +2,17 @@
 
 查询指定文件的详细信息，包括文件大小、MD5、标签、创建和更新时间等。
 
+<a id="前提"></a>
+
+<a id="h-ragapi-describe-file-prereq"></a>
+
 ## 前提
 
-已获取阿里云百炼 API Key（[控制台 API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)）并完成鉴权配置，详见 [Knowledge（原RAG） API 概览](raw/application-api-reference/rag-api/rag-api-overview.md)与[鉴权](raw/application-api-reference/rag-api/rag-api-authentication.md)。数据导入接口与其他 Knowledge API（原RAG API） 使用相同的 Base URL 与鉴权方式，路径前缀为 `/api/v1/connector/dash/`。
+已获取阿里云百炼 API Key（[控制台 API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)）并完成鉴权配置，详见 [Knowledge（原RAG） API 概览](../rag-api-overview.md)与[鉴权](../rag-api-authentication.md)。数据导入接口与其他 Knowledge API（原RAG API） 使用相同的 Base URL 与鉴权方式，路径前缀为 `/api/v1/connector/dash/`。
+
+<a id="接口"></a>
+
+<a id="h-ragapi-describe-file-endpoint"></a>
 
 ## 接口
 
@@ -12,27 +20,25 @@
 
 查询指定文件的详细信息，包括文件大小、MD5、标签、创建和更新时间等。
 
+<a id="请求体"></a>
+
+<a id="h-ragapi-describe-file-req"></a>
+
 ## 请求体
 
-字段
+| 字段 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `fileId` | 是 | string | 文件 ID，通过 `listFile` 获取。 |
 
-必填
+<a id="请求示例"></a>
 
-类型
-
-说明
-
-`fileId`
-
-是
-
-string
-
-文件 ID，通过 `listFile` 获取。
+<a id="h-ragapi-describe-file-eg"></a>
 
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST "$BASE_URL/api/v1/connector/dash/describeFile" \
   -H "Authorization: Bearer $BAILIAN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -43,11 +49,17 @@ curl -X POST "$BASE_URL/api/v1/connector/dash/describeFile" \
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`（`{workspace_id}` 为业务空间 ID），`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
+<a id="响应示例"></a>
+
+<a id="h-ragapi-describe-file-resp"></a>
+
 ## 响应示例
 
 成功返回 200。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "code": "Success",
   "message": "",
@@ -68,62 +80,29 @@ curl -X POST "$BASE_URL/api/v1/connector/dash/describeFile" \
 }
 ```
 
+<a id="响应字段"></a>
+
+<a id="h-ragapi-describe-file-dto"></a>
+
 ### 响应字段
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `code` | string | 响应码，成功时为 `Success`。 |
+| `message` | string | 错误或提示信息，成功时为空字符串。 |
+| `requestId` | string | 请求唯一标识，排查问题时请提供此 ID。 |
+| `data` | object | 文件详情。子字段 `fileId`（string，文件 ID）、`fileName`（string，文件名）、`fileType`（string，文件类型，如 pdf、md、docx）、`category`（string，所属类目 ID）、`status`（string，文件状态。枚举：`INIT`、`PARSING`、`PARSE_SUCCESS`、`FAIL`）、`sizeBytes`（integer，文件大小（字节），最小为 1）、`parser`（string，解析方式，如 DASHSCOPE\_DOCMIND）、`uploadTime`（string，上传时间）、`tags`（array<string>，文件标签列表）。 |
+| `status` | integer | 业务状态码。成功为 `200`，参数错误等失败场景为 `400`。注意失败时 HTTP 状态码仍为 200，需根据本字段与 `code` 判断结果。 |
 
-类型
+<a id="错误码"></a>
 
-说明
-
-`code`
-
-string
-
-响应码，成功时为 `Success`。
-
-`message`
-
-string
-
-错误或提示信息，成功时为空字符串。
-
-`requestId`
-
-string
-
-请求唯一标识，排查问题时请提供此 ID。
-
-`data`
-
-object
-
-文件详情。子字段 `fileId`（string，文件 ID）、`fileName`（string，文件名）、`fileType`（string，文件类型，如 pdf、md、docx）、`category`（string，所属类目 ID）、`status`（string，文件状态。枚举：`INIT`、`PARSING`、`PARSE_SUCCESS`、`FAIL`）、`sizeBytes`（integer，文件大小（字节），最小为 1）、`parser`（string，解析方式，如 DASHSCOPE\_DOCMIND）、`uploadTime`（string，上传时间）、`tags`（array<string>，文件标签列表）。
-
-`status`
-
-integer
-
-业务状态码。成功为 `200`，参数错误等失败场景为 `400`。注意失败时 HTTP 状态码仍为 200，需根据本字段与 `code` 判断结果。
+<a id="h-ragapi-describe-file-err"></a>
 
 ## 错误码
 
-HTTP 状态码
-
-错误码 `code`
-
-说明
-
-400
-
-`InvalidParameter`
-
-请求参数无效。`message` 示例：`Required parameter missing or invalid.`
-
-401
-
-`InvalidApiKey`
-
-鉴权失败，API Key 无效或缺失。`message` 示例：`Invalid API-key provided.`
+| HTTP 状态码 | 错误码 `code` | 说明 |
+| --- | --- | --- |
+| 400 | `InvalidParameter` | 请求参数无效。`message` 示例：`Required parameter missing or invalid.` |
+| 401 | `InvalidApiKey` | 鉴权失败，API Key 无效或缺失。`message` 示例：`Invalid API-key provided.` |
 
 业务失败时 HTTP 状态码仍为 200，需根据响应体中的 `status` 与 `code` 判断结果。

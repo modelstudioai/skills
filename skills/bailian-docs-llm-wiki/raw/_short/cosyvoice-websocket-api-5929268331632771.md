@@ -2,86 +2,81 @@
 
 本文介绍通过WebSocket连接访问CosyVoice实时语音合成服务的交互流程、接口地址和请求头。
 
+<a id="接口地址"></a>
+
+<a id="07bfd546805pn"></a>
+
 ## 接口地址
 
 WebSocket 接口使用 `wss://` 协议，地址如下：
+
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="可用的-sdk"></a>
 
 ## 可用的 SDK
 
--   [Python SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-websocket-sdk-python#model-cosyvoice)
--   [Java SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-websocket-sdk-java#model-cosyvoice)
--   [Android SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-websocket-sdk-android#model-cosyvoice)
--   [iOS SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-websocket-sdk-ios#model-cosyvoice)
--   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-websocket-sdk-harmonyos#model-cosyvoice)
+-   [Python SDK](cosyvoice-websocket-sdk-python-47e109e34183e539.md#model-cosyvoice)
+-   [Java SDK](cosyvoice-websocket-sdk-java-a4920147be4869ef.md#model-cosyvoice)
+-   [Android SDK](cosyvoice-websocket-sdk-android-a3c227256eefa5f2.md#model-cosyvoice)
+-   [iOS SDK](cosyvoice-websocket-sdk-ios-906cc4f70118010a.md#model-cosyvoice)
+-   [HarmonyOS SDK](cosyvoice-websocket-sdk-harmonyos-340ad797fa66e3f1.md#model-cosyvoice)
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+<a id="请求头"></a>
+
+<a id="b02603aacf7e9"></a>
 
 ## 请求头
 
 请求头中需添加如下信息：
 
-**参数**
+| 参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- |
+| **Authorization** | `string` | 是 | 鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。 |
+| **user-agent** | `string` | 否 | 客户端标识，便于服务端追踪来源。 |
+| **X-DashScope-WorkSpace** | `string` | 否 | 阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。 |
+| **X-DashScope-DataInspection** | `string` | 否 | 是否启用数据合规检测功能。默认不传或设为`enable`。如非必要，请勿启用该参数。 |
 
-**类型**
+> **重要**
+>
+> Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
 
-**是否必选**
+<a id="交互流程"></a>
 
-**说明**
-
-**Authorization**
-
-`string`
-
-是
-
-鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。
-
-**user-agent**
-
-`string`
-
-否
-
-客户端标识，便于服务端追踪来源。
-
-**X-DashScope-WorkSpace**
-
-`string`
-
-否
-
-阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。
-
-**X-DashScope-DataInspection**
-
-`string`
-
-否
-
-是否启用数据合规检测功能。默认不传或设为`enable`。如非必要，请勿启用该参数。
-
-**重要**Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
+<a id="62149ca39bx2i"></a>
 
 ## 交互流程
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7962835871/CAEQaxiBgID50pCW3hkiIDVlOWNkODdhOGYyYjQ2ZDFiMzgyYjNmMmUzOGZkNGVh4709861_20241015153444.149.svg)
 
-客户端事件和服务端事件的详细说明，请参见[客户端事件](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)和[服务端事件](raw/_short/cosyvoice-server-events-81793da4414e2646.md)。
+客户端事件和服务端事件的详细说明，请参见[客户端事件](cosyvoice-client-events-480a8821d2d60e18.md)和[服务端事件](cosyvoice-server-events-81793da4414e2646.md)。
 
 按时间顺序，客户端与服务端的交互流程如下：
 
@@ -95,12 +90,14 @@ WebSocket 接口使用 `wss://` 协议，地址如下：
     
     客户端按顺序向服务端发送一个或多个包含待合成文本的continue-task事件，服务端接收到完整语句后返回result-generated事件和音频流（文本长度有约束， 详情参见continue-task事件中`text`字段描述）。
     
-    **说明**支持多次发送continue-task事件，按顺序提交文本片段。服务端接收文本片段后自动进行分句：
-    
-    -   完整语句立即合成，此时客户端能够接收到服务端返回的音频
-    -   不完整语句缓存至完整后合成，语句不完整时服务端不返回音频
-    
-    当发送finish-task事件时，服务端会强制合成所有缓存内容。
+    > **说明**
+    >
+    > 支持多次发送continue-task事件，按顺序提交文本片段。服务端接收文本片段后自动进行分句：
+    >
+    > -   完整语句立即合成，此时客户端能够接收到服务端返回的音频
+    > -   不完整语句缓存至完整后合成，语句不完整时服务端不返回音频
+    >
+    > 当发送finish-task事件时，服务端会强制合成所有缓存内容。
     
 5.  接收音频：通过 `binary` 通道接收音频流
     
@@ -117,15 +114,27 @@ WebSocket 接口使用 `wss://` 协议，地址如下：
 
 为提高资源利用率，建议复用 WebSocket 连接处理多个任务，而非为每个任务建立新连接。
 
-**重要**同一次合成任务中，run-task、所有 continue-task、finish-task 必须使用相同的 `task_id`。每次发起新任务时生成新的 task\_id（如使用 UUID）。使用不同 task\_id 会导致音频错乱或任务失败。
+> **重要**
+>
+> 同一次合成任务中，run-task、所有 continue-task、finish-task 必须使用相同的 `task_id`。每次发起新任务时生成新的 task\_id（如使用 UUID）。使用不同 task\_id 会导致音频错乱或任务失败。
+
+<a id="示例代码"></a>
+
+<a id="ws-examples"></a>
 
 ## 示例代码
 
-以下示例使用通用 WebSocket 库直接发送协议事件，使用 `cosyvoice-v3-flash` 和音色 `longanyang`。先[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并配置 `DASHSCOPE_API_KEY` 环境变量，将 `{WorkspaceId}` 替换为对应地域的业务空间 ID；使用其他地域时同时替换接口地址和 API Key。
+以下示例使用通用 WebSocket 库直接发送协议事件，使用 `cosyvoice-v3-flash` 和音色 `longanyang`。先[获取 API Key](../model-api-reference/preparations/get-api-key.md)并配置 `DASHSCOPE_API_KEY` 环境变量，将 `{WorkspaceId}` 替换为对应地域的业务空间 ID；使用其他地域时同时替换接口地址和 API Key。
+
+<a id="sec-tabs-2"></a>
+
+<a id="java"></a>
+
+<a id="java-h4"></a>
 
 #### Java
 
-建议使用 Java DashScope SDK 进行开发，请参见[CosyVoice Java SDK](raw/_short/cosyvoice-websocket-sdk-java-a4920147be4869ef.md)。
+建议使用 Java DashScope SDK 进行开发，请参见[CosyVoice Java SDK](cosyvoice-websocket-sdk-java-a4920147be4869ef.md)。
 
 以下是 Java WebSocket 直连示例，运行前请导入以下依赖：
 
@@ -134,9 +143,15 @@ WebSocket 接口使用 `wss://` 协议，地址如下：
 
 推荐使用Maven或Gradle管理依赖包，其配置如下：
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-pom-xml-tab"></a>
+
 pom.xml
 
-```
+<a id="code-code-group-pom-xml"></a>
+
+```xml
 <dependencies>
     <!-- WebSocket Client -->
     <dependency>
@@ -154,9 +169,13 @@ pom.xml
 </dependencies>
 ```
 
+<a id="fig-code-group-build-gradle-tab"></a>
+
 build.gradle
 
-```
+<a id="code-code-group-build-gradle"></a>
+
+```groovy
 // 省略其它代码
 dependencies {
   // WebSocket Client
@@ -169,7 +188,9 @@ dependencies {
 
 Java代码如下：
 
-```
+<a id="code-block"></a>
+
+```java
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.java_websocket.client.WebSocketClient;
@@ -312,21 +333,31 @@ public class TTSWebSocketClient extends WebSocketClient {
 }
 ```
 
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-建议使用 Python DashScope SDK 进行开发，请参见[CosyVoice Python SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-websocket-sdk-python#model-cosyvoice)。
+建议使用 Python DashScope SDK 进行开发，请参见[CosyVoice Python SDK](cosyvoice-websocket-sdk-python-47e109e34183e539.md#model-cosyvoice)。
 
 以下是 Python WebSocket 直连示例，运行前请导入以下依赖：
 
-```
+<a id="code-block-2"></a>
+
+```bash
 pip uninstall websocket-client
 pip uninstall websocket
 pip install websocket-client
 ```
 
-**重要**请不要将运行示例代码的Python文件命名为“websocket.py”，否则会报错（AttributeError: module 'websocket' has no attribute 'WebSocketApp'. Did you mean: 'WebSocket'?）。
+> **重要**
+>
+> 请不要将运行示例代码的Python文件命名为“websocket.py”，否则会报错（AttributeError: module 'websocket' has no attribute 'WebSocketApp'. Did you mean: 'WebSocket'?）。
 
-```
+<a id="code-block-3"></a>
+
+```python
 import websocket
 import json
 import uuid
@@ -522,13 +553,22 @@ if __name__ == "__main__":
     client.run()
 ```
 
+<a id="go"></a>
+
+<a id="go-h4"></a>
+
 #### Go
 
-```
+<a id="code-block-4"></a>
+
+```bash
 go mod init tts-example
 go get github.com/gorilla/websocket@v1.5.3 github.com/google/uuid@v1.6.0
 ```
-```
+
+<a id="code-block-5"></a>
+
+```go
 package main
 
 import (
@@ -724,9 +764,15 @@ func main() {
 }
 ```
 
+<a id="c"></a>
+
+<a id="c-h4"></a>
+
 #### C#
 
-```
+<a id="code-block-6"></a>
+
+```csharp
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
@@ -961,6 +1007,10 @@ class Program {
 }
 ```
 
+<a id="php"></a>
+
+<a id="php-h4"></a>
+
 #### PHP
 
 示例代码目录结构为：
@@ -975,7 +1025,9 @@ my-php-project/
 
 composer.json内容如下，相关依赖的版本号请根据实际情况自行决定：
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
     "require": {
         "react/event-loop": "^1.3",
@@ -994,7 +1046,9 @@ composer.json内容如下，相关依赖的版本号请根据实际情况自行�
 
 index.php内容如下：
 
-```
+<a id="code-block-8"></a>
+
+```php
 <?php
 
 require __DIR__ . '/vendor/autoload.php';
@@ -1250,18 +1304,26 @@ function handleEvent($conn, $response, $sendContinueTask, $loop, $taskId, &$task
 }
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
 需安装相关依赖：
 
-```
+<a id="code-block-9"></a>
+
+```bash
 npm install ws
 npm install uuid
 ```
 
 示例代码如下：
 
-```
+<a id="code-block-10"></a>
+
+```javascript
 const WebSocket = require('ws');
 const fs = require('fs');
 const uuid = require('uuid').v4;

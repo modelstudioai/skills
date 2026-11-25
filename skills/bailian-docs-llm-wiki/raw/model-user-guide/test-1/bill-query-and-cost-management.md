@@ -2,9 +2,17 @@
 
 本文介绍如何查询账单明细、进行成本分摊（分账）、处理账户欠费以及停止计费。
 
+<a id="查询账单"></a>
+
+<a id="c59ddc52b96f9"></a>
+
 ## 查询账单
 
 仅在实际发生调用**结束**后生成账单：**大模型推理**分钟级出账（通常 2 到 10 分钟），**批量推理、模型训练、知识库**等小时级出账，业务高峰期请以系统最终出账时间为准。出账不等于实际扣款，按量付费采用“预占+月结”模式，详见下文常见问题“按量付费是实时扣款吗？”。
+
+<a id="费用概览"></a>
+
+<a id="a309aa68b2rxe"></a>
 
 ### 费用概览
 
@@ -19,21 +27,25 @@
     -   **订阅购买费用**：Token Plan、预置吞吐、模型单元、节省计划等订阅费用。
     -   **账单费用**：按量产生的模型调用、训练和部署费用。
 4.  查看**账单趋势**：仅展示后付费账单金额，不含订阅购买费用；当月账单有一定延迟。
-5.  如需设置预算或告警，请前往[预算管理](raw/model-user-guide/test-1/budget-management.md)。
+5.  如需设置预算或告警，请前往[预算管理](budget-management.md)。
 
-**说明**
-
--   费用数据存在延迟，最新数据请以[阿里云费用与成本](https://billing-cost.console.aliyun.com/home)为准。
--   仅支持查询 2026 年 4 月 1 日及之后的费用数据。
+> **说明**
+>
+> -   费用数据存在延迟，最新数据请以[阿里云费用与成本](https://billing-cost.console.aliyun.com/home)为准。
+> -   仅支持查询 2026 年 4 月 1 日及之后的费用数据。
 
 如需查看更早的费用或核算历史总花费，可在阿里云费用与成本的账单详情中逐月导出后手动汇总：
 
 1.  进入**费用与成本** > **账单详情**。
 2.  将**产品名称**筛选为**大模型服务平台百炼**。
-3.  逐月切换账期，将每个月的账单导出为 CSV 文件。具体导出操作参见[账单详情](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#29f8b9b9a4lmc)。
+3.  逐月切换账期，将每个月的账单导出为 CSV 文件。具体导出操作参见[账单详情](bill-query-and-cost-management.md#29f8b9b9a4lmc)。
 4.  将各月导出数据汇总求和，得到历史总花费。
 
 账单详情页的**统计周期**均为单月维度，不支持跨月汇总查询，需逐月导出后手动求和。导出对话框中可选择**近 18 个月的内容**批量导出。
+
+<a id="账单明细"></a>
+
+<a id="bill-detail-console"></a>
 
 ### 账单明细
 
@@ -47,11 +59,21 @@
 -   **下载**：点击右上角下载图标导出当前筛选条件下的账单；点击**下载记录**查看最近 7 天的导出记录。
 -   **时长类计费项**：在模型训练、预置吞吐单元、独占吞吐单元页签中，按用量 × 时长计费的计费项建议选择**按分钟**查询。按月、按天或按小时查询时，暂时无法查看时长信息。
 
-**说明**账单明细中的部分字段值可能不全。如需完整字段，可前往[阿里云费用与成本](https://billing-cost.console.aliyun.com/home)的账单详情查看，并按下方[账单详情](#29f8b9b9a4lmc)的实例ID规则核对。
+> **说明**
+>
+> 账单明细中的部分字段值可能不全。如需完整字段，可前往[阿里云费用与成本](https://billing-cost.console.aliyun.com/home)的账单详情查看，并按下方[账单详情](#29f8b9b9a4lmc)的实例ID规则核对。
+
+<a id="账单详情"></a>
+
+<a id="29f8b9b9a4lmc"></a>
 
 ### 账单详情
 
 在[阿里云费用与成本](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)的**账单详情**页面，可查看完整账单字段。大模型推理、部署与训练账单可按 **ApiKeyID、业务空间ID、模型名称、输入/输出类型、调用渠道、实例标签**拆分查看。
+
+<a id="1-下载账单"></a>
+
+<a id="586ded838c7xj"></a>
 
 #### 1\. 下载账单
 
@@ -60,9 +82,15 @@
 3.  单击页面顶部的**导出明细**，将账单下载到本地。
 4.  打开文件，找到**资产/资源实例ID（出账粒度）**列（控制台账单详情页显示为**实例ID（出账粒度）**），根据下文规则进行核对。
 
+<a id="2-解读关键字段-模型推理账单"></a>
+
+<a id="cedcb54e55m2y"></a>
+
 #### 2\. 解读关键字段（模型推理账单）
 
-**说明**以下字段格式说明适用于**模型推理**账单。**模型训练与调优**账单的实例ID字段格式不同（使用英文感叹号 `!` 分隔），请参见下方[训练与调优账单字段](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#wi82451543-train-billing-h)。Token Plan、知识库、联网搜索、ManagedAgent 会话运行时费等其他计费项的实例ID格式也不同，不适用本节规则。
+> **说明**
+>
+> 以下字段格式说明适用于**模型推理**账单。**模型训练与调优**账单的实例ID字段格式不同（使用英文感叹号 `!` 分隔），请参见下方[训练与调优账单字段](bill-query-and-cost-management.md#wi82451543-train-billing-h)。Token Plan、知识库、联网搜索、ManagedAgent 会话运行时费等其他计费项的实例ID格式也不同，不适用本节规则。
 
 **“资产/资源实例ID（出账粒度）”字段**以英文分号 `;` 分隔，从左到右依次为`ApiKeyID;业务空间ID;模型名称;输入/输出类型;调用渠道;免费额度用完即停标识`。各段含义如下：
 
@@ -91,10 +119,12 @@
 6.  `免费额度用完即停标识`：`0` 表示未开启，`1` 表示已开启。
     
 
-**说明**部分账单会省略末尾为空的字段，因此实际段数可能少于 6 段。第 5 段为 `0` 或 `1` 时，表示免费额度用完即停标识，此时调用渠道为空；第 5 段为渠道代码时，表示调用渠道，免费额度用完即停标识为空。批量推理、模型评测等任务的出账时间可能晚于调用时间，请以实际出账结果为准。例如：
-
--   `2469635;llm-xxx;qwen3.8-max;input_token;0`：调用渠道为空，免费额度用完即停标识为 `0`。
--   `;llm-xxx;agent_model_performance;input_token;managed agent`：通过 ManagedAgent 调用，免费额度用完即停标识为空。
+> **说明**
+>
+> 部分账单会省略末尾为空的字段，因此实际段数可能少于 6 段。第 5 段为 `0` 或 `1` 时，表示免费额度用完即停标识，此时调用渠道为空；第 5 段为渠道代码时，表示调用渠道，免费额度用完即停标识为空。批量推理、模型评测等任务的出账时间可能晚于调用时间，请以实际出账结果为准。例如：
+>
+> -   `2469635;llm-xxx;qwen3.8-max;input_token;0`：调用渠道为空，免费额度用完即停标识为 `0`。
+> -   `;llm-xxx;agent_model_performance;input_token;managed agent`：通过 ManagedAgent 调用，免费额度用完即停标识为空。
 
 常见形态：
 
@@ -112,18 +142,32 @@
 -   `key` 代表标签键，`value` 代表标签值。
 -   多个标签之间用英文分号 ; 隔开。
 
+<a id="3-训练与调优账单字段"></a>
+
+<a id="wi82451543-train-billing-h"></a>
+
 #### 3\. 训练与调优账单字段
 
 **模型训练**与**模型调优**账单的**“资产/资源实例ID（出账粒度）”字段**以英文感叹号 `!` 分隔，常见格式为`业务空间ID!地域!训练任务标识`，与模型推理账单的分号 `;` 分隔格式不同。
 
 **示例：**`ws-xxxxxxxxx!cn-beijing!qwen3-14b-ft-2026051510-1c3b`
 
-**说明**账单的**商品名称**字段可直接区分计费类型：训练与调优费用对应**商品名称**为`百炼大模型训练`。若无法确定对应的训练任务，可结合**账单月份**与**模型调优**页面的任务提交时间进行匹配。
+> **说明**
+>
+> 账单的**商品名称**字段可直接区分计费类型：训练与调优费用对应**商品名称**为`百炼大模型训练`。若无法确定对应的训练任务，可结合**账单月份**与**模型调优**页面的任务提交时间进行匹配。
+
+<a id="4-数据溯源与术语说明"></a>
+
+<a id="6d181ca1ddtno"></a>
 
 #### 4\. 数据溯源与术语说明
 
 -   查询 API Key：复制账单中的 `ApiKeyID`，前往[API Key](https://bailian.console.aliyun.com/model/settings/api-key)页面查找对应的 Key 名称。
 -   查询业务空间：复制账单中的 `业务空间ID`，前往[业务空间管理](https://bailian.console.aliyun.com/settings/workspace)页面，在列表的**业务空间ID**列确认具体空间。当前所处的业务空间显示在控制台顶部右上角的**默认业务空间**切换器中，悬停可查看其地域、业务空间ID与创建时间等详情。
+
+<a id="分账管理"></a>
+
+<a id="138a71c685rkt"></a>
 
 ## 分账管理
 
@@ -139,6 +183,10 @@
     4.  启用标签。进入[费用标签](https://billing-cost.console.aliyun.com/finance/tags)，在“**标签key**”中输入已绑定的标签键，单击**搜索**，找到标签，并在操作列单击**启用**。
 3.  **验证**：配置完成后，分账账单 T+1 天后生效。可在[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页面通过**实例标签**列验证业务空间的绑定标签。
     
+
+<a id="欠费处理"></a>
+
+<a id="668155806ddg7"></a>
 
 ## 欠费处理
 
@@ -156,6 +204,10 @@
     
 -   **预防欠费**：在[高额消费预警](https://usercenter2.aliyun.com/home/alarm-threshold)页面设置消费阈值，达阈值即提醒。
     
+
+<a id="异步任务欠费计费说明"></a>
+
+<a id="async-task-overdue-billing"></a>
 
 ## 异步任务欠费计费说明
 
@@ -179,11 +231,17 @@
 
 **说明：** 异步任务的费用以实际计费规则及最终账单为准，账户欠费不代表此前已提交任务产生的费用会被免除。
 
+<a id="停止计费-关闭服务"></a>
+
+<a id="8f0adf86b1vny"></a>
+
 ## 停止计费（关闭服务）
 
 不再使用百炼时，按以下方式关停对应服务即可停止计费。
 
-**重要**如需在按量付费场景中主动控制费用上限，可前往[预算管理](raw/model-user-guide/test-1/budget-management.md)设置月度预算并开启“达到预算后立即停止”。
+> **重要**
+>
+> 如需在按量付费场景中主动控制费用上限，可前往[预算管理](budget-management.md)设置月度预算并开启“达到预算后立即停止”。
 
 -   **停止模型推理**：停止代码中的 API 调用、关闭控制台体验中心的调用，即不再产生费用。为防止意外调用，可在[**API Key**](https://bailian.console.aliyun.com/model/settings/api-key)页面删除已创建的 Key。
     
@@ -198,9 +256,15 @@
     -   **按 Token 调用计费（后付费）**：账单商品名称为**百炼大模型推理**。下线部署后不再产生该部署的调用费用；也可删除[API Key](https://bailian.console.aliyun.com/model/settings/api-key)防止意外调用。
     -   **按算力单元或模型单元计费（后付费）**：账单商品名称为**百炼模型单元（按量付费）**。下线部署后停止按时长计费。
     -   **按预置吞吐单元计费（后付费，按小时）**：账单商品名称为**百炼容量预留（后付费）**。下线部署后停止按小时计费。
-    -   **按预置吞吐单元计费（预付费，按天）**：账单商品名称为**百炼容量预留（预付费）**。下线部署后，还需在[退订管理](https://billing-cost.console.aliyun.com/refund/refund)页面退订实例。退订时已使用部分按 1.2 倍系数结算（详见[退订说明](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)），退回剩余金额。
+    -   **按预置吞吐单元计费（预付费，按天）**：账单商品名称为**百炼容量预留（预付费）**。下线部署后，还需在[退订管理](https://billing-cost.console.aliyun.com/refund/refund)页面退订实例。退订时已使用部分按 1.2 倍系数结算（详见[退订说明](../model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)），退回剩余金额。
+
+<a id="常见问题"></a>
+
+<a id="7c9690db10diu"></a>
 
 ## 常见问题
+
+<a id="accordion-为什么费用概览或账单趋势中会出现-或空值"></a>
 
 为什么费用概览或账单趋势中会出现“-”或空值？
 
@@ -214,6 +278,8 @@
 
 显示“-”或为空不影响实际计费金额。如需核对具体费用，请查看[账单明细](#bill-detail-console)。
 
+<a id="accordion-为什么调用模型后查不到账单"></a>
+
 为什么调用模型后查不到账单？
 
 **原因：**
@@ -223,11 +289,15 @@
 
 **解决方案：**等待对应出账时长后再查询。
 
+<a id="accordion-为什么同一个模型在账单中有多行记录"></a>
+
 为什么同一个模型在账单中有多行记录？
 
 **原因：**同一模型按计费类型（输入 Token、输出 Token、缓存命中等）和调用渠道（API 调用、控制台体验等）分别出账。例如 qwen3.6-plus 一次对话会产生“输入 Token”和“输出 Token”两行记录。
 
-**解决方案：**通过[账单详情](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#29f8b9b9a4lmc)中的`实例 ID`字段区分每行记录的具体含义。
+**解决方案：**通过[账单详情](bill-query-and-cost-management.md#29f8b9b9a4lmc)中的`实例 ID`字段区分每行记录的具体含义。
+
+<a id="accordion-账单里很多行都叫-大模型文本消耗量-怎么区分是哪个模型"></a>
 
 账单里很多行都叫“大模型文本消耗量”，怎么区分是哪个模型？
 
@@ -235,27 +305,37 @@
 
 **解决方案：**查看[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页的**资产/资源实例ID（出账粒度）**列。字段以英文分号分隔，紧跟业务空间ID（如 llm-xxx）之后的字段即为模型名称。例：`12xxx;llm-xxx; qwen3.6-plus ;context_0-128k_input_token;bmp;0`表示 qwen3.6-plus 模型。
 
+<a id="accordion-在哪里查看模型调用次数和统计"></a>
+
 在哪里查看模型调用次数和统计？
 
 进入[阿里云百炼控制台](https://bailian.console.aliyun.com/)，在左侧导航栏选择**费用用量** > [模型用量](https://bailian.console.aliyun.com/cn-beijing/costing-balance/usage-statistics)。
+
+<a id="accordion-按量付费是实时扣款吗"></a>
 
 按量付费是实时扣款吗？
 
 不是。阿里云按量付费采用“预占+月结”模式 — 系统先冻结部分额度，月账期结束后（次月初）生成最终账单并实际扣款。
 
+<a id="accordion-如何导出明细账单用于报销"></a>
+
 如何导出明细账单用于报销？
 
 参考[如何导出明细账单](https://help.aliyun.com/zh/user-center/support/billing-faqs)。
+
+<a id="accordion-如何充值"></a>
 
 如何充值？
 
 参考[如何充值缴费](https://help.aliyun.com/zh/user-center/use-alipay-online-banking-to-recharge-online)。
 
+<a id="accordion-云工开物-300-元抵扣金可以抵扣哪些百炼费用"></a>
+
 云工开物 300 元抵扣金可以抵扣哪些百炼费用？
 
 **支持抵扣：**
 
--   **购买 50 元[高校 AI 通行证](https://opc.aliyun.com/summer-2026)模型节省计划**：抵扣范围与 [AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#nqdi1bsux4qx0)相同，但不享受其档位折扣；单人可使用抵扣金抵扣 1 次，首次自费购买可享 5 折补贴，具体以活动页为准。
+-   **购买 50 元[高校 AI 通行证](https://opc.aliyun.com/summer-2026)模型节省计划**：抵扣范围与 [AI 通用型节省计划](savings-plan-and-resource-package.md#nqdi1bsux4qx0)相同，但不享受其档位折扣；单人可使用抵扣金抵扣 1 次，首次自费购买可享 5 折补贴，具体以活动页为准。
 -   **抵扣后付费模型服务**：可抵扣商品名称为**百炼大模型训练**、**百炼大模型推理**、**百炼大模型部署**、**百炼知识库 RAG** 的后付费费用。您可前往[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)页查看对应商品名称。
 
 **不支持抵扣：**
@@ -276,41 +356,21 @@
         
         请在[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)中核对**商品名称**，对应模型示例见下方参考表。
         
+        <a id="accordion-参考-不支持抵扣的后付费商品与模型示例"></a>
+        
         参考：不支持抵扣的后付费商品与模型示例
         
         各商品名称下包含的模型会持续更新，下表仅列举部分模型作为参考，并非完整清单。**是否支持抵扣以账单中的商品名称为准，不能仅凭模型是否出现在表中判断**。
         
-        后付费商品名称
-        
-        模型示例（仅供参考，不穷举）
-        
-        百炼大模型Happy系列
-        
-        happyhorse-1.0-i2v、happyhorse-1.0-t2v、happyhorse-1.0-video-edit、happyhorse-1.0-r2v、happyhorse-1.1-t2v、happyhorse-1.1-i2v、happyhorse-1.1-r2v
-        
-        百炼大模型-万相模型
-        
-        wan2.7-image、wan2.7-image-pro、wan2.7-t2v、wan2.7-i2v、wan2.7-r2v、wan2.7-videoedit、wan3.0-video、wan3.0-video-prime、wan2.7-t2v-2026-04-25、wan2.7-i2v-2026-04-25、wan2.7-t2v-2026-06-12、wan2.7-r2v-2026-06-12
-        
-        阿里云百炼大模型-向量排序模型
-        
-        qwen3.7-text-embedding、qwen3.7-text-embedding-flash、qwen3.7-text-rerank、qwen3-vl-embedding、qwen3-vl-rerank、tongyi-embedding-vision-flash-2026-03-06、tongyi-embedding-vision-plus-2026-03-06
-        
-        百炼大模型-垂类模型
-        
-        qwen-mt-image-2.0、qwen-flash-character、farui-flash、qwen-mt-uni、qwen3.8-livetranslate-flash-realtime、tongyi-xiaomi-analysis-pro、tongyi-xiaomi-analysis-flash、qwen-flash-character-2026-02-26、qwen3.5-livetranslate-flash-realtime-2026-05-19、qwen3.5-ocr
-        
-        百炼大模型-百聆语音模型
-        
-        fun-asr-flash-8k-realtime、qwen-audio-3.0-asr-flash、qwen-audio-3.0-asr-flash-streaming、qwen-audio-3.0-asr-flash-filetrans、fun-asr-flash-8k-realtime-2026-01-28、fun-asr-realtime-2026-02-28、fun-music-v1、fun-music-preview、fun-asr-flash-2026-06-15、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-asr-flash、qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.1-asr-flash-message、qwen-audio-3.1-tts-flash、qwen-audio-3.1-tts-next、cosyvoice-v3.5-flash、fun-cosyvoice-v3.6-flash、fun-cosyvoice-v3.6-plus、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-tts-plus、cosyvoice-v3.5-plus
-        
-        百炼大模型-千问语音模型
-        
-        qwen3-asr-flash-realtime-2026-02-10、qwen3-asr-flash-2026-02-10、qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22、qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26、qwen3-tts-vc-2026-01-22、qwen3-tts-vd-2026-01-26
-        
-        百炼大模型-千问全模态模型
-        
-        qwen3.5-omni-plus-realtime-2026-03-15、qwen3.8-omni-flash、qwen3.8-omni-flash-realtime、qwen3.5-omni-flash-realtime、qwen3.5-omni-flash-realtime-2026-03-15、qwen3.5-omni-flash-2026-03-15、qwen3.5-omni-flash、qwen3.5-omni-plus、qwen3.5-omni-plus-realtime、qwen3.5-omni-plus-2026-03-15
+        | 后付费商品名称 | 模型示例（仅供参考，不穷举） |
+        | --- | --- |
+        | 百炼大模型Happy系列 | happyhorse-1.0-i2v、happyhorse-1.0-t2v、happyhorse-1.0-video-edit、happyhorse-1.0-r2v、happyhorse-1.1-t2v、happyhorse-1.1-i2v、happyhorse-1.1-r2v |
+        | 百炼大模型-万相模型 | wan2.7-image、wan2.7-image-pro、wan2.7-t2v、wan2.7-i2v、wan2.7-r2v、wan2.7-videoedit、wan3.0-video、wan3.0-video-prime、wan2.7-t2v-2026-04-25、wan2.7-i2v-2026-04-25、wan2.7-t2v-2026-06-12、wan2.7-r2v-2026-06-12 |
+        | 阿里云百炼大模型-向量排序模型 | qwen3.7-text-embedding、qwen3.7-text-embedding-flash、qwen3.7-text-rerank、qwen3-vl-embedding、qwen3-vl-rerank、tongyi-embedding-vision-flash-2026-03-06、tongyi-embedding-vision-plus-2026-03-06 |
+        | 百炼大模型-垂类模型 | qwen-mt-image-2.0、qwen-flash-character、farui-flash、qwen-mt-uni、qwen3.8-livetranslate-flash-realtime、tongyi-xiaomi-analysis-pro、tongyi-xiaomi-analysis-flash、qwen-flash-character-2026-02-26、qwen3.5-livetranslate-flash-realtime-2026-05-19、qwen3.5-ocr |
+        | 百炼大模型-百聆语音模型 | fun-asr-flash-8k-realtime、qwen-audio-3.0-asr-flash、qwen-audio-3.0-asr-flash-streaming、qwen-audio-3.0-asr-flash-filetrans、fun-asr-flash-8k-realtime-2026-01-28、fun-asr-realtime-2026-02-28、fun-music-v1、fun-music-preview、fun-asr-flash-2026-06-15、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-asr-flash、qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.1-asr-flash-message、qwen-audio-3.1-tts-flash、qwen-audio-3.1-tts-next、cosyvoice-v3.5-flash、fun-cosyvoice-v3.6-flash、fun-cosyvoice-v3.6-plus、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-tts-plus、cosyvoice-v3.5-plus |
+        | 百炼大模型-千问语音模型 | qwen3-asr-flash-realtime-2026-02-10、qwen3-asr-flash-2026-02-10、qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22、qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26、qwen3-tts-vc-2026-01-22、qwen3-tts-vd-2026-01-26 |
+        | 百炼大模型-千问全模态模型 | qwen3.5-omni-plus-realtime-2026-03-15、qwen3.8-omni-flash、qwen3.8-omni-flash-realtime、qwen3.5-omni-flash-realtime、qwen3.5-omni-flash-realtime-2026-03-15、qwen3.5-omni-flash-2026-03-15、qwen3.5-omni-flash、qwen3.5-omni-plus、qwen3.5-omni-plus-realtime、qwen3.5-omni-plus-2026-03-15 |
         
 2.  **已享受折扣或优惠的账单**：无论抵扣金何时领取，均不支持抵扣。
     
@@ -325,17 +385,21 @@
 
 完整活动规则参见[“云工开物”高校计划](https://help.aliyun.com/zh/model-studio/introduction-to-yungongkaiwu)。
 
+<a id="accordion-为什么没怎么用却产生了欠费"></a>
+
 为什么没怎么用却产生了欠费？
 
-**原因：**百炼的[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)等附加功能按调用次数单独计费（后付费），与模型推理费用分开出账。即使您近期未主动操作控制台，历史创建的应用或代码中若开启了 `enable_search` 参数，每次被调用仍会产生联网搜索费用。
+**原因：**百炼的[联网搜索](../model-experience/text-generation-model/tool-calls/web-search.md)等附加功能按调用次数单独计费（后付费），与模型推理费用分开出账。即使您近期未主动操作控制台，历史创建的应用或代码中若开启了 `enable_search` 参数，每次被调用仍会产生联网搜索费用。
 
 **阿里云账户余额为账号级别：**百炼/千问账号与阿里云账号互通。若您阿里云账号下的其他产品（如 **ECS**、**OSS** 等按量付费产品）存在未结清费用，会导致账户可用额度为负，即使未使用百炼/千问也会提示欠费。结清对应产品的欠费后，百炼/千问即可恢复正常使用。
 
 **解决方案：**
 
-1.  在[账单详情](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#29f8b9b9a4lmc)中筛选**大模型服务平台百炼**，查看**资产/资源实例ID（出账粒度）**列，确认产生费用的模型名称和调用渠道。
+1.  在[账单详情](bill-query-and-cost-management.md#29f8b9b9a4lmc)中筛选**大模型服务平台百炼**，查看**资产/资源实例ID（出账粒度）**列，确认产生费用的模型名称和调用渠道。
 2.  检查应用代码或百炼应用配置中是否开启了 `enable_search`，如不再需要联网搜索，将该参数设为 `false` 或移除。
 3.  如已停止所有调用但仍有扣费，检查是否有其他 API Key 或应用仍在运行，可在[API Key](https://bailian.console.aliyun.com/model/settings/api-key)页面逐一排查或删除不再使用的 Key。
+
+<a id="accordion-为什么短时间内余额被快速耗尽"></a>
 
 为什么短时间内余额被快速耗尽？
 
@@ -351,6 +415,8 @@
 -   在[**预算管理**](https://bailian.console.aliyun.com/cn-beijing/costing-balance/budget)页面设置预算和告警，并及时关注预警通知。
 -   如需立即停止计费，在[**API Key**](https://bailian.console.aliyun.com/model/settings/api-key)页面删除不再使用的 API Key。
 
+<a id="accordion-为什么没有主动调用-api-也会产生费用"></a>
+
 为什么没有主动调用 API 也会产生费用？
 
 **原因：**百炼的模型部署按使用时长计费，模型完成部署即状态为**运行中**时开始收费，不依赖 API 调用。即使未主动通过 API 调用该模型，只要部署状态为**运行中**就会持续产生费用。
@@ -359,6 +425,8 @@
 
 -   前往[**专属部署**](https://bailian.console.aliyun.com/model/deploy)页面，下线不再使用的已部署模型，停止按时长计费。
 -   如需防止意外调用产生推理费用，可在[**API Key**](https://bailian.console.aliyun.com/model/settings/api-key)页面删除不再使用的 Key（注意：删除后无法恢复，请谨慎操作）。
+
+<a id="accordion-如何判断账户是否被盗用"></a>
 
 如何判断账户是否被盗用？
 
@@ -369,113 +437,35 @@
 3.  查看调用时段分布，判断是否存在非本人操作的异常调用模式：进入[模型用量](https://bailian.console.aliyun.com/cn-beijing/costing-balance/usage-statistics)页面，按**模型**或 **API Key ID** 筛选，查看调用时间分布。
 4.  如发现未授权调用，立即在[API Key](https://bailian.console.aliyun.com/model/settings/api-key)页面删除对应 API Key 并重新生成。更新所有合法调用方使用新 Key。
 
+<a id="accordion-如何在按量计费-免费额度-coding-plan-资源包和-节省计划之间选择"></a>
+
 如何在按量计费、免费额度、Coding Plan、 资源包和 节省计划之间选择？
 
 **原因：**百炼默认采用**按量后付费**模式，不支持提前赠送 Token 额度；免费额度、资源包与节省计划都只是按量费用的抵扣手段，Coding Plan 与 Token Plan 则是独立于账户余额的订阅套餐。多种方案并存时，抵扣顺序为：**免费额度> 资源包> 其他模型节省计划 > AI 通用型节省计划 > 按量付费**。即先用免费额度，用完后依次抵扣资源包、节省计划，同类额度全部到期或抵扣完后超出的部分自动转为按量付费，使用账户余额结算。
 
 **解决方案：**先按调用规模和承诺意愿判断方案，再结合下表的关键规则确认：
 
-**方案**
-
-**计费模式**
-
-**适用场景**
-
-**价格量级**
-
-**使用限制**
-
-**关键规则**
-
-按量计费（默认）
-
-后付费，按输入/输出 Token 实际用量计费
-
-用量波动大、先试用再评估
-
-按输入/输出 Token 实际用量结算，无折扣，单位 Token 单价在各方案中最高
-
-无需预先购买，随时可用；欠费是否影响调用取决于对应的商品 Code
-
-采用“预占+月结”，月账期结束后（次月初）生成最终账单并实际扣款；无需预先购买；欠费是否影响调用取决于对应的商品 Code
-
-免费额度
-
-开通模型服务后自动抵扣的赠送额度
-
-功能验证与小规模试用
-
-0 元，开通模型服务后自动发放，不可叠加购买
-
-额度与有效期固定，用尽后自动转为按量付费；开启**免费额度用完即停**（**安心模式**）后节省计划无法抵扣
-
-抵扣顺序中优先级最高，用尽后才抵扣其他方案；在模型设置中开启**免费额度用完即停**（即**安心模式**）后，额度耗尽即自动停止服务、不再产生按量账单，此时节省计划无法抵扣，需手动关闭该功能后服务才恢复并切换至节省计划抵扣
-
-节省计划（AI 通用型，推荐）
-
-承诺 3、6、12 或 24 个月的月消费金额，换取阶梯式折扣，最高 5.3 折
-
-长期稳定使用大模型服务
-
-按承诺的月消费金额阶梯折扣，承诺金额越高折扣越大，最高 5.3 折；具体折扣档位参见[节省计划与资源包](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)
-
-承诺期为 3、6、12 或 24 个月；额度按月发放，当月未用完不累积到下一周期；生效并发生抵扣后通常不支持退订
-
-可抵扣阿里直供的全部模型，一次购买跨模型使用；购买后立即生效，仅抵扣生效后产生的费用；额度按动态月发放，当月未用完不累积到下一周期；一旦生效并发生过抵扣通常不支持退订，只能等自然到期
-
-Coding Plan
-
-包月订阅，按月固定投入
-
-编码类场景需要固定月度成本
-
-200 元/月，固定月费不随 Token 用量浮动
-
-仅可用于编程工具场景，不能抵扣普通 API 调用或控制台推理费用；到期自动停止，中途不支持取消和退款
-
-套餐额度独立于账户余额，欠费期间仍可使用，但会导致自动续费失败；到期自动停止，中途不支持取消和退款；如已开启自动续费，在 [Coding Plan](https://bailian.console.aliyun.com/subscription/coding-plan) 页面关闭
-
-Token Plan
-
-按月订阅 Credits 额度，团队版按席位购买
-
-团队协作共享额度
-
-个人版按套餐档位月付，团队版按坐席档位和数量月付
-
-仅支持部分模型；额度独立于账户余额；未产生用量消耗的席位可退订
-
-仅支持部分模型；套餐额度独立于账户余额；未产生用量消耗的席位可在 [Token Plan 控制台](https://bailian.console.aliyun.com/subscription/token-plan)的**我的订阅**页面按席位退订，退款原路退回支付账户
+| 方案 | 计费模式 | 适用场景 | 价格量级 | 使用限制 | 关键规则 |
+| --- | --- | --- | --- | --- | --- |
+| 按量计费（默认） | 后付费，按输入/输出 Token 实际用量计费 | 用量波动大、先试用再评估 | 按输入/输出 Token 实际用量结算，无折扣，单位 Token 单价在各方案中最高 | 无需预先购买，随时可用；欠费是否影响调用取决于对应的商品 Code | 采用“预占+月结”，月账期结束后（次月初）生成最终账单并实际扣款；无需预先购买；欠费是否影响调用取决于对应的商品 Code |
+| 免费额度 | 开通模型服务后自动抵扣的赠送额度 | 功能验证与小规模试用 | 0 元，开通模型服务后自动发放，不可叠加购买 | 额度与有效期固定，用尽后自动转为按量付费；开启**免费额度用完即停**（**安心模式**）后节省计划无法抵扣 | 抵扣顺序中优先级最高，用尽后才抵扣其他方案；在模型设置中开启**免费额度用完即停**（即**安心模式**）后，额度耗尽即自动停止服务、不再产生按量账单，此时节省计划无法抵扣，需手动关闭该功能后服务才恢复并切换至节省计划抵扣 |
+| 节省计划（AI 通用型，推荐） | 承诺 3、6、12 或 24 个月的月消费金额，换取阶梯式折扣，最高 5.3 折 | 长期稳定使用大模型服务 | 按承诺的月消费金额阶梯折扣，承诺金额越高折扣越大，最高 5.3 折；具体折扣档位参见[节省计划与资源包](savings-plan-and-resource-package.md) | 承诺期为 3、6、12 或 24 个月；额度按月发放，当月未用完不累积到下一周期；生效并发生抵扣后通常不支持退订 | 可抵扣阿里直供的全部模型，一次购买跨模型使用；购买后立即生效，仅抵扣生效后产生的费用；额度按动态月发放，当月未用完不累积到下一周期；一旦生效并发生过抵扣通常不支持退订，只能等自然到期 |
+| Coding Plan | 包月订阅，按月固定投入 | 编码类场景需要固定月度成本 | 200 元/月，固定月费不随 Token 用量浮动 | 仅可用于编程工具场景，不能抵扣普通 API 调用或控制台推理费用；到期自动停止，中途不支持取消和退款 | 套餐额度独立于账户余额，欠费期间仍可使用，但会导致自动续费失败；到期自动停止，中途不支持取消和退款；如已开启自动续费，在 [Coding Plan](https://bailian.console.aliyun.com/subscription/coding-plan) 页面关闭 |
+| Token Plan | 按月订阅 Credits 额度，团队版按席位购买 | 团队协作共享额度 | 个人版按套餐档位月付，团队版按坐席档位和数量月付 | 仅支持部分模型；额度独立于账户余额；未产生用量消耗的席位可退订 | 仅支持部分模型；套餐额度独立于账户余额；未产生用量消耗的席位可在 [Token Plan 控制台](https://bailian.console.aliyun.com/subscription/token-plan)的**我的订阅**页面按席位退订，退款原路退回支付账户 |
 
 此外，中国站还提供**资源包**，用于抵扣特定模型超出免费额度后的实时推理用量：
 
-**方案**
-
-**计费模式**
-
-**适用场景**
-
-**价格量级**
-
-**使用限制**
-
-**关键规则**
-
-资源包
-
-一次性预购固定的 Token 量或图片张数等资源量
-
-用量较小或调用集中在单个特定模型
-
-一次性支付，单位价格低于按量付费
-
-按模型名称严格匹配，跨版本或子型号不通用（qwen-plus 资源包不能抵扣 qwen-max 的调用费用）；超出有效期后剩余额度作废；额度耗尽后自动转为按量付费
-
-购买后立即生效，无需手动激活或绑定；超出有效期后剩余额度自动作废；按模型名称严格匹配，**跨版本或子型号不通用**（例如 qwen-plus 资源包不能抵扣 qwen-max 的调用费用），额度耗尽后自动转为按量付费
+| 方案 | 计费模式 | 适用场景 | 价格量级 | 使用限制 | 关键规则 |
+| --- | --- | --- | --- | --- | --- |
+| 资源包 | 一次性预购固定的 Token 量或图片张数等资源量 | 用量较小或调用集中在单个特定模型 | 一次性支付，单位价格低于按量付费 | 按模型名称严格匹配，跨版本或子型号不通用（qwen-plus 资源包不能抵扣 qwen-max 的调用费用）；超出有效期后剩余额度作废；额度耗尽后自动转为按量付费 | 购买后立即生效，无需手动激活或绑定；超出有效期后剩余额度自动作废；按模型名称严格匹配，**跨版本或子型号不通用**（例如 qwen-plus 资源包不能抵扣 qwen-max 的调用费用），额度耗尽后自动转为按量付费 |
 
 如需同时覆盖多个模型版本，选择 AI 通用型节省计划更合适。国际站不提供资源包，仅提供节省计划。
 
-选型结论：普通 API 调用场景优先选择 **AI 通用型节省计划**，编程工具场景优先选择 **Coding Plan**。长期稳定使用大模型服务，选择**节省计划**；用量较小或调用集中在单个特定模型，选择**资源包**；需要团队协作共享额度，选择 **Token Plan**；编码类场景希望按月锁定成本，选择 **Coding Plan**；仅做功能验证时先用完**免费额度**，再根据实际用量决定是否购买优惠方案。各方案的折扣档位、购买入口与生效规则可在[节省计划与资源包](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)中确认，停止各方案计费的操作参见本文**停止计费（关闭服务）**章节。
+选型结论：普通 API 调用场景优先选择 **AI 通用型节省计划**，编程工具场景优先选择 **Coding Plan**。长期稳定使用大模型服务，选择**节省计划**；用量较小或调用集中在单个特定模型，选择**资源包**；需要团队协作共享额度，选择 **Token Plan**；编码类场景希望按月锁定成本，选择 **Coding Plan**；仅做功能验证时先用完**免费额度**，再根据实际用量决定是否购买优惠方案。各方案的折扣档位、购买入口与生效规则可在[节省计划与资源包](savings-plan-and-resource-package.md)中确认，停止各方案计费的操作参见本文**停止计费（关闭服务）**章节。
+
+<a id="query-overdue-commodity-code"></a>
+
+<a id="accordion-如何查询对应的商品-code"></a>
 
 如何查询对应的商品 Code？
 

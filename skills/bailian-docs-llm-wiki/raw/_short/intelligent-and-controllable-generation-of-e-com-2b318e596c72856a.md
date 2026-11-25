@@ -2,10 +2,16 @@
 
 如果您需要撰写营销文案，通过使用阿里云百炼轻应用电商文案智能可控生成。基于全妙可控式生成大模型，深度融合用户输入与内置多元营销场景模板，智能输出商品标题、摘要及高转化营销文案。支持精准字数控制，确保内容精炼、卖点突出、风格统一，高效赋能营销内容创作，助力转化率全面提升。
 
-**重要**电商零售推广文案写作计费说明：
+> **重要**
+>
+> 电商零售推广文案写作计费说明：
+>
+> -   除全妙可控式LLM标准模型、全妙可控式LLM高级模型外，其他模型参与百炼新用户限时免费福利，更多关于新用户限时免费福利信息，请参见[新用户限时免费福利](../model-user-guide/test-1/new-free-quota.md)。
+> -   全妙计费文档详情可参见：[电商文案智能可控生成计费](e-commerce-copy-intelligent-controllable-generat-329dcd9c915f098b.md)。
 
--   除全妙可控式LLM标准模型、全妙可控式LLM高级模型外，其他模型参与百炼新用户限时免费福利，更多关于新用户限时免费福利信息，请参见[新用户限时免费福利](raw/model-user-guide/test-1/new-free-quota.md)。
--   全妙计费文档详情可参见：[电商文案智能可控生成计费](raw/_short/e-commerce-copy-intelligent-controllable-generat-329dcd9c915f098b.md)。
+<a id="功能入口"></a>
+
+<a id="0335d9162anx4"></a>
 
 ## 功能入口
 
@@ -13,13 +19,29 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9248620771/p1052532.png)
 
+<a id="功能介绍"></a>
+
+<a id="a81d896eb1pmz"></a>
+
 ## 功能介绍
+
+<a id="应用详情"></a>
+
+<a id="a55badfd1e7hr"></a>
 
 ### 应用详情
 
 在**电商文案智能可控生成**应用的**应用详情**页签，您可以查看功能描述、最佳实践、计费规则。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9248620771/p1052533.png)
 
+<a id="效果调试"></a>
+
+<a id="77e91e7557qkr"></a>
+
 ### 效果调试
+
+<a id="基础营销文案写作"></a>
+
+<a id="bffccd993ekez"></a>
 
 #### 基础营销文案写作
 
@@ -47,6 +69,10 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8914883371/p885814.png)
 
+<a id="可控式营销文案写作"></a>
+
+<a id="8a7795b58dqpt"></a>
+
 #### 可控式营销文案写作
 
 > 创作类型：生成商品标题、生成商品摘要、商品标题翻译。
@@ -60,6 +86,10 @@
 点击**创作**，即可生成相应字数范围的商品标题。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9248620771/p1052544.png)
+
+<a id="查看api示例"></a>
+
+<a id="b4be9a6149q6g"></a>
 
 ### 查看API示例
 

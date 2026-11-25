@@ -2,6 +2,10 @@
 
 Prime 模式为对输出速度敏感的场景提供更高的 TPS。
 
+<a id="使用方式"></a>
+
+<a id="prime-usage-h2"></a>
+
 ## 使用方式
 
 Prime 模式具备以下关键特性：
@@ -10,13 +14,15 @@ Prime 模式具备以下关键特性：
 -   **按 token 计费**：计费逻辑与标准 API 一致，按输入与输出 token 计费。
 -   **特殊限流**：调用量达到限流值时，若平台仍有剩余资源，则不会触发限流，因此**实际可用 TPS** 不低于限流值。
 
-调用时将 model 参数指定为[支持的模型](https://help.aliyun.com/zh/model-studio/prime-mode#prime-models-h2)的 model ID 即可开启，无需额外参数。接入域名格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，其中 `{workspace_id}`可在[业务空间管理](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)页面切换到对应地域后查看。
+调用时将 model 参数指定为[支持的模型](prime-mode.md#prime-models-h2)的 model ID 即可开启，无需额外参数。接入域名格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，其中 `{workspace_id}`可在[业务空间管理](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)页面切换到对应地域后查看。
 
 基础调用示例：
 
 > glm 5.2 的 prime 模式的模型名称仍然为 glm-5.2-fast-preview。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
@@ -27,103 +33,37 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode
 }'
 ```
 
+<a id="支持的模型"></a>
+
+<a id="prime-models-h2"></a>
+
 ## 支持的模型
 
 > 模型支持的能力、使用限制与原版模型相同
 > 
 > wan3.0-video-prime 的输入视频和输出视频均按**秒数**计费，价格由输出视频的分辨率决定。计费时长 = 输入视频时长 + 输出视频时长。
 
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
+
 #### 华北2（北京）
 
-**文本生成模型**
+<table><thead><tr><th rowspan="2"><p><strong>文本生成模型</strong></p></th><th colspan="3"><p><strong>模型计费（每百万Token）</strong></p></th></tr><tr><th><p><strong>输入单价</strong></p></th><th><p><strong>输出单价</strong></p></th><th><p><strong>缓存命中</strong></p></th></tr></thead><tbody><tr><td><p>glm-5.3-prime</p></td><td><p>¥16</p></td><td><p>¥56</p></td><td><p>¥4</p></td></tr><tr><td><p>glm-5.2-fast-preview</p></td><td><p>¥16</p></td><td><p>¥56</p></td><td><p>¥4</p></td></tr><tr><td colspan="4"></td></tr><tr><td rowspan="2"><p><strong>视频生成模型</strong></p></td><td colspan="3"><p><strong>模型计费（元/秒）</strong></p></td></tr><tr><td><p><strong>480P</strong></p></td><td><p><strong>720P</strong></p></td><td><p><strong>1080P</strong></p></td></tr><tr><td><p>wan3.0-video-prime</p></td><td><p>0.45元/秒</p></td><td><p>0.9元/秒</p></td><td><p>1.8元/秒</p></td></tr></tbody></table>
 
-**模型计费（每百万Token）**
+<a id="新加坡"></a>
 
-**输入单价**
-
-**输出单价**
-
-**缓存命中**
-
-glm-5.3-prime
-
-¥16
-
-¥56
-
-¥4
-
-glm-5.2-fast-preview
-
-¥16
-
-¥56
-
-¥4
-
-**视频生成模型**
-
-**模型计费（元/秒）**
-
-**480P**
-
-**720P**
-
-**1080P**
-
-wan3.0-video-prime
-
-0.45元/秒
-
-0.9元/秒
-
-1.8元/秒
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
-**文本生成模型**
+<table><thead><tr><th rowspan="2"><p><strong>文本生成模型</strong></p></th><th colspan="3"><p><strong>模型计费（每百万Token）</strong></p></th></tr><tr><th><p><strong>输入单价</strong></p></th><th><p><strong>输出单价</strong></p></th><th><p><strong>缓存命中</strong></p></th></tr></thead><tbody><tr><td><p>glm-5.3-prime</p></td><td><p>¥20.42</p></td><td><p>¥64.17</p></td><td><p>¥4.08</p></td></tr><tr><td><p>glm-5.2-fast-preview</p></td><td><p>¥20.984</p></td><td><p>¥65.948</p></td><td><p>¥4.196</p></td></tr><tr><td colspan="4"></td></tr><tr><td rowspan="2"><p><strong>视频生成模型</strong></p></td><td colspan="3"><p><strong>模型计费（元/秒）</strong></p></td></tr><tr><td><p><strong>480P</strong></p></td><td><p><strong>720P</strong></p></td><td><p><strong>1080P</strong></p></td></tr><tr><td><p>wan3.0-video-prime</p></td><td><p>0.496元/秒</p></td><td><p>1.02元/秒</p></td><td><p>2.04元/秒</p></td></tr></tbody></table>
 
-**模型计费（每百万Token）**
+<a id="使用示例"></a>
 
-**输入单价**
-
-**输出单价**
-
-**缓存命中**
-
-glm-5.3-prime
-
-¥20.42
-
-¥64.17
-
-¥4.08
-
-glm-5.2-fast-preview
-
-¥20.984
-
-¥65.948
-
-¥4.196
-
-**视频生成模型**
-
-**模型计费（元/秒）**
-
-**480P**
-
-**720P**
-
-**1080P**
-
-wan3.0-video-prime
-
-0.496元/秒
-
-1.02元/秒
-
-2.04元/秒
+<a id="prime-example-h2"></a>
 
 ## 使用示例
 
@@ -131,7 +71,9 @@ wan3.0-video-prime
 
 流式调用示例：
 
-```
+<a id="code-block-2"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -160,7 +102,9 @@ for chunk in completion:
 
 返回示例：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "id": "chatcmpl-xxx",
   "object": "chat.completion",
@@ -184,10 +128,18 @@ for chunk in completion:
 }
 ```
 
+<a id="计费说明"></a>
+
+<a id="prime-billing-h2"></a>
+
 ## 计费说明
 
-关于快速模式的计费规则与价格表，请参见 [模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
+关于快速模式的计费规则与价格表，请参见 [模型调用计费](../test-1/model-pricing.md)。
+
+<a id="错误码"></a>
+
+<a id="prime-errorcode-h2"></a>
 
 ## 错误码
 
-关于快速模式调用过程中可能出现的错误码及对应的解决方法，请参见 [错误码](raw/model-api-reference/preparations/error-code.md)。
+关于快速模式调用过程中可能出现的错误码及对应的解决方法，请参见 [错误码](../../model-api-reference/preparations/error-code.md)。

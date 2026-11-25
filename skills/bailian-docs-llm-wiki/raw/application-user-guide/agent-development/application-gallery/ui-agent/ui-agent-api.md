@@ -2,11 +2,19 @@
 
 UI Agent 是基于终端屏幕理解操作手机/车机/电视/PC等终端的多模态智能体方案。支持跨应用操作且无需训练，即插即用。
 
+<a id="基础信息"></a>
+
+<a id="421dd1e897hhz"></a>
+
 ## 基础信息
 
 版本号：V0.0.1
 
 API Endpoint： [https://dashscope.aliyuncs.com/](https://dashscope.aliyuncs.com/)
+
+<a id="接口信息"></a>
+
+<a id="8d84c635278qo"></a>
 
 ## 接口信息
 
@@ -14,7 +22,7 @@ API Endpoint： [https://dashscope.aliyuncs.com/](https://dashscope.aliyuncs.com
 
 **使用准备**
 
--   需要[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
+-   需要[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)
 
 **请求地址**
 
@@ -22,248 +30,56 @@ API Endpoint： [https://dashscope.aliyuncs.com/](https://dashscope.aliyuncs.com
 
 **请求头**
 
-**字段**
+| 字段 | 类型 | 必选 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| Authorization | String | 是 | 填写通过阿里云控制台获取的API Key | `Bearer sk-xxxxxxxxxxxxxxxxxxxx` |
+| Content-Type | String | 是 | 格式 | application/json |
 
-**类型**
+<a id="移动端-mobile-链路"></a>
 
-**必选**
-
-**描述**
-
-**示例值**
-
-Authorization
-
-String
-
-是
-
-填写通过阿里云控制台获取的API Key
-
-`Bearer sk-xxxxxxxxxxxxxxxxxxxx`
-
-Content-Type
-
-String
-
-是
-
-格式
-
-application/json
+<a id="02cb19673573y"></a>
 
 ### 移动端（Mobile） 链路
 
 **入参描述**
 
-**字段**
-
-**类型**
-
-**必选**
-
-**描述**
-
-**示例值**
-
-app\_id
-
-String
-
-是
-
-固定值为：gui-owl
-
-gui-owl
-
-input
-
-Array
-
-是
-
-传入信息结构列表，目前固定为单条
-
-input\[0\].role
-
-String
-
-是
-
-角色，默认传user
-
-user
-
-input\[0\].content
-
-Array
-
-是
-
-当前版本只处理第一个元素，并忽略其余
-
-{
-
-"type": "data",
-
-"data":
-
-}
-
-input\[0\].content\[0\].type
-
-String
-
-是
-
-类型
-
-input\[0\].content\[0\].data
-
-Dict
-
-是
-
-数据体
-
-input\[0\].content\[0\].data.messages
-
-Array
-
-是
-
-单键值对对象数组
-
-messages单键值对对象数组
-
-单键值对象数组
-
-```
-[
+<table><thead><tr><th><strong>字段</strong></th><th><strong>类型</strong></th><th><strong>必选</strong></th><th><strong>描述</strong></th><th><strong>示例值</strong></th></tr></thead><tbody><tr><td><p>app_id</p></td><td><p>String</p></td><td><p>是</p></td><td><p>固定值为：gui-owl</p></td><td><p>gui-owl</p></td></tr><tr><td><p>input</p></td><td><p>Array</p></td><td><p>是</p></td><td><p>传入信息结构列表，目前固定为单条</p></td><td></td></tr><tr><td><p>input[0].role</p></td><td><p>String</p></td><td><p>是</p></td><td><p>角色，默认传user</p></td><td><p>user</p></td></tr><tr><td><p>input[0].content</p></td><td><p>Array</p></td><td><p>是</p></td><td><p>当前版本只处理第一个元素，并忽略其余</p></td><td><p>{</p><p>&quot;type&quot;: &quot;data&quot;,</p><p>&quot;data&quot;:</p><p>}</p></td></tr><tr><td><p>input[0].content[0].type</p></td><td><p>String</p></td><td><p>是</p></td><td><p>类型</p></td><td></td></tr><tr><td><p>input[0].content[0].data</p></td><td><p>Dict</p></td><td><p>是</p></td><td><p>数据体</p></td><td></td></tr><tr><td><p>input[0].content[0].data.messages</p></td><td><p>Array</p></td><td><p>是</p></td><td><p>单键值对对象数组</p></td><td></td></tr><tr><td><p>messages单键值对对象数组</p></td><td></td><td></td><td><p>单键值对象数组</p></td><td><a id="code-block"></a><pre class="language-text"><code>[
               {
-                "image": "http://" # 请替换为有效的url
+                &quot;image&quot;: &quot;http://&quot; # 请替换为有效的url
               },
               {
-                "instruction": "打开微博"
+                &quot;instruction&quot;: &quot;打开微博&quot;
               },
               {
-                "session_id": ""
+                &quot;session_id&quot;: &quot;&quot;
               },
               {
-                "device_type": "mobile"
+                &quot;device_type&quot;: &quot;mobile&quot;
               },
               {
-                "pipeline_type": "agent"
+                &quot;pipeline_type&quot;: &quot;agent&quot;
               },
               {
-                "model_name": "pre-gui_owl_7b"
+                &quot;model_name&quot;: &quot;pre-gui_owl_7b&quot;
               },
               {
-                "thought_language": "chinese"
+                &quot;thought_language&quot;: &quot;chinese&quot;
               },
               {
-                "param_list": [
+                &quot;param_list&quot;: [
                   {
-                    "add_info": ""
+                    &quot;add_info&quot;: &quot;&quot;
                   }
                 ]
               }
             ]
-```
-
-image
-
-String
-
-是
-
-图片路径
-
-http(s)://
-
-instruction
-
-String
-
-是
-
-任务指令，即Mobile-Agent需要完成的任务
-
-在去哪儿旅行中查询10月19日从北京到杭州的火车票
-
-session\_id
-
-String
-
-是
-
-用于关联历史操作的查询ID，第一次调用空置，后续调用填入第一次返回的 session\_id 字段即可将所有操作关联起来
-
-session id : bee1915d-6f4d-4bfc-b657-ecb9d0ed8dad
-
-device\_type
-
-String
-
-是
-
-链路类型
-
-mobile
-
-pipeline\_type
-
-String
-
-是
-
-框架类型
-
-agent
-
-model\_name
-
-String
-
-是
-
-模型名称
-
-pre-gui\_owl\_7b
-
-thought\_language
-
-String
-
-否
-
-返回语言
-
-chinese
-
-param\_list
-
-Array
-
-是
-
-额外参数
-
-param\_list数组内键值对
-
-add\_info
-
-String
-
-是
-
-操作说明，可以添加操作知识来帮助Agent更准确地进行操作
-
-1.  点击火车·高铁模块.\\n2. 点击日期修改时间.\\n3. 点击对应的出发时间.\\n4. 点击左侧的城市名来修改出发地.\\n5. 点击起点的对应城市.\\n6. 点击右侧的城市名来修改目的地.\\n7. 点击终点对应的城市.\\n8. 上述操作完成后，点击“搜索”.
+</code></pre></td></tr><tr><td><p>image</p></td><td><p>String</p></td><td><p>是</p></td><td><p>图片路径</p></td><td><p>http(s)://</p></td></tr><tr><td><p>instruction</p></td><td><p>String</p></td><td><p>是</p></td><td><p>任务指令，即Mobile-Agent需要完成的任务</p></td><td><p>在去哪儿旅行中查询10月19日从北京到杭州的火车票</p></td></tr><tr><td><p>session_id</p></td><td><p>String</p></td><td><p>是</p></td><td><p>用于关联历史操作的查询ID，第一次调用空置，后续调用填入第一次返回的 session_id 字段即可将所有操作关联起来</p></td><td><p>session id : bee1915d-6f4d-4bfc-b657-ecb9d0ed8dad</p></td></tr><tr><td><p>device_type</p></td><td><p>String</p></td><td><p>是</p></td><td><p>链路类型</p></td><td><p>mobile</p></td></tr><tr><td><p>pipeline_type</p></td><td><p>String</p></td><td><p>是</p></td><td><p>框架类型</p></td><td><p>agent</p></td></tr><tr><td><p>model_name</p></td><td><p>String</p></td><td><p>是</p></td><td><p>模型名称</p></td><td><p>pre-gui_owl_7b</p></td></tr><tr><td><p>thought_language</p></td><td><p>String</p></td><td><p>否</p></td><td><p>返回语言</p></td><td><p>chinese</p></td></tr><tr><td><p>param_list</p></td><td><p>Array</p></td><td><p>是</p></td><td><p>额外参数</p></td><td></td></tr><tr><td><p>param_list数组内键值对</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>add_info</p></td><td><p>String</p></td><td><p>是</p></td><td><p>操作说明，可以添加操作知识来帮助Agent更准确地进行操作</p></td><td><ol><li>点击火车·高铁模块.\n2. 点击日期修改时间.\n3. 点击对应的出发时间.\n4. 点击左侧的城市名来修改出发地.\n5. 点击起点的对应城市.\n6. 点击右侧的城市名来修改目的地.\n7. 点击终点对应的城市.\n8. 上述操作完成后，点击“搜索”.</li></ol></td></tr></tbody></table>
 
 请求示例
 
-```
+<a id="code-block-2"></a>
+
+```text
 curl --location --request POST 'https://dashscope.aliyuncs.com/api/v2/apps/gui-owl/gui_agent_server' \
 --header 'Authorization: Bearer sk-' \
 --header 'Content-Type: application/json' \
@@ -316,7 +132,9 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v2/apps/gui-o
 
 响应示例
 
-```
+<a id="code-block-3"></a>
+
+```text
 import time
 import uuid
 import requests
@@ -397,92 +215,29 @@ except requests.exceptions.RequestException as e:
     print(f"请求发生错误: {e}")
 ```
 
+<a id="e5871b3e907zb"></a>
+
 ##### 出参描述
 
-**字段**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-id
-
-String
-
-请求id
-
-output
-
-Array
-
-返回数据，固定一条
-
-output\[0\].code
-
-String
-
-业务状态码，200表示成功
-
-output\[0\].id
-
-String
-
-请求id
-
-86693b43-2c99-9f51-9df0-2c32f15e7a3a
-
-output\[0\].content
-
-Array
-
-output\[0\].content.data
-
-Dict
-
-推理数据
-
-data内的数据
-
-Explanation
-
-String
-
-动作信息
-
-Tap on the Weibo app icon located in the first row of the home screen.
-
-Operation
-
-String
-
-操作动作
-
-Click (144, 248, 144, 248)
-
-Thought
-
-String
-
-思考内容
-
-The user wants to open the Weibo app. The Weibo app icon is visible in the first row of the home screen, so I need to tap on it to proceed with opening the application.
-
-usage
-
-dict
-
-该次请求的token消耗
-
-{  
-"input\_tokens": 1537,  
-"output\_tokens": 39  
-}
+| 字段 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+| id | String | 请求id |  |
+| output | Array | 返回数据，固定一条 |  |
+| output\[0\].code | String | 业务状态码，200表示成功 |  |
+| output\[0\].id | String | 请求id | 86693b43-2c99-9f51-9df0-2c32f15e7a3a |
+| output\[0\].content | Array |  |  |
+| output\[0\].content.data | Dict | 推理数据 |  |
+| data内的数据 |  |  |  |
+| Explanation | String | 动作信息 | Tap on the Weibo app icon located in the first row of the home screen. |
+| Operation | String | 操作动作 | Click (144, 248, 144, 248) |
+| Thought | String | 思考内容 | The user wants to open the Weibo app. The Weibo app icon is visible in the first row of the home screen, so I need to tap on it to proceed with opening the application. |
+| usage | dict | 该次请求的token消耗 | {<br>"input\_tokens": 1537,<br>"output\_tokens": 39<br>} |
 
 完整返回实例
 
-```
+<a id="code-block-4"></a>
+
+```text
 {
     "created_at": 1758548962,
     "id": "401a9031-3fa5-4655-a34d-090523a6dd1d",
@@ -519,219 +274,48 @@ dict
 }
 ```
 
+<a id="pc-端链路"></a>
+
+<a id="ba33b956acpdy"></a>
+
 ### PC 端链路
+
+<a id="61e5a5e151am3"></a>
 
 ##### 入参描述
 
-**字段**
-
-**类型**
-
-**必选**
-
-**描述**
-
-**示例值**
-
-app\_id
-
-String
-
-是
-
-固定值为：gui-owl
-
-gui-owl
-
-input
-
-Array
-
-是
-
-传入信息结构列表，目前固定为单条
-
-input\[0\].role
-
-String
-
-是
-
-角色，默认传user
-
-user
-
-input\[0\].content
-
-Array
-
-输入内容
-
-目前固定为单条content
-
-{
-
-"type": "data",
-
-"data":
-
-}
-
-input\[0\].content\[0\].type
-
-String
-
-是
-
-类型
-
-input\[0\].content\[0\].data
-
-Dict
-
-是
-
-数据体
-
-input\[0\].content\[0\].data.messages
-
-Array
-
-是
-
-每条messages必须包含： image, instruction,add\_info,session\_id 四个值
-
-messages数组内键值对
-
-image
-
-String
-
-是
-
-当前的设备屏幕截屏的本地路径
-
-oss地址
-
-instruction
-
-String
-
-是
-
-任务指令，即Mobile-Agent需要完成的任务
-
-在去哪儿旅行中查询10月19日从北京到杭州的火车票
-
-session\_id
-
-String
-
-是
-
-用于关联历史操作的查询ID，第一次调用空置，后续调用填入第一次返回的 session\_id 字段即可将所有操作关联起来
-
-session id : bee1915d-6f4d-4bfc-b657-ecb9d0ed8dad
-
-device\_type
-
-String
-
-是
-
-链路类型
-
-pc
-
-pipeline\_type
-
-String
-
-是
-
-框架类型
-
-agent
-
-model\_name
-
-String
-
-是
-
-模型名称
-
-pre-gui\_owl\_7b
-
-param\_list
-
-Array
-
-是
-
-额外参数
-
-param\_list数组内键值对
-
-add\_info
-
-String
-
-是
-
-操作说明，可以添加操作知识来帮助Agent更准确地进行操作，书写格式请参考add\_info文档
-
-enable\_reflector
-
-Boolean
-
-否
-
-是否添加反思agent
-
-enable\_notetaker
-
-Boolean
-
-否
-
-是否添加memory agent
-
-worker\_model
-
-String
-
-是
-
-决策agent使用的模型
-
-manager\_model
-
-String
-
-是
-
-规划agent使用的模型
-
-reflector\_model
-
-String
-
-是
-
-反思agent使用的模型
-
-notetaker\_model
-
-String
-
-是
-
-Memory agent使用的模型
+| 字段 | 类型 | 必选 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| app\_id | String | 是 | 固定值为：gui-owl | gui-owl |
+| input | Array | 是 | 传入信息结构列表，目前固定为单条 |  |
+| input\[0\].role | String | 是 | 角色，默认传user | user |
+| input\[0\].content | Array | 输入内容 | 目前固定为单条content | {<br><br>"type": "data",<br><br>"data":<br><br>} |
+| input\[0\].content\[0\].type | String | 是 | 类型 |  |
+| input\[0\].content\[0\].data | Dict | 是 | 数据体 |  |
+| input\[0\].content\[0\].data.messages | Array | 是 | 每条messages必须包含： image, instruction,add\_info,session\_id 四个值 |  |
+| messages数组内键值对 |  |  |  |  |
+| image | String | 是 | 当前的设备屏幕截屏的本地路径 | oss地址 |
+| instruction | String | 是 | 任务指令，即Mobile-Agent需要完成的任务 | 在去哪儿旅行中查询10月19日从北京到杭州的火车票 |
+|  |  |  |  |  |
+| session\_id | String | 是 | 用于关联历史操作的查询ID，第一次调用空置，后续调用填入第一次返回的 session\_id 字段即可将所有操作关联起来 | session id : bee1915d-6f4d-4bfc-b657-ecb9d0ed8dad |
+| device\_type | String | 是 | 链路类型 | pc |
+| pipeline\_type | String | 是 | 框架类型 | agent |
+| model\_name | String | 是 | 模型名称 | pre-gui\_owl\_7b |
+| param\_list | Array | 是 | 额外参数 |  |
+| param\_list数组内键值对 |  |  |  |  |
+| add\_info | String | 是 | 操作说明，可以添加操作知识来帮助Agent更准确地进行操作，书写格式请参考add\_info文档 |  |
+| enable\_reflector | Boolean | 否 | 是否添加反思agent |  |
+| enable\_notetaker | Boolean | 否 | 是否添加memory agent |  |
+| worker\_model | String | 是 | 决策agent使用的模型 |  |
+| manager\_model | String | 是 | 规划agent使用的模型 |  |
+| reflector\_model | String | 是 | 反思agent使用的模型 |  |
+| notetaker\_model | String | 是 | Memory agent使用的模型 |  |
 
 请求示例
 
-```
+<a id="code-block-5"></a>
+
+```text
 curl --location --request POST 'https://dashscope.aliyuncs.com/api/v2/apps/gui-owl/gui_agent_server' \
 --header 'Authorization: Bearer sk-' \
 --header 'Content-Type: application/json' \
@@ -802,7 +386,9 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v2/apps/gui-o
 
 响应示例
 
-```
+<a id="code-block-6"></a>
+
+```text
 import time
 import uuid
 import requests
@@ -902,103 +488,30 @@ except requests.exceptions.RequestException as e:
     print(f"请求发生错误: {e}")
 ```
 
+<a id="2e9067fdbe71r"></a>
+
 ##### 出参描述
 
-**字段**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-output
-
-Array
-
-返回数据，固定一条
-
-output\[0\].code
-
-String
-
-200
-
-output\[0\].id
-
-String
-
-请求id
-
-86693b43-2c99-9f51-9df0-2c32f15e7a3a
-
-output\[0\].content
-
-Array
-
-output\[0\].content.data
-
-Dict
-
-推理数据
-
-data内的数据
-
-action\_parameter
-
-Dict
-
-动作的参数
-
-{
-
-"count": 1,
-
-"position": \[
-
-69,
-
-2124
-
-\]
-
-}
-
-action\_type
-
-String
-
-动作类型
-
-click
-
-explanation
-
-String
-
-动作的总结
-
-global\_state
-
-Dict
-
-整体规划、当前子任务等信息
-
-meta\_data
-
-Dict
-
-此字段仅供调试使用，生产环境请勿依赖，其结构和内容未来可能变更或移除
-
-thought
-
-String
-
-思考内容
+| 字段 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+| output | Array | 返回数据，固定一条 |  |
+| output\[0\].code | String | 200 |  |
+| output\[0\].id | String | 请求id | 86693b43-2c99-9f51-9df0-2c32f15e7a3a |
+| output\[0\].content | Array |  |  |
+| output\[0\].content.data | Dict | 推理数据 |  |
+| data内的数据 |  |  |  |
+| action\_parameter | Dict | 动作的参数 | {<br><br>"count": 1,<br><br>"position": \[<br><br>69,<br><br>2124<br><br>\]<br><br>} |
+| action\_type | String | 动作类型 | click |
+| explanation | String | 动作的总结 |  |
+| global\_state | Dict | 整体规划、当前子任务等信息 |  |
+| meta\_data | Dict | 此字段仅供调试使用，生产环境请勿依赖，其结构和内容未来可能变更或移除 |  |
+| thought | String | 思考内容 |  |
 
 完整返回实例
 
-```
+<a id="code-block-7"></a>
+
+```text
 {
     "created_at": 1758182731,
     "object": "response",
@@ -1220,10 +733,18 @@ String
 }
 ```
 
+<a id="使用限制与计费说明"></a>
+
+<a id="aee4dfd504een"></a>
+
 ## 使用限制与计费说明
 
 限时免费
 
+<a id="状态码说明"></a>
+
+<a id="C8pqJ"></a>
+
 ## 状态码说明
 
-大模型服务平台通用状态码详情，请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+大模型服务平台通用状态码详情，请参见[错误码](../../../../model-api-reference/preparations/error-code.md)。

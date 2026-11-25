@@ -2,9 +2,17 @@
 
 通过 SSE 实时订阅会话事件流：助手输出消息、工具调用、状态变更。连接建立后服务端立即下发 : connected 注释行。
 
+<a id="前提"></a>
+
+<a id="h-es-prereq"></a>
+
 ## 前提
 
-已创建会话，详见[创建 Session](raw/application-api-reference/managed-agents-api/session-api/session-create.md)。`{session_id}` 形如 `sesn_xxx...`。
+已创建会话，详见[创建 Session](session-create.md)。`{session_id}` 形如 `sesn_xxx...`。
+
+<a id="接口"></a>
+
+<a id="h-es-endpoint"></a>
 
 ## 接口
 
@@ -12,129 +20,58 @@
 
 请求需带 `Accept: text/event-stream`。连接建立后服务端立即下发 `: connected` 注释行，随后实时推送会话事件。
 
+<a id="事件信封"></a>
+
+<a id="h-es-envelope"></a>
+
 ## 事件信封
 
 `data` 字段是 Message 对象，公共字段如下：
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `object` | string | 恒为 `message` |
+| `id` | string | 事件 ID（前缀 `msg_` 或 `out_`）。客户端用此 ID 在业务层去重 |
+| `created_at` | string | ISO 8601 时间戳 |
+| `role` | string | `user` / `assistant` / `tool` |
+| `type` | string | 事件类型，见下表 |
+| `status` | string | 固定为 `completed` |
+| `content` | array | ContentBlock 数组，结构同发送侧 |
+| `is_error` | bool | 仅工具输出事件（`tool_call_output` / `mcp_call_output`）出现，写在 Message 顶层：`true` 表示该次工具执行失败或被中断 / 拒绝 |
+| `metadata` | object | 事件附加信息（如 thread\_id、call\_id 等） |
 
-类型
+<a id="服务端推送事件类型"></a>
 
-说明
-
-`object`
-
-string
-
-恒为 `message`
-
-`id`
-
-string
-
-事件 ID（前缀 `msg_` 或 `out_`）。客户端用此 ID 在业务层去重
-
-`created_at`
-
-string
-
-ISO 8601 时间戳
-
-`role`
-
-string
-
-`user` / `assistant` / `tool`
-
-`type`
-
-string
-
-事件类型，见下表
-
-`status`
-
-string
-
-固定为 `completed`
-
-`content`
-
-array
-
-ContentBlock 数组，结构同发送侧
-
-`is_error`
-
-bool
-
-仅工具输出事件（`tool_call_output` / `mcp_call_output`）出现，写在 Message 顶层：`true` 表示该次工具执行失败或被中断 / 拒绝
-
-`metadata`
-
-object
-
-事件附加信息（如 thread\_id、call\_id 等）
+<a id="h-es-server-types"></a>
 
 ## 服务端推送事件类型
 
-type
+| type | 含义 |
+| --- | --- |
+| `message` | 助手输出消息，可流式分块 |
+| `reasoning` | 助手思考过程，开启 `event_deltas[]=reasoning` 后可流式分块 |
+| `tool_call` | 内置工具调用请求 |
+| `tool_call_output` | 内置工具执行结果 |
+| `tool_approval_request` | 工具审批请求，当工具需要审批时单独发送一次，`data` 携带 `batch_id`、`call_id`、`name`、`arguments`、`tool_type`。是否需要审批以本事件为准 |
+| `tool_approval_response` | 工具审批裁决。客户端上行提交裁决，服务端也会下行补发 |
+| `function_call` | 自托管函数调用请求，需客户端回填 `function_call_output` |
+| `function_call_output` | 服务端确认收到的函数结果回显 |
+| `mcp_call` | MCP 工具调用请求 |
+| `mcp_call_output` | MCP 工具执行结果 |
+| `session_status` | 会话状态变更（含 `stop_reason`，见下文） |
+| `error` | 运行期错误事件。错误详情位于 Message 顶层的 `error` 对象（`error.code` / `error.message`），不在 `content[].data` 中 |
 
-含义
+<a id="session-status-与-stop-reason"></a>
 
-`message`
-
-助手输出消息，可流式分块
-
-`reasoning`
-
-助手思考过程，开启 `event_deltas[]=reasoning` 后可流式分块
-
-`tool_call`
-
-内置工具调用请求
-
-`tool_call_output`
-
-内置工具执行结果
-
-`tool_approval_request`
-
-工具审批请求，当工具需要审批时单独发送一次，`data` 携带 `batch_id`、`call_id`、`name`、`arguments`、`tool_type`。是否需要审批以本事件为准
-
-`tool_approval_response`
-
-工具审批裁决。客户端上行提交裁决，服务端也会下行补发
-
-`function_call`
-
-自托管函数调用请求，需客户端回填 `function_call_output`
-
-`function_call_output`
-
-服务端确认收到的函数结果回显
-
-`mcp_call`
-
-MCP 工具调用请求
-
-`mcp_call_output`
-
-MCP 工具执行结果
-
-`session_status`
-
-会话状态变更（含 `stop_reason`，见下文）
-
-`error`
-
-运行期错误事件。错误详情位于 Message 顶层的 `error` 对象（`error.code` / `error.message`），不在 `content[].data` 中
+<a id="h-es-status-stop"></a>
 
 ## `session_status` 与 `stop_reason`
 
 `data.content[0].data` 携带具体状态：
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "object": "message",
   "type": "session_status",
@@ -156,19 +93,33 @@ MCP 工具执行结果
     -   `{"type": "requires_action", "pending_batch_id": "...", "pending_call_ids": [...]}`：等待客户端响应（如审批工具调用、回填函数结果），`pending_call_ids` 列出待裁决的工具调用
     -   `{"type": "retries_exhausted"}`：重试已耗尽，本轮失败
 
+<a id="订阅示例"></a>
+
+<a id="h-es-eg"></a>
+
 ## 订阅示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-curl-tab"></a>
 
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl -N "$AGENTSTUDIO_URL/sessions/sesn_xxx/events/stream" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Accept: text/event-stream"
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 with client.sessions.events.stream("sesn_xxx", timeout=120.0) as stream:
     for event in stream:
         if event.type == "message":
@@ -180,9 +131,13 @@ with client.sessions.events.stream("sesn_xxx", timeout=120.0) as stream:
                 break
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 try (AgentStudioEventStream stream = client.sessions().events().stream("sesn_xxx", 120_000L)) {
     for (Message event : stream) {
         if ("message".equals(event.getType()) && event.getContent() != null) {
@@ -199,7 +154,9 @@ try (AgentStudioEventStream stream = client.sessions().events().stream("sesn_xxx
 
 响应（节选）：
 
-```
+<a id="code-block-2"></a>
+
+```text
 : connected
 
 event: message
@@ -214,11 +171,17 @@ event: message
 data: {"object":"message","id":"msg_002","created_at":"2025-10-24T08:15:35.800Z","role":"assistant","type":"session_status","status":"completed","content":[{"type":"data","data":{"session_status":"idle","stop_reason":{"type":"end_turn"}}}]}
 ```
 
+<a id="delta-增量流"></a>
+
+<a id="h-es-delta"></a>
+
 ## Delta 增量流
 
 默认情况下，每个事件仅在生成完成后下发一帧完整 Message（`status: "completed"`）。若希望文本类事件（如 `message`、`reasoning`）在生成过程中流式逐块推送，可在请求时用 `event_deltas[]` 查询参数为指定事件类型开启增量流。该参数可重复传入以声明多个类型；未声明的事件类型仍按单帧完整 Message 下发。
 
-```
+<a id="code-block-3"></a>
+
+```bash
 curl -N --no-buffer --get "$AGENTSTUDIO_URL/sessions/sesn_xxx/events/stream" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Accept: text/event-stream" \
@@ -228,63 +191,30 @@ curl -N --no-buffer --get "$AGENTSTUDIO_URL/sessions/sesn_xxx/events/stream" \
 
 开启后，被声明类型的事件按以下顺序推送三类帧，客户端按 `event_id` 归并到同一事件：
 
-帧 `type`
-
-说明
-
-`event_start`
-
-事件开始帧，`event.id` 即该事件最终完整 Message 的 `id`，`event.type` 为事件类型（`message` / `reasoning`）；该帧不含 `content`，`object` 为 `message`，`status` 为 `in_progress`
-
-`event_delta`
-
-增量帧，`event_id` 对应 `event_start` 的 `event.id`；`message` 的新增片段在 `delta.content`，`reasoning` 的新增思考文本在 `delta.reasoning`；`delta.index` 为内容块序号
-
-`message` / `reasoning`
-
-事件结束时下发的完整 Message（`object: "message"`、`status: "completed"`），`content` 为聚合后的完整内容，与未开启增量时一致
+| 帧 `type` | 说明 |
+| --- | --- |
+| `event_start` | 事件开始帧，`event.id` 即该事件最终完整 Message 的 `id`，`event.type` 为事件类型（`message` / `reasoning`）；该帧不含 `content`，`object` 为 `message`，`status` 为 `in_progress` |
+| `event_delta` | 增量帧，`event_id` 对应 `event_start` 的 `event.id`；`message` 的新增片段在 `delta.content`，`reasoning` 的新增思考文本在 `delta.reasoning`；`delta.index` 为内容块序号 |
+| `message` / `reasoning` | 事件结束时下发的完整 Message（`object: "message"`、`status: "completed"`），`content` 为聚合后的完整内容，与未开启增量时一致 |
 
 `event_delta` 帧字段：
 
-字段
-
-说明
-
-`type`
-
-恒为 `event_delta`
-
-`object`
-
-恒为 `content`
-
-`status`
-
-恒为 `in_progress`
-
-`event_id`
-
-所属事件 ID，等于 `event_start` 的 `event.id`，也等于最终完整 Message 的 `id`；用于将增量帧归并到对应事件
-
-`delta.type`
-
-`message` 为 `content_delta`，`reasoning` 为 `reasoning_delta`
-
-`delta.index`
-
-内容块在 `content` 数组中的序号
-
-`delta.content`
-
-`message` 本次新增的 ContentBlock 片段，如 `{"type":"text","text":"…"}`
-
-`delta.reasoning`
-
-`reasoning` 本次新增的思考文本片段
+| 字段 | 说明 |
+| --- | --- |
+| `type` | 恒为 `event_delta` |
+| `object` | 恒为 `content` |
+| `status` | 恒为 `in_progress` |
+| `event_id` | 所属事件 ID，等于 `event_start` 的 `event.id`，也等于最终完整 Message 的 `id`；用于将增量帧归并到对应事件 |
+| `delta.type` | `message` 为 `content_delta`，`reasoning` 为 `reasoning_delta` |
+| `delta.index` | 内容块在 `content` 数组中的序号 |
+| `delta.content` | `message` 本次新增的 ContentBlock 片段，如 `{"type":"text","text":"…"}` |
+| `delta.reasoning` | `reasoning` 本次新增的思考文本片段 |
 
 示例流（`reasoning` 与 `message` 均开启增量）：
 
-```
+<a id="code-block-4"></a>
+
+```text
 : connected
 
 event: message
@@ -318,6 +248,8 @@ event: message
 data: {"object":"message","status":"completed","id":"sevt_status_idle_xxx","type":"session_status","content":[{"type":"data","data":{"session_status":"idle","stop_reason":{"type":"end_turn"}}}]}
 ```
 
-**说明**拼接文本时按
-
-`event_id` + `delta.index` 顺序累加各 `event_delta` 的 `delta.content`（`message`）或 `delta.reasoning`（`reasoning`）；事件结束时下发的完整 Message 携带聚合后的完整内容，可用于校验。`reasoning` 事件可能不含 `event_delta`，此时以完整 Message 为准。
+> **说明**
+>
+> 拼接文本时按
+>
+> `event_id` + `delta.index` 顺序累加各 `event_delta` 的 `delta.content`（`message`）或 `delta.reasoning`（`reasoning`）；事件结束时下发的完整 Message 携带聚合后的完整内容，可用于校验。`reasoning` 事件可能不含 `event_delta`，此时以完整 Message 为准。

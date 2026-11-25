@@ -1,56 +1,51 @@
 # 向量嵌入
 
-向量嵌入（Vector Embedding）是将原始非结构化数据（如文本、图像、视频等）映射到高维连续语义空间中的稠密数值向量的过程。该向量保留了原始内容的语义特征与相对关系，使得语义相似的内容在向量空间中距离更近，从而支撑检索、聚类、去重、RAG 等下游任务。
+向量嵌入（Embedding）是将原始文本、图像等非结构化数据映射为固定维度稠密实数向量的过程，使语义相近的内容在向量空间中距离更近，从而支撑语义搜索、相似匹配、RAG 检索等下游任务。该表示不依赖关键词匹配，而是基于模型学习到的深层语义表征。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **RAG（知识库）场景**：向量嵌入是知识库构建的核心前置步骤。文档切片后，由指定嵌入模型（如 `text-embedding-v4` 或 `qwen3-vl-embedding`）生成向量并存入向量数据库；用户查询时，查询文本也被嵌入为向量，通过向量相似度（如余弦相似度）完成语义召回。多模态知识库（如 `image` 或 `multimedia` 类型）必须配置对应多模态嵌入模型。
-  
-- **向量检索服务（Vector API）**：作为独立能力提供同步/异步接口，支持开发者自主控制嵌入流程。同步接口适用于低延迟实时场景（如对话中动态嵌入用户输入），异步批处理（`text-embedding-async-v2`）适用于离线构建大规模底库向量。
-
-- **框架集成场景**：LlamaIndex、LangChain、Spring AI 等主流框架通过 `BailianEmbeddings` 或 `AlibabaAIClient` 封装调用百炼嵌入模型，开发者无需感知底层协议，只需传入文本或 `contents` 即可获取向量，无缝接入 RAG pipeline。
-
-- **多模态统一表征**：通过 `qwen3-vl-embedding`、`tongyi-embedding-vision-plus-2026-03-06` 等模型，支持文本、图像、视频混合输入，并可选择融合为单向量（`enable_fusion=true`）或生成各模态独立向量，服务于跨模态搜索与理解任务。
-
-- **CLI 工具链支持**：`bl batch` 命令支持批量文本向量化（需配合 `--model text-embedding-*`），适用于数据预处理、评估集构建等工程化任务；所有文件类参数（如 `--file-url`）均自动上传并触发嵌入流程。
+- **RAG 知识库构建**：知识库创建或更新时，系统自动调用指定的嵌入模型（如 `text-embedding-v1` 或 `qwen3.7-text-embedding`）对文档切片进行向量化，并构建向量索引；检索阶段通过计算用户 query 向量与切片向量的余弦相似度完成语义召回。  
+- **直接 API 调用**：通过 `/api/v1/services/embeddings` 接口，开发者可独立调用文本或多模态嵌入服务，输入字符串数组或图像+文本组合，获取标准化向量结果，用于自定义检索、聚类、去重等逻辑。  
+- **混合检索策略**：在 Knowledge API 的 `retrieval_strategy=hybrid` 模式下，向量嵌入与关键词检索并行执行，结果融合后排序，兼顾语义准确性与术语召回率。  
+- **多模态理解场景**：使用 `multimodal-embedding-v1` 模型，可将图像（base64 编码）与描述文本联合编码为统一 512 维向量，支持跨模态相似检索（如“找与这张图语义最接近的文档”）。  
+- **Agent 工作流集成**：在 RAG Agent 的 `agent_config` 中，嵌入模型作为底层检索组件被策略性调用，其输出向量参与动态路由、上下文感知重排等高级编排逻辑。
 
 ## 关键参数和配置
 
-| 参数 | 适用模型/场景 | 说明 |
-|------|----------------|------|
-| `model` | 全部 | 必填。指定嵌入模型 ID，例如 `qwen3.7-text-embedding`、`text-embedding-v4`、`qwen3-vl-embedding`。不支持别名，未指定将报错。 |
-| `input` | 同步接口、[OpenAI 兼容接口](openai-compatible-interface.md) | 支持字符串、字符串列表（最大 2048 tokens 总长）、或符合 OpenAI 兼容格式的 `contents` 数组（含 `text`/`image`/`video` 字段）。 |
-| `dimensions` | 多数文本模型（如 `qwen3.7-text-embedding`） | 可选。指定输出向量维度（如 `1024`、`2048`），影响精度与存储开销；若不指定，使用模型默认维度。 |
-| `text_type` | 异步模型（如 `text-embedding-async-v2`） | 必填。设为 `"document"`（用于知识库底库）或 `"query"`（用于用户检索），不同类型经模型优化，对检索效果影响显著。 |
-| `enable_fusion` | `qwen3-vl-embedding` | 布尔值。设为 `true` 时，将 `contents` 中所有模态输入融合为一个联合向量；设为 `false` 则返回各模态独立向量。 |
-| `base_url` | 框架/SDK 调用 | 必须显式配置为 `https://dashscope.aliyuncs.com/compatible-mode/v1`（OpenAI 兼容）或 `https://dashscope.aliyuncs.com/api/v1`（原生接口）。 |
+- **`model`**（必填）：嵌入模型标识符，例如：  
+  - 文本：`"text-embedding-v1"`（1024 维，默认）、`"text-embedding-v2"`（更高精度）、`"qwen3.7-text-embedding"`（RAG 场景推荐）；  
+  - 多模态：`"multimodal-embedding-v1"`（512 维，仅支持 `float` 输出）。  
+  > ✅ 注意：模型名必须与 [向量与排序](../../raw/model-api-reference/vector-and-sort.md) 文档严格一致，大小写敏感。
 
-> ⚠️ 注意：`text-embedding-async-v1` 已不推荐使用；`multimodal-embedding-v1` 不支持 `dimension` 参数；`instruct`、`fps` 等参数属于排序（Rerank）模型，**不适用于向量嵌入接口**。
+- **`input`**（必填）：  
+  - 文本模型：接受单个字符串（如 `"你好"`）或字符串数组（如 `["A", "B"]`），最大总长度 2048 tokens；  
+  - 多模态模型：接受对象 `{ "image": "base64...", "text": "可选描述" }`，图像尺寸 ≤ 1024×1024。
+
+- **`encoding_format`**（可选，仅文本模型）：  
+  - `"float"`（默认）：返回浮点数数组（如 `[0.12, -0.45, ...]`）；  
+  - `"base64"`：返回 base64 编码的二进制向量（节省传输体积）；  
+  > ⚠️ `multimodal-embedding-v1` **不支持** `"base64"`，强制返回 `float`。
+
+- **维度与兼容性**：所有嵌入模型输出维度固定且不可配置（如 `text-embedding-v1`: 1024，`multimodal-embedding-v1`: 512），向量可直接用于余弦相似度计算或存入主流向量数据库（如 Milvus、PGVector）。
 
 ## 面向开发者，简洁实用
 
-- ✅ **首选同步调用**：实时性要求高时，直接使用 OpenAI 兼容 `/v1/embeddings` 接口或 DashScope SDK：
-  ```python
-  from openai import OpenAI
-  client = OpenAI(api_key="sk-xxx", base_url="https://dashscope.aliyuncs.com/compatible-mode/v1")
-  resp = client.embeddings.create(model="qwen3.7-text-embedding", input=["你好世界", "Hello world"])
-  vectors = [item.embedding for item in resp.data]
-  ```
-
-- ✅ **批量离线处理**：千万级文档请用异步批处理，上传 CSV/JSONL 文件 URL，轮询 `task_id` 获取结果 ZIP 下载链接（支持 10 万行/任务）。
-
-- ✅ **多模态必读**：图像/视频嵌入必须使用 `qwen3-vl-embedding` 或 `tongyi-embedding-vision-plus-2026-03-06`；输入需为 `contents=[{"image": "base64..."}, {"text": "描述"}]` 格式，融合模式按模型要求启用。
-
-- ✅ **RAG 开发者**：在 Knowledge API 创建知识库时，通过 `embeddingModelName` 显式指定嵌入模型；避免依赖默认值，确保线上环境一致性。
-
-- ❌ **不要混淆**：向量嵌入（embedding）≠ 排序（rerank）≠ 生成（chat/completions）。三者模型、接口、参数完全隔离，不可混用。
+- ✅ **快速验证**：用 `curl` 直接调用 `/api/v1/services/embeddings`，确认模型响应格式与延迟；  
+- ✅ **生产建议**：  
+  - RAG 场景优先选用 `qwen3.7-text-embedding`（精度/速度平衡）；  
+  - 多模态需求明确时，用 `multimodal-embedding-v1` 并预处理图像至 ≤1024×1024；  
+  - 批量嵌入请合并请求（传入字符串数组），避免高频单条调用；  
+- ❌ **避坑提示**：  
+  - 不要为 `multimodal-embedding-v1` 设置 `encoding_format=base64`（将报错）；  
+  - 向量索引更新非实时（30–120 秒延迟），业务需容忍短暂不一致；  
+  - 所有嵌入模型均**不支持** `top_k`、`dimension` 等可调参数——维度与行为由模型本身固化。
 
 ## 关联主题页
 
 - [vector and sort](../api/vector-and-sort.md)
-- [capabilities](../guides/capabilities.md)
 - [rag api](../api/rag-api.md)
-- [frameworks](../api/frameworks.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
+- [knowledge base](../guides/knowledge-base.md)
+- [model experience](../guides/model-experience.md)
+- [more about models](../api/more-about-models.md)
 
 

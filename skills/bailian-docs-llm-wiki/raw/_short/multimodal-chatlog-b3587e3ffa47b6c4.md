@@ -2,6 +2,10 @@
 
 如果您需要保存全量对话日志，需要使用阿里云事件总线能力，操作步骤请查看本文档。
 
+<a id="操作步骤"></a>
+
+<a id="73407199aey3f"></a>
+
 ## 操作步骤
 
 1.  开通事件总线：
@@ -36,10 +40,18 @@
             如果选择**云消息队列 RocketMQ 版**，您需按照页面上的要求填写配置（实例 ID、Topic、Vpc、交换机等），后续聊天日志就会发送到RocketMQ的对应配置中，用户只需要消费MQ中的消息即可。 其余服务类型配置步骤类似。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9345897471/p959483.png)
             
 
+<a id="事件总线文档"></a>
+
+<a id="7bb663d42c40v"></a>
+
 ### 事件总线文档
 
 -   事件总线官方文档：[什么是事件总线EventBridge](https://help.aliyun.com/zh/eventbridge/product-overview/what-is-eventbridge)
 -   事件总线API文档： [API概览](https://help.aliyun.com/zh/eventbridge/developer-reference/api-eventbridge-2020-04-01-overview)
+
+<a id="聊天日志追踪"></a>
+
+<a id="1e13a5fe28nxr"></a>
 
 ## 聊天日志追踪
 
@@ -47,10 +59,16 @@
     
 2.  在**事件追踪**页面，支持按时间范围查询和按事件ID查询。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9345897471/p959492.png)
     
-    **说明**事件ID和聊天日志的`requestId`是同一个。
+    > **说明**
+    >
+    > 事件ID和聊天日志的`requestId`是同一个。
     
     在下图示例中，事件ID即为聊天日志中的`requestId`。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9345897471/p959493.png)
     
+
+<a id="聊天日志格式说明"></a>
+
+<a id="ab4c44120bjrn"></a>
 
 ## 聊天日志格式说明
 
@@ -73,7 +91,9 @@
 -   日志示例代码如下：
     
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "datacontenttype": "application/json;charset=utf-8",
     "aliyunaccountid": "1406635223510007",

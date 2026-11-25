@@ -2,23 +2,39 @@
 
 Managed Agents API 是阿里云百炼提供的智能体托管运行时，由平台托管会话、沙箱、工具执行与事件流。
 
-**说明**调用前请先配置[认证](raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)；错误处理见[错误码](raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md)。
+> **说明**
+>
+> 调用前请先配置[认证](managed-agents-api-authentication.md)；错误处理见[错误码](managed-agents-api-errors.md)。
+
+<a id="前提条件"></a>
+
+<a id="1cea3ecb89xo6"></a>
 
 ## 前提条件
 
-1.  已开通阿里云百炼，并[创建 API Key](raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)。
+1.  已开通阿里云百炼，并[创建 API Key](managed-agents-api-authentication.md)。
 2.  **获取工作空间 ID**：阿里云百炼控制台右上角下拉菜单查看，形如 `ws_xxxxxxxxxxxx`。
+
+<a id="endpoint"></a>
+
+<a id="b9b8655d4821h"></a>
 
 ## Endpoint
 
 API 基地址按工作空间与地域拼装：
 
-```
+<a id="code-block"></a>
+
+```text
 https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio
 ```
 
 -   `workspace_id`：工作空间 ID，例如 `ws_xxxxxxxxxxxx`
 -   `region`：地域 ID，当前仅支持 `cn-beijing`
+
+<a id="sdk"></a>
+
+<a id="h-sdk"></a>
 
 ## SDK
 
@@ -26,20 +42,34 @@ https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio
 
 会话级智能体配置覆盖（`agent` 对象与 patch）和会话级 MCP 请求头（`mcp_configs`）需要 Python SDK v1.27.7 及以上、Java SDK v2.23.2 及以上；直接调用 REST 接口不受此限制。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 pip install dashscope
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>dashscope-sdk-java</artifactId>
 </dependency>
 ```
+
+<a id="请求与响应"></a>
+
+<a id="h-req-resp"></a>
 
 ## 请求与响应
 
@@ -47,302 +77,10 @@ java
 -   每次响应携带 `x-request-id` 头，可用于定位具体请求
 -   列表端点支持分页：`limit`（默认 20，最大 100）、`page`（首次不传，后续传上一次响应的 `next_page`）。响应不含 `next_page` 表示已是末页
 
+<a id="可用-api"></a>
+
+<a id="h-apis"></a>
+
 ## 可用 API
 
-**资源**
-
-**端点**
-
-**用途**
-
-[Agent](raw/application-api-reference/managed-agents-api/agent-api.md)
-
-`POST /agents`
-
-创建 Agent
-
-`GET /agents/{agent_id}`
-
-获取 Agent
-
-`GET /agents`
-
-列出 Agent
-
-`POST /agents/{agent_id}`
-
-更新 Agent（自动生成新版本号）
-
-`POST /agents/{agent_id}/archive`
-
-归档 Agent
-
-[Environment](raw/application-api-reference/managed-agents-api/environment-api.md)
-
-`POST /environments`
-
-创建 Environment
-
-`GET /environments/{environment_id}`
-
-获取 Environment
-
-`GET /environments`
-
-列出 Environment
-
-`POST /environments/{environment_id}`
-
-更新 Environment
-
-`DELETE /environments/{environment_id}`
-
-删除 Environment
-
-`POST /environments/{environment_id}/archive`
-
-归档 Environment
-
-[Session and Event](raw/application-api-reference/managed-agents-api/session-api.md)
-
-`POST /sessions`
-
-创建 Session
-
-`GET /sessions/{session_id}`
-
-获取 Session
-
-`GET /sessions`
-
-列出 Session
-
-`POST /sessions/{session_id}`
-
-更新 Session（如重命名）
-
-`DELETE /sessions/{session_id}`
-
-删除 Session
-
-`POST /sessions/{session_id}/archive`
-
-归档 Session
-
-`POST /sessions/{session_id}/events`
-
-发送 Event（向 Agent 投递用户消息或工具回执）
-
-`GET /sessions/{session_id}/events`
-
-列出 Event 历史；订阅 SSE 事件流（流式输出）
-
-[File](raw/application-api-reference/managed-agents-api/files-api.md)
-
-`POST /files`
-
-上传 File（multipart/form-data）
-
-`GET /files/{file_id}`
-
-查询 File 元数据
-
-`GET /files`
-
-列出 File
-
-`DELETE /files/{file_id}`
-
-删除 File
-
-[Memory Store](raw/application-api-reference/managed-agents-api/memory-store-api.md)
-
-`POST /memory_stores`
-
-创建 Memory Store
-
-`GET /memory_stores`
-
-列出 Memory Store
-
-`GET /memory_stores/{memory_store_id}`
-
-获取 Memory Store
-
-`POST /memory_stores/{memory_store_id}`
-
-更新 Memory Store
-
-`POST /memory_stores/{memory_store_id}/archive`
-
-归档 Memory Store
-
-`POST /memory_stores/{memory_store_id}/memories`
-
-创建 Memory（记忆文件）
-
-`GET /memory_stores/{memory_store_id}/memories`
-
-列出 Memory
-
-`GET /memory_stores/{memory_store_id}/memories/{memory_id}`
-
-获取 Memory
-
-`POST /memory_stores/{memory_store_id}/memories/{memory_id}`
-
-更新 Memory
-
-`DELETE /memory_stores/{memory_store_id}/memories/{memory_id}`
-
-删除 Memory
-
-`GET /memory_stores/{memory_store_id}/memory_versions`
-
-列出 Memory Version（历史版本）
-
-`GET /memory_stores/{memory_store_id}/memory_versions/{memory_version_id}`
-
-获取 Memory Version
-
-`POST /memory_stores/{memory_store_id}/memory_versions/{memory_version_id}/redact`
-
-擦除 Memory Version 正文
-
-[Skill](raw/application-api-reference/managed-agents-api/skills-api.md)
-
-`POST /skills`
-
-创建 Skill
-
-`GET /skills/{skill_id}`
-
-查询 Skill
-
-`GET /skills`
-
-列出 Skill
-
-`DELETE /skills/{skill_id}`
-
-删除 Skill
-
-`POST /skills/{skill_id}/versions`
-
-上传 Skill 新版本
-
-`GET /skills/{skill_id}/versions/{version}`
-
-查询 Skill 版本
-
-`GET /skills/{skill_id}/versions`
-
-列出 Skill 版本
-
-`GET /skills/{skill_id}/versions/{version}/content`
-
-下载 Skill 包
-
-[Vault](raw/application-api-reference/managed-agents-api/vault-api.md)
-
-`POST /vaults`
-
-创建 Vault
-
-`GET /vaults/{vault_id}`
-
-获取 Vault
-
-`GET /vaults`
-
-列出 Vault
-
-`POST /vaults/{vault_id}`
-
-更新 Vault
-
-`DELETE /vaults/{vault_id}`
-
-删除 Vault
-
-`POST /vaults/{vault_id}/archive`
-
-归档 Vault
-
-[Credential](raw/application-api-reference/managed-agents-api/credential-api.md)
-
-`POST /vaults/{vault_id}/credentials`
-
-创建 Credential
-
-`GET /vaults/{vault_id}/credentials/{credential_id}`
-
-获取 Credential
-
-`GET /vaults/{vault_id}/credentials`
-
-列出 Credential
-
-`POST /vaults/{vault_id}/credentials/{credential_id}`
-
-更新 Credential
-
-`DELETE /vaults/{vault_id}/credentials/{credential_id}`
-
-删除 Credential
-
-`POST /vaults/{vault_id}/credentials/{credential_id}/archive`
-
-归档 Credential
-
-[Webhook](raw/application-api-reference/managed-agents-api/webhook-api.md)
-
-`POST /webhook_endpoints`
-
-创建 Webhook
-
-`GET /webhook_endpoints/{id}`
-
-查询 Webhook 详情
-
-`GET /webhook_endpoints`
-
-查询 Webhook 列表
-
-`PUT /webhook_endpoints/{id}`
-
-更新 Webhook
-
-`DELETE /webhook_endpoints/{id}`
-
-删除 Webhook
-
-`POST /webhook_endpoints/{id}/enable`
-
-启用 Webhook
-
-`POST /webhook_endpoints/{id}/disable`
-
-禁用 Webhook
-
-`POST /webhook_endpoints/{id}/test`
-
-测试 Webhook
-
-`POST /webhook_endpoints/{id}/reset_secret`
-
-重置 Signing Secret
-
-`GET /webhook_endpoints/{id}/events`
-
-查询 Webhook 事件
-
-[Usage](raw/application-api-reference/managed-agents-api/usage-api.md)
-
-`POST /usage/summary`
-
-查询用量汇总（工作空间、Agent 或 Session）
-
-`POST /usage/trend`
-
-分页查询用量趋势（工作空间或 Agent）
+<table><thead><tr><th><p><strong>资源</strong></p></th><th><p><strong>端点</strong></p></th><th><p><strong>用途</strong></p></th></tr></thead><tbody><tr><td rowspan="5"><p><a href="agent-api.md">Agent</a></p></td><td><p><code>POST /agents</code></p></td><td><p>创建 Agent</p></td></tr><tr><td><p><code>GET /agents/{agent_id}</code></p></td><td><p>获取 Agent</p></td></tr><tr><td><p><code>GET /agents</code></p></td><td><p>列出 Agent</p></td></tr><tr><td><p><code>POST /agents/{agent_id}</code></p></td><td><p>更新 Agent（自动生成新版本号）</p></td></tr><tr><td><p><code>POST /agents/{agent_id}/archive</code></p></td><td><p>归档 Agent</p></td></tr><tr><td rowspan="6"><p><a href="environment-api.md">Environment</a></p></td><td><p><code>POST /environments</code></p></td><td><p>创建 Environment</p></td></tr><tr><td><p><code>GET /environments/{environment_id}</code></p></td><td><p>获取 Environment</p></td></tr><tr><td><p><code>GET /environments</code></p></td><td><p>列出 Environment</p></td></tr><tr><td><p><code>POST /environments/{environment_id}</code></p></td><td><p>更新 Environment</p></td></tr><tr><td><p><code>DELETE /environments/{environment_id}</code></p></td><td><p>删除 Environment</p></td></tr><tr><td><p><code>POST /environments/{environment_id}/archive</code></p></td><td><p>归档 Environment</p></td></tr><tr><td rowspan="8"><p><a href="session-api.md">Session and Event</a></p></td><td><p><code>POST /sessions</code></p></td><td><p>创建 Session</p></td></tr><tr><td><p><code>GET /sessions/{session_id}</code></p></td><td><p>获取 Session</p></td></tr><tr><td><p><code>GET /sessions</code></p></td><td><p>列出 Session</p></td></tr><tr><td><p><code>POST /sessions/{session_id}</code></p></td><td><p>更新 Session（如重命名）</p></td></tr><tr><td><p><code>DELETE /sessions/{session_id}</code></p></td><td><p>删除 Session</p></td></tr><tr><td><p><code>POST /sessions/{session_id}/archive</code></p></td><td><p>归档 Session</p></td></tr><tr><td><p><code>POST /sessions/{session_id}/events</code></p></td><td><p>发送 Event（向 Agent 投递用户消息或工具回执）</p></td></tr><tr><td><p><code>GET /sessions/{session_id}/events</code></p></td><td><p>列出 Event 历史；订阅 SSE 事件流（流式输出）</p></td></tr><tr><td rowspan="4"><p><a href="files-api.md">File</a></p></td><td><p><code>POST /files</code></p></td><td><p>上传 File（multipart/form-data）</p></td></tr><tr><td><p><code>GET /files/{file_id}</code></p></td><td><p>查询 File 元数据</p></td></tr><tr><td><p><code>GET /files</code></p></td><td><p>列出 File</p></td></tr><tr><td><p><code>DELETE /files/{file_id}</code></p></td><td><p>删除 File</p></td></tr><tr><td rowspan="13"><p><a href="memory-store-api.md">Memory Store</a></p></td><td><p><code>POST /memory_stores</code></p></td><td><p>创建 Memory Store</p></td></tr><tr><td><p><code>GET /memory_stores</code></p></td><td><p>列出 Memory Store</p></td></tr><tr><td><p><code>GET /memory_stores/{memory_store_id}</code></p></td><td><p>获取 Memory Store</p></td></tr><tr><td><p><code>POST /memory_stores/{memory_store_id}</code></p></td><td><p>更新 Memory Store</p></td></tr><tr><td><p><code>POST /memory_stores/{memory_store_id}/archive</code></p></td><td><p>归档 Memory Store</p></td></tr><tr><td><p><code>POST /memory_stores/{memory_store_id}/memories</code></p></td><td><p>创建 Memory（记忆文件）</p></td></tr><tr><td><p><code>GET /memory_stores/{memory_store_id}/memories</code></p></td><td><p>列出 Memory</p></td></tr><tr><td><p><code>GET /memory_stores/{memory_store_id}/memories/{memory_id}</code></p></td><td><p>获取 Memory</p></td></tr><tr><td><p><code>POST /memory_stores/{memory_store_id}/memories/{memory_id}</code></p></td><td><p>更新 Memory</p></td></tr><tr><td><p><code>DELETE /memory_stores/{memory_store_id}/memories/{memory_id}</code></p></td><td><p>删除 Memory</p></td></tr><tr><td><p><code>GET /memory_stores/{memory_store_id}/memory_versions</code></p></td><td><p>列出 Memory Version（历史版本）</p></td></tr><tr><td><p><code>GET /memory_stores/{memory_store_id}/memory_versions/{memory_version_id}</code></p></td><td><p>获取 Memory Version</p></td></tr><tr><td><p><code>POST /memory_stores/{memory_store_id}/memory_versions/{memory_version_id}/redact</code></p></td><td><p>擦除 Memory Version 正文</p></td></tr><tr><td rowspan="8"><p><a href="skills-api.md">Skill</a></p></td><td><p><code>POST /skills</code></p></td><td><p>创建 Skill</p></td></tr><tr><td><p><code>GET /skills/{skill_id}</code></p></td><td><p>查询 Skill</p></td></tr><tr><td><p><code>GET /skills</code></p></td><td><p>列出 Skill</p></td></tr><tr><td><p><code>DELETE /skills/{skill_id}</code></p></td><td><p>删除 Skill</p></td></tr><tr><td><p><code>POST /skills/{skill_id}/versions</code></p></td><td><p>上传 Skill 新版本</p></td></tr><tr><td><p><code>GET /skills/{skill_id}/versions/{version}</code></p></td><td><p>查询 Skill 版本</p></td></tr><tr><td><p><code>GET /skills/{skill_id}/versions</code></p></td><td><p>列出 Skill 版本</p></td></tr><tr><td><p><code>GET /skills/{skill_id}/versions/{version}/content</code></p></td><td><p>下载 Skill 包</p></td></tr><tr><td rowspan="6"><p><a href="vault-api.md">Vault</a></p></td><td><p><code>POST /vaults</code></p></td><td><p>创建 Vault</p></td></tr><tr><td><p><code>GET /vaults/{vault_id}</code></p></td><td><p>获取 Vault</p></td></tr><tr><td><p><code>GET /vaults</code></p></td><td><p>列出 Vault</p></td></tr><tr><td><p><code>POST /vaults/{vault_id}</code></p></td><td><p>更新 Vault</p></td></tr><tr><td><p><code>DELETE /vaults/{vault_id}</code></p></td><td><p>删除 Vault</p></td></tr><tr><td><p><code>POST /vaults/{vault_id}/archive</code></p></td><td><p>归档 Vault</p></td></tr><tr><td rowspan="6"><p><a href="credential-api.md">Credential</a></p></td><td><p><code>POST /vaults/{vault_id}/credentials</code></p></td><td><p>创建 Credential</p></td></tr><tr><td><p><code>GET /vaults/{vault_id}/credentials/{credential_id}</code></p></td><td><p>获取 Credential</p></td></tr><tr><td><p><code>GET /vaults/{vault_id}/credentials</code></p></td><td><p>列出 Credential</p></td></tr><tr><td><p><code>POST /vaults/{vault_id}/credentials/{credential_id}</code></p></td><td><p>更新 Credential</p></td></tr><tr><td><p><code>DELETE /vaults/{vault_id}/credentials/{credential_id}</code></p></td><td><p>删除 Credential</p></td></tr><tr><td><p><code>POST /vaults/{vault_id}/credentials/{credential_id}/archive</code></p></td><td><p>归档 Credential</p></td></tr><tr><td rowspan="10"><p><a href="webhook-api.md">Webhook</a></p></td><td><p><code>POST /webhook_endpoints</code></p></td><td><p>创建 Webhook</p></td></tr><tr><td><p><code>GET /webhook_endpoints/{id}</code></p></td><td><p>查询 Webhook 详情</p></td></tr><tr><td><p><code>GET /webhook_endpoints</code></p></td><td><p>查询 Webhook 列表</p></td></tr><tr><td><p><code>PUT /webhook_endpoints/{id}</code></p></td><td><p>更新 Webhook</p></td></tr><tr><td><p><code>DELETE /webhook_endpoints/{id}</code></p></td><td><p>删除 Webhook</p></td></tr><tr><td><p><code>POST /webhook_endpoints/{id}/enable</code></p></td><td><p>启用 Webhook</p></td></tr><tr><td><p><code>POST /webhook_endpoints/{id}/disable</code></p></td><td><p>禁用 Webhook</p></td></tr><tr><td><p><code>POST /webhook_endpoints/{id}/test</code></p></td><td><p>测试 Webhook</p></td></tr><tr><td><p><code>POST /webhook_endpoints/{id}/reset_secret</code></p></td><td><p>重置 Signing Secret</p></td></tr><tr><td><p><code>GET /webhook_endpoints/{id}/events</code></p></td><td><p>查询 Webhook 事件</p></td></tr><tr><td rowspan="2"><p><a href="usage-api.md">Usage</a></p></td><td><p><code>POST /usage/summary</code></p></td><td><p>查询用量汇总（工作空间、Agent 或 Session）</p></td></tr><tr><td><p><code>POST /usage/trend</code></p></td><td><p>分页查询用量趋势（工作空间或 Agent）</p></td></tr></tbody></table>

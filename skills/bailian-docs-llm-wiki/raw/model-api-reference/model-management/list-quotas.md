@@ -2,33 +2,71 @@
 
 查询模型的账号级和业务空间级限流配额，包括请求频率、用量及异步任务排队和并发限制，支持按模型名称或模型 ID 筛选及分页查询。
 
+<a id="前提条件"></a>
+
+<a id="b1c2d3e4f5a010"></a>
+
+<a id="请求说明"></a>
+
+<a id="43f31e8630lzd"></a>
+
 ## 请求说明
 
 调用时请将 `{WorkspaceId}` 替换为业务空间 ID，并在请求 Header 中设置 `Authorization: Bearer YOUR_API_KEY`，其中 `YOUR_API_KEY` 需替换为在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)获取的 API Key。
+
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
 GET`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/limits`
 
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
+
 #### 新加坡
 
 GET`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/models/limits`
+
+<a id="中国香港"></a>
+
+<a id="中国香港-h4"></a>
 
 #### 中国香港
 
 GET`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/models/limits`
 
+<a id="日本-东京"></a>
+
+<a id="日本-东京-h4"></a>
+
 #### 日本（东京）
 
 GET`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/models/limits`
+
+<a id="德国-法兰克福"></a>
+
+<a id="德国-法兰克福-h4"></a>
 
 #### 德国（法兰克福）
 
 GET`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/models/limits`
 
+<a id="美国-弗吉尼亚"></a>
+
+<a id="美国-弗吉尼亚-h4"></a>
+
 #### 美国（弗吉尼亚）
 
 GET`https://dashscope-us.aliyuncs.com/api/v1/models/limits`
+
+<a id="请求参数"></a>
+
+<a id="b1c2d3e4f5a100"></a>
 
 所有参数均通过 Query String 传递。
 
@@ -48,21 +86,45 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models/limits`
 
 每页返回的模型数量。默认值：`20`。
 
+<a id="请求示例"></a>
+
+<a id="b1c2d3e4f5a300"></a>
+
+<a id="sec-tabs-2"></a>
+
+<a id="所有模型"></a>
+
+<a id="所有模型-h4"></a>
+
 #### 所有模型
 
-```
+<a id="code-block"></a>
+
+```bash
 curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/limits?page_no=1&page_size=100" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header "Content-Type: application/json"
 ```
 
+<a id="指定模型"></a>
+
+<a id="指定模型-h4"></a>
+
 #### 指定模型
 
-```
+<a id="code-block-2"></a>
+
+```bash
 curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/limits?model=qwen3.8-max" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header "Content-Type: application/json"
 ```
+
+<a id="返回说明"></a>
+
+<a id="返回参数"></a>
+
+<a id="b1c2d3e4f5a200"></a>
 
 ## 返回说明
 
@@ -130,7 +192,13 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/limits?mo
 
 业务空间级别限流。您可以为每个业务空间单独设置限流，但所有业务空间的总限流不能超过 `model_limit`。值为 `null` 表示未设置业务空间级别限制。包含的字段与 `model_limit` 相同。
 
-```
+<a id="返回示例"></a>
+
+<a id="b1c2d3e4f5a400"></a>
+
+<a id="code-block-3"></a>
+
+```json
 {
     "code": null,
     "message": null,
@@ -194,6 +262,10 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/limits?mo
 -   `wan2.6-i2v-flash`：每秒最多 5 次请求，无用量限制，异步任务最大排队数 500、最大并发数 5。
 -   `qwen-image-3.0-pro`：每分钟最多 2 次请求，每分钟最多使用 1,000,000 Token，未设置业务空间级别限制。
 
+<a id="错误码"></a>
+
+<a id="b1c2d3e4f5a500"></a>
+
 ## 错误码
 
-如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](raw/model-api-reference/preparations/error-code.md)。
+如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](../preparations/error-code.md)。

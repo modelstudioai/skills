@@ -2,6 +2,8 @@
 
 本文介绍如何使用 AOQ SDK 接入 qwen-audio-3.1-asr-flash-streaming 实时语音识别模型，实现语音输入法功能。
 
+<a id="方案概述"></a>
+
 ## 方案概述
 
 语音输入法的典型交互流程为：用户点击语音输入按钮后立即开始说话，识别结果实时回显到输入框。客户端核心实现要点如下：
@@ -11,24 +13,38 @@
 3.  **Data 通道传输音频**：qwen-audio-3.1-asr-flash-streaming 采用 Inference 协议（run-task / finish-task）。当前场景需要先缓存音频再倍速补发，因此通过 `sendDataMsg` 接口以 JSON 消息形式传输音频数据。AOQ 服务端已对 JSON 格式的音频消息做了封装，客户端发送 JSON 后服务端自动解析为二进制数据转发给模型。
 4.  **中间结果与最终结果**：模型持续返回识别结果，中间结果（`sentence_end: false`）实时展示，最终结果（`sentence_end: true`）追加到输入框。
 
+<a id="准备工作"></a>
+
 ## 准备工作
+
+<a id="前置条件"></a>
 
 ### 前置条件
 
-1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)获取 API Key。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
+1.  开通阿里云百炼，并按[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)获取 API Key。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
 2.  `{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
-3.  从 [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
-4.  按 [Qwen-Audio-ASR-Streaming 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-aoq-access#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+3.  从 [SDK 下载](../../../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
+4.  按 [Qwen-Audio-ASR-Streaming 的 AOQ 鉴权步骤](../../../_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+
+<a id="导入-sdk"></a>
 
 ### 导入 SDK
 
-从 [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK 后，根据开发平台导入对应 SDK。后续客户端代码以 Android 为例，其他平台使用相同的接口设计和事件流程。
+从 [SDK 下载](../../../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK 后，根据开发平台导入对应 SDK。后续客户端代码以 Android 为例，其他平台使用相同的接口设计和事件流程。
+
+<a id="sec-tabs"></a>
+
+<a id="android"></a>
+
+<a id="android-h4"></a>
 
 #### Android
 
 1.  将 Opus 插件中的 `libPluginOpus.so` 按 ABI 放入 `app/src/main/jniLibs/armeabi-v7a/` 和 `app/src/main/jniLibs/arm64-v8a/`，将 `AoqClientSdk-release.aar` 放入 `app/libs`，并在 `app/build.gradle` 中配置依赖和 SDK 支持的 ABI：
     
-    ```
+    <a id="code-block"></a>
+    
+    ```groovy
     android {
         defaultConfig {
             minSdk 21
@@ -43,7 +59,9 @@
     
 2.  在 `AndroidManifest.xml` 中声明以下权限：
     
-    ```
+    <a id="code-block-2"></a>
+    
+    ```xml
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -53,17 +71,27 @@
 3.  在使用麦克风前动态申请 `RECORD_AUDIO` 权限。
     
 
+<a id="ios"></a>
+
+<a id="ios-h4"></a>
+
 #### iOS
 
 1.  将 `AoqClientSdk.framework` 与 `PluginOpus.framework` 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
 2.  在 Info.plist 中添加 `NSMicrophoneUsageDescription`，并在使用麦克风前请求用户授权。
 3.  Swift 工程使用 `import AoqClientSdk`；Objective-C 工程使用 `#import <AoqClientSdk/AoqClientSdk.h>`。
 
+<a id="harmonyos"></a>
+
+<a id="harmonyos-h4"></a>
+
 #### HarmonyOS
 
 1.  将 Opus 插件中的 `libPluginOpus.so` 放入 `entry/libs/arm64-v8a/`，将 `AoqClientSdk.har` 放入 `entry/libs`，并在 `entry/oh-package.json5` 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
     
-    ```
+    <a id="code-block-3"></a>
+    
+    ```json
     {
       "dependencies": {
         "@aoq/client-sdk": "file:./libs/AoqClientSdk.har"
@@ -73,7 +101,9 @@
     
 2.  在 `entry/src/main/module.json5` 中声明以下权限：
     
-    ```
+    <a id="code-block-4"></a>
+    
+    ```json
     "requestPermissions": [
       { "name": "ohos.permission.INTERNET" },
       { "name": "ohos.permission.MICROPHONE",
@@ -85,13 +115,19 @@
 3.  在使用麦克风前调用 `abilityAccessCtrl.createAtManager().requestPermissionsFromUser` 申请 `ohos.permission.MICROPHONE`。
     
 
+<a id="linux-python"></a>
+
+<a id="linux-python-h4"></a>
+
 #### Linux (Python)
 
 1.  解压 SDK，并保持 `aoq_client_sdk.py`、`libAoqClientSdk.so` 和 `libonnxruntime.so.1.16.3` 位于同一目录。
     
 2.  将 SDK 目录加入 Python 和动态库搜索路径：
     
-    ```
+    <a id="code-block-5"></a>
+    
+    ```bash
     export PYTHONPATH="$PWD/AoqClientSdk:$PYTHONPATH"
     export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
     ```
@@ -99,11 +135,15 @@
 3.  在 Python 代码中使用 `import aoq_client_sdk`。也可通过 `AOQ_CLIENT_SDK_LIB` 环境变量指定 `libAoqClientSdk.so` 的绝对路径。
     
 
+<a id="appserver-获取-token"></a>
+
 ## AppServer 获取 Token
 
 AppServer 调用百炼分配接口，将 SDK 建连所需的 Token、SID 和 Relay 接入点等信息返回客户端。
 
-```
+<a id="code-block-6"></a>
+
+```bash
 curl -X POST \
   "https://{endpoint}/api/v1/webrtc/inference?model=qwen-audio-3.1-asr-flash-streaming" \
   -H "Content-Type: application/json" \
@@ -112,29 +152,15 @@ curl -X POST \
   -d "{\"clientIp\": \"${CLIENT_REAL_IP}\"}"
 ```
 
-**响应字段**
+| 响应字段 | SDK 字段 |
+| --- | --- |
+| `aoqTokenForClient` | `AoqConnectConfig.token` |
+| `sid` | `AoqConnectConfig.sid` |
+| `clientRelayCertFingerprint` | `AoqConnectConfig.certFingerprint` |
+| `clientRelayEndpoints` | `AoqConnectConfig.relayEndpoints` |
+| `extraInfo.workspaceIdHash` | `AoqConnectConfig.workspaceIdHash` |
 
-**SDK 字段**
-
-`aoqTokenForClient`
-
-`AoqConnectConfig.token`
-
-`sid`
-
-`AoqConnectConfig.sid`
-
-`clientRelayCertFingerprint`
-
-`AoqConnectConfig.certFingerprint`
-
-`clientRelayEndpoints`
-
-`AoqConnectConfig.relayEndpoints`
-
-`extraInfo.workspaceIdHash`
-
-`AoqConnectConfig.workspaceIdHash`
+<a id="客户端实现流程"></a>
 
 ## 客户端实现流程
 
@@ -142,11 +168,15 @@ curl -X POST \
 
 以下以 Android 为例，按实现顺序分步说明。其他平台使用相同的接口设计和事件流程。
 
+<a id="1-创建引擎并设置回调"></a>
+
 ### 1\. 创建引擎并设置回调
 
 创建 `AoqClientEngine` 实例，注册连接状态回调和 Data 消息回调。连接成功后发送 `run-task`，Data 消息回调负责处理服务端事件。
 
-```
+<a id="code-block-7"></a>
+
+```java
 // 创建引擎
 AoqClientEngine.AoqCreateConfig create = new AoqClientEngine.AoqCreateConfig();
 create.workDir = getCacheDir().getAbsolutePath();
@@ -171,17 +201,27 @@ engine = AoqClientEngine.createEngine(this, create, new AoqClientListener() {
 });
 ```
 
+<a id="2-配置音频编码并启动采集"></a>
+
 ### 2\. 配置音频编码并启动采集
 
 配置 PCM 编码（16 kHz、单声道），通过 `setAudioFrameObserver` 注册采集回调获取 PCM 数据，调用 `enableSendMediaStream(Audio, false)` 关闭音频媒体上行（音频通过 Data 通道发送），最后调用 `startAudioCapture()` 启动采集。
 
 本文示例使用 AOQ SDK 内部采集，通过 `onCapturedAudioFrame` 回调获取 PCM 数据。也可以自行实现音频采集（如 Android 的 `AudioRecord`），只需将采集到的 PCM 数据放入缓存队列，后续的发送逻辑完全相同。
 
+<a id="sec-tabs-2"></a>
+
+<a id="方式-a-使用-sdk-内部采集"></a>
+
+<a id="方式-a-使用-sdk-内部采集-h4"></a>
+
 #### 方式 A：使用 SDK 内部采集
 
 本文代码示例调用 `startAudioCapture`，通过 `onCapturedAudioFrame` 获取 PCM，然后复制到应用缓存。应注册 `AoqAudioSourceCaptured` 原始采集回调，用于连接建立前的缓存。
 
-```
+<a id="code-block-8"></a>
+
+```java
 int SAMPLE_RATE = 16000;
 
 // 配置 PCM 编码
@@ -219,19 +259,29 @@ engine.enableSendMediaStream(AoqClientEngine.AoqTrackType.AoqTrackTypeAudio, fal
 engine.startAudioCapture(new AoqClientEngine.AoqAudioCaptureConfig());
 ```
 
+<a id="方式-b-业务自行采集"></a>
+
+<a id="方式-b-业务自行采集-h4"></a>
+
 #### 方式 B：业务自行采集
 
 业务使用平台录音能力或已有音频采集组件，输出符合上述格式要求的 PCM，并写入同一个缓存队列。后续仍然通过 `sendDataMsg` 发送本文定义的音频 JSON，无需把 PCM 再送入 SDK 的采集接口。
 
 两种方式选择其一，避免同时启动两套录音。自行采集时，业务负责格式转换、停止确认和音频设备释放。
 
+<a id="3-配置连接和传输轨道并建立连接"></a>
+
 ### 3\. 配置连接和传输轨道并建立连接
 
 将 AppServer 返回的凭证填入 `AoqConnectConfig`，发布 Audio + Data 轨道，订阅 Data 轨道。Audio 轨道声明是连接所需的，但媒体上行已关闭，实际音频通过 Data 通道传输。
 
-**说明****必须发布 Audio 轨道**：ASR 模型要求连接时声明 Audio 轨道，否则连接会失败。但实际音频数据不通过音频媒体通道发送，而是通过 Data 通道以 `input_audio_buffer.append` 消息传输。因此需要在连接前调用 `enableSendMediaStream(Audio, false)` 关闭音频媒体上行，避免 SDK 自动发送采集到的音频。
+> **说明**
+>
+> **必须发布 Audio 轨道**：ASR 模型要求连接时声明 Audio 轨道，否则连接会失败。但实际音频数据不通过音频媒体通道发送，而是通过 Data 通道以 `input_audio_buffer.append` 消息传输。因此需要在连接前调用 `enableSendMediaStream(Audio, false)` 关闭音频媒体上行，避免 SDK 自动发送采集到的音频。
 
-```
+<a id="code-block-9"></a>
+
+```java
 // 从 AppServer 获取凭证后，构建连接配置
 AoqClientEngine.AoqConnectConfig config = new AoqClientEngine.AoqConnectConfig();
 config.token = aoqTokenForClient;
@@ -258,13 +308,17 @@ config.subscribeTracks.add(subData);
 engine.connect(config);
 ```
 
+<a id="4-发送-run-task-启动识别任务"></a>
+
 ### 4\. 发送 run-task 启动识别任务
 
 连接成功后，每轮语音输入生成一个新的 `task_id`，例如使用 `UUID.randomUUID().toString()`。在连接成功回调中，通过 `sendDataMsg` 发送下列 JSON；同一轮只发送一次 `run-task`。
 
-run-task 事件结构如下，任务 ID 为示例值，实际应替换为本轮新生成的值。具体事件请参考[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)。
+run-task 事件结构如下，任务 ID 为示例值，实际应替换为本轮新生成的值。具体事件请参考[客户端事件](../../../_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)。
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -287,7 +341,9 @@ run-task 事件结构如下，任务 ID 为示例值，实际应替换为本轮�
 
 控制消息和音频消息，通过同一个 `sendDataMsg` 接口发送：
 
-```
+<a id="code-block-11"></a>
+
+```java
 String taskId = UUID.randomUUID().toString();
 JSONObject root = new JSONObject()
         .put("header", new JSONObject()
@@ -309,11 +365,15 @@ msg.data = root.toString().getBytes(StandardCharsets.UTF_8);
 engine.sendDataMsg(msg);
 ```
 
+<a id="5-收到-task-started-后倍速补发缓存音频"></a>
+
 ### 5\. 收到 task-started 后倍速补发缓存音频
 
 在 `onDataMsg` 中解析 JSON。收到当前任务的下列事件后，才将发送状态切换为就绪。
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
   "header": {
     "event": "task-started",
@@ -323,37 +383,21 @@ engine.sendDataMsg(msg);
 }
 ```
 
-以上为事件关键字段示例，其余响应字段可按业务需要读取，具体事件请参考[服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)。此时音频缓存通常已经积累了“凭证申请 + AOQ 建连 + 模型任务启动”期间采集到的音频。对带有 `task_id` 的响应核对当前任务 ID；重复的 `task-started` 不应启动第二个发送循环。
+以上为事件关键字段示例，其余响应字段可按业务需要读取，具体事件请参考[服务端事件](../../../_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)。此时音频缓存通常已经积累了“凭证申请 + AOQ 建连 + 模型任务启动”期间采集到的音频。对带有 `task_id` 的响应核对当前任务 ID；重复的 `task-started` 不应启动第二个发送循环。
 
-**音频数据封装格式：** qwen-audio-3.1-asr-flash-streaming 的 Inference 协议（[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)）只定义了 `run-task`、`finish-task` 两种控制事件，音频数据本身不是通过 JSON 事件发送的。但通过 AOQ Data 通道传输时，音频数据需要以 JSON 消息形式发送。为此，AOQ 在 SDK 层面封装了 `input_audio_buffer.append` 事件，用于承载音频数据：
+**音频数据封装格式：** qwen-audio-3.1-asr-flash-streaming 的 Inference 协议（[客户端事件](../../../_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)）只定义了 `run-task`、`finish-task` 两种控制事件，音频数据本身不是通过 JSON 事件发送的。但通过 AOQ Data 通道传输时，音频数据需要以 JSON 消息形式发送。为此，AOQ 在 SDK 层面封装了 `input_audio_buffer.append` 事件，用于承载音频数据：
 
-**字段**
-
-**类型**
-
-**说明**
-
-`type`
-
-string
-
-固定为 `input_audio_buffer.append`
-
-`event_id`
-
-string
-
-事件唯一标识，用于关联和去重
-
-`audio`
-
-string
-
-Base64 编码的 PCM 音频数据
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `type` | string | 固定为 `input_audio_buffer.append` |
+| `event_id` | string | 事件唯一标识，用于关联和去重 |
+| `audio` | string | Base64 编码的 PCM 音频数据 |
 
 客户端将采集到的 PCM 数据编码为 Base64 后包装到此 JSON 中，通过 `sendDataMsg` 发送。AOQ 服务端收到此 JSON 后，解析 `audio` 字段为二进制 PCM 数据，按照模型协议转发给 ASR 模型。客户端无需关心二进制帧的封装细节，只需确保 PCM 格式（采样率、声道数、位深）与 `run-task` 中声明的 `format` 和 `sample_rate` 一致。
 
-```
+<a id="code-block-13"></a>
+
+```json
 {
     "type": "input_audio_buffer.append",
     "event_id": "event_550e8400-e29b-41d4-a716-446655440000",
@@ -365,7 +409,9 @@ Base64 编码的 PCM 音频数据
 
 从缓存队列中取出 PCM 数据，包装为 `input_audio_buffer.append` JSON 后通过 `sendDataMsg` 发送：
 
-```
+<a id="code-block-14"></a>
+
+```java
 byte[] pcm = pcmQueue.poll(640);  // 取出一帧 PCM 数据
 
 if (pcm != null) {
@@ -382,9 +428,11 @@ if (pcm != null) {
 
 **处理服务端事件：**
 
-在 `onDataMsg` 回调中解析服务端事件，收到 `task-started` 后启动音频发送，收到 `result-generated` 后解析识别结果，具体事件请参考[服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)。
+在 `onDataMsg` 回调中解析服务端事件，收到 `task-started` 后启动音频发送，收到 `result-generated` 后解析识别结果，具体事件请参考[服务端事件](../../../_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)。
 
-```
+<a id="code-block-15"></a>
+
+```java
 JSONObject root = new JSONObject(new String(msg.data, StandardCharsets.UTF_8));
 String event = root.optJSONObject("header").optString("event");
 
@@ -406,11 +454,15 @@ if ("task-started".equals(event)) {
 }
 ```
 
+<a id="6-处理识别结果并显示"></a>
+
 ### 6\. 处理识别结果并显示
 
-`result-generated` 事件携带识别句子，包含 `text`、`sentence_end` 等字段。中间结果实时展示，最终结果追加到输入框。具体事件定义请参考[服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)。
+`result-generated` 事件携带识别句子，包含 `text`、`sentence_end` 等字段。中间结果实时展示，最终结果追加到输入框。具体事件定义请参考[服务端事件](../../../_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)。
 
-```
+<a id="code-block-16"></a>
+
+```java
 private void handleRecognitionResult(JSONObject root) {
     JSONObject payload = root.optJSONObject("payload");
     JSONObject output = payload == null ? null : payload.optJSONObject("output");
@@ -426,15 +478,21 @@ private void handleRecognitionResult(JSONObject root) {
 }
 ```
 
+<a id="7-发送-finish-task-结束识别任务"></a>
+
 ### 7\. 发送 finish-task 结束识别任务
 
-用户点击结束后，先调用 `engine.stopAudioCapture()` 停止采集，等待缓存中剩余的 PCM 数据排空后，发送 [finish-task](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md) 通知服务端音频已发送完毕，具体事件定义请参考[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)。
+用户点击结束后，先调用 `engine.stopAudioCapture()` 停止采集，等待缓存中剩余的 PCM 数据排空后，发送 [finish-task](../../../_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md) 通知服务端音频已发送完毕，具体事件定义请参考[客户端事件](../../../_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)。
 
-**说明**`task_id` 必须与本轮 `run-task` 一致。
+> **说明**
+>
+> `task_id` 必须与本轮 `run-task` 一致。
 
 finish-task 事件结构如下：
 
-```
+<a id="code-block-17"></a>
+
+```json
 {
     "header": {
         "action": "finish-task",
@@ -449,7 +507,9 @@ finish-task 事件结构如下：
 
 通过 `sendDataMsg` 发送：
 
-```
+<a id="code-block-18"></a>
+
+```java
 engine.stopAudioCapture();  // 停止采集
 
 // 等待缓存排空后发送 finish-task
@@ -468,7 +528,9 @@ engine.sendDataMsg(msg);
 
 模型完成后返回的关键事件为：
 
-```
+<a id="code-block-19"></a>
+
+```json
 {
   "header": {
     "event": "task-finished",
@@ -478,17 +540,23 @@ engine.sendDataMsg(msg);
 }
 ```
 
+<a id="8-断开连接并销毁引擎"></a>
+
 ### 8\. 断开连接并销毁引擎
 
 收到 `task-finished` 后，如果不再需要复用连接，按以下方式清理资源；发生异常或超时时也应清理资源。
 
-```
+<a id="code-block-20"></a>
+
+```java
 engine.stopAudioCapture();
 engine.setAudioFrameObserver(null);
 engine.disconnect();
 AoqClientEngine.destroy();
 engine = null;
 ```
+
+<a id="注意事项"></a>
 
 ## 注意事项
 
@@ -497,28 +565,38 @@ engine = null;
 3.  收到 `task-finished` 后不要立即断开连接，可复用同一连接发起新任务（新 `task_id`）。
 4.  `result-generated` 中的心跳包（`heartbeat: true`）应忽略，不作为识别结果。
 
+<a id="典型场景"></a>
+
 ## 典型场景
+
+<a id="同一连接多次识别"></a>
 
 ### 同一连接多次识别
 
 收到 `task-finished` 后，连接仍然可用。客户端可以使用新的 `task_id` 再次发送 `run-task`，开始新一轮识别，无需重新建立连接。这适用于连续语音输入场景，减少重复连接的延迟。
 
-```
+<a id="code-block-21"></a>
+
+```java
 // 第一轮识别结束后（收到 task-finished）
 // 使用新的 task_id 发送 run-task，开始第二轮
 taskId = UUID.randomUUID().toString();
 sendRunTask();
 ```
 
+<a id="自行实现音频采集"></a>
+
 ### 自行实现音频采集
 
 本文示例使用 AOQ SDK 的内部采集（`startAudioCapture` + `onCapturedAudioFrame` 回调），也可以自行实现音频采集。只需将采集到的 PCM 数据（16 kHz、单声道、16 位）放入 `PcmQueue`，后续的缓存补发和发送逻辑完全相同。
 
+<a id="相关文档"></a>
+
 ## 相关文档
 
--   [客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)
--   [服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)
--   [AOQ SDK Android API 参考](raw/model-api-reference/more-about-models/realtime-api-aoq-api/aoq-android-sdk-reference.md)
--   [qwen-audio-3.1-asr-flash-streaming 模型信息](raw/_short/qwen-audio-3-1-asr-flash-streaming-5a2483d4eed63d1c.md)
--   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](raw/_short/real-time-speech-recognition-using-aoq-access-fu-1f528aaba4a8fd1b.md)
--   [Qwen-Audio-ASR-Streaming AOQ 接入](raw/_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md)
+-   [客户端事件](../../../_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)
+-   [服务端事件](../../../_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)
+-   [AOQ SDK Android API 参考](../../../model-api-reference/more-about-models/realtime-api-aoq-api/aoq-android-sdk-reference.md)
+-   [qwen-audio-3.1-asr-flash-streaming 模型信息](../../../_short/qwen-audio-3-1-asr-flash-streaming-5a2483d4eed63d1c.md)
+-   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](../../../_short/real-time-speech-recognition-using-aoq-access-fu-1f528aaba4a8fd1b.md)
+-   [Qwen-Audio-ASR-Streaming AOQ 接入](../../../_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md)

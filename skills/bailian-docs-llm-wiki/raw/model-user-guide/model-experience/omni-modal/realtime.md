@@ -2,23 +2,27 @@
 
 通过 WebSocket、WebRTC 使用 Qwen-Omni-Realtime 理解文本、图片、音频和视频，并生成语音回复，适合语音聊天、智能客服等场景。
 
-**支持的地域：**北京、新加坡，需使用各地域的[API Key](raw/model-api-reference/preparations/get-api-key.md)。
+**支持的地域：**北京、新加坡，需使用各地域的[API Key](../../../model-api-reference/preparations/get-api-key.md)。
 
-**在线体验：**请参见[如何在线体验 Qwen-Omni-Realtime 模型？](https://help.aliyun.com/zh/model-studio/realtime#14a119f447ehf)
+**在线体验：**请参见[如何在线体验 Qwen-Omni-Realtime 模型？](realtime.md#14a119f447ehf)
+
+<a id="模型与接入方式"></a>
+
+<a id="a162110bff6c4"></a>
 
 ## 模型与接入方式
 
 实时音视频对话优先使用 **Qwen3.8-Omni-Flash-Realtime**。模型支持音视频双工交互，接收文本、图片、流式音频和视频输入，返回文本与音频。
 
--   **工具调用与联网搜索**：支持[自定义 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#rt02realtime01)和[远程 MCP 工具](https://help.aliyun.com/zh/model-studio/omni-realtime-websocket-access#qwen38-mcp-flow)，或启用[联网搜索](#f6g7h8i9j0s7k)。
+-   **工具调用与联网搜索**：支持[自定义 Function Calling](../text-generation-model/tool-calls/qwen-function-calling.md#rt02realtime01)和[远程 MCP 工具](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-websocket-access.md#qwen38-mcp-flow)，或启用[联网搜索](#f6g7h8i9j0s7k)。
 -   **语音轮次检测**：支持 `semantic_vad`，可过滤附和声、背景音等无意义声音，减少语音轮次误触发。
 -   **多通道音频与视频聚合**：WebSocket 接入支持 1、2、4 声道音频；视频聚合可在不需要细粒度视觉信息时降低计算开销。详见[输入与输出功能](#realtime-advanced-config)。
--   **语言**：支持 [113 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音识别，以及 [36 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音生成。
--   **音色与声音复刻**：默认音色为 `Tina`；可选音色和试听见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)，自定义音色的使用方式见[声音复刻](raw/model-user-guide/model-experience/omni-modal/qwen-omni-voice-cloning-user-guide.md)。
+-   **语言**：支持 [113 种语种和方言](qwen-omni.md#d54e85c641oux)的语音识别，以及 [36 种语种和方言](qwen-omni.md#d54e85c641oux)的语音生成。
+-   **音色与声音复刻**：默认音色为 `Tina`；可选音色和试听见[音色列表](omni-voice-list.md#qwen38-voices)，自定义音色的使用方式见[声音复刻](qwen-omni-voice-cloning-user-guide.md)。
 
-> 模型的名称、上下文、价格、快照版本等信息请参见百炼控制台；并发限流条件请参考[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+> 模型的名称、上下文、价格、快照版本等信息请参见百炼控制台；并发限流条件请参考[限流](../../get-started-with-models/rate-limit.md)。
 
-Qwen-Omni-Realtime 模型支持 WebSocket、WebRTC 和 AOQ 三种协议接入。WebSocket 适合服务端集成和快速接入；WebRTC 适合浏览器端、低延迟语音场景，音频通过 UDP 直接传输，内置回声消除和降噪。如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ。协议对比与选型请参见[API 参考](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-api.md)。
+Qwen-Omni-Realtime 模型支持 WebSocket、WebRTC 和 AOQ 三种协议接入。WebSocket 适合服务端集成和快速接入；WebRTC 适合浏览器端、低延迟语音场景，音频通过 UDP 直接传输，内置回声消除和降噪。如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ。协议对比与选型请参见[API 参考](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-api.md)。
 
 按当前任务选择入口：
 
@@ -28,71 +32,58 @@ Qwen-Omni-Realtime 模型支持 WebSocket、WebRTC 和 AOQ 三种协议接入。
 -   [增加图片、多通道或音色功能](#realtime-advanced-config)
 -   [接入工具或联网搜索](#realtime-tools)
 
+<a id="接入准备"></a>
+
+<a id="realtime-connection-parameters"></a>
+
 ## 接入准备
 
-获取所选地域、业务空间对应的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)，并将 API Key [配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。`qwen3.8-omni-flash-realtime` 必须使用下方绑定业务空间的调用地址。
+获取所选地域、业务空间对应的 [API Key](../../../model-api-reference/preparations/get-api-key.md) 和[业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)，并将 API Key [配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。`qwen3.8-omni-flash-realtime` 必须使用下方绑定业务空间的调用地址。
+
+<a id="sec-tabs"></a>
+
+<a id="websocket"></a>
+
+<a id="websocket-h4"></a>
 
 #### WebSocket
 
-**配置项**
+<table><thead><tr><th><strong>配置项</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><p>调用地址</p></td><td><p>华北2（北京）地域：<code>wss://WorkspaceId.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime</code></p><p>调用时，将地址中的 <code>WorkspaceId</code> 替换为实际的<a href="../../get-started-with-models/regions.md#h2_migrate_domain">业务空间 ID</a>。</p></td></tr><tr><td><p>查询参数</p></td><td><p>查询参数为model，需指定为访问的模型名。示例：<code>?model=qwen3.8-omni-flash-realtime</code></p></td></tr><tr><td><p>请求头</p></td><td><p>使用 Bearer Token 鉴权：Authorization: Bearer DASHSCOPE_API_KEY</p><blockquote><p>DASHSCOPE_API_KEY 是您在百炼上申请的<a href="../../../model-api-reference/preparations/get-api-key.md">API Key</a>。</p></blockquote></td></tr></tbody></table>
 
-**说明**
+<a id="webrtc"></a>
 
-调用地址
-
-华北2（北京）地域：`wss://WorkspaceId.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`
-
-调用时，将地址中的 `WorkspaceId` 替换为实际的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
-
-查询参数
-
-查询参数为model，需指定为访问的模型名。示例：`?model=qwen3.8-omni-flash-realtime`
-
-请求头
-
-使用 Bearer Token 鉴权：Authorization: Bearer DASHSCOPE\_API\_KEY
-
-> DASHSCOPE\_API\_KEY 是您在百炼上申请的[API Key](raw/model-api-reference/preparations/get-api-key.md)。
+<a id="webrtc-h4"></a>
 
 #### WebRTC
 
-**配置项**
+| 配置项 | 说明 |
+| --- | --- |
+| 请求地址 | 华北2（北京）地域：`POST https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime`<br><br>调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。 |
+| 查询参数 | 查询参数为model，需指定为访问的模型名。示例：`?model=qwen3.8-omni-flash-realtime`；旧型号示例：`?model=qwen3.5-omni-plus-realtime` |
+| Content-Type | application/sdp |
+| 请求头 | Authorization: Bearer DASHSCOPE\_API\_KEY |
+| 请求体 | 客户端生成的 Offer SDP 字符串 |
+| 响应 | 成功：HTTP 200，返回服务端 Answer SDP 字符串。失败：HTTP 4xx，返回 JSON 错误信息。 |
 
-**说明**
+<a id="aoq"></a>
 
-请求地址
-
-华北2（北京）地域：`POST [https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime](https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime)`
-
-调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
-
-查询参数
-
-查询参数为model，需指定为访问的模型名。示例：`?model=qwen3.8-omni-flash-realtime`；旧型号示例：`?model=qwen3.5-omni-plus-realtime`
-
-Content-Type
-
-application/sdp
-
-请求头
-
-Authorization: Bearer DASHSCOPE\_API\_KEY
-
-请求体
-
-客户端生成的 Offer SDP 字符串
-
-响应
-
-成功：HTTP 200，返回服务端 Answer SDP 字符串。失败：HTTP 4xx，返回 JSON 错误信息。
+<a id="aoq-h4"></a>
 
 #### AOQ
 
-通过业务 AppServer 发起 HTTP 请求获取 AOQ 连接参数，具体步骤参见[鉴权与连接凭证](https://help.aliyun.com/zh/model-studio/omni-realtime-aoq-access#authentication)。
+<a id="realtime-aoq-prerequisites"></a>
+
+通过业务 AppServer 发起 HTTP 请求获取 AOQ 连接参数，具体步骤参见[鉴权与连接凭证](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md#authentication)。
+
+<a id="快速开始-最小音频问答"></a>
+
+<a id="e387221c95q8r"></a>
 
 ## 快速开始：最小音频问答
 
 本例使用 WebSocket 和 Manual 模式，从本地音频文件完成一次问答。需要持续录音或浏览器交互时，参见[实时对话示例](#realtime-sdk-mic-examples)。
+
+<a id="qwen38-realtime"></a>
 
 先配置 [API Key](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，安装 `websocket-client`。在下方 Python 示例中选择地域（`cn-beijing` 或 `ap-southeast-1`），填写对应地址中的业务空间 ID。将 `PCM_FILE` 设为一段短的 16 kHz、16-bit little-endian、单声道、无文件头 PCM 语音文件路径。
 
@@ -100,14 +91,18 @@ Authorization: Bearer DASHSCOPE\_API\_KEY
 
 在 macOS 或 Linux 终端中执行以下命令。
 
-```
+<a id="code-block"></a>
+
+```bash
 python3 -m pip install websocket-client
 export PCM_FILE="./input.pcm"
 ```
 
 如果已有单声道、16 kHz、16-bit PCM 编码的 `input.wav`，可用 Python 提取 PCM 音频。此步骤检查格式，不进行重采样。
 
-```
+<a id="code-block-2"></a>
+
+```python
 import wave
 from pathlib import Path
 
@@ -120,7 +115,9 @@ with wave.open("input.wav", "rb") as source:
 
 准备好输入后，运行以下客户端。示例使用“龙安灵心”音色（`longanlingxin`）：
 
-```
+<a id="code-block-3"></a>
+
+```python
 import base64
 import json
 import os
@@ -192,7 +189,9 @@ finally:
 
 成功收到回复后，将 `reply.pcm` 包装为 WAV 文件，再使用音频播放器播放：
 
-```
+<a id="code-block-4"></a>
+
+```python
 import wave
 from pathlib import Path
 
@@ -203,11 +202,27 @@ with wave.open("reply.wav", "wb") as target:
     target.writeframes(Path("reply.pcm").read_bytes())
 ```
 
+<a id="实时对话示例"></a>
+
+<a id="realtime-sdk-mic-examples"></a>
+
 ## 实时对话示例
 
 WebSocket 示例提供 VAD 和 Manual 两种模式；WebRTC 使用 VAD。
 
+<a id="sec-tabs-2"></a>
+
+<a id="websocket-2"></a>
+
+<a id="websocket-2-h4"></a>
+
 #### WebSocket
+
+<a id="sec-tabs-3"></a>
+
+<a id="dashscope-python-sdk"></a>
+
+<a id="dashscope-python-sdk-h4"></a>
 
 #### DashScope Python SDK
 
@@ -217,48 +232,80 @@ WebSocket 示例提供 VAD 和 Manual 两种模式；WebRTC 使用 VAD。
 
 首先根据您的操作系统安装 pyaudio。
 
+<a id="sec-tabs-4"></a>
+
+<a id="macos"></a>
+
+<a id="macos-h4"></a>
+
 #### macOS
 
-```
+<a id="code-block-5"></a>
+
+```bash
 brew install portaudio && pip install pyaudio
 ```
+
+<a id="debian-ubuntu"></a>
+
+<a id="debian-ubuntu-h4"></a>
 
 #### Debian/Ubuntu
 
 -   **若未使用虚拟环境**，可直接通过系统包管理器安装：
 
-```
+<a id="code-block-6"></a>
+
+```bash
 sudo apt-get install python3-pyaudio
 ```
 
 -   **若使用虚拟环境**，需先安装编译依赖：
 
-```
+<a id="code-block-7"></a>
+
+```bash
 sudo apt update
 sudo apt install -y python3-dev portaudio19-dev
 ```
 
 然后在已激活的虚拟环境中使用 pip 安装：
 
-```
+<a id="code-block-8"></a>
+
+```bash
 pip install pyaudio
 ```
 
+<a id="centos"></a>
+
+<a id="centos-h4"></a>
+
 #### CentOS
 
-```
+<a id="code-block-9"></a>
+
+```bash
 sudo yum install -y portaudio portaudio-devel && pip install pyaudio
 ```
 
+<a id="windows"></a>
+
+<a id="windows-h4"></a>
+
 #### Windows
 
-```
+<a id="code-block-10"></a>
+
+```powershell
 pip install pyaudio
 ```
 
 安装完成后，通过 pip 安装依赖：
 
-```
+<a id="code-block-11"></a>
+
+```bash
 pip install websocket-client dashscope
 ```
 
@@ -273,13 +320,23 @@ pip install websocket-client dashscope
         客户端控制语音起止。用户说话结束后，客户端需主动发送消息至服务端。
         
     
+    <a id="sec-tabs-5"></a>
+    
+    <a id="vad-模式"></a>
+    
+    <a id="vad-模式-h4"></a>
+    
     #### VAD 模式
     
     新建一个 python 文件，命名为vad\_dash.py，并将以下代码复制到文件中：
     
+    <a id="accordion-vad-dash-py"></a>
+    
     vad\_dash.py
     
-    ```
+    <a id="code-block-12"></a>
+    
+    ```python
     # 依赖：dashscope >= 2.0.1，pyaudio
     import os
     import base64
@@ -354,13 +411,21 @@ pip install websocket-client dashscope
     
     运行`vad_dash.py`，通过麦克风即可与 Qwen-Omni-Realtime 模型实时对话，系统会检测您的音频起始位置并自动发送到服务器，无需您手动发送。
     
+    <a id="manual-模式"></a>
+    
+    <a id="manual-模式-h4"></a>
+    
     #### Manual 模式
     
     新建一个 python 文件，命名为`manual_dash.py`，并将以下代码复制进文件中：
     
+    <a id="accordion-manual-dash-py"></a>
+    
     manual\_dash.py
     
-    ```
+    <a id="code-block-13"></a>
+    
+    ```python
     # 此示例使用 Qwen3.5-Omni-Plus-Realtime，演示输入转写及会话控制。
     # 依赖：dashscope >= 2.0.1，pyaudio。
     import os
@@ -518,6 +583,10 @@ pip install websocket-client dashscope
     运行`manual_dash.py`，按 Enter 键开始说话，再按一次获取模型响应的音频。
     
 
+<a id="dashscope-java-sdk"></a>
+
+<a id="dashscope-java-sdk-h4"></a>
+
 #### DashScope Java SDK
 
 **选择交互模式**
@@ -531,11 +600,21 @@ pip install websocket-client dashscope
     客户端控制语音起止。用户说话结束后，客户端需主动发送消息至服务端。
     
 
+<a id="sec-tabs-6"></a>
+
+<a id="vad-模式-2"></a>
+
+<a id="vad-模式-2-h4"></a>
+
 #### VAD 模式
+
+<a id="accordion-omniservervad-java"></a>
 
 OmniServerVad.java
 
-```
+<a id="code-block-14"></a>
+
+```java
 // 此示例使用 Qwen3.5-Omni-Plus-Realtime，演示输入转写及会话控制。
 import com.alibaba.dashscope.audio.omni.*;
 import com.alibaba.dashscope.exception.NoApiKeyException;
@@ -709,11 +788,19 @@ public class OmniServerVad {
 
 运行`OmniServerVad.main()`方法，通过麦克风即可与 Realtime 模型实时对话，系统会检测您的音频起始位置并自动发送到服务器，无需您手动发送。
 
+<a id="manual-模式-2"></a>
+
+<a id="manual-模式-2-h4"></a>
+
 #### Manual 模式
+
+<a id="accordion-omniwithoutservervad-java"></a>
 
 OmniWithoutServerVad.java
 
-```
+<a id="code-block-15"></a>
+
+```java
 // 此示例使用 Qwen3.5-Omni-Plus-Realtime，演示输入转写及会话控制。
 // DashScope Java SDK 版本不低于2.22.15
 
@@ -988,6 +1075,10 @@ public class OmniWithoutServerVad {
 
 运行`OmniWithoutServerVad.main()`方法，按 Enter 键开始录音，录音过程中再次按 Enter 键停止录音并发送，随后将接收并播放模型响应。
 
+<a id="python-原生-websocket"></a>
+
+<a id="python-原生-websocket-h4"></a>
+
 #### Python 原生 WebSocket
 
 -   **准备运行环境**
@@ -996,15 +1087,29 @@ public class OmniWithoutServerVad {
     
     首先根据您的操作系统来安装 pyaudio。
     
+    <a id="sec-tabs-7"></a>
+    
+    <a id="macos-2"></a>
+    
+    <a id="macos-2-h4"></a>
+    
     #### macOS
     
-    ```
+    <a id="code-block-16"></a>
+    
+    ```bash
     brew install portaudio && pip install pyaudio
     ```
     
+    <a id="debian-ubuntu-2"></a>
+    
+    <a id="debian-ubuntu-2-h4"></a>
+    
     #### Debian/Ubuntu
     
-    ```
+    <a id="code-block-17"></a>
+    
+    ```bash
     sudo apt-get install python3-pyaudio
     
     或者
@@ -1014,22 +1119,36 @@ public class OmniWithoutServerVad {
     
     > 推荐使用`pip install pyaudio`。如果安装失败，请先根据您的操作系统安装`portaudio`依赖。
     
+    <a id="centos-2"></a>
+    
+    <a id="centos-2-h4"></a>
+    
     #### CentOS
     
-    ```
+    <a id="code-block-18"></a>
+    
+    ```bash
     sudo yum install -y portaudio portaudio-devel && pip install pyaudio
     ```
     
+    <a id="windows-2"></a>
+    
+    <a id="windows-2-h4"></a>
+    
     #### Windows
     
-    ```
+    <a id="code-block-19"></a>
+    
+    ```powershell
     pip install pyaudio
     ```
     
     安装完成后，通过 pip 安装 websocket 相关的依赖：
     
 
-```
+<a id="code-block-20"></a>
+
+```bash
 pip install websockets==15.0.1
 ```
 
@@ -1037,9 +1156,13 @@ pip install websockets==15.0.1
     
     在本地新建一个 python 文件，命名为`omni_realtime_client.py`，并将以下代码复制进文件中：
     
+    <a id="accordion-omni-realtime-client-py"></a>
+    
     omni\_realtime\_client.py
     
-    ```
+    <a id="code-block-21"></a>
+    
+    ```python
     import asyncio
     import websockets
     import json
@@ -1285,13 +1408,23 @@ pip install websockets==15.0.1
         客户端控制语音起止。用户说话结束后，客户端需主动发送消息至服务端。
         
     
+    <a id="sec-tabs-8"></a>
+    
+    <a id="vad-模式-3"></a>
+    
+    <a id="vad-模式-3-h4"></a>
+    
     #### VAD 模式
     
     在`omni_realtime_client.py`的同级目录下新建另一个 python 文件，命名为`vad_mode.py`，并将以下代码复制进文件中：
     
+    <a id="accordion-vad-mode-py"></a>
+    
     vad\_mode.py
     
-    ```
+    <a id="code-block-22"></a>
+    
+    ```python
     # -- coding: utf-8 --
     import os, asyncio, pyaudio, queue, threading
     from omni_realtime_client import OmniRealtimeClient, TurnDetectionMode
@@ -1363,13 +1496,21 @@ pip install websockets==15.0.1
     
     运行`vad_mode.py`，通过麦克风即可与 Realtime 模型实时对话，系统会检测您的音频起始位置并自动发送到服务器，无需您手动发送。
     
+    <a id="manual-模式-3"></a>
+    
+    <a id="manual-模式-3-h4"></a>
+    
     #### Manual 模式
     
     在`omni_realtime_client.py`的同级目录下新建另一个 python 文件，命名为`manual_mode.py`，并将以下代码复制进文件中：
     
+    <a id="accordion-manual-mode-py"></a>
+    
     manual\_mode.py
     
-    ```
+    <a id="code-block-23"></a>
+    
+    ```python
     # -- coding: utf-8 --
     import os
     import asyncio
@@ -1827,7 +1968,17 @@ pip install websockets==15.0.1
     运行`manual_mode.py`，按 Enter 键开始说话，再按一次获取模型响应的音频。
     
 
+<a id="webrtc-2"></a>
+
+<a id="webrtc-2-h4"></a>
+
 #### WebRTC
+
+<a id="sec-tabs-9"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
@@ -1836,7 +1987,9 @@ pip install websockets==15.0.1
     您的 Python 版本需要不低于 3.10。安装以下依赖：
     
 
-```
+<a id="code-block-24"></a>
+
+```bash
 pip install aiortc aiohttp sounddevice numpy certifi av
 ```
 
@@ -1844,9 +1997,13 @@ pip install aiortc aiohttp sounddevice numpy certifi av
     
     新建一个 Python 文件，命名为 `webrtc_demo.py`，并将以下代码复制到文件中：
     
+    <a id="accordion-webrtc-demo-py"></a>
+    
     webrtc\_demo.py
     
-    ```
+    <a id="code-block-25"></a>
+    
+    ```python
     # 依赖安装：pip install aiortc aiohttp sounddevice numpy certifi av
     import asyncio
     import json
@@ -2168,6 +2325,10 @@ pip install aiortc aiohttp sounddevice numpy certifi av
     运行 `webrtc_demo.py`，通过麦克风即可与 Qwen-Omni-Realtime 模型实时对话，系统会检测您的音频起始位置并自动发送到服务器，无需您手动发送。
     
 
+<a id="javascript"></a>
+
+<a id="javascript-h4"></a>
+
 #### JavaScript
 
 -   **前提条件**
@@ -2178,9 +2339,13 @@ pip install aiortc aiohttp sounddevice numpy certifi av
     
     新建一个 HTML 文件，命名为 `webrtc_demo.html`，并将以下代码复制到文件中：
     
+    <a id="accordion-webrtc-demo-html"></a>
+    
     webrtc\_demo.html
     
-    ```
+    <a id="code-block-26"></a>
+    
+    ```html
     <!DOCTYPE html>
     <html lang="zh-CN">
     <head>
@@ -2766,25 +2931,51 @@ pip install aiortc aiohttp sounddevice numpy certifi av
     2.  点击**复制 curl 命令**，在终端中执行。命令返回的内容即为 Answer SDP。
     3.  将 Answer SDP 粘贴到页面的 Answer SDP 文本框中，点击**设置 Answer**即可建立连接并开始语音对话。
 
+<a id="aoq-2"></a>
+
+<a id="aoq-2-h4"></a>
+
 #### AOQ
 
-使用 `qwen3.8-omni-flash-realtime` 的完整示例见[实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)或[按键语音对话](raw/_short/use-aoq-to-access-qwen3-5-omni-plus-realtime-to--dee7ca70112bd23e.md)。
+使用 `qwen3.8-omni-flash-realtime` 的完整示例见[实时通话](../../use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)或[按键语音对话](../../../_short/use-aoq-to-access-qwen3-5-omni-plus-realtime-to--dee7ca70112bd23e.md)。
+
+<a id="调用流程与会话管理"></a>
+
+<a id="7e1da95c25ej6"></a>
 
 ## 调用流程与会话管理
 
 一次调用依次完成建连、会话配置、输入、触发响应和接收结果。
 
+<a id="建立连接"></a>
+
+<a id="bdaa43cdd7hsd"></a>
+
 ### 建立连接
 
 以下 WebSocket 和 WebRTC 建连示例使用 `qwen3.8-omni-flash-realtime`。
 
+<a id="sec-tabs-10"></a>
+
+<a id="websocket-3"></a>
+
+<a id="websocket-3-h4"></a>
+
 #### WebSocket
+
+<a id="sec-tabs-11"></a>
+
+<a id="websocket-原生连接"></a>
+
+<a id="websocket-原生连接-h4"></a>
 
 #### WebSocket 原生连接
 
 调用地址与鉴权见[接入准备](#realtime-connection-parameters)。
 
-```
+<a id="code-block-27"></a>
+
+```python
 # pip install websocket-client
 import json
 import websocket
@@ -2817,9 +3008,15 @@ ws = websocket.WebSocketApp(
 ws.run_forever()
 ```
 
+<a id="dashscope-python-sdk-2"></a>
+
+<a id="dashscope-python-sdk-2-h4"></a>
+
 #### DashScope Python SDK
 
-```
+<a id="code-block-28"></a>
+
+```python
 # SDK 版本不低于2.0.1
 import os
 import json
@@ -2848,9 +3045,15 @@ except KeyboardInterrupt:
     pass
 ```
 
+<a id="dashscope-java-sdk-2"></a>
+
+<a id="dashscope-java-sdk-2-h4"></a>
+
 #### DashScope Java SDK
 
-```
+<a id="code-block-29"></a>
+
+```java
 // SDK 版本不低于 2.22.15
 import com.alibaba.dashscope.audio.omni.*;
 import com.alibaba.dashscope.exception.NoApiKeyException;
@@ -2890,6 +3093,10 @@ public class Main {
 }
 ```
 
+<a id="webrtc-3"></a>
+
+<a id="webrtc-3-h4"></a>
+
 #### WebRTC
 
 SDP 交换的地址与参数见[接入准备](#realtime-connection-parameters)。
@@ -2901,9 +3108,15 @@ WebRTC 建立连接分为两个阶段：
 
 建连示例代码：
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 # pip install aiortc aiohttp certifi
 import asyncio, aiohttp, ssl, certifi
 from aiortc import RTCPeerConnection, RTCConfiguration, RTCSessionDescription
@@ -2954,17 +3167,29 @@ async def connect():
 
 浏览器端的 SDP 交换受跨域限制。请按[实时对话示例](#realtime-sdk-mic-examples)中的“WebRTC → JavaScript”操作：在页面生成 curl 命令，在终端执行，再将返回的 Answer SDP 粘贴到页面完成连接。
 
+<a id="aoq-3"></a>
+
+<a id="aoq-3-h4"></a>
+
 #### AOQ
 
 AOQ 先通过业务 AppServer 获取连接参数，再由客户端 SDK 建立媒体连接。鉴权步骤见[AOQ 接入准备](#realtime-aoq-prerequisites)。
+
+<a id="配置会话"></a>
+
+<a id="6905316411elw"></a>
+
+<a id="realtime-text-input"></a>
 
 ### 配置会话
 
 在 `session.update` 的 `session` 对象中，用 `instructions` 设置业务背景和回复要求。
 
-通过客户端事件 [session.update](https://help.aliyun.com/zh/model-studio/client-events#26a8302028sjm) 配置输出模态、音色、音频格式和 VAD。下面是 Qwen3.8-Omni-Flash-Realtime 的 WebSocket Manual 模式配置，与[最小音频问答](#qwen38-realtime)示例一致。本例使用“龙安灵心”音色（`longanlingxin`）：
+通过客户端事件 [session.update](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md#26a8302028sjm) 配置输出模态、音色、音频格式和 VAD。下面是 Qwen3.8-Omni-Flash-Realtime 的 WebSocket Manual 模式配置，与[最小音频问答](#qwen38-realtime)示例一致。本例使用“龙安灵心”音色（`longanlingxin`）：
 
-```
+<a id="code-block-30"></a>
+
+```json
 {
   "type": "session.update",
   "session": {
@@ -2996,11 +3221,15 @@ AOQ 先通过业务 AppServer 获取连接参数，再由客户端 SDK 建立媒
 }
 ```
 
+<a id="accordion-qwen3-5-omni-realtime-配置示例"></a>
+
 Qwen3.5-Omni-Realtime 配置示例
 
 以下示例使用 Qwen3.5-Omni-Realtime、Ethan 音色和 `semantic_vad` 模式。
 
-```
+<a id="code-block-31"></a>
+
+```json
 {
     // 该事件的id，由客户端生成
     "event_id": "event_ToPZqeobitzUJnt3QqtWg",
@@ -3052,241 +3281,75 @@ Qwen3.5-Omni-Realtime 配置示例
 
 媒体格式和多通道配置见[输入与输出功能](#realtime-advanced-config)，工具配置见[工具调用与联网搜索](#realtime-tools)。
 
+<a id="轮次控制与事件时序"></a>
+
+<a id="b93454ed9e636"></a>
+
 ### 轮次控制与事件时序
+
+<a id="sec-tabs-12"></a>
+
+<a id="vad-模式-4"></a>
+
+<a id="vad-模式-4-h4"></a>
 
 #### VAD 模式
 
-将[session.update](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)事件的`session.turn_detection.type` 设为`"server_vad"`或`"semantic_vad"`以[启用 VAD 模式](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。适用于语音通话场景。WebSocket 和 WebRTC 均支持 VAD 模式；音频和图片的传输方式及部分服务端事件不同。
+将[session.update](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)事件的`session.turn_detection.type` 设为`"server_vad"`或`"semantic_vad"`以[启用 VAD 模式](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。适用于语音通话场景。WebSocket 和 WebRTC 均支持 VAD 模式；音频和图片的传输方式及部分服务端事件不同。
 
 使用 Qwen3.8-Omni-Flash-Realtime 系列模型进行客服或商务对话时，可将 `session.turn_detection.type` 设为 `"semantic_vad_ec"`。相比 `semantic_vad`，该模式更易于检测到用户说话并打断模型回复，同时仍可过滤背景音等无意义声音。
 
-> WebRTC 仅支持 VAD 模式，不支持 Manual 模式。WebRTC 的音频通过 RTP 直接传输，无需发送 `input_audio_buffer.append` 事件；图片通过视频轨道传输，不支持 `input_image_buffer.append` 事件。控制指令和服务端事件通过 DataChannel 传输，具体事件参见[服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)。
+> WebRTC 仅支持 VAD 模式，不支持 Manual 模式。WebRTC 的音频通过 RTP 直接传输，无需发送 `input_audio_buffer.append` 事件；图片通过视频轨道传输，不支持 `input_image_buffer.append` 事件。控制指令和服务端事件通过 DataChannel 传输，具体事件参见[服务端事件](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)。
 
 交互流程如下：
 
-1.  客户端发送音频数据。WebSocket 通过 [input\_audio\_buffer.append](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md) 事件发送；WebRTC 通过音频轨道（RTP）自动传输，无需手动发送事件。
-2.  服务端检测到语音开始，通过 DataChannel（WebRTC）或 WebSocket 发送 [input\_audio\_buffer.speech\_started](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md) 事件。
-3.  服务端检测到语音结束，发送[input\_audio\_buffer.speech\_stopped](https://help.aliyun.com/zh/model-studio/server-events#fd08ffdf0a2mt) 事件。
-4.  服务端自动提交音频缓冲区，发送[input\_audio\_buffer.committed](https://help.aliyun.com/zh/model-studio/server-events#bd9bfdc258afy) 事件。
-5.  服务端开始生成响应，依次发送 [response.created](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)、[conversation.item.created](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md) 等事件。模型的音频回复通过 WebSocket 的 `response.audio.delta` 事件增量返回，或通过 WebRTC 的音频轨道（RTP）直接传输。
+1.  客户端发送音频数据。WebSocket 通过 [input\_audio\_buffer.append](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md) 事件发送；WebRTC 通过音频轨道（RTP）自动传输，无需手动发送事件。
+2.  服务端检测到语音开始，通过 DataChannel（WebRTC）或 WebSocket 发送 [input\_audio\_buffer.speech\_started](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md) 事件。
+3.  服务端检测到语音结束，发送[input\_audio\_buffer.speech\_stopped](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#fd08ffdf0a2mt) 事件。
+4.  服务端自动提交音频缓冲区，发送[input\_audio\_buffer.committed](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#bd9bfdc258afy) 事件。
+5.  服务端开始生成响应，依次发送 [response.created](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)、[conversation.item.created](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md) 等事件。模型的音频回复通过 WebSocket 的 `response.audio.delta` 事件增量返回，或通过 WebRTC 的音频轨道（RTP）直接传输。
 6.  响应过程中，服务端通过 `response.audio_transcript.delta` 事件增量返回文字转录，最终发送 `response.done` 事件标志响应完成。
 
-**生命周期**
+<table><thead><tr><th><strong>生命周期</strong></th><th><strong>客户端事件</strong></th><th><strong>服务端事件</strong></th></tr></thead><tbody><tr><td><p>会话初始化</p></td><td><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md">session.update</a></p><blockquote><p>会话配置</p></blockquote></td><td><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md">session.created</a></p><blockquote><p>会话已创建</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#424ef2e774q9p">session.updated</a></p><blockquote><p>会话配置已更新</p></blockquote></td></tr><tr><td><p>用户音频输入</p></td><td><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md">input_audio_buffer.append</a></p><blockquote><p>WebSocket：通过此事件添加音频到缓冲区</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md">input_image_buffer.append</a></p><blockquote><p>WebSocket：通过此事件添加图片到缓冲区</p></blockquote><blockquote><p>WebRTC：音频通过 RTP 音频轨道自动传输，图片通过视频轨道传输，无需发送上述事件。</p></blockquote></td><td><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md">input_audio_buffer.speech_started</a></p><blockquote><p>检测到语音开始</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#fd08ffdf0a2mt">input_audio_buffer.speech_stopped</a></p><blockquote><p>检测到语音结束</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#bd9bfdc258afy">input_audio_buffer.committed</a></p><blockquote><p>服务器收到提交的音频</p></blockquote></td></tr><tr><td><p>服务器音频输出</p></td><td><p>无</p></td><td><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md">response.created</a></p><blockquote><p>服务端开始生成响应</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#dae2260d40qtu">response.output_item.added</a></p><blockquote><p>响应时有新的输出内容</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md">conversation.item.created</a></p><blockquote><p>对话项被创建</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#de7fa0b877j25">response.content_part.added</a></p><blockquote><p>新的输出内容添加到assistant message</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#35396453cfood">response.audio_transcript.delta</a></p><blockquote><p>增量生成的转录文字</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#a25cc50a15car">response.audio.delta</a></p><blockquote><p>WebSocket：模型增量生成的音频通过此事件返回。WebRTC：音频通过 RTP 音频轨道直接传输，不返回此事件。</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#f4d1698567bsm">response.audio_transcript.done</a></p><blockquote><p>文本转录完成</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#9e8eb59c67qnt">response.audio.done</a></p><blockquote><p>音频生成完成</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#011ad54242wft">response.content_part.done</a></p><blockquote><p>Assistant message 的文本或音频内容流式输出完成</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#f580421f45w3h">response.output_item.done</a></p><blockquote><p>Assistant message 的整个输出项流式传输完成</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#f2333c777d9s4">response.done</a></p><blockquote><p>响应完成</p></blockquote><p><code>conversation.item.input_audio_transcription.delta</code></p><blockquote><p>用户语音输入的文字流式转录（需在 session.update 中启用 input_audio_transcription）</p></blockquote><p><code>conversation.item.input_audio_transcription.completed</code></p><blockquote><p>用户语音输入的文字转录完成（需在 session.update 中启用 input_audio_transcription）</p></blockquote></td></tr></tbody></table>
 
-**客户端事件**
+<a id="manual-模式-4"></a>
 
-**服务端事件**
-
-会话初始化
-
-[session.update](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
-
-> 会话配置
-
-[session.created](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
-
-> 会话已创建
-
-[session.updated](https://help.aliyun.com/zh/model-studio/server-events#424ef2e774q9p)
-
-> 会话配置已更新
-
-用户音频输入
-
-[input\_audio\_buffer.append](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
-
-> WebSocket：通过此事件添加音频到缓冲区
-
-[input\_image\_buffer.append](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
-
-> WebSocket：通过此事件添加图片到缓冲区
-
-> WebRTC：音频通过 RTP 音频轨道自动传输，图片通过视频轨道传输，无需发送上述事件。
-
-[input\_audio\_buffer.speech\_started](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
-
-> 检测到语音开始
-
-[input\_audio\_buffer.speech\_stopped](https://help.aliyun.com/zh/model-studio/server-events#fd08ffdf0a2mt)
-
-> 检测到语音结束
-
-[input\_audio\_buffer.committed](https://help.aliyun.com/zh/model-studio/server-events#bd9bfdc258afy)
-
-> 服务器收到提交的音频
-
-服务器音频输出
-
-无
-
-[response.created](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
-
-> 服务端开始生成响应
-
-[response.output\_item.added](https://help.aliyun.com/zh/model-studio/server-events#dae2260d40qtu)
-
-> 响应时有新的输出内容
-
-[conversation.item.created](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
-
-> 对话项被创建
-
-[response.content\_part.added](https://help.aliyun.com/zh/model-studio/server-events#de7fa0b877j25)
-
-> 新的输出内容添加到assistant message
-
-[response.audio\_transcript.delta](https://help.aliyun.com/zh/model-studio/server-events#35396453cfood)
-
-> 增量生成的转录文字
-
-[response.audio.delta](https://help.aliyun.com/zh/model-studio/server-events#a25cc50a15car)
-
-> WebSocket：模型增量生成的音频通过此事件返回。WebRTC：音频通过 RTP 音频轨道直接传输，不返回此事件。
-
-[response.audio\_transcript.done](https://help.aliyun.com/zh/model-studio/server-events#f4d1698567bsm)
-
-> 文本转录完成
-
-[response.audio.done](https://help.aliyun.com/zh/model-studio/server-events#9e8eb59c67qnt)
-
-> 音频生成完成
-
-[response.content\_part.done](https://help.aliyun.com/zh/model-studio/server-events#011ad54242wft)
-
-> Assistant message 的文本或音频内容流式输出完成
-
-[response.output\_item.done](https://help.aliyun.com/zh/model-studio/server-events#f580421f45w3h)
-
-> Assistant message 的整个输出项流式传输完成
-
-[response.done](https://help.aliyun.com/zh/model-studio/server-events#f2333c777d9s4)
-
-> 响应完成
-
-`conversation.item.input_audio_transcription.delta`
-
-> 用户语音输入的文字流式转录（需在 session.update 中启用 input\_audio\_transcription）
-
-`conversation.item.input_audio_transcription.completed`
-
-> 用户语音输入的文字转录完成（需在 session.update 中启用 input\_audio\_transcription）
+<a id="manual-模式-4-h4"></a>
 
 #### Manual 模式
 
-将[session.update](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)事件的`session.turn_detection` 设为 `null` 以启用 Manual 模式。此模式下，客户端通过显式发送`input_audio_buffer.commit` 和`response.create`事件请求服务器响应。适用于按下即说场景，如聊天软件中的发送语音。
+将[session.update](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)事件的`session.turn_detection` 设为 `null` 以启用 Manual 模式。此模式下，客户端通过显式发送`input_audio_buffer.commit` 和`response.create`事件请求服务器响应。适用于按下即说场景，如聊天软件中的发送语音。
 
 交互流程如下：
 
-1.  客户端随时发送 [input\_audio\_buffer.append](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)与[input\_image\_buffer.append](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)事件追加音频与图片至缓冲区。
+1.  客户端随时发送 [input\_audio\_buffer.append](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)与[input\_image\_buffer.append](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)事件追加音频与图片至缓冲区。
     
     > 发送 input\_image\_buffer.append 事件前，至少发送过一次 input\_audio\_buffer.append 事件。
     
-2.  客户端发送[input\_audio\_buffer.commit](https://help.aliyun.com/zh/model-studio/client-events#1cbea5fa7fkfl)事件提交音频缓冲区与图像缓冲区，告知服务端本轮的用户输入（音频及图片）已全部发送完毕。
+2.  客户端发送[input\_audio\_buffer.commit](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md#1cbea5fa7fkfl)事件提交音频缓冲区与图像缓冲区，告知服务端本轮的用户输入（音频及图片）已全部发送完毕。
     
-3.  服务端响应 [input\_audio\_buffer.committed](https://help.aliyun.com/zh/model-studio/server-events#bd9bfdc258afy)事件。
+3.  服务端响应 [input\_audio\_buffer.committed](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#bd9bfdc258afy)事件。
     
-4.  客户端发送[response.create](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)事件，等待服务端返回模型的输出。
+4.  客户端发送[response.create](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)事件，等待服务端返回模型的输出。
     
-5.  服务端响应[conversation.item.created](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)事件。
+5.  服务端响应[conversation.item.created](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)事件。
     
 
-**生命周期**
+<table><thead><tr><th><strong>生命周期</strong></th><th><strong>客户端事件</strong></th><th><strong>服务端事件</strong></th></tr></thead><tbody><tr><td><p>会话初始化</p></td><td><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md">session.update</a></p><blockquote><p>会话配置</p></blockquote></td><td><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md">session.created</a></p><blockquote><p>会话已创建</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#424ef2e774q9p">session.updated</a></p><blockquote><p>会话配置已更新</p></blockquote></td></tr><tr><td><p>用户音频输入</p></td><td><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md">input_audio_buffer.append</a></p><blockquote><p>添加音频到缓冲区</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md">input_image_buffer.append</a></p><blockquote><p>添加图片到缓冲区</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md#1cbea5fa7fkfl">input_audio_buffer.commit</a></p><blockquote><p>提交音频与图片到服务器</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md">response.create</a></p><blockquote><p>创建模型响应</p></blockquote></td><td><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#bd9bfdc258afy">input_audio_buffer.committed</a></p><blockquote><p>服务器收到提交的音频</p></blockquote></td></tr><tr><td><p>服务器音频输出</p></td><td><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md#3b44f2f2abakw">input_audio_buffer.clear</a></p><blockquote><p>清除缓冲区的音频</p></blockquote></td><td><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md">response.created</a></p><blockquote><p>服务端开始生成响应</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#dae2260d40qtu">response.output_item.added</a></p><blockquote><p>响应时有新的输出内容</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md">conversation.item.created</a></p><blockquote><p>对话项被创建</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#de7fa0b877j25">response.content_part.added</a></p><blockquote><p>新的输出内容添加到assistant message 项</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#35396453cfood">response.audio_transcript.delta</a></p><blockquote><p>增量生成的转录文字</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#a25cc50a15car">response.audio.delta</a></p><blockquote><p>模型增量生成的音频</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#f4d1698567bsm">response.audio_transcript.done</a></p><blockquote><p>完成文本转录</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#9e8eb59c67qnt">response.audio.done</a></p><blockquote><p>完成音频生成</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#011ad54242wft">response.content_part.done</a></p><blockquote><p>Assistant message 的文本或音频内容流式输出完成</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#f580421f45w3h">response.output_item.done</a></p><blockquote><p>Assistant message 的整个输出项流式传输完成</p></blockquote><p><a href="../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#f2333c777d9s4">response.done</a></p><blockquote><p>响应完成</p></blockquote></td></tr></tbody></table>
 
-**客户端事件**
+<a id="结束会话"></a>
 
-**服务端事件**
-
-会话初始化
-
-[session.update](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
-
-> 会话配置
-
-[session.created](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
-
-> 会话已创建
-
-[session.updated](https://help.aliyun.com/zh/model-studio/server-events#424ef2e774q9p)
-
-> 会话配置已更新
-
-用户音频输入
-
-[input\_audio\_buffer.append](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
-
-> 添加音频到缓冲区
-
-[input\_image\_buffer.append](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
-
-> 添加图片到缓冲区
-
-[input\_audio\_buffer.commit](https://help.aliyun.com/zh/model-studio/client-events#1cbea5fa7fkfl)
-
-> 提交音频与图片到服务器
-
-[response.create](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
-
-> 创建模型响应
-
-[input\_audio\_buffer.committed](https://help.aliyun.com/zh/model-studio/server-events#bd9bfdc258afy)
-
-> 服务器收到提交的音频
-
-服务器音频输出
-
-[input\_audio\_buffer.clear](https://help.aliyun.com/zh/model-studio/client-events#3b44f2f2abakw)
-
-> 清除缓冲区的音频
-
-[response.created](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
-
-> 服务端开始生成响应
-
-[response.output\_item.added](https://help.aliyun.com/zh/model-studio/server-events#dae2260d40qtu)
-
-> 响应时有新的输出内容
-
-[conversation.item.created](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
-
-> 对话项被创建
-
-[response.content\_part.added](https://help.aliyun.com/zh/model-studio/server-events#de7fa0b877j25)
-
-> 新的输出内容添加到assistant message 项
-
-[response.audio\_transcript.delta](https://help.aliyun.com/zh/model-studio/server-events#35396453cfood)
-
-> 增量生成的转录文字
-
-[response.audio.delta](https://help.aliyun.com/zh/model-studio/server-events#a25cc50a15car)
-
-> 模型增量生成的音频
-
-[response.audio\_transcript.done](https://help.aliyun.com/zh/model-studio/server-events#f4d1698567bsm)
-
-> 完成文本转录
-
-[response.audio.done](https://help.aliyun.com/zh/model-studio/server-events#9e8eb59c67qnt)
-
-> 完成音频生成
-
-[response.content\_part.done](https://help.aliyun.com/zh/model-studio/server-events#011ad54242wft)
-
-> Assistant message 的文本或音频内容流式输出完成
-
-[response.output\_item.done](https://help.aliyun.com/zh/model-studio/server-events#f580421f45w3h)
-
-> Assistant message 的整个输出项流式传输完成
-
-[response.done](https://help.aliyun.com/zh/model-studio/server-events#f2333c777d9s4)
-
-> 响应完成
+<a id="realtime-end-session"></a>
 
 ### 结束会话
 
-每通会话结束后，应断开连接。WebSocket 接入可调用 `close()` 关闭连接；WebRTC 接入需停止媒体并关闭 PeerConnection，具体步骤参见[结束会话与资源清理](https://help.aliyun.com/zh/model-studio/best-practice-webrtc-omni-realtime#bpwrtcomni-s02jh2)。同一会话不关闭会导致上下文持续累积。
+每通会话结束后，应断开连接。WebSocket 接入可调用 `close()` 关闭连接；WebRTC 接入需停止媒体并关闭 PeerConnection，具体步骤参见[结束会话与资源清理](../../use-cases/realtime-audio-video-integration/best-practice-webrtc-omni-realtime.md#bpwrtcomni-s02jh2)。同一会话不关闭会导致上下文持续累积。
 
 调用 `close()` 关闭 WebSocket 连接时，若连接刚建立即关闭（无会话交互），关闭耗时约 5-10 秒，此为正常现象。服务端需完成音频流处理、上下文缓存及推理资源初始化后才能响应关闭请求。建议异步执行 `close()` 操作，避免阻塞主流程。
+
+<a id="会话时长与上下文限制"></a>
+
+<a id="f7fa86f1a4hn9"></a>
 
 ### 会话时长与上下文限制
 
@@ -3302,64 +3365,52 @@ Qwen3.5-Omni-Realtime 配置示例
     
     > 由于视频以抽帧方式输入（建议 1 帧/秒），视频最大时长即模型能保留的图像帧累计时长。例如 240 秒表示模型最多保留最近 240 秒内收到的帧，超过后更早的帧将被丢弃。
     
-    **模型**
+    | 模型 | 音频最大轮次 | 视频最大轮次 | 音频最大时长 | 视频最大时长 |
+    | --- | --- | --- | --- | --- |
+    | qwen3.8-omni-flash-realtime | 100轮 | 50轮 | 600秒 | 240秒 |
+    | qwen3.5-omni-plus-realtime | 100轮 | 50轮 | 600秒 | 240秒 |
+    | qwen3.5-omni-flash-realtime | 80轮 | 50轮 | 480秒 | 120秒 |
     
-    **音频最大轮次**
-    
-    **视频最大轮次**
-    
-    **音频最大时长**
-    
-    **视频最大时长**
-    
-    qwen3.8-omni-flash-realtime
-    
-    100轮
-    
-    50轮
-    
-    600秒
-    
-    240秒
-    
-    qwen3.5-omni-plus-realtime
-    
-    100轮
-    
-    50轮
-    
-    600秒
-    
-    240秒
-    
-    qwen3.5-omni-flash-realtime
-    
-    80轮
-    
-    50轮
-    
-    480秒
-    
-    120秒
-    
+
+<a id="输入与输出功能"></a>
+
+<a id="realtime-advanced-config"></a>
 
 ## 输入与输出功能
 
 按任务选择[音频输入](#realtime-audio-input)、[图片与视频](#82b7d6329836b)、[多通道音频](#realtime-multichannel)或[音色](#f4c9fd97f221z)。[工具调用](#realtime-tools)介绍 Function Calling、MCP 和联网搜索配置。
 
+<a id="音频输入"></a>
+
+<a id="realtime-audio-input"></a>
+
 ### 音频输入
 
 音频是推荐的主要输入方式，可按需搭配图片。
 
-WebSocket 通过 [input\_audio\_buffer.append](https://help.aliyun.com/zh/model-studio/client-events#2ea4b5e41fhjd) 追加 Base64 编码音频；WebRTC 通过建连时添加的音频轨道（RTP）自动传输，无需该事件。音频格式见[会话配置](#6905316411elw)，录音与发送实现见[实时对话示例](#realtime-sdk-mic-examples)。
+WebSocket 通过 [input\_audio\_buffer.append](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md#2ea4b5e41fhjd) 追加 Base64 编码音频；WebRTC 通过建连时添加的音频轨道（RTP）自动传输，无需该事件。音频格式见[会话配置](#6905316411elw)，录音与发送实现见[实时对话示例](#realtime-sdk-mic-examples)。
+
+<a id="图片与视频输入"></a>
+
+<a id="82b7d6329836b"></a>
+
+<a id="1fce10f6f4hw6"></a>
+
+<a id="realtime-image-input"></a>
 
 ### 图片与视频输入
 
 图片可来自本地文件，也可从视频流中实时采集。按协议选择发送方式：
 
+<a id="sec-tabs-13"></a>
+
+<a id="websocket-4"></a>
+
+<a id="websocket-4-h4"></a>
+
 #### WebSocket
 
-通过 [input\_image\_buffer.append](https://help.aliyun.com/zh/model-studio/client-events#c28ed38410nfw) 发送 Base64 编码图片到服务端缓冲区。发送图片前，至少发送过一次 `input_audio_buffer.append`。
+通过 [input\_image\_buffer.append](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md#c28ed38410nfw) 发送 Base64 编码图片到服务端缓冲区。发送图片前，至少发送过一次 `input_audio_buffer.append`。
 
 -   **VAD 模式**：服务端在检测到语音结束时自动提交音频与图片并触发响应。本轮图片应在 `input_audio_buffer.speech_stopped` 前发送。
 -   **Manual 模式**：追加完本轮音频与图片后，发送 `input_audio_buffer.commit`，收到 `input_audio_buffer.committed` 后发送 `response.create` 请求回复，见[事件时序](#b93454ed9e636)。
@@ -3368,17 +3419,31 @@ WebSocket 通过 [input\_audio\_buffer.append](https://help.aliyun.com/zh/model-
 
 视频通话场景可对视频抽帧，建议以 1 张/秒的频率通过 `input_image_buffer.append` 发送图像。DashScope SDK 代码见[Omni-Realtime 示例代码](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni)。
 
+<a id="webrtc-4"></a>
+
+<a id="webrtc-4-h4"></a>
+
 #### WebRTC
 
 通过建连时添加的视频轨道（RTP）发送画面帧，不支持 `input_image_buffer.append`。WebRTC 仅支持 `server_vad` 或 `semantic_vad`，不支持 Manual 模式。
 
 参见[实时对话示例](#realtime-sdk-mic-examples)的“WebRTC → JavaScript”。示例中的视频开关用于开启或停止发送视频画面。
 
+<a id="可选-视频聚合"></a>
+
+<a id="realtime-video-aggregation"></a>
+
 #### 可选：视频聚合
 
 Qwen3.8-Omni-Flash-Realtime 的 `session.video.input.representation_compact` 默认为 `none`；设为 `normal` 可聚合视频表征，降低计算开销，适用于不依赖细粒度视觉信息的场景。需在首段音频前配置，开始输入后不得修改。
 
 以下配置使用 Manual 模式、文本与音频输出、`Tina` 音色，并关闭输入转写。`conversation` 为已连接的 SDK 会话。SDK 会同时发送音色、VAD 等配置，如需调整，在同一次调用中完整设置。
+
+<a id="sec-tabs-14"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
@@ -3388,7 +3453,9 @@ Qwen3.8-Omni-Flash-Realtime 的 `session.video.input.representation_compact` 默
 2.  用下方调用替换原 `update_session` 调用（`input_video_representation_compact` 即视频聚合配置），在首段音频前调用一次。
 3.  因本例关闭输入转写，省略提交后的 `ctx['transcription_done'].wait(timeout=10)`，继续执行原有提交与发起回复流程。
 
-```
+<a id="code-block-32"></a>
+
+```python
 session.update_session(
     output_modalities=['audio', 'text'],
     voice="Tina",
@@ -3397,6 +3464,10 @@ session.update_session(
     input_video_representation_compact="normal",
 )
 ```
+
+<a id="java"></a>
+
+<a id="java-h4"></a>
 
 #### Java
 
@@ -3408,7 +3479,9 @@ session.update_session(
 
 需导入 `java.util.Arrays`、`java.util.Map`、`java.util.HashMap`、`com.alibaba.dashscope.audio.omni.OmniRealtimeConfig` 和 `com.alibaba.dashscope.audio.omni.OmniRealtimeModality`。
 
-```
+<a id="code-block-33"></a>
+
+```java
 Map<String, Object> videoInput = new HashMap<>();
 videoInput.put("representation_compact", "normal");
 
@@ -3431,27 +3504,45 @@ conversation.updateSession(config);
 
 配置后按[图片与视频输入](#82b7d6329836b)的步骤发送画面，视频 Token 计量见[计费规则](#cfba3898e4d0h)。
 
+<a id="多通道音频"></a>
+
+<a id="realtime-multichannel"></a>
+
 ### 多通道音频
 
 以下配置适用于 Qwen3.8-Omni-Flash-Realtime 的 WebSocket 接入。
 
-在首段音频前设置 `session.audio.input.format`。支持 1、2、4 声道；多通道必须为 PCM、16000 Hz、s16le、interleaved。2 声道使用 `raw_mic_array`，4 声道使用 `foa_ambix`。字段约束见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#session-audio-multichannel)。
+在首段音频前设置 `session.audio.input.format`。支持 1、2、4 声道；多通道必须为 PCM、16000 Hz、s16le、interleaved。2 声道使用 `raw_mic_array`，4 声道使用 `foa_ambix`。字段约束见[客户端事件](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md#session-audio-multichannel)。
 
 输入 Token 的倍数见[计费规则](#cfba3898e4d0h)。
+
+<a id="接收文本与音频"></a>
+
+<a id="87c543412esso"></a>
 
 ### 接收文本与音频
 
 模型的响应格式取决于配置的输出模态。
 
+<a id="sec-tabs-15"></a>
+
+<a id="websocket-5"></a>
+
+<a id="websocket-5-h4"></a>
+
 #### WebSocket
 
 -   **仅输出文本**
     
-    通过[response.text.delta](https://help.aliyun.com/zh/model-studio/server-events#0c54be63e0c3w)事件接收流式文本，[response.text.done](https://help.aliyun.com/zh/model-studio/server-events#d675635a94jfb)事件获取完整文本。
+    通过[response.text.delta](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#0c54be63e0c3w)事件接收流式文本，[response.text.done](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#d675635a94jfb)事件获取完整文本。
     
 -   **输出文本+音频**
-    -   **文本**：通过[response.audio\_transcript.delta](https://help.aliyun.com/zh/model-studio/server-events#35396453cfood)事件接收流式文本，[response.audio\_transcript.done](https://help.aliyun.com/zh/model-studio/server-events#f4d1698567bsm)事件获取完整文本。
-    -   **音频**：通过[response.audio.delta](https://help.aliyun.com/zh/model-studio/server-events#a25cc50a15car)事件获取 Base64 编码的流式输出音频数据。[response.audio.done](https://help.aliyun.com/zh/model-studio/server-events#9e8eb59c67qnt)事件标志音频数据生成完成。
+    -   **文本**：通过[response.audio\_transcript.delta](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#35396453cfood)事件接收流式文本，[response.audio\_transcript.done](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#f4d1698567bsm)事件获取完整文本。
+    -   **音频**：通过[response.audio.delta](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#a25cc50a15car)事件获取 Base64 编码的流式输出音频数据。[response.audio.done](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md#9e8eb59c67qnt)事件标志音频数据生成完成。
+
+<a id="webrtc-5"></a>
+
+<a id="webrtc-5-h4"></a>
 
 #### WebRTC
 
@@ -3463,25 +3554,39 @@ conversation.updateSession(config);
     -   **文本**：通过 DataChannel 接收 `response.audio_transcript.delta` 和 `response.audio_transcript.done` 等流式文本事件。
     -   **音频**：通过 RTP 轨道实时接收和播放，无需通过 `response.audio.delta` 事件获取音频数据。
 
+<a id="音色与声音复刻"></a>
+
+<a id="f4c9fd97f221z"></a>
+
 ### 音色与声音复刻
 
 以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
 
-默认音色为 `Tina`。新接入使用 `session.audio.output.voice`；如果同时设置了它和兼容字段 `session.voice`，输出音频使用 `session.audio.output.voice` 指定的音色。可选音色和试听见[Qwen3.8 音色](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)，自定义音色见[声音复刻](raw/model-user-guide/model-experience/omni-modal/qwen-omni-voice-cloning-user-guide.md)，其他型号见[完整音色列表](raw/model-user-guide/model-experience/omni-modal/omni-voice-list.md)。
+默认音色为 `Tina`。新接入使用 `session.audio.output.voice`；如果同时设置了它和兼容字段 `session.voice`，输出音频使用 `session.audio.output.voice` 指定的音色。可选音色和试听见[Qwen3.8 音色](omni-voice-list.md#qwen38-voices)，自定义音色见[声音复刻](qwen-omni-voice-cloning-user-guide.md)，其他型号见[完整音色列表](omni-voice-list.md)。
+
+<a id="工具调用与联网搜索"></a>
+
+<a id="realtime-tools"></a>
 
 ## 工具调用与联网搜索
 
 -   联网搜索和工具调用不兼容，不可同时开启。
 
-需要自定义工具时，参见[Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#rt02realtime01)；接入远程服务时，使用下方 MCP 入口；获取即时信息时，使用联网搜索。
+需要自定义工具时，参见[Function Calling](../text-generation-model/tool-calls/qwen-function-calling.md#rt02realtime01)；接入远程服务时，使用下方 MCP 入口；获取即时信息时，使用联网搜索。
 
 Function Calling 的工具结果通过 `conversation.item.create` 回填，`item.type` 设为 `function_call_output`。
+
+<a id="mcp"></a>
 
 ### MCP
 
 以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
 
-在 `session.tools` 中配置公网 HTTPS MCP Streamable HTTP 服务；仅在没有活动 Response 时更新 MCP 配置。默认需要审批。先确认工具发现完成，再发起需要该工具的 Response。执行结果、拒绝和失败处理以及续答步骤见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-websocket-access#qwen38-mcp-flow)。
+在 `session.tools` 中配置公网 HTTPS MCP Streamable HTTP 服务；仅在没有活动 Response 时更新 MCP 配置。默认需要审批。先确认工具发现完成，再发起需要该工具的 Response。执行结果、拒绝和失败处理以及续答步骤见[MCP 交互流程](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-websocket-access.md#qwen38-mcp-flow)。
+
+<a id="联网搜索"></a>
+
+<a id="f6g7h8i9j0s7k"></a>
 
 ### 联网搜索
 
@@ -3489,7 +3594,11 @@ Function Calling 的工具结果通过 `conversation.item.create` 回填，`item
 
 > Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni-Realtime 系列模型支持联网搜索，且默认关闭，需通过 `session.update` 事件启用。
 
-> 计费请参考[计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)中的`agent`策略。
+> 计费请参考[计费说明](../text-generation-model/tool-calls/web-search.md#92ce83df3a599)中的`agent`策略。
+
+<a id="启用方式"></a>
+
+<a id="4328475f55bre"></a>
 
 #### 启用方式
 
@@ -3498,21 +3607,35 @@ Function Calling 的工具结果通过 `conversation.item.create` 回填，`item
 -   `enable_search`：设置为 `true` 启用联网搜索功能。
 -   `search_options.enable_source`：设置为 `true` 返回搜索结果来源列表。
 
-参数详情请参见[session.update](https://help.aliyun.com/zh/model-studio/client-events#26a8302028sjm)。
+参数详情请参见[session.update](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md#26a8302028sjm)。
+
+<a id="回复与搜索执行情况"></a>
 
 #### 回复与搜索执行情况
 
 回复仍通过[文本与音频事件](#87c543412esso)接收。下方示例在收到 `response.done` 后读取搜索计量中的 `count` 和 `strategy`，打印搜索次数与策略；计量字段见[搜索计量](#v2w3x4y5z6a7b)。
 
+<a id="代码示例"></a>
+
+<a id="c9d0e1f2g3h4i"></a>
+
 #### 代码示例
 
 以下示例展示如何在实时对话中启用联网搜索功能。
+
+<a id="sec-tabs-16"></a>
+
+<a id="dashscope-python-sdk-3"></a>
+
+<a id="dashscope-python-sdk-3-h4"></a>
 
 #### DashScope Python SDK
 
 在 `update_session` 调用中传入 `enable_search` 和 `search_options` 参数：
 
-```
+<a id="code-block-34"></a>
+
+```python
 import os
 import base64
 import time
@@ -3577,11 +3700,17 @@ with client.audio.realtime.connect(model=model) as session:
         print("\n对话结束")
 ```
 
+<a id="dashscope-java-sdk-3"></a>
+
+<a id="dashscope-java-sdk-3-h4"></a>
+
 #### DashScope Java SDK
 
 在 `updateSession` 中通过 `parameters` 传入联网搜索配置：
 
-```
+<a id="code-block-35"></a>
+
+```java
 import com.alibaba.dashscope.audio.omni.*;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.google.gson.JsonObject;
@@ -3713,11 +3842,17 @@ public class OmniSearch {
 }
 ```
 
+<a id="websocket-python"></a>
+
+<a id="websocket-python-h4"></a>
+
 #### WebSocket（Python）
 
 在 `session.update` 的 JSON 中添加 `enable_search` 和 `search_options` 字段：
 
-```
+<a id="code-block-36"></a>
+
+```python
 import json
 import os
 import websocket
@@ -3784,11 +3919,17 @@ ws = websocket.WebSocketApp(API_URL, header=headers, on_open=on_open, on_message
 ws.run_forever()
 ```
 
+<a id="搜索计量"></a>
+
+<a id="v2w3x4y5z6a7b"></a>
+
 #### 搜索计量
 
 启用联网搜索后，`response.done` 事件中的 `usage` 会新增 `plugins` 字段，用于记录搜索计量信息：
 
-```
+<a id="code-block-37"></a>
+
+```json
 {
     "usage": {
         "total_tokens": 2937,
@@ -3812,7 +3953,15 @@ ws.run_forever()
 }
 ```
 
+<a id="计费与限流"></a>
+
+<a id="cb5caf6a0dg4k"></a>
+
 ## 计费与限流
+
+<a id="计费规则"></a>
+
+<a id="cfba3898e4d0h"></a>
 
 ### 计费规则
 
@@ -3820,13 +3969,23 @@ Qwen-Omni-Realtime 模型根据不同模态（音频、图像）对应的Token�
 
 输出语音时，`qwen3.8-omni-flash-realtime` 的音频及对应文本分别按音频输出和文本输出单价计费；Qwen3.5-Omni-Realtime 系列仅对音频计费，对应文本不计费。
 
-MCP 工具调用不额外收费，模型推理仍按模型价格计费。MCP 的调用流程与使用限制见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-websocket-access#qwen38-mcp-flow)。
+MCP 工具调用不额外收费，模型推理仍按模型价格计费。MCP 的调用流程与使用限制见[MCP 交互流程](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-websocket-access.md#qwen38-mcp-flow)。
 
-**说明**在多轮实时对话中，模型每次生成响应时，需要将上下文窗口内的所有历史对话内容（包括之前各轮的音频、图片和文本）与本轮新增输入一并作为输入 Token 进行处理。因此，输入 Token 会随对话轮次的增加而逐轮累积，而非仅计算当前轮次的新增输入。
+> **说明**
+>
+> 在多轮实时对话中，模型每次生成响应时，需要将上下文窗口内的所有历史对话内容（包括之前各轮的音频、图片和文本）与本轮新增输入一并作为输入 Token 进行处理。因此，输入 Token 会随对话轮次的增加而逐轮累积，而非仅计算当前轮次的新增输入。
+>
+> 例如，假设一段 10 秒的音频输入转换为 70 个 Token（Qwen3.5-Omni-Realtime 系列模型），在第 3 轮对话时，该音频仍在上下文窗口内，则它依然会被计入第 3 轮的输入 Token。实际计费的输入 Token 数 = 上下文窗口内所有历史轮次的内容 Token 数 + 本轮新增输入的 Token 数。
 
-例如，假设一段 10 秒的音频输入转换为 70 个 Token（Qwen3.5-Omni-Realtime 系列模型），在第 3 轮对话时，该音频仍在上下文窗口内，则它依然会被计入第 3 轮的输入 Token。实际计费的输入 Token 数 = 上下文窗口内所有历史轮次的内容 Token 数 + 本轮新增输入的 Token 数。
+<a id="accordion-音频-图片-视频转换为token数的规则"></a>
 
 音频、图片、视频转换为Token数的规则
+
+<a id="sec-tabs-17"></a>
+
+<a id="音频"></a>
+
+<a id="音频-h4"></a>
 
 #### 音频
 
@@ -3841,14 +4000,22 @@ MCP 工具调用不额外收费，模型推理仍按模型价格计费。MCP 的
 
 `qwen3.8-omni-flash-realtime` 开启空间音频输入时，音频输入 Token 数为普通音频的 2 倍，2 通道和 4 通道的倍数相同。
 
+<a id="图片"></a>
+
+<a id="图片-h4"></a>
+
 #### 图片
+
+<a id="realtime-image-tokens"></a>
 
 -   `qwen3.8-omni-flash-realtime`、Qwen3.5-Omni-Realtime 系列模型：每 `32x32` 像素对应 1 个 Token
 -   qwen3-omni-flash-realtime-2025-09-15**：**每`32x32`像素对应 1 个 Token
 
 一张图最少需要 4 个 Token，最多支持 1280 个 Token；可使用以下代码，传入图像路径和会话时长即可估算图片消耗的 Token 总量：
 
-```
+<a id="code-block-38"></a>
+
+```python
 # 使用以下命令安装Pillow库：pip install Pillow
 from PIL import Image
 import math
@@ -3907,17 +4074,33 @@ if __name__ == "__main__":
     total_token = token_calculate(image_path="xxx/test.jpg", duration=10)
 ```
 
+<a id="视频"></a>
+
+<a id="视频-h4"></a>
+
 #### 视频
 
 `qwen3.8-omni-flash-realtime` 的视频基础计量沿用 Qwen3.5-Omni-Realtime，视频画面的像素换算见[图片 Token 规则](#realtime-image-tokens)。
 
 `qwen3.8-omni-flash-realtime` 的视频输入在 `representation_compact="normal"` 时，视频 Token 数为未开启聚合时的 1/4。
 
+<a id="限流"></a>
+
+<a id="6b34b65df71rm"></a>
+
 ### 限流
 
-模型限流规则请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+模型限流规则请参见[限流](../../get-started-with-models/rate-limit.md)。
+
+<a id="常见问题"></a>
+
+<a id="1092077082nsf"></a>
 
 ## 常见问题
+
+<a id="连接着但不说话-也会计费吗"></a>
+
+<a id="faq-silence-billing"></a>
 
 ### 连接着但不说话，也会计费吗？
 
@@ -3926,7 +4109,11 @@ if __name__ == "__main__":
 -   **服务端 VAD**：被服务端过滤的静音不会计入音频输入用量。
 -   **Manual 模式**：客户端手动提交的静音会计入音频输入用量。
 
-音频输入 Token 数记录在 [response.done](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md) 事件中，字段位置为 `response` → `usage` → `input_tokens_details` → `audio_tokens`。模型按输入、输出 Token 计费，详细规则见[计费规则](#cfba3898e4d0h)。
+音频输入 Token 数记录在 [response.done](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md) 事件中，字段位置为 `response` → `usage` → `input_tokens_details` → `audio_tokens`。模型按输入、输出 Token 计费，详细规则见[计费规则](#cfba3898e4d0h)。
+
+<a id="rpm-限制什么-是否限制同时保持的连接总数"></a>
+
+<a id="faq-realtime-rate-limits"></a>
 
 ### RPM 限制什么？是否限制同时保持的连接总数？
 
@@ -3934,9 +4121,17 @@ RPM 限制每分钟的 WebSocket 建连请求次数。同一连接内的多轮�
 
 建连时，若 WebSocket 以 `1007` 关闭，且原因为 `Requests rate limit exceeded, please try again later.`，说明触发了请求速率限流。降低建连频率，并采用指数退避重连。
 
+<a id="云工开物-300-元学生代金券能否抵扣-omni-调用费用"></a>
+
+<a id="faq-student-coupon"></a>
+
 ### 云工开物 300 元学生代金券能否抵扣 Omni 调用费用？
 
 不支持。云工开物 300 元学生代金券不支持直接抵扣 Omni 全系列模型的按量调用费用。活动详情请参见[“云工开物”高校计划](https://help.aliyun.com/zh/model-studio/introduction-to-yungongkaiwu)。
+
+<a id="如何在线体验-qwen-omni-realtime-模型"></a>
+
+<a id="14a119f447ehf"></a>
 
 ### 如何在线体验 Qwen-Omni-Realtime 模型？
 
@@ -3944,24 +4139,32 @@ A：您可以通过以下方式一键部署：
 
 1.  访问[函数计算模板](https://fcnext.console.aliyun.com/applications/create?template=omni-realtime@dev)，**部署类型**选择**直接部署**，**百炼 API-KEY** 填入您的 API Key，**百炼业务空间 ID** 填入您的业务空间 ID；单击**创建并部署默认环境**。
     
-    获取方式参见[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key#c38fb45bc6sje)和[获取业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#6cc9270e83h9d)。
+    获取方式参见[获取 API Key](../../../model-api-reference/preparations/get-api-key.md#c38fb45bc6sje)和[获取业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#6cc9270e83h9d)。
     
 2.  等待约一分钟，在**环境详情**的**环境信息**中获取**访问域名**，**将访问域名的**`http`**改成**`https`（示例：[](https://omni-realtime.fcv3.xxxx.cn-hangzhou.fc.devsapp.net)[https://omni-realtime.fcv3.xxxx.cn-hangzhou.fc.devsapp.net](https://omni-realtime.fcv3.xxxx.cn-hangzhou.fc.devsapp.net)），修改后的 HTTPS 链接指向一个可在线体验的 Web 应用，可通过它与模型进行实时视频或语音通话。
     
 
-**重要**此链接使用自签名证书，仅用于临时测试。首次访问时，浏览器会显示安全警告，这是预期行为，**请勿在生产环境使用**。如需继续，请按浏览器提示操作（如点击“高级” → “继续前往（不安全）”）。
+> **重要**
+>
+> 此链接使用自签名证书，仅用于临时测试。首次访问时，浏览器会显示安全警告，这是预期行为，**请勿在生产环境使用**。如需继续，请按浏览器提示操作（如点击“高级” → “继续前往（不安全）”）。
 
 > 通过**资源信息**\-**函数资源**查看项目源代码。
 
-> [函数计算](https://help.aliyun.com/zh/functioncompute/trial-quota-1)与[阿里云百炼](raw/model-user-guide/test-1/new-free-quota.md)均为新用户提供免费额度，可以覆盖简单调试所需成本，额度耗尽后按量计费。只有在访问的情况下会产生费用。
+> [函数计算](https://help.aliyun.com/zh/functioncompute/trial-quota-1)与[阿里云百炼](../../test-1/new-free-quota.md)均为新用户提供免费额度，可以覆盖简单调试所需成本，额度耗尽后按量计费。只有在访问的情况下会产生费用。
+
+<a id="如何配置热词或业务术语"></a>
+
+<a id="faq-business-terms"></a>
 
 ### 如何配置热词或业务术语？
 
-可通过 [session.update](https://help.aliyun.com/zh/model-studio/client-events#26a8302028sjm) 的 `session.instructions` 提供业务背景、术语的准确写法及读音，帮助模型结合上下文理解和使用专有名词。这是提示词引导，不是独立的热词参数，效果取决于音频和上下文。
+可通过 [session.update](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md#26a8302028sjm) 的 `session.instructions` 提供业务背景、术语的准确写法及读音，帮助模型结合上下文理解和使用专有名词。这是提示词引导，不是独立的热词参数，效果取决于音频和上下文。
 
 例如，让 Omni 直接将音频转成文字时，可在提示词中说明 AI 编程产品 `Qoder` 与英文单词 `coder` 同音，引导模型使用产品名称。以下仅展示提示词配置；请将内容合并到已有的 `instructions` 中，保留会话的其他配置，并在发送音频前完成设置：
 
-```
+<a id="code-block-39"></a>
+
+```json
 {
   "type": "session.update",
   "session": {
@@ -3970,36 +4173,55 @@ A：您可以通过以下方式一键部署：
 }
 ```
 
+<a id="vad-未及时触发回复-如何调整"></a>
+
+<a id="faq-vad-response"></a>
+
 ### VAD 未及时触发回复，如何调整？
 
-可通过 [session.update](https://help.aliyun.com/zh/model-studio/client-events#26a8302028sjm) 的 `session.turn_detection`，根据当前使用的 VAD 模式调整：
+可通过 [session.update](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md#26a8302028sjm) 的 `session.turn_detection`，根据当前使用的 VAD 模式调整：
 
 -   **`server_vad`**：适当降低 `silence_duration_ms`，缩短用户停止说话后的静音等待时间。设置过低可能将句中的短暂停顿判断为说话结束，提前触发回复。
 -   **`semantic_vad`**：如果“可以”“yes”等有效的简短回答未能触发回复，使用 Qwen3.8-Omni-Flash-Realtime 系列模型时，可尝试将 `type` 切换为 `semantic_vad_ec`。相比 `semantic_vad`，该模式更容易检测到用户说话并触发打断，同时保留对背景音等无意义声音的过滤能力。
+
+<a id="收不到-asr-转录文本-transcript-怎么办"></a>
+
+<a id="faq-asr-transcript-h3"></a>
 
 ### 收不到 ASR 转录文本（transcript）怎么办？
 
 A：如果没有收到 `conversation.item.input_audio_transcription.completed` 事件，或事件中的 `transcript` 为空，请依次检查：
 
-1.  **输入转录配置**。DashScope Python SDK 的 `update_session` 参数 `enable_input_audio_transcription` 默认为 `True`；设为 `False` 时，SDK 会将会话中的 `input_audio_transcription` 置为 `null`。直接使用 WebSocket，或通过 WebRTC DataChannel 发送会话配置时，按[输入音频转录配置](https://help.aliyun.com/zh/model-studio/client-events#session-input-audio-transcription)检查发送的 `session.update.session.input_audio_transcription`。`enable_input_audio_transcription` 是 SDK 参数，不是 `session.update` 的顶层字段。
+1.  **输入转录配置**。DashScope Python SDK 的 `update_session` 参数 `enable_input_audio_transcription` 默认为 `True`；设为 `False` 时，SDK 会将会话中的 `input_audio_transcription` 置为 `null`。直接使用 WebSocket，或通过 WebRTC DataChannel 发送会话配置时，按[输入音频转录配置](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md#session-input-audio-transcription)检查发送的 `session.update.session.input_audio_transcription`。`enable_input_audio_transcription` 是 SDK 参数，不是 `session.update` 的顶层字段。
 2.  **转录失败事件**。同时监听 `conversation.item.input_audio_transcription.failed`。失败时可从事件的 `error.code`、`error.message` 和 `error.param` 查看错误信息。
 3.  **音频是否完成提交**。VAD 模式下检查服务端是否检测到语音起止；Manual 模式下确认已发送 `input_audio_buffer.commit`。没有提交本轮音频时，不要只等待转录完成事件。
 4.  **连接和 SDK 版本**。确认本轮音频输入期间连接未中断；WebRTC 接入还需检查 DataChannel 状态。使用 DashScope Python SDK 时，核对版本符合本文的最低要求（2.0.1）。
 
+<a id="错误码"></a>
+
+<a id="f6fbfec76d5vn"></a>
+
 ### 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。
+
+<a id="api-与-sdk-参考"></a>
+
+<a id="46fcc43673t0z"></a>
 
 ## API 与 SDK 参考
 
-通过 AOQ 接入的流程和示例，请参见[AOQ 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md)。协议选型和参考入口请参见[API 参考](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-api.md)。
+通过 AOQ 接入的流程和示例，请参见[AOQ 接入](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md)。协议选型和参考入口请参见[API 参考](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-api.md)。
 
--   [客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
+-   [客户端事件](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
     
--   [服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
+-   [服务端事件](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
     
--   [WebRTC 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-webrtc-access.md)
+-   [WebRTC 接入](../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-webrtc-access.md)
     
--   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md)
+-   [Python SDK](../../../_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md)
     
--   [Java SDK](raw/_short/omni-realtime-java-sdk-13dfd16f685872d7.md)
+-   [Java SDK](../../../_short/omni-realtime-java-sdk-13dfd16f685872d7.md)
+    
+
+![](data:image/png;base64,)

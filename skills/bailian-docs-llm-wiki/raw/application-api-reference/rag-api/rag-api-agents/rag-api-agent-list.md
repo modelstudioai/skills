@@ -2,9 +2,17 @@
 
 分页查询当前租户下的 Agent 列表。
 
+<a id="前提"></a>
+
+<a id="h-ragapi-list-prereq"></a>
+
 ## 前提
 
-已获取阿里云百炼 API Key 与业务空间 ID，鉴权方式见[API 认证](raw/application-api-reference/rag-api/rag-api-authentication.md)。本接口为读操作，仅需 API Key。
+已获取阿里云百炼 API Key 与业务空间 ID，鉴权方式见[API 认证](../rag-api-authentication.md)。本接口为读操作，仅需 API Key。
+
+<a id="接口"></a>
+
+<a id="h-ragapi-list-endpoint"></a>
 
 ## 接口
 
@@ -12,75 +20,36 @@
 
 分页查询指定场景下的 Agent 列表，支持按状态、名称、Agent ID、关联知识库 Pipeline ID 等条件过滤。
 
+<a id="请求体"></a>
+
+<a id="h-ragapi-list-req"></a>
+
 ## 请求体
 
-字段
+| 字段 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `agent_scene` | 是 | string | Agent 场景：`chat`（知识问答）或 `search`（知识检索）。 |
+| `agent_status` | 否 | string | 按状态过滤：`draft` / `deployed`（含 `edited`）/ `deleted`。 |
+| `agent_name` | 否 | string | 按名称模糊搜索。 |
+| `agent_id` | 否 | string | 精确匹配 Agent ID。 |
+| `pipeline_id` | 否 | string | 按关联知识库 Pipeline ID 过滤。 |
+| `search_type` | 否 | string | 按检索类型过滤，仅在 `agent_scene` 为 `search` 时有意义：`chunk`（向量检索）或 `wiki`（Wiki 检索）；不传即不按类型过滤。 |
+| `page_number` | 否 | integer | 页码，默认 1。 |
+| `page_size` | 否 | integer | 每页条数，默认 10，上限 100。 |
 
-必填
+> **说明**
+>
+> 知识库开启 Wiki 后，系统会自动创建对应的 **Wiki 检索** 服务。用 `agent_scene=search` + `search_type=wiki`（可加 `pipeline_id`）即可筛出 Wiki 检索服务并取其 `agent_id`，供[知识检索](../knowledge/knowledgesearch.md)的 Wiki 检索使用。关闭 Wiki 不会删除已创建的 Wiki 检索服务，重新开启后原 `agent_id` 恢复可用。详见[Wiki 与本体知识图谱](../../../application-user-guide/knowledge-base/data-connection-overview/rag-wiki.md)。
 
-类型
+<a id="请求示例"></a>
 
-说明
-
-`agent_scene`
-
-是
-
-string
-
-Agent 场景：`chat`（知识问答）或 `search`（知识检索）。
-
-`agent_status`
-
-否
-
-string
-
-按状态过滤：`draft` / `deployed`（含 `edited`）/ `deleted`。
-
-`agent_name`
-
-否
-
-string
-
-按名称模糊搜索。
-
-`agent_id`
-
-否
-
-string
-
-精确匹配 Agent ID。
-
-`pipeline_id`
-
-否
-
-string
-
-按关联知识库 Pipeline ID 过滤。
-
-`page_number`
-
-否
-
-integer
-
-页码，默认 1。
-
-`page_size`
-
-否
-
-integer
-
-每页条数，默认 10，上限 100。
+<a id="h-ragapi-list-eg"></a>
 
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST "$BASE_URL/api/v1/indices/rag/app/list" \
   -H "Authorization: Bearer $BAILIAN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -93,11 +62,17 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/app/list" \
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`（`{workspace_id}` 为业务空间 ID），`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
+<a id="响应示例"></a>
+
+<a id="h-ragapi-list-resp"></a>
+
 ## 响应示例
 
 操作成功返回 200。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "request_id": "e5f6a7b8-c9d0-1234-efab-345678901234",
   "status_code": 200,
@@ -149,167 +124,61 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/app/list" \
 }
 ```
 
+<a id="响应字段"></a>
+
+<a id="h-ragapi-list-dto"></a>
+
 ## 响应字段
 
-字段
-
-类型
-
-说明
-
-`request_id`
-
-string
-
-请求唯一标识，排查问题时请提供此 ID。
-
-`status_code`
-
-integer
-
-HTTP 状态码。
-
-`code`
-
-string
-
-响应码，成功时为 `Success`。
-
-`message`
-
-string
-
-提示信息。
-
-`status`
-
-string
-
-请求状态：`SUCCESS` 或 `FAILED`。
-
-`success`
-
-boolean
-
-请求是否成功。
-
-`data.page_number`
-
-integer
-
-当前页码。
-
-`data.page_size`
-
-integer
-
-每页条数。
-
-`data.total_count`
-
-integer
-
-总记录数。
-
-`data.rows`
-
-array<object>
-
-Agent 列表。元素字段见下表。
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `request_id` | string | 请求唯一标识，排查问题时请提供此 ID。 |
+| `status_code` | integer | HTTP 状态码。 |
+| `code` | string | 响应码，成功时为 `Success`。 |
+| `message` | string | 提示信息。 |
+| `status` | string | 请求状态：`SUCCESS` 或 `FAILED`。 |
+| `success` | boolean | 请求是否成功。 |
+| `data.page_number` | integer | 当前页码。 |
+| `data.page_size` | integer | 每页条数。 |
+| `data.total_count` | integer | 总记录数。 |
+| `data.rows` | array<object> | Agent 列表。元素字段见下表。 |
 
 **data.rows\[\] 元素**
 
-字段
-
-类型
-
-说明
-
-`agent_id`
-
-string
-
-Agent ID。
-
-`agent_name`
-
-string
-
-Agent 名称。
-
-`agent_scene`
-
-string
-
-Agent 场景：`chat` 或 `search`。
-
-`agent_status`
-
-string
-
-Agent 状态：`draft`、`deployed`、`edited`、`deleted`。
-
-`agent_version`
-
-string
-
-Agent 当前版本号。
-
-`create_time`
-
-string
-
-创建时间（ISO 8601 格式）。
-
-`modify_time`
-
-string
-
-修改时间（ISO 8601 格式）。
-
-`pipeline_list`
-
-array<object>
-
-关联的知识库列表。元素字段见下表。
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `agent_id` | string | Agent ID。 |
+| `agent_name` | string | Agent 名称。 |
+| `agent_scene` | string | Agent 场景：`chat` 或 `search`。 |
+| `agent_status` | string | Agent 状态：`draft`、`deployed`、`edited`、`deleted`。 |
+| `agent_version` | string | Agent 当前版本号。 |
+| `create_time` | string | 创建时间（ISO 8601 格式）。 |
+| `modify_time` | string | 修改时间（ISO 8601 格式）。 |
+| `pipeline_list` | array<object> | 关联的知识库列表。元素字段见下表。 |
 
 **data.rows\[\].pipeline\_list\[\] 元素**
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `pipeline_id` | string | 知识库 Pipeline ID。 |
+| `pipeline_name` | string | 知识库名称。 |
 
-类型
+<a id="错误码"></a>
 
-说明
-
-`pipeline_id`
-
-string
-
-知识库 Pipeline ID。
-
-`pipeline_name`
-
-string
-
-知识库名称。
+<a id="h-ragapi-list-err"></a>
 
 ## 错误码
 
-HTTP 状态码
-
-错误码
-
-说明
-
-400
-
-`Index.InvalidParameter`
-
-请求参数不合法，请检查参数是否完整且类型正确。
+| HTTP 状态码 | 错误码 | 说明 |
+| --- | --- | --- |
+| 400 | `Index.InvalidParameter` | 请求参数不合法，请检查参数是否完整且类型正确。 |
+| 400 | `Index.InvalidParameter` | `agent_scene` 缺失或取值非法；`search_type` 取值非法（须为 `chunk` 或 `wiki`）。 |
 
 失败响应示例：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "request_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
   "status_code": 400,
