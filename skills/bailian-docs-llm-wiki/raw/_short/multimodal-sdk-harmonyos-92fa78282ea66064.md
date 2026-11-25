@@ -15,7 +15,7 @@ MultiModalDialog SDK 由阿里云千问团队提供，支持音视频端到端�
 ## 前提条件
 
 -   使用阿里云百炼大模型服务提供的实时多模交互能力，需要：
-    -   开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://bailian.console.aliyun.com/)和[API Key](../model-api-reference/preparations/get-api-key.md)。
+    -   开通阿里云百炼实时多模交互应用，获取[Workspace ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)、[APP ID](https://bailian.console.aliyun.com/)和[API Key](../model-api-reference/preparations/get-api-key.md)。
     -   下载 HarmonyOS SDK 和 Demo，并配置必要的环境、依赖。
 -   导入示例代码，按照调用流程接入 SDK。
 -   可以直接运行发布产物工程（`multimodal-dialog-harmony-V1.4.9-V1.0.0`）中 `entry` 模块的 HAP 测试程序，填入上方三个必要参数，即可进行测试。

@@ -53,7 +53,7 @@ GET /{workspaceId}/quanmiao/lightapp/getVideoDetectShotTask HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 是 | 百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| workspaceId | string | 是 | 百炼业务空间唯一标识：[获取 workspaceId](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxx |
 | taskId | string | 是 | 任务唯一标识 | a3d1c2ac-f086-4a21-9069-f5631542f5a2 |
 
 <a id="返回参数"></a>

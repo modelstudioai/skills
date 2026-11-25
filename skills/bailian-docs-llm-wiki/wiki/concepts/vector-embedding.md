@@ -1,51 +1,54 @@
 # 向量嵌入
 
-向量嵌入（Embedding）是将原始文本、图像等非结构化数据映射为固定维度稠密实数向量的过程，使语义相近的内容在向量空间中距离更近，从而支撑语义搜索、相似匹配、RAG 检索等下游任务。该表示不依赖关键词匹配，而是基于模型学习到的深层语义表征。
+向量嵌入（Vector Embedding）是将原始文本、图像、音频等非结构化数据映射到高维稠密实数向量空间的数学表示过程，使语义相近的内容在向量空间中距离更近（如余弦相似度更高），从而支撑语义搜索、RAG、跨模态检索等核心AI能力。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **RAG 知识库构建**：知识库创建或更新时，系统自动调用指定的嵌入模型（如 `text-embedding-v1` 或 `qwen3.7-text-embedding`）对文档切片进行向量化，并构建向量索引；检索阶段通过计算用户 query 向量与切片向量的余弦相似度完成语义召回。  
-- **直接 API 调用**：通过 `/api/v1/services/embeddings` 接口，开发者可独立调用文本或多模态嵌入服务，输入字符串数组或图像+文本组合，获取标准化向量结果，用于自定义检索、聚类、去重等逻辑。  
-- **混合检索策略**：在 Knowledge API 的 `retrieval_strategy=hybrid` 模式下，向量嵌入与关键词检索并行执行，结果融合后排序，兼顾语义准确性与术语召回率。  
-- **多模态理解场景**：使用 `multimodal-embedding-v1` 模型，可将图像（base64 编码）与描述文本联合编码为统一 512 维向量，支持跨模态相似检索（如“找与这张图语义最接近的文档”）。  
-- **Agent 工作流集成**：在 RAG Agent 的 `agent_config` 中，嵌入模型作为底层检索组件被策略性调用，其输出向量参与动态路由、上下文感知重排等高级编排逻辑。
+- **RAG 知识库构建**：创建知识库时通过 `embeddingModelName`（如 `qwen3.7-text-embedding` 或 `text-embedding-v4`）指定嵌入模型，平台自动对上传文档切片进行向量化，并构建可检索的向量索引；多模态知识库还需配置 `multimodalEmbeddingModelName`（如 `qwen3-vl-plus`）。
+- **独立向量服务调用**：通过 `/vector-and-sort` 接口直接调用嵌入模型，支持同步（低延迟实时）和异步批处理（10万行/任务）两种模式，适用于自定义索引构建、特征工程或离线预计算。
+- **框架集成**：LlamaIndex 中使用 `DashScopeEmbedding` 组件，需显式传入 `model_name`（如 `"text-embedding-v3"`）；Spring AI Alibaba 通过 `spring-ai-alibaba-starter-dashscope` 自动绑定嵌入能力，无需手动向量化。
+- **混合检索与多模态联合**：所有支持的文本/多模态嵌入模型（如 `qwen3-vl-embedding`）均产出统一语义空间的向量，允许文本查询与图像/视频文档直接计算相似度，实现跨模态语义检索。
 
 ## 关键参数和配置
 
-- **`model`**（必填）：嵌入模型标识符，例如：  
-  - 文本：`"text-embedding-v1"`（1024 维，默认）、`"text-embedding-v2"`（更高精度）、`"qwen3.7-text-embedding"`（RAG 场景推荐）；  
-  - 多模态：`"multimodal-embedding-v1"`（512 维，仅支持 `float` 输出）。  
-  > ✅ 注意：模型名必须与 [向量与排序](../../raw/model-api-reference/vector-and-sort.md) 文档严格一致，大小写敏感。
+| 参数 | 适用模型 | 说明 | 推荐值 |
+|------|----------|------|--------|
+| `dimensions` | `qwen3.7-text-embedding`, `text-embedding-v3/v4` | 指定向量维度（影响精度与存储开销），默认 `1024`；`v1/v2` 及多模态模型不支持此参数 | `1024`（平衡）、`2048`（高精度场景） |
+| `encoding_format` | 所有同步嵌入接口 | 返回格式：`float`（默认，便于调试）或 `base64`（节省带宽，适合大规模传输） | 生产环境建议 `base64`，开发调试用 `float` |
+| `enable_fusion` | `qwen3-vl-embedding` | 设为 `true` 时，对图文混合输入生成单个融合向量；设为 `false` 则分别输出文本向量和图像向量 | 多模态检索推荐 `true` |
+| `input` | 全部 | 支持字符串、字符串数组、文件 URL（如 `oss://bucket/key`）或结构化多模态对象（如 `{"text": "...", "image": "url"}`） | 单文本用字符串，批量用数组，多模态用对象 |
 
-- **`input`**（必填）：  
-  - 文本模型：接受单个字符串（如 `"你好"`）或字符串数组（如 `["A", "B"]`），最大总长度 2048 tokens；  
-  - 多模态模型：接受对象 `{ "image": "base64...", "text": "可选描述" }`，图像尺寸 ≤ 1024×1024。
-
-- **`encoding_format`**（可选，仅文本模型）：  
-  - `"float"`（默认）：返回浮点数数组（如 `[0.12, -0.45, ...]`）；  
-  - `"base64"`：返回 base64 编码的二进制向量（节省传输体积）；  
-  > ⚠️ `multimodal-embedding-v1` **不支持** `"base64"`，强制返回 `float`。
-
-- **维度与兼容性**：所有嵌入模型输出维度固定且不可配置（如 `text-embedding-v1`: 1024，`multimodal-embedding-v1`: 512），向量可直接用于余弦相似度计算或存入主流向量数据库（如 Milvus、PGVector）。
+> ⚠️ 注意：  
+> - `text-embedding-v4` 单行上限 8,192 Token，`qwen3.7-text-embedding` 支持 128K Token；超长文本需分块。  
+> - 多模态嵌入模型（如 `qwen3-vl-embedding`）要求图片 ≤10MB、视频需先抽帧为图片序列。  
+> - 向量维度必须与后续检索/相似度计算环节保持一致（例如 FAISS 索引需预先指定相同 `dimension`）。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证**：用 `curl` 直接调用 `/api/v1/services/embeddings`，确认模型响应格式与延迟；  
+- ✅ **快速上手**：一行代码即可获取向量  
+  ```python
+  from dashscope import TextEmbedding
+  resp = TextEmbedding.call(model='qwen3.7-text-embedding', input=['杭州天气如何？'])
+  vector = resp.output.embeddings[0].embedding  # list[float]
+  ```
+
 - ✅ **生产建议**：  
-  - RAG 场景优先选用 `qwen3.7-text-embedding`（精度/速度平衡）；  
-  - 多模态需求明确时，用 `multimodal-embedding-v1` 并预处理图像至 ≤1024×1024；  
-  - 批量嵌入请合并请求（传入字符串数组），避免高频单条调用；  
+  - 实时服务优先选 `qwen3.7-text-embedding-flash`（低延迟）或 `text-embedding-v4`（高精度）；  
+  - 离线批量建库用异步接口 `/api/v1/services/embeddings/text-embedding/text-embedding`（支持 10 万行/任务）；  
+  - 多模态场景统一使用 `qwen3-vl-embedding`，启用 `enable_fusion=true` 简化下游逻辑；  
+  - 向量需持久化存储时，务必记录所用 `model` 和 `dimensions`，避免混用导致相似度计算失效。
+
 - ❌ **避坑提示**：  
-  - 不要为 `multimodal-embedding-v1` 设置 `encoding_format=base64`（将报错）；  
-  - 向量索引更新非实时（30–120 秒延迟），业务需容忍短暂不一致；  
-  - 所有嵌入模型均**不支持** `top_k`、`dimension` 等可调参数——维度与行为由模型本身固化。
+  - 不要将 `text-embedding-v1` 的向量与 `v3` 模型的向量混存于同一索引；  
+  - `base64` 编码向量需解码为 float 数组后才能用于余弦计算（SDK 已自动处理）；  
+  - 临时文件 URL（`oss://...`）有效期仅 48 小时，勿用于长期索引构建。
 
 ## 关联主题页
 
-- [vector and sort](../api/vector-and-sort.md)
 - [rag api](../api/rag-api.md)
-- [knowledge base](../guides/knowledge-base.md)
-- [model experience](../guides/model-experience.md)
+- [vector and sort](../api/vector-and-sort.md)
+- [frameworks](../api/frameworks.md)
 - [more about models](../api/more-about-models.md)
+- [use cases](../guides/use-cases.md)
 
 

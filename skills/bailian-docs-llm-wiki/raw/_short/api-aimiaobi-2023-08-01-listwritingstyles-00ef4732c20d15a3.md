@@ -41,7 +41,7 @@
 
 ## 请求参数
 
-<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>WorkspaceId</td><td>string</td><td>是</td><td><div><p><a href="https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id">业务空间 ID</a></p></div></td><td>llm-xxxxx</td></tr><tr><td>Scene</td><td>string</td><td>是</td><td><div><p>写作场景筛选</p></div><div><div>枚举值：</div><ul><li>market：营销写作。</li><li>government：法定公文 。</li><li>custom：自定义写作。</li><li>media：传媒类。</li><li>office：事务公文。</li></ul></div></td><td>media</td></tr><tr><td>MaxResults</td><td>integer</td><td>否</td><td><div><p>返回的最大结果数</p></div></td><td>100</td></tr><tr><td>NextToken</td><td>string</td><td>否</td><td><div><p>写一页 Token</p></div></td><td>下一页token</td></tr></tbody></table>
+<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>WorkspaceId</td><td>string</td><td>是</td><td><div><p><a href="../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md">业务空间 ID</a></p></div></td><td>llm-xxxxx</td></tr><tr><td>Scene</td><td>string</td><td>是</td><td><div><p>写作场景筛选</p></div><div><div>枚举值：</div><ul><li>market：营销写作。</li><li>government：法定公文 。</li><li>custom：自定义写作。</li><li>media：传媒类。</li><li>office：事务公文。</li></ul></div></td><td>media</td></tr><tr><td>MaxResults</td><td>integer</td><td>否</td><td><div><p>返回的最大结果数</p></div></td><td>100</td></tr><tr><td>NextToken</td><td>string</td><td>否</td><td><div><p>写一页 Token</p></div></td><td>下一页token</td></tr></tbody></table>
 
 <a id="返回参数"></a>
 

@@ -21,7 +21,7 @@
 2.  **插件广场中的插件**
 3.  **自定义插件**
 
-插件广场和自定义插件介绍请参见[插件概述](../application-user-guide/plug-in/plug-in-overview.md)。
+插件广场和自定义插件介绍请参见[插件概述](../application-user-guide/agent-development/llm-application/plug-in/plug-in-overview.md)。
 
 <a id="接入流程"></a>
 
@@ -35,7 +35,7 @@
     
 -   **自定义插件**：
     
-    1.  创建插件：详情请参见[自定义插件](../application-user-guide/plug-in/custom-plug-ins.md)。
+    1.  创建插件：详情请参见[自定义插件](../application-user-guide/agent-development/llm-application/plug-in/custom-plug-ins.md)。
         
         注意，需要确保【创建插件】和【创建工具】两个步骤均完成并发布。如果您返回到多模态交互控制台，在自定义插件中无法选中自己刚创建的插件，可优先检查是否未完成【创建工具】并【发布】操作。
         
@@ -93,7 +93,7 @@ multiBuilder.bizParams = MultiModalRequestParam.BizParams(builder: {
 
 ## 插件参数说明
 
-<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>二级参数</strong></p></th><th><p><strong>三级参数</strong></p></th><th><p><strong>四级参数</strong></p></th><th><p><strong>参数说明</strong></p></th></tr></thead><tbody><tr><td rowspan="4"><p>biz_params</p></td><td></td><td></td><td></td><td><p>多模请求参数中的biz_params</p></td></tr><tr><td rowspan="3"><p>user_defined_params</p></td><td></td><td></td><td><p>透传用户自定义参数</p></td></tr><tr><td rowspan="2"><p>your_plugin_code</p></td><td></td><td><p>导入的百炼应用 id，参考<a href="../application-user-guide/plug-in/custom-plug-ins.md">自定义插件</a>获取工具ID</p></td></tr><tr><td><p>your_plugin_param</p></td><td><p>类型为 Object</p><p>对应与插件配置的信息</p></td></tr></tbody></table>
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>二级参数</strong></p></th><th><p><strong>三级参数</strong></p></th><th><p><strong>四级参数</strong></p></th><th><p><strong>参数说明</strong></p></th></tr></thead><tbody><tr><td rowspan="4"><p>biz_params</p></td><td></td><td></td><td></td><td><p>多模请求参数中的biz_params</p></td></tr><tr><td rowspan="3"><p>user_defined_params</p></td><td></td><td></td><td><p>透传用户自定义参数</p></td></tr><tr><td rowspan="2"><p>your_plugin_code</p></td><td></td><td><p>导入的百炼应用 id，参考<a href="../application-user-guide/agent-development/llm-application/plug-in/custom-plug-ins.md">自定义插件</a>获取工具ID</p></td></tr><tr><td><p>your_plugin_param</p></td><td><p>类型为 Object</p><p>对应与插件配置的信息</p></td></tr></tbody></table>
 
 示例：
 

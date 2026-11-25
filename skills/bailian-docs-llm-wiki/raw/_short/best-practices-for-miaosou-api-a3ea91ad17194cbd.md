@@ -175,7 +175,7 @@ chatconfig.SearchSource 字段下配置“数据源（信源）”。
 
 -   阿里云账号已开通本产品；
 -   获得AgentKey、AccessKeyId、AccessKeySecret：获取 AccessKey 与 AgentKey；
--   获取WorkSpaceId [获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)；
+-   获取WorkSpaceId [获取Workspace ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)；
 -   引入妙笔SDK [注意获取最新sdk版本](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc)；
 
 <a id="code-block"></a>

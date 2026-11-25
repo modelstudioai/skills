@@ -55,7 +55,7 @@ POST /miaodu/stream/runDocTranslation HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxx |
 | SessionId | string | 是 | 对话 ID | 2e6b3987-f743-4d4c-8326-d9c41a6af3ee |
 | DocId | string | 否 | 文档 ID | 12345 |
 | TransType | string | 否 | 翻译方式 | toChinese toEnglish toJapenese toRussian toFrench toGerman toItalian toKorean toSpanish toPortuguese |

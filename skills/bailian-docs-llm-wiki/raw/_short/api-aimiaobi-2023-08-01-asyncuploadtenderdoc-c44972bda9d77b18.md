@@ -41,7 +41,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 否 | [工作空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。 | llm-az2gglkjauwnnhpq |
+| WorkspaceId | string | 否 | [工作空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。 | llm-az2gglkjauwnnhpq |
 | TenderDocName | string | 否 | 招标书名字 | tender.pdf |
 | FileKey | string | 否 | 文件 osskey | oss://default/aimiaobi-service-prod/aimiaobi/materialDocument/1601892701595700\_10169811/208757545922605632\_yst-test\_9eb7d7e1deb543d88e2d6f1c9df456ef.docx |
 

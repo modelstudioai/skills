@@ -41,7 +41,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm- |
+| WorkspaceId | string | 是 | 百炼业务空间唯一标识：[获取 workspaceId](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm- |
 | PageSize | integer | 否 | 每页条数 | 1 |
 | PageNumber | integer | 否 | 当前页：默认 1 | 1 |
 

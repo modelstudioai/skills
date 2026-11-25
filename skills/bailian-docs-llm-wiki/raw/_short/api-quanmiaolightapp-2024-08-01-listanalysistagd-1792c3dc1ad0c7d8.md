@@ -57,7 +57,7 @@ GET /{workspaceId}/quanmiao/lightapp/listAnalysisTagDetailByTaskId HTTP/1.1
 | --- | --- | --- | --- | --- |
 | nextToken | string | 否 | 标记当前开始读取的位置，置空表示从头开始 | JlroP3CjgQh5PQDlH3ArzADkBTPZgVqo+64jhZRglNq0mEYoV5SlGb/Juvo8CdfYE9rlwEr2pIJQwdaYotak9g== |
 | maxResults | integer | 否 | 本次读取的最大数据记录数量 | 20 |
-| workspaceId | string | 是 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| workspaceId | string | 是 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxx |
 | taskId | string | 是 | 挖掘的任务 ID | a3d1c2ac-f086-4a21-9069-f5631542f5a2 |
 
 <a id="返回参数"></a>

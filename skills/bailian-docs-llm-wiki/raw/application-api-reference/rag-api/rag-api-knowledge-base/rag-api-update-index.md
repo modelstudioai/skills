@@ -43,7 +43,7 @@
 
 ### Wiki 配置参数
 
-通过本接口可开启、关闭 Wiki 或修改 Wiki 配置。开启 Wiki 要求知识库为旗舰版（`enterprise`）且知识场景为基础文档问答（`basic_document_qa`）。功能与计费说明见[Wiki 与本体知识图谱](../../../application-user-guide/knowledge-base/data-connection-overview/rag-wiki.md)。
+通过本接口可开启、关闭 Wiki 或修改 Wiki 配置。开启 Wiki 要求知识库为旗舰版（`enterprise`）且知识场景为基础文档问答（`basic_document_qa`）。功能与计费说明见[Wiki 与本体知识图谱](../../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-wiki.md)。
 
 | 字段 | 必填 | 类型 | 说明 |
 | --- | --- | --- | --- |
@@ -175,4 +175,4 @@ Wiki 相关错误码如下，通用错误见 [Knowledge API 错误码](../rag-ap
 
 > **警告**
 >
-> 关闭 Wiki 会删除该知识库已生成的全部 Wiki Page 与本体知识图谱（含人工编辑内容和版本历史），无法恢复；再次开启需重新提供完整配置、对全部文档重新生成并再次计费，Page 使用新的 Page ID 并从 V1 开始。已创建的 Wiki 检索服务实例及其 `agent_id` 保留，重新开启完成后原 `agent_id` 自动恢复可用。详见[关闭 Wiki](../../../application-user-guide/knowledge-base/data-connection-overview/rag-wiki.md#h-ragwiki-disable)。
+> 关闭 Wiki 会删除该知识库已生成的全部 Wiki Page 与本体知识图谱（含人工编辑内容和版本历史），无法恢复；再次开启需重新提供完整配置、对全部文档重新生成并再次计费，Page 使用新的 Page ID 并从 V1 开始。已创建的 Wiki 检索服务实例及其 `agent_id` 保留，重新开启完成后原 `agent_id` 自动恢复可用。详见[关闭 Wiki](../../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-wiki.md#h-ragwiki-disable)。

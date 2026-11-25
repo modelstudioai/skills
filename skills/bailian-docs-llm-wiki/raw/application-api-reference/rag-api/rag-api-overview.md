@@ -40,7 +40,7 @@ Knowledge API（原RAG API） 包含三组接口，路径前缀不同：
 https://llm-xxxxxxxxxxxx.cn-beijing.maas.aliyuncs.com/api/v1/indices/rag/index/retrieve
 ```
 
-该检索接口的 `search_filters` 支持通过 `_operator` 和嵌套 `_conditions` 表达同一字段的多个 OR 条件，具体语法和示例请参见[知识库 SearchFilters](https://help.aliyun.com/zh/model-studio/how-to-use-search-filters)。在 Spring AI Alibaba 应用中，可以通过 `RestClient` 或 `WebClient` 直接调用此地址，也可以使用 SAA DashScope SDK 的独立 Pipeline Retrieve 路径。两种方式的选择和 Java 示例见[通过 Spring AI Alibaba 检索阿里云百炼知识库](../frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md#saa-retrieval-methods)。
+该检索接口的 `search_filters` 支持通过 `_operator` 和嵌套 `_conditions` 表达同一字段的多个 OR 条件，具体语法和示例请参见[知识库 SearchFilters](../more/how-to-use-search-filters.md)。在 Spring AI Alibaba 应用中，可以通过 `RestClient` 或 `WebClient` 直接调用此地址，也可以使用 SAA DashScope SDK 的独立 Pipeline Retrieve 路径。两种方式的选择和 Java 示例见[通过 Spring AI Alibaba 检索阿里云百炼知识库](../frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md#saa-retrieval-methods)。
 
 <a id="协议约定"></a>
 

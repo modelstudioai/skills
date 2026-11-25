@@ -43,7 +43,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-odl2p61i4vfbph4g |
+| WorkspaceId | string | 否 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-odl2p61i4vfbph4g |
 | TaskId | string | 否 | 任务 ID | 6d3c0bc9-7561-41a4-be4c-d906abdb40a9 |
 
 <a id="返回参数"></a>

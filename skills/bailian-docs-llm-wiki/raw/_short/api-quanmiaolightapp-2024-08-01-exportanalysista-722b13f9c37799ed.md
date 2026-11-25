@@ -55,7 +55,7 @@ POST /{workspaceId}/quanmiao/lightapp/exportAnalysisTagDetailByTaskId HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxxxxxxx |
+| workspaceId | string | 否 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxxxxxxx |
 | taskId | string | 是 | 任务 ID | a3d1c2ac-f086-4a21-9069-f5631542f5a2 |
 | category | string | 否 | 分类筛选 | 标签分类 |
 | categories | array | 否 | 多分类筛选 |  |

@@ -1,73 +1,36 @@
-# 智能路由
+# 智能路由与模型选型
 
-智能路由（Intelligent Routing）是百炼平台提供的动态模型分发能力，通过统一入口（`model` ID）将用户请求按预设策略自动调度至最优后端模型实例，实现模型版本灰度、A/B 测试、负载均衡、故障熔断与成本优化的统一管控。它不暴露具体部署细节，开发者仅需调用一个逻辑模型名，即可获得底层多模型协同服务。
+智能路由与模型选型（Auto-Model Routing）是百炼平台提供的动态模型调度能力，通过统一入口（`auto-model-xxxxxx`）自动匹配当前请求上下文、SLA要求与成本约束下的最优可用模型，实现效果、延迟、成本与资源可用性的实时平衡。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型迭代与灰度发布**：在微调新版本模型（如 `qwen3-14b-suffix-ft-20241029`）完成部署后，通过智能路由创建路由策略，将 5% 流量导向新模型、95% 保留在旧模型，支持按请求特征（如 `user_id` 哈希、地域、Header 标签）或时间窗口平滑切流。
-- **多模型能力融合**：针对 Qwen-MT-Uni 等全模态翻译模型，智能路由可自动识别输入类型（文本/图像/文档），并路由至对应专用子模型（如 `qwen-mt-text`, `qwen-mt-image`, `qwen-mt-doc`），对用户完全透明。
-- **SLA 分级保障**：结合吞吐预留（TPM）与 Prime 模式，路由策略可优先将高优先级请求（如带 `X-Priority: high` Header）调度至已预留高速容量的 `mr` 实例，普通请求则 fallback 至按量计费的 `mu` 实例。
-- **故障自愈与降级**：当某后端模型实例健康检查失败（如连续 3 次超时或错误率 >5%），智能路由自动将其从流量池剔除，并在恢复后平滑加回，无需人工干预或客户端重试。
-- **跨地域/跨集群调度**：在北京与新加坡双地域部署相同语义模型时，路由策略可基于请求来源 IP 地理位置，就近调度至低延迟地域，降低网络 RTT。
-
-> ✅ 提示：智能路由服务本身不直接提供模型推理能力，而是作为“模型网关”存在；所有后端模型必须已通过 `/api/v1/deployments` 完成部署（`plan="lora"`/`"mu"`/`"dtu"`），且状态为 `RUNNING`。
+- **高吞吐低延迟业务**：在 `model-high-speed-inference` 场景中，智能路由作为轻量级替代方案，无需预购容量或绑定特定模型，即可按“效果优先”或“成本优先”策略，从十余款备选模型（如 `qwen3.8-flash`、`glm-5.2`、`deepseek-v4-pro-0813`）中动态选择最适配的模型执行推理，兼顾性能与弹性。
+- **多模型灰度与AB测试**：结合 `model-management` 的权限控制与限流配置，开发者可为同一 `auto-model-xxxxxx` 路由实例设置白名单模型集、地域约束（`service_site`）及能力过滤（`capabilities`），实现按流量比例、用户标签或输入特征的精细化分流。
+- **统一应用接入层**：在 `model-experience` 和 `application-support` 中，智能路由完全兼容标准 OpenAI Chat Completions 协议（`/v1/chat/completions`），开发者只需将 `model` 字段设为 `auto-model-xxxxxx`，即可复用现有 SDK 与调用逻辑，无需修改请求结构、参数或错误处理流程。
+- **异构模型混合部署**：支持跨厂商、跨模态类型（文本为主，逐步扩展至向量/重排等轻量任务）的模型池协同调度；路由决策会自动规避未授权、未部署、不满足 `features`（如 `cache`、`function-calling`）或超出地域限制的模型。
+- **运维可观测性增强**：每次调用返回中，`model` 字段明确标识实际执行的模型 ID，`usage` 字段记录真实 token 消耗（含缓存命中数），便于归因分析、成本分摊与模型效果回溯。
 
 ## 关键参数和配置
 
-| 参数 | 作用 | 示例值 | 说明 |
-|------|------|--------|------|
-| `model`（调用时） | 路由服务对外暴露的唯一逻辑模型 ID | `"auto-model-abcd1234"` | 该 ID 由创建智能路由服务时平台分配，**不可自定义**；调用时填入此 ID 即可触发路由逻辑。 |
-| `plan="mr"`（部署时） | 部署类型标识，启用智能路由能力 | `"mr"` | 必填，与其他部署方式（`lora`/`mu`/`dtu`）互斥；复用 `/api/v1/deployments` 接口。 |
-| `route_model_version`（部署时） | 智能路由引擎版本号 | `"model-router-20260908"` | 创建 `mr` 服务前，需先调用 `/model-routing/versions` 查询可用版本；不同版本支持的策略语法与功能略有差异。 |
-| `routing_rules`（策略配置） | JSON 格式的路由规则数组 | 见下方示例 | 通过 `/model-routing/policies` API 管理；每条规则含 `match`（匹配条件）、`backend_models`（目标模型列表）、`weight`（权重）、`fallback`（降级模型）等字段。 |
-| `health_check_interval`（可选） | 后端模型健康检查周期（秒） | `30` | 默认 60 秒；建议设置为后端模型 P95 延迟的 2–3 倍，避免误判。 |
+- **核心标识符**：`model = "auto-model-xxxxxx"`（`xxxxxx` 为控制台生成的唯一路由 ID，长度固定 6 位字母数字）
+- **策略配置（创建时设定，不可运行时覆盖）**：
+  - `routing_policy`: `"effectiveness_first"`（默认，优先保障输出质量与响应稳定性）或 `"cost_first"`（优先选择单位 token 成本最低且满足基础 SLA 的模型）
+  - `candidate_models`: 显式指定参与路由的模型列表（如 `["qwen3.8-flash", "glm-5.2", "deepseek-v4-pro-0813"]`），若为空则使用平台默认备选集
+  - `service_site`: 限定候选模型部署区域（如 `"asia-pacific-china"`），确保低延迟与合规性
+  - `capabilities` / `features`: 声明必需能力（如 `["Reasoning", "function-calling"]`），路由引擎将自动过滤不支持的模型
+- **运行时透明字段（响应体中返回）**：
+  - `model`: 实际执行的模型 ID（如 `"qwen3.8-flash"`）
+  - `usage.prompt_tokens_details.cached_tokens`: 输入中命中前缀缓存的 token 数
+  - `x-dashscope-routing-id`: 唯一路由执行 trace ID，用于日志关联与问题排查
 
-**典型路由规则示例（JSON）**：
-```json
-{
-  "rules": [
-    {
-      "name": "high-priority-users",
-      "match": { "headers": { "X-Priority": "^high$" } },
-      "backend_models": ["qwen3-14b-dtu-prod", "qwen3-14b-mu-staging"],
-      "weight": 100,
-      "fallback": "qwen3-14b-mu-default"
-    },
-    {
-      "name": "geo-based-fallback",
-      "match": { "source_region": "cn-beijing" },
-      "backend_models": ["qwen3-14b-mu-beijing"],
-      "weight": 80,
-      "fallback": "qwen3-14b-mu-singapore"
-    }
-  ]
-}
-```
-
-## 面向开发者，简洁实用
-
-- ✅ **快速上手三步走**：  
-  1. 调用 `/model-routing/versions` 获取最新 `route_model_version`；  
-  2. 用 `POST /api/v1/deployments` 创建 `mr` 服务（`plan="mr"`, `route_model_version=xxx`）→ 获取返回的 `model` 字段（即 `auto-model-xxxx`）；  
-  3. 调用 `/model-routing/policies` 配置规则 → 即刻生效（无冷启动延迟）。  
-
-- ⚠️ **关键限制**：  
-  - 智能路由仅支持后付费（`charge_type="post_paid"`），不支持预付费；  
-  - 后端模型必须与路由服务同地域（北京/新加坡），不支持跨地域路由；  
-  - 单个路由服务最多关联 10 个后端模型，单条规则最多指定 3 个 `backend_models`；  
-  - 路由决策发生在请求接入层，**不增加额外 [Token](token.md) 开销或响应延迟**（P99 < 5ms）。  
-
-- 🔧 **调试建议**：  
-  - 查看响应头 `X-Route-Backend: qwen3-14b-mu-staging` 可确认实际命中模型；  
-  - 开启 `X-Debug-Route: true` 请求头，可在响应体中获取完整路由日志（含匹配规则、权重计算、健康状态）；  
-  - 所有策略变更均记录审计日志，可通过 `/model-routing/audit-logs` 查询。
+> ⚠️ 注意：智能路由当前仅支持 `maas.aliyuncs.com` 域名下的标准协议（OpenAI Chat Compat），不支持 Anthropic 或 Responses 协议；也不支持实时全模态（Realtime-Omni）及长视频/3D 等异步任务类模型。
 
 ## 关联主题页
 
-- [model production](../api/model-production.md)
 - [model high speed inference](../guides/model-high-speed-inference.md)
 - [model management](../api/model-management.md)
+- [model experience](../guides/model-experience.md)
+- [application support](../guides/application-support.md)
 - [more about models](../api/more-about-models.md)
-- [qwen mt translation models](../api/qwen-mt-translation-models.md)
 
 

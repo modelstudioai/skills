@@ -44,7 +44,7 @@
 
 ## 首次导入前完成 OSS 授权
 
-首次从 OSS 导入模型前，须完成 OSS 服务关联角色授权，并为目标 Bucket 添加访问标签。授权通过导入页一键完成，授权后系统自动创建服务关联角色 AliyunServiceRoleForSFMDataHubOSSImport（服务名 datahub.sfm.aliyuncs.com，权限策略 AliyunServiceRolePolicyForSFMDataHubOSSImport），通常秒级生效。服务关联角色说明详见[OSS 服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role)，主账号与子账号的概念与区别详见[主账号与子账号](../../security-and-compliance/permission-management-overview.md)。
+首次从 OSS 导入模型前，须完成 OSS 服务关联角色授权，并为目标 Bucket 添加访问标签。授权通过导入页一键完成，授权后系统自动创建服务关联角色 AliyunServiceRoleForSFMDataHubOSSImport（服务名 datahub.sfm.aliyuncs.com，权限策略 AliyunServiceRolePolicyForSFMDataHubOSSImport），通常秒级生效。服务关联角色说明详见[OSS 服务关联角色](../../../application-api-reference/more/bailian-service-linked-role.md)，主账号与子账号的概念与区别详见[主账号与子账号](../../security-and-compliance/permission-management-overview.md)。
 
 在[导入模型页](https://bailian.console.aliyun.com/cn-beijing/model/custom/import_model)的“导入来源”选择“从 OSS 导入”后，若未授权，OSS 字段区会提示“您还未授权OSS”并显示“前往授权”链接，确定按钮在未授权时不可用。主账号与子账号的授权路径不同，请按账号类型选择。
 
@@ -290,7 +290,7 @@ if __name__ == "__main__":
 
 子账号授权 OSS 失败怎么办？
 
-子账号授权失败是因为没有创建服务关联角色的权限，并非真失败。须先由主账号在 RAM 控制台创建自定义权限策略（操作为 ram:CreateServiceLinkedRole，针对服务 datahub.sfm.aliyuncs.com）并授予子账号，再由子账号重新点击授权。OSS 服务关联角色说明详见[OSS 服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role)。
+子账号授权失败是因为没有创建服务关联角色的权限，并非真失败。须先由主账号在 RAM 控制台创建自定义权限策略（操作为 ram:CreateServiceLinkedRole，针对服务 datahub.sfm.aliyuncs.com）并授予子账号，再由子账号重新点击授权。OSS 服务关联角色说明详见[OSS 服务关联角色](../../../application-api-reference/more/bailian-service-linked-role.md)。
 
 <a id="accordion-bucket-下拉列表中目标-bucket-不可选怎么办"></a>
 

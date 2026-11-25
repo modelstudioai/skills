@@ -1,41 +1,31 @@
 # getting started
 
-百炼平台提供统一的 API 接口与 CLI 工具，支持快速接入大模型能力。本文档面向开发者，说明基础使用路径、关键配置项及约束条件，帮助你在 5 分钟内完成首次调用。所有操作均需通过 API Key 鉴权，且默认启用流式响应。
+百炼平台提供统一的 API 接口与 CLI 工具，支持快速接入大模型能力。本文档面向开发者，说明基础使用路径、关键参数含义、功能边界及常见约束。所有操作均需完成 [安装与鉴权](getting-started/installation.md) 后方可进行。
 
 ## 支持的模型/功能
 
-当前平台支持以下核心模型（截至 v2.3.0）：
-- 文本生成：`qwen-max`、`qwen-plus`、`qwen-turbo`
-- 多模态理解：`qwen-vl-plus`（需显式指定 `input.image_urls`）
-- [函数调用](../concepts/function-calling.md)（Function Calling）：仅 `qwen-max` 和 `qwen-plus` 支持，需传入 `tools` 参数并启用 `tool_choice`
-
-> **注意**：`qwen-turbo` 不支持[函数调用](../concepts/function-calling.md)或图像输入，该限制在 [开始使用](../../raw/cli/getting-started.md) 中未明确说明，但已在 [模型能力矩阵](../../raw/models/capabilities.md) 中确认。
+当前支持调用 Qwen 系列（如 qwen-max、qwen-plus、qwen-turbo）、Yi 系列及部分开源模型（通过 `model` 参数指定）。文本生成、流式响应、[函数调用](../concepts/function-calling.md)（tool calling）和多轮对话上下文管理均已上线。图像理解（qwen-vl）与语音转文本（qwen-audio）功能处于灰度阶段，详见 [概览](getting-started/overview.md)。> **注意**：文档 1 中未列出具体模型列表，实际可用模型以 [快速开始](getting-started/quickstart.md) 示例中 `model` 字段值为准，部分旧文档提及的 `qwen-14b-chat` 已下线。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model` | string | 是 | 模型 ID，必须与平台当前可用列表一致，详见 [模型能力矩阵](../../raw/models/capabilities.md) |
-| `input.messages` | array | 是 | 至少包含一个 `role: "user"` 的 message 对象，`content` 支持字符串或结构化数组（含 `text`/`image_url`） |
-| `parameters.temperature` | number | 否 | 默认 `0.8`，取值范围 `[0.0, 1.0]`；设为 `0` 时启用确定性采样 |
+必填参数：`model`（模型标识符）、`input.messages`（消息数组，至少含 `role` 和 `content`）。  
+常用可选参数：`temperature`（0.0–2.0，默认 1.0）、`top_p`（0.1–1.0）、`max_tokens`（默认 2048，最大 8192）、`stream`（布尔值，启用流式响应）。  
+工具调用需额外传入 `tools` 数组与 `tool_choice`。参数语义与行为严格遵循 [快速开始](getting-started/quickstart.md) 中定义的 schema。
 
 ## 使用方式
 
-1. **安装 CLI**：运行 `pip install aliyun-bailian`（Python ≥ 3.8），详细步骤见 [安装与鉴权](../../raw/cli/getting-started.md)  
-2. **配置凭证**：设置环境变量 `BAI_LIAN_API_KEY` 或通过 `bailian configure` 交互式录入  
-3. **发起请求**：  
-   ```bash
-   bailian chat --model qwen-turbo --message "你好"
-   ```
-   或调用 REST API（POST `/v1/chat/completions`），参考 [快速开始](../../raw/cli/getting-started.md)
+推荐通过 CLI 快速验证：  
+```bash
+bailian chat --model qwen-turbo --message "你好"
+```  
+或调用 REST API（POST `/v1/chat/completions`），需在 Header 中携带 `Authorization: Bearer <api_key>`。完整请求结构与示例见 [快速开始](getting-started/quickstart.md)。CLI 安装与密钥配置步骤请参考 [安装与鉴权](getting-started/installation.md)。
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 最多 10 条，总 token 数上限为模型 context length 的 90%（例如 `qwen-max` 为 32k → 实际上限约 28.8k）  
-- 图像输入仅支持公网可访问的 HTTPS URL，不支持本地文件或 Base64；该要求在 [开始使用](../../raw/cli/getting-started.md) 的示例中未体现，但为实际运行必需  
-- 流式响应（`stream: true`）下，`usage` 字段仅在最终 `data: [DONE]` 帧中返回，中间 chunk 不含 token 统计  
-
-> **注意**：文档中提及的 `bailian init` 命令已废弃（v2.2.0 起），应统一使用 `bailian configure`，该变更未同步更新至 [开始使用](../../raw/cli/getting-started.md)，请以 CLI `--help` 输出为准。
+- 单次请求 `input.messages` 总 token 数上限为 32768（含 system prompt）；  
+- 免费试用额度为 1000 次/日，超出后需绑定计费账户；  
+- 流式响应（`stream=true`）下，`max_tokens` 实际生效值可能略低于设定值，因服务端需预留终止标记空间；  
+- 非 JSON Schema 格式的 `tools` 定义将被静默忽略——该行为与 [概览](getting-started/overview.md) 描述一致，但与早期内测文档存在差异。
 
 ## 来源文档
 

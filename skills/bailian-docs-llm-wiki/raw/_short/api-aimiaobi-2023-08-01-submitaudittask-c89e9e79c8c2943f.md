@@ -52,7 +52,7 @@
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
 | ArticleId | string | 否 | 审核时的文章 ID | xxxx |
-| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| WorkspaceId | string | 否 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | xxxx |
 | Content | string | 否 | 待审核的内容 | 待审核的内容 |
 | HtmlContent | string | 否 | 审核时的 HTML 格式 的内容 | 待审核的内容（HTML格式） |
 | Title | string | 否 | 审核时的文章标题 | 审核时的文章标题 |

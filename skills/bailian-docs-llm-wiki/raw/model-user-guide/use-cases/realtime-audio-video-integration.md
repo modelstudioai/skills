@@ -7,5 +7,5 @@
 -   [使用 AOQ 接入 qwen-audio-3.1-asr-flash-streaming 实现语音输入法](realtime-audio-video-integration/voice-input-using-aoq-access-qwen-audio-asr.md)
 -   [使用 AOQ 接入 qwen3.8-livetranslate-flash-realtime 实现实时语音翻译](../../_short/real-time-translation-using-aoq-access-qwen-live-9b4d3056b2eade2b.md)
 -   [使用 AOQ 接入 qwen-audio-3.1-realtime-plus 实现实时语音对话](../../_short/real-time-voice-conversation-using-aoq-access-qw-7e2ab540f9ffd31d.md)
--   [使用 AOQ 接入 qwen-audio-3.0-tts-flash 实现语音合成](../../_short/speech-synthesis-using-aoq-access-qwen-audio-3-0-43022e91dedcb0c1.md)
+-   [使用 AOQ 接入 qwen-audio-3.1-tts-flash 实现语音合成](../../_short/speech-synthesis-using-aoq-access-qwen-audio-3-0-43022e91dedcb0c1.md)
 -   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](../../_short/real-time-speech-recognition-using-aoq-access-fu-1f528aaba4a8fd1b.md)

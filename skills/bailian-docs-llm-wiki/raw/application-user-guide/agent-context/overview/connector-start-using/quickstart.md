@@ -67,7 +67,7 @@
 ## 前置条件
 
 -   一个阿里云账号，且已开通阿里云百炼。
--   一个阿里云百炼业务空间，以及该空间的业务空间 ID，形如 `llm-xxxxxxxxxxxx`。获取方式见[获取业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#6cc9270e83h9d)。
+-   一个阿里云百炼业务空间，以及该空间的业务空间 ID，形如 `llm-xxxxxxxxxxxx`。获取方式见[获取业务空间 ID](../../../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#6cc9270e83h9d)。
 -   一个 DashScope API Key。在阿里云百炼控制台的 **API-KEY** 页面创建；获取方式见[获取 API Key](../../../../model-api-reference/preparations/get-api-key.md)。Key 须属于连接器所在业务空间。
 -   一个支持 MCP 的客户端，例如 Qoder。
 

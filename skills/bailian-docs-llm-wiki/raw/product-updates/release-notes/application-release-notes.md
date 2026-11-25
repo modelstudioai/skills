@@ -65,7 +65,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 -   知识检索新增 Wiki 检索服务，与 Chunk 检索并列；知识问答可同时使用普通知识检索与 Wiki 检索。
 -   Wiki 抽取模型按实际输入/输出 Token 独立计费，不包含在知识库规格费用或知识库免费额度内。
 
-详见[Wiki 与本体知识图谱](../../application-user-guide/knowledge-base/data-connection-overview/rag-wiki.md)和[计费说明](../../application-user-guide/knowledge-base/data-connection-overview/rag-wiki.md#h-ragwiki-billing)。
+详见[Wiki 与本体知识图谱](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-wiki.md)和[计费说明](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-wiki.md#h-ragwiki-billing)。
 
 <a id="release-2026-11-11"></a>
 
@@ -552,7 +552,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 -   RAG 知识库文档上线
 
-详见[RAG 快速开始](../../application-user-guide/knowledge-base/rag-start-using/quickstart.md)。
+详见[RAG 快速开始](../../application-user-guide/agent-context/knowledge-base/rag-start-using/quickstart.md)。
 
 <a id="release-2026-07-21"></a>
 
@@ -620,7 +620,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 #### 知识库RAG：知识检索服务上线
 
-新增知识检索服务，支持多知识库联合检索与混合排序，[了解详情](../../application-user-guide/knowledge-base/rag-knowledge-retrieval.md)
+新增知识检索服务，支持多知识库联合检索与混合排序，[了解详情](../../application-user-guide/agent-context/knowledge-base/service/rag-knowledge-retrieval.md)
 
 <a id="知识库rag-知识问答服务上线"></a>
 
@@ -628,7 +628,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 #### 知识库RAG：知识问答服务上线
 
-新增知识问答服务，基于大模型结合检索生成回答，[了解详情](../../application-user-guide/knowledge-base/service/rag-knowledge-qa.md)
+新增知识问答服务，基于大模型结合检索生成回答，[了解详情](../../application-user-guide/agent-context/knowledge-base/service/rag-knowledge-qa.md)
 
 <a id="release-2026-06-10"></a>
 
@@ -654,7 +654,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 #### 数据连接：数据连接模块上线
 
-新增数据连接模块，支持 MySQL/语雀/OSS 等数据源，[了解详情](../../application-user-guide/knowledge-base/data-connection-overview/data-connection.md)
+新增数据连接模块，支持 MySQL/语雀/OSS 等数据源，[了解详情](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/data-connection.md)
 
 <a id="release-2026-06-01"></a>
 
@@ -698,7 +698,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 #### 应用组件 - 数据连接：数据连接新增 ListCategory 接口
 
-数据连接新增 ListCategory 接口, 查询原应用数据类目列表，[了解详情](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listcategory)
+数据连接新增 ListCategory 接口, 查询原应用数据类目列表，[了解详情](../../_short/api-bailian-2023-12-29-listcategory-2521532ef3e828b3.md)
 
 <a id="通义听悟-agent-通义听悟-agent-工业生产指令转写-websocket-协议上线"></a>
 
@@ -724,7 +724,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 #### 应用 - 数据连接（原应用数据）：数据连接新增 ChangeParseSetting 接口
 
-数据连接新增 ChangeParseSetting 接口, 支持按文件类型配置解析方式，[了解详情](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-changeparsesetting)
+数据连接新增 ChangeParseSetting 接口, 支持按文件类型配置解析方式，[了解详情](../../_short/api-bailian-2023-12-29-changeparsesetting-59a7c69675f499ad.md)
 
 <a id="release-2026-05-11"></a>
 
@@ -742,7 +742,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 #### 应用调用 API：新版智能体应用 DashScope API 首发
 
-发布新版智能体应用 DashScope API 参考，支持单轮/多轮、流式、文件问答、视觉理解，[了解详情](https://help.aliyun.com/zh/model-studio/new-agent-application-api-reference)
+发布新版智能体应用 DashScope API 参考，支持单轮/多轮、流式、文件问答、视觉理解，[了解详情](../../_short/new-agent-application-api-reference-be3bf785ec80b8bd.md)
 
 <a id="release-2026-04-28"></a>
 
@@ -778,7 +778,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 #### 知识库 RAG：知识库新增日志与监控
 
-知识库检索调用全量投递至 SLS 日志服务，支持审计/排查/统计/告警，[了解详情](../../application-user-guide/knowledge-base/reference/rag-knowledge-base-log-monitoring.md)
+知识库检索调用全量投递至 SLS 日志服务，支持审计/排查/统计/告警，[了解详情](../../application-user-guide/agent-context/knowledge-base/reference/rag-knowledge-base-log-monitoring.md)
 
 <a id="release-2026-04-14"></a>
 
@@ -832,7 +832,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 #### 应用组件-Prompt 工程：应用组件 Prompt 工程 API 上线
 
-应用组件新增 Prompt 工程模块及其 API，提供 Prompt 模板管理能力，[了解详情](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir-prompt-engineering)
+应用组件新增 Prompt 工程模块及其 API，提供 Prompt 模板管理能力，[了解详情](../../application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-prompt-engineering.md)
 
 <a id="release-2026-04-01"></a>
 
@@ -850,7 +850,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 #### 应用发布与分享-UI 设计器：UI 设计器上线
 
-百炼 UI 设计器上线，集成魔笔低代码能力，可视化拖放构建网页 UI 应用，[了解详情](../../application-user-guide/llm-application/application-publishing-and-sharing/ui-designer.md#845c1f4aba43y)
+百炼 UI 设计器上线，集成魔笔低代码能力，可视化拖放构建网页 UI 应用，[了解详情](../../application-user-guide/agent-development/llm-application/application-publishing-and-sharing/ui-designer.md#845c1f4aba43y)
 
 <a id="release-2026-03-20"></a>
 
@@ -964,7 +964,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 #### 插件：国际站官方插件新增 Image Generation
 
-国际站官方插件列表新增 text\_to\_image (Image Generation)，[了解详情](../../application-user-guide/plug-in/plugins.md#00edef12dc50q)
+国际站官方插件列表新增 text\_to\_image (Image Generation)，[了解详情](../../application-user-guide/agent-development/llm-application/plug-in/plugins.md#00edef12dc50q)
 
 <a id="mcp-新增官方-mcp-服务"></a>
 
@@ -998,7 +998,7 @@ Agent 各模块的功能更新、优化、问题修复与计费变更，按日�
 
 #### 应用 - 知识库：知识库检索新增排序模型与指令干预模式
 
-Retrieve 接口新增排序模型选项与指令干预模式，平台检索能力扩展，[了解详情](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-51)
+Retrieve 接口新增排序模型选项与指令干预模式，平台检索能力扩展，[了解详情](../../_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md#api-detail-51)
 
 <a id="release-2026-01-31"></a>
 
@@ -1045,7 +1045,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：支持通过API创建音视频知识库
 
-使用此API可创建两类知识库：基于文档或音视频的非结构化知识库，以及用于数据查询或图片问答的结构化知识库。详情请参见[创建知识库](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createindex)。
+使用此API可创建两类知识库：基于文档或音视频的非结构化知识库，以及用于数据查询或图片问答的结构化知识库。详情请参见[创建知识库](../../_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)。
 
 <a id="release-2026-01-23"></a>
 
@@ -1099,7 +1099,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：增加知识库监控API
 
-查询指定知识库在特定时间范围内的监控数据。详情请参见[获取知识库监控数据](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexmonitor)。
+查询指定知识库在特定时间范围内的监控数据。详情请参见[获取知识库监控数据](../../_short/api-bailian-2023-12-29-getindexmonitor-3a609181d5c9c034.md)。
 
 <a id="知识库-增加更新知识库api"></a>
 
@@ -1107,7 +1107,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：增加更新知识库API
 
-更新指定知识库的部分配置。详情请参见[更新知识库](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateindex)。
+更新指定知识库的部分配置。详情请参见[更新知识库](../../_short/api-bailian-2023-12-29-updateindex-551997e1d335e340.md)。
 
 <a id="release-2026-01-15"></a>
 
@@ -1200,7 +1200,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 智能体应用：上线新版智能体应用（Agent 2.0）
 
--   [新版智能体应用（Agent 2.0）](../../application-user-guide/llm-application/new-single-agent-application.md)将知识库、MCP 统一为工具，由智能体自主规划在何时、以何种顺序进行调用。能完整展示模型思考和工具调用的全过程。
+-   [新版智能体应用（Agent 2.0）](../../application-user-guide/agent-development/llm-application/new-single-agent-application.md)将知识库、MCP 统一为工具，由智能体自主规划在何时、以何种顺序进行调用。能完整展示模型思考和工具调用的全过程。
     
 
 <a id="release-2025-12-25"></a>
@@ -1226,7 +1226,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
     -   对音视频素材进行二次创作，如生成脚本和字幕、给出剪辑建议等。
         
     
-    详情请参见[创建和使用知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+    详情请参见[创建和使用知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 <a id="release-2025-12-17"></a>
@@ -1285,9 +1285,9 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 应用调用：支持通过Responses API 调用阿里云百炼应用
 
--   同步调用 API：适用于需要即时获取结果的实时交互场景，可轻松复用现有的 OpenAI 代码库，或快速集成来自 OpenAI 生态的各类工具。详情请参见[同步调用 API 参考](https://help.aliyun.com/zh/model-studio/synchronous-call-api-reference)。
+-   同步调用 API：适用于需要即时获取结果的实时交互场景，可轻松复用现有的 OpenAI 代码库，或快速集成来自 OpenAI 生态的各类工具。详情请参见[同步调用 API 参考](../../application-api-reference/flow-agent-api/application-call/openai-responses-api/synchronous-call-api-reference.md)。
     
--   异步调用 API：对于耗时较长的任务，只需在请求中设置 background 为 true，API 便会立即返回一个任务 ID，用于后续的查询与管理。详情请参见[异步调用 API 参考](https://help.aliyun.com/zh/model-studio/asynchronous-call-api-reference)。
+-   异步调用 API：对于耗时较长的任务，只需在请求中设置 background 为 true，API 便会立即返回一个任务 ID，用于后续的查询与管理。详情请参见[异步调用 API 参考](../../application-api-reference/flow-agent-api/application-call/openai-responses-api/asynchronous-call-api-reference.md)。
     
 
 <a id="release-2025-09-24"></a>
@@ -1325,7 +1325,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 工作流应用：新增 Dify 工作流一键导入
 
--   支持 Dify 工作流一键导入，导入后自动映射节点类型与参数。使用方法请参见[工作流导入/导出](../../application-user-guide/llm-application/workflow-application/introduction.md#c055d2211fwrp)。
+-   支持 Dify 工作流一键导入，导入后自动映射节点类型与参数。使用方法请参见[工作流导入/导出](../../application-user-guide/agent-development/llm-application/workflow-application/introduction.md#c055d2211fwrp)。
     
 
 <a id="智能体应用-文件问答升级"></a>
@@ -1334,7 +1334,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 智能体应用：文件问答升级
 
--   支持全文引用、切片检索和自定义处理三种模式，对文档、图片、音视频等多种文件进行深度分析和自动化任务处理。使用方法请参见[文件问答](../../application-user-guide/llm-application/file-q-a.md)。
+-   支持全文引用、切片检索和自定义处理三种模式，对文档、图片、音视频等多种文件进行深度分析和自动化任务处理。使用方法请参见[文件问答](../../application-user-guide/agent-development/llm-application/file-q-a.md)。
     
 
 <a id="智能体应用-回复功能升级"></a>
@@ -1343,7 +1343,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 智能体应用：回复功能升级
 
--   当主模型在特定场景下表现受限时，将自动切换至更优模型。详情请参见[智能体应用（Agent 1.0）](../../application-user-guide/llm-application/single-agent-application.md)。
+-   当主模型在特定场景下表现受限时，将自动切换至更优模型。详情请参见[智能体应用（Agent 1.0）](../../application-user-guide/agent-legacy/legacy-flow-agent/single-agent-application.md)。
     
 
 <a id="知识库-数据导入流程简化"></a>
@@ -1361,7 +1361,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：数据源支持DMS
 
--   创建知识库时，可直接从 DMS 指定数据表同步数据，详情请参见[知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   创建知识库时，可直接从 DMS 指定数据表同步数据，详情请参见[知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 <a id="知识库-创建流程优化"></a>
@@ -1370,7 +1370,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：创建流程优化
 
--   根据应用场景，将知识库类型分为**文档**、**数据**和**图片**三类，以简化创建过程，详情请参见[知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   根据应用场景，将知识库类型分为**文档**、**数据**和**图片**三类，以简化创建过程，详情请参见[知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 <a id="知识库-新增调试面板"></a>
@@ -1379,7 +1379,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：新增调试面板
 
--   编辑智能体应用时，可直接在线调整知识库参数，并实时验证检索召回效果。使用方法请参见[知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   编辑智能体应用时，可直接在线调整知识库参数，并实时验证检索召回效果。使用方法请参见[知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 <a id="release-2025-08-13"></a>
@@ -1505,7 +1505,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：导入图片可选择Qwen VL进行解析
 
--   可选择qwen-vl-max或qwen-vl-plus模型，通过传入Prompt指引需识别的版面、元素和内容，适用于解析复杂图片或图表，详情请参见[创建和使用知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   可选择qwen-vl-max或qwen-vl-plus模型，通过传入Prompt指引需识别的版面、元素和内容，适用于解析复杂图片或图表，详情请参见[创建和使用知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 <a id="release-2025-05-08"></a>
@@ -1524,7 +1524,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：非结构化知识库支持导入离线HTML文件
 
--   支持基于离线HTML文件构建非结构化知识库，详情请参见[创建和使用知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   支持基于离线HTML文件构建非结构化知识库，详情请参见[创建和使用知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 <a id="release-2025-04-10"></a>
@@ -1543,7 +1543,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：新增权重设置功能
 
--   当智能体应用同时关联多个知识库时，可按信息源的重要性为每个知识库设置权重。系统将优先召回权重更高的知识库中的相关信息。使用方法请参见[创建和使用知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   当智能体应用同时关联多个知识库时，可按信息源的重要性为每个知识库设置权重。系统将优先召回权重更高的知识库中的相关信息。使用方法请参见[创建和使用知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
 
 <a id="release-2025-04-09"></a>
 
@@ -1577,7 +1577,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 <a id="h-agent-update-2025-04-01-48"></a>
 
-#### 智能体应用：[智能体应用（Agent 1.0）](../../application-user-guide/llm-application/single-agent-application.md)支持QwQ系列模型
+#### 智能体应用：[智能体应用（Agent 1.0）](../../application-user-guide/agent-legacy/legacy-flow-agent/single-agent-application.md)支持QwQ系列模型
 
 不包括插件、流程、音视频交互能力。
 
@@ -1587,7 +1587,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 <a id="h-agent-update-2025-04-01-108"></a>
 
-#### 智能体应用：[智能体应用（Agent 1.0）](../../application-user-guide/llm-application/single-agent-application.md)支持QwQ系列模型
+#### 智能体应用：[智能体应用（Agent 1.0）](../../application-user-guide/agent-legacy/legacy-flow-agent/single-agent-application.md)支持QwQ系列模型
 
 > 不包括插件、流程、音视频交互能力
 
@@ -1607,7 +1607,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 <a id="h-agent-update-2025-03-25-49"></a>
 
-#### 工作流应用：[工作流应用](../../application-user-guide/llm-application/workflow-application.md)大模型节点支持qwq-plus、qwq-32b模型
+#### 工作流应用：[工作流应用](../../application-user-guide/agent-development/llm-application/workflow-application.md)大模型节点支持qwq-plus、qwq-32b模型
 
 -   [QwQ](../../model-user-guide/model-experience/text-generation-model/deep-thinking.md)模型具有强大的推理能力，模型会先输出思考过程，再输出回答内容。数学/代码能力（AIME 24/25、LiveCodeBench）及通用指标（IFEval等）达DeepSeek-R1满血版水平，显著优于同源精简版DeepSeek-R1-Distill。
     
@@ -1626,7 +1626,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 <a id="h-agent-update-2025-03-24-50"></a>
 
-#### 智能体应用：[智能体应用（Agent 1.0）](../../application-user-guide/llm-application/single-agent-application.md)检索配置新增 “多模态回复增强”开关
+#### 智能体应用：[智能体应用（Agent 1.0）](../../application-user-guide/agent-legacy/legacy-flow-agent/single-agent-application.md)检索配置新增 “多模态回复增强”开关
 
 -   开启多模态识别能力，使智能体应用能够解析知识库中的图表与图像内容，提供结合视觉信息的精准回答。
     
@@ -1645,7 +1645,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 <a id="h-agent-update-2025-03-18-51"></a>
 
-#### 智能体应用：[智能体应用（Agent 1.0）](../../application-user-guide/llm-application/single-agent-application.md)支持qwen-vl-plus-latest、qwen-vl-plus-2025-01-25
+#### 智能体应用：[智能体应用（Agent 1.0）](../../application-user-guide/agent-legacy/legacy-flow-agent/single-agent-application.md)支持qwen-vl-plus-latest、qwen-vl-plus-2025-01-25
 
 -   qwen-vl-plus-latest始终等同最新快照版。
     
@@ -1668,7 +1668,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 工作流应用：工作流应用支持批量节点
 
--   批量节点是[工作流](../../application-user-guide/llm-application/workflow-application.md)中用于处理批量任务的功能节点，详情请参见[批处理](../../application-user-guide/llm-application/workflow-application.md)。
+-   批量节点是[工作流](../../application-user-guide/agent-development/llm-application/workflow-application.md)中用于处理批量任务的功能节点，详情请参见[批处理](../../application-user-guide/agent-development/llm-application/workflow-application.md)。
     
 
 <a id="release-2025-02-18"></a>
@@ -1687,7 +1687,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 工作流应用：工作流应用支持 DeepSeek 系列模型
 
--   [工作流应用](../../application-user-guide/llm-application/workflow-application.md)可使用 DeepSeek 系列模型构建任务型和对话型工作流。
+-   [工作流应用](../../application-user-guide/agent-development/llm-application/workflow-application.md)可使用 DeepSeek 系列模型构建任务型和对话型工作流。
     
 
 <a id="智能体应用-智能体应用支持-deepseek-系列模型"></a>
@@ -1696,7 +1696,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 智能体应用：智能体应用支持 DeepSeek 系列模型
 
--   [智能体应用（Agent 1.0）](../../application-user-guide/llm-application/single-agent-application.md)可集成 DeepSeek 系列模型，并结合知识库、长期记忆和 Prompt 模板，构建私有知识问答应用。
+-   [智能体应用（Agent 1.0）](../../application-user-guide/agent-legacy/legacy-flow-agent/single-agent-application.md)可集成 DeepSeek 系列模型，并结合知识库、长期记忆和 Prompt 模板，构建私有知识问答应用。
     
 
 <a id="release-2024-12-16"></a>
@@ -1725,7 +1725,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 -   文本转换节点支持JSON格式输出。
     
 
-详情请参见[工作流应用](../../application-user-guide/llm-application/workflow-application.md)。
+详情请参见[工作流应用](../../application-user-guide/agent-development/llm-application/workflow-application.md)。
 
 <a id="智能体编排应用-智能体编排应用支持条件判断节点"></a>
 
@@ -1784,7 +1784,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 应用组件：新增Prompt样例优化文档
 
--   大量实践表明，FewShot方法在提升大模型的推理效果和性能方面具有显著的助益。Prompt样例库功能作为阿里云百炼的FewShot能力，通过录入用户输入（Query）和期望的模型回复（Answer）作为样例信息源，在模型调用时根据用户输入，检索召回相关样例信息，以此作为输出参考，从而提高大模型的回答准确性，适用于客服及问答等场景。详情请参见[Prompt样例库](../../application-user-guide/prompt/prompt-sample-optimization.md)。
+-   大量实践表明，FewShot方法在提升大模型的推理效果和性能方面具有显著的助益。Prompt样例库功能作为阿里云百炼的FewShot能力，通过录入用户输入（Query）和期望的模型回复（Answer）作为样例信息源，在模型调用时根据用户输入，检索召回相关样例信息，以此作为输出参考，从而提高大模型的回答准确性，适用于客服及问答等场景。详情请参见[Prompt样例库](../../application-user-guide/agent-development/llm-application/prompt/prompt-sample-optimization.md)。
     
 
 <a id="release-2024-11-27"></a>
@@ -1803,7 +1803,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 应用分享：新增微信、钉钉分享渠道
 
--   支持创建钉钉AI机器人和微信公众号AI机器人，创建完成后，可按需将AI机器人回调地址或二维码分享给目标用户。详情请参见[应用分享](../../application-user-guide/llm-application/application-publishing-and-sharing/share-an-application.md#8778cb4490l2i)。
+-   支持创建钉钉AI机器人和微信公众号AI机器人，创建完成后，可按需将AI机器人回调地址或二维码分享给目标用户。详情请参见[应用分享](../../application-user-guide/agent-development/llm-application/application-publishing-and-sharing/share-an-application.md#8778cb4490l2i)。
     
 
 <a id="release-2024-11-01"></a>
@@ -1829,7 +1829,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
     -   导入多个具有不同表结构的Excel文档。
         
     
-    详情请参见[知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+    详情请参见[知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 <a id="release-2024-10-24"></a>
@@ -1857,7 +1857,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### SFM服务关联角色：新增AliyunServiceRoleForSFMTelemetry角色
 
--   用于阿里云百炼应用观测的服务关联角色，应用观测使用此角色来访问OpenTelemetry实例。点击[SFM服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#31e88eb412d6c)查看。
+-   用于阿里云百炼应用观测的服务关联角色，应用观测使用此角色来访问OpenTelemetry实例。点击[SFM服务关联角色](../../application-api-reference/more/bailian-service-linked-role.md#31e88eb412d6c)查看。
     
 
 <a id="release-2024-09-29"></a>
@@ -1876,7 +1876,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### SFM服务关联角色：新增AliyunServiceRoleForSFMAccessingMNS角色
 
--   用于OSS变更自动同步的服务关联角色，阿里云百炼数据中心使用此角色来访问MNS队列中的OSS变更消息。点击[服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role)查看。
+-   用于OSS变更自动同步的服务关联角色，阿里云百炼数据中心使用此角色来访问MNS队列中的OSS变更消息。点击[服务关联角色](../../application-api-reference/more/bailian-service-linked-role.md)查看。
     
 
 <a id="release-2024-09-25"></a>
@@ -1895,7 +1895,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：结构化知识库数据源支持云上数据库
 
--   结构化知识库的数据源支持云数据库RDS。具体说明请参见[创建和使用知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   结构化知识库的数据源支持云数据库RDS。具体说明请参见[创建和使用知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 <a id="知识库-非结构化知识库支持自定义metadata"></a>
@@ -1904,7 +1904,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：非结构化知识库支持自定义metadata
 
--   支持为非结构化知识库中的文档附加metadata，以提升知识库检索的效率和精准度。具体说明请参见[创建和使用知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   支持为非结构化知识库中的文档附加metadata，以提升知识库检索的效率和精准度。具体说明请参见[创建和使用知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 <a id="知识库-支持图文检索"></a>
@@ -1913,11 +1913,11 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 知识库：支持图文检索
 
--   知识库支持解析文档中的图片，结构化文档中的图片将被转为向量，非结构化文档中的图片将被提取文字然后再转为向量。具体说明请参见[创建和使用知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   知识库支持解析文档中的图片，结构化文档中的图片将被转为向量，非结构化文档中的图片将被提取文字然后再转为向量。具体说明请参见[创建和使用知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
--   如果智能体应用关联的结构化知识库包含图片索引，可以在提问时上传图片，与输入图片相关的数据记录会与提问一起提供给大模型。具体说明请参见[智能体应用（Agent 1.0）](../../application-user-guide/llm-application/single-agent-application.md)。
+-   如果智能体应用关联的结构化知识库包含图片索引，可以在提问时上传图片，与输入图片相关的数据记录会与提问一起提供给大模型。具体说明请参见[智能体应用（Agent 1.0）](../../application-user-guide/agent-legacy/legacy-flow-agent/single-agent-application.md)。
     
--   测试知识库页面同样支持了图文输入，便于评估知识库的图文检索能力。具体说明请参见[创建和使用知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   测试知识库页面同样支持了图文输入，便于评估知识库的图文检索能力。具体说明请参见[创建和使用知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 <a id="release-2024-09-17"></a>
@@ -1936,7 +1936,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 数据管理：非结构化数据文件支持标签分类
 
--   非结构化数据支持标签分类，点击[创建和使用知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)查看详情。
+-   非结构化数据支持标签分类，点击[创建和使用知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)查看详情。
     
 
 <a id="release-2024-09-04"></a>
@@ -1955,7 +1955,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 应用中心：智能体应用新增“检索配置”功能
 
--   智能体应用中，打开“知识检索增强”开关后，增加“检索配置”功能，用于设置大模型的回答范围、是否展示回答来源等。点击[创建和使用知识库](../../application-user-guide/knowledge-base/rag-knowledge-base.md)查看完整信息。
+-   智能体应用中，打开“知识检索增强”开关后，增加“检索配置”功能，用于设置大模型的回答范围、是否展示回答来源等。点击[创建和使用知识库](../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)查看完整信息。
     
 
 <a id="release-2024-08-27"></a>
@@ -2021,7 +2021,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 应用中心：新增自定义参数的传入说明
 
--   调用工作流应用和智能体编排应用时，需要传入自定义参数。点击[自定义节点参数传递](../../application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md#uPwcs)查看完整信息。
+-   调用工作流应用和智能体编排应用时，需要传入自定义参数。点击[自定义节点参数传递](../../_short/pass-through-of-application-parameters-1967bbe8cc08ce9f.md#uPwcs)查看完整信息。
     
 
 <a id="release-2024-08-23"></a>
@@ -2226,7 +2226,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 应用中心：插件服务
 
--   应用中心支持**自定义参数**透传点击[应用的参数传递](../../application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)查看详情。
+-   应用中心支持**自定义参数**透传点击[应用的参数传递](../../_short/pass-through-of-application-parameters-1967bbe8cc08ce9f.md)查看详情。
 
 <a id="release-2024-07-08"></a>
 
@@ -2408,7 +2408,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 #### 应用工具：新增官方插件能力
 
--   上线新版插件中心，新增“**图片生成**”、“**夸克搜索**”、“**Python代码解释器**”和“**计算器**”四款官方插件，点击[插件中心](../../application-user-guide/plug-in/plug-in-overview.md)查看详情。
+-   上线新版插件中心，新增“**图片生成**”、“**夸克搜索**”、“**Python代码解释器**”和“**计算器**”四款官方插件，点击[插件中心](../../application-user-guide/agent-development/llm-application/plug-in/plug-in-overview.md)查看详情。
     
 
 <a id="应用广场-智能体api应用支持api调用"></a>

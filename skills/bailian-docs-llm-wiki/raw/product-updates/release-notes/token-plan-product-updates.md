@@ -14,7 +14,7 @@ Token Plan 的功能上线、模型支持、工具接入和计费权益调整记
 
 #### Qwen4-Max-Preview 下线
 
-qwen4-max-preview 于 2026 年 11 月 25 日 10:00（UTC+8）下线，原模型 ID 仍可正常调用，请求自动路由至 qwen4-max，Credits 抵扣和用量统计均按 qwen4-max 计算。预览期的限时折扣不再适用，调用按 qwen4-max 标准价格计费，费用可能高于预览期。建议将配置中的模型 ID 更新为 qwen4-max。
+qwen4-max-preview 于 2026 年 11 月 25 日 10:00（UTC+8）下线，原模型 ID 仍可正常调用，请求自动路由至 qwen4-max，Credits 抵扣和用量统计均按 qwen4-max 计算。预览期的限时折扣不再适用，调用按 qwen4-max 标准价格计费，费用可能高于预览期。建议将配置中的模型 ID 更新为 qwen4-max。详见[《模型升级通知》](https://www.aliyun.com/notice/118887)。
 
 <a id="release-2026-11-16"></a>
 

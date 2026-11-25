@@ -61,7 +61,7 @@ POST  HTTP/1.1
 | VideoUrl | string | 是 | 视频地址。 | [http://123.mp4](http://123.mp4) 目前该接口只进行视频理解额和分析，并没有对文件进行转存。请保证视频地址在任务执行期间有效。 |
 | VideoExtraInfo | string | 否 | 视频额外描述 | 视频中有一个房子 |
 | AnlysisPrompt | string | 否 | 视频理解 prompt | 重点理解视频中的风景信息 |
-| WorkspaceId | string | 是 | [百炼工作空间 Id](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxxx |
+| WorkspaceId | string | 是 | [百炼工作空间 Id](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxxx |
 | ReferenceVideo | object | 否 | 参考视频信息 |  |
 | VideoName | string | 否 | 参考视频名字 | refvideo.mp4 |
 | VideoUrl | string | 否 | 视频地址。 | [http://viapi-customer-pop.oss-cn-shanghai.aliyuncs.com/d71e\_208334498220521996\_51298e0a909d457693166eb883768c7a](http://viapi-customer-pop.oss-cn-shanghai.aliyuncs.com/d71e_208334498220521996_51298e0a909d457693166eb883768c7a) |

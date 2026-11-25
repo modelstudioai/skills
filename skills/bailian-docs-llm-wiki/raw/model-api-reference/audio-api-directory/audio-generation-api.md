@@ -6,7 +6,7 @@
 
 ## 接入前准备
 
-获取对应地域的 [API Key](../preparations/get-api-key.md) 和[业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)，分别配置为环境变量 `DASHSCOPE_API_KEY` 和 `SFM_WORKSPACE_ID`。下文示例以北京地域为例。
+获取对应地域的 [API Key](../preparations/get-api-key.md) 和[业务空间 ID](../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)，分别配置为环境变量 `DASHSCOPE_API_KEY` 和 `SFM_WORKSPACE_ID`。下文示例以北京地域为例。
 
 请求方法为 HTTPS POST，端点如下，其中 `{WorkspaceId}` 为业务空间 ID：
 

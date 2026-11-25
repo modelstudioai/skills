@@ -56,7 +56,7 @@
 | Text | string | 否 | 评论内容 | 评论内容 |
 | PubTime | string | 否 | 发布时间(格式为： YYYY-MM-dd HH:mm:ss) | 2024-01-22 10:29:00 |
 | Source | string | 否 | 新闻来源 | 百度 |
-| WorkspaceId | string | 是 | [百炼业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| WorkspaceId | string | 是 | [百炼业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xx |
 | AnalysisTypes | array | 否 | 选题热点要分析的类型（多选，不传默认分析全部。 传空数组，默认不做选题热点分析，仅聚类。） HotViewPoints： 热门选题视角分析 WebReviewPoints： 网友选题视角分析（需要有评论） TimedViewPoints：时效性选题视角分析 FreshViewPoints：新颖视角分析 TopicSummary：新闻摘要分析 |  |
 |  | string | 否 | 选题热点要分析的类型 | TimedViewPoints |
 | Topics | array<object> | 否 | 话题列表 |  |

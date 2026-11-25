@@ -38,7 +38,7 @@ Qwen-Omni-Realtime 模型支持 WebSocket、WebRTC 和 AOQ 三种协议接入。
 
 ## 接入准备
 
-获取所选地域、业务空间对应的 [API Key](../../../model-api-reference/preparations/get-api-key.md) 和[业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)，并将 API Key [配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。`qwen3.8-omni-flash-realtime` 必须使用下方绑定业务空间的调用地址。
+获取所选地域、业务空间对应的 [API Key](../../../model-api-reference/preparations/get-api-key.md) 和[业务空间 ID](../../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)，并将 API Key [配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。`qwen3.8-omni-flash-realtime` 必须使用下方绑定业务空间的调用地址。
 
 <a id="sec-tabs"></a>
 
@@ -58,7 +58,7 @@ Qwen-Omni-Realtime 模型支持 WebSocket、WebRTC 和 AOQ 三种协议接入。
 
 | 配置项 | 说明 |
 | --- | --- |
-| 请求地址 | 华北2（北京）地域：`POST https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime`<br><br>调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。 |
+| 请求地址 | 华北2（北京）地域：`POST https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime`<br><br>调用时请将`WorkspaceId`替换为真实的[业务空间ID](../../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)。 |
 | 查询参数 | 查询参数为model，需指定为访问的模型名。示例：`?model=qwen3.8-omni-flash-realtime`；旧型号示例：`?model=qwen3.5-omni-plus-realtime` |
 | Content-Type | application/sdp |
 | 请求头 | Authorization: Bearer DASHSCOPE\_API\_KEY |
@@ -4139,7 +4139,7 @@ A：您可以通过以下方式一键部署：
 
 1.  访问[函数计算模板](https://fcnext.console.aliyun.com/applications/create?template=omni-realtime@dev)，**部署类型**选择**直接部署**，**百炼 API-KEY** 填入您的 API Key，**百炼业务空间 ID** 填入您的业务空间 ID；单击**创建并部署默认环境**。
     
-    获取方式参见[获取 API Key](../../../model-api-reference/preparations/get-api-key.md#c38fb45bc6sje)和[获取业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#6cc9270e83h9d)。
+    获取方式参见[获取 API Key](../../../model-api-reference/preparations/get-api-key.md#c38fb45bc6sje)和[获取业务空间 ID](../../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#6cc9270e83h9d)。
     
 2.  等待约一分钟，在**环境详情**的**环境信息**中获取**访问域名**，**将访问域名的**`http`**改成**`https`（示例：[](https://omni-realtime.fcv3.xxxx.cn-hangzhou.fc.devsapp.net)[https://omni-realtime.fcv3.xxxx.cn-hangzhou.fc.devsapp.net](https://omni-realtime.fcv3.xxxx.cn-hangzhou.fc.devsapp.net)），修改后的 HTTPS 链接指向一个可在线体验的 Web 应用，可通过它与模型进行实时视频或语音通话。
     

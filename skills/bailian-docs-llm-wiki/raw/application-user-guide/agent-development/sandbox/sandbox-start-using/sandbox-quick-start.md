@@ -123,7 +123,7 @@ pip install "e2b-code-interpreter==2.8.1"
 
 创建实例前，替换下方示例中的输入：
 
--   `{workspace_id}`：按 [Sandbox API 前提条件](../../../../application-api-reference/sandbox-api/sandbox-api-overview.md#h-sandbox-api-prereq)在控制台右上角查看实际工作空间 ID；也可参考[获取业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#6cc9270e83h9d)。API Key 与模版应属于此工作空间。
+-   `{workspace_id}`：按 [Sandbox API 前提条件](../../../../application-api-reference/sandbox-api/sandbox-api-overview.md#h-sandbox-api-prereq)在控制台右上角查看实际工作空间 ID；也可参考[获取业务空间 ID](../../../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#6cc9270e83h9d)。API Key 与模版应属于此工作空间。
 -   `ALIYUN_UID`：登录[阿里云官网](https://www.aliyun.com/)，在右上角头像菜单查看**账号 ID**，将 `your aliyunUid` 替换为该 UID。
 -   `BAILIAN_API_KEY`：替换为步骤 3 获取的实际 API Key。
 -   `template`：将 `你的模版 code` 替换为步骤 2 记录的 `templateCode`。运行此例可选择 `code-interpreter-v1` 镜像。

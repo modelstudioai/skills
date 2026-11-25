@@ -667,7 +667,7 @@ foreach ($response->content as $block) {
 
 
 
-](../model-high-speed-inference/tpm-reservation.md)[
+](../model-high-speed-inference/tpm-reservation-index/tpm-reservation.md)[
 
 **批量推理**
 
@@ -729,7 +729,7 @@ foreach ($response->content as $block) {
 
 
 
-](https://help.aliyun.com/zh/model-studio/model-data-overview)[
+](../model-training/model-data-overview.md)[
 
 **模型调优**
 
@@ -743,7 +743,7 @@ foreach ($response->content as $block) {
 
 
 
-](../fine-tuning.md)[
+](../model-training/fine-tuning.md)[
 
 **模型评测**
 
@@ -757,7 +757,7 @@ foreach ($response->content as $block) {
 
 
 
-](../model-evaluation-introduction.md)[
+](../model-training/model-evaluation-introduction.md)[
 
 **模型压缩**
 
@@ -771,7 +771,7 @@ foreach ($response->content as $block) {
 
 
 
-](../fine-tuning/model-compression-introduction.md)
+](../model-training/model-compression-introduction.md)
 
 <a id="overview-my-models"></a>
 
@@ -789,6 +789,6 @@ foreach ($response->content as $block) {
 
 
 
-](https://help.aliyun.com/zh/model-studio/my-model-center)
+](../model-training/my-model-center.md)
 
 ![](data:image/png;base64,)

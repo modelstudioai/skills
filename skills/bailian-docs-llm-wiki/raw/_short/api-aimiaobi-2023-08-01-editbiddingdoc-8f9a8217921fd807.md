@@ -41,7 +41,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| WorkspaceId | string | 否 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xx |
 | TaskId | string | 否 | 任务 ID | 0dbf1055f8a2475d99904c3b76a0ffba |
 | Content | string | 否 | 文本内容 | 标书内容 |
 | ContentType | string | 否 | 内容类型 | outline bidding |

@@ -55,7 +55,7 @@ PUT /{workspaceId}/quanmiao/lightapp/videoAnalysis/updateVideoDetectShotConfig H
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 是 | 百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| workspaceId | string | 是 | 百炼业务空间唯一标识：[获取 workspaceId](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxx |
 | asyncConcurrency | integer | 是 | 视频理解-离线任务并发数，取值范围\[2, 10\] | 2 |
 
 <a id="返回参数"></a>

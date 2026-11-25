@@ -55,7 +55,7 @@ POST /{workspaceId}/quanmiao/lightapp/runMarketingInformationExtract HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 否 | 路径参数，[业务空间 id](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | w-08a4a3ba7104917c |
+| workspaceId | string | 否 | 路径参数，[业务空间 id](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | w-08a4a3ba7104917c |
 | modelId | string | 否 | 大模型 ID。 | qwen-max qwen-plus |
 | extractType | string | 否 | 抽取类型 | point-商品卖点 introduce-商品介绍中的要素 article-营销文案中的要素 comment-对商品看法中的要素 feature-feature |
 | customPrompt | string | 否 | 抽取指令 | 你是一位商品广告设计师，根据下面的产品介绍，生成一句话来描述该产品的卖点。 |

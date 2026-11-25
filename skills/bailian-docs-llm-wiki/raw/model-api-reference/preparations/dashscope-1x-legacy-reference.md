@@ -439,4 +439,4 @@ except DashScopeError as e:
 -   图像与视频：[图像生成](../image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)、[视频生成](../../_short/text-to-video-guide-99fbc872809463c8.md)
 -   语音：[录音文件识别](../../_short/paraformer-recorded-speech-recognition-python-sd-cec7d242cc0bcda0.md)、[实时语音识别](../../_short/realtime-websocket-python-sdk-paraformer-48f2eb5035b28f23.md)、[实时语音合成](../../model-user-guide/model-experience/speech-and-audio/speech-synthesis/realtime-tts-user-guide.md)
 -   向量与排序：[向量](../../model-user-guide/model-experience/embedding-rerank-model/embedding.md)、[重排序](../../model-user-guide/model-experience/embedding-rerank-model/rerank.md)
--   应用调用：[智能体应用调用](../../application-user-guide/bailian-application-calling/call-single-agent-application.md)
+-   应用调用：[智能体应用调用](../../_short/call-single-agent-application-7bb88312c0915edf.md)

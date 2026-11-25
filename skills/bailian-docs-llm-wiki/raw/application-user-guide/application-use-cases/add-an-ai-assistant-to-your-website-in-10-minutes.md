@@ -27,7 +27,7 @@
 
 首先创建百炼应用，获取大模型推理 API 服务。
 
-> 阿里云百炼提供的[新用户免费额度](../../model-user-guide/test-1/new-free-quota.md)可以覆盖本教程的模型调用消耗，额度消耗完后按 token 计费，相比自行部署大模型可以显著降低初期投入成本。本教程中使用的 AppFlow、函数计算 FC 及可选的 ADB-PG 向量存储由相应云产品单独计费，具体请参见各产品的计费文档。
+> AppFlow 的 AI 助手功能本身不收费，但使用该功能关联的底层资源可能产生费用，包括百炼的模型调用费用、知识库实例运行费用，以及使用函数计算 FC 部署示例网站时产生的费用。各费用项按对应云产品的计费规则收取，具体请参见[模型调用价格](../../model-user-guide/test-1/model-pricing.md)、[知识库计费说明](../agent-billing/billing-for-knowledge-base.md)与[函数计算计费概述](https://help.aliyun.com/zh/functioncompute/billing-overview-of-fc)。[新用户免费额度](../../model-user-guide/test-1/new-free-quota.md)的适用模型、领取条件与有效期以实际规则为准，不能据此认定本教程涉及的全部资源免费。
 
 <a id="1-1-创建应用"></a>
 
@@ -35,15 +35,14 @@
 
 #### 1.1 创建应用
 
-1.  进入百炼控制台的[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面，点击右上角**创建应用**，选择**智能体应用**并输入应用名称，其余参数保持默认，点击**立即创建**。
+1.  进入百炼控制台的[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)页面，单击**创建智能体**，在**创建智能体应用**弹窗中输入**应用名称**，其余保持默认，单击**立即创建**，创建完成后自动进入应用配置页面。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1601275771/p1066018.png)
+    > 当前默认创建新版智能体应用（Agent 2.0），本教程后续步骤均已基于新版控制台验证。如需创建旧版应用，可单击弹窗底部的**旧版 Agent 创建入口**。
     
-2.  在**应用配置**页面，选择**更多模型**；模型选择**Qwen3.5-Plus**。该模型能力均衡，推理效果、成本和速度介于千问Max和千问Flash之间，适合本场景中的任务需求。其他参数保持默认。
+    ![创建智能体应用弹窗](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9108.png)
+2.  在应用配置页面的**规划**区域选择模型。默认为**智能模式**（`AUTO`），由平台自动平衡成本与效果，推荐新手使用；也可以单击模型选择器指定具体模型（如`千问-Plus`），单击**更多模型**可选择其他模型。其他参数保持默认。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3601275771/p1066019.png)
-    
-    > 您可输入Prompt设置角色，引导模型应对客户咨询。
+    > 您可在**规划**区域的提示词输入框中设置角色，引导模型应对客户咨询。
     
 
 <a id="code-block"></a>
@@ -52,9 +51,11 @@
 你叫小助，可以帮助用户解答产品选购、使用等方面的问题。
 ```
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3601275771/p1066021.png) 3. 在页面右侧可以提问验证模型效果。不过目前它还无法准确回答您公司的商品信息。点击右上角的**发布**，我们将在后面的步骤中去解决这一问题。
+![应用配置页规划区域](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f910e.png)
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5082715571/p996997.png)
+3.  在页面右侧对话框中提问验证模型效果。不过目前它还无法准确回答您公司的商品信息。单击右上角的**发布**，在**发布版本**窗口中确认版本信息后单击**确认发布**，我们将在后面的步骤中解决这一问题。
+    
+    ![发布版本弹窗](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f910d.png)
 
 <a id="1-2-获取调用-api-所需的应用id和api-key"></a>
 
@@ -64,11 +65,12 @@
 
 为了在后续通过 API 调用大模型应用的能力，需要获取阿里云百炼API Key和应用 ID。
 
-1.  在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)中可以查看所有百炼应用 ID。保存应用 ID 到本地用于后续配置。
+1.  在[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)页面的应用卡片上查看并复制应用 ID。保存应用 ID 到本地用于后续配置。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2115805571/p959107.png)
-2.  前往[密钥管理](https://bailian.console.aliyun.com/?tab=app#/api-key)页面，点击**创建API Key**，在弹出窗口中创建一个新 API-Key。保存 API-Key 到本地用于后续配置。
+    ![应用卡片上的应用 ID](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f910f.png)
+2.  前往[API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)页面，单击**创建 API Key**，在弹窗中保持默认配置并单击**确定**。创建成功后立即复制 API Key 并保存到本地，完整密钥仅在创建时显示一次。详细说明请参见[获取与配置 API Key](../../model-api-reference/preparations/get-api-key.md)。
     
+    ![API Key 页面](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f910c.png)
 
 <a id="2-创建ai助手"></a>
 
@@ -86,12 +88,12 @@ AppFlow 无需代码即可连接网页与模型服务平台。
 
 1.  登录[AppFlow控制台](https://appflow.console.aliyun.com/)。
     
-2.  在左侧导航栏中选择**模型服务AI助手**。
+2.  在左侧导航栏中选择**模型服务** > **AI助手**。
     
 3.  在 AI 助手页面，单击**创建AI助手**设置基本信息。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2115805571/p975439.png)
-4.  在创建AI助手页面中可以自定义您的AI助手图标和名称。配置完成单击**提交**，跳转至AI助手详情页面。
+4.  在创建AI助手页面中，**AI助手类型**选择**智能体Agent**，并自定义AI助手图标、**AI助手名称**和**AI助手描述**。配置完成单击**提交**，跳转至AI助手详情页面。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2115805571/p975441.png)
 
@@ -105,13 +107,13 @@ AppFlow 无需代码即可连接网页与模型服务平台。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3601275771/p1066034.png)
     
-2.  于配置界面中选择连接凭证选项下点击 **添加新凭证** 按钮。完成创建后，后续可于选择连接凭证选项中复用自身业务凭证。
+2.  在配置向导的**选择连接凭证**步骤中单击下拉框，选择**添加新凭证**。完成创建后，后续可于选择连接凭证中复用该凭证。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4742151571/p975447.png)
 3.  输入凭证名称与先前获取的调用所需的API Key，以便AppFlow进行后续凭证认证。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4742151571/p976224.png)
-4.  输入先前获取的调用所需的应用ID后点击确定，将先前创建的百炼大模型应用与AI助手进行关联。
+4.  单击**下一步**进入**参数配置**步骤，输入先前获取的**应用Id**，**站点选择**保持**公共云国内站**，**业务空间标识（AgentKey）**填写百炼业务空间 ID（可在百炼控制台[业务空间管理](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)页面查看）。单击**保存**，将先前创建的百炼大模型应用与AI助手进行关联。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4742151571/p976234.png)
 
@@ -220,9 +222,9 @@ AppFlow 无需代码即可连接网页与模型服务平台。
 
 网站嵌入 AI 助手后，如果对话出现 request error，按以下步骤排查：
 
-1.  **检查 API Key 是否可用**：在 `AppFlow` 控制台 AI 助手详情页，点击已导入模型旁的编辑图标，在**选择连接凭证**步骤中查看 API Key，前往百炼控制台[密钥管理](https://bailian.console.aliyun.com/?tab=app#/api-key)页面确认状态。
+1.  **检查 API Key 是否可用**：在 `AppFlow` 控制台 AI 助手详情页，点击已导入模型旁的编辑图标，在**选择连接凭证**步骤中查看 API Key，前往百炼控制台 [API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key) 页面确认状态。
 2.  **确认智能体与 API Key 在同一业务空间**：在**参数配置**步骤中检查**业务空间标识（`AgentKey`）**。智能体与 API Key 分属不同业务空间会导致鉴权失败。
-3.  **核实应用 Id 是否正确**：在**参数配置**步骤中确认**应用 Id**字段值，前往百炼[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面对比核实。
+3.  **核实应用 Id 是否正确**：在**参数配置**步骤中确认**应用 Id**字段值，前往百炼[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)页面的应用卡片上对比核实。
 
 以上三项均正确配置后，AI 助手可正常对话。
 
@@ -244,24 +246,19 @@ AppFlow 无需代码即可连接网页与模型服务平台。
 
 接下来，我们可以尝试让大模型在面对客户问题时参考这份文档，以产出一个更准确的回答和建议。
 
-1.  **数据连接：**进入阿里云百炼控制台的[数据连接](https://bailian.console.aliyun.com/cn-beijing?tab=app#/connector/list)页签，点击**默认文件连接器**的**详情**按钮。
+1.  **创建知识库：**进入百炼控制台，在左侧导航栏选择**数据接入** > **知识管理**，进入[知识管理](https://bailian.console.aliyun.com/cn-beijing/rag/knowledge/list)页面，单击**创建**。填写**名称**和**描述**，知识库类型选择**文档搜索**，使用场景选择**基础文档问答**，单击**下一步**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9501275771/p1066004.png)
-2.  **上传文件：**在连接器详情的右上角点击**导入数据**，根据引导上传我们虚构的阿里云百炼系列手机产品介绍：
+    ![知识管理列表与创建入口](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9103.png)
+2.  **上传文件：**数据来源选择**上传文件**，根据引导上传我们虚构的阿里云百炼系列手机产品介绍，**索引设置**保持默认，单击**创建知识库**。系统将自动完成解析、切片、向量化与索引构建，知识库状态变为**已就绪**后即可用于检索。
     
     > 根据您上传的文档大小，阿里云百炼需要一定时间解析，通常占用1~6分钟，请您耐心等待。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0601275771/p1066012.png)
+3.  **创建并发布知识检索服务：**新版智能体应用通过关联**知识检索服务**使用知识库。在左侧导航栏选择**知识服务** > **知识检索**，进入[知识检索](https://bailian.console.aliyun.com/cn-beijing/rag/retrieval/list)页面，单击**创建**，填写**服务名称**后单击**确认**。在配置页面单击**\+ 添加**绑定刚才创建的知识库，然后单击右上角**发布**。发布后该检索服务才可被应用关联。
     
-3.  **创建知识库：**进入[知识库](https://bailian.console.aliyun.com/?tab=app#/knowledge-base)页面，点击**立即开通并创建**（首次使用）或**创建知识库**。选择**创建**标准版，填写**知识库名称**及**知识库描述**，其余设置可保持默认，点击**下一步**，选择刚才上传的文档，其他参数及**索引设置**保持默认即可。后续大模型回答时可以检索参考知识库中的文档。
+    ![知识检索服务列表与创建入口](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9102.png)
+4.  **引用知识：**访问[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)页面，找到之前创建的应用，单击**配置**进入应用配置页面。在**知识库**区域的**检索策略**中单击**立即配置**，在**配置检索服务**面板中选择已发布的检索服务并单击**关联**。在右侧对话框中测试验证符合预期后，单击右上角**发布**并**确认发布**。
     
-    > 选择向量存储类型时，如果您希望集中存储、灵活管理多个应用的向量数据，可选择**ADB-PG**。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5301724671/p944483.png)
-4.  **引用知识：**完成知识库的创建后，访问[应用管理](https://bailian.console.aliyun.com/?&tab=app#/app-center)页面，选择之前创建的应用。**文档**中添加目标知识库，调用方式选择**必定调用**。测试验证符合预期后点击**发布**。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0601275771/p1066026.png)
-    
+    ![应用配置页知识库检索策略区域](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9101.png) ![配置检索服务面板](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9100.png)
 
 <a id="4-2-检验效果"></a>
 
@@ -279,7 +276,7 @@ AppFlow 无需代码即可连接网页与模型服务平台。
 
 ## 总结
 
-通过前面的学习，您已在 10 分钟内免费搭建大模型 RAG 应用并部署到网站，以应对客户咨询。
+通过前面的学习，您已搭建大模型 RAG 应用并部署到网站，以应对客户咨询。实际费用取决于使用的模型及底层资源，具体请参见前文的计费说明。
 
 <a id="应用评测"></a>
 

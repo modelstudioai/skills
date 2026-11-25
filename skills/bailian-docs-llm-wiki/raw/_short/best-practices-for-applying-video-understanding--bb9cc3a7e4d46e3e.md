@@ -73,7 +73,7 @@
 pip install alibabacloud-tea-openapi-sse==1.0.2 -t .
 ```
 
-1.  代码示例参考如下，需要将[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)替换为实际值，以确保代码正常运行并返回正确的结果。
+1.  代码示例参考如下，需要将[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)替换为实际值，以确保代码正常运行并返回正确的结果。
 
 <a id="code-block-2"></a>
 
@@ -209,7 +209,7 @@ def handler(event, context):
 pip install alibabacloud-tea-openapi -t .
 ```
 
-1.  代码示例参考如下，需要将[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)替换为实际值，以确保代码正常运行并返回正确的结果。
+1.  代码示例参考如下，需要将[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)替换为实际值，以确保代码正常运行并返回正确的结果。
 
 <a id="code-block-4"></a>
 

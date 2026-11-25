@@ -286,7 +286,7 @@ Q: cached\_tokens 一直是 0，怎么排查？
 
 ## 相关文档
 
--   [吞吐预留概述](../tpm-reservation.md)
+-   [吞吐预留概述](tpm-reservation.md)
 -   [创建与接入](tpm-reservation-create.md)
 -   [吞吐预留计费](../../test-1/tpm-reservation-billing.md)
 -   [8 小时时段计费](../../test-1/tpm-reservation-billing.md#tpm-billing-8h-h2)

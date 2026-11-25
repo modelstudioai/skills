@@ -12,7 +12,7 @@
 >
 > 任意命令追加 `--help` 可查看完整参数说明，例如 `bl knowledge search --help`。删除类高危操作未显式追加 `--yes` 时会阻断执行（退出码 7）；如需预览，改用 `--dry-run`。除下文注明的 2.5.0 迁移变更外，本文命令明细以 bl 2.8.0 为基准核实。
 
-在各功能页也可查看对应用法，见 [Knowledge（原RAG） 知识库](../../../application-user-guide/knowledge-base/rag-knowledge-base.md)。
+在各功能页也可查看对应用法，见 [Knowledge（原RAG） 知识库](../../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
 
 <a id="检索与问答"></a>
 

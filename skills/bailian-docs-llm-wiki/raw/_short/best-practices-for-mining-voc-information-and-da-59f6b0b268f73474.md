@@ -24,7 +24,7 @@
     
     -   全妙-泛企业VOC挖掘【[https://bailian.console.aliyun.com/?spm=5176.29619931.J\_\_Z58Z6CX7MY\_\_Ll8p1ZOR.1.74cd59fcHNZmnE#/app/app-market/quanmiao/voc](https://bailian.console.aliyun.com/?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.74cd59fcHNZmnE#/app/app-market/quanmiao/voc)】；![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910980.png)
     -   析言GBI【[https://bailian.console.aliyun.com/xiyan?switchAgent=10037901&productCode=p\_efm#/home](https://bailian.console.aliyun.com/xiyan?switchAgent=10037901&productCode=p_efm#/home)】。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910981.png)
--   已获取WorkspaceID：[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+-   已获取WorkspaceID：[获取Workspace ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)。
     
 -   已获取AccessKey ID和AccessKey Secret：[获取 AccessKey 与 AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
     

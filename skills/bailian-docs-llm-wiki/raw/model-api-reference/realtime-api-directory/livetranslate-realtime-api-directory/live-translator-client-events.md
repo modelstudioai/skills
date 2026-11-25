@@ -8,7 +8,7 @@
 >
 > 本页为 Qwen-LiveTranslate-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](../../../_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md)、[WebRTC 接入](../../../_short/livetranslate-realtime-webrtc-access-ddb4e390439cd632.md)或[AOQ 接入](livetranslate-realtime-aoq-access.md)。
 
-WebSocket SDK 用法参见 [Python SDK](../../../_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md)和 [Java SDK](https://help.aliyun.com/zh/model-studio/qwen-livetranslate-java-sdk)。型号与协议选择参见[概述](live-translator-api.md)。
+WebSocket SDK 用法参见 [Python SDK](../../../_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md)和 [Java SDK](../../../_short/qwen-livetranslate-java-sdk-7300d52ae3d2839e.md)。型号与协议选择参见[概述](live-translator-api.md)。
 
 <a id="session-update"></a>
 

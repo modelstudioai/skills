@@ -772,6 +772,6 @@ Q: 归零后专属模型 code 还能用吗？
 
 ## 相关文档
 
--   [吞吐预留](../model-high-speed-inference/tpm-reservation.md)
+-   [吞吐预留](../model-high-speed-inference/tpm-reservation-index/tpm-reservation.md)
 -   [吞吐预留 DashScope OpenAPI 接口文档](../../model-api-reference/model-production/throughput-reservation-api.md)
 -   [模型训练与部署计费](model-training-and-deployment-billing.md)

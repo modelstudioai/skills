@@ -63,7 +63,7 @@ POST /quanmiao/aimiaobi/runAiHelperWriting HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxxxx |
+| WorkspaceId | string | 是 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxxxx |
 | WritingScene | string | 是 | 写作场景：government(政务)、media(传媒)、market(营销)、office(办公)、custom(自定义) | media |
 | WritingStyle | string | 是 | 写作文体唯一标识 KEY，可通过 [ListWritingStyles](api-aimiaobi-2023-08-01-listwritingstyles-00ef4732c20d15a3.md) 接口获取对应写作场景下的文体列表 | 通知 |
 | Prompt | string | 是 | 提示词，需要帮写的主题 | 请帮我写一篇关于人工智能发展趋势的文章 |

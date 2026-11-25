@@ -193,7 +193,7 @@
 
 1.  访问**[数据管理](https://bailian.console.aliyun.com/model/data)**页面并选择**数据流**页签。
     
-2.  在**数据流列表**页签中点击**创建数据流**，[创建并发布数据清洗数据流](https://help.aliyun.com/zh/model-studio/data-processing#02d5f6a43cqjf)。
+2.  在**数据流列表**页签中点击**创建数据流**，[创建并发布数据清洗数据流](../model-training/model-data-overview/data-processing.md#02d5f6a43cqjf)。
     
 3.  若已经准备好需要清洗的数据，您可以在**任务列表**页签点击**从数据流列表创建任务**，选择已发布的数据清洗数据流，通过填写以下表单项创建清洗任务：
     
@@ -211,7 +211,7 @@
 
 1.  访问**[数据管理](https://bailian.console.aliyun.com/model/data)**页面并选择**数据流**页签。
     
-2.  在**数据流列表**页签中点击**创建数据流**，[创建并发布数据增强数据流](https://help.aliyun.com/zh/model-studio/data-processing#02d5f6a43cqjf)。
+2.  在**数据流列表**页签中点击**创建数据流**，[创建并发布数据增强数据流](../model-training/model-data-overview/data-processing.md#02d5f6a43cqjf)。
     
 3.  若已经准备好需要增强的数据，您可以在**任务列表**页签点击**从数据流列表创建任务**，选择已发布的数据增强数据流，通过填写以下表单项创建增强任务：
     
@@ -423,6 +423,6 @@
 
 至此，本篇已经介绍了自定义模型调优、部署与评测的全生命周期管理。阅读完本篇后，您可以自行创建一个自定义模型，并能够在业务场景中调用该自定义模型。
 
-如果您需要将自定义模型投入到阿里云百炼的自定义应用中，请参考[应用类型](../../application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)选择并构建应用。
+如果您需要将自定义模型投入到阿里云百炼的自定义应用中，请参考[应用类型](../../application-user-guide/agent-development/llm-application/llm-application-start-using/flow-agent-introduction.md)选择并构建应用。
 
 本篇涉及的所有计费信息，请参考[产品计费](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。

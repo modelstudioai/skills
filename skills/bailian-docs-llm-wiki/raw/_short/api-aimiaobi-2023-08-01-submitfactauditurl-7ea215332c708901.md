@@ -43,7 +43,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xx |
 | Url | string | 是 | 用户希望使用的审核信息来源 URL。通过该接口新增信源 URL 后，事实性审核的信息来源会只从配置好的 URL 列表中获取；如果不新增 URL，则默认从全网检索审核所需的信息。每位用户最多可以配置 10 条信源 URL。 | [https://aliyun.com](https://aliyun.com) |
 
 <a id="返回参数"></a>

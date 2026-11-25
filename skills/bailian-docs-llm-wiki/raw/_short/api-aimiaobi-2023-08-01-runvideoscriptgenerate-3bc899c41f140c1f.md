@@ -55,7 +55,7 @@ POST /miaobi/runVideoScriptGenerate HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xx |
 | Prompt | string | 是 | 视频脚本的提示词 | 写一篇关于黄山旅游的脚本 |
 | UseSearch | boolean | 否 | 是否使用联网检索（如果选是，则会意图理解后联网检索相关参考素材） | true |
 | ScriptLength | string | 否 | 脚本篇幅 描述 可选值有：<br><br>20~75：10~15s 正常口播时长<br><br>75~150：15~30s 正常口播时长<br><br>150~300：≈30~60s 正常口播时长<br><br>\>=300：≥60s 正常口播时长 | \>=300 |

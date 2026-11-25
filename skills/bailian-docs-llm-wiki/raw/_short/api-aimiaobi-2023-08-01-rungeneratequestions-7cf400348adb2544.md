@@ -55,7 +55,7 @@ POST /miaodu/stream/runGenerateQuestions HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-w335gauzlbba2vze |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-w335gauzlbba2vze |
 | SessionId | string | 否 | 对话 ID | f486c4e2-b773-4d65-88f8-2ba540610456 |
 | DocId | string | 否 | 文档 ID | oOgIwodFANW1u5MnqxysOh1rtld3xn |
 | ReferenceContent | string | 否 | 要从中提取问题的文档内容，如果不为空则以此文本为准，为空则以 docId 为准 | 关联内容 |

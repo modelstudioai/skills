@@ -21,7 +21,7 @@
     
 2.  **获取模型调用权限（调用标准模型需要）：**使用子业务空间的API Key调用[标准模型](../../model-user-guide/get-started-with-models/models.md)（例如`qwen-plus`）前，需为该空间[设置模型调用权限](../../model-user-guide/security-and-compliance/permission-management-overview.md#f642213a1f38l)。
     
-    > **注意：**调用在阿里云百炼[调优](../../model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)并部署的模型，**无需模型调用授权**，但此类模型仅能由其所在业务空间的 API Key 调用。
+    > **注意：**调用在阿里云百炼[调优](../../model-user-guide/model-training/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)并部署的模型，**无需模型调用授权**，但此类模型仅能由其所在业务空间的 API Key 调用。
     
 3.  **选择开发语言：**[选择您熟悉的语言和SDK](../../model-user-guide/get-started-with-models/what-is-model-studio.md)，用于调用大模型API。
     
@@ -62,7 +62,7 @@ HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com
 
 以文本输入为例，通过 OpenAI 兼容方式调用子业务空间的`qwen-plus`标准模型。与默认业务空间的模型调用的区别在于：**必须使用该子业务空间的 API Key**。
 
-> 调用在阿里云百炼[调优](../../model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)后的模型：仅支持通过[DashScope](model-calling-in-sub-workspace.md)调用，不支持通过OpenAI兼容方式调用。
+> 调用在阿里云百炼[调优](../../model-user-guide/model-training/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)后的模型：仅支持通过[DashScope](model-calling-in-sub-workspace.md)调用，不支持通过OpenAI兼容方式调用。
 
 <a id="fig-code-group"></a>
 

@@ -55,7 +55,7 @@ POST /{workspaceId}/quanmiao/lightapp/runTagMiningAnalysis HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 是 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | w-08a4a3ba7104917c |
+| workspaceId | string | 是 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | w-08a4a3ba7104917c |
 | modelId | string | 否 | 模型 ID | qwen-max |
 | businessType | string | 否 | 业务类型 | clueMining |
 | taskDescription | string | 否 | 任务描述 | 给你一条待分析文本数据，请你按照标签体系来对数据进行打标。 |

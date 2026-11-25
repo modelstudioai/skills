@@ -43,7 +43,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。 | llm-2setzb9x4ewsd |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间 ID。获取方式请参见[如何使用业务空间](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。 | llm-2setzb9x4ewsd |
 | DocName | string | 否 | 文档名称 | 企业2022年報 |
 | DocType | string | 否 | 文档类型 | pdf |
 | Skip | integer | 否 | 跳过 n 条记录，用于分页 | 10 |

@@ -30,7 +30,8 @@
 -   **软限流**：当调用量达到限流值时，若平台仍有剩余资源，则不会触发限流，因此**实际可用 TPM** 不低于限流值；调用时观察到的实际限流值可能高于该限流值，属预期行为。
 -   **限流粒度**：按账号 + 模型，主账号下所有 RAM 子账号、业务空间、API Key 的调用量合并计入该账号对该模型的 TPM 配额，共享同一限额。
 -   **业务空间**：可为模型单独设置限流值，未单独设置的业务空间共享账号级配额。
--   **触发限流表现**：触发动态限流时返回 429 错误（错误码为 Throttling.ResourceExhausted 或 Throttling.ServiceOverloaded，报错信息为 Too many requests.）；平台资源不足时可能返回 503 错误（ServiceUnavailable），该情况与限流额度无关，稍后重试即可。错误处理建议参见[错误码](../../model-api-reference/preparations/error-code.md)。
+-   **报错表现**：当平台资源不足时，百炼会保护性地拒绝部分请求并返回 429 错误（报错信息为 Too many requests.）。这类报错表征的是平台侧资源状况，并非用户侧调用量问题；服务本身正常运行，被拒绝的请求未交付、不计费，稍后重试即可。
+-   **错误码区分**：未超出限流值的请求被拒时返回 Throttling.ResourceExhausted；超出限流值的请求会以较低优先级继续尝试，被拒时返回 Throttling.ServiceOverloaded。错误处理建议参见[错误码](../../model-api-reference/preparations/error-code.md)。
 -   **更多说明**：业务空间限流设置见[权限管理](../security-and-compliance/permission-management-overview.md)。
 
 <a id="模型与限流档位"></a>
@@ -2231,6 +2232,7 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 -   `Requests rate limit exceeded` 或 `You exceeded your current requests list`：触发了每分钟请求数（RPM）限流。
 -   `Allocated quota exceeded` 或 `You exceeded your current quota`：触发了每分钟 Token 消耗（TPM）限流。
 -   `Request rate increased too quickly`：请求频率在短时间内激增，触发了系统稳定性保护——即使总调用量未达到 RPM 或 TPM 上限也会触发。
+-   `Too many requests.`（错误码为 Throttling.ResourceExhausted 或 Throttling.ServiceOverloaded）：动态限流模型的保护性拒绝，由平台资源不足导致，并非超出限流值；被拒绝的请求不计费，稍后重试即可。参见[动态限流机制](#sec-mechanism-h2)，支持的模型见[模型与限流档位](#sec-tier-h2)。
 -   其他报错，参见[错误码](../../model-api-reference/preparations/error-code.md)确认原因。
 
 短时间内的请求爆发即使未超出分钟级上限也可能触发限流，秒级执行口径参见[静态限流规则](#static-rate-limit-rules)。
@@ -2251,7 +2253,7 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 ### 遇到限流后多久恢复？
 
-通常在一分钟内恢复。如出现其他报错，参见[错误码](../../model-api-reference/preparations/error-code.md)进行处理。
+每分钟请求数（RPM）或每分钟 Token 消耗（TPM）类限流通常在一分钟内恢复；动态限流的保护性拒绝（`Too many requests.`）取决于平台资源状况，无固定恢复时长，稍后重试即可。如出现其他报错，参见[错误码](../../model-api-reference/preparations/error-code.md)进行处理。
 
 <a id="模型响应速度与付费有关吗"></a>
 

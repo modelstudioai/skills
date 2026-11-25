@@ -142,7 +142,10 @@ HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/co
 
 #### 华北2（北京）
 
-HTTP 请求地址为`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+HTTP 请求地址：
+
+-   纯文本模型（如deepseek-v4-pro）：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+-   多模态模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017）：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="cn-beijing")`
 
@@ -152,7 +155,10 @@ SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", regio
 
 #### 美国（弗吉尼亚）
 
-HTTP 请求地址为`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+HTTP 请求地址：
+
+-   纯文本模型（如deepseek-v4-pro）：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+-   多模态模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017）：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="us-east-1")`
 
@@ -162,7 +168,10 @@ SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", regio
 
 #### 新加坡
 
-HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+HTTP 请求地址：
+
+-   纯文本模型（如deepseek-v4-pro）：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+-   多模态模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017）：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="ap-southeast-1")`
 
@@ -172,7 +181,10 @@ SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", regio
 
 #### 德国（法兰克福）
 
-HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+HTTP 请求地址：
+
+-   纯文本模型（如deepseek-v4-pro）：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+-   多模态模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017）：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="eu-central-1")`
 
@@ -182,7 +194,10 @@ SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", regio
 
 #### 日本（东京）
 
-HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+HTTP 请求地址：
+
+-   纯文本模型（如deepseek-v4-pro）：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+-   多模态模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017）：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="ap-northeast-1")`
 
@@ -192,7 +207,10 @@ SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", regio
 
 #### 中国香港
 
-HTTP 请求地址为`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+HTTP 请求地址：
+
+-   纯文本模型（如deepseek-v4-pro）：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+-   多模态模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017）：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="cn-hongkong")`
 
@@ -1054,7 +1072,7 @@ deepseek-v4-pro 在编程、数学和通用任务方面表现出色，deepseek-v
 
 1.  在线体验：访问[模型广场](https://bailian.console.aliyun.com/model/market)。
 2.  通过API或客户端（如Chatbox）调用模型：请参考本文内容。
-3.  0代码构建大模型应用：请参考[智能体应用（Agent 1.0）](../../../application-user-guide/llm-application/single-agent-application.md)或[工作流应用](../../../application-user-guide/llm-application/workflow-application.md)。
+3.  0代码构建大模型应用：请参考[智能体应用（Agent 1.0）](../../../application-user-guide/agent-legacy/legacy-flow-agent/single-agent-application.md)或[工作流应用](../../../application-user-guide/agent-development/llm-application/workflow-application.md)。
 
 如需自行部署DeepSeek，请参考[技术解决方案](https://www.aliyun.com/solution/tech-solution/deepseek-r1-for-platforms)。
 

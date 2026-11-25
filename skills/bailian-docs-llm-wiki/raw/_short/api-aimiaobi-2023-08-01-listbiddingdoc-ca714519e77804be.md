@@ -41,7 +41,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| WorkspaceId | string | 否 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xx |
 | TaskName | string | 否 | 任务名称定义 | 任务名称 |
 | TaskStatus | integer | 否 | 任务状态 | 0-waiting、1-running、2-success、3-pause、4-fail |
 | CreateTimeStart | string | 否 | 起始创建时间，时间戳形式。 | 2023-02-19 07:28:11 |

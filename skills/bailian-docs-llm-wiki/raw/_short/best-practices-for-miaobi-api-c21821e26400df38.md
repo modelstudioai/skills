@@ -9,7 +9,7 @@
 ## 前提条件
 
 -   已开通服务，开通地址：[https://common-buy.aliyun.com/?spm=a2c4g.11186623.0.0.225a777dIkFbJA&commodityCode=sfm\_miaobi\_public\_cn&request={%22guige%22:%22try%22}](https://common-buy.aliyun.com/?spm=a2c4g.11186623.0.0.225a777dIkFbJA&commodityCode=sfm_miaobi_public_cn&request=%7B%22guige%22:%22try%22%7D)；
--   [获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)；
+-   [获取Workspace ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)；
 -   [获取 AccessKey ID、AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)；
 -   引入妙笔SDK [注意获取最新SDK版本](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc)；
 

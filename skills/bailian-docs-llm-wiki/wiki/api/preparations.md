@@ -1,31 +1,40 @@
 # preparations
 
-`preparations` 是调用百炼平台模型 API 前必需完成的基础配置步骤，涵盖身份认证、环境准备和请求基础设施设置。开发者需正确获取并管理 API Key，选择适配的 SDK 版本，并确认 Base URL 等网络参数。所有操作均以安全、可复现和符合当前版本规范为前提。
+`preparations` 是调用百炼平台模型 API 前必需完成的基础配置步骤，涵盖身份认证、环境准备和请求基础设施设置。开发者需先获取并安全配置 API Key，再根据目标模型选择合适的 SDK 版本与 Base URL，方可发起合法请求。所有准备工作均需严格遵循 [使用 API](../../raw/model-api-reference/preparations.md) 文档的规范流程。
 
 ## 支持的模型/功能
 
-本阶段不直接涉及模型选型，但所完成的准备工作（如 API Key 权限配置、SDK 初始化）决定了后续可调用的模型范围。例如，部分模型（如 `qwen-max` 或 `qwen-plus`）要求 API Key 具备对应服务权限；若未开通相应模型配额，即使请求参数合法也会返回 `403 Forbidden` 错误。具体模型支持列表请参考 [使用 API](../../raw/model-api-reference/preparations.md) 中的权限说明章节。
+当前 `preparations` 流程适用于全部百炼开放模型（包括 Qwen 系列、Qwen-VL、Qwen-Audio 等），但不同模型对 SDK 版本和 Base URL 有明确要求：  
+- Qwen2/Qwen3 等新版本大模型**仅支持 DashScope SDK 2.x+**，不兼容 [SDK 1.x 历史用法参考](../../raw/model-api-reference/preparations/dashscope-1x-legacy-reference.md) 中的初始化方式；  
+- 多模态模型（如 Qwen-VL）需额外确认 Base URL 是否启用 `/multimodal` 路径前缀，详见 [Base URL总览](../../raw/model-api-reference/preparations/base-url.md)。
+
+> **注意**：[SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md) 文档中提及的“自动模型路由”功能在 v2.12.0 后已弃用，实际请求仍需显式指定 `model` 参数，避免因隐式路由导致 404 错误。
 
 ## 关键参数
 
-- `api_key`：必填，用于身份鉴权，须通过 [获取与配置 API Key](../../raw/preparations/get-api-key.md) 流程生成并妥善保管  
-- `base_url`：可选，用于指定请求入口，国内默认为 `https://dashscope.aliyuncs.com/api/v1`；国际用户或私有化部署场景需按 [Base URL总览](../../raw/preparations/base-url.md) 配置  
-- `timeout`：建议显式设置（如 60s），避免因网络波动导致连接挂起；SDK 默认超时值在不同版本中不一致，请以 [SDK Expert](../../raw/preparations/dashscope-sdk-expert.md) 文档为准  
-
-> **注意**：`dashscope` Python SDK 2.x 起已废弃 `dashscope.api_key` 全局赋值方式，改用 `DashScopeClient(api_key=...)` 实例化；而 [SDK 1.x 历史用法参考](../../raw/preparations/dashscope-1x-legacy-reference.md) 中的写法不再兼容，切勿混用。
+| 参数 | 必填 | 说明 |
+|------|------|------|
+| `api_key` | 是 | 通过 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md) 获取的密钥，须通过 HTTP Header `Authorization: Bearer <api_key>` 或 SDK 初始化传入 |
+| `base_url` | 否（推荐显式指定） | 默认为 `https://dashscope.aliyuncs.com/api/v1`，但部分区域或灰度模型需覆盖为 [Base URL总览](../../raw/model-api-reference/preparations/base-url.md) 所列专用地址 |
+| `timeout` | 否 | 建议设为 ≥60s，尤其对长上下文或流式响应场景 |
 
 ## 使用方式
 
-1. 通过 [获取与配置 API Key](../../raw/preparations/get-api-key.md) 获取有效密钥  
-2. 安装对应语言 SDK（推荐最新稳定版）：`pip install dashscope`（Python）或参见 [安装SDK](../../raw/preparations/install-sdk.md)  
-3. 初始化客户端并发起首次健康检查请求（如 `/status` 或空 payload 的 `/chat/completions`）验证连通性  
+1. **获取密钥**：登录百炼控制台，在「API 密钥管理」中创建并复制 `api_key`；  
+2. **安装 SDK**：执行 `pip install dashscope>=2.15.0`（强制要求 ≥2.15.0，旧版存在 token 刷新缺陷）；  
+3. **初始化客户端**：  
+   ```python
+   import dashscope
+   dashscope.api_key = "YOUR_API_KEY"
+   # 或显式传入 base_url（如调用国际站模型）
+   dashscope.base_url = "https://dashscope-intl.aliyuncs.com/api/v1"
+   ```
 
 ## 限制和注意事项
 
-- 单个 API Key 默认有 QPS 和日调用量限制，超出将触发 `429 Too Many Requests`；配额调整需提交工单，不可自行修改  
-- API Key 严禁硬编码在前端代码或公开仓库中；应通过环境变量（如 `DASHSCOPE_API_KEY`）注入  
-- 错误响应解析必须依赖 [错误码](../../raw/preparations/error-code.md) 文档，不同错误类型（如 `InvalidAPIKey` vs `ResourceNotFound`）需差异化处理  
-- 所有 preparatory 操作均需在调用任何模型接口前完成；跳过任一环节可能导致 `401 Unauthorized` 或 `503 Service Unavailable`
+- 单个 `api_key` 默认限流 10 QPS（每秒查询数），超限返回 `429 Too Many Requests`，详情见 [错误码](../../raw/model-api-reference/preparations/error-code.md)；  
+- `api_key` **不可硬编码在前端代码或公开仓库中**，必须通过服务端环境变量注入；  
+- Windows 系统下若出现 SSL 证书验证失败，请先执行 `pip install --upgrade certifi`，否则可能中断 [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md) 步骤。
 
 ## 来源文档
 

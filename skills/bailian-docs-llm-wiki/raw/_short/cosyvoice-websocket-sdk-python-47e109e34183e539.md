@@ -54,7 +54,7 @@ SDK的接口地址由Client构造参数`workspace`/`region`决定（对应下方
 
 ## 快速开始
 
-示例使用北京。将代码中的 `{WorkspaceId}` 替换为实际的[业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。运行后，音频保存到当前目录的 `output.mp3`。
+示例使用北京。将代码中的 `{WorkspaceId}` 替换为实际的[业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。运行后，音频保存到当前目录的 `output.mp3`。
 
 <a id="code-block"></a>
 

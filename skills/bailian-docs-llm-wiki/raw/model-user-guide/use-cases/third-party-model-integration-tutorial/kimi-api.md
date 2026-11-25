@@ -2719,7 +2719,7 @@ API 层面没有专门的工具搜索接口。如果工具数量很多，可以�
 -   OpenAI Responses：使用 `reasoning.effort`。
 -   Anthropic Messages：使用 `output_config.effort`。
 
-kimi-k3.1-pro 的 `temperature`、`top_p`、`presence_penalty` 仅支持默认值，分别为 `1.0`、`0.95`、`0.0`；传入非默认值会报错。kimi-k3.1-pro 和 kimi-k3 不支持视频输入，`fps` 和 `max_frames` 不适用。
+kimi-k3.1-pro 的 `temperature`、`top_p`、`presence_penalty` 仅支持默认值，分别为 `1.0`、`0.95`、`0.0`；kimi-k3 的 `temperature`、`top_p` 仅支持默认值，分别为 `1.0`、`0.95`。传入非默认值会报错。kimi-k3.1-pro 和 kimi-k3 不支持视频输入，`fps` 和 `max_frames` 不适用。
 
 <a id="模型列表与计费"></a>
 

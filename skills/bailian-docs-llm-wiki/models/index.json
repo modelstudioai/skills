@@ -1,17 +1,17 @@
 {
   "updatedAt": "2026-11-25",
-  "totalFamilies": 128,
-  "totalModels": 343,
+  "totalFamilies": 129,
+  "totalModels": 345,
   "profileCoverage": {
-    "full": 145,
-    "partial": 184,
-    "structured-only": 14,
+    "full": 133,
+    "partial": 202,
+    "structured-only": 10,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 32,
+    "VG": 17,
     "IG": 17,
-    "VG": 16,
     "ASR": 12,
     "Reasoning": 10,
     "TTS": 9,
@@ -30,7 +30,7 @@
   "providerDistribution": {
     "qwen": 66,
     "qwen-domain-model": 26,
-    "wan": 12,
+    "wan": 13,
     "mini-max": 4,
     "pixverse": 4,
     "deepseek": 3,
@@ -2151,6 +2151,22 @@
       "itemCount": 1,
       "items": [
         "wan2.7-videoedit"
+      ]
+    },
+    {
+      "slug": "wan-video",
+      "name": "Wan3.0-Video",
+      "primaryCapability": "VG",
+      "capabilities": [
+        "VG"
+      ],
+      "providers": [
+        "wan"
+      ],
+      "itemCount": 2,
+      "items": [
+        "wan3.0-video",
+        "wan3.0-video-prime"
       ]
     },
     {

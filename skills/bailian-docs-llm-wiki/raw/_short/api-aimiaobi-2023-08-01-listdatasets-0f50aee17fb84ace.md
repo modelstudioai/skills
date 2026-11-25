@@ -55,7 +55,7 @@ POST  HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxx |
 | StartTime | string | 否 | 创建时间-开始 | 创建时间-开始 |
 | EndTime | string | 否 | 创建时间-结束 | 创建时间-结束 |
 | DatasetName | string | 否 | 数据集名称，全局唯一 | businessDataset |

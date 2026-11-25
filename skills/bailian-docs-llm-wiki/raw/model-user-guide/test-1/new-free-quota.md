@@ -42,7 +42,7 @@
 
 > **警告**
 >
-> [Batch调用](../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)、[模型调优](../fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[模型部署](../model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)、自定义模型（调优后模型、已部署模型）、PAI-DSW、OSS 存储及请求费用不支持用免费额度抵扣。
+> [Batch调用](../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)、[模型调优](../model-training/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[模型部署](../model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)、自定义模型（调优后模型、已部署模型）、PAI-DSW、OSS 存储及请求费用不支持用免费额度抵扣。
 
 <a id="注意事项"></a>
 

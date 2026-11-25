@@ -56,7 +56,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| WorkspaceId | string | 是 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | xxxx |
 | TaskId | string | 否 | 任务 ID，多轮对话可复用同一轮任务 ID | 3f7045e099474ba28ceca1b4eb6d6e21 |
 | Articles | array<object> | 否 | 引用的文章 | 集合 |
 |  | object | 否 | 文章对象 |  |

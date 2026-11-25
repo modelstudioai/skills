@@ -196,7 +196,7 @@ public class CloudRagService implements RagService {
 }
 ```
 
-示例中的 `searchFilters` 表示“部门等于 `Corporate`，或部门名称包含 `Research`，或文档类型包含 `Policy`”。如不需要过滤，可省略 `searchFilters` 配置。完整语法和不同调用方式的差异请参见[知识库 SearchFilters](https://help.aliyun.com/zh/model-studio/how-to-use-search-filters)。
+示例中的 `searchFilters` 表示“部门等于 `Corporate`，或部门名称包含 `Research`，或文档类型包含 `Policy`”。如不需要过滤，可省略 `searchFilters` 配置。完整语法和不同调用方式的差异请参见[知识库 SearchFilters](../../more/how-to-use-search-filters.md)。
 
 <a id="最佳实践-通过-http-直接调用-rag-api"></a>
 
@@ -324,4 +324,4 @@ HTTP 客户端在服务初始化时创建并复用。示例的连接超时为 10
 ## 了解更多
 
 -   [Spring AI Alibaba](https://java2ai.com/?spm=4347728f.638c0b20.0.0.23f87982NTcSMy)：提供文档教程、实战博客和开发者社区，帮助您快速开发 Java 生成式 AI 应用。
--   [创建和使用知识库](../../../application-user-guide/knowledge-base/rag-knowledge-base.md)：深入了解阿里云百炼知识库的核心功能与最佳实践。
+-   [创建和使用知识库](../../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)：深入了解阿里云百炼知识库的核心功能与最佳实践。
