@@ -55,7 +55,7 @@ POST /miaodu/stream/runDocIntroduction HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | xxxx |
 | DocId | string | 是 | 文档 ID | 12345 |
 | SessionId | string | 是 | 对话 ID | a3b5eb35-6b28-4cf9-ac09-1dec25ab4df6 |
 | SummaryPrompt | string | 否 | 总结内容自定义要求 | 用英文输出 |

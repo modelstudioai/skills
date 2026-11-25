@@ -55,7 +55,7 @@ POST /miaodu/stream/runDocBrainmap HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间 ID。获取方式请参见[如何使用业务空间](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxx |
 | SessionId | string | 是 | 会话 ID | 3f7045e099474ba28ceca1b4eb6d6e21 |
 | DocId | string | 是 | 文档 ID | 12345 |
 | Prompt | string | 否 | 脑图自定义 prompt 要求 | 请按英文输出 |

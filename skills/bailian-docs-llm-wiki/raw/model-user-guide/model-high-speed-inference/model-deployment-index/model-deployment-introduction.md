@@ -30,7 +30,7 @@ DTU 是模型单元(MU)的继任方案（计量粒度由单元数改为输入/�
 
 > **说明**
 >
-> 预置吞吐单元（PTU）的创建与管理现已支持在“吞吐预留”页面进行，支持叠加容量包等更完整的容量管理功能。详见[吞吐预留](../tpm-reservation.md)。
+> 预置吞吐单元（PTU）的创建与管理现已支持在“吞吐预留”页面进行，支持叠加容量包等更完整的容量管理功能。详见[吞吐预留](../tpm-reservation-index/tpm-reservation.md)。
 
 -   [独占算力部署](model-deployment-modes/dtu-model-deployment.md)
 -   [Token按量部署](model-deployment-modes/model-deployment-token.md)
@@ -51,7 +51,7 @@ DTU 是模型单元(MU)的继任方案（计量粒度由单元数改为输入/�
     
 3.  填写**服务名称**，完成**选择模型**与**计费方式**，其他配置保持默认，单击**确认**。
     
-    > 需先完成[模型调优](../../fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)，方可部署大部分模型。
+    > 需先完成[模型调优](../../model-training/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)，方可部署大部分模型。
     
 4.  返回部署列表，部署状态变为**运行中**时，代表该模型已部署成功。
     

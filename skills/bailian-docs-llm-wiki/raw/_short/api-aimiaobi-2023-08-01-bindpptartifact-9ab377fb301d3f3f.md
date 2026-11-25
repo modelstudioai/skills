@@ -55,7 +55,7 @@ POST  HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xgpt3m25qdosdjr3 |
+| WorkspaceId | string | 否 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xgpt3m25qdosdjr3 |
 | TaskId | string | 是 | 任务 ID | 85da2bfe-6f05-41af-9841-d73c5bbf43a2 |
 | ArtifactId | integer | 是 | 作品 ID | 12342 |
 | ExternalUserId | string | 否 |  | abc |

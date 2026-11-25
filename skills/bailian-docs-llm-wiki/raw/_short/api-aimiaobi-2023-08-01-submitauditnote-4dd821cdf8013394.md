@@ -63,7 +63,7 @@ POST  HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xx |
 | FileKey | string | 是 | 阿里云 OSS 存储中，用户上传的规则库文件对应的 FileKey（注意：FileKey 生成方式见 [通用接口-文件上传下载 GenerateUploadConfig - 生成上传配置](https://next.api.aliyun.com/document/AiMiaoBi/2023-08-01/GenerateUploadConfig?spm=openapi-amp.newDocPublishment.0.0.18fc281fOiiBil)）。规则库文件只允许使用 docx, xlsx, pdf 格式，其中 xlsx 格式限制两列，且表头必须为“审校依据”和“依据出处”。上传 xlsx 格式能有更好的解析效果，但 docx 和 pdf 也会由系统自动解析。 | oss://default/your/file/key |
 | NoteId | string | 否 | 规则库 ID（不填默认是 Default ） | note\_id\_unique |
 

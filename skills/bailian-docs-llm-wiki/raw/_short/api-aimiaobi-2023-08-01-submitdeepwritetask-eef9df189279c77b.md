@@ -43,7 +43,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-1setzb9xb8m11vrc |
+| WorkspaceId | string | 否 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-1setzb9xb8m11vrc |
 | Input | string | 是 | 用户的问题 | 北京2025年新能源汽车发展趋势 |
 | Instructions | string | 否 | 指令 | 请根据北京新能源汽车在汽车品牌、新车发布、能源等方面进行分析 |
 | Files | array<object> | 否 | 附件列表 |  |

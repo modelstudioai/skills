@@ -41,7 +41,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 否 | [业务空间 id](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| WorkspaceId | string | 否 | [业务空间 id](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xx |
 | TaskId | string | 否 | 任务唯一 ID | 7AA2AE16-D873-5C5F-9708-15396C382EB1 |
 | Prompt | string | 否 | 提示词 | 自定义观点的输入Prompt |
 | CompanyKeyword | string | 否 | 投标公司名称 | comany name |

@@ -55,7 +55,7 @@ POST /{workspaceId}/quanmiao/lightapp/runMarketingInformationWriting HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 否 | 路径参数，[业务空间 id](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | w-26ca1703f6d71e6e |
+| workspaceId | string | 否 | 路径参数，[业务空间 id](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | w-26ca1703f6d71e6e |
 
 <a id="请求参数"></a>
 

@@ -1,79 +1,82 @@
 # overview
 
-百炼平台的 MCP（Model Calling Protocol）与 Skill 两大能力提供标准化接口，用于集成外部服务与自定义工具。MCP 支持将 HTTP、SSE、OPENAPI 或 STDIO 类型的服务快速注册为可调用的模型工具；Skill 则面向代码化技能，通过 ZIP 包定义功能逻辑与元数据。二者均基于统一认证体系，支持全生命周期管理。
+百炼平台的 MCP（Model Calling Protocol）和 Skill 两大能力体系，为开发者提供标准化的模型服务集成与可复用技能管理能力。MCP 用于对接外部工具服务（如天气、地图、数据库等），支持多种协议类型；Skill 则是封装了完整业务逻辑的可挂载、可版本化的功能单元。二者均通过统一的 API Key 鉴权和工作空间 Endpoint 访问，适用于构建智能体、自动化流程等场景。
 
 ## 支持的模型/功能
 
-- **MCP 服务**：支持四种接入类型：`STDIO`（本地进程）、`HTTP`（同步请求）、`SSE`（服务端事件流）、`OPENAPI`（OpenAPI 3.0 规范描述的 RESTful 接口）。每种类型需按对应 schema 提交 `mcp_config` [创建自定义 MCP](../../raw/application-api-reference/overview/overview/create-a29c49f8a08e5095.md)。
-- **官方与自定义 MCP**：可通过 `/list` 接口分页查询全部官方 MCP 和当前工作空间下的自定义 MCP；官方 MCP 需显式开通后方可使用，而 One Key 类型 MCP 在首次调用时自动开通 [查询 MCP 列表](../../raw/application-api-reference/overview/overview/list-c680a6eef36ba755.md)。
-- **Skill 技能**：支持上传 ZIP 包定义技能逻辑（含 `SKILL.md` 和可执行文件），版本号由服务端自动递增（如 `1.0` → `1.1`），旧版本永久保留且不影响已挂载智能体 [版本管理](../../raw/application-api-reference/overview/overview-1dac56b965dd0271.md)。
-- **工具发现与调用**：提供三类工具操作接口：`/tools`（查询工具列表）、`/tools/call`（调用指定工具）、`/tools/recommend`（根据自然语言需求推荐工具）[工具](../../raw/application-api-reference/overview/overview-743a72f61b3a54f8.md)。
+- **MCP 服务**：支持官方 MCP（如高德地图、通义万相）和自定义 MCP，后者可基于 `STDIO`（函数计算部署）、`HTTP`、`SSE` 或 `OPENAPI` 四种协议接入外部服务 [创建自定义 MCP](../../raw/application-api-reference/overview/overview/create-a29c49f8a08e5095.md)。
+- **Skill 技能**：支持上传 ZIP 包形式的自定义 Skill（含 `SKILL.md` 和代码文件），经安全扫描后生成版本化技能；官方 Skill 可直接查询和挂载 [创建 Skill](../../raw/application-api-reference/overview/overview/create-44cf2cde0a7d9a72.md)。
+- **核心功能**：
+  - MCP：服务全生命周期管理（开通/关闭/启用/停用）、工具发现（列表/推荐）、工具调用；
+  - Skill：版本化管理（创建/查询/下载/删除）、状态跟踪（`checking`/`active`/`rejected`）。
 
 ## 关键参数
 
-- **认证参数**：所有请求必须携带 `Authorization: Bearer $DASHSCOPE_API_KEY` Header，并使用工作空间专属 Endpoint（格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/{resource}`）[认证](../../raw/application-api-reference/overview/authentication-58370587ddc046ee.md)。
-- **分页参数**：`pageNo`（从 1 开始）和 `pageSize`（1–100），`pageNo × pageSize ≤ 10000`，适用于 `/list` 及 `/versions` 等接口。
-- **MCP 配置字段**：
-  - `mcp_type`：必填，值为 `STDIO`/`HTTP`/`SSE`/`OPENAPI`；
-  - `mcp_config`：结构强依赖 `mcp_type`，例如 `HTTP` 类型需提供 `url` 和可选 `headers`，`OPENAPI` 类型需完整定义 `api_list` 及各 API 的 `input_params` [创建自定义 MCP](../../raw/application-api-reference/overview/overview/create-a29c49f8a08e5095.md)。
-- **Skill ZIP 要求**：根目录必须包含 `SKILL.md`（Front Matter 中 `name` 和 `description` 为必填字段），包大小 ≤ 50MB，解压后内容 ≤ 100MB [创建 Skill](../../raw/application-api-reference/overview/overview/create-44cf2cde0a7d9a72.md)。
+- **认证参数**：`DASHSCOPE_API_KEY`（环境变量或 `Authorization: Bearer` Header），配合工作空间 ID 构成 Endpoint（如 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`）[认证](../../raw/application-api-reference/overview/authentication-58370587ddc046ee.md)。
+- **分页参数**：`pageNo`（≥1）、`pageSize`（1–100），`pageNo × pageSize ≤ 10000`，适用于 MCP 列表、Skill 列表及版本列表等接口。
+- **MCP 配置字段**：`mcp_type`（必填）、`mcp_config`（按类型结构化，如 `HTTP` 的 `url` 和 `headers`，`OPENAPI` 的 `api_list` 及 `input_params` schema）。
+- **Skill ZIP 要求**：根目录必须包含 `SKILL.md`（Front Matter 含 `name` 和 `description`），包大小 ≤ 50MB，解压后总大小 ≤ 100MB [Skill API 错误码](../../raw/application-api-reference/overview/errors-9f5f81ed72f2a1c6.md)。
 
 ## 使用方式
 
-1. **认证配置**：设置环境变量 `DASHSCOPE_API_KEY`，并从控制台获取 `workspace_id` 构造 Endpoint。
+1. **初始化**：配置 `DASHSCOPE_API_KEY` 环境变量，并确认工作空间 ID 正确。
 2. **MCP 流程**：
-   - 查询可用 MCP：`GET /api/v1/mcp/servers/list`
-   - 创建自定义 MCP：`POST /api/v1/mcp/servers`（传入 `server_name`, `description`, `mcp_type`, `mcp_config`）
-   - 开通官方 MCP：`POST /api/v1/mcp/servers/{mcpCode}/activate`
-   - 调用工具：`POST /api/v1/mcp/servers/{mcpCode}/tools/call`（需先查工具列表确认 `tool_name` 和参数 schema）
+   - 查询可用 MCP：`GET /api/v1/mcp/servers/list?type=CUSTOMER`
+   - 创建自定义 MCP：`POST /api/v1/mcp/servers`（传 `server_name`, `mcp_type`, `mcp_config`）
+   - 查询工具列表：`GET /api/v1/mcp/servers/{mcpCode}/tools`
+   - 调用工具：`POST /api/v1/mcp/servers/{mcpCode}/tools/call`（传 `tool_name` 和 `tool_params`）
 3. **Skill 流程**：
    - 创建 Skill：`POST /api/v1/skills`（`multipart/form-data` 上传 ZIP）
-   - 上传新版本：`POST /api/v1/skills/{skill_id}/versions`
-   - 查询版本详情：`GET /api/v1/skills/{skill_id}/versions/{version}`
-   - 下载 ZIP：`GET /api/v1/skills/{skill_id}/versions/{version}/content`（返回 2 小时有效预签名 URL）
+   - 查询 Skill：`GET /api/v1/skills/{skill_id}`（确认 `status` 为 `active` 后挂载）
+   - 创建新版本：`POST /api/v1/skills/{skill_id}/versions`（ZIP 包自动递增版本号）
 
-> **注意**：文档中 `MCP API 错误码`（文档 7）与 `Skill API 错误码`（文档 18）的 HTTP 状态码语义存在差异：MCP 的 `403 AccessDenied` 表示鉴权失败，而 Skill 的 `401 WORKSPACE_ID_ILLEGAL` 才表示身份无效；开发者应分别参照各自错误码文档处理响应。
+> **注意**：One Key MCP 服务（如部分云市场商品）不支持手动开通/关闭，首次调用工具时可能自动开通并产生费用；而需要 KMS 凭据或 RAM 角色的 MCP 必须前往控制台手动开通 [开通官方 MCP](../../raw/application-api-reference/overview/overview/activate.md)。
 
 ## 限制和注意事项
 
-- **权限隔离**：API Key 权限作用于工作空间级别，RAM 子账号需显式授权；官方 MCP 不支持删除或修改，仅可开通/关闭；自定义 MCP 删除后不可恢复 [删除自定义 MCP](../../raw/application-api-reference/overview/overview/delete-23f946e3aa963ba8.md)。
-- **状态约束**：
-  - 修改自定义 MCP 配置前必须先停用（`/disable`），否则返回 `400 OperationNotSupported`；
-  - Skill 处于 `checking`（安全扫描中）状态时，禁止创建新版本 [创建版本](../../raw/application-api-reference/overview/overview/create-66b335d7c24c1f0f.md)；
-  - 官方 MCP 的 `deactivate` 接口不支持 One Key 类型 [关闭官方 MCP](../../raw/application-api-reference/overview/overview/deactivate.md)。
-- **敏感信息保护**：`/get` 接口响应中的 `mcp_config.headers` 可能包含 API Key 等凭据，务必避免日志记录或前端暴露 [查询 MCP 详情](../../raw/application-api-reference/overview/overview/get-b57e1839b6840677.md)。
-- **错误处理惯例**：[工具调用](../concepts/tool-calling.md)成功但业务失败时，HTTP 状态码仍为 `200`，需检查响应体中 `data.isError === true`；所有接口均返回 `request_id`，用于问题排查 [MCP API 错误码](../../raw/application-api-reference/overview/errors-972b4127b84f4429.md)。
+- **权限与安全**：
+  - API Key 具有工作空间级权限，严禁硬编码或泄露 [认证](../../raw/application-api-reference/overview/authentication-58370587ddc046ee.md)。
+  - `mcp_config.headers` 响应中可能包含敏感凭据（如 `Authorization`），需妥善保护响应内容 [查询 MCP 详情](../../raw/application-api-reference/overview/overview/get-b57e1839b6840677.md)。
+- **状态与并发**：
+  - 自定义 MCP 修改配置前必须先停用（`/disable`），否则返回 `400 OperationNotSupported`。
+  - Skill 在 `checking` 状态时禁止创建新版本，需等待安全扫描完成。
+- **错误处理**：
+  - 工具调用失败时，接口可能返回 `200 success=true data.isError=true`，务必同时检查 HTTP 状态码和 `data.isError` 字段 [调用工具](../../raw/application-api-reference/overview/overview/call.md)。
+  - 列表类接口（如 `/skills`）数据异步更新，状态变更后可能短暂延迟，应以单资源接口（如 `/skills/{id}`）结果为准 [列出 Skill](../../raw/application-api-reference/overview/overview/list-b23c792b7a3bf72b.md)。
+- **其他限制**：
+  - 官方 MCP 不支持删除；自定义 MCP 删除后不可恢复。
+  - Skill ZIP 文件名编码仅支持 UTF-8 或 GBK，否则解压失败。
 
 ## 来源文档
 
 - [认证](../../raw/application-api-reference/overview/authentication-58370587ddc046ee.md)
-- [服务管理](../../raw/application-api-reference/overview/overview-448e7f104037b903.md)
+- [MCP API 错误码](../../raw/application-api-reference/overview/errors-972b4127b84f4429.md)
 - [查询 MCP 列表](../../raw/application-api-reference/overview/overview/list-c680a6eef36ba755.md)
+- [服务管理](../../raw/application-api-reference/overview/overview-448e7f104037b903.md)
 - [创建自定义 MCP](../../raw/application-api-reference/overview/overview/create-a29c49f8a08e5095.md)
 - [查询 MCP 详情](../../raw/application-api-reference/overview/overview/get-b57e1839b6840677.md)
 - [更新自定义 MCP](../../raw/application-api-reference/overview/overview/update.md)
-- [MCP API 错误码](../../raw/application-api-reference/overview/errors-972b4127b84f4429.md)
 - [删除自定义 MCP](../../raw/application-api-reference/overview/overview/delete-23f946e3aa963ba8.md)
 - [工具](../../raw/application-api-reference/overview/overview-743a72f61b3a54f8.md)
-- [查询工具列表](../../raw/application-api-reference/overview/overview/list-64eddd50625ee03f.md)
 - [调用工具](../../raw/application-api-reference/overview/overview/call.md)
 - [推荐工具](../../raw/application-api-reference/overview/overview/recommend.md)
 - [生命周期](../../raw/application-api-reference/overview/overview-fc1e2b9f062d93f5.md)
-- [开通官方 MCP](../../raw/application-api-reference/overview/overview/activate.md)
 - [关闭官方 MCP](../../raw/application-api-reference/overview/overview/deactivate.md)
-- [停用自定义 MCP](../../raw/application-api-reference/overview/overview/disable.md)
+- [开通官方 MCP](../../raw/application-api-reference/overview/overview/activate.md)
 - [启用自定义 MCP](../../raw/application-api-reference/overview/overview/enable.md)
-- [Skill API 错误码](../../raw/application-api-reference/overview/errors-9f5f81ed72f2a1c6.md)
+- [停用自定义 MCP](../../raw/application-api-reference/overview/overview/disable.md)
 - [Skill API 认证](../../raw/application-api-reference/overview/authentication-26822a11844efd00.md)
+- [Skill API 错误码](../../raw/application-api-reference/overview/errors-9f5f81ed72f2a1c6.md)
 - [Skill 管理](../../raw/application-api-reference/overview/overview-9d8edaa0d219d019.md)
 - [创建 Skill](../../raw/application-api-reference/overview/overview/create-44cf2cde0a7d9a72.md)
 - [列出 Skill](../../raw/application-api-reference/overview/overview/list-b23c792b7a3bf72b.md)
 - [获取 Skill](../../raw/application-api-reference/overview/overview/get-9c06b4218676761a.md)
-- [删除 Skill](../../raw/application-api-reference/overview/overview/delete-75ffff308650522a.md)
 - [版本管理](../../raw/application-api-reference/overview/overview-1dac56b965dd0271.md)
-- [创建版本](../../raw/application-api-reference/overview/overview/create-66b335d7c24c1f0f.md)
+- [查询工具列表](../../raw/application-api-reference/overview/overview/list-64eddd50625ee03f.md)
 - [列出版本](../../raw/application-api-reference/overview/overview/list-ee346a0747aae1d4.md)
-- [下载版本 ZIP](../../raw/application-api-reference/overview/overview/download.md)
 - [获取版本详情](../../raw/application-api-reference/overview/overview/get-2856ed31dd1c9b3d.md)
+- [下载版本 ZIP](../../raw/application-api-reference/overview/overview/download.md)
+- [删除 Skill](../../raw/application-api-reference/overview/overview/delete-75ffff308650522a.md)
+- [创建版本](../../raw/application-api-reference/overview/overview/create-66b335d7c24c1f0f.md)
 
 

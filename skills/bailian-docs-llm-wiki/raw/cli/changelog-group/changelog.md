@@ -2,11 +2,32 @@
 
 阿里云百炼 CLI 的版本更新记录
 
+<a id="2-11-2-2026-11-24"></a>
+
+## 2.11.2 | 2026-11-24
+
+-   新增决策模型精调流水线：`bl dataset generate` 依据 `workload.json` 业务配置生成带标注的决策训练样本；`bl dataset split` 将已标注 JSONL 切分为训练集与评估集；`bl finetune decision create` 提交决策模型精调（LoRA / efficient\_sft）；`bl dataset validate` 支持决策样本格式校验。
+-   新增 `bl finetune train-options`，从控制台查询模型的动态训练选项，包括选项定义、默认值和合法组合。`training_options: null` 表示模型无需训练选项；`--training-type` 默认 `sft`。
+-   `bl finetune text create` 新增 `--modality` 和 `--reasoning-mode`，适用于配置了动态训练选项的模型。
+-   `bl finetune params` 和 `bl finetune text create` 新增精调参数预检：控制台登录态可用时自动补齐训练选项默认值，并在提交前拦截非法取值或组合；无登录态时降级为警告并原样透传服务端。`bl finetune params` 的 JSON 输出新增 `precheck` 字段，用于说明预检是否执行。
+
+<a id="2-11-1-2026-11-24"></a>
+
+## 2.11.1 | 2026-11-24
+
+-   修复符号链接下载目标：文件下载会穿过符号链接写入真实文件，并保留链接本身，不再把链接替换为普通文件。
+-   修复 `bl speech generate` 下载失败恢复：音频已生成但落盘失败时，错误提示会带上可重新下载的地址，无需重新生成。
+
 <a id="2-11-0-2026-11-24"></a>
 
 ## 2.11.0 | 2026-11-24
 
--   新增全局 `--biz-source <source>` 参数，全部命令支持该参数；调用方（skill、agent、产品）可声明业务来源，归一化后的来源上报到 AEM 专用扁平列 `c6`（及 `ext`），支持按来源统计命令调用的 PV/UV。缺省省略；空白或非法值归一化为 `unknown`。
+-   新增 `bl speech voice` 命令组，管理自定义音色：`clone` 用参考音频克隆音色，`list` / `get` / `update` / `delete` / `preview` 管理已注册音色。CosyVoice / Qwen-Audio 音色通过 `bl speech synthesize` 使用，Omni 音色通过 `bl omni` 使用，后续 `--model` 须与克隆时的 `--target-model` 一致；Realtime 模型在创建时会被拒绝。Omni 音色仅支持 `clone` / `list` / `delete`。
+-   新增 `bl speech voice design`，用文字描述生成 CosyVoice / Qwen-Audio 音色并在本地保存一次性试听，不支持 Omni 目标。
+-   新增 `bl speech generate`，通过 `--text-prompt` 和可选的 `--audio` 参考音频（`@voice1`…`@voice3`）生成播客、对话类音频。参考音频仅支持 WAV / MP3 / OGG Opus，不接受系统音色或已克隆音色 ID；使用默认北京 MaaS 端点时需指定 Workspace ID。
+-   新增 Qwen-MT 翻译命令：`bl text translate` 使用 Qwen-MT（`qwen-mt-flash` / `plus` / `lite`）翻译文本，支持 `--term` 术语对和流式输出；`bl image translate` 翻译图片内文字并尽量保留排版（默认 `qwen-mt-image`，可选 `qwen-mt-image-2.0`）；`bl omni translate` 使用 `qwen-mt-uni` 翻译文档、图片或音频文件，支持术语表和敏感词等选项。图片和文件翻译支持等待完成或 `--async`。
+-   新增全局 `--biz-from <source>` 参数，全部命令支持。调用方（skill、agent、产品）可声明业务来源，便于按来源统计命令调用量（PV/UV）。
+-   修复 CLI npm 更新：`bl update` 和自动更新改为从官方 npm registry 安装，与版本检测使用同一来源，避免已配置镜像同步滞后时误报更新成功。
 
 <a id="2-10-5-2026-11-23"></a>
 

@@ -143,12 +143,12 @@ API Key 的状态随归属用户（账号）操作的变化如下。主账号和
 
 ### OpenAPI 接口权限
 
-RAM 用户默认无权调用百炼**应用**的数据、知识库、Prompt工程及长期记忆等功能的[Open API](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir)。
+RAM 用户默认无权调用百炼**应用**的数据、知识库、Prompt工程及长期记忆等功能的[Open API](../../application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)。
 
 若需调用，需要**阿里云主账号**在 [RAM 控制台](https://ram.console.aliyun.com/users)为 RAM 用户添加以下**权限之一**：
 
--   [AliyunBailianDataFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatafullaccess)：可调用百炼应用 [API目录](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir)下的所有API。
--   [AliyunBailianDataReadOnlyAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatareadonlyaccess)：可调用百炼应用 [API目录](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir)下的**只读类**API，例如[查询文件状态](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-describefile)、[查询知识库创建任务状态](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexjobstatus)等。
+-   [AliyunBailianDataFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatafullaccess)：可调用百炼应用 [API目录](../../application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)下的所有API。
+-   [AliyunBailianDataReadOnlyAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatareadonlyaccess)：可调用百炼应用 [API目录](../../application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)下的**只读类**API，例如[查询文件状态](../../_short/api-bailian-2023-12-29-describefile-020886c28a208bf2.md)、[查询知识库创建任务状态](../../_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)等。
 
 <a id="应用于生产环境"></a>
 
@@ -324,7 +324,7 @@ RAM 用户默认无权查看阿里云账单和购买阿里云预付费产品，�
 
 ### 1\. 如何获取业务空间 ID 呢？
 
-请参考应用开发的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+请参考应用开发的[获取Workspace ID](../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)。
 
 <a id="2-如何使用子业务空间调用模型"></a>
 
@@ -340,7 +340,7 @@ RAM 用户默认无权查看阿里云账单和购买阿里云预付费产品，�
 
 ### 3\. 如何使用特定业务空间的应用？
 
-使用 API 管理、调用特定业务空间的应用需要同时设置 [APP ID 和 Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。
+使用 API 管理、调用特定业务空间的应用需要同时设置 [APP ID 和 Workspace ID](../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。
 
 <a id="4-已配置-aliyunbailianfullaccess-但仍无法管理业务空间怎么办"></a>
 

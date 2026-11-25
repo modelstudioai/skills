@@ -67,7 +67,7 @@ POST /{workspaceId}/quanmiao/lightapp/runHotTopicSummary HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 是 | 路径参数，[业务空间 id](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| workspaceId | string | 是 | 路径参数，[业务空间 id](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxx |
 | hotTopicVersion | string | 是 | 热点播报单版本号 | 2024-10-16\_8 |
 | topicIds | array | 是 | 要进行摘要热点话题 ID 列表 |  |
 |  | string | 是 | 热点 ID | xxxx |

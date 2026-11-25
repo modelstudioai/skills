@@ -52,7 +52,7 @@ Token Plan 团队版的套餐权益、账号权限、坐席管理、升级续费
 
 > **重要**
 >
-> -   **qwen4-max-preview 已下线**：原模型 ID 仍可正常调用，请求自动路由至 qwen4-max，Credits 抵扣和用量统计均按 qwen4-max 计算；预览期的限时折扣不再适用，调用按 qwen4-max 标准价格计费，费用可能高于预览期。建议将配置中的模型 ID 更新为 qwen4-max。
+> -   **qwen4-max-preview 已下线**：原模型 ID 仍可正常调用，请求自动路由至 qwen4-max，Credits 抵扣和用量统计均按 qwen4-max 计算；预览期的限时折扣不再适用，调用按 qwen4-max 标准价格计费，费用可能高于预览期。建议将配置中的模型 ID 更新为 qwen4-max。详情参见[《模型升级通知》](https://www.aliyun.com/notice/118887)。
 > -   **限时夜间五折**：每晚 22:00 - 次日 08:00 调用 deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash、deepseek-v4.1-flash-1017，Credits 消耗享 5 折优惠。
 >
 > 阿里云百炼有权根据运营情况对活动进行变更或调整，包括不限于活动内容和有效期等，请以页面最新内容或阿里云通知为准。

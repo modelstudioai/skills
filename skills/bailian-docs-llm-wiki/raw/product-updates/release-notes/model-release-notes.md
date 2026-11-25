@@ -264,7 +264,7 @@ Coding Plan 联网搜索 MCP 升级 Streamable HTTP 协议，前 2000 次免费�
 
 #### 模型评测新增排行榜与综合评测
 
-提供排行榜(Leaderboard) 管理入口和综合评测能力, 支持 BLEU\_4 等评分方法。 [了解详情](../../model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)
+提供排行榜(Leaderboard) 管理入口和综合评测能力, 支持 BLEU\_4 等评分方法。 [了解详情](../../model-user-guide/model-training/model-evaluation-introduction/model-evaluation-overview.md)
 
 <a id="release-2026-06-05"></a>
 
@@ -298,7 +298,7 @@ API 参考新增模型导入目录, 涵盖导入任务与自定义模型对象�
 
 #### 新增生成临时 API Key 文档
 
-新增生成临时 API Key 文档，在不可信环境下避免永久 API Key 泄露， [了解详情](https://help.aliyun.com/zh/model-studio/application-obtain-temporary-authentication-token)
+新增生成临时 API Key 文档，在不可信环境下避免永久 API Key 泄露， [了解详情](../../application-api-reference/more/application-obtain-temporary-authentication-token.md)
 
 <a id="release-2026-06-01"></a>
 
@@ -312,7 +312,7 @@ Responses API
 
 #### Responses API 新增异步调用
 
-Responses API 新增异步调用模式，通过 background=true 提交长耗时任务并轮询结果， [了解详情](https://help.aliyun.com/zh/model-studio/asynchronous-call-api-reference#7226dca8fe4ld)
+Responses API 新增异步调用模式，通过 background=true 提交长耗时任务并轮询结果， [了解详情](../../application-api-reference/flow-agent-api/application-call/openai-responses-api/asynchronous-call-api-reference.md#7226dca8fe4ld)
 
 <a id="release-2026-05-31"></a>
 
@@ -326,7 +326,7 @@ Responses API 新增异步调用模式，通过 background=true 提交长耗时�
 
 #### 模型调优新增强化学习训练 (邀约制)
 
-提供强化学习 (RL) 训练能力, 支持基于奖励信号优化模型策略, 当前邀约制开放, [了解详情](../../model-user-guide/fine-tuning/rl-overview/rl-training-overview.md)
+提供强化学习 (RL) 训练能力, 支持基于奖励信号优化模型策略, 当前邀约制开放, [了解详情](../../model-user-guide/model-training/fine-tuning/rl-overview/rl-training-overview.md)
 
 <a id="release-2026-05-28"></a>
 
@@ -340,7 +340,7 @@ Responses API 新增异步调用模式，通过 background=true 提交长耗时�
 
 #### 模型调优新增图像生成模型类型支持
 
-在模型调优中支持图像生成模型(如 Wan / Wanx)进行定制训练。 [了解详情](../../model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)
+在模型调优中支持图像生成模型(如 Wan / Wanx)进行定制训练。 [了解详情](../../model-user-guide/model-training/fine-tuning/wan-image-generation-finetune-guide.md)
 
 <a id="release-2026-05-26"></a>
 
@@ -368,7 +368,7 @@ Responses API 新增异步调用模式，通过 background=true 提交长耗时�
 
 #### 模型压缩模块上线
 
-新增模型压缩模块，使用量化算法将全精度微调模型转为低精度版本，降低部署成本， [了解详情](../../model-user-guide/fine-tuning/model-compression-introduction.md)
+新增模型压缩模块，使用量化算法将全精度微调模型转为低精度版本，降低部署成本， [了解详情](../../model-user-guide/model-training/model-compression-introduction.md)
 
 <a id="release-2026-05-15"></a>
 
@@ -410,7 +410,7 @@ Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配�
 
 #### 模型调优新增 0 代码安全合规强化
 
-文本生成模型调优新增 0 代码强化大模型安全合规能力训练流程， [了解详情](../../model-user-guide/fine-tuning/fine-tune-text-generation-model/enhance-the-security-compliance-of-large-models.md)
+文本生成模型调优新增 0 代码强化大模型安全合规能力训练流程， [了解详情](../../_short/enhance-the-security-compliance-of-large-models-20037a5f23c7138a.md)
 
 <a id="release-2026-04-23"></a>
 
@@ -480,7 +480,7 @@ Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配�
 
 #### 调优新增视觉理解模型类型支持
 
-模型调优新增视觉理解(VL)模型类型支持，可对多模态模型进行定制训练， [了解详情](../../model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)
+模型调优新增视觉理解(VL)模型类型支持，可对多模态模型进行定制训练， [了解详情](../../model-user-guide/model-training/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)
 
 <a id="release-2026-01-21"></a>
 
@@ -494,7 +494,7 @@ Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配�
 
 #### 模型调优新增视频生成模型类型
 
-模型调优新增视频生成模型类型支持，可对万相系列等视频模型定制训练， [了解详情](../../model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)
+模型调优新增视频生成模型类型支持，可对万相系列等视频模型定制训练， [了解详情](../../model-user-guide/model-training/fine-tuning/wan-video-generation-finetune-guide.md)
 
 <a id="2025年"></a>
 
@@ -528,13 +528,13 @@ Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配�
 
 #### 新增排行榜功能
 
-可一次选择多个模型，并基于多个评测维度（如 BLEU、ROUGE等）生成对比榜单，便于横向比较模型性能。[模型评测](../../model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)
+可一次选择多个模型，并基于多个评测维度（如 BLEU、ROUGE等）生成对比榜单，便于横向比较模型性能。[模型评测](../../model-user-guide/model-training/model-evaluation-introduction/model-evaluation-overview.md)
 
 <a id="新增多种评估器"></a>
 
 #### 新增多种评估器
 
-覆盖字符串匹配、文本相似度计算、基于模型分类、基于模型打分及人工分类等主流评测场景，更全面地评估模型性能。[模型评测](../../model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)
+覆盖字符串匹配、文本相似度计算、基于模型分类、基于模型打分及人工分类等主流评测场景，更全面地评估模型性能。[模型评测](../../model-user-guide/model-training/model-evaluation-introduction/model-evaluation-overview.md)
 
 <a id="release-2025-11-06"></a>
 
@@ -583,7 +583,7 @@ Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配�
 
 #### **新增**千问3-VL-8B-Instruct、千问3-VL-8B-Thinking 支持 SFT 模型调优和部署。
 
-千问3-VL-8B-Instruct、千问3-VL-8B-Thinking 支持 SFT [模型调优](../../model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)和 调优后模型部署。
+千问3-VL-8B-Instruct、千问3-VL-8B-Thinking 支持 SFT [模型调优](../../model-user-guide/model-training/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)和 调优后模型部署。
 
 SFT（有监督微调）支持全参微调和高效微调（LoRA）两种方式。
 
@@ -599,7 +599,7 @@ SFT（有监督微调）支持全参微调和高效微调（LoRA）两种方式�
 
 #### **千问2.5、千问 3**系列支持 DPO 训练
 
-千问3-32B、14B、8B 和 千问 2.5-72B、32B、14B、8B 新增支持 [DPO 偏好训练](../../model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
+千问3-32B、14B、8B 和 千问 2.5-72B、32B、14B、8B 新增支持 [DPO 偏好训练](../../model-user-guide/model-training/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
 
 DPO 偏好训练通过引入负反馈，从而降低幻觉，使得模型输出更符合人类偏好。
 
@@ -615,7 +615,7 @@ DPO 偏好训练通过引入负反馈，从而降低幻觉，使得模型输出�
 
 #### 千问2.5-VL 模型支持调优和部署
 
-千问2.5-VL-72B、32B、7B 模型支持[模型调优并部署](../../model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
+千问2.5-VL-72B、32B、7B 模型支持[模型调优并部署](../../model-user-guide/model-training/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
 
 <a id="release-2025-07-29"></a>
 
@@ -822,7 +822,7 @@ batch支持的模型新增两个。
 
 #### 数据处理支持画布编排
 
--   借助画布编排，您可以灵活组合数据清洗节点和数据增强节点，轻松实现复杂的数据处理流程。[数据清洗或增强](https://help.aliyun.com/zh/model-studio/data-processing)
+-   借助画布编排，您可以灵活组合数据清洗节点和数据增强节点，轻松实现复杂的数据处理流程。[数据清洗或增强](../../model-user-guide/model-training/model-data-overview/data-processing.md)
     
 
 <a id="release-2024-10-17"></a>
@@ -1006,7 +1006,7 @@ OpenAI接口兼容
 
 新增模型评测方式
 
--   新增模型**自动化评测**，点击[模型评测简介](../../model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)进行了解。
+-   新增模型**自动化评测**，点击[模型评测简介](../../model-user-guide/model-training/model-evaluation-introduction/model-evaluation-overview.md)进行了解。
 
 <a id="release-2024-08-07"></a>
 
@@ -1019,7 +1019,7 @@ OpenAI接口兼容
 新增独立部署模型
 
 -   新增**qwen2-7b-instruct**模型支持自定义训练及独立部署；
--   新增**qwen2-72b-instruct**模型支持自定义训练及独立部署；点击[在控制台进行模型调优](../../model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)进行体验。
+-   新增**qwen2-72b-instruct**模型支持自定义训练及独立部署；点击[在控制台进行模型调优](../../model-user-guide/model-training/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)进行体验。
 
 <a id="release-2024-07-30"></a>
 
@@ -1033,14 +1033,14 @@ OpenAI接口兼容
 
 #### 数据处理新增算子类型
 
--   数据处理新增**毒性消除**算子类型，可自动检测分析并去除数据中敏感、不合规的内容。[数据清洗或增强](https://help.aliyun.com/zh/model-studio/data-processing)
+-   数据处理新增**毒性消除**算子类型，可自动检测分析并去除数据中敏感、不合规的内容。[数据清洗或增强](../../model-user-guide/model-training/model-data-overview/data-processing.md)
     
 
 <a id="数据处理新增算子类型-2"></a>
 
 #### 数据处理新增算子类型
 
--   数据处理新增**敏感词过滤**算子类型，可过滤掉带有敏感词的样本。[数据清洗或增强](https://help.aliyun.com/zh/model-studio/data-processing)
+-   数据处理新增**敏感词过滤**算子类型，可过滤掉带有敏感词的样本。[数据清洗或增强](../../model-user-guide/model-training/model-data-overview/data-processing.md)
     
 
 <a id="release-2024-07-23"></a>
@@ -1092,7 +1092,7 @@ OpenAI接口兼容
 
 #### 新增qwen-vl-plus模型微调
 
--   支持qwen-vl-plus模型微调，支持上传图文类型的训练集，点击[训练集与评测集](../../model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)查看详情。
+-   支持qwen-vl-plus模型微调，支持上传图文类型的训练集，点击[训练集与评测集](../../model-user-guide/model-training/model-data-overview/training-set-and-evaluation-set.md)查看详情。
     
 
 <a id="release-2024-06-13"></a>
@@ -1196,7 +1196,7 @@ OpenAI接口兼容
 
 -   支持qwen-plus及qwen1.5-72B模型SFT及部署。
     
--   支持千亿模型千问1.5-开源版-110B模型的SFT及部署。点击[在控制台进行模型调优](../../model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)查看详情。
+-   支持千亿模型千问1.5-开源版-110B模型的SFT及部署。点击[在控制台进行模型调优](../../model-user-guide/model-training/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)查看详情。
     
 
 <a id="全新的自动数据处理能力以及数据安全提升"></a>
@@ -1282,7 +1282,7 @@ OpenAI接口兼容
     
 -   新增模型中心内容更新，点击[模型](https://help.aliyun.com/zh/model-studio/model)查看详情。
     
--   新增应用中心内容更新，点击[应用开发](../../application-user-guide/llm-application.md)查看详情。
+-   新增应用中心内容更新，点击[应用开发](../../application-user-guide/agent-development/llm-application.md)查看详情。
     
 -   新增系统管理内容更新，点击系统管理查看详情。
     

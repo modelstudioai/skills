@@ -13,7 +13,7 @@
 -   **前置条件**：调用前须在百炼控制台 [知识问答服务页面](https://bailian.console.aliyun.com/cn-beijing/rag/qa/list) 创建并发布知识问答服务，获取应用 ID（`agent_id`），否则报 Agent 未发布。
 -   **多轮上下文**：平台不保存对话状态，每次请求需传入完整 `messages` 历史。建议限制历史长度（如最近 10 轮），避免超出模型上下文窗口。响应不返回 `session_id`。
 -   **流式要求**：`stream` 必须为 `true`，当前版本仅支持流式响应；若为 `false` 或为空将导致请求失败。
--   **临时文件**：开启控制台文件预解析后，可在对话时通过 `parameters.agent_options.session_files` 临时传入文件（最多 10 个），文件 ID 通过[添加文件](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addfile)接口获取。
+-   **临时文件**：开启控制台文件预解析后，可在对话时通过 `parameters.agent_options.session_files` 临时传入文件（最多 10 个），文件 ID 通过[添加文件](../../../_short/api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)接口获取。
 -   **限流**：默认按用户维度限流，每 10 秒最多 10 次请求。如遇限流，请稍后重试。
 
 <a id="请求语法"></a>
@@ -244,12 +244,15 @@ curl -X POST "https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/kno
 
 | 模型 | 显式缓存 | 隐式缓存 |
 | --- | --- | --- |
-| qwen3.6-plus（当前默认） | 支持 | 不支持 |
+| qwen3.8-max（当前默认） | 支持 | 支持 |
+| qwen3.8-flash | 支持 | 支持 |
+| qwen4-max | 支持 | 支持 |
 | qwen3.7-plus | 支持 | 支持 |
+| qwen3.6-plus | 支持 | 不支持 |
 
 > **警告**
 >
-> 当前默认模型 qwen3.6-plus **不支持隐式缓存**：不传 `enable_cache_control` 时没有任何缓存生效，`cached_tokens` 会一直为 0，这是模型侧能力限制而非接口异常。要获得缓存收益（降本 + 降首包延迟）需开启显式缓存；仅当服务运行在 qwen3.7-plus 上时，不开启才有隐式缓存兜底。模型支持列表以[显式缓存官方文档](../../../model-user-guide/use-cases/explicit-cache-guide.md)的“支持的模型”章节为准。
+> 可选模型中仅 qwen3.6-plus **不支持隐式缓存**：服务运行在该模型上时，不传 `enable_cache_control` 没有任何缓存生效，`cached_tokens` 会一直为 0，这是模型侧能力限制而非接口异常。要获得缓存收益（降本 + 降首包延迟）需开启显式缓存；服务运行在其他模型上时，不开启才有隐式缓存兜底。模型支持列表以[显式缓存官方文档](../../../model-user-guide/use-cases/explicit-cache-guide.md)的“支持的模型”章节为准。
 
 <a id="适用场景"></a>
 
@@ -284,7 +287,7 @@ curl -X POST "https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/kno
 
 > **说明**
 >
-> 上述“不建议”仅指显式缓存收益不划算。由于默认模型 qwen3.6-plus 不支持隐式缓存，不开启 `enable_cache_control` 并不会退化成隐式缓存兜底，而是完全没有缓存。若这些场景仍希望有一定缓存收益，可评估后照常开启。
+> 上述“不建议”仅指显式缓存收益不划算。若服务运行在 qwen3.6-plus 上（不支持隐式缓存），不开启 `enable_cache_control` 并不会退化成隐式缓存兜底，而是完全没有缓存。若这些场景仍希望有一定缓存收益，可评估后照常开启。
 
 <a id="查看缓存命中"></a>
 
@@ -317,7 +320,7 @@ curl -X POST "https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/kno
 
 ### 注意事项
 
-1.  **两种缓存互斥**：传了 `enable_cache_control: true` 即走显式缓存，不再走隐式缓存。默认模型 qwen3.6-plus 上不存在隐式缓存，不开启就是无缓存，而非“退化成隐式”。
+1.  **两种缓存互斥**：传了 `enable_cache_control: true` 即走显式缓存，不再走隐式缓存。qwen3.6-plus 上不存在隐式缓存，服务运行在该模型上时不开启就是无缓存，而非“退化成隐式”。
 2.  **首轮无命中是正常的**：任何缓存首次都需要先创建，`cached_tokens=0` 不代表功能异常。
 3.  **显式缓存 5 分钟有效期**：每次命中会重置为 5 分钟；用户长时间不发问，下一次请求会重新创建缓存。
 4.  **工具定义变化会导致缓存失效**：工具定义作为 system prompt 的一部分参与缓存计算。结构化知识库携带 `search_filters` 时会屏蔽 `execute_sql` 工具——同一会话中 filter 时有时无会改变工具列表，进而导致 system 前缀无法命中。建议同一会话内保持 `kb_search_configs` 稳定。

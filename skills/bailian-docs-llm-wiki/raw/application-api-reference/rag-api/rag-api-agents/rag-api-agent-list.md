@@ -39,7 +39,7 @@
 
 > **说明**
 >
-> 知识库开启 Wiki 后，系统会自动创建对应的 **Wiki 检索** 服务。用 `agent_scene=search` + `search_type=wiki`（可加 `pipeline_id`）即可筛出 Wiki 检索服务并取其 `agent_id`，供[知识检索](../knowledge/knowledgesearch.md)的 Wiki 检索使用。关闭 Wiki 不会删除已创建的 Wiki 检索服务，重新开启后原 `agent_id` 恢复可用。详见[Wiki 与本体知识图谱](../../../application-user-guide/knowledge-base/data-connection-overview/rag-wiki.md)。
+> 知识库开启 Wiki 后，系统会自动创建对应的 **Wiki 检索** 服务。用 `agent_scene=search` + `search_type=wiki`（可加 `pipeline_id`）即可筛出 Wiki 检索服务并取其 `agent_id`，供[知识检索](../knowledge/knowledgesearch.md)的 Wiki 检索使用。关闭 Wiki 不会删除已创建的 Wiki 检索服务，重新开启后原 `agent_id` 恢复可用。详见[Wiki 与本体知识图谱](../../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-wiki.md)。
 
 <a id="请求示例"></a>
 

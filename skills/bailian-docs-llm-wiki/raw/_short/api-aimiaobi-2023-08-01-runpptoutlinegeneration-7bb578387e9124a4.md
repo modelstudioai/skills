@@ -67,7 +67,7 @@ POST /pop/ppt/runPptOutlineGeneration HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-8v8a5mfpxffrj1pn |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-8v8a5mfpxffrj1pn |
 | Prompt | string | 是 | 用户问题 | 帮我生成一个消防安全主题的PPT |
 | ExternalUserId | string | 否 |  | abc |
 

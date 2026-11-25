@@ -63,7 +63,7 @@ pip3 install alibabacloud_endpoint_util alibabacloud_tea_openapi alibabacloud_qu
 
 2.  您可自行优化调整代码中的入参：比如`prompt`模板、`modelId`等。
     
-    需要将代码中的[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)替换为实际值，以确保代码正常运行并返回正确的结果。
+    需要将代码中的[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)替换为实际值，以确保代码正常运行并返回正确的结果。
     
     ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962781.png)
 
@@ -90,7 +90,7 @@ pip3 install alibabacloud_endpoint_util alibabacloud_tea_openapi alibabacloud_qu
 
 ### 可选：发布工作流为组件
 
-您可以将工作流应用发布为组件，以供其他智能体或工作流应用使用。具体操作，请参见[发布为组件](../application-user-guide/llm-application/workflow-application/introduction.md#cff002ee1f73o)。
+您可以将工作流应用发布为组件，以供其他智能体或工作流应用使用。具体操作，请参见[发布为组件](../application-user-guide/agent-development/llm-application/workflow-application/introduction.md#cff002ee1f73o)。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962778.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962783.png)
 

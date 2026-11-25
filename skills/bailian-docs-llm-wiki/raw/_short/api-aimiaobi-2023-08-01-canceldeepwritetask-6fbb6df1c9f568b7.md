@@ -43,7 +43,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxxxx |
+| WorkspaceId | string | 否 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxxxx |
 | TaskId | string | 否 | 任务 ID | xbabac91-fdad-44d6-95ce-\*\*\*\*\*\* |
 
 <a id="返回参数"></a>

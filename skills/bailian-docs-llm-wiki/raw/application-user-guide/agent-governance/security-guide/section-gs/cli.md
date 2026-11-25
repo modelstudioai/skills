@@ -9,7 +9,7 @@
 ## 前置准备
 
 -   按[安装与鉴权](../../../../cli/getting-started/installation.md)安装 CLI 并配置 API Key。
--   按[获取业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#6cc9270e83h9d)取得实际 ID，通过 `BAILIAN_WORKSPACE_ID` 或 CLI 工作空间配置选择目标。确认 API Key、工作空间及当前 Endpoint 指向同一目标，配置方式见[Security 命令参考](../../../../cli/capabilities/agent-infrastructure/security.md)。
+-   按[获取业务空间 ID](../../../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#6cc9270e83h9d)取得实际 ID，通过 `BAILIAN_WORKSPACE_ID` 或 CLI 工作空间配置选择目标。确认 API Key、工作空间及当前 Endpoint 指向同一目标，配置方式见[Security 命令参考](../../../../cli/capabilities/agent-infrastructure/security.md)。
 
 <a id="命令"></a>
 

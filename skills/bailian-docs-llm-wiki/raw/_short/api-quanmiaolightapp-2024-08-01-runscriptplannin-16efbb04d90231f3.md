@@ -63,7 +63,7 @@ POST /{workspaceId}/quanmiao/lightapp/runScriptPlanning HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-e9zzbkg0aj2mlXX |
+| workspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-e9zzbkg0aj2mlXX |
 | scriptName | string | 否 | 自然语言输入剧本名称 | 都市战神 |
 | scriptTypeKeyword | string | 否 | 剧本类型关键词：用户针对该剧本类型进行定性描述，如历史架空、科幻、爱情、玄幻等描述 | 现代，都市，爱情，玄幻 |
 | scriptSummary | string | 是 | 剧本梗概：用户针对该剧本进行简短的故事说明 | 在一个宁静的小镇上，每个家庭都在同一天收到一个神秘的、没有标记的包裹。 |

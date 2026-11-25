@@ -1,82 +1,89 @@
 # agent governance
 
-agent governance 是百炼平台面向 AI Agent 全生命周期提供的治理能力集合，涵盖可观测性、自动化评测、智能优化与内生安全四大支柱。它通过统一的数据标准（如 OpenTelemetry GenAI）、预置评估器与策略引擎，帮助开发者在开发、测试、上线及运维阶段持续验证、诊断和提升 Agent 的可靠性、合规性与业务效果。
+agent governance 是百炼平台面向 AI Agent 全生命周期提供的治理能力集合，涵盖可观测性、自动化评测、Prompt 智能优化及内生安全防护四大核心维度。它不依赖特定开发框架，基于 OpenTelemetry GenAI 标准实现即插即用，支持从开发调试、线上运行到效果迭代的闭环管理，帮助开发者系统性提升 Agent 的可靠性、合规性与业务效果。
 
 ## 支持的模型/功能
 
-- **可观测性**：支持 Agent 1.0、Agent 2.0 和工作流应用的全链路 Trace 上报与可视化，覆盖 Prompt 解析、模型调用（含 TTFT、[Token](../concepts/token.md) 消耗）、工具执行（MCP/自定义 API）、向量检索、记忆读写等节点；不支持通过 Assistant API 创建的智能体 [应用观测](../../raw/application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-observation.md)。
+- **观测能力**：支持 Agent 1.0、Agent 2.0 和工作流应用的全链路追踪（Trace），完整记录 Prompt 解析、模型调用（含 TTFT、Token 消耗）、工具执行、记忆读写等环节；暂不支持通过 Assistant API 创建的智能体 [应用观测](../../raw/application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-observation.md)。
 - **评测能力**：支持三类评测对象：
-  - **输出评测**：基于文本、多模态（图片/音频/视频混排）输入与期望输出的端到端质量评估；
-  - **轨迹评测**：以 ATIF 标准结构化 JSON 为输入，评估步骤逻辑、[工具调用](../concepts/tool-calling.md)成功率、观察信息增益等执行过程可靠性 [添加轨迹评测数据](../../raw/_short/agenteval-evaluation-set-trajectory-data-7bbfb9904b121823.md)；
-  - **多模态评测**：支持图片美学、指令遵循、画质、文字渲染正确性等维度，要求评测集字段类型为“多模态” [添加多模态评测数据](../../raw/_short/agenteval-evaluation-set-multimodal-data-660c12b477900b3c.md)。
-- **优化路径**：支持三种 Prompt 优化触发方式：基于单条/多条调试结果的人工反馈、基于已发布评测任务结果、基于线上 Trace 数据回流生成的评测集。
-- **安全防护**：提供默认防护（自动生效）与高级防护（需授权开通）双层机制，覆盖内容安全（I/O 检测）、提示词攻击、敏感数据外泄、RAG 数据投毒、[工具调用](../concepts/tool-calling.md)安全、身份凭证滥用等 7 类风险策略。
+  - **文本输出**：准确性、简洁性、合规性等维度；
+  - **轨迹（Trajectory）**：评估执行过程逻辑性、工具调用成功率、观察信息增益等，需评测集包含 `trajectory` 类型字段 [添加轨迹评测数据](../../raw/_short/agenteval-evaluation-set-trajectory-data-7bbfb9904b121823.md)；
+  - **多模态内容**：支持图文音视频混排输入/输出的美学质量、指令遵循、画质、文字渲染等评估，需评测集字段类型为 `多模态` [添加多模态评测数据](../../raw/_short/agenteval-evaluation-set-multimodal-data-660c12b477900b3c.md)。
+- **优化能力**：支持基于调试结果、评测任务结果或线上 Trace 数据驱动的 Prompt 多版本对比与智能优化，生成结果可人工审查后采纳至编辑区（不自动发布）。
+- **安全能力**：提供默认生效的内生防护（如内容安全 I/O 检测、知识库预扫描）和可选开通的高级防护（如提示词攻击检测、RAG 数据投毒识别），覆盖 Flow Agent、Managed Agent、RAG、Memory、Store 全模块 [概述](../../raw/application-user-guide/agent-governance/security-guide/section-gs/introduction.md)。
 
-> **注意**：文档中关于“应用观测目前暂无 API”的表述（见 [应用观测](../../raw/application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-observation.md)）与 Security 模块明确提供 `/api/v1/agentstudio/security` 系列接口（含 `/overview`、`/asset_summary` 等）存在功能边界矛盾。实际可观测数据需通过控制台或 CLI 获取，Security 相关指标可通过 API 查询，二者能力范围不同，非同一 API 体系。
+> **注意**：文档中“应用观测目前暂无 API”与“Security 模块提供 7 个接口”存在功能边界差异——前者指观测数据导出无专用 API，后者指安全策略与审计数据可通过 API 查询；二者不矛盾，但需明确：观测数据仅支持控制台导出（JSONL/EXCEL），而安全事件、资产概览等支持程序化访问。
 
 ## 关键参数
 
-- **Trace 上报粒度**：监控与限流指标更新频率为分钟级；Trace 数据同步延迟通常为分钟级，高峰期可能延长。
-- **评测集版本管理**：单个评测集最多保存 10 个发布版本，超出后自动覆盖旧版本；草稿状态不可用于评测任务 [创建与管理](../../raw/_short/agenteval-evaluation-set-946c810bda606877.md)。
-- **轨迹数据约束**：单条轨迹 JSON 大小上限为 1 MB；必须为合法 JSON 对象，且 `schema_version` 需符合 ATIF 规范（如 `"ATIF-v1.8"`）。
-- **多模态字段校验**：图片（JPG/JPEG/PNG，≤20 MB）、音频（MP3，≤100 MB）、视频（MP4/MOV，≤100 MB）；文本字段 ≤10000 字符。
-- **安全策略作用域**：所有高级防护策略配置对账号下全部 Agent **全局生效**，不区分业务空间 [安全策略](../../raw/application-user-guide/agent-governance/security-guide/section-adv/policy.md)。
+| 功能模块 | 参数/配置项 | 说明 |
+|---------|------------|------|
+| **观测** | `Request ID` / `Trace ID` / `Span ID` | 用于在 Trace 列表中精确检索单次调用链；Trace 数据同步延迟为分钟级 [应用观测](../../raw/application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-observation.md) |
+| **评测** | 评测集字段映射、评估器变量映射 | 必须严格匹配数据类型：轨迹变量 → `trajectory` 列，多模态变量 → `多模态` 列；类型不匹配将导致配置无法保存 [评测任务](../../raw/application-user-guide/agent-governance/agenteval/agenteval-evaluation/agenteval-evaluation-task.md) |
+| **告警** | 持续时间（分钟）、告警检查周期（秒）、统计周期（分钟） | 预置模板如“QPM 限流大于 6000”对应指标 `QPM`，阈值需结合业务负载设定 [告警管理](../../raw/application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-alert-management.md) |
+| **安全策略** | 策略全局生效、服务授权必要 | 所有安全策略配置对账号下全部 Agent 生效，不区分业务空间；高级防护需完成服务授权后开通 [安全策略](../../raw/application-user-guide/agent-governance/security-guide/section-adv/policy.md) |
 
 ## 使用方式
 
-1. **接入观测**：主账号进入[应用观测配置](https://bailian.console.aliyun.com/loop/app-observe)，完成 OpenTelemetry 服务角色授权、服务开通与 LogStore 初始化；在应用列表点击“开启观测”，输入测试问题触发 Trace 上报。
-2. **构建评测集**：
-   - 场景选择“轨迹”或“多模态”，配置对应字段类型（`trajectory` 或 `多模态`）；
-   - 通过“单条新增”粘贴 JSON 轨迹或上传媒体文件，或通过“批量导入”上传 CSV/XLSX；
-   - 发布评测集后方可用于评测任务。
-3. **创建评测任务**：
-   - 选择已发布评测集版本与目标应用；
-   - 为每个评估器变量配置映射：轨迹变量 → 评测集 `trajectory` 列，多模态变量 → 评测集 `多模态` 列，类型必须严格一致；
-   - 最多添加 10 个评估器，建议组合 LLM（如相关性）与 Code（如格式校验）评估器。
-4. **启动优化**：
-   - 在“调试&反馈优化”中发送问题，选择代表性调试结果，填写具体问题描述（如“未按 JSON 格式输出”）；
-   - 在“基于评测集优化”中选择已发布的高质量评测集版本；
-   - 生成对比后，点击“采纳”仅更新当前编辑区 Prompt，**不会自动发布应用**。
-5. **配置安全告警**：在[告警管理](https://bailian.console.aliyun.com/loop/alert-manage)中基于预置模板（如“QPM 限流大于 6000”）快速创建规则，设置通知时段与重复策略。
+1. **观测接入**：  
+   - 主账号进入[应用观测配置](https://bailian.console.aliyun.com/loop/app-observe)，授权 OpenTelemetry 角色、开通服务、初始化 LogStore；  
+   - 在应用列表点击**开启观测**，输入测试问题触发 Trace 上报；  
+   - 通过 Trace 列表、监控统计（调用数/Tokens/模型分析）、限流统计（QPM/限流次数）进行排查。
+
+2. **评测执行**：  
+   - 创建评测集（选择场景：智能体/工作流/轨迹/多模态），**必须发布后才能使用**；  
+   - 基于预置模板创建评估器（如“轨迹准确性”“图片指令遵循”），或自定义 LLM/Code 评估器；  
+   - 创建评测任务，关联已发布评测集版本与目标应用，完成评估器变量映射（如 `query`→评测集`input`，`trajectory`→评测集`trajectory`列）；  
+   - 查看数据明细（含轨迹预览）与指标统计（得分分布、回归对比）。
+
+3. **Prompt 优化**：  
+   - 进入应用优化页，选择“调试&反馈优化”或“基于评测集优化”；  
+   - 若选调试路径：发送测试问题 → 选择代表性调试结果 → 输入具体人工反馈（如“回答遗漏价格条款，需在末尾强制追加‘价格以官网为准’”）→ 生成并对比 Prompt → 采纳至编辑区；  
+   - 若选评测路径：直接选择已发布的优质评测集版本，系统基于样本与参考输出生成优化建议。
+
+4. **安全防护**：  
+   - 默认防护自动生效（无需操作），覆盖输入输出内容安全、知识库预扫描等；  
+   - 高级防护需在 **Security > 高级防护 > 安全策略** 页面完成服务授权后开通，默认启用前 6 项策略（如提示词攻击、敏感数据外泄），`内容安全`需手动开启；  
+   - 风险事件统一在 **Security > 风险与审计** 查看，支持按风险等级、节点类型筛选。
 
 ## 限制和注意事项
 
-- **权限要求**：应用观测首次开通必须使用主账号；子账号需主账号预先配置 OpenTelemetry 相关权限。
-- **数据时效性**：Trace 列表最长可查 30 天历史数据；监控统计聚合粒度支持分钟/小时/天，但原始数据点非实时。
-- **评测集字段强约束**：评估器变量映射时，若类型不匹配（如将字符串字段映射给轨迹变量），配置无法保存；务必在创建评测集前确认所选评估器的必填参数（如“问答相关性”需 `query` 和 `response` 字段）。
-- **安全策略开通前提**：高级防护处于限时免费阶段，但需先完成服务授权；开通后策略全局生效，修改前须评估对全部 Agent 的影响。
-- **CLI 与 API 差异**：`bl agents security overview` 命令固定查询最近 24 小时数据，而 `/api/v1/agentstudio/security/overview` 接口无时间窗口硬编码，实际行为以接口文档为准；两者均不触发新扫描或防护动作。
+- **观测限制**：仅支持已发布且归属当前业务空间的应用；子账号需主账号预先配置 OpenTelemetry 权限；Trace 数据最长保留 30 天，导出格式仅支持 JSONL 或 EXCEL。
+- **评测限制**：单条轨迹数据大小 ≤ 1 MB；多模态文件单个限制：图片 ≤ 20 MB（JPG/PNG）、音频 ≤ 100 MB（MP3）、视频 ≤ 100 MB（MP4/MOV）；评测任务最多添加 10 个评估器，创建后不可修改应用或评测集配置。
+- **优化限制**：采纳优化结果仅更新当前编辑中的 Prompt，**不会自动发布应用**；多版本对比最多支持 1 个基准组 + 2 个对照组。
+- **安全限制**：高级防护策略全局生效，修改前需评估对全部 Agent 的影响；风险与审计页面展示账号下所有 Agent 数据，**不区分业务空间**；CLI 命令 `bl agents security overview` 固定查询最近 24 小时数据，不支持自定义时间范围 [使用 CLI](../../raw/application-user-guide/agent-governance/security-guide/section-gs/cli.md)。
+- **通用限制**：所有评测任务调用大模型产生的 Token 按实际消耗计费；评测集草稿状态不可用于评测任务，必须发布 [创建与管理](../../raw/_short/agenteval-evaluation-set-946c810bda606877.md)。
 
 ## 来源文档
 
 - [开始使用](../../raw/application-user-guide/agent-governance/agenteval/agenteval-start-using.md)
-- [Evolution](../../raw/application-user-guide/agent-governance/agenteval.md)
 - [概览](../../raw/application-user-guide/agent-governance/agenteval/agenteval-start-using/agenteval-introduction.md)
 - [快速开始](../../raw/application-user-guide/agent-governance/agenteval/agenteval-start-using/agenteval-quick-start.md)
 - [应用观测](../../raw/application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-observation.md)
-- [应用观测](../../raw/application-user-guide/agent-governance/agenteval/agenteval-observability.md)
-- [应用评测](../../raw/application-user-guide/agent-governance/agenteval/agenteval-evaluation.md)
 - [告警管理](../../raw/application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-alert-management.md)
+- [应用评测](../../raw/application-user-guide/agent-governance/agenteval/agenteval-evaluation.md)
 - [评测集](../../raw/application-user-guide/agent-governance/agenteval/agenteval-evaluation/agenteval-evaluation-set-index.md)
-- [创建与管理](../../raw/_short/agenteval-evaluation-set-946c810bda606877.md)
-- [添加多模态评测数据](../../raw/_short/agenteval-evaluation-set-multimodal-data-660c12b477900b3c.md)
+- [Evolution](../../raw/application-user-guide/agent-governance/agenteval.md)
+- [应用观测](../../raw/application-user-guide/agent-governance/agenteval/agenteval-observability.md)
 - [添加轨迹评测数据](../../raw/_short/agenteval-evaluation-set-trajectory-data-7bbfb9904b121823.md)
+- [添加多模态评测数据](../../raw/_short/agenteval-evaluation-set-multimodal-data-660c12b477900b3c.md)
 - [评估器](../../raw/application-user-guide/agent-governance/agenteval/agenteval-evaluation/agenteval-grader.md)
+- [评测任务](../../raw/application-user-guide/agent-governance/agenteval/agenteval-evaluation/agenteval-evaluation-task.md)
 - [应用优化](../../raw/application-user-guide/agent-governance/agenteval/agenteval-optimization.md)
 - [标签管理](../../raw/application-user-guide/agent-governance/agenteval/agenteval-tags.md)
-- [Security](../../raw/application-user-guide/agent-governance/security-guide.md)
 - [标签管理](../../raw/application-user-guide/agent-governance/agenteval/agenteval-tags/agenteval-tag-management.md)
+- [Security](../../raw/application-user-guide/agent-governance/security-guide.md)
 - [开始使用](../../raw/application-user-guide/agent-governance/security-guide/section-gs.md)
+- [创建与管理](../../raw/_short/agenteval-evaluation-set-946c810bda606877.md)
 - [概述](../../raw/application-user-guide/agent-governance/security-guide/section-gs/introduction.md)
 - [使用 CLI](../../raw/application-user-guide/agent-governance/security-guide/section-gs/cli.md)
 - [资产盘点](../../raw/application-user-guide/agent-governance/security-guide/section-assets.md)
-- [防护总览](../../raw/application-user-guide/agent-governance/security-guide/section-assets/overview.md)
 - [Agent 资产](../../raw/application-user-guide/agent-governance/security-guide/section-assets/assets.md)
+- [防护总览](../../raw/application-user-guide/agent-governance/security-guide/section-assets/overview.md)
 - [高级防护](../../raw/application-user-guide/agent-governance/security-guide/section-adv.md)
-- [风险与审计](../../raw/application-user-guide/agent-governance/security-guide/section-adv/audit.md)
 - [安全策略](../../raw/application-user-guide/agent-governance/security-guide/section-adv/policy.md)
-- [API 参考](../../raw/application-user-guide/agent-governance/security-guide/section-ref/api.md)
+- [风险与审计](../../raw/application-user-guide/agent-governance/security-guide/section-adv/audit.md)
 - [参考](../../raw/application-user-guide/agent-governance/security-guide/section-ref.md)
-- [评测任务](../../raw/application-user-guide/agent-governance/agenteval/agenteval-evaluation/agenteval-evaluation-task.md)
+- [API 参考](../../raw/application-user-guide/agent-governance/security-guide/section-ref/api.md)
 
 

@@ -24,8 +24,6 @@ Qwen-OCR 提供以下模型，请根据业务需求选择：
 
 > `qwen-vl-ocr` 模型的 `max_tokens` 参数（最大输出长度）默认为 4096。如需将该参数调高至 4097~8192 范围，请联系商务经理进行申请，并提供：主账号 ID、图像类型（文档图、电商图、合同等）、模型名称、预计QPS和每日请求总量，以及输出长度超过 4096 的请求占比。
 
-**在线体验：**访问[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，在页面右上角选择目标地域，进入[视觉模型](https://bailian.console.aliyun.com/model/experience/vision)页面选择千问OCR 模型进行体验。
-
 <a id="准备工作"></a>
 
 <a id="0d58f5b445r12"></a>

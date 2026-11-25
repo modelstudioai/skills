@@ -67,7 +67,7 @@ POST  HTTP/1.1
 | Y | number | 否 | 花字位置纵坐标 | 0.5 |
 | FontSize | integer | 否 | 花字大小 | 默认120 |
 | EffectColorStyle | string | 否 | 花字样式 | CS0002-000007 参考：[https://help.aliyun.com/zh/ims/developer-reference/flower-effect-example?spm=a2c4g.11186623.0.0.6ee43d29lo1EWu#88bc5f6046mg2](https://help.aliyun.com/zh/ims/developer-reference/flower-effect-example?spm=a2c4g.11186623.0.0.6ee43d29lo1EWu#88bc5f6046mg2) |
-| WorkspaceId | string | 是 | [百炼业务空间 Id](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-ipe7d81yq4sl5jmk |
+| WorkspaceId | string | 是 | [百炼业务空间 Id](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-ipe7d81yq4sl5jmk |
 | VoiceVolume | integer | 否 | 口播音量 | 0-10，默认5 |
 | MusicVolume | integer | 否 | 音乐音量 | 0-10，默认5 |
 | SubtitleFontSize | integer | 否 | 字幕尺寸 | 默认120 |

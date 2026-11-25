@@ -63,7 +63,7 @@ POST /quanmiao/aimiaobi/runStyleFeatureAnalysis HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-2setzb9x4ewsd |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-2setzb9x4ewsd |
 | Contents | array | 否 | 自定义内容文本集合 |  |
 |  | string | 否 | 自定义内容文本 | 生活是一种律动，须有光有影，有左有右，有晴有雨，趣味就在这变而不猛的曲折里，微微暗些，再明起来，则暗得有趣，而明乃更明。——老舍 |
 | MaterialIds | array | 否 | 素材库 ID 集合 |  |

@@ -65,7 +65,7 @@
 | 环境变量名称 | 描述 |
 | ALIBABA\_CLOUD\_ACCESS\_KEY\_ID | [阿里云AccessKey，用于标识用户身份。](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey) |
 | ALIBABA\_CLOUD\_ACCESS\_KEY\_SECRET | [阿里云AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey) |
-| WORKSPACE\_ID | [获取百炼业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h) |
+| WORKSPACE\_ID | [获取百炼业务空间ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h) |
 | ENDPOINT | 智能审校服务入口地址。固定为：<br><br>aimiaobi.cn-beijing.aliyuncs.com |
 
 <a id="复制工具类到工程中"></a>

@@ -1,73 +1,83 @@
 # capabilities
 
-阿里云百炼平台提供覆盖文本、多模态、语音、视频、决策、Agent 基础设施及平台管理的全栈 AI 能力。所有能力均通过统一 CLI 工具 `bl` 暴露，支持命令式调用、异步任务管理与基础设施即代码（IaC）式编排。开发者可按需组合模型调用、训练部署、知识增强与安全治理等模块，构建端到端 AI 应用。
+百炼平台的 capabilities 指 CLI 工具所支持的全部模型调用、基础设施管理与平台治理能力。它覆盖从基础模型推理（文本、图像、视频、语音、视觉理解）到高级 Agent 基础设施（Managed/Flow Agent、Memory、Knowledge、MCP）、训练部署（微调、部署、导入）及可观测性（用量、监控、安全）的完整技术栈。所有能力均通过 `bl <category> <command>` 统一命令结构暴露，面向开发者提供可脚本化、可集成的终端操作接口。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-百炼支持以下核心能力类别，每类对应独立 CLI 子命令：
+百炼 CLI 支持全模态模型调用与专用 AI 基础设施：
 
-- **模型调用**：涵盖文本对话（`bl text chat`）、全模态交互（`bl omni`）、图像生成与编辑（`bl image generate/edit`）、视频生成与编辑（`bl video generate/ref`）、语音合成与识别（`bl speech synthesize/recognize`）、视觉理解（`bl vision describe`）、批量推理（`bl batch`）及决策模型（`bl decision`）[原文标题](../../raw/cli/capabilities/model-invocation.md)。  
-- **Agent 基础设施**：包括 Flow Agent（工作流与智能体应用管理）、Managed Agent（IaC 式 Agent 部署）、Knowledge（RAG 知识库）、Memory（长期记忆）、联网搜索（`bl search web`）、MCP & Skill（[模型上下文协议](../concepts/mcp.md)服务编排）、Sandbox（沙箱环境）及 Security（安全防护）[原文标题](../../raw/cli/capabilities/agent-infrastructure.md)。  
-- **训练与部署**：支持数据集管理（`bl dataset`）、模型微调（`bl finetune`）、模型部署（`bl deploy`）及自定义模型导入（`bl cmodel`）[原文标题](../../raw/cli/capabilities/training-deployment.md)。  
-- **平台管理**：提供用量与配额查询（`bl usage`）、监控日志告警（`bl monitor/log/alert`）、配置与工具（`bl auth/config`）及 ParseX 文档解析（`bl parsex`）等运维支撑能力。
+- **基础模型调用**：包括文本对话与 Omni 全模态（`bl text chat`, `bl omni`）、图像生成与编辑（`bl image generate/edit`）、视频生成与编辑（`bl video generate/ref`）、语音合成与识别（`bl speech synthesize/recognize`）、视觉理解（`bl vision describe`）以及决策模型（`bl decision`）[原文标题](../../raw/cli/capabilities/model-invocation.md)。  
+- **批量与异步处理**：支持同步 Batch Chat（`bl text chat --batch`）和独立的异步批量任务（`bl batch create`），后者专用于大规模 CSV 转 JSONL 并提交至 `/v1/chat/completions` 或 `/v1/embeddings` 端点 [原文标题](../../raw/cli/capabilities/model-invocation/batch.md)。  
+- **Agent 基础设施**：涵盖 Managed Agent（IaC 式生命周期管理）、Flow Agent（应用/工作流调用）、Memory（[长期记忆](../concepts/long-term-memory.md)写入与检索）、Knowledge（RAG 检索与问答）、MCP & Skill（工具编排与注册）、Sandbox（沙箱实例）、ParseX（文档与音视频解析）及联网搜索（`bl search web`）[原文标题](../../raw/cli/capabilities/agent-infrastructure.md)。  
+- **训练与部署**：支持按模态（文本、音频、图像、视频）创建微调任务（`bl finetune text create`）、部署模型（`bl deploy text create`）及从 OSS 导入自定义模型（`bl cmodel import`）[原文标题](../../raw/cli/capabilities/training-deployment.md)。
 
-> **注意**：文档 10（`training-deployment/finetune-deploy.md`）仅作为入口页，实际功能已拆分至 `finetune.md` 和 `deploy.md`；开发者应直接参考 [原文标题](../../raw/cli/capabilities/training-deployment/finetune.md) 和 [原文标题](../../raw/cli/capabilities/training-deployment/deploy.md) 获取最新参数细节。
+> **注意**：`bl decision` 仅支持 `cn-beijing` 和 `ap-southeast-1` 地域，且必须显式提供 `--workspace-id`；而 `bl cmodel import` 当前仅在北京地域开放，且 `--weight-type full` 可能被服务端拒绝，实际仅推荐使用 `lora` [原文标题](../../raw/cli/capabilities/model-invocation/decision.md) 和 [原文标题](../../raw/cli/capabilities/training-deployment/cmodel.md)。
 
 ## 关键参数
 
-各能力模块共享以下通用参数模式，同时具备领域特定参数：
+各命令共享统一参数设计原则，核心通用参数包括：
 
-- **鉴权与环境**：`--api-key`、`--workspace-id`（或 `BAILIAN_WORKSPACE_ID` 环境变量）、`--base-url`。Workspace ID 是多数 Agent、Memory、Knowledge、Sandbox 等能力的强制依赖项。
-- **输入处理**：支持本地文件路径（自动上传至临时存储，有效期 48 小时）和 URL；`--messages-file`、`--state-file`、`--questions-file` 等参数统一接受 JSON 格式输入。
-- **模型控制**：`--model <id>` 用于指定模型（如 `qwen3.8-max`、`qwen-image-3.0`），默认值因命令而异；`--model auto` 启用 MCP 自动路由，但会拒绝不兼容参数（如 `--seed`、`--prime`）并报错，不回退至 REST 调用。
-- **异步与流式**：`--async` 返回任务 ID 而非等待结果；`--stream` 启用[流式输出](../concepts/streaming-output.md)（TTY 中默认开启）；`--follow` 用于轮询异步任务状态（如 `bl batch get --follow`）。
-- **资源与规格**：部署类命令（`bl deploy text create`）支持 `--plan <lora|ptu|mu>`、`--input-tpm`、`--output-tpm`；微调类命令（`bl finetune text create`）支持 `--training-type <sft|dpo|cpt>`、`--n-epochs`、`--batch-size` 等超参。
+- **鉴权与环境**：`--api-key`（覆盖环境变量 `DASHSCOPE_API_KEY`）、`--base-url`（覆盖 `DASHSCOPE_BASE_URL`）、`--workspace-id`（或 `BAILIAN_WORKSPACE_ID` 环境变量），用于路由至对应业务空间 Endpoint。  
+- **输入抽象**：多数命令接受 `--file <path>`（本地路径）或 URL，CLI 自动上传至临时存储（有效期 48 小时），无需手动托管 [原文标题](../../raw/cli/capabilities/model-invocation/text-chat.md)。  
+- **模型控制**：`--model <id>`（如 `qwen3.8-max`, `qwen-image-3.0`, `wan3.0-video`），部分命令支持 `--model auto` 启用 MCP 自动路由，但此时不兼容 `--seed`、`--watermark`、`--prime` 等非标准参数。  
+- **输出与调试**：`--output <json|text>`、`--dry-run`（预览不执行）、`--verbose`（打印 HTTP 详情）、`--timeout <seconds>`（请求超时）。  
+- **异步模式**：`--async`（立即返回任务 ID）、`--poll-interval <s>`（轮询间隔）、`--follow`（阻塞等待完成），广泛用于图像/视频生成、ParseX 解析、Sandbox 创建等长耗时操作。
 
 ## 使用方式
 
-1. **安装与认证**：通过 `bl auth login --api-key <key>` 或 `--console` 完成鉴权，配置 `BAILIAN_WORKSPACE_ID` 环境变量以支持 Workspace 专属能力。  
-2. **单次调用**：例如 `bl text chat --message "你好"` 发起同步文本请求；`bl image generate --prompt "猫在火星"` 生成图片。  
-3. **批量任务**：使用 `bl batch convert` 生成 JSONL，再通过 `bl batch create` 提交异步任务；与 `bl text chat --batch` 的同步 Batch Chat 请求严格区分。  
-4. **Agent 编排**：`bl flow-agent call --app-id <id> --prompt <text>` 调用已发布应用；`bl mcp call --target <server.tool>` 直接调用 MCP 工具。  
-5. **IaC 管理**：`bl managed-agent init` 生成 `agents.yaml`，`bl managed-agent plan` 预览变更，`bl managed-agent apply` 执行部署。  
-6. **训练部署闭环**：`bl dataset upload` → `bl finetune text create` → `bl deploy text create` 形成完整流程。
+1. **初始化认证**：运行 `bl auth login --api-key <your-key>` 完成鉴权；若需访问 Workspace 专属资源（如 Decision、Memory、Knowledge），必须配置 `--workspace-id` 或设置 `BAILIAN_WORKSPACE_ID` 环境变量。  
+2. **调用模型**：  
+   - 文本对话：`bl text chat --message "你好" --model qwen-plus`  
+   - 图像生成：`bl image generate --prompt "赛博朋克城市夜景" --size 1024x1024`  
+   - 决策判定：`bl decision --workspace-id ws_xxx --state "用户要求退款" --questions '{"refund":{"type":"noul"}}'`  
+3. **管理 Agent 基础设施**：  
+   - 调用知识库：`bl knowledge chat --message "RAG 是什么？" --agent-id aid-xxx`  
+   - 检索记忆：`bl memory search --user-id u123 --query "上次讨论的订单号"`  
+   - 联网搜索：`bl search web --query "今日科技新闻" --mode mcp --count 5`  
+4. **训练与部署**：  
+   - 微调：`bl finetune text create --base-model qwen3-8b --datasets file-xxx`  
+   - 部署：`bl deploy text create --model-name my-qwen-sft --plan ptu --input-tpm 10 --charge-type pre_paid --duration 30`  
 
 ## 限制和注意事项
 
-- **地域与账号限制**：Agent 基础设施（Flow Agent、Managed Agent、Memory、Knowledge、Sandbox、Security）仅对中国站（aliyun.com）账号开放；模型导入（`bl cmodel`）仅在北京地域可用；Sandbox 实例强制要求 `cn-beijing` 地域及 SLR 授权。  
-- **配额与限流**：Memory API 有账号级限流（add 120 QPM、search 300 QPM）；收到 HTTP 429 时需退避重试（间隔 ≥1 秒）；[Token](../concepts/token.md) Plan 订阅 Key 不支持 MCP 模式联网搜索。  
-- **参数兼容性**：`--model auto` 模式下，不兼容参数（如 `--seed`、`--watermark`、`--prime`）将直接报错，不会降级执行；`--batch` 与 `--stream`、`--prime` 互斥；`bl text chat --batch` 不支持 `--enable-search`，需改用 `--tool '{"type":"web_search"}'`。  
-- **文件与格式**：`bl dataset upload` 对 ZIP 文件大小有限制（媒体 ZIP ≤2GB）；`bl batch convert` 仅支持 CSV→JSONL 的文本与 Embedding 字段映射，多模态输入需手写 JSONL；ParseX 解析仅接受可访问的 HTTP(S) URL，不支持本地文件直传。  
-- **版本一致性**：CLI 命令行为以文档中标注的版本（如 `bl 2.8.4`）为准；跨版本升级时需查阅更新日志（如 Memory 命令在 2.5.0 有不兼容变更）。
+- **地域与账号限制**：Managed Agent、Flow Agent、Memory、Knowledge、MCP、Sandbox、ParseX、Security 等 Agent 基础设施能力**仅对中国站（aliyun.com）账号开放**；模型导入（`bl cmodel`）和 Sandbox 仅支持 `cn-beijing` 地域。  
+- **配额与限流**：  
+  - Memory API 有账号级限流：`add` 120 QPM、`search` 300 QPM，合计 3000 QPM；收到 HTTP 429 时需退避重试，间隔 ≥1 秒 [原文标题](../../raw/cli/capabilities/agent-infrastructure/memory.md)。  
+  - Token Plan 订阅 Key **无法授权 MCP 模式** 的联网搜索，必须使用 `--mode model` [原文标题](../../raw/cli/capabilities/agent-infrastructure/web-search.md)。  
+- **文件与数据约束**：  
+  - 数据集上传上限：SFT/DPO 文本 ≤200MB，CPT ≤300MB，媒体 ZIP ≤2GB [原文标题](../../raw/cli/capabilities/training-deployment/dataset.md)。  
+  - `bl batch convert` 仅支持文本与 Embedding 的 CSV→JSONL 映射；多模态或多轮输入需直接编写 JSONL。  
+- **模型兼容性**：`--enable-search` 仅对白名单模型（如 `qwen3.8-max`）默认开启；`--model auto` 模式下，不兼容参数会直接报错，**不会回退到 REST 调用**。  
+- **高危操作防护**：`bl cmodel delete`、`bl memory delete`、`bl agents security alerts` 等删除类命令，未显式指定 `--yes` 时将阻断执行（退出码 7）。
 
 ## 来源文档
 
 - [模型调用](../../raw/cli/capabilities/model-invocation.md)
 - [文本对话与全模态](../../raw/cli/capabilities/model-invocation/text-chat.md)
-- [批量推理](../../raw/cli/capabilities/model-invocation/batch.md)
-- [决策模型](../../raw/cli/capabilities/model-invocation/decision.md)
 - [图像生成与编辑](../../raw/cli/capabilities/model-invocation/image.md)
 - [视频生成与编辑](../../raw/cli/capabilities/model-invocation/video.md)
 - [语音合成与识别](../../raw/cli/capabilities/model-invocation/speech.md)
 - [视觉理解](../../raw/cli/capabilities/model-invocation/vision.md)
+- [模型训练与部署](../../raw/cli/capabilities/training-deployment.md)
+- [决策模型](../../raw/cli/capabilities/model-invocation/decision.md)
+- [批量推理](../../raw/cli/capabilities/model-invocation/batch.md)
+- [模型微调](../../raw/cli/capabilities/training-deployment/finetune.md)
 - [数据集管理](../../raw/cli/capabilities/training-deployment/dataset.md)
 - [模型微调与部署](../../raw/cli/capabilities/training-deployment/finetune-deploy.md)
-- [模型训练与部署](../../raw/cli/capabilities/training-deployment.md)
-- [模型导入](../../raw/cli/capabilities/training-deployment/cmodel.md)
 - [模型部署](../../raw/cli/capabilities/training-deployment/deploy.md)
-- [模型微调](../../raw/cli/capabilities/training-deployment/finetune.md)
+- [模型导入](../../raw/cli/capabilities/training-deployment/cmodel.md)
 - [Agent 基础设施](../../raw/cli/capabilities/agent-infrastructure.md)
-- [Flow Agent](../../raw/cli/capabilities/agent-infrastructure/flow-agent.md)
 - [Managed Agent](../../raw/cli/capabilities/agent-infrastructure/managed-agent.md)
+- [Flow Agent](../../raw/cli/capabilities/agent-infrastructure/flow-agent.md)
 - [Memory](../../raw/cli/capabilities/agent-infrastructure/memory.md)
 - [Knowledge（原RAG）](../../raw/cli/capabilities/agent-infrastructure/rag.md)
-- [联网搜索](../../raw/cli/capabilities/agent-infrastructure/web-search.md)
 - [MCP & Skill](../../raw/cli/capabilities/agent-infrastructure/mcp-skill.md)
+- [联网搜索](../../raw/cli/capabilities/agent-infrastructure/web-search.md)
 - [Sandbox](../../raw/cli/capabilities/agent-infrastructure/sandbox.md)
-- [Security](../../raw/cli/capabilities/agent-infrastructure/security.md)
 - [ParseX 文档解析](../../raw/cli/capabilities/agent-infrastructure/parsex.md)
-- [平台管理与工具](../../raw/cli/capabilities/platform-management.md)
+- [Security](../../raw/cli/capabilities/agent-infrastructure/security.md)
 - [用量与配额](../../raw/cli/capabilities/platform-management/usage-quota.md)
+- [平台管理与工具](../../raw/cli/capabilities/platform-management.md)
 - [监控、日志与告警](../../raw/cli/capabilities/platform-management/monitor-log-alert.md)
 - [配置与工具](../../raw/cli/capabilities/platform-management/config.md)
 

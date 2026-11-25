@@ -2077,4 +2077,4 @@ A：[Dify](https://cloud.dify.ai/apps)的最新版通义千问插件已支持 Qw
 
 ## API参考
 
-Qwen-MT 模型的输入与输出参数请参考[Qwen-MT 翻译模型](../../../../model-api-reference/more-models/qwen-mt-api.md)。
+Qwen-MT 模型的输入与输出参数请参考[Qwen-MT 翻译模型](../../../../model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)。

@@ -51,7 +51,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| WorkspaceId | string | 是 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | xxxx |
 | Prompt | string | 否 | 自定义融合 prompt | 请从xxxx的角度，分析xxxx事件 |
 | Topics | array | 是 | 待融合的选题视角列表 |  |
 |  | [TopicSelection](api-aimiaobi-2023-08-01-struct-topicselection-ca6fa6605ea7a8a7.md) | 否 | 待融合的选题视角 |  |

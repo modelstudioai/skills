@@ -57,7 +57,7 @@
 | InEx | float | 否 | 片段开始时间（毫秒） | 0.45 |
 | Out | integer | 否 | 结束时间（妙）已经废弃 | 5 不可为空 |
 | TimelineId | string | 否 | 时间线 Id | sdfjhks 新增可为空 |
-| WorkspaceId | string | 是 | [百炼业务空间 Id](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-az2gglkjauwnnhpq |
+| WorkspaceId | string | 是 | [百炼业务空间 Id](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-az2gglkjauwnnhpq |
 | AutoClips | boolean | 否 | 是否开启自动调整能力 | false |
 
 <a id="返回参数"></a>

@@ -39,7 +39,7 @@ Token Plan 个人版的套餐权益、账号权限、升级续费、退订和使
 
 > **重要**
 >
-> -   **qwen4-max-preview 已下线**：原模型 ID 仍可正常调用，请求自动路由至 qwen4-max，Credits 抵扣和用量统计均按 qwen4-max 计算；预览期的限时折扣不再适用，调用按 qwen4-max 标准价格计费，费用可能高于预览期。建议将配置中的模型 ID 更新为 qwen4-max。
+> -   **qwen4-max-preview 已下线**：原模型 ID 仍可正常调用，请求自动路由至 qwen4-max，Credits 抵扣和用量统计均按 qwen4-max 计算；预览期的限时折扣不再适用，调用按 qwen4-max 标准价格计费，费用可能高于预览期。建议将配置中的模型 ID 更新为 qwen4-max。详情参见[《模型升级通知》](https://www.aliyun.com/notice/118887)。
 > -   **限时夜间折扣**：每晚 22:00 - 次日 08:00 调用 qwen3.8-max、qwen3.8-flash 享 4 折，调用 deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash、deepseek-v4.1-flash-1017 享 5 折。
 > -   **decision-model-preview 限时免费**：调用不消耗 Credits。接入方法参见[接入决策模型](../token-plan-best-practice/token-plan-decision-model.md)。
 >

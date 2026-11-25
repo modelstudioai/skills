@@ -12,7 +12,7 @@
 >
 > 任意命令追加 `--help` 可查看完整参数说明，例如 `bl flow-agent create --help`。本文命令明细以 bl 2.10.0 为基准核实。
 
-在各功能页也可查看对应用法，见[调用智能体应用](../../../application-user-guide/bailian-application-calling/call-single-agent-application.md)。
+在各功能页也可查看对应用法，见[调用智能体应用](../../../_short/call-single-agent-application-7bb88312c0915edf.md)。
 
 <a id="命令速查"></a>
 

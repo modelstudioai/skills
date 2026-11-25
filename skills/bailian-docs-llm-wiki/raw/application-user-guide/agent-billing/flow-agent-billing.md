@@ -14,8 +14,8 @@ Flow Agent 的编排能力本身不单独收费，费用来自应用实际调用
 
 | 应用形态 | 费用来源 | 计费详情 |
 | --- | --- | --- |
-| 智能体应用 | 模型调用、知识库、MCP 调用 | [智能体应用计费说明](../llm-application/new-single-agent-application.md#66b7273195ors) |
-| 工作流应用 | 执行路径上各计费节点的调用量 | [工作流应用计费说明](../bailian-application-calling/invoke-workflow-application.md#760df55fb1zx2) |
+| 智能体应用 | 模型调用、知识库、MCP 调用 | [智能体应用计费说明](../agent-development/llm-application/new-single-agent-application.md#66b7273195ors) |
+| 工作流应用 | 执行路径上各计费节点的调用量 | [工作流应用计费说明](../agent-development/llm-application/bailian-application-calling/invoke-workflow-application.md#760df55fb1zx2) |
 
 <a id="智能体应用"></a>
 
@@ -23,10 +23,10 @@ Flow Agent 的编排能力本身不单独收费，费用来自应用实际调用
 
 ### 智能体应用
 
--   **模型调用**：按所选模型的输入和输出 Token 计费，标准见[选择模型](../../model-user-guide/get-started-with-models/models.md)。选用智能模式时，AUTO 按统一刊例价计费，与实际路由到的模型无关；直接选择性能 / 均衡 / 经济档时按所选档位计费，各档位价目及缓存价格见[智能模式计费明细](../llm-application/new-single-agent-application.md#66b7273195ors)。
+-   **模型调用**：按所选模型的输入和输出 Token 计费，标准见[选择模型](../../model-user-guide/get-started-with-models/models.md)。选用智能模式时，AUTO 按统一刊例价计费，与实际路由到的模型无关；直接选择性能 / 均衡 / 经济档时按所选档位计费，各档位价目及缓存价格见[智能模式计费明细](../agent-development/llm-application/new-single-agent-application.md#66b7273195ors)。
 -   **知识库**：按量付费，详见[知识库计费说明](billing-for-knowledge-base.md)。从知识库召回的文本切片会增加模型输入 Token 数量，可能导致模型调用费用上升。
 -   **MCP**：部分官方 MCP 按模型调用计费，如文生图、文生视频、语音合成等。部分 MCP 涉及第三方 API 调用，该部分费用由第三方收取，阿里云百炼不收取费用。
--   **上下文缓存**：调用支持隐式缓存的模型时自动生效，无需配置且无法关闭；智能体应用暂不支持配置显式缓存。智能模式各档位的缓存费用按[智能模式计费明细](../llm-application/new-single-agent-application.md#66b7273195ors)中的对应价格计算。直接选择模型时，适用模型和缓存计费规则见[上下文缓存](../../model-user-guide/model-experience/text-generation-model/context-cache.md)。
+-   **上下文缓存**：调用支持隐式缓存的模型时自动生效，无需配置且无法关闭；智能体应用暂不支持配置显式缓存。智能模式各档位的缓存费用按[智能模式计费明细](../agent-development/llm-application/new-single-agent-application.md#66b7273195ors)中的对应价格计算。直接选择模型时，适用模型和缓存计费规则见[上下文缓存](../../model-user-guide/model-experience/text-generation-model/context-cache.md)。
 
 <a id="工作流应用"></a>
 
@@ -43,7 +43,7 @@ Flow Agent 的编排能力本身不单独收费，费用来自应用实际调用
 
 | 节点 | 计费说明 |
 | --- | --- |
-| 图片解析 | 选择大模型文档解析暂不计费；选择 Qwen VL 解析产生 Qwen-VL 系列模型的调用费用。详见[图片解析节点](../llm-application/workflow-application/image-extraction-node.md) |
+| 图片解析 | 选择大模型文档解析暂不计费；选择 Qwen VL 解析产生 Qwen-VL 系列模型的调用费用。详见[图片解析节点](../agent-development/llm-application/workflow-application/image-extraction-node.md) |
 | 文档解析、音频解析、视频解析 | 使用内置大模型解析，暂不计费 |
 | 模型内置联网搜索 | 产生模型调用费用和搜索策略费用，详见[联网搜索](../../model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md#92ce83df3a599) |
 | 知识库 | 按知识库的按量付费标准计费，详见[知识库计费说明](billing-for-knowledge-base.md) |
@@ -58,9 +58,9 @@ Flow Agent 的编排能力本身不单独收费，费用来自应用实际调用
 
 | 功能 | 说明 |
 | --- | --- |
-| 文件上传 | 文件问答中的上传操作不收费，基于文件内容的问答按模型标准计费，详见[文件问答](../llm-application/file-q-a.md#a19becd30ezve) |
-| Prompt 自动优化 | 不计费，详见[优化 Prompt](../prompt/optimize-prompt.md) |
-| UI 设计器 | 功能本身不计费；AI 对话产生模型调用费用，文件存储和数据库超出免费额度或套餐配额后按量计费，发布到生产环境需订阅团队版或更高级别套餐，详见 [UI 设计器计费说明](../llm-application/application-publishing-and-sharing/ui-designer.md#b8e7e1ed0d3wv) |
+| 文件上传 | 文件问答中的上传操作不收费，基于文件内容的问答按模型标准计费，详见[文件问答](../agent-development/llm-application/file-q-a.md#a19becd30ezve) |
+| Prompt 自动优化 | 不计费，详见[优化 Prompt](../agent-development/llm-application/prompt/optimize-prompt.md) |
+| UI 设计器 | 功能本身不计费；AI 对话产生模型调用费用，文件存储和数据库超出免费额度或套餐配额后按量计费，发布到生产环境需订阅团队版或更高级别套餐，详见 [UI 设计器计费说明](../agent-development/llm-application/application-publishing-and-sharing/ui-designer.md#b8e7e1ed0d3wv) |
 
 <a id="免费额度"></a>
 
@@ -82,7 +82,7 @@ Flow Agent 的编排能力本身不单独收费，费用来自应用实际调用
 
 ### 通过分享链接产生的费用由谁承担？
 
-由应用创建者的 UID 账号承担。详见[分享应用](../llm-application/application-publishing-and-sharing/share-an-application.md)。
+由应用创建者的 UID 账号承担。详见[分享应用](../agent-development/llm-application/application-publishing-and-sharing/share-an-application.md)。
 
 <a id="如何查询应用实际产生的费用"></a>
 

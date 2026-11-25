@@ -212,7 +212,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| WorkspaceId | string | 否 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | xxxx |
 | Text | string | 否 | 待审核的内容 | “你好呀” |
 | SubCodes | array | 否 | 子审核编码列表 |  |
 |  | string | 否 | 子审核编码，子审核编码详见接口 [ListAuditContentErrorTypes](api-aimiaobi-2023-08-01-listauditcontenterrortyp-dc8a1e855346739b.md) 或下述参数补充说明 | PunctuationError |

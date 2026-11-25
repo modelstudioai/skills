@@ -30,7 +30,7 @@
 
 DashScope API 域名为 `https://dashscope.aliyuncs.com`。弗吉尼亚地域使用 `https://{workspaceId}.us-east-1.maas.aliyuncs.com`。
 
-控制台入口参见[吞吐预留](../../model-user-guide/model-high-speed-inference/tpm-reservation.md)，部署概念参见[模型部署](../../model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)，通用部署 API 参见[使用 API 进行模型部署](../../model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)。
+控制台入口参见[吞吐预留](../../model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation.md)，部署概念参见[模型部署](../../model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)，通用部署 API 参见[使用 API 进行模型部署](../../model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)。
 
 <a id="通用规则"></a>
 

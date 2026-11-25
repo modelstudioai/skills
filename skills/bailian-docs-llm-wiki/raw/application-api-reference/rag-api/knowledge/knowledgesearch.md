@@ -10,7 +10,7 @@
 
 -   **权限要求**：调用本接口需提供阿里云百炼 API Key及业务空间。在控制台 [API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)及[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)获取。
 -   **调用方式**：HTTP REST，`POST` + `application/json`。Base URL 为 `https://{workspaceId}.cn-beijing.maas.aliyuncs.com`，其中 `{workspaceId}` 为业务空间 ID。
--   **前置条件**：调用前须在百炼控制台 [知识检索服务页面](https://bailian.console.aliyun.com/cn-beijing/rag/retrieval/list) 创建并发布[知识检索](../../../application-user-guide/knowledge-base/rag-knowledge-retrieval.md)服务，获取服务 ID（`agent_id`）。检索策略（多库权重、知识路由、混排模型、混排模型模式等）预先在控制台配置进服务实例并发布，调用方只需传入检索意图（`query` / `images`）与 `agent_id`，还可通过 `kb_search_configs` 为每个知识库指定文档/标签过滤条件。未发布时返回 Agent 未发布错误。
+-   **前置条件**：调用前须在百炼控制台 [知识检索服务页面](https://bailian.console.aliyun.com/cn-beijing/rag/retrieval/list) 创建并发布[知识检索](../../../application-user-guide/agent-context/knowledge-base/service/rag-knowledge-retrieval.md)服务，获取服务 ID（`agent_id`）。检索策略（多库权重、知识路由、混排模型、混排模型模式等）预先在控制台配置进服务实例并发布，调用方只需传入检索意图（`query` / `images`）与 `agent_id`，还可通过 `kb_search_configs` 为每个知识库指定文档/标签过滤条件。未发布时返回 Agent 未发布错误。
 -   **限流**：默认按知识库（pipeline）维度限流，每 10 秒最多 10 次请求。触发限流返回 HTTP 429，错误码 `THROTTLING.pipelineQPSLimit`，请稍后重试。
 
 <a id="请求语法"></a>
@@ -195,7 +195,7 @@ search\_filters 语法详情
 
 ## Wiki 检索
 
-知识库开启 Wiki 后，系统会自动创建对应的 Wiki 检索服务。用[查询 Agent 列表](../rag-api-agents/rag-api-agent-list.md)（`agent_scene=search` + `search_type=wiki`）取得 Wiki 检索服务的 `agent_id`，传入本接口即可检索 Wiki 页面。检索类型在服务创建时确定，调用时不可切换。功能说明见[Wiki 与本体知识图谱](../../../application-user-guide/knowledge-base/data-connection-overview/rag-wiki.md)。
+知识库开启 Wiki 后，系统会自动创建对应的 Wiki 检索服务。用[查询 Agent 列表](../rag-api-agents/rag-api-agent-list.md)（`agent_scene=search` + `search_type=wiki`）取得 Wiki 检索服务的 `agent_id`，传入本接口即可检索 Wiki 页面。检索类型在服务创建时确定，调用时不可切换。功能说明见[Wiki 与本体知识图谱](../../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-wiki.md)。
 
 > **警告**
 >

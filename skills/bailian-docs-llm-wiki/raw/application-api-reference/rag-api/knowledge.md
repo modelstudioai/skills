@@ -12,7 +12,7 @@
 
 | 接口 | 描述 | 路径 |
 | --- | --- | --- |
-| [知识检索](../../application-user-guide/knowledge-base/rag-knowledge-retrieval.md) | 跨多个知识库执行联合语义检索，返回按相关性排序的切片。 | POST /api/v1/indices/knowledge/search |
+| [知识检索](../../application-user-guide/agent-context/knowledge-base/service/rag-knowledge-retrieval.md) | 跨多个知识库执行联合语义检索，返回按相关性排序的切片。 | POST /api/v1/indices/knowledge/search |
 | [知识问答](knowledge/knowledgechat.md) | 基于知识库的智能问答，通过 SSE 流式输出，依次返回规划、工具调用、生成三个阶段。 | POST /api/v2/apps/knowledge/chat |
 
 **鉴权**：所有请求须在请求头携带 `Authorization: Bearer <API-Key>`与使用业务空间ID拼接的Base URL。API Key 在控制台 [API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)获取，业务空间在控制台[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)获取。

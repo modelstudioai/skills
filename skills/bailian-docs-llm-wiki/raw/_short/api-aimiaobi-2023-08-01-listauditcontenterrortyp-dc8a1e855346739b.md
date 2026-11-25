@@ -43,7 +43,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| WorkspaceId | string | 否 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | xxxx |
 | MaxResults | integer | 否 | 最大记录数 | 100 |
 | NextToken | string | 否 | 下一页 Token | cEoBWREAXdxaOyjq/cqAbg== |
 

@@ -43,7 +43,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xx |
 | TaskId | string | 否 | 用户通过 SubmitAuditNote 接口得到的 taskId。这是自定义规则库任务索引的唯一标识，在使用时务必妥善保存。 在您使用本接口时，如果在入参中包含 taskId，能获取到您已通过 SubmitAuditNote 接口上传成功，但未通过 ConfirmAndProcessAuditNote 进行后处理的结构化规则库；而入参中不包含 taskId 时，则能获取到已进行后处理，可以用于审核的结构化规则库。 | xxx\_Default\_1241541251241 |
 | NoteId | string | 否 | 规则库 Id ,不填默认 Default |  |
 

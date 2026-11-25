@@ -55,7 +55,7 @@ POST /miaodu/stream/runBookIntroduction HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-vtmox6g2bhq2qv5c |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-vtmox6g2bhq2qv5c |
 | DocId | string | 是 | 文档 ID | 3YQRatoe8phnpIsIE6z7DTPknhG8Fj |
 | SessionId | string | 是 | 对话 ID | 0f56f98a-f2d8-47ec-98e9-1cbdcffa9539 |
 | SummaryPrompt | string | 否 | 总结自定义要求 | 用英文输出 |

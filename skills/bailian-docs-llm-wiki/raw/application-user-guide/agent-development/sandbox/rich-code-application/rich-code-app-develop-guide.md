@@ -89,7 +89,7 @@ runtime-fc-deploy --deploy-name 我的第一个高代码应用  --whl-path <PATH
 1.  获取并配置以下环境变量（以 Linux 系统为例）
     
     1.  获取阿里云的 [AccessKey（AK 和 SK）](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)，用于上传软件包时的鉴权。
-    2.  （**可选**）获取阿里云百炼的 [Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)，以`llm-`开头，用于指定存储高代码应用的百炼业务空间，不设置将使用默认业务空间。
+    2.  （**可选**）获取阿里云百炼的 [Workspace ID](../../../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)，以`llm-`开头，用于指定存储高代码应用的百炼业务空间，不设置将使用默认业务空间。
     3.  将以上获取到的内容配置为环境变量：
 
 <a id="code-block-6"></a>

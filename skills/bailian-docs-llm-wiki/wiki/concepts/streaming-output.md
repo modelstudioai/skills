@@ -1,70 +1,43 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型在生成过程中持续分块返回结果（如逐字、逐词或逐 token），而非等待全部内容生成完毕后一次性返回。该机制显著降低用户感知延迟，提升交互自然度，是构建响应式 AI 应用（如聊天界面、实时翻译、代码补全）的关键能力。
+流式输出（Streaming）是百炼平台提供的一种实时响应机制，允许模型在生成过程中持续分块返回结果，而非等待全部内容完成后再一次性返回。它显著降低端到端延迟，提升用户交互体验，尤其适用于对话界面、实时翻译、代码补全等对响应速度敏感的场景。
 
-## 在百炼平台的不同场景中如何使用
+## 在百炼平台的不同场景中，这个概念如何使用
 
-流式输出在以下核心场景中被统一支持，但启用条件与行为细节因服务抽象层而异：
+- **文本生成（Chat/Completions）**：调用 `qwen-max`、`qwen-turbo` 等 LLM 时，设置 `stream=true` 后，API 返回 Server-Sent Events（SSE）格式的响应流，每个 `data:` chunk 包含部分生成文本（`delta.content`）及可选的 token 统计信息。适用于 Web 前端逐字渲染、CLI 实时打印等。
+  
+- **多模态模型（如 `qwen-vl`、`qwen-omni`）**：仅部分支持流式输出，且当前限于文本输出部分（即视觉理解后的文字描述可流式返回，图像/音频本身不流式）。需查阅具体模型文档确认支持状态。
 
-- **基础模型调用（`/v1/chat/completions`）**：所有文本生成模型（`qwen-max`、`qwen-plus`、`qwen-turbo`）均支持 `stream=true`。响应格式为 Server-Sent Events（SSE），每帧包含一个 `delta` 字段（增量内容）和可选的 `finish_reason`。注意：`usage` 统计仅在最终 `data: [DONE]` 帧中返回。
+- **[函数调用](function-calling.md)（Tool Calling）与 Agent 场景**：在 `/responses` 接口（OpenAI 兼容 Responses 协议）中启用 `stream=true`，可流式获取工具调用决策、执行日志及最终答案；但工具参数解析阶段不流式，仅最终回复阶段流式。
 
-- **Model Experience 统一接口（`/v1/model/experience`）**：作为平台级抽象层，`stream` 是顶层通用参数。但需注意：  
-  - ✅ 文本类、语音类（TTS/ASR）模型支持流式；  
-  - ❌ 视觉生成类（图像/视频）及全模态（Omni-modal）模型**不支持**流式，设置 `stream=true` 将返回错误。
+- **语音与音频模型（如 `qwen-audio`）**：**不支持流式输出**。该类模型必须使用 DashScope 原生接口，且仅支持同步响应（`stream=false`），返回完整转录文本或结构化结果。
 
-- **Knowledge Base（RAG）问答（`/v1/rag/qa`）**：知识库问答服务原生支持流式，启用后可在检索完成即开始生成回答，实现“边查边答”。流式响应中自动嵌入引用溯源标记（如 `[1]`），便于前端高亮来源切片。
-
-- **Prompt 调试与应用集成**：通过 `/v1/chat/completions` 接口提交 [prompt](../guides/prompt.md) 时，`stream=true` 同样生效；在 Agent 或 RAG 增强应用中，流式输出可与插件调用、多轮状态管理无缝衔接。
-
-- **增量式优化（`incremental_output=true`）**：当 `stream=true` 时，额外启用该参数可确保每帧仅返回**本次新增内容**（非全量重发），避免前端重复渲染，推荐在 Web UI 场景中启用。
+> ⚠️ 注意：流式响应仅保证 chunk 的顺序性，不保证每个 chunk 对应严格意义上的“单个 token”或语义完整单元（如中文词、标点）；应用层应按 SSE 协议拼接 `delta.content` 并做增量处理，不可依赖 chunk 边界做语义切分。
 
 ## 关键参数和配置
 
-| 参数名 | 类型 | 说明 | 默认值 | 注意事项 |
-|--------|------|------|--------|----------|
-| `stream` | boolean | 启用流式响应（SSE 格式） | `false` | 必须显式设为 `true` 才生效；不支持的模型将报错（如 `qwen-vl-plus`） |
-| `incremental_output` | boolean | 在流式下启用增量输出（仅返回新生成 token） | `false` | 非标准 OpenAI 字段，百炼特有；需与 `stream=true` 同时使用才有效 |
-| `model` | string | 模型 ID 必须支持流式（见[模型能力矩阵](../../raw/models/capabilities.md)） | — | `qwen-turbo` 支持，`qwen-vl-plus` 不支持；[函数调用](function-calling.md)（Function Calling）场景下流式仍可用 |
+- **核心开关**：`stream`（布尔值），必须显式设为 `true` 才启用流式输出。默认为 `false`。
+  - HTTP 请求中作为 JSON 字段传入（如 `"stream": true`）；
+  - CLI 中通过 `--stream` 标志启用（如 `bailian chat --model qwen-turbo --message "你好" --stream`）；
+  - Python SDK 中通过 `stream=True` 参数控制（如 `Generation.call(..., stream=True)`）。
 
-> ⚠️ 重要限制：  
-> - 流式响应下，`usage` 字段**仅在最终 `data: [DONE]` 帧中出现**，中间帧无 token 统计；  
-> - 知识库问答（`/v1/rag/qa`）流式响应中，`retrieval_results`（召回切片）**仅在首帧返回**，后续帧仅含 `delta`；  
-> - 所有流式请求必须正确处理 SSE 协议（包括 `event: message`、`data: {...}`、空行分隔），建议使用 SDK 内置流式解析器（如 `bailian-sdk` 的 `onChunk` 回调）。
+- **协议适配要求**：
+  - OpenAI 兼容 `/chat/completions` 和 `/responses` 接口：返回标准 SSE 格式，事件类型为 `event: message` 或 `event: error`；
+  - Anthropic 兼容 `/v1/messages`：**不支持流式输出**；
+  - DashScope 原生接口（如 `/text-generation/generation`）：返回 SSE，但事件名可能为 `event: result`，需按实际响应头 `Content-Type: text/event-stream` 解析。
 
-## 面向开发者：简洁实用提示
+- **配套注意事项**：
+  - `max_tokens` 在流式模式下实际生效值可能略低于设定值（服务端需预留终止标记空间）；
+  - 流式响应中若发生错误，会发送 `event: error` 事件，但错误详情较简略，**务必同时检查 HTTP 状态码（如 `400`/`500`）和响应头 `X-DashScope-Status`**；
+  - 客户端需实现健壮的 SSE 解析器（自动重连、字段提取、UTF-8 编码处理），推荐使用成熟库（如 JavaScript 的 `EventSource`、Python 的 `sseclient-py`）。
 
-- ✅ **快速验证**：CLI 中添加 `--stream` 参数即可开启流式，例如：  
-  ```bash
-  bailian chat --model qwen-plus --message "写一首五言绝句" --stream
-  ```
-
-- ✅ **HTTP 请求示例（curl）**：  
-  ```bash
-  curl -X POST https://dashscope.aliyuncs.com/api/v1/chat/completions \
-    -H "Authorization: Bearer $BAI_LIAN_API_KEY" \
-    -H "Content-Type: application/json" \
-    -d '{
-          "model": "qwen-plus",
-          "input": {"messages": [{"role": "user", "content": "你好"}]},
-          "parameters": {"stream": true, "incremental_output": true}
-        }'
-  ```
-
-- ✅ **错误规避**：  
-  - 不要对视觉/全模态模型设置 `stream=true`；  
-  - 不要在流式请求中依赖中间帧的 `usage`；  
-  - 前端务必监听 `event: message` 并拼接 `delta.content`，而非直接覆盖 `message.content`。
-
-- ✅ **性能建议**：  
-  - 高频低延迟场景（如实时对话）必开 `incremental_output=true`；  
-  - 日志审计或调试时，可先关闭流式以获取完整 `usage` 和结构化响应。
+面向开发者：启用流式输出只需加一个参数，但务必做好客户端流解析与错误兜底——这是获得低延迟体验的关键一步。
 
 ## 关联主题页
 
 - [getting started](../guides/getting-started.md)
 - [model experience](../guides/model-experience.md)
-- [knowledge base](../guides/knowledge-base.md)
-- [prompt](../guides/prompt.md)
 - [application support](../guides/application-support.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 
 

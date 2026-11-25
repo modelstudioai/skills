@@ -117,7 +117,7 @@
 
 ### Wiki 配置参数
 
-旗舰版知识库（`pipelineCommercialType=enterprise`）且知识场景为基础文档问答（`knowledgeScene=basic_document_qa`）时，可在创建知识库的同时开启 Wiki 与本体知识图谱。功能与计费说明见[Wiki 与本体知识图谱](../../../application-user-guide/knowledge-base/data-connection-overview/rag-wiki.md)。
+旗舰版知识库（`pipelineCommercialType=enterprise`）且知识场景为基础文档问答（`knowledgeScene=basic_document_qa`）时，可在创建知识库的同时开启 Wiki 与本体知识图谱。功能与计费说明见[Wiki 与本体知识图谱](../../../application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-wiki.md)。
 
 | 字段 | 必填 | 类型 | 说明 |
 | --- | --- | --- | --- |
@@ -229,7 +229,7 @@
 
 > **说明**
 >
-> `enableSearch`、`enableLlm` 与查询时的 `metadata_filter` 作用不同。通过 API 调用应用时，如需按元数据过滤文档，应在 `rag_options` 中同时指定 `pipeline_ids` 和 `metadata_filter`，详见[应用调用参数](https://help.aliyun.com/zh/model-studio/agent-and-workflow-application-api-reference)。索引构建完成后，可通过[查询文件详情](../rag-api-documents/rag-api-list-file-details.md) API 的 `meta_extract_info` 检查实际抽取结果。
+> `enableSearch`、`enableLlm` 与查询时的 `metadata_filter` 作用不同。通过 API 调用应用时，如需按元数据过滤文档，应在 `rag_options` 中同时指定 `pipeline_ids` 和 `metadata_filter`，详见[应用调用参数](../../../_short/agent-and-workflow-application-api-reference-ab48d043a951dcb2.md)。索引构建完成后，可通过[查询文件详情](../rag-api-documents/rag-api-list-file-details.md) API 的 `meta_extract_info` 检查实际抽取结果。
 
 <a id="请求示例"></a>
 

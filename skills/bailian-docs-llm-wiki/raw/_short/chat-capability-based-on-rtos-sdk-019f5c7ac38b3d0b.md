@@ -10,7 +10,7 @@
 
 ## 1\. 开发准备
 
-根据[应用创建](multimodal-app-creation-ef194a004f7549d5.md)的文档，创建应用，购买 license，获取 [APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和 AppSecret。
+根据[应用创建](multimodal-app-creation-ef194a004f7549d5.md)的文档，创建应用，购买 license，获取 [APP ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#2612f896detsz)和 AppSecret。
 
 参考[设备端C SDK](mmi-rtos-sdk-dbfd414713bc31c9.md)，根据芯片型号，下载相应的 SDK 包。
 

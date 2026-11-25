@@ -55,7 +55,7 @@ POST /{workspaceId}/quanmiao/lightapp/runEssayCorrection HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 是 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxxxxxxx |
+| workspaceId | string | 是 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxxxxxxx |
 
 <a id="请求参数"></a>
 

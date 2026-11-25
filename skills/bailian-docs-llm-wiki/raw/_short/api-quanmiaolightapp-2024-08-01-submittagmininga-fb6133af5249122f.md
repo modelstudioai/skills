@@ -55,7 +55,7 @@ POST /{workspaceId}/quanmiao/lightapp/submitTagMiningAnalysisTask HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| workspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xx |
 
 <a id="请求参数"></a>
 

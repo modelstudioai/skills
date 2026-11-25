@@ -858,7 +858,7 @@ bl finetune rl authorize [--authorize]
 
 > **警告**
 >
-> CLI 绝不自动创建服务关联角色。缺失角色时返回 REQUIRES\_USER\_ACTION 并中止，需先按[环境准备](../../../model-user-guide/fine-tuning/rl-overview/rl-training-overview.md#wjp6ghg8df9o4)手动授权。
+> CLI 绝不自动创建服务关联角色。缺失角色时返回 REQUIRES\_USER\_ACTION 并中止，需先按[环境准备](../../../model-user-guide/model-training/fine-tuning/rl-overview/rl-training-overview.md#wjp6ghg8df9o4)手动授权。
 
 **示例**：只读探测 RL 准入状态
 
@@ -1162,7 +1162,7 @@ bl finetune opd run --base-model qwen3.5-9b --teacher-model qwen3.5-397b-a17b --
 ```
 
 -   超参数按原样发送（JSON 文件 → `--hp` 覆盖）。省略字段由服务端和所选教师默认值解析，CLI 不填充 recommend\_value。
--   mtu\_capacity 必须等于学生 GPU + 教师 GPU。推荐配置及模型配对参见[模型与训练单元](../../../model-user-guide/fine-tuning/opd-overview/opd-training-overview.md#opd-models)。
+-   mtu\_capacity 必须等于学生 GPU + 教师 GPU。推荐配置及模型配对参见[模型与训练单元](../../../model-user-guide/model-training/fine-tuning/opd-overview/opd-training-overview.md#opd-models)。
 -   `--watch` 超时仅停止等待，不取消云端任务。
 
 <a id="bl-finetune-opd-params"></a>

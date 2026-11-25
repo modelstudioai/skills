@@ -43,7 +43,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xx |
 | DatasetId | long | 否 | 数据集唯一标识：和 DatasetName 二选一必选 | 1 |
 | DatasetName | string | 否 | 数据集名称 | 数据集名称 |
 | DocId | string | 否 | 用户指定的文档唯一 ID | xxx |

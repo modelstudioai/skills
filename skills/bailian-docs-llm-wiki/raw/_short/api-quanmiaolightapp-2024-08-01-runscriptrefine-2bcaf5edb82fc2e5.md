@@ -55,7 +55,7 @@ POST /{workspaceId}/quanmiao/lightapp/runScriptRefine HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-zna577pdximvztk5 |
+| workspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-zna577pdximvztk5 |
 | taskId | string | 否 | 任务唯一标识<br><br>**说明**-   taskId 默认无需填写，系统将自动生成。当后续任务填写的 taskId 相同时，表示这些任务属于同一组对话。<br>-   建议手动赋值 taskId，以便关联上下文。 | a3d1c2ac-f086-4a21-9069-f5631542f5a2 |
 
 <a id="返回参数"></a>

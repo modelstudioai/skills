@@ -55,7 +55,7 @@ POST /{workspaceId}/quanmiao/lightapp/runOcrParse HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 是 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| workspaceId | string | 是 | [业务空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxx |
 | url | string | 否 | 图片 URL（url 与 fileKey 二选一） | [http://www.example.com/xxxx.txt](http://www.example.com/xxxx.txt) |
 | fileKey | string | 否 | 图片 URL（url 与 fileKey 二选一） | oss://default/aimiaobi-service-prod/aimiaobi/temp/public/government\_service\_experience\_feedback\_summary.txt |
 | modelId | string | 否 | 模型 ID | qwen3.7-plus |

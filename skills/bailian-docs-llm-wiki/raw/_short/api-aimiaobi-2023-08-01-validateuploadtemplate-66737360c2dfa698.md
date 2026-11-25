@@ -43,7 +43,7 @@
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | xxxx |
 | TemplateType | string | 是 | 模板类型（Content：表示内容素材模板校验，PositiveSample：正面样本） | Content |
 | FileKey | string | 是 | 文件 key | Content |
 | TaskType | string | 否 | 任务类型：lightAppSass（Sass 页调用）、sdkBatchTask（SDK 批量调用任务） | lightAppSass |

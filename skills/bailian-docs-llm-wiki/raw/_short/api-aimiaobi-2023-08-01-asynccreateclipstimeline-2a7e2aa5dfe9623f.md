@@ -57,7 +57,7 @@ POST  HTTP/1.1
 | --- | --- | --- | --- | --- |
 | TaskId | string | 是 | 任务唯一 ID | 7AA2AE16-D873-5C5F-9708-15396C382EB1 |
 | ProcessPrompt | string | 否 | 处理用 prompt | 口播内容是乌镇旅游宣传广告，口播内容时长约为1分钟，开头要描述乌镇是千年文化传承的江南水乡，之后要体现乌镇的传统手工艺、美食和美景，最后要号召大家来乌镇旅游 |
-| WorkspaceId | string | 是 | [百炼工作空间 Id](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-2setzb9x4ewsd |
+| WorkspaceId | string | 是 | [百炼工作空间 Id](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-2setzb9x4ewsd |
 | CustomContent | string | 否 | 自定义口播内容 | 自定义口播内容 |
 | NoRefVideo | boolean | 否 | 是否开启模仿能力 | 默认开启 |
 | AdditionalContent | string | 否 | 素材附加信息，有助于口播文案的生成 | 素材附加信息 |

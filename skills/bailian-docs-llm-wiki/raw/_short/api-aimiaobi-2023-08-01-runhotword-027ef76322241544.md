@@ -55,7 +55,7 @@ POST /miaodu/stream/runHotword HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-baw8as25ll3wnzjr |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-baw8as25ll3wnzjr |
 | SessionId | string | 否 | 会话 ID。 | e32a1a3f-1f7e-41dd-b888-ef1d91b96d1e |
 | DocId | string | 否 | 文档 ID | 84ufBYEeLMZOjRFo84HJ7ySL3Efr55 |
 | Prompt | string | 否 | 提示词 | 提示词 |

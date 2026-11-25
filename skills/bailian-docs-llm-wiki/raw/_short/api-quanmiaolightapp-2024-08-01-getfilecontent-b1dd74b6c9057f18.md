@@ -56,7 +56,7 @@ POST /{workspaceId}/quanmiao/lightapp/getFileContent HTTP/1.1
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
 | fileKey | string | 否 | 文件 FileKey（妙笔服务文件唯一标识） | oss://default/aimiaobi-service-prod/aimiaobi/temp/1154600634854327\_10045847/300469535473178749\_300469535473178749\_ee11508152b74137ac5747a6f632256e.docx |
-| workspaceId | string | 是 | 阿里云百炼平台[工作空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxxx |
+| workspaceId | string | 是 | 阿里云百炼平台[工作空间 ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxxx |
 
 <a id="返回参数"></a>
 

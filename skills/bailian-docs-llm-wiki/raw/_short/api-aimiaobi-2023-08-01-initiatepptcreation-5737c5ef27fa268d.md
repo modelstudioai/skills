@@ -55,7 +55,7 @@ POST  HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 否 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-3fy94b2rtadt01qa |
+| WorkspaceId | string | 否 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-3fy94b2rtadt01qa |
 | TaskId | string | 是 | 任务 ID | 95c2fbe6-5a20-4fc2-8a93-376ed05fbe13 |
 | Outline | string | 否 | 大纲 | \# 中国传统文化艺术的魅力 ## 1. 传统文化艺术的源远流长 ### 1.1 中国古代艺术发展历程 #### 1.1.1 古代绘画艺术的演变 - 从新石器时代的彩陶绘画到东汉时期帛画的出现，绘画形式不断丰富，展现了古人对美的独特追求。唐代绘画风格多样，吴道子的《送子天王图》线条流畅，色彩绚丽，体现了唐代绘画的高超技艺。 #### 1.1.2 书法艺术的传承与创新 - 书法从甲骨文到楷书、行书、草书，历经数千年演变，承载着中华文化的深厚内涵。王羲之的《兰亭序》被誉为“天下第一行书”，其笔法精妙，结构严谨，展现了书法艺术的巅峰。 |
 | ExternalUserId | string | 否 |  | abc |

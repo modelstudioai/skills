@@ -617,7 +617,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请检查请求参数，确保所有必需参数都已提供且格式正确。
 
-当报错信息中参数名称为`data_sources`时，通常是因为调用 CreateIndex 接口时未指定必传参数`SourceType`导致后续 SubmitIndexJob 接口报错。基于给定文档创建知识库时，此参数需传入`DATA_CENTER_FILE`；基于给定类目创建知识库时，此参数需传入`DATA_CENTER_CATEGORY`。详见[CreateIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createindex)文档。
+当报错信息中参数名称为`data_sources`时，通常是因为调用 CreateIndex 接口时未指定必传参数`SourceType`导致后续 SubmitIndexJob 接口报错。基于给定文档创建知识库时，此参数需传入`DATA_CENTER_FILE`；基于给定类目创建知识库时，此参数需传入`DATA_CENTER_CATEGORY`。详见[CreateIndex](../../_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)文档。
 
 <a id="input-must-contain-file-urls"></a>
 

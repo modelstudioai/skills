@@ -55,7 +55,7 @@ POST /miaodu/stream/runBookBrainmap HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-hx72jf15gqyobvd9 |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-hx72jf15gqyobvd9 |
 | SessionId | string | 是 | 会话 ID。 | 3f7045e099474ba28ceca1b4eb6d6e21 |
 | DocId | string | 是 | 文档 ID | 12345 |
 | Prompt | string | 否 | 附加要求提示词 | 按英文输出 |

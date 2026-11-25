@@ -88,7 +88,7 @@
 | --- | --- | --- | --- |
 | `model` | string | 是 | 百炼模型名称，固定为 `multimodal-dialog`。 |
 | `input.directive` | string | 是 | 指令名称，固定为 `Request`。 |
-| `input.app_id` | string | 是 | 控制台创建的应用 ID，可在**多模态交互开发套件**控制台的**我的应用**页面查看。参见[获取 App ID 和 Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)。 |
+| `input.app_id` | string | 是 | 控制台创建的应用 ID，可在**多模态交互开发套件**控制台的**我的应用**页面查看。参见[获取 App ID 和 Workspace ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#2612f896detsz)。 |
 | `input.text` | string | 是 | 要处理的文本。本实践中固定为空字符串 `""`。 |
 | `parameters.client_info` | object | 是 | 终端信息，见下文。 |
 | `parameters.biz_params` | object | 是 | 业务参数，见下文。 |

@@ -17,7 +17,7 @@
 ## 前提条件
 
 -   已开通阿里云百炼。
--   已[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+-   已[获取Workspace ID](../../../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)。
 -   已[获取AccessKey ID和AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
 -   RAM用户已添加`AliyunDataAnalysisGBIFullAccess`权限策略：[管理RAM用户的权限](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)。
 -   已在析言GBI的**[数据表管理](https://bailian.console.aliyun.com/xiyan#/dataManagement/dataSourceM)**中授权联接了数据库。具体操作，请参见[数据库连接](xiyan-gbi-user-guide.md#8e5d17697392b)。

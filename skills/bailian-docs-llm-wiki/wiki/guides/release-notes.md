@@ -6,7 +6,7 @@
 
 - 新增支持 Qwen2.5-VL-7B、Qwen2.5-14B-Instruct 等多模态与大尺寸推理模型，详见 [模型上架与更新](../../raw/release-notes/newly-released-models.md)  
 - Agent 平台上线「状态持久化」与「多步骤回溯调试」能力，适用于复杂工作流编排，详情见 [Agent 平台功能更新](../../raw/release-notes/application-release-notes.md)  
-- [Token](../concepts/token.md) Plan 功能正式开放配额预分配与用量实时监控，支持按项目粒度配置，参考 [Token Plan 功能更新](../../raw/release-notes/token-plan-product-updates.md)  
+- Token Plan 功能正式开放配额预分配与用量实时监控，支持按项目粒度配置，参考 [Token Plan 功能更新](../../raw/release-notes/token-plan-product-updates.md)  
 
 ## 关键参数
 
@@ -17,16 +17,14 @@
 ## 使用方式
 
 - 模型调用需显式指定 `model` 字段（如 `"qwen2.5-14b-instruct"`），不再接受别名或模糊匹配  
-- Agent 调用需在请求头中携带 `X-Bailian-Agent-Version: 2024-07` 才能启用新调试能力，否则降级为 v1 行为  
-- [Token](../concepts/token.md) Plan 相关配额查询需调用 `/v1/projects/{pid}/token-plans` 接口，而非旧版 `/v1/token/usage`，后者已于 2024-06-15 下线  
+- Agent 调用需在请求头中携带 `X-App-ID`，否则触发 400 错误；该要求自 v2024.07.15 起强制执行  
+- Token Plan 相关配额查询接口路径变更为 `/v1/projects/{pid}/token-plans/usage`，旧路径已废弃，详见 [Token Plan 功能更新](../../raw/release-notes/token-plan-product-updates.md)
 
 ## 限制和注意事项
 
-- 已下线模型（如 `qwen-vl-plus`）仍可在历史任务中查看结果，但无法发起新请求；完整下线列表与迁移路径见 [模型下线机制说明](../../raw/release-notes/model-depreciation.md)  
-- `model-release-notes.md` 中提及的「异步批处理接口 Beta」尚未开放公测权限，当前仅限白名单客户调用，与 [模型平台功能更新](../../raw/release-notes/model-release-notes.md) 描述存在出入  
-> **注意**：`model-release-notes.md` 声称“所有用户即日起可使用异步批处理”，但实际接口返回 `403 Forbidden`，请以控制台权限提示为准。  
-> **注意**：`api-compatibility-upgrade-notice.md` 中关于 `temperature=0` 的确定性保证，与 `newly-released-models.md` 中 Qwen2.5-VL 的实测行为不一致——后者在 `temperature=0` 时仍存在极低概率的输出抖动。  
-- 流式响应（`stream=true`）下，`usage` 字段仅在末帧返回，中间帧不包含该字段，不可用于实时计费统计
+- 所有已下线模型（如 `qwen-vl-plus`）仍可在历史任务中查看结果，但无法发起新请求；下线清单与迁移建议见 [模型下线机制说明](../../raw/release-notes/model-depreciation.md)  
+- `system` 角色消息在部分新模型中参与 attention 计算，长度计入总 token 限制，此前部分文档误述为“不计费”，> **注意**：请以 [模型平台功能更新](../../raw/release-notes/model-release-notes.md) 中的 token 计费规则为准  
+- 多模态模型（如 Qwen2.5-VL）暂不支持 `logprobs` 参数，启用将返回 400；该限制未在 [API 兼容性升级](../../raw/release-notes/api-compatibility-upgrade-notice.md) 中明确说明，属新增约束
 
 ## 来源文档
 

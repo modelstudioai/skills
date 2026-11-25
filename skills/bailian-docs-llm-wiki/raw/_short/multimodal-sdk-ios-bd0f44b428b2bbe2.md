@@ -20,7 +20,7 @@ MultiModalDialog SDK是阿里云通义团队提供的支持音视频端到端多
 
 ## 前提条件
 
-开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](../model-api-reference/preparations/get-api-key.md)。
+开通阿里云百炼实时多模交互应用，获取[Workspace ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)、[APP ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#2612f896detsz)和[API Key](../model-api-reference/preparations/get-api-key.md)。
 
 <a id="交互数据链路说明"></a>
 

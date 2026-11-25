@@ -16,7 +16,7 @@
 
 > **说明**
 >
-> 模型训练流程请参见[模型调优](../fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。训练完成后的新模型需先完成**模型部署**，才能评测和调用。
+> 模型训练流程请参见[模型调优](../model-training/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。训练完成后的新模型需先完成**模型部署**，才能评测和调用。
 
 <table><tbody><tr><td><strong>计费方式</strong></td><td><p>按训练Token计费</p></td></tr><tr><td><strong>计费公式</strong></td><td><p>模型训练费用 = （训练数据 Token 总数 + 混合训练数据 Token 总数）× 循环次数 × 训练单价（最小计费单位：1 token）</p><blockquote><p>您可以查看<a href="https://bailian.console.aliyun.com/model/tuning/create">模型训练控制台</a>底部的预估训练费用，并单击<strong>计费详情</strong>，查看训练 Token 总数、循环次数和训练单价。</p></blockquote></td></tr></tbody></table>
 
@@ -46,7 +46,7 @@
 
 > **说明**
 >
-> 模型训练流程请参见[图像生成模型调优](../fine-tuning/wan-image-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+> 模型训练流程请参见[图像生成模型调优](../model-training/fine-tuning/wan-image-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 |  |  |
 | --- | --- |
@@ -95,7 +95,7 @@
 
 > **说明**
 >
-> 模型训练流程请参见[图像生成模型调优](../fine-tuning/wan-image-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+> 模型训练流程请参见[图像生成模型调优](../model-training/fine-tuning/wan-image-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 |  |  |
 | --- | --- |
@@ -155,7 +155,7 @@
 
 > **说明**
 >
-> 模型训练流程请参见[模型调优](../fine-tuning/wan-video-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+> 模型训练流程请参见[模型调优](../model-training/fine-tuning/wan-video-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 |  |  |
 | --- | --- |
@@ -223,7 +223,7 @@
 
 > **说明**
 >
-> CosyVoice 模型调优服务仅支持**华北2（北京）**地域。模型训练流程请参见[CosyVoice模型调优](../fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+> CosyVoice 模型调优服务仅支持**华北2（北京）**地域。模型训练流程请参见[CosyVoice模型调优](../../_short/fine-tune-speech-synthesis-model-by-api-961a082a0e1a5d8b.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 |  |  |
 | --- | --- |
@@ -540,7 +540,7 @@
 
 ### 图像生成模型-万相
 
-经过SFT-LoRA高效微调的万相图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](../fine-tuning/wan-image-generation-finetune-guide.md)。
+经过SFT-LoRA高效微调的万相图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](../model-training/fine-tuning/wan-image-generation-finetune-guide.md)。
 
 | 模型名称 | Lora部署调用价格 |
 | --- | --- |
@@ -553,7 +553,7 @@
 
 ### 图像生成模型-千问
 
-经过SFT-LoRA高效微调的千问图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](../fine-tuning/wan-image-generation-finetune-guide.md)。
+经过SFT-LoRA高效微调的千问图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](../model-training/fine-tuning/wan-image-generation-finetune-guide.md)。
 
 | 模型名称 | Lora部署调用价格 |
 | --- | --- |

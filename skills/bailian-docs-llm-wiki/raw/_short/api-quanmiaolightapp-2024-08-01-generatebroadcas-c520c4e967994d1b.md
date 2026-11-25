@@ -67,7 +67,7 @@ POST /{workspaceId}/quanmiao/lightapp/GenerateBroadcastNews HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| workspaceId | string | 是 | [业务空间唯一标识](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| workspaceId | string | 是 | [业务空间唯一标识](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-xxx |
 | prompt | string | 是 | 用户意图 | 帮我播报体育热点 |
 
 <a id="返回参数"></a>

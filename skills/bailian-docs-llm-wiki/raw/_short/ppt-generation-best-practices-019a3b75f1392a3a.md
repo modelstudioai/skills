@@ -21,7 +21,7 @@
 ### 后端
 
 -   点击[PPT生成下单地址](https://common-buy.aliyun.com/?spm=a2c4g.11186623.0.0.24c66c00ZsOBpm&commodityCode=sfm_pptgeneration_public_cn)开通服务；
--   [获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)；
+-   [获取Workspace ID](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)；
 -   [获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)；
 -   引入妙笔SDK [注意获取最新SDK版本](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc)。
 

@@ -55,7 +55,7 @@ POST /quanmiao/aimiaobi/runDocWashing HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-2setzb9x4ewsd |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | llm-2setzb9x4ewsd |
 | SessionId | string | 否 | 通道 Id | 3f7045e099474ba28ceca1b4eb6d6e21 |
 | WritingTypeName | string | 否 | 文体类型名字 | 小红书文体 朋友圈文体 专业新闻文体 政府公文文体 报纸文章文体 意见信文体 |
 | WritingTypeRefDoc | string | 否 | 文体示例文章 | 该值若不为空则按该值优先 |

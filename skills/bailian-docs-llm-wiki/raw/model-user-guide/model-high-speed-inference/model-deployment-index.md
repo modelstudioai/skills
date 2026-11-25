@@ -7,5 +7,5 @@
 -   [Token 按量部署](model-deployment-index/model-deployment-modes/model-deployment-token.md)
 -   [模型导入](model-deployment-index/model-import.md)
 -   [API 部署指南](model-deployment-index/model-deployment-quick-start.md)
--   [我的模型](https://help.aliyun.com/zh/model-studio/my-model-center)
+-   [我的模型](../model-training/my-model-center.md)
 -   [智能路由](model-routing.md)

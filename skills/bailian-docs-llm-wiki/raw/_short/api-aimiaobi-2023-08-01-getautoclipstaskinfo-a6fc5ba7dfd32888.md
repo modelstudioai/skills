@@ -56,7 +56,7 @@ POST  HTTP/1.1
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
 | TaskId | string | 是 | 任务唯一 ID | 0dbf1055f8a2475d99904c3b76a0ffba |
-| WorkspaceId | string | 是 | [工作空间](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | 百炼工作空间Id |
+| WorkspaceId | string | 是 | [工作空间](../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md) | 百炼工作空间Id |
 | ShowResourceInfo | boolean | 否 | 展示视频素材信息 | false |
 | ShowAnalysisResults | boolean | 否 | 展示视频理解结果 | false |
 

@@ -24,7 +24,7 @@
 
 > 各地域的API Key 不同。
 
-> 以下示例使用北京地域的 Endpoint，调用时请将 `WorkspaceId` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+> 以下示例使用北京地域的 Endpoint，调用时请将 `WorkspaceId` 替换为真实的[业务空间 ID](../../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md#732535cfc959h)。
 
 <a id="code-block"></a>
 

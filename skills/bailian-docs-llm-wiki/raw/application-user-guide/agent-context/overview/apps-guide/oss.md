@@ -56,7 +56,7 @@ OSS 连接基于阿里云服务关联角色访问你的 Bucket，不需要配置
 >
 > 标签缺失或值写错时，Bucket 不会出现在下拉列表中，或连接创建失败。报错信息有时会指向跨域配置，实际原因通常是标签问题，先核对标签再排查其他方向。
 
-标签在 OSS 控制台的 Bucket 管理页面添加，具体步骤见[旧版数据连接文档的 OSS 章节](../../../knowledge-base/data-connection-overview/data-connection.md#b8de517ce557x)。
+标签在 OSS 控制台的 Bucket 管理页面添加，具体步骤见[旧版数据连接文档的 OSS 章节](../../knowledge-base/data-connection-overview/data-connection.md#b8de517ce557x)。
 
 <a id="自动生成的工具"></a>
 

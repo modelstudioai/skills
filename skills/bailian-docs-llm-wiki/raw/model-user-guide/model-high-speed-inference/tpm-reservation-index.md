@@ -4,7 +4,7 @@
 
 吞吐预留为指定模型锁定专属推理容量，确保业务高峰期不受公共限流影响。相关文档如下：
 
--   [吞吐预留概述](tpm-reservation.md)：产品概念、标准/高速模式对比、支持模型与常见问题。
+-   [吞吐预留概述](tpm-reservation-index/tpm-reservation.md)：产品概念、标准/高速模式对比、支持模型与常见问题。
 -   [创建、接入与管理](tpm-reservation-index/tpm-reservation-create.md)：控制台创建流程、参数、三协议接入调用、查看监控与扩缩容、续订、退订。
 -   [长输入与前缀缓存](tpm-reservation-index/tpm-reservation-long-input.md)：缓存折算系数、长输入阶梯、TPM 容量计算器与容量消耗字段。
 -   [8 小时时段与叠加容量包计费](../test-1/tpm-reservation-billing.md#tpm-billing-8h-h2)：8 小时时段预留规则与叠加容量包计费。

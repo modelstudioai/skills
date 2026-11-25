@@ -53,7 +53,7 @@ PUT /{workspaceId}/quanmiao/lightapp/videoAnalysis/updateVideoAnalysisTask HTTP/
 
 ## 请求参数
 
-<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>workspaceId</td><td>string</td><td>是</td><td><div><p>百炼业务空间唯一标识：<a href="https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id">获取 workspaceId</a></p></div></td><td>llm-xxx</td></tr><tr><td>taskId</td><td>string</td><td>是</td><td><div><p>任务唯一标识</p></div></td><td>xxxx</td></tr><tr><td>taskStatus</td><td>string</td><td>是</td><td><div><p>任务状态：</p><ul><li>CANCELED：取消任务</li></ul></div></td><td>CANCELED</td></tr></tbody></table>
+<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>workspaceId</td><td>string</td><td>是</td><td><div><p>百炼业务空间唯一标识：<a href="../application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md">获取 workspaceId</a></p></div></td><td>llm-xxx</td></tr><tr><td>taskId</td><td>string</td><td>是</td><td><div><p>任务唯一标识</p></div></td><td>xxxx</td></tr><tr><td>taskStatus</td><td>string</td><td>是</td><td><div><p>任务状态：</p><ul><li>CANCELED：取消任务</li></ul></div></td><td>CANCELED</td></tr></tbody></table>
 
 <a id="返回参数"></a>
 

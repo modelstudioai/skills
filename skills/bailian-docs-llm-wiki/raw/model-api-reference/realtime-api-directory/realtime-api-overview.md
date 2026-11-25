@@ -39,7 +39,7 @@ Realtime API 支持实时多模态交互、语音识别、语音合成、语音�
 | Qwen-TTS-Realtime | [Python](../../_short/realtime-websocket-python-sdk-qwen-tts-realtime-3dc71548ffc651f8.md) · [Java](../../_short/qwen-tts-realtime-java-sdk-9494aeb08ebf2190.md) |
 | Sambert | [Python](../../_short/realtime-websocket-python-sdk-sambert-74c648d694dcfd04.md) · [Java](../../_short/sambert-java-sdk-79ed7a3fed2f3f90.md) · [C#](../../_short/sambert-csharp-sdk-3727135a614c5624.md) · [Android](../../_short/sambert-android-sdk-8827dfd4fba2386d.md) · [iOS](../../_short/sambert-ios-sdk-3a58fd71fde42af6.md) · [HarmonyOS](../../_short/sambert-harmonyos-sdk-6ffde1be395ffb11.md) · [Flutter](../../_short/realtime-websocket-flutter-sdk-sambert-d02804b097bac96d.md) |
 | Qwen-Audio-Realtime | [Node.js](../../_short/qwen-audio-realtime-nodejs-sdk-a2a0cc33ba0a85a8.md) · [C#](../../_short/qwen-audio-realtime-csharp-sdk-7c78b8d6a3bc97a4.md) · [Android](../../_short/android-sdk-for-qwen-audio-realtime-service-fbe978d80b5ee150.md) · [iOS](../../_short/ios-sdk-for-qwen-audio-realtime-service-11c3579f6cded913.md) · [HarmonyOS](../../_short/harmonyos-sdk-for-qwen-audio-realtime-service-c258297df757a167.md) · [Flutter](../../_short/realtime-websocket-flutter-sdk-qwen-audio-realti-8fa612950516022e.md) |
-| Qwen-LiveTranslate-Realtime | [Python](../../_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md) · [Java](../../_short/qwen-livetranslate-realtime-websocket-sdk-java-4fa3677627879b83.md) · [C#](../../_short/qwen-livetranslate-csharp-sdk-7dc0bd18d993e44e.md) · [Flutter](../../_short/realtime-websocket-flutter-sdk-qwen-livetranslat-ed4e5a3a77d23fdf.md) |
+| Qwen-LiveTranslate-Realtime | [Python](../../_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md) · [Java](../../_short/qwen-livetranslate-java-sdk-7300d52ae3d2839e.md) · [C#](../../_short/qwen-livetranslate-csharp-sdk-7dc0bd18d993e44e.md) · [Flutter](../../_short/realtime-websocket-flutter-sdk-qwen-livetranslat-ed4e5a3a77d23fdf.md) |
 
 **C# 通用参考** [SDK简介](https://help.aliyun.com/zh/model-studio/csharp-sdk) · [接口与事件](https://help.aliyun.com/zh/model-studio/csharp-sdk-methods-and-events)
 
@@ -353,7 +353,7 @@ curl -X POST \
 -   [使用 AOQ 接入 qwen3.8-omni-flash-realtime 实现按键语音对话](../../_short/use-aoq-to-access-qwen3-5-omni-plus-realtime-to--dee7ca70112bd23e.md)
 -   [使用 AOQ 接入 qwen-audio-3.1-asr-flash-streaming 实现语音输入法](../../model-user-guide/use-cases/realtime-audio-video-integration/voice-input-using-aoq-access-qwen-audio-asr.md)
 -   [使用 AOQ 接入 qwen3.8-livetranslate-flash-realtime 实现实时语音翻译](../../_short/real-time-translation-using-aoq-access-qwen-live-9b4d3056b2eade2b.md)
--   [使用 AOQ 接入 qwen-audio-3.0-tts-flash 实现语音合成](../../_short/speech-synthesis-using-aoq-access-qwen-audio-3-0-43022e91dedcb0c1.md)
+-   [使用 AOQ 接入 qwen-audio-3.1-tts-flash 实现语音合成](../../_short/speech-synthesis-using-aoq-access-qwen-audio-3-0-43022e91dedcb0c1.md)
 -   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](../../_short/real-time-speech-recognition-using-aoq-access-fu-1f528aaba4a8fd1b.md)
 -   [使用 AOQ 接入 qwen-audio-3.1-realtime-plus 实现实时语音对话](../../_short/real-time-voice-conversation-using-aoq-access-qw-7e2ab540f9ffd31d.md)
 
