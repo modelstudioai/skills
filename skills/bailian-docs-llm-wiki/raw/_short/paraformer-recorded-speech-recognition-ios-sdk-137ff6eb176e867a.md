@@ -17,7 +17,7 @@
     > 当需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时API Key](../model-api-reference/more-about-models/generate-temporary-api-key.md)。临时API Key拥有固定的60秒有效期，过期后需重新获取。
     
 2.  **下载SDK并运行示例代码：**
-    -   [下载最新SDK整合包](https://help.aliyun.com/zh/model-studio/sdk-selection-and-download)。
+    -   [下载最新SDK整合包](../model-api-reference/more-about-models/sdk-selection-and-download.md)。
     -   解压 ZIP 包，将其中的 nuisdk.framework 添加到工程。
     -   在 Build Phases → Link Binary With Libraries 中添加 nuisdk.framework。
     -   在 General → Frameworks, Libraries, and Embedded Content 中将 nuisdk.framework 设置为 Embed & Sign。

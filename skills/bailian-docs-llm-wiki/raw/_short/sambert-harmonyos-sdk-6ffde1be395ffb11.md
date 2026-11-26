@@ -22,7 +22,7 @@
 
 ### 安装 SDK
 
-1.  [下载最新 SDK 整合包](https://help.aliyun.com/zh/model-studio/sdk-selection-and-download)。
+1.  [下载最新 SDK 整合包](../model-api-reference/more-about-models/sdk-selection-and-download.md)。
 2.  解压 TAR 包，将 `neonui` 目录中的 HAR SDK 添加到项目依赖。
 3.  如需接入 C++，从 TAR 包内的 `native/libs` 和 `native/include` 获取动态库和头文件。
 

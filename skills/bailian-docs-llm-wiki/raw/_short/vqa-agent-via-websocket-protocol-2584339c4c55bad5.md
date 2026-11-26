@@ -22,7 +22,7 @@
 
 ## 前提条件
 
-必须先阅读[实时多模态交互协议（WebSocket）](../model-api-reference/more-about-models/multimodal-interaction-protocol.md) ，了解实时多模态交互的整体WebSocket协议。
+必须先阅读[实时多模态交互协议（WebSocket）](multimodal-interaction-protocol-23b12b66c717437f.md) ，了解实时多模态交互的整体WebSocket协议。
 
 <a id="开通阿里云百炼模型服务并获取api-key"></a>
 
@@ -176,5 +176,5 @@
 
 > **重要**
 >
-> 1.  header中的参数定义见[实时多模态交互协议（WebSocket）](../model-api-reference/more-about-models/multimodal-interaction-protocol.md)相关说明
-> 2.  时序图中的其他流程见[实时多模态交互协议（WebSocket）](../model-api-reference/more-about-models/multimodal-interaction-protocol.md)相关说明
+> 1.  header中的参数定义见[实时多模态交互协议（WebSocket）](multimodal-interaction-protocol-23b12b66c717437f.md)相关说明
+> 2.  时序图中的其他流程见[实时多模态交互协议（WebSocket）](multimodal-interaction-protocol-23b12b66c717437f.md)相关说明

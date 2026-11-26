@@ -8,11 +8,20 @@
 
 ## 接口说明
 
--   不支持通过 API 删除数据表。如需删除数据表或表中特定的数据，请前往[应用数据](https://bailian.console.aliyun.com/?tab=app#/data-center)操作。
--   本接口用于删除[应用数据](https://bailian.console.aliyun.com/?tab=app#/data-center)中的文件，不会影响已构建好的知识库。如需删除知识库中的文件，请调用 **DeleteIndexDocument** 接口。
+-   不支持通过 API 删除数据表。
+    
+    1.  打开[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)，在目标表格数据集上单击**详情**。
+        
+    2.  删除目标数据表或表中的指定数据。
+        
+-   本接口用于删除[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)中的文件，不会影响已构建好的知识库。如需删除知识库中的文件，请调用 **DeleteIndexDocument** 接口。
+    
 -   RAM 用户（子账号）需要首先获取阿里云百炼的 [API 权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)（需要`AliyunBailianDataFullAccess`，已包括 sfm:DeleteFile 权限点），并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)后，方可调用本接口。阿里云账号（主账号）可直接调用无须授权。建议您通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)来调用本接口。
+    
 -   本接口仅能删除状态为解析失败（PARSE\_FAILED）或解析完成（PARSE\_SUCCESS）的文件。
+    
 -   本接口具有幂等性。
+    
 
 **限流说明：** 本接口频繁调用会被限流，频率请勿超过 10 次/秒。如遇限流，请稍后重试。
 
@@ -69,7 +78,7 @@ DELETE /{WorkspaceId}/datacenter/file/{FileId}/ HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| FileId | string | 是 | 文件 ID，即 **AddFile** 接口返回的`FileId`。您也可以在[应用数据](https://bailian.console.aliyun.com/?tab=app#/data-center)页面，单击文件名称旁的 ID 图标获取。 | file\_9a65732555b54d5ea10796ca5742ba22\_xxxxxxxx |
+| FileId | string | 是 | 文件 ID，即 **AddFile** 接口返回的`FileId`。<br>1\. 打开[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)，在目标文件数据集上单击**详情**。<br>2\. 单击目标文件的 **ID** 图标，再单击提示中的复制图标，复制文件 ID。 | file\_9a65732555b54d5ea10796ca5742ba22\_xxxxxxxx |
 | WorkspaceId | string | 是 | 文件所属的业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。 | llm-3shx2gu255oxxxx |
 
 <a id="请求参数"></a>

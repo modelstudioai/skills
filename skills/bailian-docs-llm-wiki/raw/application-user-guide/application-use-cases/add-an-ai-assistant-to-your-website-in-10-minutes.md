@@ -35,7 +35,7 @@
 
 #### 1.1 创建应用
 
-1.  进入百炼控制台的[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)页面，单击**创建智能体**，在**创建智能体应用**弹窗中输入**应用名称**，其余保持默认，单击**立即创建**，创建完成后自动进入应用配置页面。
+1.  打开[创建智能体应用](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-center/assistant?immediatelyCreate=true)表单，输入**应用名称**，其余保持默认，单击**立即创建**，创建完成后自动进入应用配置页面。
     
     > 当前默认创建新版智能体应用（Agent 2.0），本教程后续步骤均已基于新版控制台验证。如需创建旧版应用，可单击弹窗底部的**旧版 Agent 创建入口**。
     
@@ -70,7 +70,6 @@
     ![应用卡片上的应用 ID](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f910f.png)
 2.  前往[API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)页面，单击**创建 API Key**，在弹窗中保持默认配置并单击**确定**。创建成功后立即复制 API Key 并保存到本地，完整密钥仅在创建时显示一次。详细说明请参见[获取与配置 API Key](../../model-api-reference/preparations/get-api-key.md)。
     
-    ![API Key 页面](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f910c.png)
 
 <a id="2-创建ai助手"></a>
 
@@ -246,7 +245,7 @@ AppFlow 无需代码即可连接网页与模型服务平台。
 
 接下来，我们可以尝试让大模型在面对客户问题时参考这份文档，以产出一个更准确的回答和建议。
 
-1.  **创建知识库：**进入百炼控制台，在左侧导航栏选择**数据接入** > **知识管理**，进入[知识管理](https://bailian.console.aliyun.com/cn-beijing/rag/knowledge/list)页面，单击**创建**。填写**名称**和**描述**，知识库类型选择**文档搜索**，使用场景选择**基础文档问答**，单击**下一步**。
+1.  **创建知识库：**打开[知识管理](https://bailian.console.aliyun.com/cn-beijing/rag/knowledge/list)，单击**创建**。填写**名称**和**描述**，知识库类型选择**文档搜索**，使用场景选择**基础文档问答**，单击**下一步**。
     
     ![知识管理列表与创建入口](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9103.png)
 2.  **上传文件：**数据来源选择**上传文件**，根据引导上传我们虚构的阿里云百炼系列手机产品介绍，**索引设置**保持默认，单击**创建知识库**。系统将自动完成解析、切片、向量化与索引构建，知识库状态变为**已就绪**后即可用于检索。

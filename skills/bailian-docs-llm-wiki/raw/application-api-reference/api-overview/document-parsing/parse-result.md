@@ -14,7 +14,7 @@
 
 | 参数 | 类型 | 必填 | 说明 |
 | --- | --- | --- | --- |
-| `biz_id` | string | 是 | `/parse/submit` 提交接口返回的业务任务 ID。 |
+| `biz_id` | string | 是 | `/parse/submit` 提交接口返回的业务任务 ID。在线任务使用 `data.biz_id`；离线子任务使用 `data.biz_id_list[].biz_id`。 |
 | `step_start` | integer | 否 | 分片起始位置，默认 `0`。文档结果对应 `layouts`，音视频结果对应 `segments`。 |
 | `step_size` | integer | 否 | 分片步长，默认 `0` |
 | `oss_config` | object | 否 | OSS 输出配置。 |
@@ -37,7 +37,7 @@
 | `data.paragraph_count` | integer | 段落数量。 |
 | `data.page_count` | integer | 页数。 |
 | `data.layouts` | array | 查询分片的布局结果。 |
-| `data.output_format_result` | array | 输出格式结果列表。 |
+| `data.output_format_result` | array | 输出格式结果列表。仅当 `status` 为 `success` 且已获取完所有结果时返回。 |
 | `data.output_format_result[].output_file_url` | string | 输出类型对应 URL。 |
 | `data.output_format_result[].output_type` | string | 输出类型。当值为 `markdown` 时，`output_file_url` 为 Markdown 格式解析结果的 URL。 |
 | `data.media_duration` | number | 文件时长（音视频）。 |

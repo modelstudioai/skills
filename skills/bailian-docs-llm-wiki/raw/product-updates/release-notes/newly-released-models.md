@@ -14,6 +14,16 @@
 
 ## 2026 年
 
+<a id="decision-model-release-0-2026-11-18"></a>
+
+### 2026-11-25
+
+#### decision-model
+
+面向高频业务判断的结构化决策模型，可根据文本、图片或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。
+
+[decision-model](../../model-user-guide/get-started-with-models/model-studio-model-list/model-list-decision/decision-model-stable.md)
+
 <a id="region-0-2026-11-23-qwen-audio-3.1-live"></a>
 
 ### 2026-11-23
@@ -4302,6 +4312,16 @@ Paraformer语音识别提供的文件转写API，能够对常见的音频或音�
 
 ## 2026 年
 
+<a id="decision-model-release-3-2026-11-18"></a>
+
+### 2026-11-25
+
+#### decision-model
+
+面向高频业务判断的结构化决策模型，可根据文本、图片或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。
+
+[decision-model](../../model-user-guide/get-started-with-models/model-studio-model-list/model-list-decision/decision-model-stable.md)
+
 <a id="region-1-2026-11-23-qwen-audio-3.1-live"></a>
 
 ### 2026-11-23
@@ -6516,6 +6536,16 @@ Qwen3系列Turbo模型，实现思考模式和非思考模式的有效融合，�
 
 ## 2026 年
 
+<a id="decision-model-release-6-2026-11-18"></a>
+
+### 2026-11-26
+
+#### decision-model
+
+面向高频业务判断的结构化决策模型，可根据文本、图片或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。
+
+[decision-model](../../model-user-guide/get-started-with-models/model-studio-model-list/model-list-decision/decision-model-stable.md)
+
 <a id="region-2-2026-11-20-qwen4-max-local"></a>
 
 ### 2026-11-20
@@ -7690,6 +7720,16 @@ Qwen3系列Plus模型，实现思考模式和非思考模式的有效融合，�
 
 ## 2026 年
 
+<a id="decision-model-release-8-2026-11-18"></a>
+
+### 2026-11-26
+
+#### decision-model
+
+面向高频业务判断的结构化决策模型，可根据文本、图片或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。
+
+[decision-model](../../model-user-guide/get-started-with-models/model-studio-model-list/model-list-decision/decision-model-stable.md)
+
 <a id="region-3-2026-11-16"></a>
 
 ### 2026-11-16
@@ -8606,6 +8646,16 @@ Qwen3系列Plus模型，实现思考模式和非思考模式的有效融合，�
 
 ## 2026 年
 
+<a id="decision-model-release-10-2026-11-18"></a>
+
+### 2026-11-26
+
+#### decision-model
+
+面向高频业务判断的结构化决策模型，可根据文本、图片或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。
+
+[decision-model](../../model-user-guide/get-started-with-models/model-studio-model-list/model-list-decision/decision-model-stable.md)
+
 <a id="region-4-2026-11-16"></a>
 
 ### 2026-11-16
@@ -9049,6 +9099,16 @@ Qwen3.6原生视觉语言系列Plus模型，展现出与当前顶尖前沿模型
 <a id="region-5-2026"></a>
 
 ## 2026 年
+
+<a id="decision-model-release-11-2026-11-18"></a>
+
+### 2026-11-26
+
+#### decision-model
+
+面向高频业务判断的结构化决策模型，可根据文本、图片或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。
+
+[decision-model](../../model-user-guide/get-started-with-models/model-studio-model-list/model-list-decision/decision-model-stable.md)
 
 <a id="region-5-2026-11-16"></a>
 

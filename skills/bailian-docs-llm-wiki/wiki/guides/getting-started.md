@@ -1,34 +1,51 @@
 # getting started
 
-百炼平台提供统一的 API 接口与 CLI 工具，支持快速接入大模型能力。本文档面向开发者，说明基础使用路径、关键参数含义、功能边界及常见约束。所有操作均需完成 [安装与鉴权](getting-started/installation.md) 后方可进行。
+阿里云百炼 CLI 是面向 AI Agent 的命令行工具，将百炼平台的全模态能力（文本、图像、视频、语音、视觉理解、RAG、记忆等）封装为结构化工具调用。开发者安装并完成鉴权后，即可通过自然语言指令驱动 Agent 调度底层服务，无需手动编写 API 请求。本文档汇总核心入门路径，覆盖能力范围、关键参数、使用方式及约束条件。
 
 ## 支持的模型/功能
 
-当前支持调用 Qwen 系列（如 qwen-max、qwen-plus、qwen-turbo）、Yi 系列及部分开源模型（通过 `model` 参数指定）。文本生成、流式响应、[函数调用](../concepts/function-calling.md)（tool calling）和多轮对话上下文管理均已上线。图像理解（qwen-vl）与语音转文本（qwen-audio）功能处于灰度阶段，详见 [概览](getting-started/overview.md)。> **注意**：文档 1 中未列出具体模型列表，实际可用模型以 [快速开始](getting-started/quickstart.md) 示例中 `model` 字段值为准，部分旧文档提及的 `qwen-14b-chat` 已下线。
+CLI 提供 10+ 类原子能力，按产品线组织为四大类：  
+- **模型调用**：支持文本对话（含 Omni 全模态）、[图像生成与编辑](../capabilities/model-invocation/image.md)、[视频生成与编辑](../capabilities/model-invocation/video.md)、语音合成与识别（TTS/ASR）、视觉理解（文档/图像/视频解析）、ParseX 文档解析、批量推理、决策模型；  
+- **模型训练与部署**：涵盖数据集管理、模型微调（文本/音频/图像/视频）、模型部署（含吞吐预留）、自定义模型导入；  
+- **Agent 基础设施**：包括 Managed Agent、Flow Agent、[RAG](../capabilities/agent-infrastructure/rag.md)、Memory、联网搜索、MCP & Skill、Sandbox；  
+- **平台管理与工具**：用量与配额、监控日志告警、配置与通用工具。  
+完整能力清单见 [阿里云百炼 CLI](../../raw/cli/getting-started/overview.md) 文档。
 
 ## 关键参数
 
-必填参数：`model`（模型标识符）、`input.messages`（消息数组，至少含 `role` 和 `content`）。  
-常用可选参数：`temperature`（0.0–2.0，默认 1.0）、`top_p`（0.1–1.0）、`max_tokens`（默认 2048，最大 8192）、`stream`（布尔值，启用流式响应）。  
-工具调用需额外传入 `tools` 数组与 `tool_choice`。参数语义与行为严格遵循 [快速开始](getting-started/quickstart.md) 中定义的 schema。
+CLI 鉴权支持多种凭据类型，需根据场景选择并显式指定配置上下文：  
+- `--console`：控制台登录（推荐交互式环境），自动打通 OpenAPI 与控制台能力；  
+- `--api-key <key>`：普通 API Key，适用于按量计费场景；  
+- `--config token-plan --api-key <sk-sp-Key>`：[Token](../concepts/token.md) Plan 订阅 Key，**必须显式指定 `--config token-plan`**，否则不会扣减套餐额度；  
+- `--access-key-id` / `--access-key-secret`：用于生成临时访问令牌（如配合 Postman），支持 STS `--security-token`；  
+- 环境变量 `DASHSCOPE_API_KEY` 可替代配置文件，但 `BAILIAN_ACCESS_KEY_ID` 等仅在需要 OpenAPI 或控制台能力时生效。  
+> **注意**：文档 3 中称“执行 `bl auth login --console` 即可”，但文档 2 明确指出 [Token](../concepts/token.md) Plan 必须使用 `--config token-plan` 参数且需单独切换 Profile（`bl config use --name token-plan`），否则 CLI 默认使用 `default` Profile 导致不扣减套餐额度 —— 此处存在操作指引不一致，应以 [安装与鉴权](../../raw/cli/getting-started/installation.md) 为准。
 
 ## 使用方式
 
-推荐通过 CLI 快速验证：  
-```bash
-bailian chat --model qwen-turbo --message "你好"
-```  
-或调用 REST API（POST `/v1/chat/completions`），需在 Header 中携带 `Authorization: Bearer <api_key>`。完整请求结构与示例见 [快速开始](getting-started/quickstart.md)。CLI 安装与密钥配置步骤请参考 [安装与鉴权](getting-started/installation.md)。
+三步完成接入：  
+1. **安装 CLI**：推荐二进制脚本（无 Node.js 依赖）：  
+   ```bash
+   curl -fsSL https://bailian.aliyun.com/cli/install.sh | bash  # macOS/Linux
+   irm https://bailian.aliyun.com/cli/install.ps1 | iex         # Windows PowerShell
+   ```  
+   或 npm 安装（需 Node.js ≥ 18.17.0）：`npm install -g bailian-cli`；  
+2. **鉴权配置**：执行 `bl auth login --console`（交互式）或 `bl auth login --api-key <key>`（非交互式），随后用 `bl auth status --output json` 校验；  
+3. **下发需求**：向已集成 Skills 的 Agent 发送自然语言指令，例如 `帮我生成一套电商主图，6 张图，产品是纯黑色夏日男装 T 恤`，Agent 将自动调用 `bl image generate` 等命令完成任务。  
+详细步骤见 [快速开始](../../raw/cli/getting-started/quickstart.md)。
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 总 token 数上限为 32768（含 system prompt）；  
-- 免费试用额度为 1000 次/日，超出后需绑定计费账户；  
-- 流式响应（`stream=true`）下，`max_tokens` 实际生效值可能略低于设定值，因服务端需预留终止标记空间；  
-- 非 JSON Schema 格式的 `tools` 定义将被静默忽略——该行为与 [概览](getting-started/overview.md) 描述一致，但与早期内测文档存在差异。
+- CLI 工具本身免费开源，但模型调用、存储、带宽等按实际用量计费，新用户享有免费额度；  
+- `bl skill init` 是安装全部官方 Skills 的首选方式；若不可用，需固定 `skills@1.5.18`（Node.js 18 环境不兼容新版）；  
+- **AK/SK 不与 API Key 混用**：CLI 按“命令参数 → 百炼环境变量 → 百炼配置 → 阿里云环境变量”顺序解析凭据，**不跨来源拼接字段**（如不能用 `--api-key` + 环境变量 `BAILIAN_ACCESS_KEY_ID` 组合）；  
+- 控制台类命令（如 `app list`, `usage free`）必须完成 `--console` 登录；[Token](../concepts/token.md) Plan 用户若需席位管理，还需额外提供 AK/SK；  
+- 所有敏感信息（如 API Key）严禁明文输出或写入日志/仓库，`bl auth status` 仅返回脱敏字段。
 
 ## 来源文档
 
-- [开始使用](../../raw/cli/getting-started.md)
+- [阿里云百炼 CLI](../../raw/cli/getting-started/overview.md)
+- [安装与鉴权](../../raw/cli/getting-started/installation.md)
+- [快速开始](../../raw/cli/getting-started/quickstart.md)
 
 

@@ -1876,36 +1876,17 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 <table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>wan2.6-t2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-i2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-r2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr></tbody></table>
 
-<a id="舞动人像animateanyone"></a>
-
-<a id="02e62576072f0"></a>
-
-#### 舞动人像AnimateAnyone
-
-<a id="sec-tabs-66"></a>
-
-<a id="华北2-北京-60"></a>
-
-<a id="华北2-北京-60-h4"></a>
-
-#### 华北2（北京）
-
-| 模型名称 | 每秒钟调用次数（RPS） | 同时处理中任务数量 |
-| --- | --- | --- |
-| animate-anyone-detect | 5 | 1算力单元支持2并发 |
-| animate-anyone | 5 | 1算力单元支持1并发 |
-
 <a id="声动人像videoretalk"></a>
 
 <a id="4bb36ecec8el3"></a>
 
 #### 声动人像VideoRetalk
 
-<a id="sec-tabs-67"></a>
+<a id="sec-tabs-66"></a>
 
-<a id="华北2-北京-61"></a>
+<a id="华北2-北京-60"></a>
 
-<a id="华北2-北京-61-h4"></a>
+<a id="华北2-北京-60-h4"></a>
 
 #### 华北2（北京）
 
@@ -1919,11 +1900,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### 视频风格重绘
 
-<a id="sec-tabs-68"></a>
+<a id="sec-tabs-67"></a>
 
-<a id="华北2-北京-62"></a>
+<a id="华北2-北京-61"></a>
 
-<a id="华北2-北京-62-h4"></a>
+<a id="华北2-北京-61-h4"></a>
 
 #### 华北2（北京）
 
@@ -1937,11 +1918,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### 爱诗系列
 
-<a id="sec-tabs-69"></a>
+<a id="sec-tabs-68"></a>
 
-<a id="华北2-北京-63"></a>
+<a id="华北2-北京-62"></a>
 
-<a id="华北2-北京-63-h4"></a>
+<a id="华北2-北京-62-h4"></a>
 
 #### 华北2（北京）
 
@@ -1955,11 +1936,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### 可灵系列
 
-<a id="sec-tabs-70"></a>
+<a id="sec-tabs-69"></a>
 
-<a id="华北2-北京-64"></a>
+<a id="华北2-北京-63"></a>
 
-<a id="华北2-北京-64-h4"></a>
+<a id="华北2-北京-63-h4"></a>
 
 #### 华北2（北京）
 
@@ -1971,11 +1952,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### Vidu系列
 
-<a id="sec-tabs-71"></a>
+<a id="sec-tabs-70"></a>
 
-<a id="华北2-北京-65"></a>
+<a id="华北2-北京-64"></a>
 
-<a id="华北2-北京-65-h4"></a>
+<a id="华北2-北京-64-h4"></a>
 
 #### 华北2（北京）
 
@@ -1987,11 +1968,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### MiniMax系列
 
-<a id="sec-tabs-72"></a>
+<a id="sec-tabs-71"></a>
 
-<a id="华北2-北京-66"></a>
+<a id="华北2-北京-65"></a>
 
-<a id="华北2-北京-66-h4"></a>
+<a id="华北2-北京-65-h4"></a>
 
 #### 华北2（北京）
 
@@ -2009,11 +1990,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### Tripo系列
 
-<a id="sec-tabs-73"></a>
+<a id="sec-tabs-72"></a>
 
-<a id="华北2-北京-67"></a>
+<a id="华北2-北京-66"></a>
 
-<a id="华北2-北京-67-h4"></a>
+<a id="华北2-北京-66-h4"></a>
 
 #### 华北2（北京）
 
@@ -2031,11 +2012,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### 文本向量
 
-<a id="sec-tabs-74"></a>
+<a id="sec-tabs-73"></a>
 
-<a id="华北2-北京-68"></a>
+<a id="华北2-北京-67"></a>
 
-<a id="华北2-北京-68-h4"></a>
+<a id="华北2-北京-67-h4"></a>
 
 #### 华北2（北京）
 
@@ -2063,11 +2044,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### 多模态向量
 
-<a id="sec-tabs-75"></a>
+<a id="sec-tabs-74"></a>
 
-<a id="华北2-北京-69"></a>
+<a id="华北2-北京-68"></a>
 
-<a id="华北2-北京-69-h4"></a>
+<a id="华北2-北京-68-h4"></a>
 
 #### 华北2（北京）
 
@@ -2079,11 +2060,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### 排序模型
 
-<a id="sec-tabs-76"></a>
+<a id="sec-tabs-75"></a>
 
-<a id="华北2-北京-70"></a>
+<a id="华北2-北京-69"></a>
 
-<a id="华北2-北京-70-h4"></a>
+<a id="华北2-北京-69-h4"></a>
 
 #### 华北2（北京）
 
@@ -2109,11 +2090,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### 意图理解
 
-<a id="sec-tabs-77"></a>
+<a id="sec-tabs-76"></a>
 
-<a id="华北2-北京-71"></a>
+<a id="华北2-北京-70"></a>
 
-<a id="华北2-北京-71-h4"></a>
+<a id="华北2-北京-70-h4"></a>
 
 #### 华北2（北京）
 
@@ -2125,11 +2106,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### 角色扮演
 
-<a id="sec-tabs-78"></a>
+<a id="sec-tabs-77"></a>
 
-<a id="华北2-北京-72"></a>
+<a id="华北2-北京-71"></a>
 
-<a id="华北2-北京-72-h4"></a>
+<a id="华北2-北京-71-h4"></a>
 
 #### 华北2（北京）
 
@@ -2173,11 +2154,11 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### 界面交互
 
-<a id="sec-tabs-79"></a>
+<a id="sec-tabs-78"></a>
 
-<a id="华北2-北京-73"></a>
+<a id="华北2-北京-72"></a>
 
-<a id="华北2-北京-73-h4"></a>
+<a id="华北2-北京-72-h4"></a>
 
 #### 华北2（北京）
 
@@ -2189,15 +2170,15 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### 决策模型
 
-<a id="sec-tabs-80"></a>
+<a id="sec-tabs-79"></a>
 
-<a id="华北2-北京-74"></a>
+<a id="华北2-北京-73"></a>
 
-<a id="华北2-北京-74-h4"></a>
+<a id="华北2-北京-73-h4"></a>
 
 #### 华北2（北京）
 
-<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>decision-model-preview</p></td><td><p>1,200</p></td><td><p>2,000,000</p></td></tr></tbody></table>
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>decision-model-preview</p></td><td><p>1,200</p></td><td><p>2,000,000</p></td></tr><tr><td><p>decision-model</p></td><td><p>5,000</p></td><td><p>5,000,000</p></td></tr></tbody></table>
 
 <a id="新加坡-39"></a>
 
@@ -2205,7 +2186,39 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 #### 新加坡
 
-<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>decision-model-preview</p></td><td><p>1,200</p></td><td><p>2,000,000</p></td></tr></tbody></table>
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>decision-model-preview</p></td><td><p>1,200</p></td><td><p>2,000,000</p></td></tr><tr><td><p>decision-model</p></td><td><p>5,000</p></td><td><p>5,000,000</p></td></tr></tbody></table>
+
+<a id="美国-弗吉尼亚-17"></a>
+
+<a id="美国-弗吉尼亚-17-h4"></a>
+
+#### 美国（弗吉尼亚）
+
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>decision-model</p></td><td><p>5,000</p></td><td><p>5,000,000</p></td></tr></tbody></table>
+
+<a id="德国-法兰克福-16"></a>
+
+<a id="德国-法兰克福-16-h4"></a>
+
+#### 德国（法兰克福）
+
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>decision-model</p></td><td><p>5,000</p></td><td><p>5,000,000</p></td></tr></tbody></table>
+
+<a id="日本-东京-9"></a>
+
+<a id="日本-东京-9-h4"></a>
+
+#### 日本（东京）
+
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>decision-model</p></td><td><p>5,000</p></td><td><p>5,000,000</p></td></tr></tbody></table>
+
+<a id="中国香港-9"></a>
+
+<a id="中国香港-9-h4"></a>
+
+#### 中国香港
+
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>decision-model</p></td><td><p>5,000</p></td><td><p>5,000,000</p></td></tr></tbody></table>
 
 <a id="已下线模型"></a>
 

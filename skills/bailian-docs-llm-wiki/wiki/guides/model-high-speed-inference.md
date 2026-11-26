@@ -1,59 +1,58 @@
 # model high speed inference
 
-百炼平台提供多种面向高吞吐、低延迟场景的推理加速能力，核心包括 Prime 模式（轻量级提速）、吞吐预留（TPM 专属容量保障）、批量推理（异步低成本）及智能路由（动态模型选型）。所有方案均基于标准 API 协议兼容设计，开发者可按业务 SLA、成本敏感度与运维复杂度需求选择组合。
+百炼平台提供多种面向高吞吐、低延迟场景的高速推理能力，核心包括 Prime 模式（轻量级加速）、吞吐预留（容量保障）、批量推理（异步降本）及机密推理（安全增强）。所有方案均兼容 OpenAI 等主流协议，无需修改业务代码即可接入。
 
 ## 支持的模型/功能
 
-- **Prime 模式**：专为输出速度敏感场景优化，TPS 提升至标准 API 的 1.5~2 倍。支持 `glm-5.2-fast-preview`、`glm-5.3-prime`、`wan3.0-video-prime` 等模型，能力与原版模型一致，但计费按 token 细粒度拆分（输入/输出/缓存命中）[原文标题](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。  
-- **吞吐预留（TPM Reservation）**：为指定模型锁定专属推理容量，支持**标准模式**（TPS 与标准 API 相同）和**高速模式**（TPS 提升 1.5~2 倍），覆盖 Qwen、GLM、DeepSeek、Kimi 等主流系列 [原文标题](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation.md)。  
-- **批量推理（Batch Inference）**：异步处理大批量请求，成本约为实时推理的 50%，适用于模型评测、数据标注等非实时场景，支持 qwen3/4 系列、Qwen-VL、向量模型等 [原文标题](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md)。  
-- **智能路由（Auto-Model Routing）**：通过 `auto-model-xxxxxx` model-code 动态匹配最优备选模型，支持“效果优先”与“成本优先”策略，当前备选集含 `qwen3.8-flash`、`glm-5.2`、`deepseek-v4-pro-0813` 等十余款模型。  
+- **Prime 模式**：专为输出速度敏感场景优化，TPS 提升至标准 API 的 1.5~2 倍。支持文本生成模型（如 `glm-5.2-fast-preview`、`glm-5.3-prime`）和视频生成模型（如 `wan3.0-video-prime`），能力与原版模型完全一致，仅推理链路加速 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
+- **吞吐预留（高速模式）**：为指定模型锁定专属推理容量，推理速度相比标准模式提升 1.5~2 倍，适用于高并发、低延迟场景。支持 `Qwen3.8-Max`、`Qwen3.7-Plus-2026-05-26`、`GLM-5.2`、`DeepSeek-v4-Pro` 等主流模型，但 `GLM-5.3` 和 `Qwen4-Max` 在华北2（北京）暂不支持高速模式 [吞吐预留概述](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation.md)。
+- **批量推理**：异步处理大批量请求，成本约为实时推理的 50%，适用于模型评测、数据标注等非实时场景。支持 `qwen4-max`、`qwen3.8-max`、`qwen3.7-plus`、`qwen3.7-flash` 等系列模型，单次请求上下文最大支持 256K token [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md)。
+- **机密推理**：基于 TEE 硬件级可信执行环境，全程加密计算，保障提示词与输出隐私。当前支持 `cmaas-qwen3.8-flash`、`cmaas-glm-5.3`、`cmaas-deepseek-v4-flash-0731` 等模型，部署后通过专用 SDK 调用 [机密推理](../../raw/model-user-guide/model-high-speed-inference/confidential-inference.md)。
 
-> **注意**：文档 2 中表格显示 `GLM-5.3` 在华北2（北京）**不支持高速模式**，但文档 1 明确列出 `glm-5.3-prime` 为 Prime 模式支持模型。二者逻辑一致（Prime 是吞吐预留高速模式的轻量实现），但术语需统一——实际使用中 `glm-5.3-prime` 即对应 GLM-5.3 的高速推理能力，无需额外创建吞吐预留实例。
+> **注意**：文档 2 中表格显示 `GLM-5.3` 在华北2（北京）“高速模式”列为 ×，但文档 1 的 Prime 模式价格表明确列出 `glm-5.3-prime` 模型。二者定位不同：Prime 是轻量 API 层加速，吞吐预留高速模式是底层资源独占加速。两者不冲突，但不可混用——调用 `glm-5.3-prime` 不消耗吞吐预留容量。
 
 ## 关键参数
 
-| 参数 | 说明 | 示例值 |
-|------|------|--------|
-| `model` | 启用加速能力的核心标识符 | `"glm-5.2-fast-preview"`（Prime）、`"your-dedicated-model-code"`（吞吐预留）、`"auto-model-abcd1234"`（智能路由） |
-| `service_tier`（响应字段） | 标识是否命中预留容量 | `"ptu_fast"`（高速模式预留）、`"ptu_default"`（标准模式预留）、`null`（未命中，走公共池） |
-| `provisioned_tokens`（响应字段） | **折算后**消耗的预留容量（含长输入阶梯放大与缓存折扣） | `usage.prompt_tokens_details.provisioned_tokens`（输入侧） |
-| `cached_tokens`（响应字段） | 输入中命中前缀缓存的 token 数 | `usage.prompt_tokens_details.cached_tokens` |
-
-> **注意**：吞吐预留的容量消耗是**折算值**，非原始 token 数。例如 `qwen3.7-flash` 输入 50K 且无缓存时，因长输入阶梯系数（(32K,256K] 区间为 3x）实际消耗 86 kTPM；若前 30K 命中缓存（系数 0.2），则消耗降至 62 kTPM [原文标题](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation-long-input.md)。
+- **Prime 模式**：无额外参数，仅需将 `model` 设为对应 Prime 模型 ID（如 `glm-5.2-fast-preview`），接入域名使用 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`。
+- **吞吐预留**：创建时需指定 `推理模式`（标准/高速）、`付费周期`（预付费/按天 或 后付费/按小时）、`输入/输出容量`（单位 kTPM，起步 200/20，步长 10/1），以及 `溢出策略`（默认自动溢出，超出部分转按量计费）[创建、接入与管理](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation-create.md)。
+- **批量推理**：JSONL 文件中每个请求必须包含 `custom_id`（唯一标识）、`method`（固定为 `POST`）、`url`（如 `/v1/chat/completions`）和 `body`（与实时 API body 结构一致），且同一文件内所有请求须使用相同模型及 `enable_thinking` 设置 [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md)。
+- **机密推理**：调用必须使用专用 SDK（非 DashScope/OpenAI 官方 SDK），`model` 参数为部署生成的 `cmaas-*` 模型 Code，域名固定为 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，不支持 `dashscope.aliyuncs.com`。
 
 ## 使用方式
 
-1. **Prime 模式**：直接调用 `model` 为 Prime 专用 ID 的接口，无需修改 endpoint 或 header。接入域名格式为 `https://{workspace_id}.{region}.maas.aliyuncs.com/compatible-mode/v1`。  
-2. **吞吐预留**：在控制台创建后获取专属 `model code`，将其替换至请求中的 `model` 字段即可。支持 OpenAI Chat 兼容、Anthropic、OpenAI Responses 三种协议，但 Responses 协议**不消耗预留容量**（按量计费）[原文标题](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation-create.md)。  
-3. **批量推理**：上传 JSONL 文件（每行一个 POST 请求对象），指定 `/v1/chat/completions` 或 `/v1/embeddings` endpoint，系统异步执行并返回结果文件。  
-4. **智能路由**：使用 `auto-model-xxxxxx` model-code 发起标准 OpenAI Chat Completions 请求，响应体中 `model` 字段返回实际执行的模型名，`usage` 字段记录真实 token 消耗。
+- **Prime 模式**：直接替换 `model` 参数发起调用，示例：
+  ```bash
+  curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+    -H "Authorization: Bearer $API_KEY" \
+    -d '{"model": "glm-5.2-fast-preview", "messages": [{"role": "user", "content": "你是谁"}]}'
+  ```
+- **吞吐预留**：创建成功后获取专属 `模型 code`，在任意兼容协议（OpenAI Chat、Anthropic Messages）中将其设为 `model` 值。关键验证字段为响应中的 `service_tier`（`ptu_fast` 表示命中高速预留）和 `provisioned_tokens`（折算后消耗量）[创建、接入与管理](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation-create.md)。
+- **批量推理**：通过控制台或 API 提交 JSONL 文件，任务完成后下载结果文件（含成功响应）和错误文件（含失败详情）。不返回 `reasoning_content` 字段，如需思考过程请使用实时 API [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md)。
+- **机密推理**：部署后使用 [机密推理 SDK](https://github.com/dashscope/dashscope-)，调用方式与普通 SDK 类似，但需传入 `workspace` 和 `region`，且 `model` 必须为 `cmaas-*` 格式 Code。
 
 ## 限制和注意事项
 
-- **Prime 模式限流**：虽有特殊限流机制（资源充足时不触发），但**仍受账号级 RPM/TPM 配额约束**，超限将返回 429。  
-- **吞吐预留容量折算**：购买的 kTPM 容量按长输入阶梯系数与缓存折算系数动态计算，务必使用控制台“以折算容量观测”开关查看真实利用率；超出部分按溢出策略处理（默认自动转按量计费）。  
-- **模型兼容性**：  
-  - Prime 模式与吞吐预留高速模式**不支持思考模式（reasoning_content）的流式分片推送**，但响应体仍包含完整 `reasoning_content` 字段（见文档 1 返回示例）。  
-  - 批量推理结果文件**不包含 `reasoning_content` 字段**，如需思考过程必须使用实时 API 调用。  
-- **地域与协议限制**：智能路由仅支持 `maas.aliyuncs.com` 域名，不支持 `dashscope.aliyuncs.com`；吞吐预留的 Anthropic 协议必须使用业务空间专属域名（`{workspaceId}.{region}.maas.aliyuncs.com`）。  
-- **计费差异**：Prime 按 token 计费；吞吐预留预付费容量内不另收 token 费，溢出部分才按量计费；批量推理与智能路由均为纯按量计费。
+- **Prime 模式**：不改变模型能力与限制，仅加速输出；`wan3.0-video-prime` 计费按输入/输出视频秒数，而非 token [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
+- **吞吐预留**：长输入与前缀缓存会显著影响实际容量消耗——50K 输入可能因阶梯系数放大至 86 kTPM，而缓存命中可使其降至 27.5 kTPM。务必使用 [TPM 容量计算器](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation-long-input.md) 并结合折算规则估算 [长输入与前缀缓存](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation-long-input.md)。
+- **批量推理**：不支持流式响应；`qwen3.8-max` 等模型默认开启思考模式，若无需思考内容，必须显式设置 `enable_thinking=false`，否则成本增加 [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md)。
+- **通用限制**：所有高速方案均不支持 Responses 协议的容量保障（文档 10 明确指出 Responses 调用 `不消耗预留容量`）；智能路由（`auto-model-*`）虽能自动选模，但其本身不提供加速，仅优化效果与成本，不属于“高速推理”范畴。
 
 ## 来源文档
 
 - [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)
 - [吞吐预留概述](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation.md)
-- [创建、接入与管理](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation-create.md)
+- [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index.md)
 - [长输入与前缀缓存](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation-long-input.md)
 - [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md)
 - [模型部署](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index.md)
-- [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index.md)
 - [专属部署概述](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)
 - [部署模式](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes.md)
 - [独占吞吐（DTU）](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)
-- [Token 按量部署](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/model-deployment-token.md)
-- [模型导入](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-import.md)
+- [创建、接入与管理](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation-create.md)
 - [API 部署指南](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)
+- [模型导入](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-import.md)
 - [智能路由](../../raw/model-user-guide/model-high-speed-inference/model-routing.md)
+- [Token 按量部署](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/model-deployment-token.md)
+- [机密推理](../../raw/model-user-guide/model-high-speed-inference/confidential-inference.md)
 
 

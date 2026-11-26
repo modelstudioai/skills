@@ -22,7 +22,7 @@
 
 ### 安装 SDK
 
-1.  [下载最新 SDK 整合包](https://help.aliyun.com/zh/model-studio/sdk-selection-and-download)。
+1.  [下载最新 SDK 整合包](../model-api-reference/more-about-models/sdk-selection-and-download.md)。
 2.  解压 ZIP 包，将 `app/libs` 目录中的 AAR SDK 添加到项目依赖。
 3.  如需接入 Android C++，从 ZIP 包内的 `android_libs` 和 `android_include` 获取动态库和头文件。
 

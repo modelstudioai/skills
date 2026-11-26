@@ -1,43 +1,14 @@
-# 非实时语音识别（Qwen-Audio-ASR）HTTP API
+# Qwen-Audio-ASR HTTP API
 
-本文介绍Qwen-Audio-ASR非实时语音识别HTTP API的参数和接口细节。
-
-关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02)。
-
-<a id="接口地址"></a>
+提交音频文件的公网 URL 或 Base64 Data URI，获取转写文本和词级时间戳。支持一次返回结果或通过 SSE 流式返回。
 
 <a id="h-fl-url"></a>
 
-## 接口地址
-
-<a id="sec-tabs"></a>
-
-<a id="华北2-北京"></a>
-
-<a id="华北2-北京-h4"></a>
-
-#### 华北2（北京）
-
-`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
-
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
-
-<a id="新加坡"></a>
-
-<a id="新加坡-h4"></a>
-
-#### 新加坡
-
-`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
-
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
-
-> **重要**
+> **说明**
 >
-> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
->
-> -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-> -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+> 示例使用华北2（北京）地域。将 `{WorkspaceId}` 替换为[业务空间 ID](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)，并将环境变量 `DASHSCOPE_API_KEY` 设为该地域的 [API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)。
+
+POST`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 <a id="请求头"></a>
 
@@ -45,292 +16,701 @@
 
 ## 请求头
 
-| 参数 | 类型 | 是否必选 | 说明 |
-| --- | --- | --- | --- |
-| `Authorization` | `string` | 是 | 鉴权令牌，格式为`Bearer <your_api_key>`，使用时将"`<your_api_key>`"替换为实际的API Key。 |
-| `Content-Type` | `string` | 是 | 请求参数的媒体类型，固定为`application/json`。 |
-| `X-DashScope-SSE` | `string` | 否 | 用于控制是否请求流式返回。设置为 `enable` 时请求 SSE 流式返回；设置为 `disable` 或不传该参数则仅返回最终结果。<br><br>> **说明**<br>><br>> 仅适用于 `qwen-audio-3.0-asr-flash`：音频时长不少于 1 分钟时才以 SSE 流式方式返回结果。 |
+`Authorization`string必填
 
-<table><tbody><tr><td><a id="h-fl-rq"></a><h2>请求参数</h2><p><strong>model</strong><code>string</code><strong>（必选）</strong></p><p>模型名称。</p><p><strong>input</strong><code>object</code><strong>（必选）</strong></p><p>输入信息。</p><a id="accordion-属性"></a><section><p>属性</p><div><p><strong>messages</strong><code>array(object)</code><strong>（必选）</strong></p><p>消息列表。包含当前待识别的音频，以及可选的对话上下文（用于提升识别效果）。</p><div><div><p><strong>重要</strong>上下文功能用于提升专有词汇的识别准确率，使用方法详见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#ctx_enhance_h2">上下文增强</a>。</p><p>上下文消息（<code>input_text</code> 和 <code>text</code> 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（<code>user</code> 和 <code>assistant</code> 的 <code>text</code> 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。</p></div></div><div><div><p><strong>重要</strong>携带上下文时，<code>messages</code> 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 <code>user</code>（<code>input_text</code> 类型）必须在对应的 <code>assistant</code>（<code>text</code> 类型）之前；包含 <code>input_audio</code> 的 <code>user</code> 消息必须放在 <code>messages</code> 数组的最后。</p></div></div><a id="accordion-属性-2"></a><section><p>属性</p><div><p><strong>role</strong><code>string</code><strong>（必选）</strong></p><p>消息角色。取值范围：</p><ul><li><code>user</code>（必选）：用户消息。type为<code>input_audio</code>时表示当前待识别的音频；type为<code>input_text</code>时表示前几轮的识别结果或领域相关的词表（可选，上下文）。</li><li><code>assistant</code>（可选，上下文）：前几轮大语言模型的回复内容。</li></ul><p><strong>content</strong><code>array(object)</code><strong>（必选）</strong></p><p>消息内容列表。</p><a id="accordion-属性-3"></a><section><p>属性</p><div><p><strong>type</strong><code>string</code><strong>（必选）</strong></p><p>内容类型。每个请求至少需要一条<code>input_audio</code>类型的消息。取值范围：</p><ul><li><code>input_audio</code>（必选）：当前待识别的音频输入（role为user），需同时传入<code>input_audio</code>对象。</li><li><code>input_text</code>（可选，上下文）：前几轮用户语音的识别结果或领域相关的词表（role为user），需同时传入<code>text</code>字段。</li><li><code>text</code>（可选，上下文）：前几轮大语言模型的回复内容（role为assistant），需同时传入<code>text</code>字段。</li></ul><p><strong>input_audio</strong><code>object</code><strong>（条件必选）</strong></p><p>当<code>type</code>为<code>input_audio</code>时必填。</p><a id="accordion-属性-4"></a><section><p>属性</p><div><p><strong>data</strong><code>string</code><strong>（必选）</strong></p><p>待识别音频数据。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02">音频规格</a>。支持以下两种方式：</p><ul><li><strong>音频文件URL</strong>：直接传入可公开访问的音频文件地址。</li><li><strong>Base64 Data URI</strong>：采用Data URI格式传入Base64编码的音频数据，值由<code>data:{MIME_TYPE};base64,</code>前缀与Base64编码的音频数据拼接而成。支持的MIME类型包括<code>audio/wav</code>、<code>audio/mp3</code>等。</li></ul><p>示例（URL方式）：<code>https://example.com/audio/sample.wav</code></p><p>示例（Base64方式）：<code>data:audio/wav;base64,{BASE64_ENCODED_DATA}</code></p></div></section><p><strong>text</strong><code>string</code><strong>（条件必选）</strong></p><p>当<code>type</code>为<code>input_text</code>时，填入前几轮用户语音的识别结果或领域相关的词表；当<code>type</code>为<code>text</code>时，填入前几轮大语言模型的回复内容。文本按字符数计算，每个字符计为 1。每轮上下文中所有消息的 <code>text</code> 字段长度之和不超过 400 个字符，超出部分从末尾截断。</p></div></section></div></section></div></section><p><strong>parameters</strong><code>object</code><strong>（必选）</strong></p><p>模型参数。</p><div><div><p><strong>说明</strong><code>qwen-audio-3.0-asr-flash</code> 的润色顺滑功能默认关闭，暂未开放。<code>qwen-audio-3.1-asr-flash</code> 支持原生文本润色。</p><p>润色顺滑：模型在识别语音的同时，自动清理无意义语气词和口吃重复，处理说话过程中的自我纠正，理顺口语表达，并规范标点与文本格式。输出结果更加简洁、流畅、易读，同时尽可能保留用户的最终意图和关键信息。</p></div></div><a id="accordion-属性-5"></a><section><p>属性</p><div><p><strong>speaker_diarization_enabled</strong> <code>boolean</code> （可选）</p><div><div><p><strong>说明</strong>仅适用于 <code>qwen-audio-3.1-asr-flash</code>。</p></div></div><p>是否启用说话人分离，默认值为 <code>false</code>。设为 <code>true</code> 时，通过响应中的 <code>speaker_id</code> 区分说话人，并返回 <code>output.sentences</code>。开启后，<code>keep_dialect</code> 和 <code>language_hints</code> 不生效。</p><p><strong>keep_dialect</strong> <code>boolean</code> （可选）</p><div><div><p><strong>说明</strong>仅适用于 <code>qwen-audio-3.1-asr-flash</code>。</p></div></div><p>是否保留方言表达，默认值为 <code>false</code>。<code>false</code>：将方言转写为普通话文本；<code>true</code>：保留方言表达。</p><p><strong>format</strong><code>string</code><strong>（必选）</strong></p><p>音频格式。根据实际音频格式填写，支持<code>wav</code>、<code>mp3</code>、<code>opus</code>等。详情请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02">音频规格</a>。</p><p><strong>sample_rate</strong><code>string</code>（可选）</p><p>音频采样率，单位Hz。例如<code>16000</code>表示16kHz采样率。详情请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02">音频规格</a>。</p><p><strong>vocabulary_id</strong><code>string</code>（可选）</p><p>预编译热词列表 ID。</p><p>需预先调用创建热词列表接口生成，识别时传入该 ID 即可使用列表中的热词。</p><p>适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。</p><p>使用方法请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_precompiled_h3">预编译热词</a>。</p><p><strong>vocabulary</strong><code>object</code>（可选）</p><p>即时热词。</p><p>以键值对形式传入，键为热词文本（<code>string</code>），值为热词权重（<code>integer</code>），无需预先创建热词列表。权重取值范围为 [1, 5] 或 50：取 [1, 5] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。</p><p>适用于临时性、会话级别的热词优化。</p><p>与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_instant_h3">即时热词</a>。</p><p><strong>language_hints</strong> <code>array[string]</code>（可选）</p><p>设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。最多支持设置 4 个值，超出时仅前 4 个生效。</p><p>指定语种代码可提升识别准确率。</p><a id="accordion-支持的语言代码"></a><section><p>支持的语言代码</p><div><ul><li>zh: 中文</li><li>en: 英文</li><li>ja: 日语</li><li>ko: 韩语</li><li>vi: 越南语</li><li>th: 泰语</li><li>id: 印尼语</li><li>ms: 马来语</li><li>tl: 菲律宾语</li><li>hi: 印地语</li><li>ar: 阿拉伯语</li><li>fr: 法语</li><li>de: 德语</li><li>es: 西班牙语</li><li>pt: 葡萄牙语</li><li>ru: 俄语</li><li>it: 意大利语</li><li>nl: 荷兰语</li><li>sv: 瑞典语</li><li>da: 丹麦语</li><li>fi: 芬兰语</li><li>no: 挪威语</li><li>el: 希腊语</li><li>pl: 波兰语</li><li>cs: 捷克语</li><li>hu: 匈牙利语</li><li>ro: 罗马尼亚语</li><li>bg: 保加利亚语</li><li>hr: 克罗地亚语</li><li>sk: 斯洛伐克语</li></ul><p><code>qwen-audio-3.1-asr-flash</code> 还支持以下语言代码：</p><ul><li>tr: 土耳其语</li><li>fa: 波斯语</li><li>mr: 马拉地语</li><li>ml: 马拉雅拉姆语</li><li>ne: 尼泊尔语</li><li>ky: 吉尔吉斯语</li><li>az: 阿塞拜疆语</li><li>ka: 格鲁吉亚语</li><li>hy: 亚美尼亚语</li><li>sl: 斯洛文尼亚语</li><li>sq: 阿尔巴尼亚语</li><li>et: 爱沙尼亚语</li><li>lv: 拉脱维亚语</li><li>lt: 立陶宛语</li><li>ca: 加泰罗尼亚语</li><li>eu: 巴斯克语</li><li>gl: 加利西亚语</li><li>or: 奥里亚语</li><li>dv: 迪维希语</li><li>as: 阿萨姆语</li><li>kmr: 北库尔德语</li><li>tig: 提格雷语</li><li>fy: 西弗里西亚语</li><li>ba: 巴什基尔语</li><li>be: 白俄罗斯语</li><li>tt: 鞑靼语</li><li>ia: 国际语</li><li>mhr: 草原马里语</li><li>tok: 道本语</li></ul></div></section></div></section></td><td><p>以下为华北2（北京）地域的配置，调用时请将&quot;{WorkspaceId}&quot;替换为真实的业务空间ID，各地域的配置不同。</p><a id="sec-tabs-2"></a><section><a id="非流式"></a><section><a id="非流式-h4"></a><h4>非流式</h4><a id="code-block"></a><pre class="language-bash"><code>curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
-     --header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
-     --header &quot;Content-Type: application/json&quot; \
-     --header &quot;X-DashScope-SSE: disable&quot; \
-     --data '{
-    &quot;model&quot;: &quot;qwen-audio-3.1-asr-flash&quot;,
-    &quot;input&quot;: {
-        &quot;messages&quot;: [
-            {
-                &quot;role&quot;: &quot;user&quot;,
-                &quot;content&quot;: [
-                    {
-                        &quot;type&quot;: &quot;input_audio&quot;,
-                        &quot;input_audio&quot;: {
-                            &quot;data&quot;: &quot;{YOUR_AUDIO_URL}&quot;
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    &quot;parameters&quot;: {
-        &quot;format&quot;: &quot;wav&quot;,
-        &quot;sample_rate&quot;: &quot;16000&quot;
-    }
-}'
-</code></pre></section><a id="流式"></a><section><a id="流式-h4"></a><h4>流式</h4><a id="code-block-2"></a><pre class="language-bash"><code>curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
-     --header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
-     --header &quot;Content-Type: application/json&quot; \
-     --header &quot;X-DashScope-SSE: enable&quot; \
-     --data '{
-    &quot;model&quot;: &quot;qwen-audio-3.1-asr-flash&quot;,
-    &quot;input&quot;: {
-        &quot;messages&quot;: [
-            {
-                &quot;role&quot;: &quot;user&quot;,
-                &quot;content&quot;: [
-                    {
-                        &quot;type&quot;: &quot;input_audio&quot;,
-                        &quot;input_audio&quot;: {
-                            &quot;data&quot;: &quot;{YOUR_AUDIO_URL}&quot;
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    &quot;parameters&quot;: {
-        &quot;format&quot;: &quot;wav&quot;,
-        &quot;sample_rate&quot;: &quot;16000&quot;
-    }
-}'
-</code></pre></section><a id="携带上下文-非流式"></a><section><a id="携带上下文-非流式-h4"></a><h4>携带上下文-非流式</h4><a id="code-block-3"></a><pre class="language-bash"><code>curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
-     --header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
-     --header &quot;Content-Type: application/json&quot; \
-     --header &quot;X-DashScope-SSE: disable&quot; \
-     --data '{
-    &quot;model&quot;: &quot;qwen-audio-3.1-asr-flash&quot;,
-    &quot;input&quot;: {
-        &quot;messages&quot;: [
-            {
-                &quot;role&quot;: &quot;user&quot;,
-                &quot;content&quot;: [
-                    {
-                        &quot;type&quot;: &quot;input_text&quot;,
-                        &quot;text&quot;: &quot;你好啊&quot;
-                    }
-                ]
-            },
-            {
-                &quot;role&quot;: &quot;assistant&quot;,
-                &quot;content&quot;: [
-                    {
-                        &quot;type&quot;: &quot;text&quot;,
-                        &quot;text&quot;: &quot;你好啊，我是通义千问，有什么可以帮助你的？&quot;
-                    }
-                ]
-            },
-            {
-                &quot;role&quot;: &quot;user&quot;,
-                &quot;content&quot;: [
-                    {
-                        &quot;type&quot;: &quot;input_audio&quot;,
-                        &quot;input_audio&quot;: {
-                            &quot;data&quot;: &quot;{YOUR_AUDIO_URL}&quot;
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    &quot;parameters&quot;: {
-        &quot;format&quot;: &quot;wav&quot;,
-        &quot;sample_rate&quot;: &quot;16000&quot;
-    }
-}'
-</code></pre></section><a id="携带上下文-流式"></a><section><a id="携带上下文-流式-h4"></a><h4>携带上下文-流式</h4><a id="code-block-4"></a><pre class="language-bash"><code>curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
-     --header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
-     --header &quot;Content-Type: application/json&quot; \
-     --header &quot;X-DashScope-SSE: enable&quot; \
-     --data '{
-    &quot;model&quot;: &quot;qwen-audio-3.1-asr-flash&quot;,
-    &quot;input&quot;: {
-        &quot;messages&quot;: [
-            {
-                &quot;role&quot;: &quot;user&quot;,
-                &quot;content&quot;: [
-                    {
-                        &quot;type&quot;: &quot;input_text&quot;,
-                        &quot;text&quot;: &quot;你好啊&quot;
-                    }
-                ]
-            },
-            {
-                &quot;role&quot;: &quot;assistant&quot;,
-                &quot;content&quot;: [
-                    {
-                        &quot;type&quot;: &quot;text&quot;,
-                        &quot;text&quot;: &quot;你好啊，我是通义千问，有什么可以帮助你的？&quot;
-                    }
-                ]
-            },
-            {
-                &quot;role&quot;: &quot;user&quot;,
-                &quot;content&quot;: [
-                    {
-                        &quot;type&quot;: &quot;input_audio&quot;,
-                        &quot;input_audio&quot;: {
-                            &quot;data&quot;: &quot;{YOUR_AUDIO_URL}&quot;
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    &quot;parameters&quot;: {
-        &quot;format&quot;: &quot;wav&quot;,
-        &quot;sample_rate&quot;: &quot;16000&quot;
-    }
-}'
-</code></pre></section><a id="base64"></a><section><a id="base64-h4"></a><h4>Base64</h4><p>可输入Base64编码数据（<a href="https://www.rfc-editor.org/rfc/rfc2397">Data URL</a>），格式为：<code>data:&lt;mediatype&gt;;base64,&lt;data&gt;</code>。</p><ul><li><p><code>&lt;mediatype&gt;</code>：MIME类型</p><p>因音频格式而异，例如：</p><ul><li>WAV：<code>audio/wav</code></li><li>MP3：<code>audio/mpeg</code></li></ul></li><li><p><code>&lt;data&gt;</code>：音频转成的Base64编码的字符串</p><p>Base64 编码会增大数据体积，音频文件的大小和时长限制请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02">音频规格</a>。</p></li><li><p>示例：<code>data:audio/wav;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//PAxABQ/BXRbMPe4IQAhl9</code></p><a id="fig-code-group"></a><div><a id="fig-code-group-python-tab"></a>python<div><a id="code-code-group-python"></a><pre class="language-python"><code>import base64, pathlib
+使用与请求地址对应的 API Key，格式为 `Bearer <API Key>`。
 
-# 请替换为自己的音频文件路径，确保其符合音频要求
-file_path = pathlib.Path(&quot;{YOUR_AUDIO_FILE}&quot;)
-base64_str = base64.b64encode(file_path.read_bytes()).decode()
-data_uri = f&quot;data:audio/mpeg;base64,{base64_str}&quot;
-</code></pre></div><a id="fig-code-group-java-tab"></a>java<div><a id="code-code-group-java"></a><pre class="language-java"><code>import java.nio.file.*;
-import java.util.Base64;
+`Content-Type`string必填
 
-public class Main {
-    /**
-     * 请替换为自己的音频文件路径，确保其符合音频要求
-     */
-    public static String toDataUrl(String filePath) throws Exception {
-        byte[] bytes = Files.readAllBytes(Paths.get(filePath));
-        String encoded = Base64.getEncoder().encodeToString(bytes);
-        return &quot;data:audio/mpeg;base64,&quot; + encoded;
-    }
-
-    public static void main(String[] args) throws Exception {
-        System.out.println(toDataUrl(&quot;{YOUR_AUDIO_FILE}&quot;));
-    }
-}
-</code></pre></div></div></li></ul><a id="code-block-5"></a><pre class="language-python"><code>import base64, pathlib
-import os
-import requests
-
-# 请替换为自己的音频文件路径，确保其符合音频要求
-file_path = pathlib.Path(&quot;{YOUR_AUDIO_FILE}&quot;)
-base64_str = base64.b64encode(file_path.read_bytes()).decode()
-data_uri = f&quot;data:audio/wav;base64,{base64_str}&quot;
-
-url = &quot;https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation&quot;
-
-headers = {
-    &quot;Authorization&quot;: f&quot;Bearer {os.environ['DASHSCOPE_API_KEY']}&quot;,
-    &quot;Content-Type&quot;: &quot;application/json&quot;,
-    &quot;X-DashScope-SSE&quot;: &quot;disable&quot;,
-}
-
-payload = {
-    &quot;model&quot;: &quot;qwen-audio-3.1-asr-flash&quot;,
-    &quot;input&quot;: {
-        &quot;messages&quot;: [
-            {
-                &quot;role&quot;: &quot;user&quot;,
-                &quot;content&quot;: [
-                    {
-                        &quot;type&quot;: &quot;input_audio&quot;,
-                        &quot;input_audio&quot;: {
-                            &quot;data&quot;: data_uri,
-                        },
-                    }
-                ],
-            }
-        ]
-    },
-    &quot;parameters&quot;: {
-        &quot;format&quot;: &quot;wav&quot;,
-        &quot;sample_rate&quot;: &quot;16000&quot;,
-    },
-}
-
-response = requests.post(url, headers=headers, json=payload)
-print(response.status_code)
-print(response.json())
-</code></pre></section><a id="即时热词"></a><section><a id="即时热词-h4"></a><h4>即时热词</h4><a id="code-block-6"></a><pre class="language-bash"><code>curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
-     --header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
-     --header &quot;Content-Type: application/json&quot; \
-     --header &quot;X-DashScope-SSE: disable&quot; \
-     --data '{
-    &quot;model&quot;: &quot;qwen-audio-3.1-asr-flash&quot;,
-    &quot;input&quot;: {
-        &quot;messages&quot;: [
-            {
-                &quot;role&quot;: &quot;user&quot;,
-                &quot;content&quot;: [
-                    {
-                        &quot;type&quot;: &quot;input_audio&quot;,
-                        &quot;input_audio&quot;: {
-                            &quot;data&quot;: &quot;{YOUR_AUDIO_URL}&quot;
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    &quot;parameters&quot;: {
-        &quot;format&quot;: &quot;wav&quot;,
-        &quot;sample_rate&quot;: &quot;16000&quot;,
-        &quot;vocabulary&quot;: {&quot;张三&quot;: 5, &quot;李四&quot;: 5}
-    }
-}'
-</code></pre></section></section></td></tr></tbody></table>
-
-<table><tbody><tr><td><a id="h-fl-rs"></a><h2>响应参数</h2><p><strong>request_id</strong><code>string</code></p><p>本次请求的唯一标识。</p><p><strong>output</strong><code>object</code></p><p>输出结果。</p><a id="accordion-属性-6"></a><section><p>属性</p><div><p><strong>text</strong><code>string</code></p><p>当前累积的完整识别文本。</p><p><strong>sentences</strong> <code>array[object]</code></p><div><div><p><strong>说明</strong>仅适用于 <code>qwen-audio-3.1-asr-flash</code>。</p></div></div><p>开启说话人分离时返回。包含当前及历史句子的识别结果，每个元素的结构与 <code>sentence</code> 相同。</p><p><strong>sentence</strong><code>object</code></p><p>当前句子的详细信息。</p><a id="accordion-属性-7"></a><section><p>属性</p><div><p><strong>speaker_id</strong> <code>integer | null</code></p><div><div><p><strong>说明</strong>仅适用于 <code>qwen-audio-3.1-asr-flash</code>。</p></div></div><p>说话人编号，用于区分不同说话人。开启说话人分离时返回编号，未开启时为 <code>null</code>。</p><p><strong>sentence_id</strong><code>integer</code></p><p>句子编号，从1开始。</p><p><strong>sentence_end</strong><code>boolean</code></p><p>是否为该句的最终结果。为<code>true</code>时表示该句识别完成。</p><p><strong>begin_time</strong><code>integer</code></p><p>句子开始时间，单位毫秒。</p><p><strong>end_time</strong><code>integer</code></p><p>句子结束时间，单位毫秒。仅在<code>sentence_end</code>为<code>true</code>时返回。</p><p><strong>text</strong><code>string</code></p><p>当前句子的识别文本。</p><p><strong>channel_id</strong><code>integer</code></p><p>声道编号，从0开始。</p><p><strong>words</strong><code>array</code></p><p>词级别时间戳列表。</p><a id="accordion-属性-8"></a><section><p>属性</p><div><p><strong>speaker_id</strong> <code>integer | null</code></p><div><div><p><strong>说明</strong>仅适用于 <code>qwen-audio-3.1-asr-flash</code>。</p></div></div><p>词对应的说话人编号。开启说话人分离时返回编号，未开启时为 <code>null</code>。</p><p><strong>text</strong><code>string</code></p><p>词文本。</p><p><strong>begin_time</strong><code>integer</code></p><p>词开始时间，单位毫秒。</p><p><strong>end_time</strong><code>integer</code></p><p>词结束时间，单位毫秒。</p><p><strong>punctuation</strong><code>string</code></p><p>词后的标点符号。无标点时为空字符串。</p><p><strong>fixed</strong><code>boolean</code></p><p>词是否已稳定。<code>false</code>表示后续事件中该词的时间戳可能调整。</p></div></section></div></section></div></section><p><strong>usage</strong><code>object</code></p><p>用量信息。仅在<code>sentence_end</code>为<code>true</code>时返回。</p><a id="accordion-属性-9"></a><section><p>属性</p><div><p><strong>duration</strong><code>integer</code></p><p>已处理的音频时长，单位秒。</p><p><strong>input_tokens</strong> <code>integer</code></p><div><div><p><strong>说明</strong>仅适用于 <code>qwen-audio-3.1-asr-flash</code>。</p></div></div><p>本次调用消耗的输入 Token 数。</p><p><strong>output_tokens</strong> <code>integer</code></p><div><div><p><strong>说明</strong>仅适用于 <code>qwen-audio-3.1-asr-flash</code>。</p></div></div><p>本次调用消耗的输出 Token 数。</p><p><strong>total_tokens</strong> <code>integer</code></p><div><div><p><strong>说明</strong>仅适用于 <code>qwen-audio-3.1-asr-flash</code>。</p></div></div><p>本次调用消耗的总 Token 数，等于 <code>input_tokens</code> 与 <code>output_tokens</code> 之和。</p></div></section></td><td><a id="sec-tabs-3"></a><section><a id="非流式-2"></a><section><a id="非流式-2-h4"></a><h4>非流式</h4><a id="code-block-7"></a><pre class="language-json"><code>{
-    &quot;output&quot;: {
-        &quot;sentence&quot;: {
-            &quot;begin_time&quot;: 760,
-            &quot;channel_id&quot;: 0,
-            &quot;end_time&quot;: 3800,
-            &quot;sentence_end&quot;: true,
-            &quot;sentence_id&quot;: 1,
-            &quot;text&quot;: &quot;Hello World，这里是阿里巴巴语音实验室。&quot;,
-            &quot;words&quot;: [
-                {&quot;begin_time&quot;: 760, &quot;end_time&quot;: 1040, &quot;fixed&quot;: true, &quot;punctuation&quot;: &quot;&quot;, &quot;text&quot;: &quot;Hello&quot;},
-                {&quot;begin_time&quot;: 1040, &quot;end_time&quot;: 1240, &quot;fixed&quot;: true, &quot;punctuation&quot;: &quot;，&quot;, &quot;text&quot;: &quot; World&quot;},
-                {&quot;begin_time&quot;: 1360, &quot;end_time&quot;: 1880, &quot;fixed&quot;: true, &quot;punctuation&quot;: &quot;&quot;, &quot;text&quot;: &quot;这里是&quot;},
-                {&quot;begin_time&quot;: 1880, &quot;end_time&quot;: 2520, &quot;fixed&quot;: true, &quot;punctuation&quot;: &quot;&quot;, &quot;text&quot;: &quot;阿里巴巴&quot;},
-                {&quot;begin_time&quot;: 2520, &quot;end_time&quot;: 2840, &quot;fixed&quot;: true, &quot;punctuation&quot;: &quot;&quot;, &quot;text&quot;: &quot;语音&quot;},
-                {&quot;begin_time&quot;: 2840, &quot;end_time&quot;: 3800, &quot;fixed&quot;: true, &quot;punctuation&quot;: &quot;。&quot;, &quot;text&quot;: &quot;实验室&quot;}
-            ]
-        },
-        &quot;text&quot;: &quot;Hello World，这里是阿里巴巴语音实验室。&quot;
-    },
-    &quot;usage&quot;: {
-        &quot;duration&quot;: 4
-    },
-    &quot;request_id&quot;: &quot;40e0734d-096f-9ae3-86c1-a8c013287561&quot;
-}
-</code></pre></section><a id="流式-2"></a><section><a id="流式-2-h4"></a><h4>流式</h4><p>SSE 流式响应的事件格式如下：</p><a id="code-block-8"></a><pre class="language-text"><code>id:{序列号}
-event:result
-:HTTP_STATUS/200
-data:{JSON数据}
-</code></pre><p>返回示例：</p><a id="code-block-9"></a><pre class="language-text"><code>id:1
-event:result
-:HTTP_STATUS/200
-data:{&quot;output&quot;:{&quot;sentence&quot;:{&quot;sentence_id&quot;:1,&quot;sentence_end&quot;:true,&quot;end_time&quot;:3800,&quot;words&quot;:[{&quot;end_time&quot;:1040,&quot;punctuation&quot;:&quot;&quot;,&quot;begin_time&quot;:760,&quot;fixed&quot;:true,&quot;text&quot;:&quot;Hello&quot;},{&quot;end_time&quot;:1240,&quot;punctuation&quot;:&quot;，&quot;,&quot;begin_time&quot;:1040,&quot;fixed&quot;:true,&quot;text&quot;:&quot; World&quot;},{&quot;end_time&quot;:1880,&quot;punctuation&quot;:&quot;&quot;,&quot;begin_time&quot;:1360,&quot;fixed&quot;:true,&quot;text&quot;:&quot;这里是&quot;},{&quot;end_time&quot;:2520,&quot;punctuation&quot;:&quot;&quot;,&quot;begin_time&quot;:1880,&quot;fixed&quot;:true,&quot;text&quot;:&quot;阿里巴巴&quot;},{&quot;end_time&quot;:2840,&quot;punctuation&quot;:&quot;&quot;,&quot;begin_time&quot;:2520,&quot;fixed&quot;:true,&quot;text&quot;:&quot;语音&quot;},{&quot;end_time&quot;:3800,&quot;punctuation&quot;:&quot;。&quot;,&quot;begin_time&quot;:2840,&quot;fixed&quot;:true,&quot;text&quot;:&quot;实验室&quot;}],&quot;begin_time&quot;:760,&quot;text&quot;:&quot;Hello World，这里是阿里巴巴语音实验室。&quot;,&quot;channel_id&quot;:0},&quot;text&quot;:&quot;Hello World，这里是阿里巴巴语音实验室。&quot;},&quot;usage&quot;:{&quot;duration&quot;:4},&quot;request_id&quot;:&quot;fc1582e4-935c-9fc2-a482-a98bf43daa69&quot;}
-</code></pre></section></section></td></tr></tbody></table>
-
-<a id="sse-流式结果处理逻辑"></a>
+请求参数的媒体类型，固定为`application/json`。
 
 <a id="h-fl-stream-logic"></a>
 
-## SSE 流式结果处理逻辑
+`X-DashScope-SSE`string可选
 
-在流式模式下，客户端需关注以下处理要点：
+控制结果的返回方式。
 
-1.  每收到一个SSE事件，解析`data`字段中的JSON。
-2.  对于 `qwen-audio-3.0-asr-flash`，通过 `output.sentence.sentence_end` 判断当前句子是否结束：当该值为 `true` 时，该句识别完成，词级时间戳已稳定，可作为最终结果使用；当该值为 `false` 时，识别仍在进行中，文本和时间戳可能在后续事件中更新。
-3.  `usage` 信息仅在句子结束事件中返回，包含音频处理时长。对于 `qwen-audio-3.1-asr-flash`，还包含本次调用的输入、输出和总 Token 数，该模型按 Token 计费。
+-   `enable`：请求流式返回，按响应的 `Content-Type` 选择解析方式。
+    -   `text/event-stream`：逐个读取 SSE 事件，将 `data:` 后的内容解析为 JSON。
+    -   `application/json`：按单个 JSON 对象解析整个响应。
+-   `disable` 或不传：一次返回最终结果。
 
-对于 `qwen-audio-3.1-asr-flash`，未开启说话人分离时，词级时间戳在 `output.sentence.words[i].fixed` 为 `true` 后才固定；在此之前，时间戳仍可能调整。开启说话人分离时，应读取 `output.sentences` 中当前及历史句子的结果。
+> **说明**
+>
+> qwen-audio-3.0-asr-flash 在音频时长不少于 1 分钟时才以 SSE 流式方式返回结果。
+
+<a id="请求参数"></a>
+
+<a id="h-fl-rq"></a>
+
+## 请求参数
+
+`model`string必填
+
+模型名称。
+
+`input`object必填
+
+输入信息。
+
+`messages`array\[object\]必填
+
+消息列表。可在待识别音频前添加对话上下文。包含音频的 `user` 消息必须放在最后。
+
+`role`string必填
+
+消息角色。
+
+-   `user`（必选）：至少一条用户消息须包含待识别的音频。其他用户消息可提供上下文。
+-   `assistant`（可选）：提供之前的模型回复。
+
+`content`array\[object\]必填
+
+消息内容列表。
+
+`type`string必填
+
+按消息角色选择内容类型。每个请求至少包含一项 `input_audio`。
+
+-   `input_audio`：`user` 的音频，必填 `input_audio` 对象。
+-   `input_text`：`user` 的上下文，必填 `text` 字段。
+-   `text`：`assistant` 的上下文，必填 `text` 字段。
+
+`input_audio`object条件必填
+
+当`type`为`input_audio`时必填。
+
+`data`string必填
+
+待识别的音频数据，支持两种输入方式。
+
+-   **公网 URL**：传入可公开访问的音频文件地址，例如 `https://example.com/audio/sample.wav`。
+-   **[Base64 Data URI](https://www.rfc-editor.org/rfc/rfc2397)**：传入与音频格式匹配的 MIME 类型和 Base64 编码的文件内容，例如 `data:audio/wav;base64,{BASE64_ENCODED_DATA}`。MP3 文件可使用 `audio/mpeg`。Base64 编码会增大数据体积，文件大小和时长限制见[音频规格](../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02)。
+
+<a id="accordion-如何生成-base64-data-uri"></a>
+
+如何生成 Base64 Data URI
+
+以下示例将本地 WAV 文件 `sample.wav` 编码为 Base64 Data URI，输出可直接传给 `input_audio.data`。可使用[示例 WAV 音频](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav)运行示例。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
+python
+
+<a id="code-code-group-python"></a>
+
+```python
+import base64
+from pathlib import Path
+
+audio = Path("sample.wav").read_bytes()
+print("data:audio/wav;base64," + base64.b64encode(audio).decode("ascii"))
+```
+
+<a id="fig-code-group-java-tab"></a>
+
+java
+
+<a id="code-code-group-java"></a>
+
+```java
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Base64;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        byte[] audio = Files.readAllBytes(Paths.get("sample.wav"));
+        System.out.println("data:audio/wav;base64," + Base64.getEncoder().encodeToString(audio));
+    }
+}
+```
+
+`text`string条件必填
+
+上下文文本可提高专有词汇的识别准确率，使用方法见[上下文增强](../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#ctx_enhance_h2)。根据 `type` 填写以下内容。
+
+-   `input_text`：前几轮用户语音的识别结果，或与当前音频相关的领域词表。
+-   `text`：前几轮对话中的模型回复。
+
+> **说明**
+>
+> -   消息数量：`input_text` 和 `text` 类型的上下文消息各最多 5 条，超出时保留最近的 5 条。
+> -   文本长度：每轮 `user` 和 `assistant` 的 `text` 字段总长度不超过 400 个字符，每个字符计为 1；超出部分从末尾截断。
+> -   消息顺序：按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
+
+`parameters`object必填
+
+模型参数。
+
+`format`string必填
+
+填写音频文件的实际格式，例如 `wav`、`mp3` 或 `opus`。支持的格式见[音频规格](../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02)。
+
+`sample_rate`string可选
+
+音频采样率（Hz）。例如，16 kHz 音频填写 `16000`。支持的采样率见[音频规格](../model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md#asr_audio_spec02)。
+
+`speaker_diarization_enabled`boolean可选
+
+> **说明**
+>
+> 仅适用于 qwen-audio-3.1-asr-flash。
+
+是否启用说话人分离，默认值为 `false`。设为 `true` 时，通过响应中的 `speaker_id` 区分说话人，并返回 `output.sentences`。开启后，`keep_dialect` 和 `language_hints` 不生效。
+
+`keep_dialect`boolean可选
+
+> **说明**
+>
+> 仅适用于 qwen-audio-3.1-asr-flash。
+
+是否保留方言表达。
+
+-   `false`：将方言转写为普通话文本（默认）。
+-   `true`：保留方言表达。
+
+`language_hints`array\[string\]可选
+
+指定语种可提高识别准确率。最多传入 4 个语言代码，超出时仅前 4 个生效。无法确定语种时可省略，模型会自动识别。
+
+<a id="accordion-支持的语言代码"></a>
+
+支持的语言代码
+
+-   `zh`: 中文
+-   `en`: 英文
+-   `ja`: 日语
+-   `ko`: 韩语
+-   `vi`: 越南语
+-   `th`: 泰语
+-   `id`: 印尼语
+-   `ms`: 马来语
+-   `tl`: 菲律宾语
+-   `hi`: 印地语
+-   `ar`: 阿拉伯语
+-   `fr`: 法语
+-   `de`: 德语
+-   `es`: 西班牙语
+-   `pt`: 葡萄牙语
+-   `ru`: 俄语
+-   `it`: 意大利语
+-   `nl`: 荷兰语
+-   `sv`: 瑞典语
+-   `da`: 丹麦语
+-   `fi`: 芬兰语
+-   `no`: 挪威语
+-   `el`: 希腊语
+-   `pl`: 波兰语
+-   `cs`: 捷克语
+-   `hu`: 匈牙利语
+-   `ro`: 罗马尼亚语
+-   `bg`: 保加利亚语
+-   `hr`: 克罗地亚语
+-   `sk`: 斯洛伐克语
+
+qwen-audio-3.1-asr-flash 还支持以下语言代码：
+
+-   `tr`: 土耳其语
+-   `fa`: 波斯语
+-   `mr`: 马拉地语
+-   `ml`: 马拉雅拉姆语
+-   `ne`: 尼泊尔语
+-   `ky`: 吉尔吉斯语
+-   `az`: 阿塞拜疆语
+-   `ka`: 格鲁吉亚语
+-   `hy`: 亚美尼亚语
+-   `sl`: 斯洛文尼亚语
+-   `sq`: 阿尔巴尼亚语
+-   `et`: 爱沙尼亚语
+-   `lv`: 拉脱维亚语
+-   `lt`: 立陶宛语
+-   `ca`: 加泰罗尼亚语
+-   `eu`: 巴斯克语
+-   `gl`: 加利西亚语
+-   `or`: 奥里亚语
+-   `dv`: 迪维希语
+-   `as`: 阿萨姆语
+-   `kmr`: 北库尔德语
+-   `tig`: 提格雷语
+-   `fy`: 西弗里西亚语
+-   `ba`: 巴什基尔语
+-   `be`: 白俄罗斯语
+-   `tt`: 鞑靼语
+-   `ia`: 国际语
+-   `mhr`: 草原马里语
+-   `tok`: 道本语
+
+`vocabulary_id`string可选
+
+预编译热词列表 ID。
+
+需预先调用创建热词列表接口生成，识别时传入该 ID 即可使用列表中的热词。
+
+适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。
+
+使用方法请参见[预编译热词](../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_precompiled_h3)。
+
+`vocabulary`object可选
+
+用[即时热词](../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_instant_h3)为当前请求指定词汇，无需预先创建词表。键为热词文本（`string`），值为权重（`integer`），例如 `{"祺元": 5, "洛柯": 5, "璇枢": 5}`。
+
+热词权重可取以下值：
+
+-   `1～5`：数值越大，模型越倾向于输出该词。
+-   `50`：超级热词，可显著提高召回率，最多 50 个。
+
+> **说明**
+>
+> 同时传入 `vocabulary_id` 和 `vocabulary` 时，系统会合并两类热词。合并后超过 2000 个时，随机选用 2000 个。
+
+<a id="响应参数"></a>
+
+<a id="h-fl-rs"></a>
+
+## 响应参数
+
+`request_id`string
+
+本次请求的唯一标识。
+
+`output`object
+
+输出结果。
+
+`sentence`object
+
+当前句子的详细信息。
+
+`sentence_id`integer
+
+句子编号，从1开始。
+
+`begin_time`integer
+
+句子开始时间，单位毫秒。
+
+`end_time`integer | null
+
+句子结束时间，单位为毫秒。`sentence_end` 为 `true` 时读取有效值。
+
+`text`string
+
+当前句子的识别文本。
+
+`channel_id`integer
+
+声道编号，从0开始。
+
+`speaker_id`integer | null
+
+> **说明**
+>
+> 仅 qwen-audio-3.1-asr-flash 支持说话人分离。
+
+开启说话人分离时返回说话人编号；关闭时该字段可能缺省或为 `null`。
+
+`sentence_end`boolean
+
+当前句子是否识别完成。
+
+-   `true`：句子已结束。对 qwen-audio-3.0-asr-flash，此时词级时间戳已固定。
+-   `false`：句子尚未结束，后续事件可能更新文本和时间戳。
+
+`words`array\[object\]
+
+词级别时间戳列表。
+
+`begin_time`integer
+
+词开始时间，单位毫秒。
+
+`end_time`integer
+
+词结束时间，单位毫秒。
+
+`text`string
+
+词文本。
+
+`punctuation`string
+
+词后的标点符号。无标点时为空字符串。
+
+`fixed`boolean
+
+词级时间戳是否已固定。使用 qwen-audio-3.1-asr-flash 且未开启说话人分离时，以此字段判断。
+
+-   `true`：该词的时间戳已固定。
+-   `false`：后续事件可能更新时间戳。
+
+`speaker_id`integer | null
+
+> **说明**
+>
+> 仅 qwen-audio-3.1-asr-flash 支持说话人分离。
+
+词对应的说话人编号。开启说话人分离时返回编号，未开启时为 `null`。
+
+`text`string
+
+当前累积的完整识别文本。
+
+`sentences`array\[object\]
+
+> **说明**
+>
+> 仅适用于 qwen-audio-3.1-asr-flash。
+
+开启说话人分离时返回。包含当前及历史句子的识别结果，每个元素的结构与 `sentence` 相同。
+
+`usage`object
+
+当前句子结束时返回用量，中间结果可省略此字段。
+
+> **说明**
+>
+> -   qwen-audio-3.0-asr-flash 按音频时长（`duration`）计费。
+> -   qwen-audio-3.1-asr-flash 按输入和输出 Token（`input_tokens`、`output_tokens`）计费，同时返回 `duration` 和 `total_tokens`。
+
+`duration`integer
+
+已处理的音频时长，单位秒。
+
+`input_tokens`integer
+
+本次调用消耗的输入 Token 数。
+
+`output_tokens`integer
+
+本次调用消耗的输出 Token 数。
+
+`total_tokens`integer
+
+本次调用消耗的总 Token 数，等于 `input_tokens` 与 `output_tokens` 之和。
+
+<a id="sec-tabs"></a>
+
+<a id="非流式"></a>
+
+<a id="非流式-h4"></a>
+
+#### 非流式
+
+<a id="code-block"></a>
+
+```bash
+curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "X-DashScope-SSE: disable" \
+  --data '{
+  "model": "qwen-audio-3.1-asr-flash",
+  "input": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "input_audio",
+            "input_audio": {"data": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"}
+          }
+        ]
+      }
+    ]
+  },
+  "parameters": {
+    "format": "wav",
+    "sample_rate": "16000"
+  }
+}'
+```
+
+<a id="code-block-2"></a>
+
+```json
+{
+  "output": {
+    "sentence": {
+      "sentence_id": 1,
+      "begin_time": 120,
+      "end_time": 6228,
+      "text": "请把漆园项目的报告发给罗科，下周我们要上线悬枢系统。",
+      "channel_id": 0,
+      "sentence_end": true,
+      "words": [
+        {"begin_time": 120, "end_time": 600, "text": "请把", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 600, "end_time": 840, "text": "漆", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 840, "end_time": 1160, "text": "园", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 1160, "end_time": 1680, "text": "项目的", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 1680, "end_time": 2160, "text": "报告", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 2160, "end_time": 2600, "text": "发给", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 2600, "end_time": 2840, "text": "罗", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 2840, "end_time": 3480, "text": "科", "punctuation": "，", "fixed": true, "speaker_id": null},
+        {"begin_time": 3480, "end_time": 4000, "text": "下周", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 4000, "end_time": 4520, "text": "我们要", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 4520, "end_time": 5160, "text": "上线", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 5160, "end_time": 5360, "text": "悬", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 5360, "end_time": 5680, "text": "枢", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 5680, "end_time": 5880, "text": "系", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 5880, "end_time": 6228, "text": "统", "punctuation": "。", "fixed": true, "speaker_id": null}
+      ]
+    },
+    "text": "请把漆园项目的报告发给罗科，下周我们要上线悬枢系统。"
+  },
+  "usage": {
+    "duration": 6,
+    "input_tokens": 78,
+    "output_tokens": 16,
+    "total_tokens": 94
+  },
+  "request_id": "2e7a1ccb-766b-9d21-b2e4-762b52bdabab"
+}
+```
+
+<a id="流式-sse"></a>
+
+<a id="流式-sse-h4"></a>
+
+#### 流式（SSE）
+
+<a id="code-block-3"></a>
+
+```bash
+curl --no-buffer "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "X-DashScope-SSE: enable" \
+  --data '{
+  "model": "qwen-audio-3.1-asr-flash",
+  "input": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "input_audio",
+            "input_audio": {"data": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"}
+          }
+        ]
+      }
+    ]
+  },
+  "parameters": {
+    "format": "wav",
+    "sample_rate": "16000"
+  }
+}'
+```
+
+<a id="code-block-4"></a>
+
+```text
+data:{"output":{"sentence":{"sentence_id":1,"begin_time":120,"end_time":null,"text":"请把漆园项目的报告发给罗科，下周我们要上线玄枢","channel_id":0,"sentence_end":false,"words":[{"begin_time":120,"end_time":600,"text":"请把","punctuation":"","fixed":false,"speaker_id":null},{"begin_time":600,"end_time":840,"text":"漆","punctuation":"","fixed":false,"speaker_id":null},{"begin_time":840,"end_time":1160,"text":"园","punctuation":"","fixed":false,"speaker_id":null},{"begin_time":1160,"end_time":1680,"text":"项目的","punctuation":"","fixed":false,"speaker_id":null},{"begin_time":1680,"end_time":2160,"text":"报告","punctuation":"","fixed":false,"speaker_id":null},{"begin_time":2160,"end_time":2600,"text":"发给","punctuation":"","fixed":false,"speaker_id":null},{"begin_time":2600,"end_time":2840,"text":"罗","punctuation":"","fixed":false,"speaker_id":null},{"begin_time":2840,"end_time":3480,"text":"科","punctuation":"，","fixed":false,"speaker_id":null},{"begin_time":3480,"end_time":4000,"text":"下周","punctuation":"","fixed":false,"speaker_id":null},{"begin_time":4000,"end_time":4520,"text":"我们要","punctuation":"","fixed":false,"speaker_id":null},{"begin_time":4520,"end_time":5160,"text":"上线","punctuation":"","fixed":false,"speaker_id":null},{"begin_time":5160,"end_time":5360,"text":"玄","punctuation":"","fixed":false,"speaker_id":null},{"begin_time":5360,"end_time":5680,"text":"枢","punctuation":"","fixed":false,"speaker_id":null}]},"text":"请把漆园项目的报告发给罗科，下周我们要上线玄枢"},"request_id":"72ab1a19-770d-90bb-87d5-013aa67cdf5d"}
+
+data:{"output":{"sentence":{"sentence_id":1,"begin_time":120,"end_time":6228,"text":"请把漆园项目的报告发给罗科，下周我们要上线玄枢系统。","channel_id":0,"sentence_end":true,"words":[{"begin_time":120,"end_time":600,"text":"请把","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":600,"end_time":840,"text":"漆","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":840,"end_time":1160,"text":"园","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":1160,"end_time":1680,"text":"项目的","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":1680,"end_time":2160,"text":"报告","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":2160,"end_time":2600,"text":"发给","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":2600,"end_time":2840,"text":"罗","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":2840,"end_time":3480,"text":"科","punctuation":"，","fixed":true,"speaker_id":null},{"begin_time":3480,"end_time":4000,"text":"下周","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":4000,"end_time":4520,"text":"我们要","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":4520,"end_time":5160,"text":"上线","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":5160,"end_time":5360,"text":"玄","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":5360,"end_time":5680,"text":"枢","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":5680,"end_time":5880,"text":"系","punctuation":"","fixed":true,"speaker_id":null},{"begin_time":5880,"end_time":6228,"text":"统","punctuation":"。","fixed":true,"speaker_id":null}]},"text":"请把漆园项目的报告发给罗科，下周我们要上线玄枢系统。"},"usage":{"duration":6,"input_tokens":78,"output_tokens":16,"total_tokens":94},"request_id":"72ab1a19-770d-90bb-87d5-013aa67cdf5d"}
+```
+
+<a id="携带上下文"></a>
+
+<a id="携带上下文-h4"></a>
+
+#### 携带上下文
+
+<a id="code-block-5"></a>
+
+```bash
+curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "X-DashScope-SSE: disable" \
+  --data '{
+  "model": "qwen-audio-3.1-asr-flash",
+  "input": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "input_text",
+            "text": "祺元项目、洛柯、璇枢系统。"
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "已记录这些项目和人名。"
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "input_audio",
+            "input_audio": {"data": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"}
+          }
+        ]
+      }
+    ]
+  },
+  "parameters": {
+    "format": "wav",
+    "sample_rate": "16000"
+  }
+}'
+```
+
+<a id="code-block-6"></a>
+
+```json
+{
+  "output": {
+    "sentence": {
+      "sentence_id": 1,
+      "begin_time": 120,
+      "end_time": 6228,
+      "text": "请把祺元项目的报告发给洛柯，下周我们要上线璇枢系统。",
+      "channel_id": 0,
+      "sentence_end": true,
+      "words": [
+        {"begin_time": 120, "end_time": 600, "text": "请把", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 600, "end_time": 840, "text": "祺", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 840, "end_time": 1160, "text": "元", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 1160, "end_time": 1680, "text": "项目的", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 1680, "end_time": 2160, "text": "报告", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 2160, "end_time": 2600, "text": "发给", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 2600, "end_time": 2840, "text": "洛", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 2840, "end_time": 3480, "text": "柯", "punctuation": "，", "fixed": true, "speaker_id": null},
+        {"begin_time": 3480, "end_time": 4000, "text": "下周", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 4000, "end_time": 4520, "text": "我们要", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 4520, "end_time": 5160, "text": "上线", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 5160, "end_time": 5360, "text": "璇", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 5360, "end_time": 5680, "text": "枢", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 5680, "end_time": 5880, "text": "系", "punctuation": "", "fixed": true, "speaker_id": null},
+        {"begin_time": 5880, "end_time": 6228, "text": "统", "punctuation": "。", "fixed": true, "speaker_id": null}
+      ]
+    },
+    "text": "请把祺元项目的报告发给洛柯，下周我们要上线璇枢系统。"
+  },
+  "usage": {
+    "duration": 6,
+    "input_tokens": 100,
+    "output_tokens": 16,
+    "total_tokens": 116
+  },
+  "request_id": "062cc295-fa5d-92dd-a3ec-5d56d34a4e1e"
+}
+```
+
+<a id="说话人分离"></a>
+
+<a id="说话人分离-h4"></a>
+
+#### 说话人分离
+
+<a id="code-block-7"></a>
+
+```bash
+curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "X-DashScope-SSE: disable" \
+  --data '{
+  "model": "qwen-audio-3.1-asr-flash",
+  "input": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "input_audio",
+            "input_audio": {"data": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"}
+          }
+        ]
+      }
+    ]
+  },
+  "parameters": {
+    "format": "wav",
+    "sample_rate": "16000",
+    "speaker_diarization_enabled": true
+  }
+}'
+```
+
+<a id="code-block-8"></a>
+
+```json
+{
+  "output": {
+    "sentence": {
+      "sentence_id": 1,
+      "begin_time": 0,
+      "end_time": 6160,
+      "text": "请把漆园项目的报告发给罗科，下周我们要上线玄枢系统。",
+      "channel_id": 0,
+      "speaker_id": 0,
+      "sentence_end": true,
+      "words": [
+        {"begin_time": 0, "end_time": 473, "text": "请把", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 473, "end_time": 710, "text": "漆", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 710, "end_time": 947, "text": "园", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 947, "end_time": 1658, "text": "项目的", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 1658, "end_time": 2132, "text": "报告", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 2132, "end_time": 2606, "text": "发给", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 2606, "end_time": 2843, "text": "罗", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 2843, "end_time": 3316, "text": "科", "punctuation": "，", "fixed": true, "speaker_id": 0},
+        {"begin_time": 3316, "end_time": 3790, "text": "下周", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 3790, "end_time": 4501, "text": "我们要", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 4501, "end_time": 4975, "text": "上线", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 4975, "end_time": 5212, "text": "玄", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 5212, "end_time": 5449, "text": "枢", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 5449, "end_time": 5686, "text": "系", "punctuation": "", "fixed": true, "speaker_id": 0},
+        {"begin_time": 5686, "end_time": 6160, "text": "统", "punctuation": "。", "fixed": true, "speaker_id": 0}
+      ]
+    },
+    "text": "请把漆园项目的报告发给罗科，下周我们要上线玄枢系统。",
+    "sentences": [
+      {
+        "sentence_id": 1,
+        "begin_time": 0,
+        "end_time": 6160,
+        "text": "请把漆园项目的报告发给罗科，下周我们要上线玄枢系统。",
+        "channel_id": 0,
+        "speaker_id": 0,
+        "sentence_end": true,
+        "words": [
+          {"begin_time": 0, "end_time": 473, "text": "请把", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 473, "end_time": 710, "text": "漆", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 710, "end_time": 947, "text": "园", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 947, "end_time": 1658, "text": "项目的", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 1658, "end_time": 2132, "text": "报告", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 2132, "end_time": 2606, "text": "发给", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 2606, "end_time": 2843, "text": "罗", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 2843, "end_time": 3316, "text": "科", "punctuation": "，", "fixed": true, "speaker_id": 0},
+          {"begin_time": 3316, "end_time": 3790, "text": "下周", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 3790, "end_time": 4501, "text": "我们要", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 4501, "end_time": 4975, "text": "上线", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 4975, "end_time": 5212, "text": "玄", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 5212, "end_time": 5449, "text": "枢", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 5449, "end_time": 5686, "text": "系", "punctuation": "", "fixed": true, "speaker_id": 0},
+          {"begin_time": 5686, "end_time": 6160, "text": "统", "punctuation": "。", "fixed": true, "speaker_id": 0}
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "duration": 6,
+    "input_tokens": 78,
+    "output_tokens": 31,
+    "total_tokens": 109
+  },
+  "request_id": "f224bd86-52f0-95b3-96ca-a58889f08d1f"
+}
+```

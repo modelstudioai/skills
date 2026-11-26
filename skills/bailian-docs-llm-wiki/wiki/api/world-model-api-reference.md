@@ -4,34 +4,34 @@
 
 ## 支持的模型/功能
 
-- **Adventure 模型**：用于长周期剧情状态建模与分支推演，支持基于用户输入与世界状态的因果链预测；详见 [Adventure Open API参考](../../raw/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)  
-- **Directing 模型**：负责多角色协同调度与镜头语言生成，输出场景切换指令、角色位置/朝向变更等结构化指令；详见 [Directing Open API参考](../../raw/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)  
-- **Acting 模型**（邀测中）：生成细粒度角色动作序列（含肢体、表情、语音节奏），当前仅对白名单用户开放；详见 [Acting Open API参考（邀测中）](../../raw/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)  
-
-> **注意**：原始文档中未明确说明 Acting 模型是否支持流式响应，但 [Acting Open API参考（邀测中）](../../raw/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md) 的示例请求体中包含 `stream: true` 字段，而 [Directing Open API参考](../../raw/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 明确声明“不支持流式”。请以各子服务文档为准，勿跨模型复用流式参数。
+- **Adventure 模型**：用于长周期剧情状态建模与分支推演，支持时间线锚定、因果链回溯及多结局概率预测。  
+- **Directing 模型**：负责跨角色、跨场景的指令编排与资源协调，例如镜头切换、NPC 位置同步、环境状态广播等。  
+- **Acting 模型**（邀测中）：生成细粒度角色行为序列（含肢体动作、语音节奏、微表情时序），当前仅对白名单用户开放。  
+> **注意**：[Acting Open API参考（邀测中）](../../raw/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md) 中描述的 `action_duration_ms` 参数在 v2.3.1 版本后已弃用，实际应使用 `timing_profile` 字段替代；请以 [Adventure Open API参考](../../raw/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 的参数规范为准。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `world_state` | object | 是 | 当前世界状态快照，格式为 JSON Schema 定义的 `WorldState`，字段含义见各子服务文档 |
-| `user_input` | string | 否 | 用户本轮输入文本，部分模型（如 Adventure）可为空，触发自主演化 |
-| `max_steps` | integer | 否 | 最大推演步数，默认 1，上限 10（Adventure）/5（Directing）/3（Acting） |
-| `temperature` | number | 否 | 采样温度，范围 [0.1, 2.0]，默认 0.8；Acting 模型对此参数更敏感 |
+| `world_state_id` | string | 是 | 全局唯一世界快照 ID，由上一次响应返回或通过 `/state/init` 创建 |
+| `context_window` | integer | 否 | 推理上下文长度（token），默认 4096，最大 8192（Adventure/Directing）或 2048（Acting） |
+| `temperature` | number | 否 | 采样随机性，范围 [0.0, 2.0]，默认 0.7；Acting 模型建议 ≤1.0 以保障动作连贯性 |
+| `response_format` | string | 否 | 可选 `"json"` 或 `"protobuf"`，默认 `"json"`；若选 `"protobuf"`，需在 `Accept` header 中声明 `application/x-protobuf` |
 
 ## 使用方式
 
-1. 获取 API Key（控制台 → API 密钥管理 → 创建世界模型专用密钥）  
-2. 构造 POST 请求，目标 URL 格式为：`https://dashscope.aliyuncs.com/api/v1/world-model/{service}`，其中 `{service}` 取值为 `adventure` / `directing` / `acting`  
-3. 设置 Header：`Authorization: Bearer <your_api_key>`，`Content-Type: application/json`  
-4. 请求体按对应子服务文档要求组织，例如 Adventure 调用需包含完整 `world_state` 和可选 `user_input`  
+1. 初始化世界状态：`POST /v1/world/state/init`，传入初始场景描述与角色配置；  
+2. 调用具体模型：如 `POST /v1/world/adventure/step`（Adventure）、`POST /v1/world/directing/plan`（Directing）；  
+3. 携带认证头：`Authorization: Bearer <your_api_key>`；  
+4. 响应体包含 `next_world_state_id`，用于链式调用。完整请求示例见 [Directing Open API参考](../../raw/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)。
 
 ## 限制和注意事项
 
-- 单次请求 `world_state` JSON 大小不得超过 2MB；超过时将返回 `413 Payload Too Large`  
-- 所有模型均不支持跨会话状态持久化，`world_state` 必须由客户端全量维护并每次传入  
-- Acting 模型处于邀测阶段，未获授权调用将返回 `403 Forbidden`，错误码为 `InvalidAPIKey`（非密钥失效）  
-- 若发现 [Adventure Open API参考](../../raw/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中定义的 `WorldState` 字段与实际响应不一致（如缺失 `time_elapsed_ms`），请以最新响应为准，该字段已在 v2.3.1 版本中移除
+- 单次请求最大输入长度为 16KB（UTF-8 编码），超长文本需预截断或分块；  
+- Acting 模型调用频率限制为 5 QPS/项目，且不支持流式响应；  
+- 所有模型均不保留客户端侧会话状态，`world_state_id` 是维持世界一致性的唯一凭证；  
+- 若连续 3 次请求返回 `429 Too Many Requests`，需退避至少 1 秒再重试；  
+- 注意：[Adventure Open API参考](../../raw/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中提及的 `enable_debug_trace=true` 参数在生产环境将被忽略，仅测试环境生效。
 
 ## 来源文档
 

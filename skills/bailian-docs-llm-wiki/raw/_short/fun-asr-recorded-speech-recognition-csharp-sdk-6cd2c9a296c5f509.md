@@ -8,7 +8,7 @@
 
 ## 快速开始
 
-按[SDK简介](https://help.aliyun.com/zh/model-studio/csharp-sdk)安装 SDK 并配置 API Key。将示例地址中的 `WorkspaceId` 替换为同地域的业务空间 ID。
+按[SDK简介](../model-api-reference/more-about-models/csharp-speech-sdk/csharp-sdk.md)安装 SDK 并配置 API Key。将示例地址中的 `WorkspaceId` 替换为同地域的业务空间 ID。
 
 以下示例使用 `fun-asr` 转写音频文件，并在控制台输出文本。
 
@@ -47,7 +47,7 @@ foreach (var result in results)
 4.  用 `WaitForCompletionAsync` 等待任务结束，或用 `QueryAsync` 查询一次状态。
 5.  逐个检查 `Results` 中的 `SubtaskStatus`。对于成功的子任务，用 `DownloadTranscriptionAsync` 下载 `TranscriptionUrl` 指向的结果，并从 `Transcripts` 读取文本。
 
-方法和结果对象见[接口与事件](https://help.aliyun.com/zh/model-studio/csharp-sdk-methods-and-events#fun-asr-file-transcriber)。
+方法和结果对象见[接口与事件](../model-api-reference/more-about-models/csharp-speech-sdk/csharp-sdk-methods-and-events.md#fun-asr-file-transcriber)。
 
 <a id="参数说明"></a>
 

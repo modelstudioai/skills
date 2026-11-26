@@ -66,7 +66,7 @@
 
 **原因：** 错误码error\_code出现在header里，百炼网关报错，无法建连。百炼网关要求服务端和客户端必须持续通信，如果超过1分钟没有交互则会超时报错。
 
-**解决方案：** 持续交互，避免长时间无消息传递。若客户端需在无交互时保持连接，应定期发送心跳消息（HeartBeat）。服务端会回应心跳，确保连接活跃，避免超时关闭。具体的心跳消息格式参见[心跳事件](../model-api-reference/more-about-models/multimodal-interaction-protocol.md#adedb03b40fzw)。
+**解决方案：** 持续交互，避免长时间无消息传递。若客户端需在无交互时保持连接，应定期发送心跳消息（HeartBeat）。服务端会回应心跳，确保连接活跃，避免超时关闭。具体的心跳消息格式参见[心跳事件](multimodal-interaction-protocol-23b12b66c717437f.md#adedb03b40fzw)。
 
 <a id="421-invalidparameter"></a>
 
@@ -124,7 +124,7 @@
 
 **原因：**错误码status\_code出现在header里，收到该错误后连接会断开。传入的指令 directive 的取值是不支持的指令。
 
-**解决方案：**请检查指令名称，使用多模态交互可用的指令。参考[文本消息类型](../model-api-reference/more-about-models/multimodal-interaction-protocol.md#408ddb268eyt7)的说明。
+**解决方案：**请检查指令名称，使用多模态交互可用的指令。参考[文本消息类型](multimodal-interaction-protocol-23b12b66c717437f.md#408ddb268eyt7)的说明。
 
 <a id="432-appconfigerror"></a>
 

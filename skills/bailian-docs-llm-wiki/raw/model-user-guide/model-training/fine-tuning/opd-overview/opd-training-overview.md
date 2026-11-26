@@ -159,7 +159,11 @@ OPD 训练从环境准备到模型部署，共 5 步：
 python -m pip install ./dashscope-*.whl
 ```
 
-**工作区目录** 从[示例代码包](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/files/6a4b3c2d1e0f92ef.zip)获取，含 wheel（Python 打包安装文件）、函数代码、数据、依赖、提交脚本，结构如下；获取与提交脚本的完整实现见[训练配置](opd-training-config.md)：
+> **说明**
+>
+> **[下载示例代码包](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/files/6a4b3c2d1e0f92ef.zip)**——含 wheel（Python 打包安装文件）、函数代码、数据、依赖、提交脚本，解压即得下述工作区目录。
+
+**工作区目录**结构如下；获取与提交脚本的完整实现见[训练配置](opd-training-config.md)：
 
 <a id="code-block-3"></a>
 

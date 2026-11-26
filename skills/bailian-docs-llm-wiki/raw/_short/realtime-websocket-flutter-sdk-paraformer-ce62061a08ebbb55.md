@@ -17,7 +17,7 @@ Paraformer 将麦克风实时音频转为文本。选择模型后使用匹配的
 
 ### 安装 SDK
 
-打开[移动端语音 SDK 选型与下载](https://help.aliyun.com/zh/model-studio/sdk-selection-and-download)，在 **Flutter** 标签下下载安装包并解压。
+打开[移动端语音 SDK 选型与下载](../model-api-reference/more-about-models/sdk-selection-and-download.md)，在 **Flutter** 标签下下载安装包并解压。
 
 将解压后的 SDK 目录复制到 Flutter 项目的 `packages/aliyun_neonui`，在 `pubspec.yaml` 中添加本地依赖。
 

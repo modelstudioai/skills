@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-11-25",
+  "updatedAt": "2026-11-27",
   "totalFamilies": 129,
-  "totalModels": 345,
+  "totalModels": 343,
   "profileCoverage": {
-    "full": 133,
-    "partial": 202,
+    "full": 127,
+    "partial": 206,
     "structured-only": 10,
     "none": 0
   },
@@ -162,16 +162,18 @@
       "name": "Decision Model",
       "primaryCapability": "TG",
       "capabilities": [
-        "TG"
+        "TG",
+        "VU"
       ],
       "providers": [
         "qwen-domain-model"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
+        "decision-model",
         "decision-model-preview"
       ],
-      "maxContextWindow": 65536
+      "maxContextWindow": 268288
     },
     {
       "slug": "deepseek",
@@ -1902,13 +1904,10 @@
       "providers": [
         "deepseek"
       ],
-      "itemCount": 9,
+      "itemCount": 6,
       "items": [
-        "vanchin/deepseek-ocr",
         "vanchin/deepseek-r1",
         "vanchin/deepseek-v3",
-        "vanchin/deepseek-v3.1-terminus",
-        "vanchin/deepseek-v3.2-think",
         "vanchin/deepseek-v4-pro",
         "vanchin/deepseek-v4-pro-0813",
         "vanchin/deepseek-v4.1-flash",

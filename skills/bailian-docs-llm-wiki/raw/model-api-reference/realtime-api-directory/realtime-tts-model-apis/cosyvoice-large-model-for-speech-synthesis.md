@@ -4,4 +4,4 @@
 -   [服务端事件](../../../_short/cosyvoice-server-events-81793da4414e2646.md)
 -   [WebSocket 接入](../../../_short/cosyvoice-websocket-api-5929268331632771.md)
 -   [AOQ 接入](../../../_short/cosyvoice-aoq-access-c0e8e4035486f433.md)
--   [WebSocket SDK](../../../_short/cosyvoice-websocket-sdk-69fd9f290b78f6ab.md)
+-   [SDK 参考](../../../_short/cosyvoice-websocket-sdk-69fd9f290b78f6ab.md)

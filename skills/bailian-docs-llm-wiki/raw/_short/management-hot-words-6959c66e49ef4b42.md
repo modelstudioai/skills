@@ -172,4 +172,4 @@ RAM用户调用热词OpenAPI需要访问多模态对话产品的权限，授权�
 
 1.  使用热词OpenAPI创建的热词，如何在对话链路中使用？
 
-参考[实时多模态交互协议（WebSocket）](../model-api-reference/more-about-models/multimodal-interaction-protocol.md)，在Start指令中通过parameters.upstream.vocabulary\_id参数指定热词id，设置该参数后会覆盖管控台热词配置。
+参考[实时多模态交互协议（WebSocket）](multimodal-interaction-protocol-23b12b66c717437f.md)，在Start指令中通过parameters.upstream.vocabulary\_id参数指定热词id，设置该参数后会覆盖管控台热词配置。

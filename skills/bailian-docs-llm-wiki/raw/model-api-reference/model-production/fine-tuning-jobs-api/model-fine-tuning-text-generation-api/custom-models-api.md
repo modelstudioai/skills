@@ -14,6 +14,8 @@
 
 > 当前模型导入 API 仅在北京 Region 开放。如您使用其他 Region，请通过该 Region 的百炼控制台完成模型导入操作。
 
+调用时，请将 `{WorkspaceId}` 替换为真实的 [Workspace ID](../../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
 <a id="前提条件"></a>
 
 <a id="mim-h2-prereq"></a>
@@ -95,7 +97,7 @@
 <a id="code-block"></a>
 
 ```http
-POST https://dashscope.aliyuncs.com/api/v1/custom_models/import
+POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/custom-models/import
 ```
 
 <a id="请求示例"></a>
@@ -107,7 +109,7 @@ POST https://dashscope.aliyuncs.com/api/v1/custom_models/import
 <a id="code-block-2"></a>
 
 ```bash
-curl -X POST "https://dashscope.aliyuncs.com/api/v1/custom_models/import" \
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/custom-models/import" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header "Content-Type: application/json" \
     --data '{
@@ -200,7 +202,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/custom_models/import" \
 <a id="code-block-4"></a>
 
 ```http
-GET https://dashscope.aliyuncs.com/api/v1/custom_models/import/{job_id}
+GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/custom-models/import/{job_id}
 ```
 
 <a id="请求示例-2"></a>
@@ -212,7 +214,7 @@ GET https://dashscope.aliyuncs.com/api/v1/custom_models/import/{job_id}
 <a id="code-block-5"></a>
 
 ```bash
-curl "https://dashscope.aliyuncs.com/api/v1/custom_models/import/937b****-2a4f-****-8abe-c2fa********" \
+curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/custom-models/import/937b****-2a4f-****-8abe-c2fa********" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header "Content-Type: application/json"
 ```
@@ -278,7 +280,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/custom_models/import/937b****-2a4f-*
 <a id="code-block-7"></a>
 
 ```http
-GET https://dashscope.aliyuncs.com/api/v1/custom_models/import
+GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/custom-models/import
 ```
 
 <a id="请求示例-3"></a>
@@ -290,7 +292,7 @@ GET https://dashscope.aliyuncs.com/api/v1/custom_models/import
 <a id="code-block-8"></a>
 
 ```bash
-curl "https://dashscope.aliyuncs.com/api/v1/custom_models/import?page_no=1&page_size=10" \
+curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/custom-models/import?page_no=1&page_size=10" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header "Content-Type: application/json"
 ```
@@ -300,7 +302,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/custom_models/import?page_no=1&page_
 <a id="code-block-9"></a>
 
 ```bash
-curl "https://dashscope.aliyuncs.com/api/v1/custom_models/import?page_no=1&page_size=10&status=SUCCESSED" \
+curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/custom-models/import?page_no=1&page_size=10&status=SUCCESSED" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header "Content-Type: application/json"
 ```
@@ -395,7 +397,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/custom_models/import?page_no=1&page_
 <a id="code-block-11"></a>
 
 ```http
-DELETE https://dashscope.aliyuncs.com/api/v1/custom_models/import/{job_id}
+DELETE https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/custom-models/import/{job_id}
 ```
 
 <a id="请求示例-4"></a>
@@ -407,7 +409,7 @@ DELETE https://dashscope.aliyuncs.com/api/v1/custom_models/import/{job_id}
 <a id="code-block-12"></a>
 
 ```bash
-curl -X DELETE "https://dashscope.aliyuncs.com/api/v1/custom_models/import/937b****-2a4f-****-8abe-c2fa********" \
+curl -X DELETE "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/custom-models/import/937b****-2a4f-****-8abe-c2fa********" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header "Content-Type: application/json"
 ```

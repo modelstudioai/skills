@@ -54,7 +54,7 @@ AI妙搜-智能搜索生成：对应妙搜首页的搜索生成能力。此接�
 
 ### 阿里云百炼控制台授权说明
 
-使用主账号或有阿里云百炼管理员权限的子账号，登录阿里云百炼控制台，在[权限管理](https://bailian.console.aliyun.com/?tab=app#/authority)页面添加子账号“新增用户”。
+使用主账号或具有百炼管理员权限的子账号，在[**权限管理**](https://bailian.console.aliyun.com/cn-beijing/model/settings/permission)页面单击**添加用户**，添加目标子账号。
 
 <a id="调试"></a>
 

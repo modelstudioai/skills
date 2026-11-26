@@ -60,7 +60,7 @@
 
 1.  **选择UI模板**
     
-    前往[UI设计器页面](https://bailian.console.aliyun.com/?tab=app#/app-ui)，单击**创建UI**，在左侧选择UI模板。
+    在[**创建 UI**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-ui/create)页面选择模板。
     
     阿里云百炼平台提供四种预置模板（智能出行助手、智能体门户、AI基础对话、企业AI知识库Lite）及空白模板。预置模板包含预设组件和界面，支持直接修改或二次开发，空白模板则需要从零开始设计。
     
@@ -91,11 +91,11 @@
     
     部分UI模板自带用于存储运行时数据的数据库表（如`kb_chat_list`会话记录），其结构固定且无法修改，可单击**模板中数据库表名称**列的图标查看。
     
-    配置映射时，指定库表名称即可。若该表在[数据库](https://bailian.console.aliyun.com/?tab=app#/data-center/mobi/database)中不存在，系统将按模板结构自动创建；若存在同名表，则直接使用并保留已有数据。
+    配置映射时，指定库表名称。系统会使用已有的同名表并保留其数据。如果表不存在，系统会按模板结构创建表。
     
     **注意**：使用已有表时，务必确保其结构与模板内置表**完全一致**，否则可能导致运行时错误。
     
-    UI创建完成后，可在[数据库](https://bailian.console.aliyun.com/?tab=app#/data-center/mobi/database)中查看表详情。若表中无数据，通常是因为没有进行相关操作。例如，`kb_chat_list` 表在用户发起问答后才会生成记录。
+    创建 UI 后，在 [**UI 应用数据**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-ui/app-data)中查看目标表。部分记录在执行相应操作后生成。例如，用户发起问答后，`kb_chat_list` 表才会生成记录。
     
 
 <a id="步骤二-编辑ui"></a>
@@ -106,7 +106,7 @@
 
 **通过拖放组件来搭建页面**。左侧的[组件面板](https://help.aliyun.com/zh/mobi/low-code-development-designer-overview)中提供各类UI元素，包括按钮、输入框、展示、导航栏等。将所需[页面组件](https://help.aliyun.com/zh/mobi/components/)添加到页面中，根据业务需求调整其位置和样式，完成[页面搭建](https://help.aliyun.com/zh/mobi/page-build/)。
 
-如果需要使用自定义的图片或文件，可在搭建过程中随时上传，或可提前在[文件](https://bailian.console.aliyun.com/?tab=app#/data-center/mobi/files)页面上传。上传的文件将保存在[文件](https://bailian.console.aliyun.com/?tab=app#/data-center/mobi/files)页面，详情请参见[UI应用数据](https://help.aliyun.com/zh/model-studio/ui-application-data)。
+在搭建 UI 时上传自定义图片或文件，或提前在 [**UI 应用数据**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-ui/app-data)中上传。有关文件管理，请参见 [UI 应用数据说明](https://help.aliyun.com/zh/model-studio/ui-application-data)。
 
 <a id="步骤三-发布与分享"></a>
 
@@ -123,7 +123,7 @@
     | **有效期** | **发布的 UI 24 小时后失效**，需要重新发布才能访问 | 发布的 UI 长期有效 |
     | **是否收费** | 免费 | 需订阅付费套餐，同时需要[配置域名](https://help.aliyun.com/zh/mobi/environment-and-domain)，详情请参见[产品计费说明](https://help.aliyun.com/zh/mobi/product-billing-description) |
     
-2.  在[UI设计器](https://bailian.console.aliyun.com/?tab=app#/app-ui)页面，悬停于已发布的UI，单击**环境部署**。
+2.  打开[**UI 设计器**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-ui)，将指针移至已发布的目标 UI，然后单击**环境部署**。
     
 3.  **应用地址**可分享给其他用户，默认持有链接的阿里云用户均可访问。单击**下线**可以停止该应用服务。
     

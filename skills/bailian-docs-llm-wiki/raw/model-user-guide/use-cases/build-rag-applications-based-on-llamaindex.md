@@ -73,7 +73,10 @@ documents = SimpleDirectoryReader(
 ).load_data(num_workers=1)
 ```
 
-上传成功后，您可以访问**[数据连接器](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)**页面，点击指定连接器卡片上的**查看详情**，查看上传的文档。
+1.  打开[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)，在目标文件数据集上单击**详情**。
+    
+2.  在文件列表中查看已上传的文件。
+    
 
 <a id="创建知识库"></a>
 

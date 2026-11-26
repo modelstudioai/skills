@@ -381,4 +381,5 @@ Base URL 见[接入AI工具·通用配置](../use-chat-client-or-development-too
 额度怎么计算、何时重置、用完了怎么办、在哪里查看、为什么消耗异常，统一见：
 
 -   [用量与额度](token-plan-usage-quota.md)
--   [查看用量](https://bailian.console.aliyun.com/cn-beijing/subscription/overview)
+-   个人版用户可查看[**个人版用量详情**](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal/usage-detail)。
+-   团队管理员可查看[**团队用量分析**](https://bailian.console.aliyun.com/cn-beijing/subscription/uac-admin/organization/usage)。

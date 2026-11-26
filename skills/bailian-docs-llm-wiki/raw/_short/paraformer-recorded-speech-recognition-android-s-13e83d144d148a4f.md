@@ -17,7 +17,7 @@
     > 当需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时API Key](../model-api-reference/more-about-models/generate-temporary-api-key.md)。临时API Key默认拥有60秒有效期，过期后需重新获取。
     
 2.  **下载SDK并运行示例代码：**
-    -   [下载最新SDK整合包](https://help.aliyun.com/zh/model-studio/sdk-selection-and-download)。
+    -   [下载最新SDK整合包](../model-api-reference/more-about-models/sdk-selection-and-download.md)。
     -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
         需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。  
           

@@ -1,39 +1,39 @@
 # service announcements
 
-`service announcements` 是百炼平台面向开发者发布的官方变更通知集合，涵盖模型上下线、功能升级、计费调整、网络与网关变更、SLA 协议更新等关键运营动态。所有公告均按发布日期倒序排列，确保开发者能及时掌握影响集成稳定性和成本的关键变化。公告内容以阿里云官网正式发布为准，[原文标题](../../raw/product-updates/service-announcements/product-announcements.md)为唯一权威来源。
+服务公告（Service Announcements）是百炼平台面向开发者发布的、影响 API 行为、计费模型、功能可用性或基础设施的正式变更通知。所有公告均按发布时间倒序排列，涵盖产品调整、调价、升级、下线、网络变更等类型。开发者应定期查阅以确保应用兼容性与成本可控性。最新公告可直接在 [产品公告](../../raw/product-updates/service-announcements/product-announcements.md) 中获取。
 
 ## 支持的模型/功能
 
-服务公告覆盖以下四类核心对象：  
-- **模型生命周期变更**：包括下线（如 `qwen-turbo 资源包`、`Qwen3.5 系列旧版本`、`GTE-RERANK`）、退市（如 `全妙商品`、`析言GBI`）、升级（如 `Qwen-Image-2.0-Pro`、`Qwen3-VL-Flash`）及商业化启动（如 `千问联网检索 Agent`、`MCP 广场联网搜索`）。  
-- **功能模块调整**：涉及 MCP 广场（`WebParser`、`天气通MCP`、`4个MCP服务` 下线）、Agent 能力（`Agent1.0长期记忆功能` 下线）、知识库（`企业知识库（旧）`、`虚商客户RAG` 下线）、搜索组件（`夸克搜索组件` 下线）等。  
-- **基础设施与访问层变更**：包括网关变更（多次通告，如 [网关变更通告](../../raw/product-updates/service-announcements/product-announcements.md)）、域名维护（`DashScope 域名进入维护状态`）、地域出口扩容（`北京地域公网出口 IP 扩容`）、智能路由入口及权限调整、美国（弗吉尼亚）部署模式变更等。  
-- **配套服务与协议更新**：含 SLA 协议变更、《服务协议》与《产品服务协议》更新、API Key 加密存储升级、PTU 能力升级等。
+服务公告覆盖以下核心能力范围：
+- **模型生命周期管理**：包括主线/快照模型下线（如 `qwen-turbo` 资源包退市、`Qwen3.5` 旧版本下线）、模型升级（如 `Qwen-Image-2.0-Pro`、`Qwen3-VL-Flash`）、以及商业化启动（如 `千问联网检索 Agent`、`全妙-视频混剪`）；
+- **MCP 相关服务**：MCP 广场整体演进，含 `WebParser` 下线、`天气通MCP` 下线、`4个MCP服务下线` 及 `部分MCP服务下线` 等多轮调整；
+- **配套能力变更**：知识库 Metadata 抽取计费方式调整、记忆库商业化、Managed Agents 商业化、智能路由入口及权限调整、网关变更（多次通告）、DashScope 域名维护等；
+- **基础设施升级**：北京地域公网出口 IP 扩容、美国（弗吉尼亚）业务空间部署模式变更、PTU（预置吞吐）能力升级等。
+
+> **注意**：文档中存在多处模型下线时间冲突。例如 `[部分老旧模型下线通知](../../raw/product-updates/service-announcements/product-announcements.md)`（2026-07-14）与 `[部分老旧模型延期下线通知](../../raw/product-updates/service-announcements/product-announcements.md)`（2026-07-06）明确表明原计划下线被推迟，开发者需以延期通知为准。
 
 ## 关键参数
 
-公告本身不提供 API 参数，但开发者需重点关注以下元信息字段（均来自 [原文标题](../../raw/product-updates/service-announcements/product-announcements.md) 中的锚点结构）：  
-- **`id` 锚点格式**：统一采用 `announcement-{notice_id}`（如 `announcement-118728`）和日期锚点（如 `2026-10-21`），可用于程序化订阅或精准定位；  
-- **分类标签**：每条公告明确标注类型（`产品调整` / `升级` / `调价` / `其他` / `网络优化`），是判断影响范围的首要依据；  
-- **生效时间**：多数公告含明确生效日期（如 `2026年6月30日商业化`、`2026年2月27日商业化`），部分仅标注发布日期，需结合正文确认；  
-- **影响范围标识**：部分公告注明地域（如 `北京地域`、`美国（弗吉尼亚）`）、业务空间（`专属推理 API 域名`）、客户类型（`虚商客户`）等限定条件。
-
-> **注意**：多份公告提及“网关变更”，但未统一说明是否兼容旧网关或强制切换窗口期。例如 `2026-11-03`、`2026-09-16`、`2026-07-13` 三条 [网关变更通告](../../raw/product-updates/service-announcements/product-announcements.md) 均未提供迁移路径或回滚机制，建议以最新通告为准并主动联系技术支持确认。
+公告本身不定义运行时参数，但直接影响以下关键配置项的行为或有效性：
+- `model` 名称：下线模型（如 `kimi-k2.5`、`GTE-RERANK`）将返回 `404 Model Not Found`；升级模型（如 `Qwen3.8-Max`）可能引入新字段或弃用旧字段；
+- `endpoint` / `domain`：网关变更（如 `[网关变更通告](../../raw/product-updates/service-announcements/product-announcements.md)` 多次出现）和域名维护（`[百炼DashScope 域名进入维护状态通知](../../raw/product-updates/service-announcements/product-announcements.md)`）要求客户端及时切换至新域名；
+- `pricing tier` / `plan`：`Token Plan` 个人版降价、`Coding Plan Lite` 停止新购与续费、`GLM-5.2 Fast mode` 降价等均需同步更新计费策略；
+- `region`：北京/弗吉尼亚地域变更可能影响延迟与 SLA，需检查 `RegionEndpoint` 配置。
 
 ## 使用方式
 
-- **实时获取**：通过阿里云官网公告页（URL 形式见原文内超链接）或百炼控制台「通知中心」查看；  
-- **程序化集成**：解析 [原文标题](../../raw/product-updates/service-announcements/product-announcements.md) 的 HTML 锚点结构，按 `id="announcement-*"` 提取公告 ID，结合日期锚点做增量轮询；  
-- **变更订阅**：在百炼控制台开通「服务公告推送」，支持邮件/Webhook 接收指定类型（如仅 `产品调整` 或 `调价`）的变更；  
-- **影响评估**：对自身调用链中涉及的模型 ID（如 `qwen3-max`、`deepseek-v4-pro`）、组件名（如 `WebParser`、`MCP`）、API 域名（如 `dashscope.aliyuncs.com`）进行关键词扫描，匹配对应公告正文中的具体描述。
+- **主动订阅**：通过阿里云官网「产品公告」页或控制台消息中心接收推送；
+- **程序化集成**：建议在 CI/CD 流程中定期拉取 [产品公告](../../raw/product-updates/service-announcements/product-announcements.md) 的 Markdown 源文件，解析 `<a id="announcement-XXXXXX">` 锚点及日期标签，构建本地变更日志；
+- **关键路径验证**：对涉及下线/升级的模型或服务，应在公告生效前完成兼容性测试（如替换 `qwen-vl-ocr` 为新版 OCR 模型）；
+- **告警联动**：将高频变更类型（如下线、网关变更）纳入监控系统，当 API 返回 `404` 或 `503` 且时间窗口匹配公告日期时触发告警。
 
 ## 限制和注意事项
 
-- **时效性**：公告发布时间 ≠ 生效时间，尤其商业化/下线类公告常设缓冲期（如 `2026-05-27` 公告中 `千问联网检索 Agent` 于 `6月30日` 商业化），务必核对正文中明确的生效节点；  
-- **地域与权限隔离**：部分变更仅限特定地域（如 `北京地域公网出口`）或业务空间（如 `专属推理 API 域名`），跨区域部署需单独验证；  
-- **隐式依赖风险**：模型下线可能影响依赖其的上层能力（如 `Agent1.0长期记忆` 下线后，未迁移至 Agent2.0 的应用将失效），需检查完整调用栈；  
-- **字段兼容性**：`2026-04-09` 和 `2026-04-01` 两则 [部分模型字段变更通知](../../raw/product-updates/service-announcements/product-announcements.md) 未说明具体字段名及兼容策略，建议在沙箱环境验证响应结构变更；  
-- **缓存与计费联动**：`DeepSeek-V4.1-Flash` 缓存命中价格调整与 `隐式缓存调价` 分属不同公告（`118827` vs `118228`），开发者需同时关注模型级与缓存策略级定价变动。
+- 所有下线类公告（如 `[Agent1.0长期记忆功能下线](../../raw/product-updates/service-announcements/product-announcements.md)`、`[DMS-数据库安全访问下线通知](../../raw/product-updates/service-announcements/product-announcements.md)`）均无回滚机制，调用将永久失败；
+- 网关变更类通告（如 `[网关变更通告](../../raw/product-updates/service-announcements/product-announcements.md)` 共出现 3 次）通常伴随短暂不可用（<5 分钟），不承诺零中断；
+- 调价类公告（如 `[DeepSeek-V4.1-Flash系列模型缓存命中价格调整通知](../../raw/product-updates/service-announcements/product-announcements.md)`）自生效日起按新单价计费，历史用量不追溯；
+- 模型字段变更（如 `[部分模型字段变更通知](../../raw/product-updates/service-announcements/product-announcements.md)`）可能导致 JSON Schema 校验失败，需更新客户端解析逻辑；
+- “其他”类通告（如 SLA 协议变更、服务协议更新）虽不直接影响 API，但具法律效力，建议法务团队同步审阅。
 
 ## 来源文档
 

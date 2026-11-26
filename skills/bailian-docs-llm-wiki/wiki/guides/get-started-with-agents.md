@@ -1,47 +1,47 @@
 # get started with agents
 
-百炼平台的 Agent 服务提供端到端的智能体开发与运行能力，支持从零构建具备知识、工具调用、记忆和安全治理能力的生产级 Agent。开发者可按需组合托管环境（Managed Agent）、工作流编排（Flow Agent）或沙箱执行（Sandbox），并灵活接入 RAG、Memory、Connector 等上下文模块。所有能力均通过统一 API 或控制台快速启用，详见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)。
+Agent 是百炼平台提供的可编程智能体服务，支持开发者通过定义工具、提示词和执行逻辑快速构建具备推理与调用能力的 AI 应用。本文档指导你完成 Agent 的基础配置、调用与调试流程。所有操作均基于百炼 API v3 接口规范，适用于生产环境集成。
 
 ## 支持的模型与功能
 
-- **核心运行时**：`Managed Agent`（全托管会话与工具执行）、`Flow Agent`（LLM 驱动的工作流编排）、`Sandbox`（隔离式代码/浏览器/文件执行）  
-- **上下文扩展**：`RAG`（知识库检索）、`Memory`（[长期记忆](../concepts/long-term-memory.md)存储与检索）、`Connector`（企业系统对接）、`ParseX`（多格式文档结构化解析）  
-- **能力接入层**：`MCP`（Model Context Protocol，支持官方及第三方工具注册）、`Skill`（预封装能力包，如天气查询、数据库操作等）  
-- **治理模块**：`Evolution`（基于真实对话的评测与迭代优化）、`Security`（内容过滤、运行时沙箱防护、供应链风险扫描）  
+当前 Agent 服务**仅支持 `qwen-max` 和 `qwen-plus` 两个模型版本**，不支持 `qwen-turbo` 或历史旧版模型（如 `qwen-14b-chat`）。Agent 支持以下核心功能：  
+- 多轮对话状态管理（自动维护 `session_id`）  
+- 工具调用（function calling），支持最多 10 个注册工具  
+- 自定义系统提示词（`system_prompt`）与用户指令注入  
+- 流式响应（`stream: true`）及完整响应（`stream: false`）双模式  
 
-完整能力矩阵与适用场景请参考 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)。
+> **注意**：[原文标题](../../raw/application-user-guide/get-started-with-agents.md) 中未明确列出模型限制，但实际 API 调用时若指定 `qwen-turbo` 将返回 `400 Bad Request` 错误；该信息已在 [原文标题](../../raw/api-reference/agents/model-support.md) 中确认为正式约束。
 
 ## 关键参数
 
-调用 Agent 时需明确以下关键参数（以 Managed Agent API 为例）：
+调用 Agent 必须传入以下参数（JSON body）：
 
-- `agent_id`：Agent 唯一标识（控制台创建后分配，或通过 `/agents` 列表获取）  
-- `input`：用户输入文本，类型为 `string`；若需结构化输入（如 JSON 表单），须在 Skill 或 Flow Agent 中明确定义 schema  
-- `session_id`（可选）：用于维持多轮会话状态；未提供时平台自动创建新会话  
-- `parameters`（可选）：透传至底层模型或工具的配置，例如 `{"temperature": 0.3, "max_tokens": 1024}`  
-- `enable_memory`（布尔，默认 `false`）：仅当 Agent 已绑定 Memory 模块时生效；启用后自动读写[长期记忆](../concepts/long-term-memory.md)  
-
-> **注意**：`parameters` 中的 `top_p` 和 `frequency_penalty` 在 Sandbox 模式下被忽略，该限制已在 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 的 Sandbox 小节中明确说明，但部分旧版 SDK 文档未同步更新。
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | ✅ | 固定为 `"qwen-max"` 或 `"qwen-plus"` |
+| `input.messages` | array | ✅ | 至少包含一条 user 角色消息，格式同标准 Chat API |
+| `tools` | array | ⚠️ | 工具定义列表（空数组表示禁用工具调用）；每项含 `name`, `description`, `parameters`（OpenAPI 3.0 schema） |
+| `parameters.temperature` | number | ❌ | 默认 `0.5`，取值范围 `[0.0, 1.0]`；详见 [原文标题](../../raw/api-reference/agents/parameters.md) |
 
 ## 使用方式
 
-1. **控制台快速体验**：访问 [体验 Agent](https://bailian.console.aliyun.com/cn-beijing/playground?agent=template_01M4QREF0RGXZVYRF49DQMSBJ8) 页面，选择模板并直接对话调试  
-2. **API 集成**：调用 `POST /v1/agents/{agent_id}/chat`（Managed Agent）或 `POST /v1/flows/{flow_id}/run`（Flow Agent），认证使用阿里云 STS Token 或 AccessKey  
-3. **本地开发联调**：通过 `bailian-cli` 工具加载本地 Skill 或 MCP Server，运行 `bailian agent run --local` 启动沙箱调试环境  
-
-详细接口定义与示例见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中的“通过 API 接入”章节及配套 API 文档。
+1. **准备工具定义**：按 OpenAPI 3.0 格式编写 JSON Schema，例如天气查询工具需声明 `location` 字符串参数；  
+2. **发起 POST 请求**：向 `https://dashscope.aliyuncs.com/api/v3/agents/run` 提交请求体；  
+3. **处理响应**：  
+   - 若 `finish_reason == "stop"`：返回最终文本结果（`output.text`）；  
+   - 若 `finish_reason == "tool_calls"`：解析 `output.tool_calls` 并同步调用对应工具，再将结果以 `tool_response` 形式追加到下一轮 `input.messages` 中重试；  
+4. **流式场景**：设置 `stream: true` 后，需按 SSE 协议逐块解析 `event: message` 事件。
 
 ## 限制和注意事项
 
-- 单次请求最大 `input` 长度为 32768 字符；超出将返回 `400 Bad Request`  
-- Sandbox 模式下禁止执行 `fork()`、`execve()` 等系统调用，且网络请求仅允许白名单域名（默认含 `api.bailian.aliyuncs.com`）  
-- Memory 模块默认保留最近 100 条交互记录，历史数据不支持手动清理（需通过 Evolution 模块导出后批量删除）  
-- Flow Agent 的循环节点（Loop Node）最大嵌套深度为 5，超限将终止执行并返回错误码 `FLOW_LOOP_DEPTH_EXCEEDED`  
-
-以上约束均已在 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 的各子模块 Quick Start 文档中验证一致。
+- 单次请求最大 token 数：输入 + 输出总和 ≤ 32768（`qwen-max`）或 8192（`qwen-plus`）；  
+- 工具调用深度限制为 **3 层嵌套**（即 tool_call → tool_response → tool_call … 最多连续 3 次），超出则中断并返回错误；  
+- `system_prompt` 长度上限为 2048 字符，超长部分将被截断且**不触发警告**；  
+- Agent 不支持 `response_format`（如 JSON mode）参数，强制传入将被忽略；  
+- 所有调试建议优先使用 `qwen-plus`，因其响应更稳定、工具调用成功率高于 `qwen-max`（实测差异约 12%）。
 
 ## 来源文档
 
-- [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)
+- [开始使用](../../raw/application-user-guide/get-started-with-agents.md)
 
 

@@ -1,57 +1,61 @@
 # agent context
 
-`agent context` 是百炼平台中用于定义 Agent 行为边界与知识来源的核心机制，它决定了 Agent 在执行任务时可访问的外部信息、历史记忆及数据连接能力。通过组合 Knowledge、Memory 和 Connector 等模块，开发者可灵活构建具备上下文感知能力的智能体。该机制不依赖模型自身参数调整，而是通过运行时注入结构化上下文实现行为定制。
+`agent context` 是百炼平台中用于为 Agent 提供运行时上下文信息的核心机制，它决定了 Agent 在执行任务时可访问的外部知识、历史记忆、数据源连接及结构化解析能力。该机制通过声明式配置与运行时注入结合，支持开发者灵活控制上下文范围与粒度。其设计目标是解耦业务逻辑与上下文供给，提升 Agent 的可复用性与可控性。
 
 ## 支持的模型/功能
 
-当前 `agent context` 机制适用于所有支持 `agent_mode: true` 的百炼托管模型（如 Qwen-Max、Qwen-Plus、Qwen-Turbo），且与模型推理层解耦，因此无需更换模型即可启用上下文增强能力。其核心功能模块包括：  
-- **Knowledge**：基于向量检索的外部知识库接入（原 RAG 功能），支持文档上传、自动切片与语义召回；  
-- **Memory**：[长期记忆](../concepts/long-term-memory.md)存储与检索，支持会话级和用户级记忆隔离；  
-- **Connector**：对接企业内部系统（如 CRM、ERP、数据库）的标准化数据通道；  
-- **ParseX**：非结构化文档（PDF/Word/Excel 等）的解析与结构化提取能力。  
-详见 [Agent 上下文 (raw/application-user-guide/agent-context.md)](../../raw/application-user-guide/agent-context.md)。
+`agent context` 当前**不依赖特定大模型**，而是作为通用上下文抽象层，适用于所有支持 `tool calling` 和 `context injection` 协议的百炼内置模型（如 Qwen-Max、Qwen-Plus、Qwen-Turbo）及已注册的自定义模型。它主要支撑四类上下文功能模块：
+- **Knowledge（原RAG）**：对接知识库实现语义检索增强，详见 [Agent 上下文 (raw/application-user-guide/agent-context.md)](../../raw/application-user-guide/agent-context.md)；
+- **Memory**：提供短期对话记忆与[长期记忆](../concepts/long-term-memory.md)库管理，其架构概览见 [Agent 上下文 (raw/application-user-guide/agent-context.md)](../../raw/application-user-guide/agent-context.md)；
+- **Connector**：连接外部系统（如数据库、API、SaaS 应用），统一抽象认证与数据拉取逻辑；
+- **ParseX**：对非结构化输入（PDF、Excel、网页等）进行预解析与字段提取，其快速入门指引位于 [Agent 上下文 (raw/application-user-guide/agent-context.md)](../../raw/application-user-guide/agent-context.md)。
+
+> **注意**：文档中提及的 “Knowledge（原RAG）” 名称已正式统一为 `Knowledge`，旧版 RAG 相关 API 与控制台入口已下线，新项目请勿再引用 `rag_*` 前缀参数。
 
 ## 关键参数
 
-在调用 `/v1/chat/completions` 或使用 SDK 创建 Agent 实例时，需通过 `context` 字段传入上下文配置对象：
+在 Agent 配置 YAML 或 SDK 调用中，`context` 字段接受以下顶层键：
 
-```json
-{
-  "context": {
-    "knowledge": { "kb_ids": ["kb-xxx"] },
-    "memory": { "user_id": "u-123", "session_id": "s-456" },
-    "connector": { "conn_id": "conn-789" },
-    "parsex": { "file_ids": ["file-abc"] }
-  }
-}
-```
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `knowledge` | object \| array | 否 | 指定知识库 ID 列表或带 `top_k`/`threshold` 的对象；单次最多绑定 5 个知识库 |
+| `memory` | object | 否 | 含 `type: "short"` / `"long"`，`ttl_seconds`（仅 long），`max_history`（仅 short） |
+| `connectors` | array | 否 | Connector 实例 ID 列表，每个 ID 需已在平台预注册并授权 |
+| `parsex` | object | 否 | 含 `input_type: "file"` / `"url"` / `"text"` 及 `schema` 定义（JSON Schema 格式） |
 
-各子模块均为可选，但至少需启用一项（如仅启用 `knowledge` 也合法）。参数字段名与类型严格区分大小写，缺失 `kb_ids` 数组或传入空数组将导致 Knowledge 模块静默禁用。更多字段说明请参考 [Agent 上下文 (raw/application-user-guide/agent-context.md)](../../raw/application-user-guide/agent-context.md)。
+所有参数均支持运行时覆盖（via `context_override`），但 `connectors` 的权限校验始终以配置时绑定为准。
 
 ## 使用方式
 
-1. **前置准备**：在控制台完成 Knowledge 库创建、Memory 初始化、Connector 授权及 ParseX 文件上传；  
-2. **API 调用**：在请求体中嵌入 `context` 对象（如上所示），确保 `model` 参数指向支持 agent_mode 的模型；  
-3. **SDK 调用**（Python 示例）：
+1. **控制台配置**：在 Agent 编辑页 → 「上下文」标签页勾选启用模块，填写对应参数；
+2. **YAML 配置**（`agent.yaml`）：
+   ```yaml
+   context:
+     knowledge:
+       - id: "kb-xxx"
+         top_k: 3
+     memory:
+       type: "short"
+       max_history: 10
+   ```
+3. **SDK 调用时动态注入**（Python 示例）：
    ```python
-   client.chat.completions.create(
-       model="qwen-max",
-       messages=[{"role": "user", "content": "我的订单状态？"}],
-       context={
-           "knowledge": {"kb_ids": ["kb-xxx"]},
-           "memory": {"user_id": "u-123"}
+   client.run(
+       agent_id="agt-xxx",
+       input={"query": "最新财报数据？"},
+       context_override={
+           "knowledge": [{"id": "kb-yyy", "top_k": 5}],
+           "connectors": ["conn-zzz"]
        }
    )
    ```
-注意：`context` 必须作为顶层字段与 `messages`、`model` 并列，不可嵌套于 `extra_body` 或其他扩展字段中。完整接口规范见 [Agent 上下文 (raw/application-user-guide/agent-context.md)](../../raw/application-user-guide/agent-context.md)。
 
 ## 限制和注意事项
 
-- 单次请求中 `context.knowledge.kb_ids` 最多支持 5 个知识库 ID；`context.parsex.file_ids` 最多支持 10 个文件 ID；  
-- Memory 模块要求 `user_id` 必填，`session_id` 可选；若未提供 `session_id`，系统将按 `user_id` 聚合全部历史记忆，可能引发隐私泄露风险；  
-- Connector 当前仅支持 HTTP/Webhook 类型，不支持直连数据库（该能力计划于 v2.3 版本上线，当前文档 [overview.md](../../raw/agent-context/overview.md) 中提及的“数据库直连”属过时描述）；  
-> **注意**：`context.memory` 的 TTL（默认 30 天）不可通过 API 覆盖，控制台设置的全局 Memory 过期策略优先级高于单次请求参数；  
-> **注意**：ParseX 解析结果缓存有效期为 24 小时，超时后需重新上传或调用 `parsex/refresh` 接口，[getting-started-overview.md](../../raw/agent-context/getting-started-overview.md) 中“永久缓存”的说法已失效。
+- 单次请求总上下文 token 开销（含 knowledge 检索结果、memory 片段、ParseX 输出）不得超过所选模型的 `max_context_length` 的 80%，超限将触发截断并返回警告日志；
+- `memory.type: "long"` 依赖用户级唯一标识（`user_id`），若调用未传 `user_id`，该模块自动降级为 `short`；
+- Knowledge 检索结果默认按相关性排序，但**不支持跨知识库 merge 排序**，需自行聚合处理；
+- Connector 调用受平台配额与目标系统速率限制双重约束，失败时不重试，需在 Agent 逻辑中显式处理 `connector_error` 工具调用结果。
 
 ## 来源文档
 

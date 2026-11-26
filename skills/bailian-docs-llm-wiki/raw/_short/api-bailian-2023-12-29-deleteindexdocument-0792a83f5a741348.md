@@ -13,7 +13,7 @@
 -   调用本接口前，请确保您的知识库已经创建完成且未被删除（即知识库 IDIndexId有效）。
 -   仅能删除知识库中状态为导入失败（INSERT\_ERROR）或导入成功（FINISH）的文件。如需查询指定知识库下的文件状态，可调用 ListIndexDocuments 接口。
 -   删除操作不可逆，被删的文件内容将无法恢复，且 Retrieve 接口将无法再获取其相关信息，请谨慎操作。
--   调用本接口不会删除应用数据中已导入的文档。
+-   调用本接口不会删除数据集中已导入的文档。
 -   本接口具有幂等性。
 
 **限流说明：** 本接口频繁调用会被限流，频率请勿超过 10 次/秒。如遇限流，请稍后重试。
@@ -74,7 +74,7 @@ POST /{WorkspaceId}/index/delete_index_document HTTP/1.1
 | WorkspaceId | string | 是 | 知识库所属的业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。 | llm-3z7uw7fwz0vxxxx |
 | IndexId | string | 是 | 知识库 ID，即 **CreateIndex** 接口返回的`Data.Id`。 | 79c0alxxxx |
 | DocumentIds | array | 是 | 文件 ID 列表。 |  |
-|  | string | 是 | 文件 ID，即 **AddFile** 接口返回的`FileId`。您也可以在[应用数据](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/data-center)\-文件页签，单击文件名称旁的 ID 图标获取。 | file\_5f03dfea56da4050ab68d61871fc4cb3\_xxxxxxxx |
+|  | string | 是 | 文件 ID，即 **AddFile** 接口返回的`FileId`。<br>1\. 打开[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)，在目标文件数据集上单击**详情**。<br>2\. 单击目标文件的 **ID** 图标，再单击提示中的复制图标，复制文件 ID。 | file\_5f03dfea56da4050ab68d61871fc4cb3\_xxxxxxxx |
 
 <a id="返回参数"></a>
 

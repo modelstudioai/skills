@@ -1220,7 +1220,14 @@
 
 #### 步骤一：自定义节点参数
 
-访问百炼控制台的**[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)**页面，选择**工作流应用**并自定义**开始节点**的参数（示例设置String类型变量city），同时在**Prompt**中插入变量city和变量query，并**发布**应用。
+1.  在[**工作流列表**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-center/workflow)中打开目标应用。
+    
+2.  在**开始**节点添加 `String` 类型的变量 `city`。
+    
+3.  在提示词中插入 `city` 和 `query`。
+    
+4.  发布应用。
+    
 
 <a id="步骤二-api调用"></a>
 

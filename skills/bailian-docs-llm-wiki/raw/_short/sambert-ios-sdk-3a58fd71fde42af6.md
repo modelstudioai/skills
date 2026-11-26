@@ -20,7 +20,7 @@
 
 ### 安装 SDK
 
-1.  [下载最新SDK整合包](https://help.aliyun.com/zh/model-studio/sdk-selection-and-download)。
+1.  [下载最新SDK整合包](../model-api-reference/more-about-models/sdk-selection-and-download.md)。
 2.  解压 `.tar.gz` 整合包，将 `Release/nuisdk.xcframework` 添加到 Xcode 工程。
 3.  在 Build Phases → Link Binary With Libraries 中添加 `nuisdk.xcframework`。
 4.  在 General → Frameworks, Libraries, and Embedded Content 中将 `nuisdk.xcframework` 设置为 Embed & Sign。

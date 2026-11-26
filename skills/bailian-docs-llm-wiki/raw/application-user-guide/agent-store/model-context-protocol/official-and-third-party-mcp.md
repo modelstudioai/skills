@@ -60,7 +60,7 @@ One Key MCP 服务无需手动开通，首次调用自动生效。以使用 **�
 
 1.  **创建智能体**
     
-    前往阿里云百炼[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，点击**创建应用**，选择**智能体应用立即创建**。
+    在[**创建智能体**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-center/assistant?immediatelyCreate=true)表单中输入**应用名称**，然后单击**立即创建**。
     
 2.  **添加 MCP 服务**
     
@@ -124,7 +124,7 @@ MCP 服务可能有多个工具，但在工作流应用中，每个 MCP 节点�
 
 1.  **创建工作流**
     
-    前往阿里云百炼[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，点击**创建应用**，选择**工作流应用立即创建**。
+    在[**创建工作流**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-center/workflow?immediatelyCreate=true)表单中输入**应用名称**，然后单击**立即创建**。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1614144471/p941093.png)
 2.  **设置开始节点**

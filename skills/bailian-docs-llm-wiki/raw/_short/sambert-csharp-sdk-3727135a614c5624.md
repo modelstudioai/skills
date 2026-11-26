@@ -10,7 +10,7 @@
 
 <a id="installation"></a>
 
-按[SDK简介](https://help.aliyun.com/zh/model-studio/csharp-sdk)安装 SDK 并配置 API Key。将示例地址中的 `WorkspaceId` 替换为同地域的业务空间 ID。
+按[SDK简介](../model-api-reference/more-about-models/csharp-speech-sdk/csharp-sdk.md)安装 SDK 并配置 API Key。将示例地址中的 `WorkspaceId` 替换为同地域的业务空间 ID。
 
 Sambert 仅支持北京地域。用 `sambert-zhichu-v1` 合成一句话，将音频保存为 `output.wav`。
 

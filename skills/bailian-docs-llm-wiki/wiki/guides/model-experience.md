@@ -1,56 +1,41 @@
 # model experience
 
-`model experience` 是百炼平台统一的模型调用抽象层，为开发者提供一致的 API 接口与参数语义，屏蔽底层模型类型（文本、视觉、语音等）和部署形态（SaaS/私有化）的差异。所有模型能力均通过该层接入，支持同步推理、流式响应、批量处理等通用交互模式。其设计目标是降低多模态模型集成复杂度，提升跨模型迁移效率。
+`model experience` 是百炼平台统一的模型调用抽象层，为开发者提供一致的 API 接口与参数语义，屏蔽底层模型类型（文本、视觉、语音等）和部署形态（托管/自定义）的差异。所有模型能力均通过 `/v1/models/{model_id}/invoke` 统一入口接入，支持同步响应与[流式输出](../concepts/streaming-output.md)。该设计已在 [模型调用](../../raw/model-user-guide/model-experience.md) 文档中明确规范。
 
 ## 支持的模型与功能
 
-当前 `model experience` 覆盖以下五大能力域，各领域对应独立子文档说明具体模型列表、输入输出格式及典型用例：
+当前 `model experience` 覆盖以下模态能力：
+- **文本生成**：包括大语言模型（LLM）的对话、补全、结构化输出等，详见 [文本](../../raw/model-user-guide/model-experience/text-generation-model.md)  
+- **视觉生成**：图像生成、编辑、理解及视频生成，详见 [视觉](../../raw/model-user-guide/model-experience/image-and-video-generation.md)  
+- **语音与音频**：TTS、ASR、音色克隆与音频理解，详见 [语音](../../raw/model-user-guide/model-experience/speech-and-audio.md)  
+- **向量服务**：嵌入（embedding）与重排序（rerank），详见 [向量](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)  
+- **全模态模型**：支持跨文本、图像、语音输入的联合推理，详见 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md)  
 
-- 文本生成：包括大语言模型（LLM）的对话、补全、指令遵循等任务，详见 [模型调用 (raw/model-user-guide/model-experience.md)](../../raw/model-user-guide/model-experience.md)  
-- 视觉生成：支持文生图、图生图、视频生成及理解类模型，详见 [模型调用 (raw/model-user-guide/model-experience.md)](../../raw/model-user-guide/model-experience.md)  
-- 语音与音频：涵盖 TTS、ASR、音色克隆及音频理解，详见 [模型调用 (raw/model-user-guide/model-experience.md)](../../raw/model-user-guide/model-experience.md)  
-- 向量与重排：提供嵌入（embedding）和检索重排（rerank）模型，适用于 RAG 场景  
-- 全模态：支持跨文本、图像、语音的联合建模与推理（如图文问答、语音指令驱动视觉操作）
-
-> **注意**：`omni-modal.md` 中描述的“端到端多模态 tokenization”能力尚未在 v3.2 SDK 中开放，实际调用仍需按单模态路径拆分输入；请以 [模型调用 (raw/model-user-guide/model-experience.md)](../../raw/model-user-guide/model-experience.md) 中列出的可用模型为准。
+> **注意**：部分旧版文档（如 `raw/legacy/llm-api.md`）仍将 `text-generation` 作为独立路径调用，该方式已废弃；请以 [模型调用](../../raw/model-user-guide/model-experience.md) 中定义的统一 `/v1/models/{model_id}/invoke` 为准。
 
 ## 关键参数
 
-所有请求共用以下核心参数（部分参数在特定模型类型中为可选或忽略）：
+所有调用共用以下核心参数（JSON body）：
+- `model_id`（必填）：平台注册的模型唯一标识，非模型原始名称（如 `qwen2.5-7b-chat` 而非 `Qwen2.5-7B-Chat`）  
+- `input`（必填）：模态特定输入结构，例如文本为 `{"messages": [...]}`，图像为 `{"image_url": "..."}`  
+- `parameters`（可选）：标准化参数集，含 `temperature`、`top_p`、`max_tokens`（文本/语音）、`n`（采样数）、`stream`（布尔值）等  
+- `tools`（可选）：用于[函数调用](../concepts/function-calling.md)（Function Calling）场景，格式与 OpenAI 兼容  
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model` | string | 是 | 模型唯一标识符（如 `qwen-max`, `wanx-v1`），须从控制台或 `/v1/models` 接口获取有效值 |
-| `input` | object | 是 | 模型输入数据，结构依模型类型而异（见各子文档） |
-| `parameters` | object | 否 | 控制生成行为的键值对，如 `temperature`, `top_p`, `max_tokens`（文本）、`size`（图像）等 |
-| `stream` | boolean | 否 | 是否启用流式响应，默认 `false`；仅部分文本/语音模型支持 |
-
-`parameters` 中的字段语义与 OpenAI 兼容，但部分视觉模型不支持 `temperature`；具体支持情况请查阅对应子文档。
+参数语义严格遵循 [模型调用](../../raw/model-user-guide/model-experience.md) 定义，不因模型类型而异。
 
 ## 使用方式
 
 1. **认证**：使用 `Authorization: Bearer <api_key>` 请求头  
-2. **端点**：统一 POST 到 `/v1/chat/completions`（文本/全模态）或 `/v1/models/{model}/invoke`（其他类型，推荐）  
-3. **示例（文本）**：
-   ```bash
-   curl -X POST https://dashscope.aliyuncs.com/api/v1/chat/completions \
-     -H "Authorization: Bearer $API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "model": "qwen-max",
-           "input": {"messages": [{"role":"user","content":"你好"}]},
-           "parameters": {"temperature": 0.7}
-         }'
-   ```
-4. **SDK 调用**：推荐使用 `dashscope` Python SDK v1.20.0+，自动适配 `model experience` 协议。
+2. **请求**：`POST https://dashscope.aliyuncs.com/v1/models/{model_id}/invoke`  
+3. **响应**：成功时返回 `200 OK`，结构统一为 `{ "output": {...}, "usage": {...} }`；流式响应使用 `Content-Type: text/event-stream`，事件格式为 `data: {...}\n\n`  
+4. **SDK 支持**：Python SDK v1.20+、Java SDK v1.15+ 原生适配 `model experience` 接口，无需额外封装  
 
 ## 限制和注意事项
 
-- 单次请求最大 `input` 大小为 16 MB（视觉/语音模型以原始文件计，文本以 UTF-8 字节计）  
-- 流式响应仅保证 chunk 顺序，不保证每个 chunk 的 token 边界与模型内部 tokenizer 严格对齐  
-- 私有化部署场景下，`model` 参数必须与本地注册的模型别名完全一致，大小写敏感  
-- 所有模型调用受账户配额与速率限制约束，超限返回 `429 Too Many Requests`；详细策略见 [模型调用 (raw/model-user-guide/model-experience.md)](../../raw/model-user-guide/model-experience.md)  
-- 不支持跨模型状态保持（如 session-based 对话历史），需由应用层自行管理上下文
+- 单次请求 `input` 总大小上限为 16 MB（含 base64 图像、音频二进制等）  
+- 流式响应仅支持文本、语音 TTS 及部分全模态模型；图像生成暂不支持流式（见 [视觉](../../raw/model-user-guide/model-experience/image-and-video-generation.md)）  
+- `model_id` 必须通过 [模型调用](../../raw/model-user-guide/model-experience.md) 中的「模型列表 API」或控制台获取，硬编码模型名将导致 `404 Not Found`  
+- 向量模型（embedding/rerank）不接受 `temperature` 或 `stream` 参数，传入将被静默忽略 —— 此行为与 [向量](../../raw/model-user-guide/model-experience/embedding-rerank-model.md) 文档一致，但与部分早期测试文档冲突，以本页为准
 
 ## 来源文档
 

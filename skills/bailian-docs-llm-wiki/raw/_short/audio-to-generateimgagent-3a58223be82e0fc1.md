@@ -28,7 +28,7 @@
 
 ## 前提条件
 
-必须先阅读 [开始会话](../model-api-reference/more-about-models/multimodal-interaction-protocol.md#92d1f462e5xrm) ，了解实时多模态交互的整体WebSocket协议。
+必须先阅读 [开始会话](multimodal-interaction-protocol-23b12b66c717437f.md#92d1f462e5xrm) ，了解实时多模态交互的整体WebSocket协议。
 
 <a id="开通阿里云百炼模型服务并获取api-key"></a>
 
@@ -88,7 +88,7 @@
 
 ## 开始会话
 
-请参考 [开始会话](../model-api-reference/more-about-models/multimodal-interaction-protocol.md#92d1f462e5xrm)消息的说明，本文需要在开始会话消息中进行如下配置。
+请参考 [开始会话](multimodal-interaction-protocol-23b12b66c717437f.md#92d1f462e5xrm)消息的说明，本文需要在开始会话消息中进行如下配置。
 
 <a id="开启文本流式返回"></a>
 
@@ -211,7 +211,7 @@ size用来指定生成图片的分辨率，分辨率和选择的玩法及模型�
 >
 > parameters.downstream.intermediate\_text字段、parameters.downstream.incremental\_response字段只能在创建WSS连接的开始消息中设置，在整轮对话中生效。
 >
-> 而parameters.biz\_params.commands\[ \]、parameters.biz\_params.user\_defined\_params字段可在开始消息中设置，创建连接后也可以通过[UpdateInfo - Input Message](../model-api-reference/more-about-models/multimodal-interaction-protocol.md#649c4ce759ep7)消息动态更新。
+> 而parameters.biz\_params.commands\[ \]、parameters.biz\_params.user\_defined\_params字段可在开始消息中设置，创建连接后也可以通过[UpdateInfo - Input Message](multimodal-interaction-protocol-23b12b66c717437f.md#649c4ce759ep7)消息动态更新。
 
 <a id="开始会话消息示例"></a>
 

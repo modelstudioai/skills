@@ -47,7 +47,9 @@ Coding Plan 整合了千问、GLM、Kimi、MiniMax 等模型，并兼容主流 A
 
 RAM 子账号授权步骤
 
-1.  **添加用户：**使用主账号登录阿里云百炼，访问目标工作空间的 [权限管理](https://bailian.console.aliyun.com/cn-beijing/model/settings/permission)页面，点击**新增用户**添加该 RAM 用户，并定义用户名称，单击**确定**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4734072771/p1057319.png)
+1.  使用主账号打开[**权限管理**](https://bailian.console.aliyun.com/cn-beijing/model/settings/permission)，确认当前业务空间。  
+    单击**添加用户**，再选择目标 RAM 用户。  
+    填写用户名，然后单击**确定**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4734072771/p1057319.png)
 2.  **授予权限：**点击该用户右侧的**权限管理**，添加**管理员**权限，然后点击**确定**完成授权。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4734072771/p1057328.png)
 
 <a id="步骤二-获取套餐-api-key-和-base-url"></a>
@@ -90,7 +92,7 @@ RAM 子账号授权步骤
 
 ### 步骤四：开始使用
 
-完成以上步骤后，可前往[Coding Plan 使用指南](https://bailian.console.aliyun.com/cn-beijing/model/market)查看详细用法。
+配置完成后，在所选编程工具中开始对话。
 
 <a id="订阅前须知"></a>
 

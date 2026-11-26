@@ -67,7 +67,7 @@ GET /{WorkspaceId}/datacenter/parser/settings HTTP/1.1
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
 | WorkspaceId | string | 否 | 文件所属的业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。 | llm-3shx2gu255oqxxxx |
-| CategoryId | string | 否 | 类目 ID，即 **AddCategory** 接口返回的`CategoryId`，或者在[应用数据](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/data-center)\-非结构化数据页签，单击类目名称旁的 ID 图标获取。 | cate\_cdd11b1b79a74e8bbd675c356a91ee35xxxxxxxx |
+| CategoryId | string | 否 | 使用 `AddCategory` 返回的 `CategoryId`。如需从控制台获取类目 ID：<br>1\. 打开[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)，在目标文件数据集上单击**详情**。<br>2\. 单击目标类目的 **ID** 图标，再单击提示中的复制图标，复制类目 ID。 | cate\_cdd11b1b79a74e8bbd675c356a91ee35xxxxxxxx |
 
 <a id="返回参数"></a>
 

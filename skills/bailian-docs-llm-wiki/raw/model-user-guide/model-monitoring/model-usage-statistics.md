@@ -10,7 +10,7 @@
 
 ## 适用范围
 
--   **地域与时间范围**：支持查看各地域 2026 年 9 月及之后的模型用量数据；其中，美国（弗吉尼亚）地域的调用次数仅支持查询 2026 年 10 月及之后的数据。
+-   **地域与时间范围**：支持查看各地域 2026 年 9 月及之后的模型用量数据；美国（弗吉尼亚）地域暂不支持查看模型用量。
 -   **模型**：模型列表中的全部模型均支持查看用量，包括基于它们[调优后的模型](../model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)。
 -   **统计范围**：Token 等用量用于核对费用，仅统计按 Token 后付费的模型调用，不含模型训练、预置吞吐单元、独占吞吐单元等调用；调用次数包含预置吞吐单元、独占吞吐单元等调用。模型调用产生的工具调用用量单独统计。
 
@@ -63,13 +63,13 @@
 >
 > 页面仅支持查询 2026 年 9 月及之后的用量数据；更早的数据请通过[费用与成本](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)查看。
 
-<a id="查看费用概览"></a>
+<a id="查看费用成本"></a>
 
 <a id="cost-overview-title"></a>
 
-## 查看费用概览
+## 查看费用成本
 
-在[费用概览](https://bailian.console.aliyun.com/cn-beijing/costing-balance/overview)页面查看模型调用和模型训练产生的费用，包括总消费金额、订阅购买费用、账单费用和账单趋势。费用概览的详细说明请参见[账单查询与成本管理](../test-1/bill-query-and-cost-management.md#a309aa68b2rxe)。
+在[**费用成本**](https://bailian.console.aliyun.com/cn-beijing/costing-balance/overview)页面查看模型调用和训练的总消费金额、订阅购买费用、账单费用及账单趋势。详情请参见[账单查询与成本管理](../test-1/bill-query-and-cost-management.md#a309aa68b2rxe)。
 
 <a id="模型用量统计单位说明"></a>
 

@@ -137,7 +137,7 @@ Relay TLS 证书指纹
 
 `sidExpiresInSecs`
 
-会话过期时间（秒）
+临时建连 Token 的有效期（秒）。仅当请求设置 `tokenExpiresInSecs` 时返回，值与请求一致；未设置时不返回。
 
 `extraInfo`
 
@@ -165,7 +165,6 @@ Relay TLS 证书指纹
     "aoqTokenForClient": "ecc1a46015d5496ca4ff7a48281eb739",
     "clientRelayEndpoints": [{"endpoint": "121.199.XX.XX", "port": 8443, "route_index": 0}],
     "clientRelayCertFingerprint": "sha256/99843495...",
-    "sidExpiresInSecs": 7200,
     "extraInfo": {"workspaceIdHash": "2021b6f98cea4cff"}
 }
 ```

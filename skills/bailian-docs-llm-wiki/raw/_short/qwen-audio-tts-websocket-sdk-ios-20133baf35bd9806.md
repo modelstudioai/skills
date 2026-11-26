@@ -11,7 +11,7 @@
 1.  [获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。移动端应用请勿硬编码长期 API Key。建议由应用服务端[生成临时 API Key](../model-api-reference/more-about-models/generate-temporary-api-key.md)，再下发给客户端。
     
 2.  **下载SDK并运行示例代码：**
-    -   [下载最新SDK整合包](https://help.aliyun.com/zh/model-studio/sdk-selection-and-download)。
+    -   [下载最新SDK整合包](../model-api-reference/more-about-models/sdk-selection-and-download.md)。
     -   解压 `.tar.gz` 整合包，将 `Release/nuisdk.xcframework` 添加到 Xcode 工程。
     -   在 Build Phases → Link Binary With Libraries 中添加 `nuisdk.xcframework`。
     -   在 General → Frameworks, Libraries, and Embedded Content 中将 `nuisdk.xcframework` 设置为 Embed & Sign。

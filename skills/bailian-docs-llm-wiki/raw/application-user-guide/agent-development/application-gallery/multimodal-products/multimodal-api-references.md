@@ -1,7 +1,10 @@
 # API参考
 
--   [Realtime API](../../../../_short/multimodal-aoq-access-86d2558b6e5bb42e.md)
--   [HTTP协议](../../../../_short/multimodal-http-protocol-858f15c248c0bdb9.md)
+使用 WebSocket 或 AOQ 与应用进行实时音视频交互。通过 HTTP 提交文本或图片时，应用以 SSE 返回结果。浏览器实时通话示例见[WebRTC 接入教程](../../../../model-user-guide/use-cases/realtime-audio-video-integration/best-practice-webrtc-multimodal-dialog.md)。
+
+-   [WebSocket 协议](../../../../_short/multimodal-interaction-protocol-23b12b66c717437f.md)
+-   [AOQ 协议](../../../../_short/multimodal-aoq-access-86d2558b6e5bb42e.md)
+-   [HTTP 协议](../../../../_short/multimodal-http-protocol-858f15c248c0bdb9.md)
 -   [调用官方Agent](../../../../_short/official-agent-297b22931e69e622.md)
 -   [调用三方语音模型](../../../../_short/third-party-voice-integration-8ea83955d322380a.md)
 -   [调用插件](../../../../_short/call-plugins-14618bf7fd2d95ca.md)

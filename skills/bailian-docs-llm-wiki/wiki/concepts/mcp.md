@@ -1,41 +1,38 @@
 # 模型上下文协议
 
-模型上下文协议（Model Context Protocol，简称 MCP）是百炼平台定义的标准化接口规范，用于实现大语言模型与外部工具服务之间的结构化、可发现、可调用的双向交互。它抽象了工具注册、元信息描述、参数校验与执行反馈等关键环节，使智能体无需硬编码适配即可动态感知并调用各类能力。
+模型上下文协议（Model Context Protocol，简称 MCP）是百炼平台定义的标准化服务接入与交互规范，用于将外部能力（如 HTTP API、本地进程、事件流服务等）以结构化、可发现、可编排的方式注入大模型推理上下文，实现工具调用、上下文增强与多步协同的统一抽象。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **智能体（Managed Agent）与工作流（Flow Agent）集成**：MCP 服务作为“插件式能力”被添加至智能体或工作流配置中，模型在推理过程中根据上下文自动触发对应工具（如 `maps_weather`），参数由模型生成并经平台校验后透传，结果再注入后续上下文。
-- **Agent Store 统一能力中心**：MCP 是 Agent Store 的核心协议标准，所有官方 MCP（如高德地图、联网搜索）、One Key MCP（开箱即用）及自定义 MCP 均需符合 MCP 规范才能被发现、列表展示和安全调用。
-- **外部客户端对接**：开发者可通过兼容 MCP 的 SDK（如 `mcp.client.streamable_http`）或支持 OpenAI 工具调用格式的 IDE 插件（Qoder/Cursor），以标准 HTTP 或 SSE 协议直连 MCP 服务端点（如 `/mcp` 或 `/sse`），实现跨平台工具复用。
-- **自定义 MCP 开发与部署**：开发者可基于 `STDIO`（函数计算运行 CLI）、`HTTP`、`SSE` 或 `OPENAPI` 四种接入模式实现 MCP Server，只需暴露符合 MCP Schema 的工具列表与调用接口，平台即自动完成注册、发现与生命周期管理。
+- **Agent 编排场景**：MCP 是 Agent 2.0 的核心能力载体。开发者通过 `agent.yaml` 中 `tools: [store://<mcp_id>]` 声明 MCP 工具，Agent 运行时自动完成工具发现、参数校验、调用路由与结果结构化解析，无需硬编码集成逻辑。
+- **智能体开发场景**：在 Flow Agent 或 Sandbox Agent 中，MCP 作为“外部动作节点”被调用；其工具列表（`GET /{mcpCode}/tools`）和推荐接口（`POST /tools/recommend`）支持自然语言驱动的动态工具选择，提升多轮对话中的意图理解与动作泛化能力。
+- **能力注册中心（Agent Store）场景**：MCP 作为一类标准能力类型（`type: "mcp"`）注册到 Agent Store，需提供 `endpoint` 和符合 OpenAPI 3.0 或 JSON Schema 的 `schema`，供全平台统一发现、权限管控与可观测性治理。
+- **服务管理场景**：MCP 支持四种接入类型（`STDIO`/`HTTP`/`SSE`/`OPENAPI`），开发者可通过 MCP API 全生命周期管理自定义服务（创建、启用、更新、删除），并开通官方 MCP（如高德地图）直接复用。
+- **可观测与治理场景**：MCP 调用天然纳入 [agent governance](../guides/agent-governance.md) 的 Trace 链路，支持工具级 QPM、成功率、耗时监控；其调用输入/输出也参与安全策略检测（如敏感数据外泄拦截）与评测集回流（用于轨迹准确性评估）。
 
 ## 关键参数和配置
 
-- **`mcp_type`**（必填）：标识接入协议类型，取值为 `stdio`、`http`、`sse` 或 `openapi`。
-- **`mcp_config`**（结构化对象，按类型填写）：
-  - `http`：需提供 `url`（服务地址）、`headers`（含鉴权信息，如 `Authorization: Bearer xxx`）、`timeout_ms`（默认 10000）；
-  - `openapi`：需提供 `api_list`（工具定义数组）及每个工具的 `input_params` JSON Schema；
-  - `stdio`：需指定 `command`（如 `npx`）、`args`（如 `["@modelcontextprotocol/server-memory"]`）、`env`（环境变量）；
-  - `sse`：需提供 `url` 及 `event_prefix`（可选，默认 `mcp.`）。
-- **`deploymentMode`**（自定义 MCP）：控制性能与计费模式，取值 `basic`（基础）或 `pro`（极速），影响响应延迟与单价。
-- **工具调用参数**：统一通过 `tool_params` 字段传递，其结构必须严格匹配该工具在 `GET /tools` 接口中返回的 `input_schema` 定义。
+- **协议标识**：每个 MCP 由唯一 `mcp_code` 标识，用于构造所有操作路径（如 `/api/v1/mcp/servers/{mcpCode}/tools/call`）。
+- **接入类型配置（`mcp_config`）**：
+  - `STDIO`：`command`（启动命令）、`args`（参数数组）、`env`（环境变量映射）；
+  - `HTTP` / `SSE`：`url`（HTTPS 地址）、`headers`（下游请求头，**可能含敏感凭据，禁止日志透出**）；
+  - `OPENAPI`：`api_list` 数组，每项含 `name`、`path`、`method`、`input_params`（JSON Schema 描述）等字段。
+- **工具调用参数**：
+  - 请求体必须包含 `tool_name` 和 `tool_input`（按 `inputSchema` 校验）；
+  - 响应体固定含 `isError: boolean` 字段（`success: true` 仅表示 HTTP 成功，业务失败需检查此字段）。
+- **推荐与发现参数**：
+  - `GET /{mcpCode}/tools`：返回全部工具元信息（名称、描述、参数 Schema）；
+  - `POST /tools/recommend`：支持 `topN`（默认 3）和 `query`（自然语言描述）参数，语义匹配最适配工具。
 
-## 面向开发者，简洁实用
-
-- ✅ **快速验证**：使用 CLI 命令 `bl mcp tools --server <code>` 查看工具列表及其输入 Schema；用 `bl mcp call --target <server>.<tool> --params '{"key":"value"}'` 直接调试。
-- ✅ **安全第一**：敏感凭据（如 API Key、Bearer Token）仅允许配置在 `mcp_config.headers` 或 `env` 中，**严禁写入代码或日志**；响应体中的 `headers` 字段可能含敏感信息，需脱敏处理。
-- ✅ **协议选型建议**：
-  - 优先选用 `streamable_http`（即 `http` 类型 + `/mcp` endpoint），兼容性好、调试直观、支持超时与重试；
-  - `stdio` 适合轻量脚本类工具（如本地 memory server），部署简单但无弹性伸缩；
-  - `sse` 仅用于需长连接推送的特殊场景，客户端需主动维护连接。
-- ⚠️ **注意限制**：MCP 服务运行于函数计算，**无固定出口 IP**，访问公网资源需配置白名单；**不支持访问本地网络、硬件设备或未打通 VPC 的私有数据库**。
+> ⚠️ 注意：`mcp_config.headers` 和工具调用响应中的敏感字段，必须在可信环境处理，严禁写入日志、前端或不可信存储。
 
 ## 关联主题页
 
 - [overview](../api/overview.md)
+- [overview 1e06e5e20b81f10d](../api/overview-1e06e5e20b81f10d.md)
 - [agent store](../guides/agent-store.md)
-- [agent billing](../guides/agent-billing.md)
-- [managed agents api](../api/managed-agents-api.md)
-- [flow agent api](../api/flow-agent-api.md)
+- [agent development](../guides/agent-development.md)
+- [agent legacy](../guides/agent-legacy.md)
+- [agent governance](../guides/agent-governance.md)
 
 

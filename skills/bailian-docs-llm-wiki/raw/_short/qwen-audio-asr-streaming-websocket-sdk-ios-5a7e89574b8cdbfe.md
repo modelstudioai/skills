@@ -12,7 +12,7 @@
 
 ### 安装 SDK
 
--   [下载最新SDK整合包](https://help.aliyun.com/zh/model-studio/sdk-selection-and-download)。
+-   [下载最新SDK整合包](../model-api-reference/more-about-models/sdk-selection-and-download.md)。
 -   解压 ZIP 包，将其中的 nuisdk.xcframework 添加到工程。
 -   在 Build Phases → Link Binary With Libraries 中添加 nuisdk.xcframework。
 -   在 General → Frameworks, Libraries, and Embedded Content 中将 nuisdk.xcframework 设置为 Embed & Sign。
