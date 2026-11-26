@@ -394,7 +394,7 @@ fun stopSpeech()
 | 类型 | 客户端控制模式 | 点击模式 | 双工模式 |
 | 音频上传方式 | 按需 | 持续<br><br>Listening状态超过20秒不上传音频即报错 | 持续<br><br>任何状态超过20秒不上传音频都报错 |
 | VAD检测方 | 客户端 | 服务端 | 服务端 |
-| 打断方式 | [RequestToSpeak](../model-api-reference/more-about-models/multimodal-interaction-protocol.md)消息打断 | [RequestToSpeak](../model-api-reference/more-about-models/multimodal-interaction-protocol.md)消息打断 | 语音打断 |
+| 打断方式 | [RequestToSpeak](multimodal-interaction-protocol-23b12b66c717437f.md)消息打断 | [RequestToSpeak](multimodal-interaction-protocol-23b12b66c717437f.md)消息打断 | 语音打断 |
 | 使用场景 | 由用户控制开始/结束客户端语音发送和识别，适用于按键说话，松开停止说话的场景。 | 客户端需持续上传音频，服务端自动检测语音活动的场景。但不支持用户语音打断大模型输出，只能发送RequestToSpeak打断消息。 | 客户端需持续上传音频，服务端自动检测语音活动的场景。用户随时可以说话打断大模型输出。 |
 
 示例如下：

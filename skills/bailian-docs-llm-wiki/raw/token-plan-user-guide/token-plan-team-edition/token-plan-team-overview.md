@@ -30,7 +30,7 @@ Token Plan 团队版的套餐权益、账号权限、坐席管理、升级续费
 | 高级坐席 | **¥550/坐席/月** | 100,000 Credits/坐席/月 | 日常高频使用 AI 编程或办公的团队成员 |
 | 尊享坐席 | **¥1,298/坐席/月** | 250,000 Credits/坐席/月 | 重度依赖 AI 的核心开发者或高强度使用者 |
 
-每个坐席的月度 Credits 独立计量，不跨坐席共享；跨坐席的弹性额度通过共享用量包补充。查看各坐席额度、剩余用量和消耗明细，见[控制台我的订阅](https://bailian.console.aliyun.com/cn-beijing/subscription/overview)。
+每个坐席的月度 Credits 独立计量，不跨坐席共享；跨坐席的弹性额度通过共享用量包补充。团队管理员可在[**团队用量分析**](https://bailian.console.aliyun.com/cn-beijing/subscription/uac-admin/organization/usage)中查看各坐席的总额度、剩余额度和成员消耗明细。
 
 <a id="token-plan-团队版-共享用量包"></a>
 

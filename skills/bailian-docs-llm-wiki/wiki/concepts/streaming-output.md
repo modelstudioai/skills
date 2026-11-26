@@ -1,43 +1,63 @@
 # 流式输出
 
-流式输出（Streaming）是百炼平台提供的一种实时响应机制，允许模型在生成过程中持续分块返回结果，而非等待全部内容完成后再一次性返回。它显著降低端到端延迟，提升用户交互体验，尤其适用于对话界面、实时翻译、代码补全等对响应速度敏感的场景。
+流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型在生成过程中逐 token（或逐 chunk）向客户端持续推送结果，而非等待全部推理完成后再返回完整响应。该机制显著降低端到端延迟，提升用户体验，尤其适用于对话交互、实时语音合成、长文本生成等对响应速度敏感的场景。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **文本生成（Chat/Completions）**：调用 `qwen-max`、`qwen-turbo` 等 LLM 时，设置 `stream=true` 后，API 返回 Server-Sent Events（SSE）格式的响应流，每个 `data:` chunk 包含部分生成文本（`delta.content`）及可选的 token 统计信息。适用于 Web 前端逐字渲染、CLI 实时打印等。
-  
-- **多模态模型（如 `qwen-vl`、`qwen-omni`）**：仅部分支持流式输出，且当前限于文本输出部分（即视觉理解后的文字描述可流式返回，图像/音频本身不流式）。需查阅具体模型文档确认支持状态。
+- **标准文本生成（LLM）**：通过 `POST /v1/models/{model_id}/invoke` 接口，设置 `stream: true` 即可启用逐 token 流式返回；配合 `incremental_output: true` 可确保每次事件仅包含新增内容（非累计），避免前端重复渲染。
+- **实时音视频模型（ASR/TTS/多模态）**：所有实时 API（如 `/v1/realtime/chat/completions`、`/v1/realtime/asr`）强制要求 `stream: true`，响应采用 Server-Sent Events（SSE）或 WebSocket 流式协议，每帧携带 `delta`（增量文本）、`final`（终局标记）等语义字段。
+- **Agent 与[函数调用](function-calling.md)场景**：当模型具备 `function_calling` capability 且启用流式时，工具调用请求与执行结果可分阶段流式返回，支持前端动态渲染思考链与工具执行状态。
+- **不支持流式的场景**：图像/视频生成（如 `wanx2.1-t2i-turbo`）、[向量嵌入](vector-embedding.md)（embedding/rerank）及部分异步任务模型不支持流式输出；尝试传入 `stream: true` 将被静默忽略或返回错误。
 
-- **[函数调用](function-calling.md)（Tool Calling）与 Agent 场景**：在 `/responses` 接口（OpenAI 兼容 Responses 协议）中启用 `stream=true`，可流式获取工具调用决策、执行日志及最终答案；但工具参数解析阶段不流式，仅最终回复阶段流式。
-
-- **语音与音频模型（如 `qwen-audio`）**：**不支持流式输出**。该类模型必须使用 DashScope 原生接口，且仅支持同步响应（`stream=false`），返回完整转录文本或结构化结果。
-
-> ⚠️ 注意：流式响应仅保证 chunk 的顺序性，不保证每个 chunk 对应严格意义上的“单个 token”或语义完整单元（如中文词、标点）；应用层应按 SSE 协议拼接 `delta.content` 并做增量处理，不可依赖 chunk 边界做语义切分。
+> ⚠️ 注意：流式能力依赖模型自身的 `capabilities` 声明（如 `"streaming"` 或 `"chat"` + `"streaming"`）。调用前请务必通过 `GET /v2/models/{model}` 查询模型是否支持流式，否则将触发 `400 Bad Request`。
 
 ## 关键参数和配置
 
-- **核心开关**：`stream`（布尔值），必须显式设为 `true` 才启用流式输出。默认为 `false`。
-  - HTTP 请求中作为 JSON 字段传入（如 `"stream": true`）；
-  - CLI 中通过 `--stream` 标志启用（如 `bailian chat --model qwen-turbo --message "你好" --stream`）；
-  - Python SDK 中通过 `stream=True` 参数控制（如 `Generation.call(..., stream=True)`）。
+| 参数 | 类型 | 必填 | 说明 | 示例 |
+|------|------|------|------|------|
+| `stream` | boolean | 是（流式场景） | 启用流式响应模式 | `true` |
+| `incremental_output` | boolean | 推荐显式设置 | 控制输出是否为增量（`true`）或累计（`false`）；默认行为因 SDK 版本而异，建议始终显式指定 | `true` |
+| `stream_options` | object | 否（高级控制） | 包含 `include_usage: boolean` 等子字段，用于在流式末尾附加 token 使用统计（需模型 capability 支持） | `{"include_usage": true}` |
 
-- **协议适配要求**：
-  - OpenAI 兼容 `/chat/completions` 和 `/responses` 接口：返回标准 SSE 格式，事件类型为 `event: message` 或 `event: error`；
-  - Anthropic 兼容 `/v1/messages`：**不支持流式输出**；
-  - DashScope 原生接口（如 `/text-generation/generation`）：返回 SSE，但事件名可能为 `event: result`，需按实际响应头 `Content-Type: text/event-stream` 解析。
+- **HTTP 响应头**：流式响应固定返回 `Content-Type: text/event-stream`。
+- **事件格式**：遵循 SSE 标准，每条消息以 `data: {JSON}` 开头，双换行分隔；终局消息可能包含 `event: done` 或 `data: {"finish_reason":"stop"}`。
+- **SDK 行为差异**：
+  - DashScope Python SDK ≥2.0.1：`stream=True` 默认启用 `incremental_output=True`；
+  - OpenAI 兼容 SDK：`stream=True` 对应百炼的增量流式，无需额外配置 `incremental_output`；
+  - 旧版 DashScope SDK 1.x：`incremental_output` 需单独传参，且默认为 `False`，迁移时务必检查。
 
-- **配套注意事项**：
-  - `max_tokens` 在流式模式下实际生效值可能略低于设定值（服务端需预留终止标记空间）；
-  - 流式响应中若发生错误，会发送 `event: error` 事件，但错误详情较简略，**务必同时检查 HTTP 状态码（如 `400`/`500`）和响应头 `X-DashScope-Status`**；
-  - 客户端需实现健壮的 SSE 解析器（自动重连、字段提取、UTF-8 编码处理），推荐使用成熟库（如 JavaScript 的 `EventSource`、Python 的 `sseclient-py`）。
+## 面向开发者，简洁实用
 
-面向开发者：启用流式输出只需加一个参数，但务必做好客户端流解析与错误兜底——这是获得低延迟体验的关键一步。
+- ✅ **立即启用**：只需在请求 body 中添加 `"stream": true`，无需修改 URL 或认证逻辑。
+- ✅ **前端解析示例（JavaScript）**：
+  ```javascript
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer xxx' },
+    body: JSON.stringify({ model_id: 'qwen-plus', input: { messages: [...] }, parameters: { stream: true } })
+  });
+  const reader = response.body.getReader();
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    const chunk = new TextDecoder().decode(value);
+    // 解析 data: {...}\n\n 格式，提取 content 字段
+  }
+  ```
+- ✅ **错误排查**：
+  - 返回 `400 Bad Request` + `"message": "stream is not supported"` → 模型不支持流式（查 capability）；
+  - 返回 `200` 但无 `text/event-stream` 头 → 请求未正确设置 `stream: true` 或被中间件拦截；
+  - 前端收到重复内容 → 未启用 `incremental_output: true`，改用累计模式需自行去重。
+
+- ❌ **不要做**：对不支持流式的模型（如 embedding）强行传 `stream: true`；在非流式接口（如异步任务 `/api/v1/tasks`）中尝试流式解析；在客户端硬编码模型名而非通过 `/v2/models` 动态发现 capability。
 
 ## 关联主题页
 
-- [getting started](../guides/getting-started.md)
+- [capabilities](../guides/capabilities.md)
 - [model experience](../guides/model-experience.md)
+- [preparations](../api/preparations.md)
+- [more about models](../api/more-about-models.md)
 - [application support](../guides/application-support.md)
-- [qwen api reference](../api/qwen-api-reference.md)
+- [realtime api directory](../api/realtime-api-directory.md)
 
 

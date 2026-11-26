@@ -222,7 +222,7 @@
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)
 
-**decision-model-preview**
+**decision-model**
 
 结构化决策
 
@@ -230,9 +230,9 @@
 
 
 
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/decision-model-preview)
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/decision-model)
 
-[查看更多](model-studio-model-list/model-list-decision/decision-model-preview.md)
+[查看更多](model-studio-model-list/model-list-decision/decision-model-stable.md)
 
 <a id="视觉"></a>
 

@@ -1,51 +1,54 @@
-# Token 计量与消耗
+# Token
 
-Token 计量与消耗是百炼平台统一的资源计量核心机制，指对模型调用过程中实际处理的输入文本、输出文本及上下文缓存等数据单元进行标准化计数，并据此触发额度抵扣或费用结算的过程。该机制贯穿所有按量调用场景，是成本控制、预算管理、限流策略与用量监控的数据基础。
+Token 是百炼平台中用于计量模型输入与输出文本单元的基本单位，是模型推理成本核算、资源配额控制与性能监控的核心度量基础。一个 Token 通常对应一个子词（subword）或标点符号，在中文场景下平均约等于 1.5–2 个汉字，具体切分由模型所用 tokenizer 决定。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **通用按量调用（`sk-` Key）**：以千字为单位精确计量 `input_tokens` 和 `output_tokens`，费用按模型单价 × Token 数计算；免费额度、节省计划、资源包均按此 Token 总量优先抵扣；异步任务（如生图、生视频）同样按最终完成时的实际 Token 消耗出账。
+- **Token Plan 订阅服务**：Token 不作为直接计费单位，而是底层计量依据——Credits 消耗量由实际 `input_tokens`、`output_tokens` 及缓存命中、工具调用等因子加权计算得出。开发者无需手动统计 Token 数，但需理解其对 Credits 消耗的影响（例如长上下文、多轮工具调用会显著增加 Token 总量，从而提升 Credits 扣减）。
 
-- **Token Plan（`sk-sp-` Key）**：不直接按原始 Token 计费，而是以 Credits 为统一计量单位，1 Credits 对应模型特定的“加权 Token 成本”。其消耗由输入 Token、缓存 Token（命中时按折算系数计）、输出 Token、工具调用次数及模型单价共同决定，例如 `qwen3.6-plus` 单次调用可能消耗约 3.18 Credits。
+- **按量计费（test-1）**：Token 是精确计费的直接依据。调用 `/v1/chat/completions` 等接口后，系统自动解析请求中的 `input_tokens` 和响应中的 `output_tokens`，按模型单价（元/千 Token）实时计费。该数值可在账单明细、用量监控和 OpenAPI 返回头（如 `X-DashScope-Usage: {"input_tokens":128,"output_tokens":64}`）中获取。
 
-- **Agent 场景（Managed Agents / Flow Agent）**：模型调用部分严格按 `token_input` / `token_output` 实际数量计费（与通用按量一致），而会话运行时、沙箱快照、知识库 RCU、记忆库操作等则属于独立计费项，不参与 Token 计量。
+- **模型监控（[model monitoring](../guides/model-monitoring.md)）**：Token 消耗是核心可观测指标之一，监控页展示「总 Token 数」（`input_tokens + output_tokens`），用于分析服务负载、识别异常请求（如超长 prompt）、评估成本趋势。注意：该统计不含系统提示词（system prompt）和工具调用内部开销，仅覆盖用户显式传入内容与模型生成结果。
 
-- **吞吐预留（TPM）与训练任务**：TPM 消耗量受 Token 长度影响（如长输入区间按阶梯系数折算），直接影响预留容量占用；模型微调训练费用则按训练阶段总 Token 量（含 prompt + target）结算。
+- **多模态能力（图像/语音/视频生成等）**：Token 概念不直接适用。此类服务采用独立计费模型（如“每次生成”或“每秒音频”），但其 API 请求体中仍可能包含文本描述（caption、prompt），这部分文本会被 tokenizer 处理并计入 `input_tokens`（影响 Token Plan Credits 或按量费用），需在调试时关注。
 
-- **监控与告警**：`TotalToken 数` 是核心可观测指标，支持配置突增告警，用于及时发现异常调用或成本风险，但监控数据本身不用于计费——计费以 [模型用量](https://bailian.console.aliyun.com/cn-beijing/model/usage) 页面和账单为准。
+- **API 鉴权与路由**：Token 本身不参与鉴权，但 API Key 类型（`sk-sp-` vs `sk-`）决定了 Token 的归属通道——`sk-sp-` Key 的调用走 Token Plan Credits 通道，`sk-` Key 的调用走按量或 Harness 通道，二者 Token 计量逻辑隔离，不可混用。
+
+- **开发调试与优化**：开发者可通过 SDK 的 `response.usage` 字段（OpenAI 兼容格式）或响应头 `X-DashScope-Usage` 获取本次调用的精确 Token 数，用于：
+  - 估算成本（结合模型单价）
+  - 优化 prompt 长度与结构
+  - 判断是否触发限流（TPM/RPM 基于 Token 速率）
+  - 调试缓存效果（缓存命中时 `input_tokens` 仍计费，`output_tokens` 显著减少）
 
 ## 关键参数和配置
 
-| 参数 | 所属场景 | 说明 | 注意事项 |
-|------|----------|------|----------|
-| `input_tokens` / `output_tokens` | 全场景通用 | API 响应中返回的实际 Token 数（含系统提示词、用户输入、模型输出） | 异步任务需查询结果接口获取；多模态模型（如 Qwen-VL）对图像 token 有专用计量逻辑 |
-| `cached_tokens` | 缓存启用模型（如 `qwen3.8-max`） | 上下文缓存命中时计入的输入 Token，按固定系数（如 0.125）折算 | 折算仅影响计费金额，**不减少免费额度消耗**；需在请求头显式启用缓存（`x-dashscope-cache-enable: true`） |
-| `credits_consumed` | Token Plan | 每次调用消耗的 Credits 数量，由模型 ID、输入/输出长度、工具调用等动态计算 | 无法在请求时预知，需通过 [用量页面](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/usage) 或 `/usage/summary` API 查询历史明细 |
-| `session_runtime_hours` | Managed Agents | 会话处于“运行中”状态的累计时长（秒级精度），独立于 Token 计费 | 即使未触发模型调用，只要会话活跃即产生费用 |
-| `tpm_consumed` | 吞吐预留 | 实际占用的每分钟 Token 数，受输入长度阶梯折算影响 | 调用 `qwen3.7-flash` 时，32K–256K 输入区间按 3× 折算，显著提升 TPM 占用 |
+- `input_tokens` / `output_tokens`：只读字段，由服务端 tokenizer 自动计算，不可手动设置。在 [OpenAI 兼容接口](openai-compatible-interface.md)中通过 `response.usage` 返回；在 DashScope 原生接口中通过响应头 `X-DashScope-Usage` 返回（JSON 格式字符串）。
+
+- `max_tokens`：请求参数，用于限制模型最大生成长度（即 `output_tokens` 上限）。设置过小可能导致截断，过大则增加延迟与费用。建议根据业务需求合理设定，避免盲目设为 `8192`。
+
+- `thinking.budget_tokens` / `thinking_budget`：Anthropic/OpenAI 兼容参数，**Token Plan 当前不支持**（`auto` 模型及多数指定模型均忽略该参数）。如需控制推理深度，请改用 `max_tokens` 或模型专属参数（如 Qwen 的 `max_new_tokens`）。
+
+- 缓存相关：百炼支持响应缓存（需开启），缓存命中时 `output_tokens` 按实际返回内容计费，但 `input_tokens` 仍全额计费——这是设计行为，非 bug。
 
 ## 面向开发者，简洁实用
 
-- ✅ **务必校验响应头**：所有成功响应均包含 `x-dashscope-token-count-input` 和 `x-dashscope-token-count-output`，这是最权威的 Token 消耗依据，优于客户端估算。
-- ✅ **免费额度共用规则**：新人 100 万 Token 免费额度为输入+输出总额度，不区分模型或地域（仅限华北2生效），但不同模型版本（如 `qwen3.7` 与 `qwen3.7-flash`）额度独立。
-- ✅ **Token Plan 开发者须知**：必须使用 `sk-sp-` Key + 配套 Base URL；调用模型内置工具（如联网搜索）自动消耗 Credits；若需调用同名 Harness 工具（如图像生成 MCP），请改用 `sk-` Key + `dashscope.aliyuncs.com`，不扣 Credits。
-- ⚠️ **避免常见误用**：
-  - 不要用 `sk-` Key 调 Token Plan 模型（401 错误）；
-  - 不要用 `sk-sp-` Key 调通用模型或 Harness 服务（403 错误）；
-  - 不要依赖客户端 tokenizer 估算 Token 数——百炼服务端 tokenizer 可能不同（尤其含 emoji、多语言、XML 标签时）；
-  - 异步任务提交时不扣费，但完成时按实际 Token 结算，请确保账户余额充足。
-- 🔍 **排查建议**：若 Token 消耗异常偏高，优先检查：
-  - 是否启用了冗长系统提示词（system message）；
-  - 是否重复上传同一文件导致多次解析计费；
-  - 是否在 Flow Agent 中误将条件分支节点设为必执行；
-  - 是否未启用缓存（`x-dashscope-cache-enable`）却频繁发送相似请求。
+- ✅ **必查**：每次调试模型调用后，务必检查 `X-DashScope-Usage` 响应头或 `response.usage`，确认 Token 数是否符合预期。异常高的 `input_tokens` 往往意味着 prompt 中混入了冗余日志、注释或未清理的 base64 图片数据。
+
+- ✅ **必配**：在生产环境，为所有 `chat/completions` 请求显式设置 `max_tokens`，防止失控生成导致 Token 暴增与费用飙升。
+
+- ⚠️ **禁用**：不要尝试用 `sk-` Key 调用 Token Plan 模型（如 `qwen4-max`），或用 `sk-sp-` Key 调用 Harness 工具（如 `EnhancedSearch/mcp`）——将返回 `401 Unauthorized` 或 `429 insufficient_quota`，且无法抵扣任何额度。
+
+- 🛑 **严禁**：将 `sk-sp-` API Key 用于自动化脚本、定时任务或高并发批量调用。Token Plan 明确禁止生产级自动化使用，违者将被暂停订阅。
+
+- 💡 **技巧**：想快速估算 Token 数？用百炼控制台「模型调试」页粘贴文本，点击「计算 Token」即可实时查看（基于当前模型 tokenizer）。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
-- [agent billing](../guides/agent-billing.md)
+- [token plan personal](../guides/token-plan-personal.md)
+- [token plan team edition](../guides/token-plan-team-edition.md)
 - [test 1](../guides/test-1.md)
 - [model monitoring](../guides/model-monitoring.md)
-- [more about models](../api/more-about-models.md)
+- [token plan best practice](../guides/token-plan-best-practice.md)
 
 

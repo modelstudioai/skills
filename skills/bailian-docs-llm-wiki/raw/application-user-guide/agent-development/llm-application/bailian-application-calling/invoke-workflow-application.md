@@ -21,7 +21,7 @@
 开始前，请确保您已完成以下操作：
 
 1.  已[获取 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-2.  已创建[工作流应用](../workflow-application.md)，并在[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)页面的应用卡片上获取 APP\_ID。
+2.  已创建[工作流应用](../workflow-application.md)。打开[**工作流列表**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-center/workflow)，从目标应用卡片获取 `APP_ID`。
 3.  若通过DashScope SDK调用，需要[安装DashScope SDK](../../../../model-api-reference/preparations/install-sdk.md)。
 
 <a id="快速开始"></a>

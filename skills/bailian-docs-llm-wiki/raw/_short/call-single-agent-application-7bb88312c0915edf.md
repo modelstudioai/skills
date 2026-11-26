@@ -5547,9 +5547,20 @@ func main() {
     
     -   获取方式：
         
-        -   文档ID（file\_ids）：可以在[应用数据](https://bailian.console.aliyun.com/#/data-center)页面的文档列表中获取，也可以使用[AddFile](api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)接口导入文档返回的ID。
-        -   文档标签（tags）：可以在[应用数据](https://bailian.console.aliyun.com/#/data-center)页面查看非结构化文档的标签。也可以通过[DescribeFile](api-bailian-2023-12-29-describefile-020886c28a208bf2.md)接口获取。
+        -   文档 ID（`file_ids`）：使用 [`AddFile`](api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md) 导入文档时返回的 ID。如需从控制台获取文档 ID：
+            
+            1.  打开[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)，在目标文件数据集上单击**详情**。
+                
+            2.  从文档列表获取 ID。
+                
+        -   文档标签（`tags`）可在控制台查看。
+            
+            1.  打开[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)，在目标文件数据集上单击**详情**。
+                
+            2.  查看目标非结构化文档的标签。也可以通过[DescribeFile](api-bailian-2023-12-29-describefile-020886c28a208bf2.md)接口获取。
+                
         -   文档元数据（metadata）：在[知识库](https://bailian.console.aliyun.com/#/knowledge-base)页面，进入某个知识库后可以查看非结构化文档的元数据（**Meta信息**）。
+            
     -   可以传入多个文档ID，仅支持已建立知识索引的文档。
         
     -   传入文档ID时，需要同时传入文档所属的知识库ID，检索才会生效。

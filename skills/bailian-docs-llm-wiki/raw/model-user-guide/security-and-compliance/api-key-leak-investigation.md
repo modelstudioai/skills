@@ -121,7 +121,7 @@ API Key 疑似泄漏后的排查路径：定位并处置泄漏 Key 止损，查�
 
 ## 第四步：查管理操作历史
 
-API Key 的创建、删除等生命周期操作统一归集到阿里云操作审计（ActionTrail）。前往[操作审计事件查询](https://actiontrail.console.aliyun.com/cn-hangzhou/events)页面，按服务（百炼）与时间范围筛选：
+API Key 的创建、删除等生命周期操作统一归集到阿里云操作审计（ActionTrail）。前往[操作审计事件查询](https://actiontrail.console.aliyun.com/cn-hangzhou/events)页面，按服务（百炼）与时间范围筛选。筛选时注意百炼事件的服务名与事件名形态：华北2（北京）地域的服务名为**百炼管控(BailianControl)**，事件列表直接显示具体操作名（如 api-key\_listApiKeys4Agent）；其他地域的服务名为**大模型服务平台百炼(SFM)**，事件列表显示网关级事件名，需展开事件记录查看 **requestParameters.Api** 字段（如 api-key.listApiKeys4Agent）定位具体操作。按「百炼」关键词筛选服务时，两个服务名都要覆盖。
 
 -   查找 Key 的**创建事件**，确认这个 Key 是谁、在什么时间创建的，核对归属责任。
 -   查找 Key 的**删除事件**，确认泄漏窗口前后是否有人删除过 Key，例如攻击者或内部人员试图抹除痕迹。

@@ -1,3 +1,3 @@
 # 决策模型
 
--   [decision-model-preview](model-list-decision/decision-model-preview.md)
+-   [decision-model](model-list-decision/decision-model-stable.md)

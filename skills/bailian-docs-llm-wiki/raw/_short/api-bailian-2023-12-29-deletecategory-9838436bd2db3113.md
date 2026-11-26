@@ -66,7 +66,7 @@ DELETE /{WorkspaceId}/datacenter/category/{CategoryId}/ HTTP/1.1
 
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
-| CategoryId | string | 是 | 类目 ID，即 **AddCategory** 接口返回的`CategoryId`。您也可以在[应用数据](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/data-center)\-文件页签，单击类目名称旁的 ID 图标获取。 | cate\_cdd11b1b79a74e8bbd675c356a91ee35xxxxxxxx |
+| CategoryId | string | 是 | 类目 ID，即 **AddCategory** 接口返回的`CategoryId`。<br>1\. 打开[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)，在目标文件数据集上单击**详情**。<br>2\. 单击目标类目的 **ID** 图标，再单击提示中的复制图标，复制类目 ID。 | cate\_cdd11b1b79a74e8bbd675c356a91ee35xxxxxxxx |
 | WorkspaceId | string | 是 | 类目所属的业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。 | llm-3shx2gu255oqxxxx |
 
 <a id="返回参数"></a>

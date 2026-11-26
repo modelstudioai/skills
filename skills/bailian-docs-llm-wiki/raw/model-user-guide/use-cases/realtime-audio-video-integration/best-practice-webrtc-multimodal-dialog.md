@@ -338,8 +338,8 @@ function generateTaskId() {
 
 | 参数路径 | 类型 | 说明 |
 | --- | --- | --- |
-| `payload.input.workspace_id` | string | 百炼工作空间 ID，在控制台“应用管理”中获取 |
-| `payload.input.app_id` | string | 多模态交互应用 ID，在控制台“应用管理”中获取 |
+| `payload.input.workspace_id` | string | 百炼业务空间 ID。在[业务空间管理](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)页面查看项目所属业务空间的 ID。 |
+| `payload.input.app_id` | string | 多模态交互项目 ID。在 Agent Studio for Hardware 的[我的项目](https://agent.console.aliyun.com/agent-for-hardware/multimodal#/myApp)页面，打开**多模态交互**页签，复制目标项目卡片上的 ID。 |
 | `payload.input.directive` | string | 固定值 `Start` |
 | `payload.parameters.client_info.user_id` | string | 业务系统中的用户标识，用于日志追踪 |
 | `payload.parameters.client_info.device.uuid` | string | 设备唯一标识，用于设备维度的数据分析 |

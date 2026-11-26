@@ -73,7 +73,9 @@ pip3 install alibabacloud_endpoint_util alibabacloud_tea_openapi alibabacloud_qu
 
 ### 步骤二：配置阿里云百炼工作流
 
-1.  创建任务型工作流： 访问**[应用管理](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.134172147obHXO#/app-center)**页面，单击**创建应用**，选择**工作流应用**，填写应用名称和描述信息，上传头像，点击**立即创建**即可，进入工作流配置页面。 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2945430671/p1015539.png)
+1.  在[**创建工作流**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-center/workflow?immediatelyCreate=true)表单中填写**应用名称**和**描述信息**，上传**应用头像**。  
+    单击**立即创建**。  
+    在编辑器中配置任务型工作流。 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2945430671/p1015539.png)
     
 2.  将模板导入工作流。模板示例文件：[全妙-视频理解-工作流模板.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250530/qjfcat/%E5%85%A8%E5%A6%99-%E8%A7%86%E9%A2%91%E7%90%86%E8%A7%A3-%E5%B7%A5%E4%BD%9C%E6%B5%81%E6%A8%A1%E7%89%88.zip)。![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962784.png)
     

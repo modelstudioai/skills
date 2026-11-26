@@ -1632,7 +1632,7 @@ qwen-image-2.0 系列按张计费，支持文生图与图生图/图像编辑，�
 | 模型 ID（Model ID） | 服务部署范围 | 输出单价 |
 | --- | --- | --- |
 | wan2.7-image-pro | 国际 | 0.562065元/张 |
-| wan2.7-image | 全球 | 0.027504元/张 |
+| wan2.7-image | 全球 | 0.2元/张 |
 | wan2.7-image | 国际 | 0.224826元/张 |
 | wan2.6-image | 国际 | 0.220177元/张 |
 
@@ -3041,6 +3041,8 @@ Qwen-Audio-Live 按会话时长（秒）计费。连接建立后，单次会话�
 -   输入视频的计费时长为**实际输入的视频秒数**。
 -   输出视频的计费时长为**成功生成的视频秒数**。
 
+资源紧张时，wan3.0-video-prime 的个别任务可能降级为 wan3.0-video 完成推理，系统将自动识别此类任务并按 wan3.0-video 的单价计费。实际提供服务的模型以 API 响应 usage 中的 served\_model 字段为准。
+
 > **说明**
 >
 > 以下模型所有地域均无免费额度。
@@ -3133,7 +3135,7 @@ Qwen-Audio-Live 按会话时长（秒）计费。连接建立后，单次会话�
 
 #### 新加坡
 
-<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>输出视频分辨率</strong></p></th><th><p><strong>输出单价</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>wan2.7-t2v-2026-06-12</p></td><td rowspan="2"><p>全球</p></td><td><p>720P</p></td><td><p>0.086012元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.143353元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-t2v-2026-04-25</p></td><td rowspan="2"><p>全球</p></td><td><p>720P</p></td><td><p>0.086012元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.143353元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-t2v</p></td><td rowspan="2"><p>全球</p></td><td><p>720P</p></td><td><p>0.086012元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.143353元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-t2v-2026-06-12</p></td><td rowspan="2"><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-t2v-2026-04-25</p></td><td rowspan="2"><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-t2v</p></td><td rowspan="2"><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.6-t2v</p></td><td rowspan="2"><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="3"><p>wan2.5-t2v-preview</p></td><td rowspan="3"><p>国际</p></td><td><p>480P</p></td><td><p>0.366961元/秒</p></td></tr><tr><td><p>720P</p></td><td><p>0.733923元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100885元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.2-t2v-plus</p></td><td rowspan="2"><p>国际</p></td><td><p>480P</p></td><td><p>0.146785元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.1-t2v-turbo</p></td><td rowspan="2"><p>国际</p></td><td><p>480P</p></td><td><p>0.264213元/秒</p></td></tr><tr><td><p>720P</p></td><td><p>0.264213元/秒</p></td></tr><tr><td><p>wan2.1-t2v-plus</p></td><td><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr></tbody></table>
+<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>输出视频分辨率</strong></p></th><th><p><strong>输出单价</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>wan2.7-t2v-2026-06-12</p></td><td rowspan="2"><p>全球</p></td><td><p>720P</p></td><td><p>0.6元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-t2v-2026-04-25</p></td><td rowspan="2"><p>全球</p></td><td><p>720P</p></td><td><p>0.6元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-t2v</p></td><td rowspan="2"><p>全球</p></td><td><p>720P</p></td><td><p>0.6元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-t2v-2026-06-12</p></td><td rowspan="2"><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-t2v-2026-04-25</p></td><td rowspan="2"><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-t2v</p></td><td rowspan="2"><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.6-t2v</p></td><td rowspan="2"><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="3"><p>wan2.5-t2v-preview</p></td><td rowspan="3"><p>国际</p></td><td><p>480P</p></td><td><p>0.366961元/秒</p></td></tr><tr><td><p>720P</p></td><td><p>0.733923元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100885元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.2-t2v-plus</p></td><td rowspan="2"><p>国际</p></td><td><p>480P</p></td><td><p>0.146785元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.1-t2v-turbo</p></td><td rowspan="2"><p>国际</p></td><td><p>480P</p></td><td><p>0.264213元/秒</p></td></tr><tr><td><p>720P</p></td><td><p>0.264213元/秒</p></td></tr><tr><td><p>wan2.1-t2v-plus</p></td><td><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr></tbody></table>
 
 <a id="德国-法兰克福-23"></a>
 
@@ -3173,7 +3175,7 @@ Qwen-Audio-Live 按会话时长（秒）计费。连接建立后，单次会话�
 
 #### 新加坡
 
-<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>输出视频类型</strong></p></th><th><p><strong>输出视频分辨率</strong></p></th><th><p><strong>输出单价</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>wan2.7-i2v-2026-04-25</p></td><td rowspan="2"><p>全球</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.086012元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.143353元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-i2v</p></td><td rowspan="2"><p>全球</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.086012元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.143353元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-i2v-2026-04-25</p></td><td rowspan="2"><p>国际</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-i2v</p></td><td rowspan="2"><p>国际</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr></tbody></table>
+<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>输出视频类型</strong></p></th><th><p><strong>输出视频分辨率</strong></p></th><th><p><strong>输出单价</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>wan2.7-i2v-2026-04-25</p></td><td rowspan="2"><p>全球</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.6元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-i2v</p></td><td rowspan="2"><p>全球</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.6元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-i2v-2026-04-25</p></td><td rowspan="2"><p>国际</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-i2v</p></td><td rowspan="2"><p>国际</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr></tbody></table>
 
 <a id="万相-图生视频-基于首帧"></a>
 
@@ -3299,7 +3301,7 @@ Qwen-Audio-Live 按会话时长（秒）计费。连接建立后，单次会话�
 
 #### 新加坡
 
-<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>输出视频类型</strong></p></th><th><p><strong>输出视频分辨率</strong></p></th><th><p><strong>输入和输出单价</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>wan2.7-r2v-2026-06-12</p></td><td rowspan="2"><p>全球</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.086012元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.143353元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-r2v</p></td><td rowspan="2"><p>全球</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.086012元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.143353元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-r2v-2026-06-12</p></td><td rowspan="2"><p>国际</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-r2v</p></td><td rowspan="2"><p>国际</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="4"><p>wan2.6-r2v-flash</p></td><td rowspan="4"><p>国际</p></td><td rowspan="2"><p>有声视频</p><p><code>audio=true</code></p></td><td><p>720P</p></td><td><p>0.366962元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.550443元/秒</p></td></tr><tr><td rowspan="2"><p>无声视频</p><p><code>audio=false</code></p></td><td><p>720P</p></td><td><p>0.183481元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.275221元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.6-r2v</p></td><td rowspan="2"><p>国际</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr></tbody></table>
+<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>输出视频类型</strong></p></th><th><p><strong>输出视频分辨率</strong></p></th><th><p><strong>输入和输出单价</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>wan2.7-r2v-2026-06-12</p></td><td rowspan="2"><p>全球</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.6元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-r2v</p></td><td rowspan="2"><p>全球</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.6元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-r2v-2026-06-12</p></td><td rowspan="2"><p>国际</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-r2v</p></td><td rowspan="2"><p>国际</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr><tr><td rowspan="4"><p>wan2.6-r2v-flash</p></td><td rowspan="4"><p>国际</p></td><td rowspan="2"><p>有声视频</p><p><code>audio=true</code></p></td><td><p>720P</p></td><td><p>0.366962元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.550443元/秒</p></td></tr><tr><td rowspan="2"><p>无声视频</p><p><code>audio=false</code></p></td><td><p>720P</p></td><td><p>0.183481元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.275221元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.6-r2v</p></td><td rowspan="2"><p>国际</p></td><td rowspan="2"><p>有声视频</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr></tbody></table>
 
 <a id="德国-法兰克福-25"></a>
 
@@ -3343,7 +3345,7 @@ Qwen-Audio-Live 按会话时长（秒）计费。连接建立后，单次会话�
 
 #### 新加坡
 
-<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>输出视频分辨率</strong></p></th><th><p><strong>输入和输出单价</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>wan2.7-videoedit</p></td><td rowspan="2"><p>全球</p></td><td><p>720P</p></td><td><p>0.086012元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>0.143353元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-videoedit</p></td><td rowspan="2"><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr></tbody></table>
+<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>输出视频分辨率</strong></p></th><th><p><strong>输入和输出单价</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>wan2.7-videoedit</p></td><td rowspan="2"><p>全球</p></td><td><p>720P</p></td><td><p>0.6元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1元/秒</p></td></tr><tr><td rowspan="2"><p>wan2.7-videoedit</p></td><td rowspan="2"><p>国际</p></td><td><p>720P</p></td><td><p>0.733924元/秒</p></td></tr><tr><td><p>1080P</p></td><td><p>1.100886元/秒</p></td></tr></tbody></table>
 
 | 模型 ID（Model ID） | 服务部署范围 | 输出视频分辨率 | 输出单价 |
 | --- | --- | --- | --- |
@@ -4140,6 +4142,8 @@ Qwen-Audio-Live 按会话时长（秒）计费。连接建立后，单次会话�
 
 计费规则：按输入token计费。
 
+免费额度有效期：自开通百炼、模型发布或申请通过之日起 90 天内（以较晚者为准）。
+
 <a id="sec-tabs-118"></a>
 
 <a id="华北2-北京-112"></a>
@@ -4148,7 +4152,7 @@ Qwen-Audio-Live 按会话时长（秒）计费。连接建立后，单次会话�
 
 #### 华北2（北京）
 
-<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>输入单价（每百万Token）</strong></p></th><th><p><strong>免费额度</strong></p></th></tr></thead><tbody><tr><td><p>decision-model-preview</p></td><td colspan="2"><p>限时免费</p></td></tr></tbody></table>
+<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>输入单价（每百万Token）</strong></p></th><th><p><strong>免费额度</strong></p></th></tr></thead><tbody><tr><td><p>decision-model-preview</p></td><td colspan="2"><p>限时免费</p></td></tr><tr><td><p>decision-model</p></td><td><p>0.3元</p></td><td><p>100万Token</p></td></tr></tbody></table>
 
 <a id="新加坡-60"></a>
 
@@ -4156,7 +4160,47 @@ Qwen-Audio-Live 按会话时长（秒）计费。连接建立后，单次会话�
 
 #### 新加坡
 
-<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>输入单价（每百万Token）</strong></p></th><th><p><strong>免费额度</strong></p></th></tr></thead><tbody><tr><td><p>decision-model-preview</p></td><td colspan="2"><p>限时免费</p></td></tr></tbody></table>
+<table><thead><tr><th><p><strong>模型 ID（Model ID）</strong></p></th><th><p><strong>输入单价（每百万Token）</strong></p></th><th><p><strong>免费额度</strong></p></th></tr></thead><tbody><tr><td><p>decision-model-preview</p></td><td colspan="2"><p>限时免费</p></td></tr><tr><td><p>decision-model</p></td><td><p>0.306元</p></td><td><p>无免费额度</p></td></tr></tbody></table>
+
+<a id="美国-弗吉尼亚-31"></a>
+
+<a id="美国-弗吉尼亚-31-h4"></a>
+
+#### 美国（弗吉尼亚）
+
+| 模型 ID（Model ID） | 输入单价（每百万Token） | 免费额度 |
+| --- | --- | --- |
+| decision-model | 0.3元 | 无免费额度 |
+
+<a id="德国-法兰克福-27"></a>
+
+<a id="德国-法兰克福-27-h4"></a>
+
+#### 德国（法兰克福）
+
+| 模型 ID（Model ID） | 输入单价（每百万Token） | 免费额度 |
+| --- | --- | --- |
+| decision-model | 0.3元 | 无免费额度 |
+
+<a id="日本-东京-16"></a>
+
+<a id="日本-东京-16-h4"></a>
+
+#### 日本（东京）
+
+| 模型 ID（Model ID） | 输入单价（每百万Token） | 免费额度 |
+| --- | --- | --- |
+| decision-model | 0.3元 | 无免费额度 |
+
+<a id="中国香港-14"></a>
+
+<a id="中国香港-14-h4"></a>
+
+#### 中国香港
+
+| 模型 ID（Model ID） | 输入单价（每百万Token） | 免费额度 |
+| --- | --- | --- |
+| decision-model | 0.3元 | 无免费额度 |
 
 <a id="token-消耗与成本控制"></a>
 

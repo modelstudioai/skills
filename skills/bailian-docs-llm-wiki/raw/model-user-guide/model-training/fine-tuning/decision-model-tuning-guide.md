@@ -117,7 +117,7 @@ curl --request POST 'https://dashscope.aliyuncs.com/api/v1/files' \
   --form 'descriptions="decision-model-preview training dataset"'
 ```
 
-返回 `file_id`（如 `976bd01a-...`），填入下方微调请求。详见[训练集与评估集](training-set-and-evaluation-set.md)与[调优数据上传规则](text-generation-tuning-data-upload-rules)。
+返回 `file_id`（如 `976bd01a-...`），填入下方微调请求。详见[训练集与评估集](../model-data-overview/training-set-and-evaluation-set.md)与[调优数据上传规则](../../../_short/text-generation-tuning-data-upload-rules-28b04d7fad3dfa13.md)。
 
 > 数据集上传与微调请求走百炼 OpenAPI，鉴权用 `Authorization: Bearer <API-Key>`。
 
@@ -218,7 +218,7 @@ Calibration 组看 `_after` 是否相对 `_before` 改善（`acc` 升、`brier`/
 
 训练完成后最后一个 Checkpoint 自动发布至[我的模型](https://bailian.console.aliyun.com/cn-beijing/model/custom)。如需发布中间 Checkpoint，前往[模型调优控制台](https://bailian.console.aliyun.com/cn-beijing/model/tuning)产出页手动操作。
 
-在”我的模型”页面部署训练返回的 `finetuned_output`（如 `decision-model-preview-2026-09-24-ft-xxxxxxxx`），部署规格为 MU5×1，部署完成后即可通过决策调用接口调用。部署方式与 MU 单价详见[模型部署](model-deployment-introduction.md)与[模型调优计费](model-training-and-deployment-billing)。
+在”我的模型”页面部署训练返回的 `finetuned_output`（如 `decision-model-preview-2026-09-24-ft-xxxxxxxx`），部署规格为 MU5×1，部署完成后即可通过决策调用接口调用。部署方式与 MU 单价详见[模型部署](../../model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)与[模型调优计费](../../test-1/model-training-and-deployment-billing.md)。
 
 <a id="部署后调用"></a>
 
@@ -451,7 +451,7 @@ MU5×1。后付费 21 元/小时（最小计费分钟），预付费 10139 元/�
 
 ## 后续步骤
 
--   [模型部署](model-deployment-introduction.md)：部署方式与规格
--   [模型调优计费](model-training-and-deployment-billing)：微调与部署计费
--   [在控制台进行模型调优](model-training-on-console)：控制台查看产出与发布
--   [调优数据上传规则](text-generation-tuning-data-upload-rules)：打包规则、大小与数量限制
+-   [模型部署](../../model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)：部署方式与规格
+-   [模型调优计费](../../test-1/model-training-and-deployment-billing.md)：微调与部署计费
+-   [在控制台进行模型调优](fine-tune-text-generation-model/model-training-on-console.md)：控制台查看产出与发布
+-   [调优数据上传规则](../../../_short/text-generation-tuning-data-upload-rules-28b04d7fad3dfa13.md)：打包规则、大小与数量限制

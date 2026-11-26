@@ -1,45 +1,42 @@
 # managed agents api
 
-Managed Agents API 是百炼平台提供的用于创建、配置和管理托管智能体（Managed Agent）的 RESTful 接口集合，支持从环境初始化、会话生命周期控制到技能编排、文件与记忆存储等全链路能力。该 API 采用标准 OAuth2 认证，所有资源均遵循 REST 设计规范，并通过统一错误码体系提供可预测的响应行为。开发者可通过 [原文标题](../../raw/application-api-reference/managed-agents-api.md) 查阅完整子模块索引。
+Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和运行具备[长期记忆](../concepts/long-term-memory.md)、工具调用、多步推理能力的 AI Agent。该 API 将底层模型调度、状态管理、技能编排等复杂逻辑封装为标准化资源操作（如 `Agent`、`Environment`、`Session`），开发者可通过 RESTful 接口快速集成。所有核心能力均基于百炼统一认证与配额体系，详见 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md)。
 
 ## 支持的模型与功能
 
-Managed Agents API **不直接绑定特定大模型**，而是通过 `agent` 资源中的 `model_id` 字段指定底层推理模型（如 `qwen-max`、`qwen-plus` 等），具体可用模型列表以 [原文标题](../../raw/application-api-reference/managed-agents-api.md) 中 `/agent` 接口文档为准。核心功能覆盖：
-- Agent 生命周期管理（创建、更新、删除、发布）
-- Environment 隔离配置（网络策略、资源限制、依赖注入）
-- Session 与 Event 驱动交互（支持长连接 SSE 和短轮询）
-- 文件上传/引用（支持 Base64 内联与对象存储 URI）
-- Memory Store 的结构化记忆读写（键值 + 元数据过滤）
-- Skill 组合调用（内置 HTTP、SQL、Python 执行器，支持自定义 Skill 注册）
+- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列模型；其他模型（如 `qwen2.5-*`）暂未开放 Agent 模式推理通道，具体以 [Agent API](../../raw/application-api-reference/managed-agents-api/agent-api.md) 文档为准。
+- **核心功能**：
+  - 多轮 Session 管理（含事件流式返回）
+  - 内置 Memory Store 实现跨会话上下文持久化
+  - Vault + Credential 组合实现安全凭证注入
+  - Skills 插件机制支持自定义工具注册与调用
+  - Webhook 回调支持异步任务结果通知
 
-> **注意**：部分旧版文档（如 `managed-agents-api-overview.md`）提及“默认使用 qwen-turbo”，但该描述已过时；实际模型由 `model_id` 显式指定，且必须在创建 Agent 时传入，参见 [原文标题](../../raw/application-api-reference/managed-agents-api.md) 中 `/agent` 接口定义。
+> **注意**：原始文档中 [Environment API](../../raw/application-api-reference/managed-agents-api/environment-api.md) 提到支持“自定义 Docker 镜像部署”，但该能力已于 v2.3 版本下线；实际仅支持平台预置的沙箱环境，最新约束请以 [Deployment API](../../raw/application-api-reference/managed-agents-api/deployment-api.md) 为准。
 
 ## 关键参数
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `model_id` | string | 是 | 百炼平台已上线的模型 ID，例如 `qwen-max`；不可为空或留空字符串 |
-| `environment_id` | string | 否 | 关联的 Environment ID；未指定则使用默认环境 |
-| `session_id` | string | 否（仅 `/session` 接口） | 用于复用上下文的会话标识符，长度 ≤ 64 字符，仅含字母、数字、下划线、短横线 |
-| `enable_memory` | boolean | 否 | 默认 `false`；设为 `true` 后自动启用 Memory Store 并关联当前 Agent |
-| `webhook_url` | string | 否 | 事件回调地址，需为 HTTPS 协议，且须提前在 Vault 中注册可信域名 |
+| `agent_id` | string | 是 | 通过 `/v1/agents` 创建后返回的唯一标识 |
+| `session_id` | string | 否 | 复用已有会话时传入；不传则新建会话（自动绑定 Memory Store） |
+| `input` | object | 是 | 用户输入内容，结构为 `{ "text": "..." }` 或 `{ "files": [...] }` |
+| `stream` | boolean | 否 | `true` 时启用 Server-Sent Events 流式响应，默认 `false` |
+| `tools` | array | 否 | 显式指定本次调用可使用的 Skill ID 列表，优先级高于 Agent 全局配置 |
 
 ## 使用方式
 
-1. **认证**：使用 `Authorization: Bearer <access_token>` 请求头，Token 通过 OAuth2 Client Credentials 流程获取（详见 [原文标题](../../raw/application-api-reference/managed-agents-api.md) 中 `/authentication` 文档）  
-2. **创建 Agent**：`POST /v1/agents`，请求体包含 `name`、`model_id`、`description` 等字段  
-3. **启动会话**：`POST /v1/agents/{agent_id}/sessions`，可选传入 `initial_context` 或 `file_ids`  
-4. **流式调用**：对 `/v1/sessions/{session_id}/messages` 使用 `Accept: text/event-stream` 头，接收 SSE 响应  
-
-所有接口均返回标准 JSON 响应，含 `request_id` 用于问题排查。
+1. **前置准备**：使用平台颁发的 `API Key` 进行 Bearer 认证（参考 [认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)）；
+2. **创建 Agent**：`POST /v1/agents`，需指定 `model`, `skills`, `memory_store_id` 等；
+3. **发起调用**：`POST /v1/agents/{agent_id}/sessions`，传入 `input` 及可选参数；
+4. **获取结果**：同步响应返回 `session_id` 和首条 `output`；若启用 `stream=true`，则通过 SSE 获取 `event: message` 和 `event: tool_call` 等事件。
 
 ## 限制和注意事项
 
-- 单个 Agent 最多关联 100 个 Skill；单次会话最多携带 10 个文件（总大小 ≤ 50MB）  
-- Memory Store 单条记录最大 1MB，Key 长度 ≤ 128 字符，Value 长度 ≤ 10MB  
-- Webhook 回调超时为 10 秒，失败后重试 2 次（间隔 1s），超过阈值将丢弃事件  
-- `model_id` 必须与当前 Region 支持的模型严格匹配，不支持跨 Region 模型别名（如 `qwen-max-cn` 与 `qwen-max-us` 视为不同模型）  
-- Agent 创建后需显式调用 `/deploy` 接口发布才可被会话调用；未部署状态下的调用将返回 `400 Bad Request`（错误码 `AGENT_NOT_DEPLOYED`）
+- 单次 `input.text` 长度上限为 32,768 字符；文件上传单个不超过 100 MB（见 [Files API](../../raw/application-api-reference/managed-agents-api/files-api.md)）；
+- 每个 Agent 默认最多关联 1 个 Memory Store，且不可在运行时动态切换；
+- Session 生命周期默认 24 小时，超时后 `session_id` 失效，需重新创建；
+- 错误响应遵循统一格式，常见错误码（如 `429 Too Many Requests`、`403 Forbidden`）含义详见 [错误码](../../raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md)。
 
 ## 来源文档
 

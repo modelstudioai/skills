@@ -1,54 +1,43 @@
 # 向量嵌入
 
-向量嵌入（Vector Embedding）是将原始文本、图像、音频等非结构化数据映射到高维稠密实数向量空间的数学表示过程，使语义相近的内容在向量空间中距离更近（如余弦相似度更高），从而支撑语义搜索、RAG、跨模态检索等核心AI能力。
+向量嵌入（Vector Embedding）是将原始非结构化数据（如文本、图像、视频等）映射到高维连续语义空间中的固定长度稠密向量的过程。该向量能表征输入内容的语义本质，使得语义相似的内容在向量空间中距离更近，从而支撑检索、聚类、去重、RAG 等下游任务。
 
-## 在百炼平台的不同场景中，这个概念如何使用
+## 在百炼平台的不同场景中如何使用
 
-- **RAG 知识库构建**：创建知识库时通过 `embeddingModelName`（如 `qwen3.7-text-embedding` 或 `text-embedding-v4`）指定嵌入模型，平台自动对上传文档切片进行向量化，并构建可检索的向量索引；多模态知识库还需配置 `multimodalEmbeddingModelName`（如 `qwen3-vl-plus`）。
-- **独立向量服务调用**：通过 `/vector-and-sort` 接口直接调用嵌入模型，支持同步（低延迟实时）和异步批处理（10万行/任务）两种模式，适用于自定义索引构建、特征工程或离线预计算。
-- **框架集成**：LlamaIndex 中使用 `DashScopeEmbedding` 组件，需显式传入 `model_name`（如 `"text-embedding-v3"`）；Spring AI Alibaba 通过 `spring-ai-alibaba-starter-dashscope` 自动绑定嵌入能力，无需手动向量化。
-- **混合检索与多模态联合**：所有支持的文本/多模态嵌入模型（如 `qwen3-vl-embedding`）均产出统一语义空间的向量，允许文本查询与图像/视频文档直接计算相似度，实现跨模态语义检索。
+- **RAG（知识库检索）**：知识库创建或文档导入时，平台自动调用指定嵌入模型（如 `text-embedding-v4` 或 `qwen3.7-text-embedding`）对文档切片进行向量化，并构建向量索引；后续用户查询时，先将问题转为向量，在索引中执行近似最近邻（ANN）搜索召回候选切片。
+- **语义搜索与跨模态检索**：通过 `vector and sort` 功能，可独立调用文本或多模态嵌入模型（如 `qwen3-vl-embedding`），支持文本→图像、图像→文本、图文混合→统一向量等多种输入组合；启用 `enable_fusion=true` 可生成融合向量，实现跨模态语义对齐。
+- **Agent 与记忆库（Memory Library）**：Agent 执行记忆检索（`memory.search`）时，底层调用嵌入模型将用户指令或上下文编码为向量；记忆库 Pro/Lite 版本差异直接影响嵌入后是否触发 Rerank 精排，进而影响召回质量与 [Token](token.md) 消耗。
+- **框架集成（LlamaIndex / Spring AI Alibaba）**：开发者可通过 `EmbeddingClient` 接口直接调用百炼嵌入服务，无需手动封装 HTTP 请求；框架自动处理 `api_key`、`model` 和 endpoint 配置，与原生 API 行为一致。
+- **异步批量预处理**：对海量文档（如百万级 PDF/网页），可使用 `text-embedding-async-v2` 等异步接口提交批处理任务，单次最多支持 100,000 行，每行 ≤2,048 [Token](token.md)，适用于知识库初始化或定期更新。
 
 ## 关键参数和配置
 
-| 参数 | 适用模型 | 说明 | 推荐值 |
-|------|----------|------|--------|
-| `dimensions` | `qwen3.7-text-embedding`, `text-embedding-v3/v4` | 指定向量维度（影响精度与存储开销），默认 `1024`；`v1/v2` 及多模态模型不支持此参数 | `1024`（平衡）、`2048`（高精度场景） |
-| `encoding_format` | 所有同步嵌入接口 | 返回格式：`float`（默认，便于调试）或 `base64`（节省带宽，适合大规模传输） | 生产环境建议 `base64`，开发调试用 `float` |
-| `enable_fusion` | `qwen3-vl-embedding` | 设为 `true` 时，对图文混合输入生成单个融合向量；设为 `false` 则分别输出文本向量和图像向量 | 多模态检索推荐 `true` |
-| `input` | 全部 | 支持字符串、字符串数组、文件 URL（如 `oss://bucket/key`）或结构化多模态对象（如 `{"text": "...", "image": "url"}`） | 单文本用字符串，批量用数组，多模态用对象 |
+| 参数 | 适用模型/场景 | 说明 | 默认值 | 注意事项 |
+|------|----------------|------|--------|----------|
+| `dimensions` | 同步文本嵌入（`qwen3.7-text-embedding`, `text-embedding-v3/v4`） | 指定向量维度（如 `512`, `1024`, `2048`） | `1024` | `v1/v2` 及异步模型不支持；维度越高，表征能力越强，但存储与计算开销增大 |
+| `encoding_format` | 同步文本嵌入 | 返回格式：`float`（原始浮点数组）或 `base64`（Base64 编码字符串） | `float` | 新网关短请求按设置返回；长请求或老网关强制回落为 `float` |
+| `enable_fusion` | 多模态嵌入（`qwen3-vl-embedding`） | 是否将文本、图像、视频等多模态输入融合为单个向量 | `false` | 设为 `true` 时，`input.contents` 中所有模态被联合编码；设为 `false` 则返回各模态独立向量 |
+| `input` | 所有嵌入接口 | 输入内容：支持字符串、字符串数组、文件 URL（如 `https://xxx.png`）或 `contents` 对象数组（多模态） | — | 文本嵌入单行 [Token](token.md) 上限因模型而异（`qwen3.7-text-embedding`: 128k；`text-embedding-v4`: 8,192） |
 
-> ⚠️ 注意：  
-> - `text-embedding-v4` 单行上限 8,192 Token，`qwen3.7-text-embedding` 支持 128K Token；超长文本需分块。  
-> - 多模态嵌入模型（如 `qwen3-vl-embedding`）要求图片 ≤10MB、视频需先抽帧为图片序列。  
-> - 向量维度必须与后续检索/相似度计算环节保持一致（例如 FAISS 索引需预先指定相同 `dimension`）。
+> ⚠️ 提示：  
+> - 免费额度策略按地域和模型独立配置（如 `text-embedding-v4` 在北京/新加坡均无免费额度），请以控制台最新计费页为准；  
+> - 向量维度变更不影响已有索引，但新嵌入必须与索引维度一致，否则检索失败；  
+> - 多模态嵌入需确保输入文件 URL 可公开访问且有效期 ≥10 分钟（推荐使用 OSS 直传 URL）。
 
-## 面向开发者，简洁实用
+## 面向开发者：简洁实用建议
 
-- ✅ **快速上手**：一行代码即可获取向量  
-  ```python
-  from dashscope import TextEmbedding
-  resp = TextEmbedding.call(model='qwen3.7-text-embedding', input=['杭州天气如何？'])
-  vector = resp.output.embeddings[0].embedding  # list[float]
-  ```
-
-- ✅ **生产建议**：  
-  - 实时服务优先选 `qwen3.7-text-embedding-flash`（低延迟）或 `text-embedding-v4`（高精度）；  
-  - 离线批量建库用异步接口 `/api/v1/services/embeddings/text-embedding/text-embedding`（支持 10 万行/任务）；  
-  - 多模态场景统一使用 `qwen3-vl-embedding`，启用 `enable_fusion=true` 简化下游逻辑；  
-  - 向量需持久化存储时，务必记录所用 `model` 和 `dimensions`，避免混用导致相似度计算失效。
-
-- ❌ **避坑提示**：  
-  - 不要将 `text-embedding-v1` 的向量与 `v3` 模型的向量混存于同一索引；  
-  - `base64` 编码向量需解码为 float 数组后才能用于余弦计算（SDK 已自动处理）；  
-  - 临时文件 URL（`oss://...`）有效期仅 48 小时，勿用于长期索引构建。
+- ✅ **选型优先级**：实时 RAG 场景用 `qwen3.7-text-embedding`（高精度+低延迟）；海量离线处理用 `text-embedding-async-v2`；跨模态需求首选 `qwen3-vl-embedding` + `enable_fusion=true`。  
+- ✅ **性能优化**：对长文本，建议预切分（如按段落/句子）再向量化，避免超 Token 限制；多模态输入避免混入无关模态（如空 `image` 字段），减少冗余计算。  
+- ✅ **成本控制**：`TopK`（初步召回数）直接影响 Rerank 的 Token 消耗，建议从 `20–50` 起调优；异步任务可结合事件总线回调替代轮询，降低 QPS 压力。  
+- ✅ **调试技巧**：使用 `curl` 或 Postman 测试时，先用小样本（单字符串/单图）验证 `200 OK` 和向量长度；生产环境务必显式指定 `model` 和 `dimensions`，避免依赖默认值导致行为漂移。
 
 ## 关联主题页
 
-- [rag api](../api/rag-api.md)
 - [vector and sort](../api/vector-and-sort.md)
+- [rag api](../api/rag-api.md)
+- [agent billing](../guides/agent-billing.md)
 - [frameworks](../api/frameworks.md)
 - [more about models](../api/more-about-models.md)
-- [use cases](../guides/use-cases.md)
+- [model production](../api/model-production.md)
 
 

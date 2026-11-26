@@ -4,4 +4,4 @@
 -   [服务端事件](../../../_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)
 -   [WebSocket 接入](../../../_short/qwen-audio-asr-streaming-websocket-api-779f1056a08e5525.md)
 -   [AOQ 接入](../../../_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md)
--   [WebSocket SDK](../../../_short/qwen-audio-asr-streaming-websocket-sdk-d20b4697a2dff49e.md)
+-   [SDK 参考](../../../_short/qwen-audio-asr-streaming-websocket-sdk-d20b4697a2dff49e.md)

@@ -56,7 +56,7 @@
     
 2.  参考[UI设计](ui-designer.md#d62913bf8dcza)，进行相关应用界面的编辑与发布。
     
-3.  访问百炼控制台的[UI设计器](https://bailian.console.aliyun.com/?tab=app#/app-ui)页面，鼠标悬停于已发布的UI上，单击**环境部署**。
+3.  打开[**UI 设计器**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-ui)，将指针移至已发布的目标 UI，然后单击**环境部署**。
     
 4.  可以将**应用地址**分享给其他用户，持有该链接的阿里云用户均可访问此应用。单击**下线**可以停止该应用服务。
     
@@ -224,7 +224,7 @@
     > -   **避免嵌套调用**：对于 A 调用 B，B 调用 A 的情况，应用会进入重复调用状态，导致功能不可用。
     > -   **避免多级调用**：对于 A 调用 B，B 调用 C 的情况，应用有最长运行时间限制，多级调用容易产生超时错误。
     
-    <table><tbody><tr><td><p>在智能体应用中引用组件</p></td><td><ol><li><p>在阿里云百炼的<a href="https://bailian.console.aliyun.com/flow-agent/app-center">应用管理</a>页面，创建<a href="../../../agent-legacy/legacy-flow-agent/single-agent-application.md">智能体应用（Agent 1.0）</a>时，在<strong>技能</strong>中选择组件。</p><p>仅支持选择已发布的智能体组件。</p><p>单击<strong>智能体</strong>对应的<strong>+</strong>按钮，在弹出的<strong>选择智能体</strong>面板中完成选择。</p></li><li><p>配置完成后，输入组件功能相关的问题测试效果。</p><blockquote><p>如果引用的组件包含需要<strong>业务透传</strong>的参数，您可以在测试时手动填入<strong>入参变量配置</strong>，或者在 API 调用时通过 <code>biz_param</code>参数传入。</p></blockquote></li></ol></td></tr><tr><td><p>在工作流应用中引用组件</p></td><td><ol><li><p>在阿里云百炼的<a href="https://bailian.console.aliyun.com/flow-agent/app-center">应用管理</a>页面，创建<a href="../workflow-application.md">工作流应用</a>时，将<strong>组件</strong>节点拖入画布，再选择组件。</p><p>支持选择已发布的智能体组件或工作流组件。</p></li><li><p>配置完成后，输入组件功能相关的问题测试效果。</p></li></ol></td></tr></tbody></table>
+    <table><tbody><tr><td><p>在智能体应用中引用组件</p></td><td><ol><li><p>在阿里云百炼的<a href="https://bailian.console.aliyun.com/flow-agent/app-center">应用管理</a>页面，创建<a href="../../../agent-legacy/legacy-flow-agent/single-agent-application.md">智能体应用（Agent 1.0）</a>时，在<strong>技能</strong>中选择组件。</p><p>仅支持选择已发布的智能体组件。</p><p>单击<strong>智能体</strong>对应的<strong>+</strong>按钮，在弹出的<strong>选择智能体</strong>面板中完成选择。</p></li><li><p>配置完成后，输入组件功能相关的问题测试效果。</p><blockquote><p>如果引用的组件包含需要<strong>业务透传</strong>的参数，您可以在测试时手动填入<strong>入参变量配置</strong>，或者在 API 调用时通过 <code>biz_param</code>参数传入。</p></blockquote></li></ol></td></tr><tr><td><p>在工作流应用中引用组件</p></td><td><ol><li><p><a href="https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-center/workflow?immediatelyCreate=true"><strong>创建工作流</strong></a>。<br>将组件节点拖入画布，选择要使用的组件。</p><p>支持选择已发布的智能体组件或工作流组件。</p></li><li><p>配置完成后，输入组件功能相关的问题测试效果。</p></li></ol></td></tr></tbody></table>
     
 
 <a id="通过音视频实时互动发布应用"></a>

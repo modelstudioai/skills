@@ -10,7 +10,7 @@
 
 <a id="installation"></a>
 
-按[SDK简介](https://help.aliyun.com/zh/model-studio/csharp-sdk)安装 SDK 并配置 API Key。将示例地址中的 `WorkspaceId` 替换为同地域的业务空间 ID。
+按[SDK简介](../model-api-reference/more-about-models/csharp-speech-sdk/csharp-sdk.md)安装 SDK 并配置 API Key。将示例地址中的 `WorkspaceId` 替换为同地域的业务空间 ID。
 
 用 `longanhuan_v3` 音色分段合成两句话，将收到的音频依次写入 `output.wav`。运行后即可播放该文件。
 

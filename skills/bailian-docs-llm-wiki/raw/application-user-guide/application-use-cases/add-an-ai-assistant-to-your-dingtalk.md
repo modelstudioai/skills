@@ -26,7 +26,7 @@
 
 ### 1.1 创建应用
 
-1.  进入百炼控制台的[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面，点击右上角**创建应用**，选择**智能体应用**，点击**立即创建**。
+1.  在[**创建旧版智能体**](https://bailian-legacy.console.aliyun.com/cn-beijing/?tab=app#/app-center?appType=Agent&create=true)表单中输入**应用名称**，然后单击**立即创建**。
     
 2.  在**应用配置**页面，模型选择千问-Plus，其他参数保持默认。
     
@@ -180,7 +180,9 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0601275771/p1066012.png)
     
-3.  **创建知识库：**进入[知识库](https://bailian.console.aliyun.com/?tab=app#/knowledge-base)页面，点击**立即开通并创建**（首次使用）或**创建知识库**。选择**创建**标准版，填写**知识库名称**及**知识库描述**，其余设置可保持默认，点击**下一步**，选择刚才上传的文档，其他参数及**索引设置**保持默认即可。后续大模型回答时可以检索参考知识库中的文档。
+3.  首次使用时，在[**知识库**](https://bailian.console.aliyun.com/cn-beijing/rag/knowledge/list)页面单击**立即开通并创建**。
+    
+    已开通服务的用户可直接[**创建标准版知识库**](https://bailian.console.aliyun.com/cn-beijing/rag/knowledge/create?pipelineCommercialType=standard)。填写**知识库名称**及**知识库描述**，其余设置可保持默认，点击**下一步**，选择刚才上传的文档，其他参数及**索引设置**保持默认即可。后续大模型回答时可以检索参考知识库中的文档。
     
     > 选择向量存储类型时，如果您希望集中存储、灵活管理多个应用的向量数据，可选择**ADB-PG**。
     

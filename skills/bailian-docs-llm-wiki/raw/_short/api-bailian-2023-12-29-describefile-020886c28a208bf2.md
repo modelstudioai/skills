@@ -67,7 +67,7 @@ GET /{WorkspaceId}/datacenter/file/{FileId}/ HTTP/1.1
 | 名称 | 类型 | 必填 | 描述 | 示例值 |
 | --- | --- | --- | --- | --- |
 | WorkspaceId | string | 是 | 文件所属的业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。 | llm-3shx2gu255oqxxxx |
-| FileId | string | 是 | 文件 ID，即 **AddFile** 接口返回的`FileId`。您也可以在[应用数据](https://bailian.console.aliyun.com/?tab=app#/data-center)\-文件页签，单击文件名称旁的 ID 图标获取。 | file\_9a65732555b54d5ea10796ca5742ba22\_xxxxxxxx |
+| FileId | string | 是 | 文件 ID，即 **AddFile** 接口返回的`FileId`。<br>1\. 打开[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)，在目标文件数据集上单击**详情**。<br>2\. 单击目标文件的 **ID** 图标，再单击提示中的复制图标，复制文件 ID。 | file\_9a65732555b54d5ea10796ca5742ba22\_xxxxxxxx |
 
 <a id="请求参数"></a>
 

@@ -22,7 +22,7 @@ Qwen-Audio-3.0-TTS-Flash是面向实时交互场景优化的高性能语音合�
 | 模型体验 | 不支持 | Function Calling | 不支持 |
 | 结构化输出 | 不支持 | 联网搜索 | 不支持 |
 | 前缀续写 | 不支持 | 上下文缓存 | 不支持 |
-| 批量推理 | 不支持 | 模型调优 | 不支持 |
+| 批量推理 | 不支持 | 模型调优 | [支持（邀测）](../model-user-guide/model-training/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-qwen-audio-tts.md) |
 
 <a id="上下文限制"></a>
 

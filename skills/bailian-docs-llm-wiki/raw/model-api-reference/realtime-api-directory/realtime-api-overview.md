@@ -14,7 +14,7 @@ Realtime API 支持实时多模态交互、语音识别、语音合成、语音�
 
 下表列出各模型和应用支持的协议。点击“支持”查看对应的接入文档。
 
-<table><thead><tr><th><strong>模型/应用类型</strong></th><th><strong>模型</strong></th><th><strong>WebSocket</strong></th><th><strong>WebRTC</strong></th><th><strong>AOQ</strong></th></tr></thead><tbody><tr><td><p><a href="omni-realtime-api-directory.md">实时全模态</a></p></td><td><p>qwen3.8-omni-flash-realtime、qwen3.5-omni-plus-realtime、qwen3.5-omni-flash-realtime</p></td><td><p><a href="omni-realtime-api-directory/omni-realtime-websocket-access.md">支持</a></p></td><td><p><a href="omni-realtime-api-directory/omni-realtime-webrtc-access.md">支持</a></p></td><td><p><a href="omni-realtime-api-directory/omni-realtime-aoq-access.md">支持</a></p></td></tr><tr><td rowspan="2"><p><a href="realtime-tts-model-apis.md">实时语音合成</a></p></td><td><p>qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、qwen-audio-3.0-tts-plus</p></td><td><p><a href="../../_short/qwen-audio-tts-websocket-api-6f9e2d20cf04ea96.md">支持</a></p></td><td><p>不支持</p></td><td><p><a href="realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md">支持</a></p></td></tr><tr><td><p>CosyVoice系列模型</p></td><td><p><a href="../../_short/cosyvoice-websocket-api-5929268331632771.md">支持</a></p></td><td><p>不支持</p></td><td><p><a href="../../_short/cosyvoice-aoq-access-c0e8e4035486f433.md">支持</a></p></td></tr><tr><td><p><a href="realtime-asr-model-apis.md">实时语音识别</a></p></td><td><p>qwen-audio-3.1-asr-flash-message、qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming、Fun-ASR-Realtime系列模型</p></td><td><p><a href="../../_short/qwen-asr-message-websocket-api-8b78d8662335cafa.md">Qwen-Audio-ASR-Message</a></p><p><a href="../../_short/qwen-audio-asr-streaming-websocket-api-779f1056a08e5525.md">Qwen-Audio-ASR-Streaming</a></p><p><a href="../../_short/fun-asr-realtime-websocket-api-ba4d50025cae8d1c.md">Fun-ASR-Realtime</a></p></td><td><p>不支持</p></td><td><p><a href="../../_short/qwen-asr-message-aoq-access-7699c2c24f2a0149.md">Qwen-Audio-ASR-Message</a></p><p><a href="../../_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md">Qwen-Audio-ASR-Streaming</a></p><p><a href="../../_short/fun-asr-realtime-aoq-access-18b59bd85ad6d915.md">Fun-ASR-Realtime</a></p></td></tr><tr><td><p><a href="audio-realtime-api-directory.md">实时语音对话</a></p></td><td><p>qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash</p></td><td><p><a href="audio-realtime-api-directory/audio-realtime-websocket-access.md">支持</a></p></td><td><p><a href="audio-realtime-api-directory/audio-realtime-webrtc-access.md">支持</a></p></td><td><p><a href="audio-realtime-api-directory/audio-realtime-aoq-access.md">支持</a></p></td></tr><tr><td><p><a href="qwen-audio-live-api-directory.md">Qwen-Audio-Live</a></p></td><td><p><code>qwen-audio-3.1-live</code></p></td><td><p><a href="qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md">支持</a></p></td><td><p><a href="../../_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md">支持</a></p></td><td><p><a href="../../_short/qwen-audio-live-aoq-access-7fc752b6a8e53044.md">支持</a></p></td></tr><tr><td><p><a href="livetranslate-realtime-api-directory.md">实时语音翻译</a></p></td><td><p>Qwen-Livetranslate-Realtime 系列模型</p></td><td><p><a href="../../_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md">支持</a></p></td><td><p><a href="../../_short/livetranslate-realtime-webrtc-access-ddb4e390439cd632.md">支持</a></p></td><td><p><a href="livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md">支持</a></p></td></tr><tr><td><p><a href="../../application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-products-overview.md">多模态开发套件</a></p></td><td><p>multimodal-dialog</p></td><td><p><a href="../more-about-models/multimodal-interaction-protocol.md">支持</a></p></td><td><p><a href="../../model-user-guide/use-cases/realtime-audio-video-integration/best-practice-webrtc-multimodal-dialog.md">支持</a></p></td><td><p><a href="../../_short/multimodal-aoq-access-86d2558b6e5bb42e.md#aoq">支持</a></p></td></tr></tbody></table>
+<table><thead><tr><th><strong>模型/应用类型</strong></th><th><strong>模型</strong></th><th><strong>WebSocket</strong></th><th><strong>WebRTC</strong></th><th><strong>AOQ</strong></th></tr></thead><tbody><tr><td><p><a href="omni-realtime-api-directory.md">实时全模态</a></p></td><td><p>qwen3.8-omni-flash-realtime、qwen3.5-omni-plus-realtime、qwen3.5-omni-flash-realtime</p></td><td><p><a href="omni-realtime-api-directory/omni-realtime-websocket-access.md">支持</a></p></td><td><p><a href="omni-realtime-api-directory/omni-realtime-webrtc-access.md">支持</a></p></td><td><p><a href="omni-realtime-api-directory/omni-realtime-aoq-access.md">支持</a></p></td></tr><tr><td rowspan="2"><p><a href="realtime-tts-model-apis.md">实时语音合成</a></p></td><td><p>qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、qwen-audio-3.0-tts-plus</p></td><td><p><a href="../../_short/qwen-audio-tts-websocket-api-6f9e2d20cf04ea96.md">支持</a></p></td><td><p>不支持</p></td><td><p><a href="realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md">支持</a></p></td></tr><tr><td><p>CosyVoice系列模型</p></td><td><p><a href="../../_short/cosyvoice-websocket-api-5929268331632771.md">支持</a></p></td><td><p>不支持</p></td><td><p><a href="../../_short/cosyvoice-aoq-access-c0e8e4035486f433.md">支持</a></p></td></tr><tr><td><p><a href="realtime-asr-model-apis.md">实时语音识别</a></p></td><td><p>qwen-audio-3.1-asr-flash-message、qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming、Fun-ASR-Realtime系列模型</p></td><td><p><a href="../../_short/qwen-asr-message-websocket-api-8b78d8662335cafa.md">Qwen-Audio-ASR-Message</a></p><p><a href="../../_short/qwen-audio-asr-streaming-websocket-api-779f1056a08e5525.md">Qwen-Audio-ASR-Streaming</a></p><p><a href="../../_short/fun-asr-realtime-websocket-api-ba4d50025cae8d1c.md">Fun-ASR-Realtime</a></p></td><td><p>不支持</p></td><td><p><a href="../../_short/qwen-asr-message-aoq-access-7699c2c24f2a0149.md">Qwen-Audio-ASR-Message</a></p><p><a href="../../_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md">Qwen-Audio-ASR-Streaming</a></p><p><a href="../../_short/fun-asr-realtime-aoq-access-18b59bd85ad6d915.md">Fun-ASR-Realtime</a></p></td></tr><tr><td><p><a href="audio-realtime-api-directory.md">实时语音对话</a></p></td><td><p>qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash</p></td><td><p><a href="audio-realtime-api-directory/audio-realtime-websocket-access.md">支持</a></p></td><td><p><a href="audio-realtime-api-directory/audio-realtime-webrtc-access.md">支持</a></p></td><td><p><a href="audio-realtime-api-directory/audio-realtime-aoq-access.md">支持</a></p></td></tr><tr><td><p><a href="qwen-audio-live-api-directory.md">Qwen-Audio-Live</a></p></td><td><p><code>qwen-audio-3.1-live</code></p></td><td><p><a href="qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md">支持</a></p></td><td><p><a href="../../_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md">支持</a></p></td><td><p><a href="../../_short/qwen-audio-live-aoq-access-7fc752b6a8e53044.md">支持</a></p></td></tr><tr><td><p><a href="livetranslate-realtime-api-directory.md">实时语音翻译</a></p></td><td><p>Qwen-Livetranslate-Realtime 系列模型</p></td><td><p><a href="../../_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md">支持</a></p></td><td><p><a href="../../_short/livetranslate-realtime-webrtc-access-ddb4e390439cd632.md">支持</a></p></td><td><p><a href="livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md">支持</a></p></td></tr><tr><td><p><a href="../../application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-products-overview.md">多模态开发套件</a></p></td><td><p>multimodal-dialog</p></td><td><p><a href="../../_short/multimodal-interaction-protocol-23b12b66c717437f.md">支持</a></p></td><td><p><a href="../../model-user-guide/use-cases/realtime-audio-video-integration/best-practice-webrtc-multimodal-dialog.md">支持</a></p></td><td><p><a href="../../_short/multimodal-aoq-access-86d2558b6e5bb42e.md#aoq">支持</a></p></td></tr></tbody></table>
 
 > **说明**
 >
@@ -41,7 +41,7 @@ Realtime API 支持实时多模态交互、语音识别、语音合成、语音�
 | Qwen-Audio-Realtime | [Node.js](../../_short/qwen-audio-realtime-nodejs-sdk-a2a0cc33ba0a85a8.md) · [C#](../../_short/qwen-audio-realtime-csharp-sdk-7c78b8d6a3bc97a4.md) · [Android](../../_short/android-sdk-for-qwen-audio-realtime-service-fbe978d80b5ee150.md) · [iOS](../../_short/ios-sdk-for-qwen-audio-realtime-service-11c3579f6cded913.md) · [HarmonyOS](../../_short/harmonyos-sdk-for-qwen-audio-realtime-service-c258297df757a167.md) · [Flutter](../../_short/realtime-websocket-flutter-sdk-qwen-audio-realti-8fa612950516022e.md) |
 | Qwen-LiveTranslate-Realtime | [Python](../../_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md) · [Java](../../_short/qwen-livetranslate-java-sdk-7300d52ae3d2839e.md) · [C#](../../_short/qwen-livetranslate-csharp-sdk-7dc0bd18d993e44e.md) · [Flutter](../../_short/realtime-websocket-flutter-sdk-qwen-livetranslat-ed4e5a3a77d23fdf.md) |
 
-**C# 通用参考** [SDK简介](https://help.aliyun.com/zh/model-studio/csharp-sdk) · [接口与事件](https://help.aliyun.com/zh/model-studio/csharp-sdk-methods-and-events)
+**C# 通用参考** [SDK简介](../more-about-models/csharp-speech-sdk/csharp-sdk.md) · [接口与事件](../more-about-models/csharp-speech-sdk/csharp-sdk-methods-and-events.md)
 
 <a id="接入方式选择"></a>
 
@@ -213,7 +213,7 @@ WebSocket 在建立连接时通过 HTTP 请求头携带 API Key 进行鉴权，�
 -   [Fun-ASR-Realtime](../../_short/fun-asr-realtime-websocket-api-ba4d50025cae8d1c.md)
 -   [Qwen-Audio-Realtime](audio-realtime-api-directory/audio-realtime-websocket-access.md)
 -   [Qwen-LiveTranslate-Realtime](../../_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md)
--   [多模态开发套件](../more-about-models/multimodal-interaction-protocol.md)
+-   [多模态开发套件](../../_short/multimodal-interaction-protocol-23b12b66c717437f.md)
 
 <a id="webrtc"></a>
 
@@ -251,6 +251,8 @@ AOQ 采用**服务端代理鉴权**模式：API Key 仅在业务 AppServer 侧�
 
 业务需要媒体连接时，由 AppServer 请求连接凭证并返回客户端，客户端随即调用 `connect(config)` 建连。
 
+如需提前获取凭证，AppServer 可在请求体中设置 `tokenExpiresInSecs`。客户端必须在指定的有效期内完成建连；过期后需重新获取凭证。未设置时，获取凭证后应立即建连。该参数不限制建连后的会话时长。
+
 ![AOQ 即时鉴权与媒体建连时序](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f90b0.png)
 
 <a id="aoq-request-paths"></a>
@@ -272,10 +274,15 @@ AOQ 采用**服务端代理鉴权**模式：API Key 仅在业务 AppServer 侧�
 | `model` | 查询参数 · `string` | 必填。待调用的模型 ID，建连路径按上表中的模型系列选择。 |
 | `Authorization` | 请求头 · `string` | 必填。格式为 `Bearer <API_KEY>`，使用与接入域名对应的 API Key。 |
 | `Content-Type` | 请求头 · `string` | 必填。固定为 `application/json`。 |
-| `x-dashscope-rtc-transport` | 请求头 · `string` | 必填。固定为 `moq`，指定使用 AOQ 协议。 |
+| `x-dashscope-rtc-transport` | 请求头 · `string` | 必填。原生 AOQ SDK 使用 `moq`；通过浏览器 WebTransport 接入的 Web SDK 使用 `webtransport`。 |
 | `clientIp` | 请求体 · `string` | 选填。客户端真实公网 IP，用于选择 Relay 接入点；不传时使用请求来源 IP。 |
+| `tokenExpiresInSecs` | 请求体 · `integer` | 选填。建连 Token 的有效期，单位为秒，取值为 1 至 1800 的整数。仅在需要提前获取凭证时设置。类型错误或超出范围会导致请求失败。 |
 
-以下以 qwen3.8-omni-flash-realtime 为例，使用对应的 `{endpoint}` 和环境变量 `DASHSCOPE_API_KEY`。调用 Inference 路径的模型时，将请求路径改为 `/api/v1/webrtc/inference`，并设置对应的 `model`。
+在 AppServer 上使用对应的 `{endpoint}` 和环境变量 `DASHSCOPE_API_KEY` 发起请求。以下以 qwen3.8-omni-flash-realtime 为例；调用 Inference 路径的模型时，将路径改为 `/api/v1/webrtc/inference`，并设置对应的 `model`。
+
+<a id="aoq-credential-request-native-on-demand"></a>
+
+建连时获取凭证（原生SDK）
 
 <a id="code-block"></a>
 
@@ -288,24 +295,74 @@ curl -X POST \
   -d '{}'
 ```
 
+<a id="aoq-credential-request-native-advance"></a>
+
+提前获取凭证（原生SDK）
+
+<a id="code-block-2"></a>
+
+```bash
+curl -X POST \
+  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime" \
+  -H "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+  -H "Content-Type: application/json" \
+  -H "x-dashscope-rtc-transport: moq" \
+  -d '{"tokenExpiresInSecs": 600}'
+```
+
+<a id="aoq-credential-request-web-on-demand"></a>
+
+建连时获取凭证（Web SDK）
+
+<a id="code-block-3"></a>
+
+```bash
+curl -X POST \
+  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime" \
+  -H "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+  -H "Content-Type: application/json" \
+  -H "x-dashscope-rtc-transport: webtransport" \
+  -d '{}'
+```
+
+<a id="aoq-credential-request-web-advance"></a>
+
+提前获取凭证（Web SDK）
+
+<a id="code-block-4"></a>
+
+```bash
+curl -X POST \
+  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime" \
+  -H "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+  -H "Content-Type: application/json" \
+  -H "x-dashscope-rtc-transport: webtransport" \
+  -d '{"tokenExpiresInSecs": 600}'
+```
+
 <a id="tkauth-aoq-response-fields-title"></a>
 
 #### 返回说明
 
 | 字段 | 类型 | 说明与 SDK 映射 |
 | --- | --- | --- |
-| `sid` | `string` | 会话唯一标识，填入 `AoqConnectConfig.sid`。 |
-| `aoqTokenForClient` | `string` | 客户端临时连接 Token，填入 `AoqConnectConfig.token`。 |
-| `clientRelayEndpoints` | `array` | Relay 接入点数组，填入 `relayEndpoints`。每项包含 `endpoint`、`port` 和 `route_index`；将 `route_index` 映射为 SDK 的 `routeIndex`，缺省时使用数组下标。 |
-| `clientRelayCertFingerprint` | `string` | Relay TLS 证书指纹，填入 `AoqConnectConfig.certFingerprint`。 |
-| `sidExpiresInSecs` | `integer` | 会话有效期（秒）。过期后需重新获取，否则建立连接将失败。 |
-| `extraInfo.workspaceIdHash` | `string` | 业务空间 ID 的哈希值，填入 `AoqConnectConfig.workspaceIdHash`。 |
+| `sid` | `string` | 会话唯一标识。原生 SDK 填入 `AoqConnectConfig.sid`；Web SDK 使用该标识配置连接。 |
+| `aoqTokenForClient` | `string` | 客户端建连使用的临时 Token。原生 SDK 填入 `AoqConnectConfig.token`；Web SDK 使用该 Token 建连。 |
+| `clientRelayEndpoints` | `array` | Relay 接入点数组，每项包含 `endpoint`、`port` 和 `route_index`。原生 SDK 将接入点填入 `relayEndpoints`，把 `route_index` 映射为 `routeIndex`；未返回 `route_index` 时使用数组下标。Web SDK 的每个接入点还包含 `certHashes`。 |
+| `clientRelayEndpoints[].certHashes` | `array<string>` | 仅 Web SDK 请求返回。该接入点的 WebTransport 服务端证书 SHA-256 指纹列表，每个指纹为 64 位小写十六进制字符串。 |
+| `clientRelayCertFingerprint` | `string` | 仅原生 SDK 请求返回。将 Relay TLS 证书指纹填入 `AoqConnectConfig.certFingerprint`。Web SDK 使用各接入点中的 `certHashes`。 |
+| `sidExpiresInSecs` | `integer` | 临时建连 Token 的有效期（秒）。仅当请求设置 `tokenExpiresInSecs` 时返回，值与请求一致；未设置时不返回。 |
+| `extraInfo.workspaceIdHash` | `string` | 业务空间 ID 的哈希值。原生 SDK 填入 `AoqConnectConfig.workspaceIdHash`；Web SDK 按其接入说明使用。 |
 
 <a id="tkauth-aoq-response-title"></a>
 
-以下为响应示例，字段值以实际返回为准。
+以下响应中的接入点、端口和证书指纹均为示例值，请使用接口实际返回的值。
 
-<a id="code-block-2"></a>
+<a id="aoq-credential-response-native-on-demand"></a>
+
+建连时获取凭证（原生SDK）
+
+<a id="code-block-5"></a>
 
 ```json
 {
@@ -315,10 +372,57 @@ curl -X POST \
     {"endpoint": "192.0.2.1", "port": 8443, "route_index": 0}
   ],
   "clientRelayCertFingerprint": "sha256/<fingerprint>",
-  "sidExpiresInSecs": 7200,
   "extraInfo": {"workspaceIdHash": "<workspace_id_hash>"}
 }
 ```
+
+<a id="aoq-credential-response-native-advance"></a>
+
+提前获取凭证（原生SDK）
+
+<a id="code-block-6"></a>
+
+```json
+{
+  "sid": "<session_id>",
+  "aoqTokenForClient": "<token>",
+  "clientRelayEndpoints": [
+    {"endpoint": "192.0.2.1", "port": 8443, "route_index": 0}
+  ],
+  "clientRelayCertFingerprint": "sha256/<fingerprint>",
+  "sidExpiresInSecs": 600,
+  "extraInfo": {"workspaceIdHash": "<workspace_id_hash>"}
+}
+```
+
+<a id="aoq-credential-response-web-advance"></a>
+
+提前获取凭证（Web SDK）
+
+<a id="code-block-7"></a>
+
+```json
+{
+  "sid": "<session_id>",
+  "aoqTokenForClient": "<token>",
+  "clientRelayEndpoints": [
+    {
+      "endpoint": "192.0.2.1",
+      "port": 4443,
+      "route_index": 0,
+      "certHashes": [
+        "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069"
+      ]
+    }
+  ],
+  "sidExpiresInSecs": 600,
+  "extraInfo": {
+    "workspaceIdHash": "<workspace_id_hash>"
+  }
+}
+```
+
+Web SDK 请求未设置 `tokenExpiresInSecs` 时，也不返回 `sidExpiresInSecs`，其余字段结构不变。
 
 <a id="tkauth-aoq-sdk-title"></a>
 

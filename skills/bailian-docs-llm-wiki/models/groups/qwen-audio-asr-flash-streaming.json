@@ -11,7 +11,7 @@
           "Audio"
         ]
       },
-      "description": "qwen-audio-3.0-asr-flash-streaming是通义实验室专为低延迟、高并发实时交互场景打造的旗舰级语音识别模型。它不仅能实现“边说边出字”的极致流畅体验，并深度集成了 Context（上下文增强）能力，还针对垂直行业专业词汇进行了深度强化训练，是构建实时会议同传、智能客服坐席辅助、语音助手等应用的首选。",
+      "description": "Qwen-Audio-3.0-ASR-Flash-Streaming是通义实验室专为低延迟、高并发实时交互场景打造的旗舰级语音识别模型。它不仅能实现“边说边出字”的极致流畅体验，并深度集成了 Context（上下文增强）能力，还针对垂直行业专业词汇进行了深度强化训练，是构建实时会议同传、智能客服坐席辅助、语音助手等应用的首选。",
       "features": [],
       "provider": "qwen",
       "model": "qwen-audio-3.0-asr-flash-streaming",
@@ -38,7 +38,7 @@
       ],
       "modelAlias": "",
       "versionTag": "MAJOR",
-      "latestOnlineAt": "2026-07-30T15:11:41.943+00:00",
+      "latestOnlineAt": "2026-07-30T15:11:41.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Audio-3.0-ASR-Flash-Streaming",
       "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide",

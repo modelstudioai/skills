@@ -1,6 +1,6 @@
 # 决策模型 API
 
-调用 POST /compatible-mode/v1/systemone 接口使用百炼决策模型（decision-model-preview），一次前向返回分类、评分、是非判断及其概率分布与置信度，不生成文本。适用于工单分流、内容审核、智能体路由与结果校验等高频结构化决策场景。
+调用 POST /compatible-mode/v1/systemone 接口使用百炼决策模型（decision-model / decision-model-preview），一次前向返回分类、评分、是非判断及其概率分布与置信度，不生成文本。适用于工单分流、内容审核、智能体路由与结果校验等高频结构化决策场景。
 
 <a id="前提条件"></a>
 
@@ -12,7 +12,7 @@
 
 > **重要**
 >
-> **在线体验**：在编写代码前，可先通过 [Playground](https://bailian.console.aliyun.com/systemone_playground) 在线体验决策模型。选择预设场景（客服对话判断、Agent 完成度核验、工单分流、内容审核、Agent 任务路由、医疗导诊辅助），输入业务内容并运行模型，查看判断结果、概率分布与 Token 用量，再修改条件观察结果变化。
+> **预览版在线体验**：在编写代码前，可先通过 [Playground](https://bailian.console.aliyun.com/systemone_playground) 在线体验决策模型。选择预设场景（客服对话判断、Agent 完成度核验、工单分流、内容审核、Agent 任务路由、医疗导诊辅助），输入业务内容并运行模型，查看判断结果、概率分布与 Token 用量，再修改条件观察结果变化。
 
 <a id="请求说明"></a>
 
@@ -32,8 +32,63 @@
 | --- | --- |
 | 华北2（北京） | `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone` |
 | 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/systemone` |
+| 美国（弗吉尼亚）<br>`decision-model` | `https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/systemone` |
+| 德国（法兰克福）<br>`decision-model` | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/systemone` |
+| 日本（东京）<br>`decision-model` | `https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/systemone` |
+| 中国香港<br>`decision-model` | `https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/systemone` |
 
-<table><tbody><tr><td><a id="请求参数"></a><a id="dm-100"></a><h2>请求参数</h2><p><strong>Content-Type</strong> · <code>String</code> · Header · 必选</p><p>请求类型：<code>application/json</code>。</p><p><strong>Authorization</strong> · <code>String</code> · Header · 必选</p><p>API-Key，格式：<code>Bearer $DASHSCOPE_API_KEY</code>。</p><p><strong>model</strong> · <code>String</code> · Body · 必选</p><p>模型名，取值 <code>decision-model-preview</code>。</p><p><strong>state</strong> · <code>String / Object / Array</code> · Body · 必选</p><p>待决策的业务状态：工单文本、对话或结构化对象（对象会被序列化后送模型）。</p><p><strong>questions</strong> · <code>Object</code> · Body · 必选</p><p>问题表。key 为调用方自定义的问题 id；value 为问题对象，字段如下。</p><a id="accordion-问题对象属性"></a><section><p>问题对象属性</p><div><p><strong>type</strong> · <code>String</code> · 必选</p><p>问题类型，取值：</p><ul><li><code>choice</code>：多选一</li><li><code>noul</code>：是否判断</li><li><code>score</code>：有序量表</li></ul><p><strong>instructions</strong> · <code>String</code> · 可选</p><p>问题描述或评判标准。</p><p><strong>criteria</strong> · <code>Object / Array</code> · 视类型</p><ul><li><code>choice</code>：选项名 → 选项描述 的映射（1–255 项，建议给全量选项并补 <code>other</code> 兜底）。</li><li><code>noul</code>：可选 <code>{&quot;true&quot;:…, &quot;false&quot;:…}</code> 描述。</li><li><code>score</code>：从低到高的等级描述数组（2–255 级，建议 3–7 级且每级可清晰区分）。</li></ul></div></section><strong>接口限制与建议</strong><ul><li>问题数上限 16（延迟随问题数近线性增长）。</li><li><code>choice</code> 选项 ≤ 255。</li><li><code>score</code> 等级 2–255（建议 3–7 级）。</li><li>上下文上限 65536 token，超长 <code>state</code> 会被拒绝。</li></ul></td><td><a id="请求示例"></a><a id="dm-400"></a><h2>请求示例</h2><p>DashScope SDK 已支持决策模型（兼容 TypeSafe System One 协议）：</p><ul><li><strong>Python</strong>：DashScope SDK <strong>2.0.1 及以上</strong>（决策模型为 2.0.1 新增能力，旧版本无 <code>client.decision</code> 接口，调用会报 <code>AttributeError</code>）。安装：<code>pip install -U &quot;dashscope&gt;=2.0.1&quot;</code>，参见<a href="../preparations/install-sdk.md">安装 SDK</a>。SDK 根据业务空间与地域自动拼接 <code>/compatible-mode/v1/systemone</code> 端点。</li><li><strong>Java</strong>：DashScope SDK <strong>2.23.3 及以上</strong>（决策模型为 2.23.3 新增能力，旧版本无 <code>com.alibaba.dashscope.decision</code> 包）。Maven 坐标：<code>com.alibaba:dashscope-sdk-java:2.23.3</code>（Gradle：<code>implementation group: 'com.alibaba', name: 'dashscope-sdk-java', version: '2.23.3'</code>）。API Key 默认从环境变量 <code>DASHSCOPE_API_KEY</code> 读取。</li><li>调用失败时，Python SDK 抛出 <code>DashScopeError</code> 异常，Java SDK 抛出 <code>ApiException</code>。</li></ul><p>也可以使用通用 TypeSafe SDK（<code>typesafe-sdk</code>）调用，<code>base_url</code> 指向百炼网关，SDK 会自动拼接 <code>/v1/systemone</code> 并解析返回体。安装：<code>pip install typesafe-sdk</code>。</p><a id="sec-tabs"></a><section><a id="工单分流示例"></a><section><a id="工单分流示例-h4"></a><h4>工单分流示例</h4><p>一次请求同时完成“派单团队 choice”“是否升级 noul”“严重度 score”三项决策。以下以华北2（北京）地域为例。</p><a id="sec-tabs-2"></a><section><a id="dashscope-python"></a><section><a id="dashscope-python-h4"></a><h4>DashScope Python</h4><a id="code-block"></a><pre class="language-python"><code>import os
+<table><tbody><tr><td><a id="请求参数"></a><a id="dm-100"></a><h2>请求参数</h2><p><strong>Content-Type</strong> · <code>String</code> · Header · 必选</p><p>请求类型：<code>application/json</code>。</p><p><strong>Authorization</strong> · <code>String</code> · Header · 必选</p><p>API-Key，格式：<code>Bearer $DASHSCOPE_API_KEY</code>。</p><p><strong>model</strong> · <code>String</code> · Body · 必选</p><p>模型名，取值：</p><ul><li><code>decision-model</code>：正式版。<a href="../../model-user-guide/get-started-with-models/model-studio-model-list/model-list-decision/decision-model-stable.md">模型详情</a>。</li><li><code>decision-model-preview</code>：预览版。</li></ul><p><strong>state</strong> · <code>String / Object / Array</code> · Body · 必选</p><p>待决策的业务状态：工单文本、对话或结构化对象（对象会被序列化后送模型）。</p><p>以下图像输入参数用于正式版 <code>decision-model</code>。</p><p><strong>image</strong> · <code>Object</code> · Body · 可选</p><p>单图输入，与 <code>state</code> 文本一起用于决策。<code>url</code> 为可公开访问的图像 URL，或 <code>data:image/png;base64,...</code> 格式的 Base64 Data URL（MIME 类型应与图像文件一致）。</p><p><strong>images</strong> · <code>Array&lt;Object&gt;</code> · Body · 可选</p><p>多图输入，每个元素使用与 <code>image</code> 相同的对象格式。</p><p>每个问题最多 4 张图，每个请求最多 16 张图。</p><p>图像输入请使用 HTTP 调用；DashScope Python SDK 2.0.1 的 <code>client.decision.create</code> 尚无 <code>images</code> 参数。</p><p><strong>questions</strong> · <code>Object</code> · Body · 必选</p><p>问题表。key 为调用方自定义的问题 id；value 为问题对象，字段如下。</p><a id="accordion-问题对象属性"></a><section><p>问题对象属性</p><div><p><strong>type</strong> · <code>String</code> · 必选</p><p>问题类型，取值：</p><ul><li><code>choice</code>：多选一</li><li><code>noul</code>：是否判断</li><li><code>score</code>：有序量表</li></ul><p><strong>instructions</strong> · <code>String</code> · 可选</p><p>问题描述或评判标准。</p><p><strong>criteria</strong> · <code>Object / Array</code> · 视类型</p><ul><li><code>choice</code>：选项名 → 选项描述 的映射（1–255 项，建议给全量选项并补 <code>other</code> 兜底）。</li><li><code>noul</code>：可选 <code>{&quot;true&quot;:…, &quot;false&quot;:…}</code> 描述。</li><li><code>score</code>：从低到高的等级描述数组（2–255 级，建议 3–7 级且每级可清晰区分）。</li></ul></div></section><strong>接口限制与建议</strong><ul><li>问题数上限 16（延迟随问题数近线性增长）。</li><li><code>choice</code> 选项 ≤ 255。</li><li><code>score</code> 等级 2–255（建议 3–7 级）。</li><li>上下文上限 <code>decision-model</code> 为 268,288 Token；<code>decision-model-preview</code> 为 65,536 Token，超长 <code>state</code> 会被拒绝。</li></ul></td><td><a id="请求示例"></a><a id="dm-400"></a><h2>请求示例</h2><ul><li><strong>Python</strong>：DashScope SDK <strong>2.0.1 及以上</strong>。</li><li><strong>Java</strong>：DashScope SDK <strong>2.23.3 及以上</strong>。</li></ul><a id="sec-tabs"></a><section><a id="图像输入示例"></a><section><a id="图像输入示例-h4"></a><h4>图像输入示例</h4><a id="sec-tabs-2"></a><section><a id="图片-url-curl"></a><section><a id="图片-url-curl-h4"></a><h4>图片 URL（curl）</h4><a id="code-block"></a><pre class="language-bash"><code>curl -sS -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone \
+  -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
+  -H 'Content-Type: application/json' \
+  -d '{
+    &quot;model&quot;: &quot;decision-model&quot;,
+    &quot;state&quot;: &quot;请看图片内容做判断。&quot;,
+    &quot;image&quot;: {&quot;url&quot;: &quot;https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg&quot;},
+    &quot;questions&quot;: {
+      &quot;animal&quot;: {
+        &quot;type&quot;: &quot;choice&quot;,
+        &quot;instructions&quot;: &quot;图中有什么？&quot;,
+        &quot;criteria&quot;: {&quot;dog&quot;: &quot;狗&quot;, &quot;cat&quot;: &quot;猫&quot;, &quot;other&quot;: &quot;其他&quot;}
+      }
+    }
+  }'
+</code></pre></section><a id="base64-图片-python"></a><section><a id="base64-图片-python-h4"></a><h4>Base64 图片（Python）</h4><p>将 <code>/path/to/screenshot.png</code> 替换为本地 PNG 截图路径。多图时，将 <code>image</code> 替换为 <code>images: [{&quot;url&quot;: ...}, ...]</code>。</p><a id="code-block-2"></a><pre class="language-python"><code>import base64
+import json
+import os
+import urllib.request
+
+with open(&quot;/path/to/screenshot.png&quot;, &quot;rb&quot;) as image_file:
+    img_b64 = base64.b64encode(image_file.read()).decode()
+
+body = {
+    &quot;model&quot;: &quot;decision-model&quot;,
+    &quot;state&quot;: &quot;请根据工单截图判断用户遇到的问题。&quot;,
+    &quot;image&quot;: {&quot;url&quot;: f&quot;data:image/png;base64,{img_b64}&quot;},
+    &quot;questions&quot;: {
+        &quot;error_code&quot;: {
+            &quot;type&quot;: &quot;choice&quot;,
+            &quot;instructions&quot;: &quot;截图中显示的错误码是什么？&quot;,
+            &quot;criteria&quot;: {&quot;E-7788&quot;: &quot;磁盘空间不足&quot;, &quot;500&quot;: &quot;HTTP 500&quot;, &quot;other&quot;: &quot;其他或未出现&quot;},
+        },
+        &quot;escalate&quot;: {&quot;type&quot;: &quot;noul&quot;, &quot;instructions&quot;: &quot;是否需要立即通知值班人员？&quot;},
+        &quot;severity&quot;: {
+            &quot;type&quot;: &quot;score&quot;,
+            &quot;instructions&quot;: &quot;问题严重程度？&quot;,
+            &quot;criteria&quot;: [&quot;轻微&quot;, &quot;部分功能受影响&quot;, &quot;核心功能不可用&quot;, &quot;严重业务/安全影响&quot;],
+        },
+    },
+}
+request = urllib.request.Request(
+    &quot;https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone&quot;,
+    data=json.dumps(body).encode(),
+    headers={
+        &quot;Authorization&quot;: f&quot;Bearer {os.environ['DASHSCOPE_API_KEY']}&quot;,
+        &quot;Content-Type&quot;: &quot;application/json&quot;,
+    },
+)
+with urllib.request.urlopen(request) as response:
+    print(json.dumps(json.load(response), ensure_ascii=False, indent=2))
+</code></pre></section></section></section><a id="工单分流示例"></a><section><a id="工单分流示例-h4"></a><h4>工单分流示例</h4><p>一次请求同时完成“派单团队 choice”“是否升级 noul”“严重度 score”三项决策。以下以华北2（北京）地域为例。</p><a id="sec-tabs-3"></a><section><a id="dashscope-python"></a><section><a id="dashscope-python-h4"></a><h4>DashScope Python</h4><a id="code-block-3"></a><pre class="language-python"><code>import os
 
 import dashscope
 
@@ -47,7 +102,7 @@ client = dashscope.Client(
 )
 
 result = client.decision.create(
-    model=&quot;decision-model-preview&quot;,
+    model=&quot;decision-model&quot;,
     state={&quot;ticket_id&quot;: &quot;T-1001&quot;, &quot;content&quot;: &quot;订单支付后超过 24 小时仍未到账，用户无法继续使用核心服务。&quot;},
     questions={
         &quot;department&quot;: {&quot;type&quot;: &quot;choice&quot;, &quot;instructions&quot;: &quot;应该由哪个团队处理？&quot;,
@@ -63,7 +118,7 @@ print(result.answers[&quot;department&quot;].choice)   # 选中选项
 print(result.answers[&quot;escalate&quot;].noul)       # P(yes)
 print(result.answers[&quot;severity&quot;].score)      # 概率加权等级索引
 print(result.usage.input_tokens, result.latency_ms)
-</code></pre></section><a id="dashscope-java"></a><section><a id="dashscope-java-h4"></a><h4>DashScope Java</h4><a id="code-block-2"></a><pre class="language-java"><code>import com.alibaba.dashscope.decision.DecisionModel;
+</code></pre></section><a id="dashscope-java"></a><section><a id="dashscope-java-h4"></a><h4>DashScope Java</h4><a id="code-block-4"></a><pre class="language-java"><code>import com.alibaba.dashscope.decision.DecisionModel;
 import com.alibaba.dashscope.decision.DecisionModelParam;
 import com.alibaba.dashscope.decision.DecisionModelResult;
 import com.alibaba.dashscope.decision.DecisionQuestion;
@@ -99,7 +154,7 @@ public class DecisionDemo {
     questions.put(&quot;severity&quot;, DecisionQuestion.score(&quot;这个问题有多严重？&quot;, levels));
 
     DecisionModelParam param = DecisionModelParam.builder()
-        .model(DecisionModelParam.Models.DECISION_MODEL_PREVIEW)
+        .model(&quot;decision-model&quot;)
         .state(state)
         .questions(questions)
         .build();
@@ -110,7 +165,7 @@ public class DecisionDemo {
     System.out.println(JsonUtils.toJson(result));
   }
 }
-</code></pre></section><a id="typesafe-python"></a><section><a id="typesafe-python-h4"></a><h4>TypeSafe Python</h4><a id="code-block-3"></a><pre class="language-python"><code>import os
+</code></pre></section><a id="typesafe-python"></a><section><a id="typesafe-python-h4"></a><h4>TypeSafe Python</h4><a id="code-block-5"></a><pre class="language-python"><code>import os
 from typesafe_sdk import TypeSafeClient
 
 client = TypeSafeClient(
@@ -119,7 +174,7 @@ client = TypeSafeClient(
 )
 
 result = client.system_one(
-    model=&quot;decision-model-preview&quot;,
+    model=&quot;decision-model&quot;,
     state={&quot;ticket_id&quot;: &quot;T-1001&quot;, &quot;content&quot;: &quot;订单支付后超过 24 小时仍未到账，用户无法继续使用核心服务。&quot;},
     questions={
         &quot;department&quot;: {&quot;type&quot;: &quot;choice&quot;, &quot;instructions&quot;: &quot;应该由哪个团队处理？&quot;,
@@ -134,11 +189,11 @@ result = client.system_one(
 print(result.answers[&quot;department&quot;])   # choice, confidence, probabilities
 print(result.answers[&quot;escalate&quot;])     # noul P(yes)
 print(result.answers[&quot;severity&quot;])     # score, legend, probabilities
-</code></pre></section><a id="curl"></a><section><a id="curl-h4"></a><h4>curl</h4><a id="code-block-4"></a><pre class="language-bash"><code>curl -sS -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone \
+</code></pre></section><a id="curl"></a><section><a id="curl-h4"></a><h4>curl</h4><a id="code-block-6"></a><pre class="language-bash"><code>curl -sS -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone \
   -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
   -H 'Content-Type: application/json' \
   -d '{
-    &quot;model&quot;: &quot;decision-model-preview&quot;,
+    &quot;model&quot;: &quot;decision-model&quot;,
     &quot;state&quot;: {&quot;ticket_id&quot;: &quot;T-1001&quot;, &quot;content&quot;: &quot;订单支付后超过 24 小时仍未到账，用户无法继续使用核心服务，要求立即处理。&quot;},
     &quot;questions&quot;: {
       &quot;department&quot;: {&quot;type&quot;: &quot;choice&quot;, &quot;instructions&quot;: &quot;应该由哪个团队处理？&quot;,
@@ -149,7 +204,7 @@ print(result.answers[&quot;severity&quot;])     # score, legend, probabilities
                                   &quot;核心功能不可用，没有替代方案&quot;, &quot;造成严重业务或安全影响&quot;]}
     }
   }'
-</code></pre></section></section></section><a id="是非判断示例"></a><section><a id="是非判断示例-h4"></a><h4>是非判断示例</h4><p>对一个 <code>noul</code> 问题返回 P(yes) 概率，0=否 1=是。以下以华北2（北京）地域为例。</p><a id="sec-tabs-3"></a><section><a id="dashscope-python-2"></a><section><a id="dashscope-python-2-h4"></a><h4>DashScope Python</h4><a id="code-block-5"></a><pre class="language-python"><code>import os
+</code></pre></section></section></section><a id="是非判断示例"></a><section><a id="是非判断示例-h4"></a><h4>是非判断示例</h4><p>对一个 <code>noul</code> 问题返回 P(yes) 概率，0=否 1=是。以下以华北2（北京）地域为例。</p><a id="sec-tabs-4"></a><section><a id="dashscope-python-2"></a><section><a id="dashscope-python-2-h4"></a><h4>DashScope Python</h4><a id="code-block-7"></a><pre class="language-python"><code>import os
 
 import dashscope
 
@@ -161,13 +216,13 @@ client = dashscope.Client(
 )
 
 result = client.decision.create(
-    model=&quot;decision-model-preview&quot;,
+    model=&quot;decision-model&quot;,
     state=&quot;这段评论是否在索要退款？&quot;,
     questions={&quot;refund&quot;: {&quot;type&quot;: &quot;noul&quot;, &quot;instructions&quot;: &quot;是否在索要退款？&quot;}},
 )
 
 print(result.answers[&quot;refund&quot;].noul)   # P(yes)
-</code></pre></section><a id="dashscope-java-2"></a><section><a id="dashscope-java-2-h4"></a><h4>DashScope Java</h4><a id="code-block-6"></a><pre class="language-java"><code>import com.alibaba.dashscope.decision.DecisionModel;
+</code></pre></section><a id="dashscope-java-2"></a><section><a id="dashscope-java-2-h4"></a><h4>DashScope Java</h4><a id="code-block-8"></a><pre class="language-java"><code>import com.alibaba.dashscope.decision.DecisionModel;
 import com.alibaba.dashscope.decision.DecisionModelParam;
 import com.alibaba.dashscope.decision.DecisionModelResult;
 import com.alibaba.dashscope.decision.DecisionQuestion;
@@ -180,7 +235,7 @@ public class DecisionDemo {
     questions.put(&quot;refund&quot;, DecisionQuestion.noul(&quot;是否在索要退款？&quot;));
 
     DecisionModelParam param = DecisionModelParam.builder()
-        .model(DecisionModelParam.Models.DECISION_MODEL_PREVIEW)
+        .model(&quot;decision-model&quot;)
         .state(&quot;这段评论是否在索要退款？&quot;)
         .questions(questions)
         .build();
@@ -191,7 +246,7 @@ public class DecisionDemo {
     System.out.println(result.getAnswers().get(&quot;refund&quot;).getNoul());   // P(yes)
   }
 }
-</code></pre></section><a id="typesafe-python-2"></a><section><a id="typesafe-python-2-h4"></a><h4>TypeSafe Python</h4><a id="code-block-7"></a><pre class="language-python"><code>import os
+</code></pre></section><a id="typesafe-python-2"></a><section><a id="typesafe-python-2-h4"></a><h4>TypeSafe Python</h4><a id="code-block-9"></a><pre class="language-python"><code>import os
 from typesafe_sdk import TypeSafeClient
 
 client = TypeSafeClient(
@@ -200,17 +255,17 @@ client = TypeSafeClient(
 )
 
 result = client.system_one(
-    model=&quot;decision-model-preview&quot;,
+    model=&quot;decision-model&quot;,
     state=&quot;这段评论是否在索要退款？&quot;,
     questions={&quot;refund&quot;: {&quot;type&quot;: &quot;noul&quot;, &quot;instructions&quot;: &quot;是否在索要退款？&quot;}},
 )
 
 print(result.answers[&quot;refund&quot;])   # noul P(yes)
-</code></pre></section><a id="curl-2"></a><section><a id="curl-2-h4"></a><h4>curl</h4><a id="code-block-8"></a><pre class="language-bash"><code>curl -sS -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone \
+</code></pre></section><a id="curl-2"></a><section><a id="curl-2-h4"></a><h4>curl</h4><a id="code-block-10"></a><pre class="language-bash"><code>curl -sS -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone \
   -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
   -H 'Content-Type: application/json' \
   -d '{
-    &quot;model&quot;: &quot;decision-model-preview&quot;,
+    &quot;model&quot;: &quot;decision-model&quot;,
     &quot;state&quot;: &quot;这段评论是否在索要退款？&quot;,
     &quot;questions&quot;: {
       &quot;refund&quot;: {&quot;type&quot;: &quot;noul&quot;, &quot;instructions&quot;: &quot;是否在索要退款？&quot;}
@@ -218,8 +273,8 @@ print(result.answers[&quot;refund&quot;])   # noul P(yes)
   }'
 </code></pre></section></section></section></section></td></tr></tbody></table>
 
-<table><tbody><tr><td><a id="返回参数"></a><a id="dm-300"></a><h2>返回参数</h2><p><strong>model</strong> · <code>String</code></p><p>模型名回显。</p><p><strong>request_id</strong> · <code>String</code></p><p>请求 ID，用于问题排查。</p><p><strong>answers</strong> · <code>Object</code></p><p>答案表，key 与请求中的问题 id 一一对应，value 为答案对象，字段如下。</p><a id="accordion-答案对象属性"></a><section><p>答案对象属性</p><div><p><strong>type</strong> · <code>String</code></p><p>与问题类型一致（<code>choice</code> / <code>noul</code> / <code>score</code>）。</p><p><strong>choice</strong> · <code>String</code></p><p><code>choice</code> 类型：选中的选项名。</p><p><strong>noul</strong> · <code>Float</code></p><p><code>noul</code> 类型：P(yes)，0=否 1=是。</p><p><strong>score</strong> · <code>Float</code></p><p><code>score</code> 类型：等级索引的概率加权期望，可落在两级之间（如 <code>1.43</code>）。</p><p><strong>probabilities</strong> · <code>Object</code></p><p>每个选项 / 等级的概率（和为 1）。</p><p><strong>confidence</strong> · <code>Float</code></p><p>该答案的置信度（<code>choice</code> / <code>score</code> 类型返回）。</p><p><strong>legend</strong> · <code>Object</code></p><p><code>score</code> 类型：等级索引 → 等级描述。</p></div></section><p><strong>usage</strong> · <code>Object</code></p><p>计量信息：</p><ul><li><code>input_tokens</code>（Integer）：输入 token 数。</li></ul><p><strong>latency_ms</strong> · <code>Float</code></p><p>服务端耗时（毫秒）。</p></td><td><a id="返回示例"></a><a id="dm-500"></a><h2>返回示例</h2><p>以下为工单分流示例的返回结果（节选），概率与置信度以实际返回为准。</p><a id="code-block-9"></a><pre class="language-json"><code>{
-  &quot;model&quot;: &quot;decision-model-preview&quot;,
+<table><tbody><tr><td><a id="返回参数"></a><a id="dm-300"></a><h2>返回参数</h2><p><strong>model</strong> · <code>String</code></p><p>模型名回显。</p><p><strong>request_id</strong> · <code>String</code></p><p>请求 ID，用于问题排查。</p><p><strong>answers</strong> · <code>Object</code></p><p>答案表，key 与请求中的问题 id 一一对应，value 为答案对象，字段如下。</p><a id="accordion-答案对象属性"></a><section><p>答案对象属性</p><div><p><strong>type</strong> · <code>String</code></p><p>与问题类型一致（<code>choice</code> / <code>noul</code> / <code>score</code>）。</p><p><strong>choice</strong> · <code>String</code></p><p><code>choice</code> 类型：选中的选项名。</p><p><strong>noul</strong> · <code>Float</code></p><p><code>noul</code> 类型：P(yes)，0=否 1=是。</p><p><strong>score</strong> · <code>Float</code></p><p><code>score</code> 类型：等级索引的概率加权期望，可落在两级之间（如 <code>1.43</code>）。</p><p><strong>probabilities</strong> · <code>Object</code></p><p>每个选项 / 等级的概率（和为 1）。</p><p><strong>confidence</strong> · <code>Float</code></p><p>该答案的置信度（<code>choice</code> / <code>score</code> 类型返回）。</p><p><strong>legend</strong> · <code>Object</code></p><p><code>score</code> 类型：等级索引 → 等级描述。</p></div></section><p><strong>usage</strong> · <code>Object</code></p><p>计量信息：</p><ul><li><code>input_tokens</code>（Integer）：输入 token 数。</li></ul><p><strong>latency_ms</strong> · <code>Float</code></p><p>服务端耗时（毫秒）。</p></td><td><a id="返回示例"></a><a id="dm-500"></a><h2>返回示例</h2><p>以下为工单分流示例的返回结果（节选），概率与置信度以实际返回为准。</p><a id="code-block-11"></a><pre class="language-json"><code>{
+  &quot;model&quot;: &quot;decision-model&quot;,
   &quot;request_id&quot;: &quot;7b986c65-b223-9341-b5f0-b988e27ecaac&quot;,
   &quot;answers&quot;: {
     &quot;department&quot;: {

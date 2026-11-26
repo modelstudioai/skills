@@ -49,7 +49,7 @@
 
 #### 工作流应用
 
-1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)，创建一个新的任务型（或对话型）工作流应用。
+1.  [**创建工作流**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-center/workflow?immediatelyCreate=true)，并按场景配置任务型或对话型工作流。
     
 2.  **配置开始节点：**删除默认的 city 和 date 参数，在本例中不会使用。
     
@@ -171,7 +171,7 @@
 
 组件可以作为组件节点接入工作流。在此场景下，您需要手动为组件传入符合要求的参数，并将组件的输出结果传递到下一个节点。
 
-1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)，创建一个新的任务型（或对话型）工作流应用。
+1.  [**创建工作流**](https://bailian.console.aliyun.com/cn-beijing/flow-agent/app-center/workflow?immediatelyCreate=true)，并按场景配置任务型或对话型工作流。
     
 2.  **配置开始节点：**删除默认的 city 和 date 参数，在本例中不会使用。
     

@@ -94,11 +94,16 @@ pip install -r requirements.txt
 
 ## 读取本地文件并构建云端知识库
 
-进入`create_cloud_index.py`所在路径，运行如下命令：`python create_cloud_index.py`，即可将`docs/`中的业务文件上传到阿里云百炼[应用数据](https://bailian.console.aliyun.com/?tab=app#/data-center)，并构建云端知识库。
+在 `create_cloud_index.py` 所在目录运行以下命令，将 `docs/` 中的业务文件上传到百炼[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)并构建云端知识库。
+
+`python create_cloud_index.py`
 
 > 请确保本地可以访问公网。文件上传需要一定时间，请耐心等待执行完成。
 
-代码执行完毕后，您可以在应用数据的[文件](https://bailian.console.aliyun.com/?tab=app#/data-center?dataType=0)页面，查看已上传到云端的文件集合。
+1.  打开[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)，在目标文件数据集上单击**详情**。
+    
+2.  在文件列表中查看已上传的文件。
+    
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2286424671/p935553.png)
 

@@ -491,11 +491,11 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 #### The product is not activated, please confirm that you have activated products and try again after activation.
 
-**原因：** 所调用的模型服务未开通（未激活）。通过 OpenAI 兼容接口调用时，若目标模型未在模型市场开通，网关会返回该错误，错误码为 `invalid_parameter_error`。
+**原因：** 所调用的模型服务未开通（未激活）。通过 OpenAI 兼容接口调用时，若目标模型未在模型广场开通，网关会返回该错误，错误码为 `invalid_parameter_error`。
 
 **解决方案：**
 
--   **开通模型服务：**请前往阿里云百炼控制台[模型市场](https://bailian.console.aliyun.com/cn-beijing/model/market)，确认所调用的模型（如 `kimi-k3`）处于已开通状态后再行调用。
+-   在[**模型广场**](https://bailian.console.aliyun.com/cn-beijing/model/market)确认目标模型（如 `kimi-k3`）已开通，再调用模型。
 -   **开通百炼服务：**若尚未开通百炼，请使用阿里云主账号或拥有 `AliyunBailianFullAccess` 权限的 RAM 账号登录[百炼控制台](https://bailian.console.aliyun.com/)，满足使用条件后由系统自动开通，再重试调用。
 
 <a id="the-result-format-parameter-must-be-message-when-enable-thinking-is-true"></a>

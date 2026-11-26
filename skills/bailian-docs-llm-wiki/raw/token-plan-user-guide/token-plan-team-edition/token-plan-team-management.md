@@ -202,4 +202,4 @@
 
 ## 用量分析
 
-查看各坐席额度、消耗趋势和成员用量，见[控制台我的订阅](https://bailian.console.aliyun.com/cn-beijing/subscription/overview)。
+团队管理员可在[**团队用量分析**](https://bailian.console.aliyun.com/cn-beijing/subscription/uac-admin/organization/usage)中查看坐席额度、消耗趋势和成员用量。

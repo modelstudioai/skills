@@ -8,9 +8,16 @@
 
 ## 接口说明
 
--   不支持通过 API 新增数据表，请通过控制台的[应用数据](https://bailian.console.aliyun.com/?tab=app#/data-center)操作。
+-   API 不支持新增数据表。
+    
+    1.  打开[**数据集**](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)，在目标表格数据集上单击**详情**。
+        
+    2.  单击**数据表管理**旁的 **+**，新建数据表。
+        
 -   RAM 用户（子账号）需要首先获取阿里云百炼的 [API 权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)（需要`AliyunBailianDataFullAccess`，已包括 sfm:AddCategory 权限点），并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)后，方可调用本接口。阿里云账号（主账号）可直接调用无须授权。建议您通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)来调用本接口。
+    
 -   本接口不具备幂等性。
+    
 
 **限流说明：** 本接口频繁调用会被限流，频率请勿超过 5 次/秒。如遇限流，请稍后重试。
 

@@ -13,7 +13,7 @@
 1.  **获取API Key：**[获取API Key](../model-api-reference/preparations/get-api-key.md)，为安全起见，推荐将API Key配置到环境变量。
     
 2.  **下载SDK并运行示例代码：**
-    -   [下载最新SDK整合包](https://help.aliyun.com/zh/model-studio/sdk-selection-and-download)。
+    -   [下载最新SDK整合包](../model-api-reference/more-about-models/sdk-selection-and-download.md)。
     -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
         需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。
     -   用 Android Studio 打开工程。示例代码位于`DashFunAsrFileTranscriberActivity.java`，替换 API Key 后体验功能。

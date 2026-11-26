@@ -143,7 +143,9 @@ Credits 消耗主要受上下文长度、模型单价、思考模式、工具调
 
 ### 用量监控
 
-定期查看[控制台用量分析](https://bailian.console.aliyun.com/cn-beijing/subscription/overview)，定位高消耗模型和成员。
+个人版用户可在[**个人版用量详情**](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal/usage-detail)中查看模型消耗。
+
+团队管理员可在[**团队用量分析**](https://bailian.console.aliyun.com/cn-beijing/subscription/uac-admin/organization/usage)中按模型和成员查看消耗。
 
 <a id="额度用尽与恢复"></a>
 

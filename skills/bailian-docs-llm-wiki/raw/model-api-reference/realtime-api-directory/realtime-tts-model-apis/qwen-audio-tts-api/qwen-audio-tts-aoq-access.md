@@ -37,7 +37,7 @@ curl -X POST \
 
 若使用 Token Plan，接入域名中的 `WorkspaceId` 固定为 `token-plan`。请求体中的 `clientIp` 可选，填写客户端真实公网 IP，供网关选择 Relay 接入点。未填写时，网关使用请求来源 IP。
 
-API Key 仅保存在 AppServer。AppServer 将下表中的连接参数返回客户端，响应中的 `sidExpiresInSecs` 表示会话有效期，单位为秒。
+API Key 仅保存在 AppServer。AppServer 将下表中的连接参数返回客户端。仅当请求指定 `tokenExpiresInSecs` 时，响应才返回同值的 `sidExpiresInSecs`，表示建连 Token 的有效期（秒），不是会话时长。
 
 | 网关响应字段 | `AoqConnectConfig` 字段 |
 | --- | --- |

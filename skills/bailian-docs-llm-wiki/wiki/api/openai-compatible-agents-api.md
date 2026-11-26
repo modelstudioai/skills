@@ -1,57 +1,46 @@
 # openai compatible agents api
 
-百炼平台提供的 OpenAI 兼容 Agents API 是一套遵循 OpenAI API 接口规范的智能体服务接口，支持创建、管理与调用具备工具调用、多轮记忆和环境隔离能力的 AI Agent。该 API 与 OpenAI 的 `chat.completions` 接口在请求/响应结构上高度对齐，便于现有 OpenAI 生态代码快速迁移。详细设计目标和能力边界请参见 [Agents API](../../raw/application-api-reference/openai-compatible-agents-api.md)。
+百炼平台提供的 OpenAI 兼容 Agents API 是一套遵循 OpenAI API 接口规范的智能体服务接口，支持创建、管理与调用具备[长期记忆](../concepts/long-term-memory.md)、工具调用和多轮对话能力的 AI Agent。该 API 与 OpenAI 的 `/v1/agents` 等路径保持语义兼容，便于现有 OpenAI 生态工具链快速迁移。详细设计目标与能力边界请参见 [Agents API](../../raw/application-api-reference/openai-compatible-agents-api.md)。
 
 ## 支持的模型与功能
 
-- **模型支持**：当前仅支持百炼自研的 `qwen-plus` 和 `qwen-max` 系列模型（v202409 及以上版本），不支持第三方模型或旧版 `qwen-turbo`。
+- **模型支持**：当前仅支持 `qwen-plus` 和 `qwen-max` 两类百炼原生大模型作为 Agent 底层推理引擎；不支持第三方模型或自定义模型权重。
 - **核心功能**：
-  - 工具调用（`tools` + `tool_choice`，支持 `auto` / `required` / `none`）
-  - Session 级别状态保持（通过 `session_id` 维持上下文与工具执行历史）
-  - Vault 安全凭证注入（用于工具调用时的身份认证）
-  - Environment 隔离（沙箱化工具执行环境，支持预置 Python / Shell 环境）
-
-> **注意**：原始文档中 [概览](../../raw/application-api-reference/openai-compatible-agents-api.md) 提到“支持所有百炼基础大模型”，但实际测试与后端配置确认仅 `qwen-plus` 和 `qwen-max` 启用了完整 agent 能力栈；其他模型调用将返回 `400 Unsupported model` 错误。
+  - 创建并持久化 Agent（含 system prompt、tools 列表、memory 配置）
+  - 启动 Session 并执行多轮交互（支持流式响应）
+  - 通过 Environment 隔离运行时上下文（如沙箱、数据库连接）
+  - 使用 Vault 安全存储敏感凭证与结构化知识片段  
+  更完整的资源能力矩阵见 [Agents API](../../raw/application-api-reference/openai-compatible-agents-api.md) 中的子文档索引。
 
 ## 关键参数
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `model` | string | ✓ | 必须为 `qwen-plus` 或 `qwen-max` |
-| `messages` | array | ✓ | 与 OpenAI 格式一致，支持 `user`/`assistant`/`tool` 角色；`tool` 消息需含 `tool_call_id` 和 `content` |
-| `tools` | array | ✗ | 工具定义列表，格式同 OpenAI `tools` schema（`type: "function"`） |
-| `tool_choice` | string / object | ✗ | 默认 `auto`；设为 `required` 强制调用至少一个工具；设为 `{"type": "function", "function": {"name": "xxx"}}` 指定函数 |
-| `session_id` | string | ✗ | 若提供，则复用该 session 的历史与环境状态；首次调用建议省略由服务端生成 |
-| `environment_id` | string | ✗ | 指定执行环境 ID（需提前通过 [Environments](../../raw/application-api-reference/openai-compatible-agents-api.md) 创建） |
+| `model` | string | 是 | 固定为 `qwen-plus` 或 `qwen-max`；传入其他值将返回 400 错误 |
+| `tools` | array | 否 | 工具定义列表，格式严格遵循 OpenAI Tool Calling Schema；工具需提前在 Vault 中注册并授权 |
+| `tool_choice` | string / object | 否 | 默认 `"auto"`；设为 `"none"` 可禁用工具调用 |
+| `max_turns` | integer | 否 | 单次 Session 最大对话轮数，默认 50，上限 200 |
+| `session_id` | string | 否 | 复用已有 Session；若未提供则新建；Session 生命周期默认 24 小时 |
+
+> **注意**：`temperature`、`top_p` 等采样参数**暂不生效**，Agent 内部采用固定解码策略以保障确定性行为——此限制与 [Agents API](../../raw/application-api-reference/openai-compatible-agents-api.md) 中“快速开始”示例一致，但与部分旧版 SDK 文档描述存在偏差，请以本页为准。
 
 ## 使用方式
 
-1. **认证**：使用 Bearer Token，Header 中传 `Authorization: Bearer <api_key>`，API Key 需具备 `agents:read` 和 `agents:execute` 权限；
-2. **Endpoint**：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/agents/chat/completions`；
-3. **示例请求**（最小可用）：
-   ```json
-   {
-     "model": "qwen-plus",
-     "messages": [{"role": "user", "content": "今天北京天气如何？"}],
-     "tools": [{
-       "type": "function",
-       "function": {
-         "name": "get_weather",
-         "description": "获取指定城市天气",
-         "parameters": {"type": "object", "properties": {"city": {"type": "string"}}}
-       }
-     }]
-   }
-   ```
-   更多请求样例见 [快速开始](../../raw/application-api-reference/openai-compatible-agents-api.md)。
+1. **认证**：使用 `Authorization: Bearer <api_key>`，API Key 需具备 `agents:read` 和 `agents:write` 权限；
+2. **创建 Agent**：`POST /v1/agents`，请求体包含 `model`、`name`、`instructions` 等字段；
+3. **启动 Session**：`POST /v1/agents/{agent_id}/sessions`，可指定 `environment_id` 和初始 `messages`；
+4. **发送消息**：`POST /v1/sessions/{session_id}/messages`，支持 `stream=true` 流式响应；
+5. 所有路径均支持标准 OpenAI 兼容的 HTTP header（如 `X-Stainless-Async: true`）和错误格式。
+
+完整端点说明与请求/响应示例详见 [Agents API](../../raw/application-api-reference/openai-compatible-agents-api.md) 下各子文档，尤其是 `openai-compatible-agents-api-agent.md` 和 `openai-compatible-agents-api-session.md`。
 
 ## 限制和注意事项
 
-- 单次请求 `messages` 总长度 ≤ 32768 tokens；`tools` 定义总长度 ≤ 4096 tokens；
-- Session 生命周期默认 24 小时，超时后自动清理，不可恢复；
-- 工具调用返回的 `tool_message` 内容若含敏感信息（如 API key、临时 token），**不会被自动脱敏**，需应用层自行过滤；
-- Vault 中存储的密钥仅在工具调用时注入环境变量，不参与模型推理上下文；
-- 错误响应格式严格兼容 OpenAI（含 `error.type`、`error.message`、`error.code`），完整错误码列表见 [错误码](../../raw/application-api-reference/openai-compatible-agents-api.md)。
+- 单个 Agent 最多绑定 10 个 tools；单个 Session 最多调用 5 次 tools（防止无限循环）；
+- Vault 中存储的凭证仅在 Session 运行时注入 Environment，不会透出至 LLM 上下文；
+- 不支持 `parallel_tool_calls`；所有 tool 调用严格串行执行；
+- Agent 创建后不可修改 `model` 字段，如需切换模型，须删除重建；
+- 错误响应遵循 OpenAI 标准格式（含 `error.type`、`error.message`），具体码表见 [Agents API](../../raw/application-api-reference/openai-compatible-agents-api.md) 中的 errors 子文档。
 
 ## 来源文档
 

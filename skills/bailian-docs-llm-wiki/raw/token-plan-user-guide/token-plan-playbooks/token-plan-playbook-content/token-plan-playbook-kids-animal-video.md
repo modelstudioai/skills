@@ -73,4 +73,5 @@
 ## 说明
 
 -   **消耗**：本玩法涉及文本生成（`qwen3.7-plus`）与视频生成（`happyhorse-1.1-t2v`，5s / 720P / 16:9）。视频生成的 Credits 消耗明显高于文本，且随时长与分辨率上升。
--   **建议**：首次以较短时长、较低分辨率试跑，通过控制台[“用量详情”](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal)确认单次消耗后再加量。
+-   首次试跑时，使用较短的时长和较低的分辨率。  
+    在[**个人版用量详情**](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal/usage-detail)中确认单次消耗后，再增加用量。

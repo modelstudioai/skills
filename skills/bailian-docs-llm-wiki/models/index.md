@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 129 个模型家族 · 345 个主干模型 · 更新于 2026-11-25
+> 自动生成 · 共 129 个模型家族 · 343 个主干模型 · 更新于 2026-11-27
 
 **机器查询走结构化文件**：
 
@@ -22,7 +22,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [AntDigital](groups/antdigital-models-market-place.json) — 由蚂蚁数科提供的Ling系列模型的API服务
   - 模型：`antdigital/Ling-3.1-flash`
 - [Decision Model](groups/decision-model.json) — 面向高频业务判断的结构化决策模型，可根据文本或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。
-  - 模型：`decision-model-preview`
+  - 模型：`decision-model`, `decision-model-preview`
 - [DeepSeek](groups/deepseek.json) — DeepSeek 系列模型覆盖通用对话、复杂推理与多模态理解等场景，提供 Flash、Pro 等不同规格，可根据效果、响应速度和成本灵活选择。
   - 模型：`deepseek-r1-distill-qwen-1.5b`, `deepseek-v4-flash-0731`, `deepseek-v4-pro`, `deepseek-v4-pro-0813`, `deepseek-v4.1-flash`, `deepseek-v4.1-flash-1017`
 - [GLM](groups/glm-4.5.json) — GLM是由智谱提供的开源模型。
@@ -74,7 +74,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [StepFun推理模型](groups/stepfun-models-market-place.json) — 由阶跃星辰StepFun提供的Step系列推理模型API服务
   - 模型：`stepfun/step-3.7-flash`, `stepfun/step-5-preview`
 - [Vanchin DeepSeek](groups/vanchin-models-market-place.json) — 由快手万擎提供的DeepSeek系列模型API服务。
-  - 模型：`vanchin/deepseek-ocr`, `vanchin/deepseek-r1`, `vanchin/deepseek-v3`, `vanchin/deepseek-v3.1-terminus`, `vanchin/deepseek-v3.2-think`, `vanchin/deepseek-v4-pro`, `vanchin/deepseek-v4-pro-0813`, `vanchin/deepseek-v4.1-flash`, `vanchin/deepseek-v4.1-flash-1017`
+  - 模型：`vanchin/deepseek-r1`, `vanchin/deepseek-v3`, `vanchin/deepseek-v4-pro`, `vanchin/deepseek-v4-pro-0813`, `vanchin/deepseek-v4.1-flash`, `vanchin/deepseek-v4.1-flash-1017`
 - [云知声文本模型](groups/unisound-models-market-place.json) — 由云知声提供的 Unisound U2 模型 API 服务.
   - 模型：`unisound/unisound-u2`
 - [伶鹊-对话分析-flash](groups/tongyi-xiaomi-analysis-flash.json) — 伶鹊-对话分析-flash是专注于日常任务，如对话信息抽取、场景分类等分析类需求的模型，自定义分析标准遵循与对话语义理解能力显著提升，适用于低时延的离线在线分析任务。

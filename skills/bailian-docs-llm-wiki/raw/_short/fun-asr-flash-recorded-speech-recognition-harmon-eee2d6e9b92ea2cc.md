@@ -10,7 +10,7 @@ Fun-ASR-Flash非实时语音识别HarmonyOS SDK可将语音转换为文本。
 
 1.  **获取API Key：**[获取API Key](../model-api-reference/preparations/get-api-key.md)，为安全起见，推荐将API Key配置到环境变量。
 2.  **下载SDK并运行示例代码：**
-    -   [下载最新SDK整合包](https://help.aliyun.com/zh/model-studio/sdk-selection-and-download)。
+    -   [下载最新SDK整合包](../model-api-reference/more-about-models/sdk-selection-and-download.md)。
     -   解压 TAR 包。在 `neonui` 目录中获取 HAR 格式 SDK，并添加到项目依赖。需要 C++ 接入时，使用 TAR 包内的 `native/libs` 与 `native/include` 获取动态库和头文件。
     -   用 DevEco Studio 打开工程。示例代码位于 `DashFunAsrFlashFileTranscriberPage.ets`，替换 API Key 后体验功能。
 
