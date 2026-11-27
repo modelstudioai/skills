@@ -77,8 +77,11 @@ bl deploy audio create \
   --plan mu \
   --deploy-spec <spec-id> \
   --capacity 1 \
-  --output json
+  --output json \
+  --yes
 ```
+
+- `--yes` is required (high-risk command): preview with `--dry-run` first, then add `--yes` only after the user confirms
 
 Key points:
 - Audio TTS fine-tuned models **only support the `mu` plan** (not `lora` / `ptu`)

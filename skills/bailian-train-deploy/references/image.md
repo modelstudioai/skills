@@ -90,8 +90,11 @@ bl deploy image create \
   --display-name <display-name> \
   --plan lora \
   --capacity 1 \
-  --output json
+  --output json \
+  --yes
 ```
+
+- `--yes` is required (high-risk command): preview with `--dry-run` first, then add `--yes` only after the user confirms
 
 Key points:
 - Image generation fine-tuned models **only support the `lora` plan** (not `mu` / `ptu`)
