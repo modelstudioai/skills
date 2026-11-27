@@ -42,15 +42,16 @@
 - 不知道选哪个基座 / 模型选型 → `bailian-model-recommend`
 - 纯查模型参数 / 价格 / 上下文窗口 → `bailian-docs-llm-wiki`
 - 已有训练任务 / 部署的查删（生命周期管理）→ `bl` 直接：`bl finetune list` / `bl deploy list` / `bl deploy delete --deployed-model <id>`
+- 量化压缩（`bl finetune compress`）、吞吐预留 / ModelCode 容量（`bl deploy capacity`）→ `bailian-finetune`
 
 > 本 skill 只负责"新建训练任务 + 新建部署 + 调用交付"闭环；全生命周期管理（list/pause/resume/delete）不在流程内。
 
 ## 安全护栏
 
-`bl finetune <模态> create` 与 `bl deploy <模态> create` 都是真实写操作，会产生计费资源。`bl` **没有 `--dry-run`**，所以用真实预检 + 计费闸门代替：
+`bl finetune <模态> create` 与 `bl deploy <模态> create` 都是真实写操作，会产生计费资源。两者都支持 `--dry-run`：先用 `--dry-run` 预览请求，再做真实预检，并设置计费闸门：
 
-1. **预检代替 dry-run** —— `bl finetune capability --base-model <base>`（训练支持）、`bl deploy models --source custom|base`（可部署 + 可用 plan）、`bl deploy list --status RUNNING`（复用已有同模型部署，不再建第二个计费实例）。
-2. **mu/ptu 计费闸门** —— `lora`（token 计费，闲置一般免费）是安全默认；`mu`/`ptu` 是预留资源、闲置也计费，创建前**必须取得用户显式确认**，在 agent/CI 等非交互环境**不能自动开通预留资源**。
+1. **预检 + dry-run 预览** —— `bl finetune capability --base-model <base>`（训练支持）、`bl deploy models --source custom|base`（可部署 + 可用 plan）、`bl deploy list --status RUNNING`（复用已有同模型部署，不再建第二个计费实例）。
+2. **mu/ptu 计费闸门** —— `lora`（token 计费，闲置一般免费）是安全默认；`mu`/`ptu` 是预留资源、闲置也计费，创建前**必须取得用户显式确认**，在 agent/CI 等非交互环境**不能自动开通预留资源**。`bl deploy <模态> create` 是高风险命令，不带 `--yes` 会直接停止；先用 `--dry-run` 预览，用户确认后再加 `--yes`。
 3. **账号就绪** —— 先 `bl auth status`，未认证即停。
 
 ## 使用示例

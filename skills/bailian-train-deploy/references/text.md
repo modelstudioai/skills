@@ -64,8 +64,11 @@ bl deploy text create \
   --model-name <finetuned_output> \
   --display-name <display-name> \
   --plan lora \
-  --output json
+  --output json \
+  --yes
 ```
+
+- `--yes` 必填（高风险命令）：先用 `--dry-run` 预览请求，用户确认后再加 `--yes`
 
 - 文本微调模型支持 `lora`（默认，token 计费）和 `mu` plan
 - `lora` 安全默认，闲置一般不计费

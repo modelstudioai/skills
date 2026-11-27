@@ -48,15 +48,16 @@ Link B fits "I just want to run some base model as my own deployment service" �
 
 ## Write-operation guardrails (read before creating anything)
 
-`bl finetune <modality> create` and `bl deploy <modality> create` are real write operations that create billable resources (fine-tuning + inference deployment). `bl` has **no `--dry-run`**, so use **pre-check commands** instead of a dry run, and gate reserved resources with **billing confirmation**. Any write operation must pass these three gates first:
+`bl finetune <modality> create` and `bl deploy <modality> create` are real write operations that create billable resources (fine-tuning + inference deployment). Both accept `--dry-run`: **preview the request with `--dry-run` before every real run**, run the **pre-check commands** below, and gate reserved resources with **billing confirmation**. Any write operation must pass these three gates first:
 
-1. **Pre-checks instead of dry-run** (must run before creation; write only once feasibility is confirmed). These pre-check commands themselves require authentication via the [pre-flight checks](#pre-flight-checks-start-of-the-action-flow-1) below — if not authenticated, run `bl auth login` first, then pre-check:
+1. **Pre-checks, then a dry run** (must run before creation; write only once feasibility is confirmed). These pre-check commands themselves require authentication via the [pre-flight checks](#pre-flight-checks-start-of-the-action-flow-1) below — if not authenticated, run `bl auth login` first, then pre-check:
    - Before training: `bl finetune capability --base-model <base>` — confirm the base model supports your chosen training-type (unsupported combos fail fast without consuming quota; `create` re-validates at submission).
    - Before deployment: `bl deploy models --source custom` (Link A fine-tuned output) or `--source base` (Link B base model) — confirm the target model is deployable, see the available plans, then decide `--plan`.
    - Reuse detection: `bl deploy list --status RUNNING` — if a RUNNING deployment already references the same `finetuned_output`, reuse its `deployed_model` and **do not create a second billable instance**.
+   - Dry run right before the real run: re-run the same `create` command with `--dry-run`. It prints the request that would be sent and creates nothing (no job, no deployment, no charge). Check the resolved model name, datasets / `--model-name` and `--plan` in that output, then drop `--dry-run`. `--dry-run` needs no `--yes`.
 2. **Hard billing-confirmation gate (mu/ptu)**:
    - `lora` (default; token-billed; idle usually not billed) — the safe default, can be created directly.
-   - `mu` / `ptu` are **reserved/exclusive resources that bill even when idle** — before creating them you **must** explain the billing model to the user and get their confirmation. In non-interactive environments (agent / CI) you **must not auto-provision reserved resources**. When mu/ptu applies, hand "this will incur idle billing" together with the command back to a real human for terminal confirmation (`bl` currently offers no `--yes` flag to skip confirmation; confirmation is entirely human-controlled).
+   - `mu` / `ptu` are **reserved/exclusive resources that bill even when idle** — before creating them you **must** explain the billing model to the user and get their confirmation. In non-interactive environments (agent / CI) you **must not auto-provision reserved resources**. When mu/ptu applies, hand "this will incur idle billing" together with the command back to a real human for terminal confirmation. `bl deploy <modality> create` is a high-risk command: run without `--yes`, it stops with a confirmation-required error (exit 7) and creates nothing. Never add `--yes` on your own; re-run the same command with `--yes` only after the user has confirmed (for `mu`/`ptu`, only after the billing explanation above). `bl finetune <modality> create` has no `--yes` and runs directly.
 3. **Account readiness check**: `bl auth status` — if `authenticated: false`, stop and provide `bl auth login --api-key sk-...`. Bailian authenticates with API key / access token and has **no separate real-name gate**; `auth status` is the account readiness check.
 
 ## Reverse-trigger table (intents that do not belong to this skill, with full commands)
@@ -69,8 +70,9 @@ Link B fits "I just want to run some base model as my own deployment service" �
 | Pure lookup of model specs / pricing / context window | `bailian-docs-llm-wiki` | (query the model data catalog) |
 | Already have a deployment, only want a call example | `bailian-cli` | `bl text chat --model <deployed_model> --message "..."` or `bl speech synthesize --model <deployed_model> --voice default --text "..."` or the async API + trigger word (image generation, see [image.md](references/image.md#inference-and-invocation)) |
 | Query/delete existing jobs or deployments (lifecycle) | `bl` directly | `bl finetune list` / `bl deploy list` / `bl deploy delete --deployed-model <id>` |
+| Quantize / compress a fine-tuned model (`bl finetune compress`), or buy / scale / renew / release throughput-reservation and ModelCode capacity (`bl deploy capacity`) | `bailian-finetune` | (its capacity write commands are high-risk: preview with `--dry-run`, confirm with `--yes`) |
 
-> This skill only owns the closed loop of "create a training job + create a deployment + deliver invocation". **Full lifecycle management** of jobs and deployments (list / stop / delete historical jobs, delete deployments, etc.) is outside this skill's flow — operate directly with `bl finetune list` / `bl deploy list` / `bl deploy delete`.
+> This skill only owns the closed loop of "create a training job + create a deployment + deliver invocation". **Full lifecycle management** of jobs and deployments (list / stop / delete historical jobs, delete deployments, etc.) is outside this skill's flow — operate directly with `bl finetune list` / `bl deploy list` / `bl deploy delete`. Quantization (`bl finetune compress`) and capacity reservation (`bl deploy capacity`) are likewise outside this loop; hand them to `bailian-finetune`.
 
 ## Anti-hallucination checklist
 
@@ -84,7 +86,7 @@ Link B fits "I just want to run some base model as my own deployment service" �
 - **`--source` exhaustive values** (`bl deploy models`): `custom` (fine-tuned output) / `base` (base model) / `public`.
 - **`--learning-rate` must be a string**: pass `"3e-4"`, not the number `3e-4`, to avoid JSON precision loss (applies to text; audio/image do not take this parameter).
 - **Inference commands differ by modality**: text models use `bl text chat`, audio TTS uses `bl speech synthesize --voice default`, image generation uses the async API + trigger word (see [`references/image.md`](references/image.md#inference-and-invocation)).
-- **These flags/subcommands do not exist**: `bl` has no `--dry-run`, no bare `finetune create`/`deploy create` (**the modality segment is mandatory**: `finetune text|audio|image create`, `deploy text|audio|image create`), no `finetune start`, no `deploy stop` (use `bl deploy pause` / `bl deploy resume` to disable/restore; pause stops billing for mu/ptu).
+- **These flags/subcommands do not exist**: no bare `finetune create`/`deploy create` (**the modality segment is mandatory**: `finetune text|audio|image create`, `deploy text|audio|image create`), no `finetune start`, no `deploy stop` (use `bl deploy pause` / `bl deploy resume` to disable/restore; pause stops billing for mu/ptu).
 - **Required**: `--base-model` / `--datasets` on `finetune <modality> create`; `--model-name` / `--display-name` on `deploy <modality> create`.
 
 ## Pre-flight checks (start of the action flow)
@@ -160,9 +162,11 @@ bl deploy <modality> create \
   --model-name <finetuned-output> \   # fine-tuned output name (Link A) or base model name (Link B)
   --display-name <display-name> \
   --plan <lora|ptu|mu> \              # see notes below
-  --output json
+  --output json \
+  --yes                               # the real run always needs it; see the guardrails
 ```
 
+- `--yes` is required: `deploy <modality> create` is high-risk and stops without it. To preview, replace `--yes` with `--dry-run` (prints the request, creates nothing); put `--yes` back only after the user has seen that preview.
 - The **modality segment** (`text` / `audio` / `image`) must match the deployed model's modality; the three modality subcommands share identical flags.
 - `--model-name`: Link A passes the `finetuned_output` from Step 2; Link B passes the base model name directly.
 - `--plan`:

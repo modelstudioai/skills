@@ -117,10 +117,11 @@ bl deploy image create \
   --model-name <finetuned_output> \
   --display-name my-video-lora \
   --plan lora \
-  --output json
+  --output json \
+  --yes
 ```
 
-Video LoRA deployment uses `plan=lora` (token-billed). The deployment reaches RUNNING in about 5-10 minutes.
+Video LoRA deployment uses `plan=lora` (token-billed). The deployment reaches RUNNING in about 5-10 minutes. `deploy create` is high-risk, so the command carries `--yes`; preview it with `--dry-run` first and add `--yes` only after the user confirms.
 
 ```bash
 bl deploy get --deployed-model <deployed_model>
